@@ -1,4 +1,5 @@
 var express = require('express');
+var async = require('async');
 
 var app = express.createServer();
 
@@ -46,6 +47,12 @@ app.get('/add', function(req, http_res) {
     });
 });
 
+function _call_add_bin(item, callback) {
+    callback(null, function(acallback) {
+        api.bin.add(item.id, item.bin, acallback);
+    });
+}
+
 app.post('/add', function(req, http_res) {
     var fields = {body: req.body.doc.body};
     api.add_document(fields, req.body.doc.title, function(err, res, url) {
@@ -54,11 +61,36 @@ app.post('/add', function(req, http_res) {
                 locals: {message: err}
             });
         } else {
-            http_res.render('add', {
-                locals: {url: url}
-            });
+            var bins = req.body.doc.bins;
+            if(bins) {
+                var fcns = [];
+                if(!(bins instanceof Array)) { //we will get a string if only one box is checked
+                    bins = [bins];
+                }
+                
+                var bin_pairs = [];
+                for(var i in bins) {
+                    bin_pairs.push({
+                        bin: bins[i],
+                        id: res.id
+                    });
+                }
+                async.map(bin_pairs, _call_add_bin, function(map_err, results) {
+                    async.series(results, function(ser_err, ser_res) {
+                        if(ser_err) {
+                            http_res.render('error', {
+                                locals: {message: ser_err}
+                            });
+                        } else {
+                            http_res.redirect('article/' + url);
+                        }
+                    });
+                });
+            } else {
+                http_res.redirect('article/' + url);
+            }
         }
-    })
-})
+    });
+});
 
 app.listen(4000);

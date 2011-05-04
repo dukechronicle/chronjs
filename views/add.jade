@@ -9,7 +9,7 @@ form(action='/add', method='POST')
   p
     - each bin, key in bins
       label(for=key) #{bin}:
-      input.check(type='checkbox', id=key, name='bins')
+      input.check(type='checkbox', id=key, name='doc[bins]', value=bin)
   p
     input(type='submit', value='add')
     

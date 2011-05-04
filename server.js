@@ -13,6 +13,27 @@ app.set('view engine', 'jade');
 
 var api = require('./api/api.js');
 
+app.get('/article/:url', function(req, http_res) {
+    var url = req.params.url;
+    api.list_urls(function(err, res) {
+        for(var i in res) {
+            if(url === res[i].key) {
+                api.get_document_by_id(res[i].id, function(db_err, doc) {
+                    http_res.render('article', {
+                        locals: {doc: doc}
+                    });
+                });
+                break;
+            }
+        }
+        http_res.render('error', {
+            locals: {
+                message: "Article not found."
+            }
+        });
+    });
+});
+
 app.get('/add', function(req, http_res) {
     http_res.render('add');
 });

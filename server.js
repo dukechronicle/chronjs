@@ -14,6 +14,10 @@ app.set('view engine', 'jade');
 
 var api = require('./api/api.js');
 
+app.get('/', function(req, http_res) {
+    http_res.render('main');
+});
+
 app.get('/article/:url', function(req, http_res) {
     var url = req.params.url;
     api.list_urls(function(err, res) {
@@ -47,12 +51,6 @@ app.get('/add', function(req, http_res) {
     });
 });
 
-function _call_add_bin(item, callback) {
-    callback(null, function(acallback) {
-        api.bin.add(item.id, item.bin, acallback);
-    });
-}
-
 app.post('/add', function(req, http_res) {
     var fields = {body: req.body.doc.body};
     api.add_document(fields, req.body.doc.title, function(err, res, url) {
@@ -68,23 +66,14 @@ app.post('/add', function(req, http_res) {
                     bins = [bins];
                 }
                 
-                var bin_pairs = [];
-                for(var i in bins) {
-                    bin_pairs.push({
-                        bin: bins[i],
-                        id: res.id
-                    });
-                }
-                async.map(bin_pairs, _call_add_bin, function(map_err, results) {
-                    async.series(results, function(ser_err, ser_res) {
-                        if(ser_err) {
-                            http_res.render('error', {
-                                locals: {message: ser_err}
-                            });
-                        } else {
-                            http_res.redirect('article/' + url);
-                        }
-                    });
+                api.bin.add(res.id, bins, function(add_err, add_res) {
+                    if(add_err) {
+                        http_res.render('error', {
+                            locals: {message: add_err}
+                        });
+                    } else {
+                        http_res.redirect('article/' + url);
+                    }
                 });
             } else {
                 http_res.redirect('article/' + url);

@@ -23,7 +23,7 @@ app.get('/article/:url', function(req, http_res) {
                         locals: {doc: doc}
                     });
                 });
-                break;
+                return;
             }
         }
         http_res.render('error', {

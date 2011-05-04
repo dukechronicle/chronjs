@@ -20,22 +20,19 @@ app.get('/', function(req, http_res) {
 
 app.get('/article/:url', function(req, http_res) {
     var url = req.params.url;
-    api.list_urls(function(err, res) {
-        for(var i in res) {
-            if(url === res[i].key) {
-                api.get_document_by_id(res[i].id, function(db_err, doc) {
-                    http_res.render('article', {
-                        locals: {doc: doc}
-                    });
-                });
-                return;
-            }
+    
+    api.doc_for_url(url, function(err, doc) {
+        if(err) {
+            http_res.render('error', {
+                locals: {
+                    message: err
+                }
+            });
+        } else {
+            http_res.render('article', {
+                locals: {doc: doc}
+            });
         }
-        http_res.render('error', {
-            locals: {
-                message: "Article not found."
-            }
-        });
     });
 });
 

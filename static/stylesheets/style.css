@@ -2,3 +2,11 @@ body{
 	font-family: Helvetica, Arial, Sans-Serif;
 	font-size: 16px;
 }
+
+label {
+    margin-right: 3px;
+}
+
+input.check {
+    margin-right: 10px;
+}

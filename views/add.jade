@@ -7,6 +7,10 @@ form(action='/add', method='POST')
     label(for='body') Body:
     textarea#body(rows=5, cols=20, name='doc[body]')
   p
+    - each bin, key in bins
+      label(for=key) #{bin}:
+      input.check(type='checkbox', id=key, name='bins')
+  p
     input(type='submit', value='add')
     
 - if (typeof url !== "undefined")

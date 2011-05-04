@@ -35,7 +35,15 @@ app.get('/article/:url', function(req, http_res) {
 });
 
 app.get('/add', function(req, http_res) {
-    http_res.render('add');
+    api.bin.list(function(err, res) {
+        var bins = [];
+        for(var i in res) {
+            bins.push(res[i].value.bin_name);
+        }
+        http_res.render('add', {
+            locals: {bins: bins}
+        });
+    });
 });
 
 app.post('/add', function(req, http_res) {

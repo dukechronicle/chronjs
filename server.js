@@ -12,3 +12,9 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 var api = require('./api/api.js');
+
+app.get('/add', function(req, http_res) {
+    http_res.render('add');
+});
+
+app.listen(4000);

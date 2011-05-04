@@ -1,0 +1,10 @@
+h1 Add a Document
+form(action='/add', method='POST')
+  p
+    label(for='title') Title:
+    input#title(type='text', name='title')
+  p
+    label(for='body') Body:
+    textarea#body(rows=5, cols=20, name='body')
+  p
+    input(type='submit', value='add')

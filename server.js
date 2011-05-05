@@ -41,6 +41,26 @@ app.get('/', function(req, http_res) {
     });
 });
 
+app.get('/article/:url/edit', function(req, http_res) {
+    var url = req.params.url;
+    api.doc_for_url(url, function(err, doc) {
+        if(err) {
+            _error(http_res, err);
+        } else {
+            api.bin.list(function(bin_err, bins) {
+                if(bin_err) {
+                    _error(http_res, bin_err);
+                } else {
+                    http_res.render('edit', {
+                        locals: {doc: doc,
+                                 bins: bins}
+                    });
+                }
+            });
+        }
+    });
+});
+
 app.get('/article/:url', function(req, http_res) {
     var url = req.params.url;
     

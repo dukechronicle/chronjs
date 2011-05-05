@@ -1,0 +1,28 @@
+h1 Editing a Document
+form(action='/edit', method='POST')
+  p
+    label(for='title') Title:
+    input#title(type='text', name='doc[title]', value=doc.title)
+  p
+    label(for='body') Body:
+    textarea#body(rows=5, cols=20, name='doc[body]', value)
+      #{doc.body}
+  p
+    - each bin, key in bins
+      label(for=key) #{bin}:
+      - if(!doc.bins || doc.bins.indexOf(bin) == -1)
+        input.check(type='checkbox', id=key, name='doc[bins]', value=bin)
+      - else
+        input.check(type='checkbox', id=key, name='doc[bins]', value=bin, checked='yes')
+  p
+    input(type='submit', value='add')
+    
+form(action='/addbin', method='GET')
+  label(for='addbin') Add Bin:
+  input#addbin(type='text', name='addbin')
+  input(type='submit', value='add')
+    
+- if (typeof url !== "undefined")
+  p
+    | Article edited successfully. You can view it 
+    a(href='article/' + url) here

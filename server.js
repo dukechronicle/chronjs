@@ -73,6 +73,18 @@ app.get('/add', function(req, http_res) {
     });
 });
 
+app.get('/manage', function(req, http_res) {
+    api.all_docs_by_date(function(err, res) {
+        if(err) {
+            _error(http_res, err);
+        } else {
+            http_res.render('manage', {
+                locals: {docs: res}
+            });
+        }
+    });
+});
+
 app.post('/add', function(req, http_res) {
     var fields = {body: req.body.doc.body};
     api.add_document(fields, req.body.doc.title, function(err, res, url) {

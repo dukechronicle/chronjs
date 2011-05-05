@@ -1,0 +1,7 @@
+table(border=1)
+  - each doc in docs
+    tr
+      td
+        #{doc.value.title}
+      td
+        a(href='/article/' + doc.value.urls[doc.value.urls.length - 1] + '/edit') Edit

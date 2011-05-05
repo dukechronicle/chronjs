@@ -1,5 +1,4 @@
 var express = require('express');
-var async = require('async');
 
 var app = express.createServer();
 
@@ -14,8 +13,32 @@ app.set('view engine', 'jade');
 
 var api = require('./api/api.js');
 
+function _error(res, message) {
+    res.render('error', {
+        locals: {
+            message: message
+        }
+    });
+}
+
 app.get('/', function(req, http_res) {
-    http_res.render('main');
+    api.bin.list(function(err, bins) {
+        if(err) {
+            _error(http_res, err);
+        } else {
+            api.bin.get_documents(bins, function(get_err, get_res) {
+                if(get_err) {
+                    _error(http_res, get_err);
+                } else {
+                    http_res.render('main', {
+                        locals: {
+                            bins: get_res
+                        }
+                    });
+                }
+            });
+        }
+    });
 });
 
 app.get('/article/:url', function(req, http_res) {
@@ -23,11 +46,7 @@ app.get('/article/:url', function(req, http_res) {
     
     api.doc_for_url(url, function(err, doc) {
         if(err) {
-            http_res.render('error', {
-                locals: {
-                    message: err
-                }
-            });
+            _error(http_res, err);
         } else {
             http_res.render('article', {
                 locals: {doc: doc}
@@ -36,12 +55,18 @@ app.get('/article/:url', function(req, http_res) {
     });
 });
 
-app.get('/add', function(req, http_res) {
-    api.bin.list(function(err, res) {
-        var bins = [];
-        for(var i in res) {
-            bins.push(res[i].value.bin_name);
+app.get('/addbin', function(req, http_res) {
+    api.bin.create(req.query.addbin, function(err, res) {
+        if(err) {
+            _error(http_res, err);
+        } else {
+            http_res.redirect('/add');
         }
+    })
+});
+
+app.get('/add', function(req, http_res) {
+    api.bin.list(function(err, bins) {
         http_res.render('add', {
             locals: {bins: bins}
         });
@@ -52,9 +77,7 @@ app.post('/add', function(req, http_res) {
     var fields = {body: req.body.doc.body};
     api.add_document(fields, req.body.doc.title, function(err, res, url) {
         if(err) {
-            http_res.render('error', {
-                locals: {message: err}
-            });
+            _error(http_res, err);
         } else {
             var bins = req.body.doc.bins;
             if(bins) {
@@ -65,9 +88,7 @@ app.post('/add', function(req, http_res) {
                 
                 api.bin.add(res.id, bins, function(add_err, add_res) {
                     if(add_err) {
-                        http_res.render('error', {
-                            locals: {message: add_err}
-                        });
+                        _error(http_res, add_err);
                     } else {
                         http_res.redirect('article/' + url);
                     }

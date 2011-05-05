@@ -13,6 +13,11 @@ form(action='/add', method='POST')
   p
     input(type='submit', value='add')
     
+form(action='/addbin', method='GET')
+  label(for='addbin') Add Bin:
+  input#addbin(type='text', name='addbin')
+  input(type='submit', value='add')
+    
 - if (typeof url !== "undefined")
   p
     | Article posted successfully. You can view it 

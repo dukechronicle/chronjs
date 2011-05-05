@@ -1,3 +1,9 @@
 h1 The Chronicle
 | You're actually reading this?
 
+- each docs, bin_name in bins
+  div.bin
+    h4 #{bin_name}
+    - each doc in docs
+      p
+        a(href='article/' + doc.urls[doc.urls.length - 1]) #{doc.title}

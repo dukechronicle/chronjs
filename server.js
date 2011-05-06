@@ -114,20 +114,14 @@ app.post('/edit', function(req, http_res) {
     }
     var fields = {
         title: req.body.doc.title,
-        body: req.body.doc.body
+        body: req.body.doc.body,
+        bins: new_bins
     };
-    nimble.series([
-        function(acallback) {
-            api.bin.edit(id, new_bins, acallback);
-        },
-        function(acallback) {
-            api.edit_document(id, fields, acallback);
-        }
-    ], function(err, res) {
+    api.edit_document(id, fields, function(err, res) {
         if(err) {
             _error(http_res, err);
         } else {
-            http_res.redirect('/article/' + res[1][1] + '/edit');
+            http_res.redirect('/article/' + res.merge[1] + '/edit');
         }
     });
 });

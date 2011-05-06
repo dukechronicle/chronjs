@@ -12,6 +12,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 
 var api = require('./api/api.js');
+var nimble = require('nimble');
 
 function _error(res, message) {
     res.render('error', {
@@ -101,6 +102,32 @@ app.get('/manage', function(req, http_res) {
             http_res.render('manage', {
                 locals: {docs: res}
             });
+        }
+    });
+});
+
+app.post('/edit', function(req, http_res) {
+    var id = req.body.doc.id;
+    var new_bins = req.body.doc.bins;
+    if(!(new_bins instanceof Array)) { //we will get a string if only one box is checked
+        new_bins = [new_bins];
+    }
+    var fields = {
+        title: req.body.doc.title,
+        body: req.body.doc.body
+    };
+    nimble.series([
+        function(acallback) {
+            api.bin.edit(id, new_bins, acallback);
+        },
+        function(acallback) {
+            api.edit_document(id, fields, acallback);
+        }
+    ], function(err, res) {
+        if(err) {
+            _error(http_res, err);
+        } else {
+            http_res.redirect('/article/' + res[1][1] + '/edit');
         }
     });
 });

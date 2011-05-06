@@ -14,6 +14,7 @@ form(action='/edit', method='POST')
         input.check(type='checkbox', id=key, name='doc[bins]', value=bin)
       - else
         input.check(type='checkbox', id=key, name='doc[bins]', value=bin, checked='yes')
+    input(type='hidden', name='doc[id]', value=doc.id)
   p
     input(type='submit', value='add')
     
@@ -21,8 +22,3 @@ form(action='/addbin', method='GET')
   label(for='addbin') Add Bin:
   input#addbin(type='text', name='addbin')
   input(type='submit', value='add')
-    
-- if (typeof url !== "undefined")
-  p
-    | Article edited successfully. You can view it 
-    a(href='article/' + url) here

@@ -1,0 +1,39 @@
+!!! 5
+html(lang="en")
+	head
+		title Container Demo
+		link(rel='stylesheet', href='css/reset.css')
+		link(rel='stylesheet', href='css/container/style.css')
+		script(src='js/jquery.js')
+		script(src='js/container/vertical-text-align.js')
+	body
+		.container.clearfix.sidebar
+			.vertical-container
+				h1.vertical News
+			
+			a.rounded(href='#')
+				.content-container
+					h2 @DukeChronicle
+					p
+						RT @fhi_duke: "Why Tell Stories?" Edwidge Danticat on power of testimony 
+						in face of catastrophe http://bit.ly/gu4K8h Thanks @DukeChronicle!
+		br
+		.container.clearfix.sidebar
+			.vertical-container
+				h1.vertical Something Longer
+		
+			a.rounded(href='#')
+				.content-container
+					h2 @DukeChronicle
+					p
+						RT @fhi_duke: "Why Tell Stories?" Edwidge Danticat on power of testimony 
+						in face of catastrophe http://bit.ly/gu4K8h Thanks @DukeChronicle!	
+		
+		br
+		.container.clearfix.sidebar
+			.vertical-container.discrete
+				h1.vertical Advertisement
+			
+			a.rounded(href='#')
+				.content-container
+					img(src='container/images/250x250.gif')

@@ -1,0 +1,10 @@
+.container.clearfix.sidebar.most-popular
+	.vertical-container
+		h1.vertical #{title} 
+	
+	.rounded	
+		.content-container
+		
+		- each story, id in stories
+			.story
+				a(href='#') #{story.title}

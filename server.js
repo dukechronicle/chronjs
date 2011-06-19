@@ -1,17 +1,44 @@
+var PORT = 4000;
 var express = require('express');
+var stylus = require('stylus');
 
 var app = express.createServer();
 
-app.configure(function() {
-    app.use(express.bodyParser());
-    app.use(express.methodOverride());
-	app.use(express.static(__dirname + '/static'));
-});
+var publicDir = '/public';
+var viewsDir = '/views'
 
-app.set('views', __dirname + '/views');
-app.set('view engine', 'jade');
 
-var api = require('./api/api.js');
+function compile(str, path) {
+  return stylus(str)
+    .set('filename', path)
+    .set('compress', true);
+};
+
+// add the stylus middleware, which re-compiles when
+// a stylesheet has changed, compiling FROM src,
+// TO dest. dest is optional, defaulting to src
+
+app.use(stylus.middleware({
+    src: __dirname + viewsDir
+  , dest: __dirname + publicDir
+  , compile: compile
+}));
+
+
+// minimal setup both reading and writting to ./public
+// would look like:
+//   app.use(stylus.middleware({ src: __dirname + '/public' }));
+
+// the middleware itself does not serve the static
+// css files, so we need to expose them with staticProvider
+
+app.use(express.static(__dirname + publicDir));
+
+app.set('views', __dirname + viewsDir);
+
+
+//var api = require('./api/api.js');
+var api = null; 
 var nimble = require('nimble');
 
 function _error(res, message) {
@@ -21,6 +48,38 @@ function _error(res, message) {
         }
     });
 }
+
+var homeModel = {
+	twitter: {
+		title: 'Keep Up',
+		imageUrl: 'https://si0.twimg.com/profile_images/1157619932/Duke_Chronicle_reasonably_small.jpeg',
+		user: 'DukeChronicle',
+		tweet: 'RT @fhi_duke: "Why Tell Stories?" Edwidge Danticat on power of testimony in face of catastrophe http://bit.ly/gu4K8h Thanks @DukeChronicle!'
+	},
+	popular: {
+		title: 'Most Popular',
+		stories: {
+			1: {title: 'Drinking policy should prioritize safety',
+				comments: '3'},
+			2: {title: 'Why to take Russian Literature',
+				comments: '1'},
+			3: {title: 'Starcraft 2 reaches new heights in the West',
+				comments: '5'},
+			4: {title: 'Need for Pokemon RIghts Policy Reform',
+				comments: '0'},
+			5: {title: 'Random article written the day before',
+				comments: '14'},
+		}
+	},
+	ad: {
+		title: 'Advertisement',
+		imageUrl: 'https://www.google.com/adsense/static/en/images/inline_rectangle.gif',
+		url: 'http://google.com'
+	}
+}
+app.get('/index', function(req, res) {
+	res.render('index.jade', {layout: false, model: homeModel});
+});
 
 app.get('/', function(req, http_res) {
     api.bin.list(function(err, bins) {
@@ -153,4 +212,5 @@ app.post('/add', function(req, http_res) {
     });
 });
 
-app.listen(4000);
+console.log('Listening on port ' + PORT);
+app.listen(PORT);

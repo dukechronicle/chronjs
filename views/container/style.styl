@@ -1,3 +1,4 @@
+link-color = #226a9f 
 corner-radius = 6px
 
 shadow(opacity, height, width, offset)
@@ -18,22 +19,29 @@ border-radius(corner-radius)
 	border-bottom-left-radius corner-radius corner-radius
 
 body
-	background-color #F5F6F7
-	padding 30px
-	
-	a
-		text-decoration none
-		color black
-	
 	.container
-		margin-top 30px
+		margin-top 10px
 		position relative
-	
-	.container.sidebar
-		width 272px
 
-	h1
-		font-weight bold
+	.container.sidebar
+		width 316px
+		.rounded
+			width 300px
+	
+	.container.twitter
+		.text
+			h3
+				color link-color
+				font-size 0.8em
+			p	
+				font-size 0.7em
+				line-height 1.1em
+				padding-left 15px
+		img
+			border-left 1px solid #CCC
+			padding-left 8px
+			float right
+			width 65px
 	
 
 	.rounded
@@ -41,7 +49,7 @@ body
 		shadow(0.3, 0px, 1px, 3px)
 		
 		background-color white
-		padding 10px
+		padding 7px
 
 	
 	a.rounded:hover

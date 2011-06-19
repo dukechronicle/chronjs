@@ -1,0 +1,10 @@
+.container.clearfix.sidebar.twitter
+	.vertical-container
+		h1.vertical #{title} 
+	
+	a.rounded(href='http://twitter.com/#{user}')
+		.content-container
+			img(src='#{imageUrl}')
+			.text
+				h3 @#{user}
+				p #{tweet}

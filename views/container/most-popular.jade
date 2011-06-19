@@ -2,9 +2,9 @@
 	.vertical-container
 		h1.vertical #{title} 
 	
-	.rounded	
+	.rounded.no-padding
 		.content-container
-		
-		- each story, id in stories
-			.story
-				a(href='#') #{story.title}
+			- each story, id in stories
+				h2
+					a.hover.list-story(href='#', class='#{story.cssClass}')
+						#{story.title}

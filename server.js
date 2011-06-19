@@ -60,15 +60,15 @@ var homeModel = {
 		title: 'Most Popular',
 		stories: {
 			1: {title: 'Drinking policy should prioritize safety',
-				comments: '3'},
+				comments: '3', cssClass: 'first'},
 			2: {title: 'Why to take Russian Literature',
 				comments: '1'},
 			3: {title: 'Starcraft 2 reaches new heights in the West',
 				comments: '5'},
-			4: {title: 'Need for Pokemon RIghts Policy Reform',
+			4: {title: 'Need for Pokemon Rights Policy Reform',
 				comments: '0'},
 			5: {title: 'Random article written the day before',
-				comments: '14'},
+				comments: '14', cssClass: 'last'},
 		}
 	},
 	ad: {

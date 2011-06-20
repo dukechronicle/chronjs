@@ -2,20 +2,41 @@
 html(lang="en")
 	head
 		title Container Demo
-		link(rel='stylesheet', href='css/reset.css')
+		link(rel='stylesheet', href='/css/reset.css')
 		link(rel='stylesheet', href='/style.css')
+		link(rel='stylesheet', href='/css/apple.css')
 		link(rel='stylesheet', href='/container/style.css')
 		script(src='js/jquery.js')
 		script(src='js/container/vertical-text-align.js')
 	body
-		header
-		
-		section
-			!=partial('container/twitter', model.twitter)	
-			br
-			!=partial('container/most-popular', model.popular)
-			br
-			!=partial('container/advertisement', model.ad)
-
-		
-		footer
+		#shell
+			header
+				#header-top
+				#header-bottom
+					h1 The Chronicle
+					nav
+						h2.first
+							a(href='#') News
+						h2
+							a(href='#') Sports
+						h2
+							a(href='#') Opinion
+						h2
+							a(href='#') Recess
+						h2
+							a(href='#') Towerview
+						h2
+							a(href='#') Multimedia
+						h2.last
+							a(href='#') Blogs
+			section
+				!=partial('rotator')
+				#sidebar
+					!=partial('container/twitter', model.twitter)	
+					br
+					!=partial('container/most-popular', model.popular)
+					br
+					!=partial('container/advertisement', model.ad)
+	
+			
+			footer

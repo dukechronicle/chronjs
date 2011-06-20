@@ -1,5 +1,20 @@
-body{background-color:#f5f6f7;font-family:Arial,Helvetica,sans-serif;}
+html,body{width:100%;height:100%;background-color:#f5f6f7}
+body{font-family:Arial,Helvetica,sans-serif;}
 body a{text-decoration:none;color:#226a9f;}
 body a *{color:#333}
 body h1,body h2,body h3,body h4,body h5,body h6{font-family:Georgia,"Century Schoolbook","Times New Roman",Times,serif}
 body h1{font-weight:bold}
+body #shell{margin:0 auto;width:972px}
+body header,body section,body footer{width:972px}
+body #header-top{height:100px;background-color:#003564;box-shadow:0 1px 3px rgba(0,0,0,0.4);border-bottom:2px solid #fff}
+body #header-bottom{height:100px;background-color:#069;border-bottom-right-radius:4px;border-bottom-left-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.4);}
+body #header-bottom \,body #header-bottom h1{font-family:Didot,"Didot LT STD","Hoefler Text",Garamond,"Times New Roman",serif;color:#222}
+body #header-bottom nav h2{font-weight:bold;text-transform:uppercase;float:left;margin-right:20px;text-shadow:1px 2px 2px #333;letter-spacing:-1px}
+body #header-bottom nav h2.first{margin-left:1em}
+body #header-bottom nav h2.last,body #header-bottom nav a{color:#fff}
+body section{margin-top:20px}
+#sidebar{float:right;margin-top:-3px;}
+#sidebar .container{margin-bottom:1em}
+#shell .rotator{width:630px;float:left}
+#shell .pb-pageindicator a.page{width:180px;height:52px}
+#shell .pb-pageindicator a.page.first{margin-top:-10px}

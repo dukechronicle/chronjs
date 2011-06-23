@@ -1,6 +1,3 @@
-[submodule "Chronicle-API"]
-	path = api
-	url = git@github.com:DukeChronicle/Chronicle-API.git
 [submodule "api"]
 	path = api
 	url = git@github.com:DukeChronicle/Chronicle-API.git

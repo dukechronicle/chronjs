@@ -24,6 +24,7 @@ app.use(stylus.middleware({
   , compile: compile
 }));
 
+app.set('view engine', 'jade');
 
 // minimal setup both reading and writting to ./public
 // would look like:
@@ -37,8 +38,7 @@ app.use(express.static(__dirname + publicDir));
 app.set('views', __dirname + viewsDir);
 
 
-//var api = require('./api/api.js');
-var api = null; 
+var api = require('./api/api.js');
 var nimble = require('nimble');
 
 function _error(res, message) {
@@ -78,7 +78,7 @@ var homeModel = {
 	}
 }
 app.get('/index', function(req, res) {
-	res.render('index.jade', {layout: false, model: homeModel});
+	res.render('index', {layout: false, model: homeModel});
 });
 
 app.get('/', function(req, http_res) {
@@ -111,7 +111,7 @@ app.get('/article/:url/edit', function(req, http_res) {
                 if(bin_err) {
                     _error(http_res, bin_err);
                 } else {
-                    http_res.render('edit', {
+                    http_res.render('admin/edit', {
                         locals: {doc: doc,
                                  bins: bins}
                     });
@@ -147,7 +147,7 @@ app.get('/addbin', function(req, http_res) {
 
 app.get('/add', function(req, http_res) {
     api.bin.list(function(err, bins) {
-        http_res.render('add', {
+        http_res.render('admin/add', {
             locals: {bins: bins}
         });
     });
@@ -158,7 +158,7 @@ app.get('/manage', function(req, http_res) {
         if(err) {
             _error(http_res, err);
         } else {
-            http_res.render('manage', {
+            http_res.render('admin/manage', {
                 locals: {docs: res}
             });
         }
@@ -186,6 +186,7 @@ app.post('/edit', function(req, http_res) {
 });
 
 app.post('/add', function(req, http_res) {
+	console.log(req);
     var fields = {body: req.body.doc.body};
     api.add_document(fields, req.body.doc.title, function(err, res, url) {
         if(err) {

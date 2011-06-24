@@ -34,6 +34,7 @@ app.set('view engine', 'jade');
 // css files, so we need to expose them with staticProvider
 
 app.use(express.static(__dirname + publicDir));
+app.use(express.bodyParser());
 
 app.set('views', __dirname + viewsDir);
 
@@ -186,7 +187,6 @@ app.post('/edit', function(req, http_res) {
 });
 
 app.post('/add', function(req, http_res) {
-	console.log(req);
     var fields = {body: req.body.doc.body};
     api.add_document(fields, req.body.doc.title, function(err, res, url) {
         if(err) {

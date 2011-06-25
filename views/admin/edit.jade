@@ -1,5 +1,5 @@
 h1 Editing a Document
-form(action='/edit', method='POST')
+form(action='/admin/edit', method='POST')
   p
     label(for='title') Title:
     input#title(type='text', name='doc[title]', value=doc.title)
@@ -18,7 +18,7 @@ form(action='/edit', method='POST')
   p
     input(type='submit', value='add')
     
-form(action='/addbin', method='GET')
+form(action='/admin/addbin', method='GET')
   label(for='addbin') Add Bin:
   input#addbin(type='text', name='addbin')
   input(type='submit', value='add')

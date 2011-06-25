@@ -1,13 +1,14 @@
 var api = require('../api');
+var globalFunctions = require('../global-functions');
 
 exports.init = function(app) {
 	app.namespace('/admin', function() {
 		app.get('/addbin', function(req, http_res) {
 		    api.bin.create(req.query.addbin, function(err, res) {
 		        if(err) {
-		            _error(http_res, err);
+		            globalFunctions.showError(http_res, err);
 		        } else {
-		            http_res.redirect('/add');
+		            http_res.redirect('/admin/add');
 		        }
 		    })
 		});
@@ -23,7 +24,7 @@ exports.init = function(app) {
 		app.get('/manage', function(req, http_res) {
 		    api.all_docs_by_date(function(err, res) {
 		        if(err) {
-		            _error(http_res, err);
+		            globalFunctions.showError(http_res, err);
 		        } else {
 		            http_res.render('admin/manage', {
 		                locals: {docs: res}
@@ -45,7 +46,7 @@ exports.init = function(app) {
 		    };
 		    api.edit_document(id, fields, function(err, res) {
 		        if(err) {
-		            _error(http_res, err);
+		            globalFunctions.showError(http_res, err);
 		        } else {
 		            http_res.redirect('/article/' + res.merge[1] + '/edit');
 		        }
@@ -56,7 +57,7 @@ exports.init = function(app) {
 		    var fields = {body: req.body.doc.body};
 		    api.add_document(fields, req.body.doc.title, function(err, res, url) {
 		        if(err) {
-		            _error(http_res, err);
+		            globalFunctions.showError(http_res, err);
 		        } else {
 		            var bins = req.body.doc.bins;
 		            if(bins) {
@@ -67,7 +68,7 @@ exports.init = function(app) {
 		                
 		                api.bin.add(res.id, bins, function(add_err, add_res) {
 		                    if(add_err) {
-		                        _error(http_res, add_err);
+		                        globalFunctions.showError(http_res, add_err);
 		                    } else {
 		                        http_res.redirect('article/' + url);
 		                    }

@@ -1,10 +1,11 @@
 {
-	"name": "website",
+	"name": "thechronicle-website",
 	"version": "0.0.1",
 	"dependencies": {
 		"express": "2.3.x",
 		"jade": "0.12.x",
 		"nimble": "0.0.x",
-		"stylus": "0.13.x"
+		"stylus": "0.13.x",
+		"cradle": "0.5.x"
 	}
 }

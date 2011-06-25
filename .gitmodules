@@ -1,3 +1,0 @@
-[submodule "api"]
-	path = api
-	url = git@github.com:thechronicle/api.git

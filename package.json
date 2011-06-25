@@ -12,6 +12,8 @@
 		"stylus": 			"0.13.x",
 		
 		"nimble": 			"0.0.x",
+		"underscore":		"0.1.x",
+		"async":			"0.1.x",
 		
 		"cradle": 			"0.5.x"
 	}

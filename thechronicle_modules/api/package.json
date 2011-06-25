@@ -1,0 +1,8 @@
+{
+	"name": "thechronicle-api",
+	"version" : "0.0.1",
+	"main" : "index",
+	"dependencies": {
+		"nimble": "0.0.x",
+	}
+}

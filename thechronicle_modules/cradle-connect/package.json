@@ -1,0 +1,8 @@
+{
+	"name": "thechronicle-cradle-connect",
+	"version" : "0.0.1",
+	"main" : "index",
+	"dependencies": {
+		"cradle": "0.5.x"
+	}
+}

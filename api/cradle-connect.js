@@ -2,7 +2,8 @@ var cradle = require('cradle');
 
 exports.connect = function(database) {
 	var cloudantUrlRegEx = new RegExp('(.*?)://(.*?):(.*?)@(.*)')
-	var cloudant_auth = cloudantUrlRegEx.exec(process.env.CLOUDANT_URL);
+	var connect_url = process.env.CLOUDANT_URL || process.env.COUCHDB_URL;
+	var cloudant_auth = cloudantUrlRegEx.exec(connect_url);
 	
 	var port;
 	(cloudant_auth[1] === 'https') ? port = 443 : port = 80;

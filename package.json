@@ -8,6 +8,7 @@
 	"dependencies": {
 		"express": 			"2.3.x",
 		"express-namespace":"0.0.x", 
+		"express-resource": "0.2.x",
 		"jade": 			"0.12.x",
 		"stylus": 			"0.13.x",
 		

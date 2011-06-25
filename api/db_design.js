@@ -1,7 +1,11 @@
 var cradle = require('cradle');
-var conn = new(cradle.Connection)('https://app576269.heroku.cloudant.com', 443, {
-	auth: {username: 'app576269.heroku', password: 'VK3F3DdX6aRAHwBjJ2M2ANDB'}
+
+var cloudantUrlRegEx = new RegExp('https://(.*?):(.*?)@(.*)')
+var cloudant_auth = cloudantUrlRegEx.exec(process.env.CLOUDANT_URL);
+var conn = new(cradle.Connection)('https://' + cloudant_auth[3], 443, {
+	auth: {username: cloudant_auth[1], password: cloudant_auth[2]}
 });
+
 var db = conn.database('chronicle');
 db.create();
 

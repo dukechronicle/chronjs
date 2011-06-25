@@ -1,0 +1,7 @@
+{
+	"name": "thechronicle-api",
+	"version": "0.0.1",
+	"dependencies": {
+		"cradle": "0.5.x"
+	}
+}

@@ -1,12 +1,20 @@
+/* declare global configuration variables */
 var PORT = process.env.PORT || 4000;
-var express = require('express');
-var stylus = require('stylus');
 
+/* require npm nodejs modules */
+var express = require('express');
+require('express-namespace');
+var stylus = require('stylus');
+var nimble = require('nimble');
+
+/* require internal nodejs modules */
+var api = require('./api/api.js');
+
+/* express configuration */
 var app = express.createServer();
 
 var publicDir = '/public';
 var viewsDir = '/views'
-
 
 function compile(str, path) {
   return stylus(str)
@@ -26,21 +34,13 @@ app.use(stylus.middleware({
 
 app.set('view engine', 'jade');
 
-// minimal setup both reading and writting to ./public
-// would look like:
-//   app.use(stylus.middleware({ src: __dirname + '/public' }));
-
 // the middleware itself does not serve the static
 // css files, so we need to expose them with staticProvider
-
 app.use(express.static(__dirname + publicDir));
 app.use(express.bodyParser());
 
 app.set('views', __dirname + viewsDir);
 
-
-var api = require('./api/api.js');
-var nimble = require('nimble');
 
 function _error(res, message) {
     res.render('error', {
@@ -78,6 +78,8 @@ var homeModel = {
 		url: 'http://google.com'
 	}
 }
+
+/*** FRONTEND ***/
 app.get('/index', function(req, res) {
 	res.render('index', {layout: false, model: homeModel});
 });
@@ -135,83 +137,89 @@ app.get('/article/:url', function(req, http_res) {
         }
     });
 });
+/*** !FRONTEND ***/
 
-app.get('/addbin', function(req, http_res) {
-    api.bin.create(req.query.addbin, function(err, res) {
-        if(err) {
-            _error(http_res, err);
-        } else {
-            http_res.redirect('/add');
-        }
-    })
+/*** ADMIN ***/
+app.namespace('/admin', function() {
+	app.get('/addbin', function(req, http_res) {
+	    api.bin.create(req.query.addbin, function(err, res) {
+	        if(err) {
+	            _error(http_res, err);
+	        } else {
+	            http_res.redirect('/add');
+	        }
+	    })
+	});
+	
+	app.get('/add', function(req, http_res) {
+	    api.bin.list(function(err, bins) {
+	        http_res.render('admin/add', {
+	            locals: {bins: bins}
+	        });
+	    });
+	});
+	
+	app.get('/manage', function(req, http_res) {
+	    api.all_docs_by_date(function(err, res) {
+	        if(err) {
+	            _error(http_res, err);
+	        } else {
+	            http_res.render('admin/manage', {
+	                locals: {docs: res}
+	            });
+	        }
+	    });
+	});
+	
+	app.post('/edit', function(req, http_res) {
+	    var id = req.body.doc.id;
+	    var new_bins = req.body.doc.bins;
+	    if(!(new_bins instanceof Array)) { //we will get a string if only one box is checked
+	        new_bins = [new_bins];
+	    }
+	    var fields = {
+	        title: req.body.doc.title,
+	        body: req.body.doc.body,
+	        bins: new_bins
+	    };
+	    api.edit_document(id, fields, function(err, res) {
+	        if(err) {
+	            _error(http_res, err);
+	        } else {
+	            http_res.redirect('/article/' + res.merge[1] + '/edit');
+	        }
+	    });
+	});
+	
+	app.post('/add', function(req, http_res) {
+	    var fields = {body: req.body.doc.body};
+	    api.add_document(fields, req.body.doc.title, function(err, res, url) {
+	        if(err) {
+	            _error(http_res, err);
+	        } else {
+	            var bins = req.body.doc.bins;
+	            if(bins) {
+	                var fcns = [];
+	                if(!(bins instanceof Array)) { //we will get a string if only one box is checked
+	                    bins = [bins];
+	                }
+	                
+	                api.bin.add(res.id, bins, function(add_err, add_res) {
+	                    if(add_err) {
+	                        _error(http_res, add_err);
+	                    } else {
+	                        http_res.redirect('article/' + url);
+	                    }
+	                });
+	            } else {
+	                http_res.redirect('article/' + url);
+	            }
+	        }
+	    });
+	});
 });
 
-app.get('/add', function(req, http_res) {
-    api.bin.list(function(err, bins) {
-        http_res.render('admin/add', {
-            locals: {bins: bins}
-        });
-    });
-});
-
-app.get('/manage', function(req, http_res) {
-    api.all_docs_by_date(function(err, res) {
-        if(err) {
-            _error(http_res, err);
-        } else {
-            http_res.render('admin/manage', {
-                locals: {docs: res}
-            });
-        }
-    });
-});
-
-app.post('/edit', function(req, http_res) {
-    var id = req.body.doc.id;
-    var new_bins = req.body.doc.bins;
-    if(!(new_bins instanceof Array)) { //we will get a string if only one box is checked
-        new_bins = [new_bins];
-    }
-    var fields = {
-        title: req.body.doc.title,
-        body: req.body.doc.body,
-        bins: new_bins
-    };
-    api.edit_document(id, fields, function(err, res) {
-        if(err) {
-            _error(http_res, err);
-        } else {
-            http_res.redirect('/article/' + res.merge[1] + '/edit');
-        }
-    });
-});
-
-app.post('/add', function(req, http_res) {
-    var fields = {body: req.body.doc.body};
-    api.add_document(fields, req.body.doc.title, function(err, res, url) {
-        if(err) {
-            _error(http_res, err);
-        } else {
-            var bins = req.body.doc.bins;
-            if(bins) {
-                var fcns = [];
-                if(!(bins instanceof Array)) { //we will get a string if only one box is checked
-                    bins = [bins];
-                }
-                
-                api.bin.add(res.id, bins, function(add_err, add_res) {
-                    if(add_err) {
-                        _error(http_res, add_err);
-                    } else {
-                        http_res.redirect('article/' + url);
-                    }
-                });
-            } else {
-                http_res.redirect('article/' + url);
-            }
-        }
-    });
-});
+/*** !ADMIN ***/
 
 console.log('Listening on port ' + PORT);
 app.listen(PORT);

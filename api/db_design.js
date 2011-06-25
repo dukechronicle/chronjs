@@ -1,4 +1,4 @@
-var cloudant = require('./cloudant');
+var cloudant = require('./cradle-connect');
 
 var db = cloudant.connect('chronicle') 
 

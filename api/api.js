@@ -3,7 +3,7 @@ api.bin = {};
 var exports = module.exports = api;
 
 var nimble = require('nimble');
-var cloudant = require('./cloudant');
+var cloudant = require('./cradle-connect');
 
 var MAX_URL_LENGTH = 50;
 

@@ -2,10 +2,20 @@
 	"name": "thechronicle-website",
 	"version": "0.0.1",
 	"dependencies": {
+		// web framework
 		"express": "2.3.x",
+		// namespace of url routes
+		"express-namespace": "0.0.x", 
+		// html renderer 		
 		"jade": "0.12.x",
-		"nimble": "0.0.x",
+		// css render			
 		"stylus": "0.13.x",
-		"cradle": "0.5.x"
+		
+		// async helper			
+		"nimble": "0.0.x",
+		
+		// couchdb wrapper			
+		"cradle": "0.5.x"			
+		
 	}
 }

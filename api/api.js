@@ -2,23 +2,12 @@ var api = {};
 api.bin = {};
 var exports = module.exports = api;
 
-var cradle = require('cradle');
 var nimble = require('nimble');
+var cloudant = require('./cloudant');
+
 var MAX_URL_LENGTH = 50;
 
-api.db_init = function() {
-	var cloudantUrlRegEx = new RegExp('https://(.*?):(.*?)@(.*)')
-	var cloudant_auth = cloudantUrlRegEx.exec(process.env.CLOUDANT_URL);
-	var conn = new(cradle.Connection)('https://' + cloudant_auth[3], 443, {
-		auth: {username: cloudant_auth[1], password: cloudant_auth[2]}
-	}); 
-	
-	var db = conn.database('chronicle');
-    db.create();
-    return db;
-}
-
-var db = api.db_init();
+var db = cloudant.connect('chronicle')
 
 function _get_available_url(url, n, callback) {
     var new_url = url;

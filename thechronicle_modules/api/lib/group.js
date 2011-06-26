@@ -4,15 +4,6 @@ var db = require('../../db-abstract');
 
 var group = exports;
 
-// lists all groups with given query options
-_listGroups = function(options, callback) {
-    db.view('articles/list_groups', options,
-    function(err, res) {
-        callback(err, res);
-    }
-);
-}
-
 // list all groups in the given namespace
 group.list = function(namespace, callback) {
 	var groupKey = {};
@@ -25,7 +16,7 @@ group.list = function(namespace, callback) {
     	
     	startIndex = namespace.length
 	}
-    _listGroups(groupKey, function(err, res) {
+    db.group.list(groupKey, function(err, res) {
         if(err) {
             callback(err, null);
         } else {
@@ -39,7 +30,7 @@ group.list = function(namespace, callback) {
 
 group.create = function(group, callback) {
     //check if group exists
-    _listGroups({
+    db.group.list({
         startkey: group,
         endkey: group
     }, function(err, res) {
@@ -93,7 +84,7 @@ function _addRemoveLogic(docid, group, callback, dbres, logic) {
 
 function _addToGroup(docid, group, callback) {
     //check if group exists
-    _listGroups({
+    db.group.list({
         key: group
     },
     function(err, res) {
@@ -131,7 +122,7 @@ group.add = function(docid, groups, callback) {
 
 function _removeFromGroup(docid, group, callback) {
     //check if group exists
-    _listGroups({
+    db.group.list({
         startkey: group,
         endkey: group
     },

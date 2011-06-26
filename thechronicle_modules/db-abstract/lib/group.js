@@ -1,4 +1,5 @@
 var db = require('./db-abstract');
+var nimble = require('nimble');
 
 var group = exports;
 
@@ -21,11 +22,31 @@ group.list = function(options, callback) {
 	);
 }
 
+group.docs = function(namespace, groupName, callback) {
+	db.view('articles/group_docs', {
+        key: [namespace, groupName]
+    }, 
+    function(err, res) {
+    	if (res) {
+    		// fetch each child document after getting their id
+	        nimble.map(res, function(docId, cbck) {
+	            cbck(null, function(acallback) {
+	                db.get(docId.value, acallback);
+	            });
+	        }, function(map_err, map_res) {
+	            nimble.parallel(map_res, callback);
+	        });
+	    } else {
+	    	callback(null, []);
+	    }
+    });
+}
+
 // add document to group
-group.add = function (docId, namespace, group, callback) {
+group.add = function (docId, namespace, groupName, callback) {
     //check if group exists
     db.group.list({
-        key: [namespace, group]
+        key: [namespace, groupName]
     },
     function(err, res) {
         if(err) {
@@ -37,15 +58,15 @@ group.add = function (docId, namespace, group, callback) {
         else {
         	// if group exists and doc isn't already in group 
         	// add docid to children array of group
-            var children = res[0].value.children;
-            if (children.indexOf(docId) != -1) {
+        	var groupDoc = res[0];
+            var docs = groupDoc.value.docs;
+            if (docs.indexOf(docId) != -1) {
                 callback("Document already in this group", null);
-            }
-            else {
-                arr.push(obj);
+            } else {
+                docs.push(docId);
 				//update group document
 			    db.merge(groupDoc.id, {
-			        docs: children
+			        docs: docs
 			    }, callback);
             }
         }
@@ -63,8 +84,8 @@ group.remove = function(docId, namespace, group, callback) {
         }
         else {
         	var groupDoc = res[0];
-            var children = groupDoc.value.children;
-            if (children.indexOf(docId) == -1) {
+            var docs = groupDoc.value.docs;
+            if (docs.indexOf(docId) == -1) {
                 callback("Document not in this group", null);
             }
             else {
@@ -72,7 +93,7 @@ group.remove = function(docId, namespace, group, callback) {
 			    
 			    //update group document
 			    db.merge(groupDoc.id, {
-			        docs: children
+			        docs: docs
 			    }, callback);
             }
         }

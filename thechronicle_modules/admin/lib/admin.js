@@ -2,12 +2,12 @@ var api = require('../../api');
 var globalFunctions = require('../../global-functions');
 var async = require('async');
 
-var ADMIN_GROUP_NAMESPACE = ['section'];
+var FRONTPAGE_GROUP_NAMESPACE = ['section'];
 
 exports.init = function(app) {
 	app.namespace('/admin', function() {
 		app.get('/addgroup', function(req, http_res) {
-		    api.group.create(ADMIN_GROUP_NAMESPACE, req.query.addgroup, function(err, res) {
+		    api.group.create(FRONTPAGE_GROUP_NAMESPACE, req.query.addgroup, function(err, res) {
 		        if(err) {
 		            globalFunctions.showError(http_res, err);
 		        } else {
@@ -62,25 +62,24 @@ exports.init = function(app) {
 		        if(err) {
 		            globalFunctions.showError(http_res, err);
 		        } else {
+		        	// add document to groups selected
 		            var groups = req.body.doc.groups;
 		            if(groups) {
 		                var fcns = [];
-		                if(!(groups instanceof Array)) { //we will get a string if only one box is checked
+		                
+		                //we will get a string if only one box is checked
+		                if(!(groups instanceof Array)) { 
 		                    groups = [groups];
 		                }
-		                async.map(groups, function(group) {
-		                	return ['section'].concat(group);
-		                }, function(err, groups) {
-		                	api.group.add(res.id, groups, function(add_err, add_res) {
+		               	
+		               	groups.forEach(function(group, index) {
+		               		api.group.add(res.id, FRONTPAGE_GROUP_NAMESPACE, group, function(add_err, add_res) {
 			                    if(add_err) {
 			                        globalFunctions.showError(http_res, add_err);
-			                    } else {
-			                        http_res.redirect('article/' + url);
-			                    }
-			                });
-		                })
-		                
-		                
+								}
+		                	});
+		               	});
+	                	http_res.redirect('article/' + url);
 		            } else {
 		                http_res.redirect('article/' + url);
 		            }

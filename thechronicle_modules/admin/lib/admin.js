@@ -44,14 +44,14 @@ exports.init = function(app) {
 		app.post('/upload', function(req, httpRes) {
 		    var form = new formidable.IncomingForm();
 		    form.parse(req, function(err, fields, files) {
-		        if(err) globalFunctions.showError(http_res, err);
+		        if(err) globalFunctions.showError(httpRes, err);
 		        else {
 		            var filename = files.upload.name;
     		        fs.readFile(files.upload.path, function(err2, data) {
-    		            if(err2) globalFunctions.showError(http_res, err2);
+    		            if(err2) globalFunctions.showError(httpRes, err2);
     		            else {
     		                s3.put(data, filename, files.upload.type, function(err3, url) {
-                                if(err3) globalFunctions.showError(http_res, err3);
+                                if(err3) globalFunctions.showError(httpRes, err3);
                                 else {
                                     httpRes.render('admin/image', {
                                         locals: {url: url}

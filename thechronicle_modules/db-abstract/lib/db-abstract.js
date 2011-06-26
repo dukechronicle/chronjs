@@ -1,6 +1,10 @@
 var cradle = require('cradle');
+var _ = require('underscore');
 
-exports.connect = function(database) {
+var DATABASE = 'chronicle';
+
+// parse environment variable CLOUDANT_URL OR COUHDB_URL to extract authentication information
+function connect(database) {
 	var cloudantUrlRegEx = new RegExp('(.*?)://(.*?):(.*?)@(.*)')
 	var connect_url = process.env.CLOUDANT_URL || process.env.COUCHDB_URL;
 	var cloudant_auth = cloudantUrlRegEx.exec(connect_url);
@@ -17,3 +21,12 @@ exports.connect = function(database) {
     db.create();
     return db;	
 }
+
+// all functions defined inside of db variable will be available as a module function
+_.extend(exports, connect(DATABASE));
+
+var db = exports;
+
+db.group = require('./group.js');
+
+

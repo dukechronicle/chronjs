@@ -1,5 +1,6 @@
 /* declare global configuration variables */
 var PORT = process.env.PORT || 4000;
+var FRONTPAGE_GROUP_NAMESPACE = ['section'];
 
 /* require npm nodejs modules */
 var express = require('express');
@@ -43,9 +44,6 @@ app.use(express.bodyParser());
 
 app.set('views', __dirname + viewsDir);
 
-
-
-
 var homeModel = {
 	twitter: {
 		title: 'Keep Up',
@@ -80,12 +78,13 @@ app.get('/index', function(req, res) {
 	res.render('index', {layout: false, model: homeModel});
 });
 
+
 app.get('/', function(req, http_res) {
-    api.group.list(function(err, groups) {
+    api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(err, groups) {
         if(err) {
             globalFunctions.showError(http_res, err);
         } else {
-            api.group.get_documents(groups, function(get_err, get_res) {
+            api.group.docs(FRONTPAGE_GROUP_NAMESPACE, groups, function(get_err, get_res) {
                 if(get_err) {
                     globalFunctions.showError(http_res, get_err);
                 } else {
@@ -120,7 +119,7 @@ app.get('/article/:url/edit', function(req, http_res) {
         if(err) {
             globalFunctions.showError(http_res, err);
         } else {
-            api.group.list(function(group_err, groups) {
+            api.group.list(['section'], function(group_err, groups) {
                 if(group_err) {
                     globalFunctions.showError(http_res, group_err);
                 } else {

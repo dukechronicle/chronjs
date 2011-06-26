@@ -1,7 +1,7 @@
 var nimble = require('nimble');
 
 exports.init = function(api, db) {
-	api.group = {};
+	var group = {};
 	//private function that is shared
 	_list_groups = function(options, callback) {
 	    db.view('articles/list_groups', options,
@@ -11,7 +11,7 @@ exports.init = function(api, db) {
 	);
 	}
 	
-	api.group.list = function(callback) {
+	group.list = function(callback) {
 	    _list_groups({}, function(err, res) {
 	        if(err) {
 	            callback(err, null);
@@ -23,7 +23,7 @@ exports.init = function(api, db) {
 	    });
 	}
 	
-	api.group.create = function(group, callback) {
+	group.create = function(group, callback) {
 	    //check if group exists
 	    _list_groups({
 	        startkey: group,
@@ -104,7 +104,7 @@ exports.init = function(api, db) {
 	    });
 	}
 	
-	api.group.add = function(docid, groups, callback) {
+	group.add = function(docid, groups, callback) {
 	    nimble.map(groups, function(item, cbck) {
 	        cbck(null, function(acallback) {
 	            _add_to_group(docid, item, acallback);
@@ -141,7 +141,7 @@ exports.init = function(api, db) {
 	    });
 	}
 	
-	api.group.remove = function(docid, groups, callback) {
+	group.remove = function(docid, groups, callback) {
 	    nimble.map(groups, function(item, cbck) {
 	        cbck(null, function(acallback) {
 	            _remove_from_group(docid, item, acallback);
@@ -171,7 +171,7 @@ exports.init = function(api, db) {
 	    });
 	}
 	
-	api.group.get_documents = function(groups, callback) {
+	group.get_documents = function(groups, callback) {
 	    var add = function(memo, item, cbk) {
 	        memo[item] = function(acallback) {
 	            _get_documents_for_group(item, acallback);
@@ -224,5 +224,5 @@ exports.init = function(api, db) {
 	        }
 	    });
 	}
-	return api;
+	return group;
 }

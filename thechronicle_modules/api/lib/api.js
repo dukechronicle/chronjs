@@ -9,7 +9,7 @@ var MAX_URL_LENGTH = 50;
 
 var db = cloudant.connect('chronicle')
 
-api = groups.init(api, db);
+api.group = groups.init(api, db);
 
 function _get_available_url(url, n, callback) {
     var new_url = url;

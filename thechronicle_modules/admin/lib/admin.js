@@ -1,6 +1,9 @@
 var api = require('../../api');
 var globalFunctions = require('../../global-functions');
 var async = require('async');
+var formidable = require('formidable');
+var fs = require('fs');
+var s3 = require('./s3.js')
 
 exports.init = function(app) {
 	app.namespace('/admin', function() {
@@ -37,6 +40,27 @@ exports.init = function(app) {
 		app.get('/upload', function(req, httpRes) {
 		    httpRes.render('admin/upload');
 		});
+		
+		app.post('/upload', function(req, httpRes) {
+		    var form = new formidable.IncomingForm();
+		    form.parse(req, function(err, fields, files) {
+		        if(err) globalFunctions.showError(http_res, err);
+		        else {
+		            var filename = files.upload.name;
+    		        fs.readFile(files.upload.path, 'binary', function(err2, data) {
+    		            if(err2) globalFunctions.showError(http_res, err2);
+    		            else {
+    		                s3.put(data, filename, files.upload.type, function(err3, url) {
+                                if(err3) globalFunctions.showError(http_res, err3);
+                                else {
+                                    console.log(url);
+                                }
+        		            })
+    		            }
+    		        })
+		        }
+		    })
+		})
 		
 		app.post('/edit', function(req, http_res) {
 		    var id = req.body.doc.id;

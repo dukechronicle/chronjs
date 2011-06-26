@@ -2,10 +2,12 @@ var api = require('../../api');
 var globalFunctions = require('../../global-functions');
 var async = require('async');
 
+var ADMIN_GROUP_NAMESPACE = ['section'];
+
 exports.init = function(app) {
 	app.namespace('/admin', function() {
 		app.get('/addgroup', function(req, http_res) {
-		    api.group.create(req.query.addgroup, function(err, res) {
+		    api.group.create(ADMIN_GROUP_NAMESPACE, req.query.addgroup, function(err, res) {
 		        if(err) {
 		            globalFunctions.showError(http_res, err);
 		        } else {

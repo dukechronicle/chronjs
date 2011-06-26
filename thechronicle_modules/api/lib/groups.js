@@ -1,5 +1,5 @@
 var nimble = require('nimble');
-
+var _ = require('underscore')
 exports.init = function(db) {
 	var group = {};
 	//private function that is shared
@@ -13,20 +13,22 @@ exports.init = function(db) {
 	
 	group.list = function(callback, namespace) {
 		var groupKey = {};
-		
+		var startIndex = 0
 		if (namespace) {
 			groupKey = {
 		    	startkey: namespace,
 		    	endkey: namespace.concat({})
 	    	}
+	    	
+	    	startIndex = namespace.length
 		}
 	    _listGroups(groupKey, function(err, res) {
 	        if(err) {
 	            callback(err, null);
 	        } else {
-	        	console.log(res)
+	        	// do not return the fully qualified, only the name/path after the namespace
 	            nimble.map(res, function(val, cbck) {
-	                cbck(null, val.key);
+	                cbck(null, _.rest(val.key, startIndex));
 	            }, callback);
 	        }
 	    });

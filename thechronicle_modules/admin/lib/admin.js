@@ -19,7 +19,7 @@ exports.init = function(app) {
 		        http_res.render('admin/add', {
 		            locals: {groups: groups}
 		        });
-		    });
+		    }, ['section']);
 		});
 		
 		app.get('/manage', function(req, http_res) {

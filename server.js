@@ -130,7 +130,7 @@ app.get('/article/:url/edit', function(req, http_res) {
                                  groups: groups}
                     });
                 }
-            });
+            }, ['section']);
         }
     });
 });

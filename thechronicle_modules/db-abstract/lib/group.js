@@ -33,10 +33,11 @@ group.add = function (docId, group, callback) {
                 callback("Document already in this group", null);
             }
             else {
-                _addRemoveLogic(docId, res[0], function(arr, obj) {
-                    arr.push(obj);
-                },
-                callback);
+                arr.push(obj);
+				//update group document
+			    db.merge(groupDoc.id, {
+			        children: children
+			    }, callback);
             }
         }
     });
@@ -53,29 +54,19 @@ group.remove = function(docId, group, callback) {
             callback("group does not exist", null);
         }
         else {
-            var children = res[0].value.children;
+        	var groupDoc = res[0];
+            var children = groupDoc.value.children;
             if (children.indexOf(docId) == -1) {
                 callback("Document not in this group", null);
             }
             else {
-                _addRemoveLogic(docId, res[0], function(arr, obj) {
-                    var index = arr.indexOf(obj);
-                    arr.splice(index, 1);
-                },
-                callback);
+                arr.splice(arr.indexOf(obj), 1);
+			    
+			    //update group document
+			    db.merge(groupDoc.id, {
+			        children: children
+			    }, callback);
             }
         }
     });
-}
-
-function _addRemoveLogic(docid, groupDoc, logic, callback) {
-    var children = groupDoc.value.children;
-    //add/remove to children array
-    logic(children, docid);
-    
-    //update group document
-    db.merge(groupDoc.id, {
-        children: children
-    },
-    callback);
 }

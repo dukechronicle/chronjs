@@ -3,12 +3,10 @@ var exports = module.exports = api;
 
 var nimble = require('nimble');
 var db = require('../../db-abstract');
-var groups = require('./groups');
+
+api.group = require('./group');
 
 var MAX_URL_LENGTH = 50;
-
-// initialize groups api by providing it with the database context
-api.group = groups.init(db);
 
 function getAvailableUrl(url, n, callback) {
     var new_url = url;

@@ -2,4 +2,7 @@
 	"name": "thechronicle-admin",
 	"version" : "0.0.1",
 	"main" : "./lib/admin"
+	"dependencies": {
+		"knox":				"0.0.x"
+	}
 }

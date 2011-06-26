@@ -2,9 +2,19 @@ var db = require('./db-abstract');
 
 var group = exports;
 
+// create a new entry for group
+group.create = function(namespace, name, callback) {
+	db.save({
+		type: 'group',
+		namespace: namespace,
+        name: name,
+        docs: []
+   }, callback);
+}
+
 // lists all groups with given query options
 group.list = function(options, callback) {
-    db.view('articles/list_groups', options,
+    db.view('articles/group_list', options,
 	    function(err, res) {
 	        callback(err, res);
 	    }
@@ -12,11 +22,10 @@ group.list = function(options, callback) {
 }
 
 // add document to group
-group.add = function (docId, group, callback) {
+group.add = function (docId, namespace, group, callback) {
     //check if group exists
     db.group.list({
-        startkey: group,
-        endkey: group
+        key: [namespace, group]
     },
     function(err, res) {
         if(err) {
@@ -36,18 +45,17 @@ group.add = function (docId, group, callback) {
                 arr.push(obj);
 				//update group document
 			    db.merge(groupDoc.id, {
-			        children: children
+			        docs: children
 			    }, callback);
             }
         }
     });
 }
 
-group.remove = function(docId, group, callback) {
+group.remove = function(docId, namespace, group, callback) {
     //check if group exists
     db.group.list({
-        startkey: group,
-        endkey: group
+        key: [namespace, group]
     },
     function(err, res) {
         if (res.length == 0) {
@@ -64,7 +72,7 @@ group.remove = function(docId, group, callback) {
 			    
 			    //update group document
 			    db.merge(groupDoc.id, {
-			        children: children
+			        docs: children
 			    }, callback);
             }
         }

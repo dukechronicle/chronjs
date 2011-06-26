@@ -13,7 +13,6 @@ group.list = function(namespace, callback) {
 	    	startkey: namespace,
 	    	endkey: namespace.concat({})
     	}
-    	
     	startIndex = namespace.length
 	}
     db.group.list(groupKey, function(err, res) {
@@ -22,25 +21,20 @@ group.list = function(namespace, callback) {
         } else {
         	// do not return the fully qualified, only the name/path after the namespace
             nimble.map(res, function(val, cbck) {
-                cbck(null, _.rest(val.key, startIndex));
+                cbck(null, _.rest(val.key[1]));
             }, callback);
         }
     });
 }
 
-group.create = function(group, callback) {
+group.create = function(namespace, name, callback) {
     //check if group exists
     db.group.list({
-        startkey: group,
-        endkey: group
+        key: namespace.concat(name)
     }, function(err, res) {
         if(res.length == 0) {
             //doesn't exist
-            db.save({
-                group_name: group,
-                children: []
-            }, 
-            callback);
+           	db.group.create(namespace, name, callback);
         }
         else {
             callback("group already exists", null);
@@ -48,10 +42,8 @@ group.create = function(group, callback) {
     });
 }
 
-
-
-group.add = function(docid, groups, callback) {
-    nimble.map(groups, function(item, cbck) {
+group.add = function(docid, namespace, name, callback) {
+    nimble.map(name, function(item, cbck) {
         cbck(null, function(acallback) {
             db.group.add(docid, item, acallback);
         });
@@ -62,8 +54,8 @@ group.add = function(docid, groups, callback) {
     });
 }
 
-group.remove = function(docid, groups, callback) {
-    nimble.map(groups, function(item, cbck) {
+group.remove = function(docid, namespace, name, callback) {
+    nimble.map(name, function(item, cbck) {
         cbck(null, function(acallback) {
             db.group.remove(docid, item, acallback);
         });

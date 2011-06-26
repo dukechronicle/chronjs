@@ -70,6 +70,21 @@ var homeModel = {
 		title: 'Advertisement',
 		imageUrl: 'https://www.google.com/adsense/static/en/images/inline_rectangle.gif',
 		url: 'http://google.com'
+	},
+	top: {
+		title: 'Headlines',
+		news: {
+			'top': {title: 'A PRESIDENTIAL VISIT', 
+					teaser: 'Although the economic recession sparked some sacrifice across the University, Duke’s revered Talent Identification Program has continued to grow during the past several years.'},
+			'second': {title: 'New center for Judicial Studies created'},
+			'third': {title: 'Math department earns top 10 world ranking'}
+		},
+		sports: {
+			'top': {title: 'Bottorff crowned in Iowa',
+					teaser: 'When Juliet Bottorff first stepped on the track at the NCAA championships, winning was not on her mind.'},
+			'second': {title: 'Duke plans for upcoming season'},
+			'third': {title: 'Duke falls in match play semis'}
+		}
 	}
 }
 

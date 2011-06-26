@@ -30,7 +30,9 @@ html(lang="en")
 						h2.last
 							a(href='#') Blogs
 			section
-				!=partial('rotator')
+				#main
+					!=partial('rotator')
+					!=partial('container/top-news', model.top)
 				#sidebar
 					!=partial('container/twitter', model.twitter)	
 					br

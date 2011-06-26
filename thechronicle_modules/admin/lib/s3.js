@@ -6,7 +6,7 @@ var fs = require('fs');
 var BUCKET_NAME = 'alga';
 
 s3.put = function(buf, key, type, callback) {
-    _get_client(function(err, client) {
+    _getClient(function(err, client) {
         var req = client.put(key, {
             'Content-Length': buf.length,
             'Content-Type': type
@@ -20,7 +20,7 @@ s3.put = function(buf, key, type, callback) {
 }
 
 //reading access keys from file for now...
-function _get_client(callback) {
+function _getClient(callback) {
     fs.readFile('ak.txt',
     function(err, data) {
         var parts = data.toString('utf8').split(',')

@@ -52,7 +52,7 @@ function _URLify(s, maxChars) {
     return s.substring(0, maxChars);// trim to first num_chars chars
 }
 
-api.get_articles = function(parent_node, count, callback) {
+api.getArticles= function(parent_node, count, callback) {
     var start = [parent_node];
     var end = [parent_node, {}];
     db.view('articles/descendants', {
@@ -92,7 +92,7 @@ function _editDocument(docid, fields, callback) {
     });
 }
 
-api.edit_document = function(docid, fields, callback) {
+api.editDoc = function(docid, fields, callback) {
     var fcns = {};
     var groups = fields.groups;
     if(fields.groups) {
@@ -107,7 +107,7 @@ api.edit_document = function(docid, fields, callback) {
     nimble.series(fcns, callback);
 }
 
-api.get_taxonomy_tree = function(callback) {
+api.getTaxonomy = function(callback) {
     db.view('articles/tree',
     function(err, res) {
         if (err) {
@@ -119,11 +119,11 @@ api.get_taxonomy_tree = function(callback) {
     });
 };
 
-api.get_document_by_id = function(id, callback) {
+api.docsById = function(id, callback) {
     db.get(id, callback);
 };
 
-api.get_documents_by_author = function(author, callback) {
+api.docsByAuthor = function(author, callback) {
     db.view('articles/authors', {
         startkey: author,
         endkey: author
@@ -131,7 +131,7 @@ api.get_documents_by_author = function(author, callback) {
     callback);
 }
 
-api.add_document = function(fields, title, callback) {
+api.addDoc = function(fields, title, callback) {
     
     getAvailableUrl(_URLify(title, MAX_URL_LENGTH), 0, function(err, url) {
         if(err) {
@@ -150,7 +150,7 @@ api.add_document = function(fields, title, callback) {
     });
 }
 
-api.add_node = function(parent_path, name, callback) {
+api.addNode = function(parent_path, name, callback) {
     parent_path.push(name);
     db.save({
         type: "node",
@@ -159,15 +159,15 @@ api.add_node = function(parent_path, name, callback) {
     callback);
 }
 
-api.list_urls = function(callback) {
+api.listUrls = function(callback) {
     db.view('articles/urls', callback);
 }
 
-api.doc_for_url = function(url, callback) {
-    api.list_urls(function(err, res) {
+api.docForUrl = function(url, callback) {
+    api.listUrls(function(err, res) {
         for(var i in res) {
             if(url === res[i].key) {
-                api.get_document_by_id(res[i].id, callback);
+                api.docsById(res[i].id, callback);
                 return;
             }
         }
@@ -175,6 +175,6 @@ api.doc_for_url = function(url, callback) {
     });
 }
 
-api.all_docs_by_date = function(callback) {
+api.docsByDate = function(callback) {
     db.view('articles/all_by_date', {descending: true}, callback);
 }

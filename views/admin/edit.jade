@@ -8,17 +8,17 @@ form(action='/admin/edit', method='POST')
     textarea#body(rows=5, cols=20, name='doc[body]', value)
       #{doc.body}
   p
-    - each bin, key in bins
-      label(for=key) #{bin}:
-      - if(!doc.bins || doc.bins.indexOf(bin) == -1)
-        input.check(type='checkbox', id=key, name='doc[bins]', value=bin)
+    - each group, key in groups
+      label(for=key) #{group}:
+      - if(!doc.groups || doc.groups.indexOf(group) == -1)
+        input.check(type='checkbox', id=key, name='doc[groups]', value=group)
       - else
-        input.check(type='checkbox', id=key, name='doc[bins]', value=bin, checked='yes')
+        input.check(type='checkbox', id=key, name='doc[groups]', value=group, checked='yes')
     input(type='hidden', name='doc[id]', value=doc.id)
   p
     input(type='submit', value='add')
     
-form(action='/admin/addbin', method='GET')
-  label(for='addbin') Add Bin:
-  input#addbin(type='text', name='addbin')
+form(action='/admin/addgroup', method='GET')
+  label(for='addgroup') Add group:
+  input#addgroup(type='text', name='addgroup')
   input(type='submit', value='add')

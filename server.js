@@ -103,7 +103,7 @@ app.get('/', function(req, http_res) {
 app.get('/article/:url', function(req, http_res) {
     var url = req.params.url;
     
-    api.doc_for_url(url, function(err, doc) {
+    api.docForUrl(url, function(err, doc) {
         if(err) {
             globalFunctions.showError(http_res, err);
         } else {
@@ -116,7 +116,7 @@ app.get('/article/:url', function(req, http_res) {
 
 app.get('/article/:url/edit', function(req, http_res) {
     var url = req.params.url;
-    api.doc_for_url(url, function(err, doc) {
+    api.docForUrl(url, function(err, doc) {
         if(err) {
             globalFunctions.showError(http_res, err);
         } else {

@@ -4,8 +4,8 @@ var async = require('async');
 
 exports.init = function(app) {
 	app.namespace('/admin', function() {
-		app.get('/addbin', function(req, http_res) {
-		    api.bin.create(req.query.addbin, function(err, res) {
+		app.get('/addgroup', function(req, http_res) {
+		    api.group.create(req.query.addgroup, function(err, res) {
 		        if(err) {
 		            globalFunctions.showError(http_res, err);
 		        } else {
@@ -15,15 +15,15 @@ exports.init = function(app) {
 		});
 		
 		app.get('/add', function(req, http_res) {
-		    api.bin.list(function(err, bins) {
+		    api.group.list(function(err, groups) {
 		        http_res.render('admin/add', {
-		            locals: {bins: bins}
+		            locals: {groups: groups}
 		        });
 		    });
 		});
 		
 		app.get('/manage', function(req, http_res) {
-		    api.all_docs_by_date(function(err, res) {
+		    api.docsByDate(function(err, res) {
 		        if(err) {
 		            globalFunctions.showError(http_res, err);
 		        } else {
@@ -36,16 +36,16 @@ exports.init = function(app) {
 		
 		app.post('/edit', function(req, http_res) {
 		    var id = req.body.doc.id;
-		    var new_bins = req.body.doc.bins;
-		    if(!(new_bins instanceof Array)) { //we will get a string if only one box is checked
-		        new_bins = [new_bins];
+		    var new_groups = req.body.doc.groups;
+		    if(!(new_groups instanceof Array)) { //we will get a string if only one box is checked
+		        new_groups = [new_groups];
 		    }
 		    var fields = {
 		        title: req.body.doc.title,
 		        body: req.body.doc.body,
-		        bins: new_bins
+		        groups: new_groups
 		    };
-		    api.edit_document(id, fields, function(err, res) {
+		    api.editDoc(id, fields, function(err, res) {
 		        if(err) {
 		            globalFunctions.showError(http_res, err);
 		        } else {
@@ -56,21 +56,21 @@ exports.init = function(app) {
 		
 		app.post('/add', function(req, http_res) {
 		    var fields = {body: req.body.doc.body};
-		    api.add_document(fields, req.body.doc.title, function(err, res, url) {
+		    api.addDoc(fields, req.body.doc.title, function(err, res, url) {
 		        if(err) {
 		            globalFunctions.showError(http_res, err);
 		        } else {
-		            var bins = req.body.doc.bins;
-		            if(bins) {
+		            var groups = req.body.doc.groups;
+		            if(groups) {
 		                var fcns = [];
-		                if(!(bins instanceof Array)) { //we will get a string if only one box is checked
-		                    bins = [bins];
+		                if(!(groups instanceof Array)) { //we will get a string if only one box is checked
+		                    groups = [groups];
 		                }
-		                async.map(bins, function(group) {
+		                async.map(groups, function(group) {
 		                	return ['section'].push(group);
-		                }, function(err, bins) {
-		                	console.log(bins)
-		                	api.bin.add(res.id, bins, function(add_err, add_res) {
+		                }, function(err, groups) {
+		                	console.log(groups)
+		                	api.group.add(res.id, groups, function(add_err, add_res) {
 			                    if(add_err) {
 			                        globalFunctions.showError(http_res, add_err);
 			                    } else {

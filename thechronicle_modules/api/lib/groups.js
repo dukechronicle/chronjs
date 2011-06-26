@@ -1,9 +1,9 @@
 var nimble = require('nimble');
 
-exports.init = function(api, db) {
+exports.init = function(db) {
 	var group = {};
 	//private function that is shared
-	_list_groups = function(options, callback) {
+	_listGroups = function(options, callback) {
 	    db.view('articles/list_groups', options,
 	    function(err, res) {
 	        callback(err, res);
@@ -12,7 +12,7 @@ exports.init = function(api, db) {
 	}
 	
 	group.list = function(callback) {
-	    _list_groups({}, function(err, res) {
+	    _listGroups({}, function(err, res) {
 	        if(err) {
 	            callback(err, null);
 	        } else {
@@ -25,7 +25,7 @@ exports.init = function(api, db) {
 	
 	group.create = function(group, callback) {
 	    //check if group exists
-	    _list_groups({
+	    _listGroups({
 	        startkey: group,
 	        endkey: group
 	    }, function(err, res) {
@@ -43,7 +43,7 @@ exports.init = function(api, db) {
 	    });
 	}
 	
-	function _add_remove_logic(docid, group, callback, dbres, logic) {
+	function _addRemoveLogic(docid, group, callback, dbres, logic) {
 	
 	    var children = dbres[0].value.children;
 	    //add to group document
@@ -56,7 +56,7 @@ exports.init = function(api, db) {
 	        acallback);
 	    },
 	    function(acallback) {
-	        api.get_document_by_id(docid,
+	        db.get(docid,
 	        function(err2, res2) {
 	            if (err2) {
 	                acallback(err2, null);
@@ -77,10 +77,10 @@ exports.init = function(api, db) {
 	    callback);
 	}
 	
-	function _add_to_group(docid, group, callback) {
+	function _addToGroup(docid, group, callback) {
 	    console.log(group)
 	    //check if group exists
-	    _list_groups({
+	    _listGroups({
 	        key: group
 	    },
 	    function(err, res) {
@@ -96,7 +96,7 @@ exports.init = function(api, db) {
 	                callback("Document already in this group", null);
 	            }
 	            else {
-	                _add_remove_logic(docid, group, callback, res, function(arr, obj) {
+	                _addRemoveLogic(docid, group, callback, res, function(arr, obj) {
 	                    arr.push(obj);
 	                });
 	            }
@@ -107,7 +107,7 @@ exports.init = function(api, db) {
 	group.add = function(docid, groups, callback) {
 	    nimble.map(groups, function(item, cbck) {
 	        cbck(null, function(acallback) {
-	            _add_to_group(docid, item, acallback);
+	            _addToGroup(docid, item, acallback);
 	        });
 	    }, function(map_err, results) {
 	        nimble.series(results, function(ser_err, ser_res) {
@@ -116,9 +116,9 @@ exports.init = function(api, db) {
 	    });
 	}
 	
-	function _remove_from_group(docid, group, callback) {
+	function _removeFromGroup(docid, group, callback) {
 	    //check if group exists
-	    _list_groups({
+	    _listGroups({
 	        startkey: group,
 	        endkey: group
 	    },
@@ -132,7 +132,7 @@ exports.init = function(api, db) {
 	                callback("Document not in this group", null);
 	            }
 	            else {
-	                _add_remove_logic(docid, group, callback, res, function(arr, obj) {
+	                _addRemoveLogic(docid, group, callback, res, function(arr, obj) {
 	                    var index = arr.indexOf(obj);
 	                    arr.splice(index, 1);
 	                });
@@ -144,14 +144,14 @@ exports.init = function(api, db) {
 	group.remove = function(docid, groups, callback) {
 	    nimble.map(groups, function(item, cbck) {
 	        cbck(null, function(acallback) {
-	            _remove_from_group(docid, item, acallback);
+	            _removeFromGroup(docid, item, acallback);
 	        });
 	    }, function(map_err, map_res) {
 	        nimble.series(map_res, callback);
 	    });
 	}
 	
-	function _get_documents_for_group(group, callback) {
+	function _getDocumentsForGroup(group, callback) {
 	    db.view('articles/group-children', {
 	        startkey: ['section'],
 	        endkey: ['section', {}]
@@ -160,7 +160,7 @@ exports.init = function(api, db) {
 	    	if (res) {
 		        nimble.map(res, function(item, cbck) {
 		            cbck(null, function(acallback) {
-		                api.get_document_by_id(item.value, acallback);
+		                db.get(item.value, acallback);
 		            });
 		        }, function(map_err, map_res) {
 		            nimble.parallel(map_res, callback);
@@ -174,7 +174,7 @@ exports.init = function(api, db) {
 	group.get_documents = function(groups, callback) {
 	    var add = function(memo, item, cbk) {
 	        memo[item] = function(acallback) {
-	            _get_documents_for_group(item, acallback);
+	            _getDocumentsForGroup(item, acallback);
 	        };
 	        cbk(null, memo);
 	    };
@@ -183,9 +183,9 @@ exports.init = function(api, db) {
 	    });
 	}
 	
-	function _edit_group(docid, new_groups, callback) {
+	function _editGroup(docid, new_groups, callback) {
 		console.log(docid);
-	    api.get_document_by_id(docid, function(get_err, get_res) {
+	    db.get(docid, function(get_err, get_res) {
 	        if(get_err) {
 	           callback(get_err, null);
 	        } else {

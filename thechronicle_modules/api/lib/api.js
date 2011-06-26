@@ -9,9 +9,10 @@ var MAX_URL_LENGTH = 50;
 
 var db = cloudant.connect('chronicle')
 
-api.group = groups.init(api, db);
+// initialize groups api by providing it with the database context
+api.group = groups.init(db);
 
-function _get_available_url(url, n, callback) {
+function getAvailableUrl(url, n, callback) {
     var new_url = url;
     if(n != 0) {
         new_url = new_url + '-' + n;
@@ -24,7 +25,7 @@ function _get_available_url(url, n, callback) {
             callback(null, new_url);
         }
         else {
-            _get_available_url(url, n + 1, callback);
+            getAvailableUrl(url, n + 1, callback);
         }
     });
 }
@@ -62,13 +63,13 @@ api.get_articles = function(parent_node, count, callback) {
     callback);
 };
 
-function _edit_document(docid, fields, callback) {
+function _editDocument(docid, fields, callback) {
     api.get_document_by_id(docid, function(geterr, res) {
         if(geterr) {
             callback(geterr, null, null);
         } else {
             if(fields.title && (fields.title !== res.title)) {
-                _get_available_url(_URLify(fields.title, MAX_URL_LENGTH), 0, function(err, url) {
+                getAvailableUrl(_URLify(fields.title, MAX_URL_LENGTH), 0, function(err, url) {
                     if(err) {
                         callback(err, null, null);
                     }
@@ -101,7 +102,7 @@ api.edit_document = function(docid, fields, callback) {
         delete fields.groups; //we will edit this field in group.edit
     }
     fcns['merge'] = function(acallback) {
-        _edit_document(docid, fields, acallback);
+        _editDocument(docid, fields, acallback);
     };
     nimble.series(fcns, callback);
 }
@@ -132,7 +133,7 @@ api.get_documents_by_author = function(author, callback) {
 
 api.add_document = function(fields, title, callback) {
     
-    _get_available_url(_URLify(title, MAX_URL_LENGTH), 0, function(err, url) {
+    getAvailableUrl(_URLify(title, MAX_URL_LENGTH), 0, function(err, url) {
         if(err) {
             callback(err, null, null);
         }

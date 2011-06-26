@@ -1,5 +1,0 @@
-{
-	"name": "thechronicle-db-wrapper",
-	"version" : "0.0.1",
-	"main" : "./lib/db-wrapper"
-}

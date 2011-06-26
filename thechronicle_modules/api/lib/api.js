@@ -2,12 +2,10 @@ var api = {};
 var exports = module.exports = api;
 
 var nimble = require('nimble');
-var cloudant = require('../../cradle-connect');
+var db = require('../../db-abstract');
 var groups = require('./groups');
 
 var MAX_URL_LENGTH = 50;
-
-var db = cloudant.connect('chronicle')
 
 // initialize groups api by providing it with the database context
 api.group = groups.init(db);

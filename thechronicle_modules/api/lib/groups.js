@@ -1,8 +1,10 @@
 var nimble = require('nimble');
-var _ = require('underscore')
+var _ = require('underscore');
+
 exports.init = function(db) {
 	var group = {};
-	//private function that is shared
+	
+	// lists all groups with given query options
 	_listGroups = function(options, callback) {
 	    db.view('articles/list_groups', options,
 	    function(err, res) {
@@ -11,6 +13,7 @@ exports.init = function(db) {
 	);
 	}
 	
+	// list all groups in the given namespace
 	group.list = function(namespace, callback) {
 		var groupKey = {};
 		var startIndex = 0
@@ -89,7 +92,6 @@ exports.init = function(db) {
 	}
 	
 	function _addToGroup(docid, group, callback) {
-	    console.log(group)
 	    //check if group exists
 	    _listGroups({
 	        key: group

@@ -1,0 +1,5 @@
+{
+	"name": "thechronicle-db-abstract",
+	"version" : "0.0.1",
+	"main" : "./lib/db-abstract"
+}

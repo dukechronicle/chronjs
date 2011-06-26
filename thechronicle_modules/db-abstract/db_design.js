@@ -1,6 +1,4 @@
-var cloudant = require('../cradle-connect');
-
-var db = cloudant.connect('chronicle') 
+var db = require('./lib/db-abstract');
 
 var views = {
     descendants: {

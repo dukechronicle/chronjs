@@ -25,4 +25,8 @@ function connect(database) {
 // all functions defined inside of db variable will be available as a module function
 _.extend(exports, connect(DATABASE));
 
+var db = exports;
+
+db.group = require('./group.js');
+
 

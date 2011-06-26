@@ -1,4 +1,4 @@
-var cloudant = require('./cradle-connect');
+var cloudant = require('../cradle-connect');
 
 var db = cloudant.connect('chronicle') 
 
@@ -55,18 +55,20 @@ var views = {
             }
         }
     },
-    list_bins: {
+    // list all groups keyed by path
+    list_groups: {
         map: function(doc) {
-            if(doc.bin_name) {
-                emit(doc.bin_name, doc);
+            if(doc.type == 'group') {
+                emit(doc.path.concat(doc.name), doc);
             }
         }
     },
-    bin_docs: {
+    // get the uuid of all children keyed by fully qualified group name
+    group_children: {
         map: function(doc) {
-            if(doc.bin_name) {
+            if(doc.type == 'group') {
                 doc.children.forEach(function(child_id) {
-                    emit(doc.bin_name, child_id);
+                    emit(doc.path.concat(doc.name), child_id);
                 });
             }
         }

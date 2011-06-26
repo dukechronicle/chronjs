@@ -5,9 +5,11 @@ var PORT = process.env.PORT || 4000;
 var express = require('express');
 require('express-namespace');
 var stylus = require('stylus');
+var async = require('async');
 
 /* require internal nodejs modules */
-var api = require('./thechronicle_modules/api');
+var globalFunctions = require('./thechronicle_modules/global-functions')
+var api = require('./thechronicle_modules/api/lib/api');
 var admin = require('./thechronicle_modules/admin')
 
 /* express configuration */
@@ -42,13 +44,7 @@ app.use(express.bodyParser());
 app.set('views', __dirname + viewsDir);
 
 
-function _error(res, message) {
-    res.render('error', {
-        locals: {
-            message: message
-        }
-    });
-}
+
 
 var homeModel = {
 	twitter: {
@@ -87,11 +83,11 @@ app.get('/index', function(req, res) {
 app.get('/', function(req, http_res) {
     api.bin.list(function(err, bins) {
         if(err) {
-            _error(http_res, err);
+            globalFunctions.showError(http_res, err);
         } else {
             api.bin.get_documents(bins, function(get_err, get_res) {
                 if(get_err) {
-                    _error(http_res, get_err);
+                    globalFunctions.showError(http_res, get_err);
                 } else {
                     http_res.render('main', {
                         locals: {
@@ -109,7 +105,7 @@ app.get('/article/:url', function(req, http_res) {
     
     api.doc_for_url(url, function(err, doc) {
         if(err) {
-            _error(http_res, err);
+            globalFunctions.showError(http_res, err);
         } else {
             http_res.render('article', {
                 locals: {doc: doc}
@@ -122,11 +118,11 @@ app.get('/article/:url/edit', function(req, http_res) {
     var url = req.params.url;
     api.doc_for_url(url, function(err, doc) {
         if(err) {
-            _error(http_res, err);
+            globalFunctions.showError(http_res, err);
         } else {
             api.bin.list(function(bin_err, bins) {
                 if(bin_err) {
-                    _error(http_res, bin_err);
+                    globalFunctions.showError(http_res, bin_err);
                 } else {
                     http_res.render('admin/edit', {
                         locals: {doc: doc,

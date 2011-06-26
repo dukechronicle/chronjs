@@ -1,5 +1,6 @@
-var api = require('../api');
-var globalFunctions = require('../global-functions');
+var api = require('../../api');
+var globalFunctions = require('../../global-functions');
+var async = require('async');
 
 exports.init = function(app) {
 	app.namespace('/admin', function() {
@@ -65,14 +66,20 @@ exports.init = function(app) {
 		                if(!(bins instanceof Array)) { //we will get a string if only one box is checked
 		                    bins = [bins];
 		                }
+		                async.map(bins, function(group) {
+		                	return ['section'].push(group);
+		                }, function(err, bins) {
+		                	console.log(bins)
+		                	api.bin.add(res.id, bins, function(add_err, add_res) {
+			                    if(add_err) {
+			                        globalFunctions.showError(http_res, add_err);
+			                    } else {
+			                        http_res.redirect('article/' + url);
+			                    }
+			                });
+		                })
 		                
-		                api.bin.add(res.id, bins, function(add_err, add_res) {
-		                    if(add_err) {
-		                        globalFunctions.showError(http_res, add_err);
-		                    } else {
-		                        http_res.redirect('article/' + url);
-		                    }
-		                });
+		                
 		            } else {
 		                http_res.redirect('article/' + url);
 		            }

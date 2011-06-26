@@ -38,9 +38,7 @@ exports.init = function(app) {
 		});
 		
 		app.get('/upload', function(req, httpRes) {
-		    httpRes.render('admin/upload', {
-		        locals: {url: undefined}
-		    });
+		    httpRes.render('admin/upload');
 		});
 		
 		app.post('/upload', function(req, httpRes) {
@@ -55,7 +53,7 @@ exports.init = function(app) {
     		                s3.put(data, filename, files.upload.type, function(err3, url) {
                                 if(err3) globalFunctions.showError(http_res, err3);
                                 else {
-                                    httpRes.render('admin/upload', {
+                                    httpRes.render('admin/image', {
                                         locals: {url: url}
                                     });
                                 }

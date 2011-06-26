@@ -93,12 +93,12 @@ function _edit_document(docid, fields, callback) {
 
 api.edit_document = function(docid, fields, callback) {
     var fcns = {};
-    var bins = fields.bins;
-    if(fields.bins) {
-        fcns['bins'] = function(acallback) {
-            _edit_bin(docid, bins, acallback);
+    var groups = fields.groups;
+    if(fields.groups) {
+        fcns['groups'] = function(acallback) {
+            _edit_group(docid, groups, acallback);
         };
-        delete fields.bins; //we will edit this field in bin.edit
+        delete fields.groups; //we will edit this field in group.edit
     }
     fcns['merge'] = function(acallback) {
         _edit_document(docid, fields, acallback);

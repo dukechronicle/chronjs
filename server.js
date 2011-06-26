@@ -81,17 +81,17 @@ app.get('/index', function(req, res) {
 });
 
 app.get('/', function(req, http_res) {
-    api.bin.list(function(err, bins) {
+    api.group.list(function(err, groups) {
         if(err) {
             globalFunctions.showError(http_res, err);
         } else {
-            api.bin.get_documents(bins, function(get_err, get_res) {
+            api.group.get_documents(groups, function(get_err, get_res) {
                 if(get_err) {
                     globalFunctions.showError(http_res, get_err);
                 } else {
                     http_res.render('main', {
                         locals: {
-                            bins: get_res
+                            groups: get_res
                         }
                     });
                 }
@@ -120,13 +120,13 @@ app.get('/article/:url/edit', function(req, http_res) {
         if(err) {
             globalFunctions.showError(http_res, err);
         } else {
-            api.bin.list(function(bin_err, bins) {
-                if(bin_err) {
-                    globalFunctions.showError(http_res, bin_err);
+            api.group.list(function(group_err, groups) {
+                if(group_err) {
+                    globalFunctions.showError(http_res, group_err);
                 } else {
                     http_res.render('admin/edit', {
                         locals: {doc: doc,
-                                 bins: bins}
+                                 groups: groups}
                     });
                 }
             });

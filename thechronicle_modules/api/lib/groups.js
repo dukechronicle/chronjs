@@ -1,9 +1,9 @@
 var nimble = require('nimble');
 
 exports.init = function(api, db) {
-	api.bin = {};
+	api.group = {};
 	//private function that is shared
-	_list_bins = function(options, callback) {
+	_list_groups = function(options, callback) {
 	    db.view('articles/list_groups', options,
 	    function(err, res) {
 	        callback(err, res);
@@ -11,8 +11,8 @@ exports.init = function(api, db) {
 	);
 	}
 	
-	api.bin.list = function(callback) {
-	    _list_bins({}, function(err, res) {
+	api.group.list = function(callback) {
+	    _list_groups({}, function(err, res) {
 	        if(err) {
 	            callback(err, null);
 	        } else {
@@ -23,30 +23,30 @@ exports.init = function(api, db) {
 	    });
 	}
 	
-	api.bin.create = function(bin, callback) {
-	    //check if bin exists
-	    _list_bins({
-	        startkey: bin,
-	        endkey: bin
+	api.group.create = function(group, callback) {
+	    //check if group exists
+	    _list_groups({
+	        startkey: group,
+	        endkey: group
 	    }, function(err, res) {
 	        if(res.length == 0) {
 	            //doesn't exist
 	            db.save({
-	                bin_name: bin,
+	                group_name: group,
 	                children: []
 	            }, 
 	            callback);
 	        }
 	        else {
-	            callback("Bin already exists", null);
+	            callback("group already exists", null);
 	        }
 	    });
 	}
 	
-	function _add_remove_logic(docid, bin, callback, dbres, logic) {
+	function _add_remove_logic(docid, group, callback, dbres, logic) {
 	
 	    var children = dbres[0].value.children;
-	    //add to bin document
+	    //add to group document
 	    logic(children, docid);
 	    nimble.series([
 	    function(acallback) {
@@ -62,13 +62,13 @@ exports.init = function(api, db) {
 	                acallback(err2, null);
 	            }
 	            else {
-	                var bins = res2.bins;
-	                if(!bins) {
-	                    bins = [];
+	                var groups = res2.groups;
+	                if(!groups) {
+	                    groups = [];
 	                }
-	                logic(bins, bin);
+	                logic(groups, group);
 	                db.merge(docid, {
-	                    bins: bins
+	                    groups: groups
 	                },
 	                acallback);
 	            }
@@ -77,26 +77,26 @@ exports.init = function(api, db) {
 	    callback);
 	}
 	
-	function _add_to_bin(docid, bin, callback) {
-	    console.log(bin)
-	    //check if bin exists
-	    _list_bins({
-	        key: bin
+	function _add_to_group(docid, group, callback) {
+	    console.log(group)
+	    //check if group exists
+	    _list_groups({
+	        key: group
 	    },
 	    function(err, res) {
 	        if(err) {
 	            callback(err, null);
 	        }
 	        else if (res.length == 0) {
-	            callback("Bin does not exist", null);
+	            callback("group does not exist", null);
 	        }
 	        else {
 	            var children = res[0].value.children;
 	            if (children.indexOf(docid) != -1) {
-	                callback("Document already in this bin", null);
+	                callback("Document already in this group", null);
 	            }
 	            else {
-	                _add_remove_logic(docid, bin, callback, res, function(arr, obj) {
+	                _add_remove_logic(docid, group, callback, res, function(arr, obj) {
 	                    arr.push(obj);
 	                });
 	            }
@@ -104,10 +104,10 @@ exports.init = function(api, db) {
 	    });
 	}
 	
-	api.bin.add = function(docid, bins, callback) {
-	    nimble.map(bins, function(item, cbck) {
+	api.group.add = function(docid, groups, callback) {
+	    nimble.map(groups, function(item, cbck) {
 	        cbck(null, function(acallback) {
-	            _add_to_bin(docid, item, acallback);
+	            _add_to_group(docid, item, acallback);
 	        });
 	    }, function(map_err, results) {
 	        nimble.series(results, function(ser_err, ser_res) {
@@ -116,23 +116,23 @@ exports.init = function(api, db) {
 	    });
 	}
 	
-	function _remove_from_bin(docid, bin, callback) {
-	    //check if bin exists
-	    _list_bins({
-	        startkey: bin,
-	        endkey: bin
+	function _remove_from_group(docid, group, callback) {
+	    //check if group exists
+	    _list_groups({
+	        startkey: group,
+	        endkey: group
 	    },
 	    function(err, res) {
 	        if (res.length == 0) {
-	            callback("Bin does not exist", null);
+	            callback("group does not exist", null);
 	        }
 	        else {
 	            var children = res[0].value.children;
 	            if (children.indexOf(docid) == -1) {
-	                callback("Document not in this bin", null);
+	                callback("Document not in this group", null);
 	            }
 	            else {
-	                _add_remove_logic(docid, bin, callback, res, function(arr, obj) {
+	                _add_remove_logic(docid, group, callback, res, function(arr, obj) {
 	                    var index = arr.indexOf(obj);
 	                    arr.splice(index, 1);
 	                });
@@ -141,17 +141,17 @@ exports.init = function(api, db) {
 	    });
 	}
 	
-	api.bin.remove = function(docid, bins, callback) {
-	    nimble.map(bins, function(item, cbck) {
+	api.group.remove = function(docid, groups, callback) {
+	    nimble.map(groups, function(item, cbck) {
 	        cbck(null, function(acallback) {
-	            _remove_from_bin(docid, item, acallback);
+	            _remove_from_group(docid, item, acallback);
 	        });
 	    }, function(map_err, map_res) {
 	        nimble.series(map_res, callback);
 	    });
 	}
 	
-	function _get_documents_for_bin(bin, callback) {
+	function _get_documents_for_group(group, callback) {
 	    db.view('articles/group-children', {
 	        startkey: ['section'],
 	        endkey: ['section', {}]
@@ -171,41 +171,41 @@ exports.init = function(api, db) {
 	    });
 	}
 	
-	api.bin.get_documents = function(bins, callback) {
+	api.group.get_documents = function(groups, callback) {
 	    var add = function(memo, item, cbk) {
 	        memo[item] = function(acallback) {
-	            _get_documents_for_bin(item, acallback);
+	            _get_documents_for_group(item, acallback);
 	        };
 	        cbk(null, memo);
 	    };
-	    nimble.reduce(bins, add, {}, function(err, res) {
+	    nimble.reduce(groups, add, {}, function(err, res) {
 	        nimble.parallel(res, callback);
 	    });
 	}
 	
-	function _edit_bin(docid, new_bins, callback) {
+	function _edit_group(docid, new_groups, callback) {
 		console.log(docid);
 	    api.get_document_by_id(docid, function(get_err, get_res) {
 	        if(get_err) {
 	           callback(get_err, null);
 	        } else {
 	        	// find the difference between original and old groups
-	            var orig_bins = get_res.bins;
-	            console.log(new_bins)
+	            var orig_groups = get_res.groups;
+	            console.log(new_groups)
 	            nimble.series([
 	                function(acallback) {
-	                	if (orig_bins) {
-		                    nimble.filter(new_bins, function(val, cbck) {
-		                        cbck(null, orig_bins.indexOf(val) == -1);
+	                	if (orig_groups) {
+		                    nimble.filter(new_groups, function(val, cbck) {
+		                        cbck(null, orig_groups.indexOf(val) == -1);
 		                    }, acallback);
 		                } else {
-							acallback(null, new_bins);
+							acallback(null, new_groups);
 		                }
 	                },
 	                function(acallback) {
-	                	if (orig_bins) {
-		                    nimble.filter(orig_bins, function(val, cbck) {
-		                        cbck(null, new_bins.indexOf(val) == -1);
+	                	if (orig_groups) {
+		                    nimble.filter(orig_groups, function(val, cbck) {
+		                        cbck(null, new_groups.indexOf(val) == -1);
 		                    }, acallback)
 		                } else {
 		                	acallback(null, []);
@@ -214,10 +214,10 @@ exports.init = function(api, db) {
 	            ], function(err, res) {
 	                nimble.series([
 	                    function(acallback) {
-	                        api.bin.add(docid, res[0], acallback);
+	                        api.group.add(docid, res[0], acallback);
 	                    },
 	                    function(acallback) {
-	                        api.bin.remove(docid, res[1], acallback);
+	                        api.group.remove(docid, res[1], acallback);
 	                    }
 	                ], callback);
 	            });

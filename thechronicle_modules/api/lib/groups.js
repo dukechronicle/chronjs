@@ -11,11 +11,20 @@ exports.init = function(db) {
 	);
 	}
 	
-	group.list = function(callback) {
-	    _listGroups({}, function(err, res) {
+	group.list = function(callback, namespace) {
+		var groupKey = {};
+		
+		if (namespace) {
+			groupKey = {
+		    	startkey: namespace,
+		    	endkey: namespace.concat({})
+	    	}
+		}
+	    _listGroups(groupKey, function(err, res) {
 	        if(err) {
 	            callback(err, null);
 	        } else {
+	        	console.log(res)
 	            nimble.map(res, function(val, cbck) {
 	                cbck(null, val.key);
 	            }, callback);

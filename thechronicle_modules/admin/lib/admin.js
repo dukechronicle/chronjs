@@ -69,7 +69,6 @@ exports.init = function(app) {
 		                async.map(groups, function(group) {
 		                	return ['section'].push(group);
 		                }, function(err, groups) {
-		                	console.log(groups)
 		                	api.group.add(res.id, groups, function(add_err, add_res) {
 			                    if(add_err) {
 			                        globalFunctions.showError(http_res, add_err);

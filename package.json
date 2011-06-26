@@ -17,6 +17,7 @@
 		"async":			"0.1.x",
 		
 		"cradle": 			"0.5.x",
-		"knox":				"0.0.x"
+		"knox":				"0.0.x",
+		"formidable":		"1.0.x"
 	}
 }

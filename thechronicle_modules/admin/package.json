@@ -3,6 +3,7 @@
 	"version" : "0.0.1",
 	"main" : "./lib/admin"
 	"dependencies": {
-		"knox":				"0.0.x"
+		"knox":				"0.0.x",
+		"formidable":		"1.0.x"
 	}
 }

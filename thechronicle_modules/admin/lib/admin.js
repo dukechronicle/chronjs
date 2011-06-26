@@ -34,6 +34,10 @@ exports.init = function(app) {
 		    });
 		});
 		
+		app.get('/upload', function(req, httpRes) {
+		    httpRes.render('admin/upload');
+		});
+		
 		app.post('/edit', function(req, http_res) {
 		    var id = req.body.doc.id;
 		    var new_groups = req.body.doc.groups;

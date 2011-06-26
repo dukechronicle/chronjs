@@ -86,7 +86,7 @@ app.get('/', function(req, http_res) {
             globalFunctions.showError(http_res, err);
         } else {
         	console.log(groups)
-            api.group.get_documents(groups, function(get_err, get_res) {
+            api.group.docs(groups, function(get_err, get_res) {
                 if(get_err) {
                     globalFunctions.showError(http_res, get_err);
                 } else {

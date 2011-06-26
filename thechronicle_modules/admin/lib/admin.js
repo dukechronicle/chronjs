@@ -15,11 +15,11 @@ exports.init = function(app) {
 		});
 		
 		app.get('/add', function(req, http_res) {
-		    api.group.list(function(err, groups) {
+		    api.group.list(['section'], function(err, groups) {
 		        http_res.render('admin/add', {
 		            locals: {groups: groups}
 		        });
-		    }, ['section']);
+		    });
 		});
 		
 		app.get('/manage', function(req, http_res) {
@@ -67,7 +67,7 @@ exports.init = function(app) {
 		                    groups = [groups];
 		                }
 		                async.map(groups, function(group) {
-		                	return ['section'].push(group);
+		                	return ['section'].concat(group);
 		                }, function(err, groups) {
 		                	api.group.add(res.id, groups, function(add_err, add_res) {
 			                    if(add_err) {

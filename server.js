@@ -81,7 +81,7 @@ app.get('/index', function(req, res) {
 });
 
 app.get('/', function(req, http_res) {
-    api.group.list(function(err, groups) {
+    api.group.list(['section'], function(err, groups) {
         if(err) {
             globalFunctions.showError(http_res, err);
         } else {
@@ -98,7 +98,7 @@ app.get('/', function(req, http_res) {
                 }
             });
         }
-    }, ['section']);
+    });
 });
 
 app.get('/article/:url', function(req, http_res) {
@@ -121,7 +121,7 @@ app.get('/article/:url/edit', function(req, http_res) {
         if(err) {
             globalFunctions.showError(http_res, err);
         } else {
-            api.group.list(function(group_err, groups) {
+            api.group.list(['section'], function(group_err, groups) {
                 if(group_err) {
                     globalFunctions.showError(http_res, group_err);
                 } else {
@@ -130,7 +130,7 @@ app.get('/article/:url/edit', function(req, http_res) {
                                  groups: groups}
                     });
                 }
-            }, ['section']);
+            });
         }
     });
 });

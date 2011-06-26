@@ -11,7 +11,7 @@ exports.init = function(db) {
 	);
 	}
 	
-	group.list = function(callback, namespace) {
+	group.list = function(namespace, callback) {
 		var groupKey = {};
 		var startIndex = 0
 		if (namespace) {

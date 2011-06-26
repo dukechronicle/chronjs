@@ -5,6 +5,7 @@ exports.connect = function(database) {
 	var connect_url = process.env.CLOUDANT_URL || process.env.COUCHDB_URL;
 	var cloudant_auth = cloudantUrlRegEx.exec(connect_url);
 	
+	if(!cloudant_auth) throw "No Cloudant URL specified...";
 	var port;
 	(cloudant_auth[1] === 'https') ? port = 443 : port = 80;
 	

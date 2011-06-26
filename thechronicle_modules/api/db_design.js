@@ -38,6 +38,7 @@ var views = {
             return tree;
         }
     },
+    // return all doc ids keyed by doc url if one exists
     urls: {
         map: function(doc) {
             if(doc.urls) {
@@ -47,6 +48,7 @@ var views = {
             }
         }
     },
+    // return all doc ids keyed by document author name if one exists
     authors: {
         map: function(doc) {
             if(doc.authors) {
@@ -73,6 +75,7 @@ var views = {
             }
         }
     },
+    // return articles keyed by date
     all_by_date: {
         map: function(doc) {
             if(doc.title) {

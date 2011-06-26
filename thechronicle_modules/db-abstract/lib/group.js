@@ -14,8 +14,9 @@ group.list = function(options, callback) {
 // add document to group
 group.add = function (docId, group, callback) {
     //check if group exists
-    group.list({
-        key: group
+    db.group.list({
+        startkey: group,
+        endkey: group
     },
     function(err, res) {
         if(err) {
@@ -32,9 +33,10 @@ group.add = function (docId, group, callback) {
                 callback("Document already in this group", null);
             }
             else {
-                _addRemoveLogic(docId, group, callback, res, function(arr, obj) {
+                _addRemoveLogic(docId, res[0], function(arr, obj) {
                     arr.push(obj);
-                });
+                },
+                callback);
             }
         }
     });
@@ -56,45 +58,24 @@ group.remove = function(docId, group, callback) {
                 callback("Document not in this group", null);
             }
             else {
-                _addRemoveLogic(docId, group, callback, res, function(arr, obj) {
+                _addRemoveLogic(docId, res[0], function(arr, obj) {
                     var index = arr.indexOf(obj);
                     arr.splice(index, 1);
-                });
+                },
+                callback);
             }
         }
     });
 }
 
-// TODO refactor this to make sense
-function _addRemoveLogic(docid, group, callback, dbres, logic) {
-	var children = dbres[0].value.children;
-    //add to group document
+function _addRemoveLogic(docid, groupDoc, logic, callback) {
+    var children = groupDoc.value.children;
+    //add/remove to children array
     logic(children, docid);
-    nimble.series([
-    function(acallback) {
-        db.merge(dbres[0].id, {
-            children: children
-        },
-        acallback);
+    
+    //update group document
+    db.merge(groupDoc.id, {
+        children: children
     },
-    function(acallback) {
-        db.get(docid,
-        function(err2, res2) {
-            if (err2) {
-                acallback(err2, null);
-            }
-            else {
-                var groups = res2.groups;
-                if(!groups) {
-                    groups = [];
-                }
-                logic(groups, group);
-                db.merge(docid, {
-                    groups: groups
-                },
-                acallback);
-            }
-        });
-    }], 
     callback);
 }

@@ -38,7 +38,9 @@ exports.init = function(app) {
 		});
 		
 		app.get('/upload', function(req, httpRes) {
-		    httpRes.render('admin/upload');
+		    httpRes.render('admin/upload', {
+		        locals: {url: undefined}
+		    });
 		});
 		
 		app.post('/upload', function(req, httpRes) {
@@ -47,20 +49,22 @@ exports.init = function(app) {
 		        if(err) globalFunctions.showError(http_res, err);
 		        else {
 		            var filename = files.upload.name;
-    		        fs.readFile(files.upload.path, 'binary', function(err2, data) {
+    		        fs.readFile(files.upload.path, function(err2, data) {
     		            if(err2) globalFunctions.showError(http_res, err2);
     		            else {
     		                s3.put(data, filename, files.upload.type, function(err3, url) {
                                 if(err3) globalFunctions.showError(http_res, err3);
                                 else {
-                                    console.log(url);
+                                    httpRes.render('admin/upload', {
+                                        locals: {url: url}
+                                    });
                                 }
-        		            })
+        		            });
     		            }
-    		        })
+    		        });
 		        }
-		    })
-		})
+		    });
+		});
 		
 		app.post('/edit', function(req, http_res) {
 		    var id = req.body.doc.id;

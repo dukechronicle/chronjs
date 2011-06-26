@@ -72,30 +72,12 @@ group.remove = function(docid, groups, callback) {
     });
 }
 
-function _getDocumentsForGroup(group, callback) {
-    db.view('articles/group-children', {
-        startkey: ['section'],
-        endkey: ['section', {}]
-    }, 
-    function(err, res) {
-    	if (res) {
-	        nimble.map(res, function(item, cbck) {
-	            cbck(null, function(acallback) {
-	                db.get(item.value, acallback);
-	            });
-	        }, function(map_err, map_res) {
-	            nimble.parallel(map_res, callback);
-	        });
-	    } else {
-	    	callback(null, []);
-	    }
-    });
-}
 
-group.get_documents = function(groups, callback) {
+
+group.docs = function(groups, callback) {
     var add = function(memo, item, cbk) {
         memo[item] = function(acallback) {
-            _getDocumentsForGroup(item, acallback);
+            db.group.docs(item, acallback);
         };
         cbk(null, memo);
     };
@@ -104,6 +86,7 @@ group.get_documents = function(groups, callback) {
     });
 }
 
+/*
 function _editGroup(docid, new_groups, callback) {
 	console.log(docid);
     db.get(docid, function(get_err, get_res) {
@@ -145,4 +128,4 @@ function _editGroup(docid, new_groups, callback) {
         }
     });
 }
-
+*/

@@ -28,5 +28,5 @@ _.extend(exports, connect(DATABASE));
 var db = exports;
 
 db.group = require('./group.js');
-
+db.image = require('./image.js');
 

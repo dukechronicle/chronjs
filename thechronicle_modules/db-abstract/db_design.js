@@ -80,6 +80,13 @@ var views = {
                 emit(doc.created, doc);
             }
         }
+    },
+    image_originals: {
+        map: function(doc) {
+            if(doc.imageVersions) {
+                emit(doc.name, doc);
+            }
+        }
     }
 };
 

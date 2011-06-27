@@ -47,14 +47,17 @@ exports.init = function(app) {
 		        if(err) globalFunctions.showError(httpRes, err);
 		        else {
 		            var filename = files.upload.name;
+		            //have field for this instead
+		            var imageName = filename;
     		        fs.readFile(files.upload.path, function(err2, data) {
     		            if(err2) globalFunctions.showError(httpRes, err2);
     		            else {
     		                s3.put(data, filename, files.upload.type, function(err3, url) {
                                 if(err3) globalFunctions.showError(httpRes, err3);
                                 else {
-                                    httpRes.render('admin/image', {
-                                        locals: {url: url}
+                                    api.image.createOriginal(imageName, url, files.upload.path, function(err4, res) {
+                                        if(err4) globalFunctions.showError(httpRes, err4);
+                                        else httpRes.redirect('/admin/image/' + imageName);
                                     });
                                 }
         		            });
@@ -62,6 +65,22 @@ exports.init = function(app) {
     		        });
 		        }
 		    });
+		});
+		
+		app.get('/image/:imageName', function(req, httpRes) {
+		    var imageName = req.params.imageName;
+		    api.image.getOriginal(imageName, function(err, orig) {
+		        if(err) globalFunctions.showError(httpRes, err);
+		        else httpRes.render('admin/image', {
+		            locals: {
+		                url: orig.value.url
+		            }
+		        });
+		    });
+		});
+		
+		app.post('/image', function(req, httpRes) {
+		    console.log(req.body);
 		});
 		
 		app.post('/edit', function(req, http_res) {

@@ -88,12 +88,20 @@ exports.init = function(app) {
 		    var imageName = req.params.imageName;
 		    api.image.getOriginal(imageName, function(err, orig) {
 		        if(err) globalFunctions.showError(httpRes, err);
-		        else httpRes.render('admin/image', {
-		            locals: {
-		                url: orig.value.url,
-		                name: imageName
-		            }
-		        });
+		        else {
+		            api.docsById(orig.value.imageVersions, function(err2, versions) {
+		                if(err2) globalFunctions.showError(httpRes, err2);
+		                else {
+		                    httpRes.render('admin/image', {
+            		            locals: {
+            		                url: orig.value.url,
+            		                name: imageName,
+            		                versions: versions
+            		            }
+            		        });
+		                }
+		            })
+		        }
 		    });
 		});
 		
@@ -126,7 +134,7 @@ exports.init = function(app) {
 		                                    api.image.createVersion(orig.id, url, width, height,
 		                                    function(dbErr, dbRes) {
 		                                        if(dbErr) globalFunctions.showError(httpRes, dbErr);
-		                                        else httpRes.redirect('/admin/upload');
+		                                        else httpRes.redirect('/admin/image/' + imageName);
 		                                    })
 		                                }
 		                            })

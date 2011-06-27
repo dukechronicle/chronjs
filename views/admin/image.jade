@@ -1,3 +1,4 @@
+h1 Crop
 - if(url)
   script
     function showCoords(c) {
@@ -26,3 +27,8 @@ p
     input#y2(type='hidden', name='y2')
     input(type='hidden', name='name', value=name)
     input(type='submit')
+
+- if(versions.length > 0)
+  hr
+  h1 Existing Versions
+  #versions!= partial('version', {collection: versions})

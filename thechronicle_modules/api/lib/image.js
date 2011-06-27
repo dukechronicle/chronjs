@@ -14,17 +14,20 @@ image.getOriginal = function(name, callback) {
     });
 }
 
-image.createOriginal = function(name, url, localPath, callback) {
+image.createOriginal = function(name, url, localPath, contentType, callback) {
     var options = {
         url: url,
-        localPath: localPath
+        localPath: localPath,
+        contentType: contentType
     };
     db.image.createOriginal(name, options, callback);
 }
 
-image.createVersion = function(parentId, url, callback) {
+image.createVersion = function(parentId, url, width, height, callback) {
     var options = {
-        url: url
+        url: url,
+        width: width,
+        height: height
     };
     db.image.createVersion(parentId, options, callback);
 }

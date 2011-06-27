@@ -1,4 +1,6 @@
 form(action='/admin/upload', method='post', enctype='multipart/form-data')
+  label(for='name') Name:
+  input#name(type='text', name='name')
   input(type='file', name='upload', multiple='multiple')
   input(type='submit')
   

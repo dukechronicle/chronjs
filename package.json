@@ -18,6 +18,7 @@
 		
 		"cradle": 			"0.5.x",
 		"knox":				"0.0.x",
-		"formidable":		"1.0.x"
+		"formidable":		"1.0.x",
+		"imagemagick":		"0.1.x"
 	}
 }

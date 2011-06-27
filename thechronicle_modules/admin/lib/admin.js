@@ -3,7 +3,23 @@ var globalFunctions = require('../../global-functions');
 var async = require('async');
 var formidable = require('formidable');
 var fs = require('fs');
-var s3 = require('./s3.js')
+var s3 = require('./s3.js');
+var im = require('imagemagick');
+
+var EXTENSIONS = {};
+EXTENSIONS['image/jpeg'] = 'jpg';
+EXTENSIONS['image/png'] = 'png';
+EXTENSIONS['image/gif'] = 'gif';
+
+function _getS3Filename(imageName, addition, type) {
+    return imageName + addition + '.' + EXTENSIONS[type];
+}
+
+function _getMagickString(x1, y1, x2, y2) {
+    var w = x2 - x1;
+    var h = y2 - y1;
+    return w.toString() + 'x' + h.toString() + '+' + x1.toString() + '+' + y1.toString();
+}
 
 exports.init = function(app) {
 	app.namespace('/admin', function() {
@@ -48,14 +64,15 @@ exports.init = function(app) {
 		        else {
 		            var filename = files.upload.name;
 		            //have field for this instead
-		            var imageName = filename;
+		            var imageName = (fields.name === '') ? filename : fields.name;
+		            var s3Name = _getS3Filename(imageName, '', files.upload.type);
     		        fs.readFile(files.upload.path, function(err2, data) {
     		            if(err2) globalFunctions.showError(httpRes, err2);
     		            else {
-    		                s3.put(data, filename, files.upload.type, function(err3, url) {
+    		                s3.put(data, s3Name, files.upload.type, function(err3, url) {
                                 if(err3) globalFunctions.showError(httpRes, err3);
                                 else {
-                                    api.image.createOriginal(imageName, url, files.upload.path, function(err4, res) {
+                                    api.image.createOriginal(imageName, url, files.upload.path, files.upload.type, function(err4, res) {
                                         if(err4) globalFunctions.showError(httpRes, err4);
                                         else httpRes.redirect('/admin/image/' + imageName);
                                     });
@@ -73,14 +90,52 @@ exports.init = function(app) {
 		        if(err) globalFunctions.showError(httpRes, err);
 		        else httpRes.render('admin/image', {
 		            locals: {
-		                url: orig.value.url
+		                url: orig.value.url,
+		                name: imageName
 		            }
 		        });
 		    });
 		});
 		
 		app.post('/image', function(req, httpRes) {
-		    console.log(req.body);
+		    var imageName = req.body.name;
+		    api.image.getOriginal(imageName, function(err, orig) {
+		        if(err) globalFunctions.showError(httpRes, err);
+		        else {
+		            var path = orig.value.localPath;
+		            var dest = path + 'crop';
+		            var geom = _getMagickString(
+		                parseInt(req.body.x1),
+		                parseInt(req.body.y1),
+		                parseInt(req.body.x2),
+		                parseInt(req.body.y2));
+		            var width = req.body.x2 - req.body.x1;
+		            var height = req.body.y2 - req.body.y1;
+		            im.convert([path, '-crop', geom, dest], function(imErr, stdout, stderr) {
+		                if(imErr) globalFunctions.showError(httpRes, imErr);
+		                else {
+		                    var versionNum = orig.value.imageVersions.length + 1;
+		                    var type = orig.value.contentType;
+		                    var s3Name = _getS3Filename(imageName, versionNum.toString(), type);
+		                    fs.readFile(dest, function(readErr, buf) {
+		                        if(readErr) globalFunctions.showError(httpRes, readErr);
+		                        else {
+		                            s3.put(buf, s3Name, type, function(s3Err, url) {
+		                                if(s3Err) globalFunctions.showError(httpRes, s3Err);
+		                                else {
+		                                    api.image.createVersion(orig.id, url, width, height,
+		                                    function(dbErr, dbRes) {
+		                                        if(dbErr) globalFunctions.showError(httpRes, dbErr);
+		                                        else httpRes.redirect('/admin/upload');
+		                                    })
+		                                }
+		                            })
+		                        }
+		                    })
+		                }
+		            })
+		        }
+		    })
 		});
 		
 		app.post('/edit', function(req, http_res) {

@@ -44,6 +44,11 @@ app.use(express.bodyParser());
 
 app.set('views', __dirname + viewsDir);
 
+app.error(function(err, req, res, next){
+	res.send(500);
+  	globalFunctions.log('ERROR: ' + err.stack);
+});
+
 var homeModel = {
 	twitter: {
 		title: 'Keep Up',

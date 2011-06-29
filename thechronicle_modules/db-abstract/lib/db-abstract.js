@@ -1,7 +1,7 @@
 var cradle = require('cradle');
 var _ = require('underscore');
 
-var DATABASE = process.env.COUCHDB_DATABASEc || 'chronicle';
+var DATABASE = process.env.COUCHDB_DATABASE || 'chronicle';
 
 // parse environment variable CLOUDANT_URL OR COUHDB_URL to extract authentication information
 function connect(database) {

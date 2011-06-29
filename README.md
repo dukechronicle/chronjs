@@ -12,3 +12,6 @@ The following command will the the COUCHDB_URL enviroment variable for a sample 
 	
 	export COUCHDB_URL=https://dean:123@dukechronicle.com
 
+You have to run this script to populate your database with the correct views:
+
+	node thechronicle_modules/db-abstract/db_design.js

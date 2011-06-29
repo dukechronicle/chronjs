@@ -29,3 +29,7 @@ image.createVersion = function(parentId, url, width, height, callback) {
     };
     db.image.createVersion(parentId, options, callback);
 }
+
+image.originalsForPhotographer = function(photog, callback) {
+    db.image.originalsForPhotographer(photog, callback);
+}

@@ -43,3 +43,9 @@ image.createVersion = function(parentId, options, callback) {
         }
     });
 }
+
+image.originalsForPhotographer = function(photog, callback) {
+    db.view('articles/photographers', {
+        key: photog
+    }, callback);
+}

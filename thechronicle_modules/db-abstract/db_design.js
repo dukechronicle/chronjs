@@ -87,6 +87,13 @@ var views = {
                 emit(doc.name, doc);
             }
         }
+    },
+    photographers: {
+        map: function(doc) {
+            if(doc.photographer) {
+                emit(doc.photographer, doc);
+            }
+        }
     }
 };
 

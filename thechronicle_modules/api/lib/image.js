@@ -14,13 +14,11 @@ image.getOriginal = function(name, callback) {
     });
 }
 
-image.createOriginal = function(name, url, localPath, contentType, callback) {
-    var options = {
-        url: url,
-        localPath: localPath,
-        contentType: contentType
-    };
-    db.image.createOriginal(name, options, callback);
+image.createOriginal = function(name, url, localPath, contentType, metadata, callback) {
+    metadata.url = url;
+    metadata.localPath = localPath;
+    metadata.contentType = contentType;
+    db.image.createOriginal(name, metadata, callback);
 }
 
 image.createVersion = function(parentId, url, width, height, callback) {

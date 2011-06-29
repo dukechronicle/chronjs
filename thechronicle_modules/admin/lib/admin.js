@@ -72,7 +72,13 @@ exports.init = function(app) {
     		                s3.put(data, s3Name, files.upload.type, function(err3, url) {
                                 if(err3) globalFunctions.showError(httpRes, err3);
                                 else {
-                                    api.image.createOriginal(imageName, url, files.upload.path, files.upload.type, function(err4, res) {
+                                    api.image.createOriginal(imageName, url, files.upload.path, files.upload.type, {
+                                        photographer: fields.photographer,
+                                        caption: fields.caption,
+                                        date: fields.date,
+                                        location: fields.location
+                                    },
+                                    function(err4, res) {
                                         if(err4) globalFunctions.showError(httpRes, err4);
                                         else httpRes.redirect('/admin/image/' + imageName);
                                     });

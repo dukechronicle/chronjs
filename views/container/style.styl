@@ -58,16 +58,24 @@ body
 		padding container-padding
 	
 	a.list-story
+		color #333
 		display block
 		border-bottom 1px solid border-color
-		padding 7px 0px 7px container-padding 
+		padding 7px 0px 7px container-padding
+		-webkit-transition color linear .2s
+		border-right 1px solid white
+
+	a.list-story:hover
+		color #226A9F
 	
 	a.list-story.first
-		padding-top container-padding
+		padding-top container-padding - 2
+		margin-top 2px
 	
 	a.list-story.last
-		border none
-		padding-bottom container-padding 
+		border-bottom none
+		padding-bottom container-padding - 2
+		margin-bottom 2px
 	
 	a.hover:hover
 		background #e9e9e9

@@ -11,10 +11,8 @@ body a.list-story:hover{color:#226a9f;border-right-color:#4d90f0}
 body a.list-story.first{padding-top:7px;margin-top:2px}
 body a.list-story.last{border-bottom:none;padding-bottom:7px;margin-bottom:2px}
 body a.hover:hover{background:#e9e9e9;background:transparent -webkit-gradient(linear,left bottom,left top,color-stop(0,#ededed),color-stop(.5,#fff));background:transparent -moz-linear-gradient(center bottom,#ededed 0%,#fff 50%)}
-body .vertical-container{font-size:1em;writing-mode:tb-rl;filter:flipv fliph;-webkit-transform:rotate(-90deg);-moz-transform:rotate(-90deg);-o-transform:rotate(-90deg);white-space:nowrap;display:block;float:left;-webkit-transform-origin-x:0;-webkit-transform-origin-y:100%;-moz-transform-origin:0 100%;position:relative;left:1px;border-bottom:3px solid #666;}
-body .vertical-container .vertical{color:#666;text-shadow:1px 1px 1px #ddd;text-transform:uppercase;margin-bottom:-.2em}
-body .vertical-container.discrete{border-bottom:none;padding-bottom:3px;}
-body .vertical-container.discrete .vertical{color:#999;text-shadow:none}
+body .vertical-container{font-size:1em;writing-mode:tb-rl;filter:flipv fliph;-webkit-transform:rotate(-90deg);-moz-transform:rotate(-90deg);-o-transform:rotate(-90deg);white-space:nowrap;display:block;float:left;-webkit-transform-origin-x:0;-webkit-transform-origin-y:100%;-moz-transform-origin:0 100%;position:relative;left:1px;}
+body .vertical-container .vertical{font-size:.9em;color:#999;text-shadow:0 -1px 0 #ddd;letter-spacing:1px;text-transform:uppercase;margin-bottom:-.2em}
 body .rounded{float:right}
 body .clearfixafter{content:".";display:block;clear:both;visibility:hidden;line-height:0;height:0}
 body .clearfix{display:inline-block}

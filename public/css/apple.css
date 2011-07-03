@@ -21,7 +21,7 @@ img.slideshow  {
     -webkit-transition-delay:.2s;
 	font-family:   Georgia,"Century Schoolbook","Times New Roman",Times,serif;
 }
-.pb-dynamic     { height:443px; padding:0; }
+.pb-dynamic     { height:433px; padding:0; }
 
 .productbrowser { opacity:1; }
 
@@ -32,7 +32,7 @@ img.slideshow  {
 
 
 /* controls */
-.productbrowser .pb-pageindicator { display:none; width:100%; height:60px; text-align:center; background:#fff; *overflow:hidden;
+.productbrowser .pb-pageindicator { display:none; width:100%; height:50px; text-align:center; background:#fff; *overflow:hidden;
     background:-moz-linear-gradient(center bottom, rgba(223,223,223,1) 0%, rgba(242,242,242,1) 66%, rgba(242,242,242,1) 90%, rgba(230,230,230,1) 93%, rgba(190,190,190,1) 96%, rgba(150,150,150,1) 100%);
     background:-webkit-gradient(linear, left bottom, left top, from(rgba(223,223,223,1)), color-stop(66%, rgba(242,242,242,1)), color-stop(90%, rgba(242,242,242,1)), color-stop(95.6%, rgba(230,230,230,1)), color-stop(97%, rgba(210,210,210,1)), to(rgba(140,140,140,1)));
     border-bottom:1px solid #ebebeb;

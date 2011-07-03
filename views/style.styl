@@ -39,7 +39,15 @@ body
 	
 	header, section, footer
 		width 972px
-	
+
+
+	header
+		position relative
+		
+	#header-overlay
+		position absolute
+		left 50px
+
 	#header-top
 		height 100px
 		background-color #003564
@@ -47,6 +55,7 @@ body
 		border-bottom 2px solid white 
 		
 	#header-bottom
+
 		height 80px
 		background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, rgb(51,102,153)),color-stop(1, rgb(255,255,255)));
 		background-image: -moz-linear-gradient(center top,rgb(51,102,153) 0%,rgb(255,255,255) 100%)
@@ -55,6 +64,8 @@ body
 		box-shadow: 0px 1px 3px rgba(0,0,0,.4)
 		
 		h1
+			position relative
+			z-index 2
 			padding-top 3px
 			a
 				color white
@@ -69,6 +80,7 @@ body
 				text-shadow: 0px -1px 1px black
 		nav
 			position absolute
+			z-index 2
 			top 162px
 
 			h2

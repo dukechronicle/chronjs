@@ -1,3 +1,4 @@
+@font-face{font-family:"didot";src:url("css/fonts/didot.eot");src:local("☺"),url("css/fonts/didot.woff") format("woff"),url("css/fonts/didot.ttf") format("truetype"),url("css/fonts/didot.svg") format("svg");font-weight:normal;font-style:normal}
 html,body{width:100%;height:100%;background-color:#f5f6f7}
 body{font-family:Arial,Helvetica,sans-serif;}
 body a{text-decoration:none;color:#226a9f;}
@@ -7,9 +8,12 @@ body h1{font-weight:bold}
 body #shell{margin:0 auto;width:972px}
 body header,body section,body footer{width:972px}
 body #header-top{height:100px;background-color:#003564;box-shadow:0 1px 3px rgba(0,0,0,0.4);border-bottom:2px solid #fff}
-body #header-bottom{height:100px;background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#369),color-stop(1,#fff));background-image:-moz-linear-gradient(center top,#369 0%,#fff 100%);border-bottom-right-radius:4px;border-bottom-left-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.4);}
-body #header-bottom \,body #header-bottom h1{font-family:Didot,"Didot LT STD","Hoefler Text",Garamond,"Times New Roman",serif;color:#222}
-body #header-bottom nav h2{color:#333;margin-top:60px;font-size:.9em;text-transform:uppercase;float:left;margin-right:20px;letter-spacing:1px;text-shadow:0 -1px 0 #bbb}
+body #header-bottom{height:80px;background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#369),color-stop(1,#fff));background-image:-moz-linear-gradient(center top,#369 0%,#fff 100%);border-bottom-right-radius:4px;border-bottom-left-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.4);}
+body #header-bottom h1{padding-top:3px;}
+body #header-bottom h1 a{color:#fff;font-family:didot;font-size:40px;font-weight:normal;letter-spacing:-1px;padding-left:10px;text-shadow:0 -1px 1px #666}
+body #header-bottom h1 a:hover{text-shadow:0 -1px 1px #000}
+body #header-bottom nav{position:absolute;top:165px;}
+body #header-bottom nav h2{color:#333;font-size:.8em;text-transform:uppercase;float:left;margin-right:20px;letter-spacing:1px;text-shadow:0 -1px 0 #bbb}
 body #header-bottom nav h2.first{margin-left:1em}
 body #header-bottom nav h2.last,body #header-bottom nav a{color:#333}
 body section{margin-top:20px}

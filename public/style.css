@@ -21,6 +21,6 @@ body #header-bottom nav h2.last,body #header-bottom nav a{color:#333}
 body section{margin-top:20px}
 #sidebar{float:right;margin-top:-3px;}
 #sidebar .container{margin-bottom:1em}
-#shell .rotator{width:630px;float:left}
+#main{width:630px;float:left}
 #shell .pb-pageindicator a.page{width:180px;height:52px}
 #shell .pb-pageindicator a.page.first{margin-top:-10px}

@@ -8,6 +8,12 @@ box-shadow: 0 1px 3px rgba(0,0,0,.35);
 -moz-box-shadow: 0 1px 3px rgba(0,0,0,.35);
 }
 
+img.slideshow  {
+	-webkit-border-top-left-radius: 4px;
+	-webkit-border-top-right-radius: 4px;
+	width: 630px;
+}
+
 /* product browser
 ------------------------*/
 .productbrowser { position:relative; width:630px; margin:0 auto 14px; padding:0 0 1em; background:#fff; z-index:1;

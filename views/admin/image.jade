@@ -1,0 +1,34 @@
+h1 Crop
+- if(url)
+  script
+    function showCoords(c) {
+      $('#x1').val(c.x);
+      $('#y1').val(c.y);
+      $('#x2').val(c.x2);
+      $('#y2').val(c.y2);
+    };
+    function clearCoords() {
+      $('#coords input').val('');
+    };
+    
+    jQuery(function() {
+      jQuery('#toCrop').Jcrop({
+        onChange:   showCoords,
+        onSelect:   showCoords,
+        onRelease:  clearCoords
+      });
+    });
+  img#toCrop(src=url)
+p
+  form#coords(action='/admin/image', method='POST')
+    input#x1(type='hidden', name='x1')
+    input#x2(type='hidden', name='x2')
+    input#y1(type='hidden', name='y1')
+    input#y2(type='hidden', name='y2')
+    input(type='hidden', name='name', value=name)
+    input(type='submit')
+
+- if(versions.length > 0)
+  hr
+  h1 Existing Versions
+  #versions!= partial('version', {collection: versions})

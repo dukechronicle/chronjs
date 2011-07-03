@@ -1,4 +1,4 @@
-link-color = #226a9f 
+link-color = #226a9f
 corner-radius = 6px
 container-padding = 7px
 border-color = #DDD
@@ -18,6 +18,21 @@ border-radius(corner-radius)
 	border-bottom-right-radius corner-radius corner-radius
 	border-bottom-left-radius corner-radius corner-radius
 
+transition-property()
+	-webkit-transition-property arguments
+	-moz-transition-property arguments
+	-o-transition-property arguments
+	
+transition-duration()
+	-webkit-transition-duration arguments
+	-moz-transition-duration arguments
+	-o-transition-duration arguments
+
+transition-timing-function()
+	-webkit-transition-timing-function arguments
+	-moz-transition-timing-function arguments
+	-o-transition-timing-function arguments
+
 body
 	.container
 		margin-top -1em
@@ -31,10 +46,10 @@ body
 			width 300px
 		
 		
-		.rounded.no-padding 
+		.rounded.no-padding {
 			padding 0px
 			width 300px + (container-padding * 2)
-		
+		}
 	.container.twitter
 		.text
 			h3
@@ -45,29 +60,10 @@ body
 				line-height 1.15em
 				padding-left 1.25em
 		img
-			border-left 1px solid border-color
-			padding-left container-padding - 1
+			padding-left container-padding
 			margin-left 3px
 			float right
 			width 65px
-	
-	.container.top-news
-		width 618px
-		
-		.left, .right
-			float left
-			width 290px
-			
-		.left
-			border-right 1px solid #DDD
-			margin-right 5px
-		.rounded
-			width 603px
-			
-		h2
-			font-size 1.3em
-		h2,h3
-			color link-color
 	
 	.rounded
 		border-radius(4px)
@@ -76,17 +72,36 @@ body
 		padding container-padding
 	
 	a.list-story
+		color #333
 		display block
-		border-bottom 1px solid border-color
-		padding 7px 0px 7px container-padding 
-	
+		padding 5px 0px 5px container-padding
+		border-right 1px solid white
+
+		-webkit-transition-property color, border-color
+		-moz-transition-property color, border-color
+		-o-transition-property color, border-color
+
+		-webkit-transition-duration .2s, .2s
+		-moz-transition-duration .2s, .2s
+		-o-transition-duration .2s, .2s
+		
+		-webkit-transition-duration linear, linear
+		-moz-transition-duration linear, linear
+		-o-transition-duration linear, linear
+
+	a.list-story:hover
+		color #226A9F
+		border-right-color #4D90F0
+
 	a.list-story.first
-		padding-top container-padding
-	
+		padding-top container-padding + 2 - 2
+		margin-top 2px
+
 	a.list-story.last
-		border none
-		padding-bottom container-padding 
-	
+		border-bottom none
+		padding-bottom container-padding + 2 - 2
+		margin-bottom 2px
+
 	a.hover:hover
 		background #e9e9e9
 		background transparent -webkit-gradient(linear,left bottom,left top,color-stop(0, rgb(237,237,237)),color-stop(.5, rgb(255,255,255)))
@@ -112,24 +127,19 @@ body
 		-moz-transform-origin 0px 100%
 		position relative
 		left 1px
-		border-bottom 3px solid #666
+		//border-bottom 3px solid #666
 		
 			
 		.vertical
-			color #666
-			text-shadow 1px 1px 1px border-color
-			
-			text-transform uppercase
-			margin-bottom -0.2em 
-			
-	.vertical-container.discrete
-		border-bottom none
-		padding-bottom 3px
-		.vertical
+			font-size 0.9em
 			color #999
-			text-shadow none
-		
-	
+			text-shadow 0px -1px 0px #DDD
+			letter-spacing 1px
+
+			text-transform uppercase
+			margin-bottom -0.2em
+			
+			
 	.rounded
 		float right
 	
@@ -152,4 +162,3 @@ body
 	 
 	* html .clearfix
 		height 1%
-	

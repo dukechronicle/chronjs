@@ -11,7 +11,7 @@ var async = require('async');
 /* require internal nodejs modules */
 var globalFunctions = require('./thechronicle_modules/global-functions')
 var api = require('./thechronicle_modules/api/lib/api');
-var admin = require('./thechronicle_modules/admin')
+var admin = require('./thechronicle_modules/admin/lib/admin')
 
 /* express configuration */
 var app = express.createServer();
@@ -43,6 +43,11 @@ app.use(express.static(__dirname + publicDir));
 app.use(express.bodyParser());
 
 app.set('views', __dirname + viewsDir);
+
+app.error(function(err, req, res, next){
+	res.send(500);
+  	globalFunctions.log('ERROR: ' + err.stack);
+});
 
 var homeModel = {
 	twitter: {

@@ -5,6 +5,7 @@ var nimble = require('nimble');
 var db = require('../../db-abstract');
 
 api.group = require('./group');
+api.image = require('./image');
 
 var MAX_URL_LENGTH = 50;
 

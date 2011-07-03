@@ -19,16 +19,16 @@ img.slideshow  {
 /* product browser
 ------------------------*/
 .productbrowser { position:relative; width:630px; margin:0 auto 14px; padding:0 0 1em; background:#fff; z-index:1;
+	font-size: 0.9em;
     -webkit-transition:opacity .3s;
     -webkit-transition-delay:.2s;
 	font-family:   Georgia,"Century Schoolbook","Times New Roman",Times,serif;
 }
 .pb-dynamic     { height:433px; padding:0; }
 
-.productbrowser { opacity:1; }
 
 /* product lists */
-.productbrowser .pb-slider { position:relative; width:630px; text-align:center; overflow:hidden; z-index:0; }
+.productbrowser .pb-slider { position:relative; width:630px; text-align:left; overflow:hidden; z-index:0; }
 .pb-dynamic     .pb-slider { height:383px; }
 
 
@@ -37,16 +37,15 @@ img.slideshow  {
 .productbrowser .pb-pageindicator { display:none; width:100%; height:50px; text-align:center; background:#fff; *overflow:hidden;
     background:-moz-linear-gradient(center bottom, rgba(223,223,223,1) 0%, rgba(242,242,242,1) 66%, rgba(242,242,242,1) 90%, rgba(230,230,230,1) 93%, rgba(190,190,190,1) 96%, rgba(150,150,150,1) 100%);
     background:-webkit-gradient(linear, left bottom, left top, from(rgba(223,223,223,1)), color-stop(66%, rgba(242,242,242,1)), color-stop(90%, rgba(242,242,242,1)), color-stop(95.6%, rgba(230,230,230,1)), color-stop(97%, rgba(210,210,210,1)), to(rgba(140,140,140,1)));
-    border-bottom:1px solid #ebebeb;
 }
 .pb-dynamic     .pb-pageindicator { display:block; }
 .productbrowser .pb-pageindicator div { width:630px; margin:0 auto; }
 
-.productbrowser .pb-pageindicator a.page { display:inline-block; margin:0 15px; padding:8px 0 6px; cursor:pointer; color:#7f7f7f;
+.productbrowser .pb-pageindicator a.page { display:inline-block; margin:0 15px; padding:8px 0 6px; cursor:pointer; color:#666;
     -webkit-transition:color linear .2s;
 }
-.productbrowser .pb-pageindicator a.page:hover { color:#000; text-decoration:none; }
-.productbrowser .pb-pageindicator a.page.active { color:#2b2b2b; cursor:default; text-shadow:#fff 0 1px 0; }
+.productbrowser .pb-pageindicator a.page:hover { color:#111; text-decoration:none; }
+.productbrowser .pb-pageindicator a.page.active { color:#111; cursor:default; text-shadow:0px 1px 0px white; }
 
 .productbrowser .pb-pageindicator b.caret { display:block; position:absolute; width:15px; height:8px; margin:0 0 -8px -7px; background:url(/images/caret_active.png) no-repeat;
     -webkit-transform:translate(50%, 0);

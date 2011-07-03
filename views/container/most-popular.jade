@@ -1,10 +1,10 @@
 .container.clearfix.sidebar.most-popular
 	.vertical-container
-		h1.vertical #{title} 
+		h2.vertical #{title}
 	
-	.rounded.no-padding
+	.rounded.no-padding.hover
 		.content-container
 			- each story, id in stories
 				h2
-					a.hover.list-story(href='#', class='#{story.cssClass}')
+					a.list-story(href='#', class='#{story.cssClass}')
 						#{story.title}

@@ -5,3 +5,7 @@ exports.showError = function (res, message) {
         }
     });
 }
+
+exports.log = function (message){
+	console.log(message);
+}

@@ -40,14 +40,32 @@ body
 		font-size 0.8em
 		padding-left 1em
 
+	a.hover
+		border-right 1px solid white
+		-webkit-transition-property color, border-color
+		-moz-transition-property color, border-color
+		-o-transition-property color, border-color
+
+		-webkit-transition-duration .25s, .25s
+		-moz-transition-duration .25s, .25s
+		-o-transition-duration .25s, .25s
+
+		-webkit-transition-duration linear, linear
+		-moz-transition-duration linear, linear
+		-o-transition-duration linear, linear
+
 	.container.sidebar
 		width 300px + (container-padding + 1) * 2
 		.rounded
 			width 300px - 1
 
-		.rounded.no-padding
-			padding 0px
-			width 300px + (container-padding * 2)
+		a.hover:hover
+				color #226A9F
+				border-right-color #4D90F0
+
+		.rounded.collection
+			padding-right 0px
+			width 300px + (container-padding)
 		
 	.container.twitter
 		.text
@@ -73,35 +91,18 @@ body
 	a.list-story
 		color #333
 		display block
-		padding 5px 0px 5px container-padding
+		padding 4px 0px 4px 2px
 
 	a.list-story.first
-		padding-top container-padding + 2 - 2
-		margin-top 2px
+		padding-top 2px
 
 	a.list-story.last
-		border-bottom none
-		padding-bottom container-padding + 2 - 2
-		margin-bottom 2px
+		padding-bottom 2px
 
-	a.hover
-		border-right 1px solid white
-
-		-webkit-transition-property color, border-color
-		-moz-transition-property color, border-color
-		-o-transition-property color, border-color
-
-		-webkit-transition-duration .25s, .25s
-		-moz-transition-duration .25s, .25s
-		-o-transition-duration .25s, .25s
-
-		-webkit-transition-duration linear, linear
-		-moz-transition-duration linear, linear
-		-o-transition-duration linear, linear
 
 	a.hover:hover
 		color #226A9F
-		border-right-color #4D90F0
+		border-bottom-color #4D90F0
 		//background #e9e9e9
 
 		//background transparent -webkit-gradient(linear,left bottom,left top,color-stop(0, rgb(237,237,237)),color-stop(.5, rgb(255,255,255)))
@@ -133,7 +134,7 @@ body
 		.vertical
 			font-size 0.9em
 			color #999
-			text-shadow 0px -1px 0px #DDD
+			text-shadow 0px 1px 1px white
 			letter-spacing 1px
 
 			text-transform uppercase

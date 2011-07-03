@@ -11,6 +11,8 @@ box-shadow: 0 1px 3px rgba(0,0,0,.35);
 img.slideshow  {
 	-webkit-border-top-left-radius: 4px;
 	-webkit-border-top-right-radius: 4px;
+	-moz-border-radius-topleft: 4px;
+	-moz-border-radius-topright: 4px;
 	width: 630px;
 }
 

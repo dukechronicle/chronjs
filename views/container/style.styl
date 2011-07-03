@@ -43,13 +43,12 @@ body
 	.container.sidebar
 		width 300px + (container-padding + 1) * 2
 		.rounded
-			width 300px
-		
-		
-		.rounded.no-padding {
+			width 300px - 1
+
+		.rounded.no-padding
 			padding 0px
 			width 300px + (container-padding * 2)
-		}
+		
 	.container.twitter
 		.text
 			h3
@@ -75,23 +74,6 @@ body
 		color #333
 		display block
 		padding 5px 0px 5px container-padding
-		border-right 1px solid white
-
-		-webkit-transition-property color, border-color
-		-moz-transition-property color, border-color
-		-o-transition-property color, border-color
-
-		-webkit-transition-duration .2s, .2s
-		-moz-transition-duration .2s, .2s
-		-o-transition-duration .2s, .2s
-		
-		-webkit-transition-duration linear, linear
-		-moz-transition-duration linear, linear
-		-o-transition-duration linear, linear
-
-	a.list-story:hover
-		color #226A9F
-		border-right-color #4D90F0
 
 	a.list-story.first
 		padding-top container-padding + 2 - 2
@@ -102,10 +84,28 @@ body
 		padding-bottom container-padding + 2 - 2
 		margin-bottom 2px
 
+	a.hover
+		border-right 1px solid white
+
+		-webkit-transition-property color, border-color
+		-moz-transition-property color, border-color
+		-o-transition-property color, border-color
+
+		-webkit-transition-duration .25s, .25s
+		-moz-transition-duration .25s, .25s
+		-o-transition-duration .25s, .25s
+
+		-webkit-transition-duration linear, linear
+		-moz-transition-duration linear, linear
+		-o-transition-duration linear, linear
+
 	a.hover:hover
-		background #e9e9e9
-		background transparent -webkit-gradient(linear,left bottom,left top,color-stop(0, rgb(237,237,237)),color-stop(.5, rgb(255,255,255)))
-		background transparent -moz-linear-gradient(center bottom,rgb(237,237,237) 0%,rgb(255,255,255) 50%)
+		color #226A9F
+		border-right-color #4D90F0
+		//background #e9e9e9
+
+		//background transparent -webkit-gradient(linear,left bottom,left top,color-stop(0, rgb(237,237,237)),color-stop(.5, rgb(255,255,255)))
+		//background transparent -moz-linear-gradient(center bottom,rgb(237,237,237) 0%,rgb(255,255,255) 50%)
 		
 	
 	.vertical-container

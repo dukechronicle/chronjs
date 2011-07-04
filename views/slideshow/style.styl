@@ -1,11 +1,14 @@
+shadow(opacity, height, width, offset)
+	-webkit-box-shadow rgba(0, 0, 0, opacity) height width offset
+	-moz-box-shadow rgba(0, 0, 0, opacity) height width offset
+	box-shadow rgba(0, 0, 0, opacity) height width offset
+
 .slideshow
 	width  630px
 	border-radius  4px
 	-webkit-border-radius  4px
 	-moz-border-radius  4px
-	box-shadow  0 1px 3px rgba(0,0,0,.35)
-	-webkit-box-shadow  0 1px 3px rgba(0,0,0,.35)
-	-moz-box-shadow  0 1px 3px rgba(0,0,0,.35)
+	shadow(0.398438, 0px, 1px, 3px)
 
 	font-size  0.9em
 	font-family  Georgia,"Century Schoolbook","Times New Roman",Times,serif

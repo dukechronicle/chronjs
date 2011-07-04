@@ -20,7 +20,7 @@ body #header-bottom nav h2 .active{border-bottom-color:#4d90f0}
 body #header-bottom nav h2:hover{border-bottom-color:#4d90f0}
 body #header-bottom nav h2.first{margin-left:1em}
 body #header-bottom nav h2.last,body #header-bottom nav a{color:#333}
-body section{margin-top:20px}
+body section{margin-top:15px}
 #sidebar{float:right;}
-#sidebar .container{margin-bottom:1em}
+#sidebar .container{margin-bottom:10px}
 #shell .slideshow{width:630px;float:left}

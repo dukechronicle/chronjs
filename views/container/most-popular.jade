@@ -4,7 +4,9 @@
 
 	.rounded.collection
 		.content-container
-			- each story, id in stories
-				h2
-					a.list-story.hover(href='#', class='#{story.cssClass}')
-						#{story.title}
+			ol
+				- each story, id in stories
+					li
+						h2
+							a.list-story.hover(href='#', class='#{story.cssClass}')
+								#{story.title}

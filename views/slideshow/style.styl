@@ -1,7 +1,11 @@
+headlines-height = 50px
+
 shadow(opacity, height, width, offset)
 	-webkit-box-shadow rgba(0, 0, 0, opacity) height width offset
 	-moz-box-shadow rgba(0, 0, 0, opacity) height width offset
 	box-shadow rgba(0, 0, 0, opacity) height width offset
+
+
 
 .slideshow
 	width  630px
@@ -13,6 +17,7 @@ shadow(opacity, height, width, offset)
 	font-size  0.9em
 	font-family  Georgia,"Century Schoolbook","Times New Roman",Times,serif
 	padding 0
+	margin-bottom 20px
 
 
 .slides img  
@@ -37,7 +42,7 @@ shadow(opacity, height, width, offset)
 .headlines
 	display none
 	width 100%
-	height 50px
+	height headlines-height
 	text-align center
 	background #fff
 	*overflow hidden
@@ -52,11 +57,12 @@ shadow(opacity, height, width, offset)
 	a.page
 		cursor pointer
 		width 180px
-		height 52px
 		display inline-block
 		margin 0 15px
-		padding 8px 0 6px
+		padding 6px 0 6px
+		height headlines-height - (6 * 2)
 		color #666
+		line-height 1.3em
 		-webkit-transition color linear .2s
 
 	a.page:hover

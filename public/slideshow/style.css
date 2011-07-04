@@ -4,5 +4,5 @@
 .headlines{display:none;width:100%;height:50px;text-align:center;background:#fff;*overflow:hidden;background:-moz-linear-gradient(center bottom,#dfdfdf 0%,#f2f2f2 66%,#f2f2f2 90%,#e6e6e6 93%,#bebebe 96%,#969696 100%);background:-webkit-gradient(linear,left bottom,left top,from(#dfdfdf),color-stop(66%,#f2f2f2),color-stop(90%,#f2f2f2),color-stop(95.6%,#e6e6e6),color-stop(97%,#d2d2d2),to(#8c8c8c));display:block;}
 .headlines div{width:630px margin 0 auto}
 .headlines a.page{cursor:pointer;width:180px;display:inline-block;margin:0 15px;padding:6px 0 6px;height:38px;color:#666;line-height:1.3em;-webkit-transition:color linear .2s}
-.headlines a.page:hover{color:#111;text-decoration:none}
-.headlines a.page.active{color:#111;text-shadow:0 1px 0 #fff}
+.headlines a.page:hover{color:#000;text-decoration:none}
+.headlines a.page.active{color:#000;text-shadow:0 1px 0 #fff}

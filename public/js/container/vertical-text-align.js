@@ -6,6 +6,32 @@ $(function() {
 		height = parseInt(height.substring(0, height.length - 2), 10) + topSpacing;
 		$(this).css('top', height + "px");
 	});
+
+	// align rows
+	// find all align groups
+	$(".align-group").each(function(i) {
+		var groups = [];
+
+		// find all elements of align group and add it to group array
+		$(this).find('> .align-element').each(function(i) {
+			groups.push($(this).find('> a'))
+		});
+		console.log(_.zip.apply(this, groups))
+		_.each(_.zip.apply(this, groups), function(row) {
+			// get max height of current row
+			var maxHeight = 0;
+			_.each(row, function(element) {
+				var height = $(element).height();
+				if (height > maxHeight) {
+					maxHeight = height;
+					console.log(maxHeight)
+				}
+			});
+			_.each(row, function(element) {
+				$(element).height(maxHeight);
+			});
+		});
+	});
 /*
 	$(".hover-highlight").each(function(i) {
 		var element = $(this);
@@ -19,4 +45,5 @@ $(function() {
 			element.find('p').removeClass('selected');
 		})
 	});*/
+
 });

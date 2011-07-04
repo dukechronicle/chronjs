@@ -1,11 +1,13 @@
 body .container{margin-top:-1em;position:relative;font-size:.8em;padding-left:0;}
-body .container a.hover{display:block;border-right:1px solid #fff;-webkit-transition-property:color,#ddd;-moz-transition-property:color,#ddd;-o-transition-property:color,#ddd;-webkit-transition-duration:.25s,.25s;-moz-transition-duration:.25s,.25s;-o-transition-duration:.25s,.25s;-webkit-transition-duration:linear,linear;-moz-transition-duration:linear,linear;-o-transition-duration:linear,linear;}
-body .container a.hover h1,body .container a.hover h2,body .container a.hover h3,body .container a.hover h4,body .container a.hover h5,body .container a.hover p{-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear;color:#333}
+body .container a.hover{display:block;border-right:1px solid transparent;border-left:1px solid transparent;-webkit-transition-property:color,border-color;-moz-transition-property:color,border-color;-o-transition-property:color,border-color;-webkit-transition-duration:.25s,.25s;-moz-transition-duration:.25s,.25s;-o-transition-duration:.25s,.25s;-webkit-transition-duration:linear,linear;-moz-transition-duration:linear,linear;-o-transition-duration:linear,linear;}
+body .container a.hover h1,body .container a.hover h2,body .container a.hover h3,body .container a.hover h4,body .container a.hover h5,body .container a.hover p{-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear;color:#000}
+body .container a.hover p{color:#666}
 body .container a.hover:hover{color:#36c;border-right-color:#4d90f0}
+body .container a.hover.left:hover{border-right-color:transparent;border-left-color:#4d90f0}
 body .container a.hover:hover h1,body .container a.hover:hover h2,body .container a.hover:hover h3,body .container a.hover:hover h4,body .container a.hover:hover h5{color:#36c}
-body .container a.hover:hover p{color:#000}
+body .container a.hover:hover p{color:#333}
 body .container.sidebar{width:316px;}
-body .container.sidebar .rounded{width:299px}
+body .container.sidebar .rounded{width:298px}
 body .container.sidebar .rounded.collection{padding-right:0;width:307px}
 body .container.sidebar .vertical-container .vertical{margin-bottom:-2px}
 body .container.twitter .text h3{margin-bottom:3px}
@@ -17,7 +19,7 @@ body a.list-story.first{padding-top:2px}
 body a.list-story.last{padding-bottom:2px}
 body a.hover:hover{color:#36c;border-bottom-color:#4d90f0}
 body .vertical-container{font-size:1em;writing-mode:tb-rl;filter:flipv fliph;-webkit-transform:rotate(-90deg);-moz-transform:rotate(-90deg);-o-transform:rotate(-90deg);white-space:nowrap;display:block;float:left;-webkit-transform-origin-x:0;-webkit-transform-origin-y:100%;-moz-transform-origin:0 100%;position:relative;left:1px;}
-body .vertical-container .vertical{font-size:.9em;color:#999;text-shadow:0 1px 1px #fff;letter-spacing:1px;text-transform:uppercase;margin-bottom:0}
+body .vertical-container .vertical{font-size:.9em;color:#999;text-shadow:0 1px 1px #fff;letter-spacing:1px;text-transform:uppercase;margin-bottom:-1px}
 body .rounded{float:right}
 body .clearfixafter{content:".";display:block;clear:both;visibility:hidden;line-height:0;height:0}
 body .clearfix{display:inline-block}

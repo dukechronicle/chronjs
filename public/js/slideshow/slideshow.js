@@ -26,8 +26,8 @@ $(function(){
 
 	// bind headlines to slideshow switches
 	$('.slideshow .headlines a').each(function(index) {
-		$(this).click(function() {
-			showSlide(index);
+		$(this).mouseover(function() {
+			if (index != currentSlide) showSlide(index);
 		})
 	});
 });

@@ -2,7 +2,7 @@
 link-color = #36c
 corner-radius = 6px
 container-padding = 7px
-border-color = #DDD
+border-color-grey = #DDD
 
 shadow(opacity, height, width, offset)
 	-webkit-box-shadow rgba(0, 0, 0, opacity) height width offset
@@ -49,7 +49,8 @@ body
 
 		a.hover
 			display block
-			border-right 1px solid white
+			border-right 1px solid transparent
+			border-left 1px solid transparent
 			-webkit-transition-property color, border-color
 			-moz-transition-property color, border-color
 			-o-transition-property color, border-color
@@ -64,22 +65,28 @@ body
 
 			h1, h2, h3, h4, h5, p
 				transition(color, .25s, linear)
-				color #333
+				color black
+
+			p
+				color #666
 
 		a.hover:hover
 				color link-color
 				border-right-color #4D90F0
-				
+
+		a.hover.left:hover
+				border-right-color transparent
+				border-left-color #4D90F0
 		a.hover:hover
 			h1, h2, h3, h4, h5
 				color link-color
 			p
-				color black
+				color #333
 
 	.container.sidebar
 		width 300px + (container-padding + 1) * 2
 		.rounded
-			width 300px - 1
+			width 300px - 2
 
 		.rounded.collection
 			padding-right 0px
@@ -157,7 +164,7 @@ body
 			letter-spacing 1px
 
 			text-transform uppercase
-			margin-bottom 0px
+			margin-bottom -1px
 			
 			
 	.rounded

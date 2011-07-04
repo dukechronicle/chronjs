@@ -32,12 +32,19 @@ shadow(opacity, height, width, offset)
 
 
 .slides
+	-webkit-border-top-left-radius  4px
+	-webkit-border-top-right-radius  4px
+	-moz-border-radius-topleft  4px
+	-moz-border-radius-topright  4px
 	position relative
 	width 630px
 	text-align left
 	overflow hidden
-	z-index 0
 	height 383px
+	//border 1px solid
+	z-index 0
+	//border-color #E5E5E5 #DBDBDB #D2D2D2
+	box-shadow rgba(0,0,0,0.3) 0 1px 3px
 
 .headlines
 	display none
@@ -47,9 +54,8 @@ shadow(opacity, height, width, offset)
 	background #fff
 	*overflow hidden
 	
-	background -moz-linear-gradient(center bottom, rgba(223,223,223,1) 0%, rgba(242,242,242,1) 66%, rgba(242,242,242,1) 90%, rgba(230,230,230,1) 93%, rgba(190,190,190,1) 96%, rgba(150,150,150,1) 100%)
-	background -webkit-gradient(linear, left bottom, left top, from(rgba(223,223,223,1)), color-stop(66%, rgba(242,242,242,1)), color-stop(90%, rgba(242,242,242,1)), color-stop(95.6%, rgba(230,230,230,1)), color-stop(97%, rgba(210,210,210,1)), to(rgba(140,140,140,1)))
-
+	background -moz-linear-gradient(center bottom,rgb(234,234,234) 23%,rgb(255,255,255) 70%,rgb(255,255,255) 92%,rgb(234,234,234) 100%,rgb(227,227,227) 0%)
+	background -webkit-gradient(linear,left bottom,left top,color-stop(0.23, rgb(244,244,244)),color-stop(0.7, rgb(255,255,255)),color-stop(1, rgb(244,244,244)),color-stop(0, rgb(237,237,237)))
 	display block
 
 	div
@@ -61,9 +67,10 @@ shadow(opacity, height, width, offset)
 		margin 0 15px
 		padding 6px 0 6px
 		height headlines-height - (6 * 2)
-		color #666
+		color #444
 		line-height 1.3em
 		-webkit-transition color linear .2s
+		text-shadow 0px 1px 1px white
 
 	a.page:hover
 		color black

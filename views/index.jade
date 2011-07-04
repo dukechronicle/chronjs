@@ -4,11 +4,12 @@ html(lang="en")
 		title Container Demo
 		link(rel='stylesheet', href='/css/reset.css')
 		link(rel='stylesheet', href='/style.css')
-		link(rel='stylesheet', href='/css/apple.css')
+		link(rel='stylesheet', href='/slideshow/style.css')
 		link(rel='stylesheet', href='/container/style.css')
 		script(src='js/jquery.js')
 		//script(src='js/jquery-ui.js')
 		script(src='js/container/vertical-text-align.js')
+		script(src='js/slideshow/slideshow.js')
 	body
 		#shell
 			header
@@ -34,7 +35,7 @@ html(lang="en")
 						h2.last
 							a(href='#') Blogs
 			section
-				!=partial('rotator')
+				!=partial('slideshow')
 				#sidebar
 					!=partial('container/twitter', model.twitter)	
 					br

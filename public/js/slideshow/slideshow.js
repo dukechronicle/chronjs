@@ -26,7 +26,7 @@ $(function(){
 
 	// bind headlines to slideshow switches
 	$('.slideshow .headlines a').each(function(index) {
-		$(this).mouseover(function() {
+		$(this).click(function() {
 			if (index != currentSlide) showSlide(index);
 		})
 	});

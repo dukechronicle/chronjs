@@ -1,0 +1,11 @@
+.container.clearfix.sidebar.opinion
+	.vertical-container
+		h2.vertical #{title}
+
+	.rounded.collection
+		.content-container
+			- each story, id in stories
+				h2
+					a.list-story.hover(href='#', class='#{story.cssClass}')
+						#{story.title}
+						p.author #{story.author}

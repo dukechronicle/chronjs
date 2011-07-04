@@ -94,12 +94,12 @@ var homeModel = {
 }
 
 /*** FRONTEND ***/
-app.get('/index', function(req, res) {
+app.get('/', function(req, res) {
 	res.render('index', {layout: false, model: homeModel});
 });
 
 
-app.get('/', function(req, http_res) {
+app.get('/article-list', function(req, http_res) {
     api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(err, groups) {
         if(err) {
             globalFunctions.showError(http_res, err);

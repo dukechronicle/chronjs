@@ -1,6 +1,12 @@
-link-color = #226a9f
+link-color = #36c
 text-color = #333
 bg-color = #F5F6F7
+
+transition()
+	-webkit-transition arguments
+	-moz-transition arguments
+	-o-transition arguments
+	transition arguments
 
 @font-face
 	font-family 'didot'
@@ -17,7 +23,7 @@ html, body
 
 body
 	font-family "Lucida Grande", "Lucida Sans Unicode", Helvetica, Arial, Verdana, sans-serif
-	font-family Arial,Helvetica,sans-serif;
+	//font-family Arial,Helvetica,sans-serif;
 	
 	a
 		text-decoration none
@@ -85,7 +91,7 @@ body
 		nav
 			position absolute
 			z-index 2
-			top 162px
+			top 163px
 
 			h2
 				color #333
@@ -94,8 +100,16 @@ body
 				float left
 				margin-right 20px
 				letter-spacing 1px
-				text-shadow: 0px 1px 0px white
+				text-shadow 0px 1px 0px white
+				border-bottom 1px solid white
+				padding-bottom 3px
+				transition(border-color, .25s, linear)
 
+				.active
+					border-bottom-color #4D90F0
+			h2:hover
+				border-bottom-color #4D90F0
+				
 			h2.first
 				margin-left 1em
 			

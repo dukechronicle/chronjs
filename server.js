@@ -51,7 +51,7 @@ app.error(function(err, req, res, next){
 
 var homeModel = {
 	twitter: {
-		title: 'Keep Up',
+		title: 'Twitter',
 		imageUrl: 'https://si0.twimg.com/profile_images/1157619932/Duke_Chronicle_reasonably_small.jpeg',
 		user: 'DukeChronicle',
 		tweet: 'RT @fhi_duke: "Why Tell Stories?" Edwidge Danticat on power of testimony in face of catastrophe http://bit.ly/gu4K8h Thanks @DukeChronicle!'
@@ -90,8 +90,23 @@ var homeModel = {
 			'second': {title: 'Duke plans for upcoming season'},
 			'third': {title: 'Duke falls in match play semis'}
 		}
+	},
+	opinion: {
+		title: 'Opinion',
+		stories: {
+			1: {title: 'Egypt an academic opportunity',
+				comments: '3', cssClass: 'first', author: 'Editorial Board'},
+			2: {title: 'Make my day',
+				comments: '1', author: 'Carol Apollonio'},
+			3: {title: 'Arab dictators stuck in yesteryear',
+				comments: '5', author: 'Chris Bassil'},
+			4: {title: 'The right to obstain',
+				comments: '0', author: 'Christine Hall'},
+			5: {title: 'I read programming books for fun',
+				comments: '14', cssClass: 'last', author: 'Dean Chen'}
+		}
 	}
-}
+};
 
 /*** FRONTEND ***/
 app.get('/', function(req, res) {

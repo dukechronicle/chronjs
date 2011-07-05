@@ -22,3 +22,4 @@ body #header-bottom nav h2.first{margin-left:1em}
 body #header-bottom nav h2.last,body #header-bottom nav a{color:#333}
 body section{margin-top:20px}
 .container{margin-bottom:15px}
+.clear-both{clear:both}

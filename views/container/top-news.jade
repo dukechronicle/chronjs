@@ -1,9 +1,9 @@
-.container.top-news
+.container.clear-fix.top-news
 	.vertical-container
 		h2.vertical #{title}
 	
-	.rounded.collection
-		.content-container.clearfix.align-group
+	.rounded
+		.content-container.align-group
 		
 			.left.align-element
 				a.hover.left.first.teaser(href='#')
@@ -13,11 +13,12 @@
 					h3 #{news.second.title}
 				a.hover.left(href='#')
 					h3 #{news.third.title}
-			.right.align-element
-				a.hover.first.teaser(href='#')
+			.right.clear-fix.align-element
+				a.hover.right.first.teaser(href='#')
 					h2 #{sports.top.title}
 					p #{sports.top.teaser}
-				a.hover(href='#')
+				a.hover.right(href='#')
 					h3 #{sports.second.title}
-				a.hover(href='#')
+				a.hover.right(href='#')
 					h3 #{sports.third.title}
+			.clear-both

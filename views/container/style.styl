@@ -92,20 +92,24 @@ body
 			padding-top 2px
 			text-transform uppercase
 
+
+	.rounded
+		padding container-padding
+
+		a.hover.right
+			margin-right container-padding * -2
+		a.hover.left
+			margin-left container-padding * -2
+
 	.container.sidebar
 
-		
 		h1, h2, h3, h4, h5
 			text-shadow 0px 1px 1px white
 		width 300px + (container-padding) * 2
 
 		.rounded
 			width 300px
-			padding container-padding
 
-			a.hover.right
-				margin-right container-padding * -2
-		// account for 1px left and right border
 		.rounded-hover
 			padding container-padding (container-padding - 1)
 

@@ -73,7 +73,7 @@ var homeModel = {
 	},
 	ad: {
 		title: 'Advertisement',
-		imageUrl: 'https://www.google.com/adsense/static/en/images/inline_rectangle.gif',
+		imageUrl: '/images/ads/monster.png',
 		url: 'http://google.com'
 	},
 	top: {

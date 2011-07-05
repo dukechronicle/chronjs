@@ -71,9 +71,19 @@ var homeModel = {
 				comments: '14', cssClass: 'last'},
 		}
 	},
-	ad: {
+	adFullRectangle: {
 		title: 'Advertisement',
 		imageUrl: '/images/ads/monster.png',
+		url: 'http://google.com'
+	},
+	adFullBanner: {
+		title: 'Ad',
+		imageUrl: '/images/ads/full-banner.jpg',
+		url: 'http://google.com'
+	},
+	printEdition: {
+		title: 'Print',
+		imageUrl: '/images/issuu-thumb.jpg',
 		url: 'http://google.com'
 	},
 	top: {

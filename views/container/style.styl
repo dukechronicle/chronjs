@@ -1,7 +1,7 @@
 //link-color = link-color
 link-color = #36c
 corner-radius = 6px
-container-padding = 7px
+container-padding = 3px
 border-color-grey = #DDD
 
 shadow(opacity, height, width, offset)
@@ -47,6 +47,8 @@ body
 		font-size 0.8em
 		padding-left 0em
 
+		.content-container
+			padding container-padding
 		a.hover
 			display block
 			border-right 1px solid transparent
@@ -76,8 +78,8 @@ body
 			border-right-color #4D90F0
 
 		a.hover.left:hover
-				border-right-color transparent
-				border-left-color #4D90F0
+			border-right-color transparent
+			border-left-color #4D90F0
 		a.hover:hover
 			h1, h2, h3, h4, h5
 				color link-color
@@ -91,18 +93,29 @@ body
 			text-transform uppercase
 
 	.container.sidebar
+
+		
 		h1, h2, h3, h4, h5
 			text-shadow 0px 1px 1px white
-		width 300px + (container-padding + 1) * 2
+		width 300px + (container-padding) * 2
+
 		.rounded
-			width 300px - 2
+			width 300px
+			padding container-padding
 
-		.rounded.collection
-			padding-right 0px
-			width 300px + (container-padding)
+			a.hover.right
+				margin-right container-padding * -2
+		// account for 1px left and right border
+		.rounded-hover
+			padding container-padding (container-padding - 1)
 
-		.vertical-container .vertical
-			margin-bottom -2px
+	.container.advertisement
+		img
+			border-radius 4px
+			display block
+		.content-container
+			padding 0px
+		
 	.container.twitter
 		.text
 			h3
@@ -117,14 +130,13 @@ body
 			float right
 			width 65px
 	
-	.rounded
+	.rounded, .rounded-hover
 		border-radius(4px)
 		shadow(0.398438, 0px, 1px, 3px)
 		background-color white
 		background -webkit-gradient(linear,left bottom,left top,color-stop(0, whiteSmoke),color-stop(0.33, white))
 		background -moz-linear-gradient(center bottom,whiteSmoke 0%,white 33%)
-
-		padding container-padding
+		float right
 	
 	a.list-story
 		color black
@@ -183,8 +195,6 @@ body
 	.most-popular ol
 		font-family Georgia,"Century Schoolbook","Times New Roman",Times,serif
 
-	.rounded
-		float right
 	
 	.clearfixafter
 		content "."

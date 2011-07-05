@@ -83,7 +83,7 @@ var homeModel = {
 	},
 	printEdition: {
 		title: 'Print',
-		imageUrl: '/images/issuu-thumb.jpg',
+		imageUrl: '/images/issuu-thumb.png',
 		url: 'http://google.com'
 	},
 	top: {

@@ -16,7 +16,7 @@ $(function() {
 		$(this).find('> .align-element').each(function(i) {
 			groups.push($(this).find('> a'))
 		});
-		console.log(_.zip.apply(this, groups))
+		//console.log(_.zip.apply(this, groups))
 		_.each(_.zip.apply(this, groups), function(row) {
 			// get max height of current row
 			var maxHeight = 0;
@@ -24,7 +24,7 @@ $(function() {
 				var height = $(element).height();
 				if (height > maxHeight) {
 					maxHeight = height;
-					console.log(maxHeight)
+					//console.log(maxHeight)
 				}
 			});
 			_.each(row, function(element) {

@@ -1,27 +1,39 @@
 link-color = #36c
-container-padding = 3px
+container-padding = 4px
+main-width =  636px
 
 #sidebar
 	float right
 
 #main
 	float left
-	width 636px
+	width main-width
+
+	.rounded
+		padding container-padding
+
+		a.hover.right
+			margin-right container-padding * -2 + 1
+		a.hover.left
+			margin-left container-padding * -2 + 1
 
 #main .container
-	width 636px
+	width main-width
 	.rounded
-		width 636px - (container-padding * 2)
+		width (main-width - (container-padding * 2))
+
+
 
 .top-news .rounded
-	width = 626px
-	leftColumnWidth = 306px
 	padding = 10px
+	width = main-width - 2 - padding
+	leftColumnWidth = width/2
+
 	> .left, > .right
 		margin-top 1px
 
 	.left
-		width leftColumnWidth - padding + 2
+		width leftColumnWidth - padding
 		float left
 		
 		a.hover

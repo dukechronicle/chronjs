@@ -12,7 +12,7 @@ body #header-overlay{position:absolute;left:50px}
 body #header-top{height:96px;background-color:#003564;box-shadow:0 1px 3px rgba(0,0,0,0.4);border-bottom:2px solid #fff}
 body #header-bottom{height:80px;background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#369),color-stop(1,#fff));background-image:-moz-linear-gradient(center top,#369 0%,#fff 100%);border-bottom-right-radius:4px;border-bottom-left-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,0.4);}
 body #header-bottom h1{position:relative;z-index:2;padding-top:3px;}
-body #header-bottom h1 a{color:#fff;font-family:didot;font-size:40px;font-weight:normal;letter-spacing:-1px;padding-left:10px;text-shadow:0 -1px 1px #666;-webkit-transition:text-shadow .2s linear;-moz-transition:text-shadow .2s linear}
+body #header-bottom h1 a{color:#fff;font-family:didot;font-size:48px;font-weight:normal;letter-spacing:-1px;padding-left:10px;text-shadow:0 -1px 1px #666;-webkit-transition:text-shadow .2s linear;-moz-transition:text-shadow .2s linear}
 body #header-bottom h1 a:hover{text-shadow:0 -1px 1px #000}
 body #header-bottom nav{position:absolute;z-index:2;top:159px;}
 body #header-bottom nav h2{color:#333;font-size:.8em;text-transform:uppercase;float:left;margin-right:20px;letter-spacing:1px;text-shadow:0 1px 0 #fff;border-bottom:1px solid #fff;padding-bottom:3px;-webkit-transition:border-color .25s linear;-moz-transition:border-color .25s linear;-o-transition:border-color .25s linear;transition:border-color .25s linear;}
@@ -27,4 +27,12 @@ body section{margin-top:20px}
 span.timestamp{color:#036;font-size:.5em;display:block}
 #search-box{float:right;margin-right:5px;font-size:.8em;margin-top:57px;}
 #search-box input{background:#fff url("/images/search-button.png") no-repeat;border-radius:10px;border:2px inset;width:150px}
-.leaderboard{float:right;margin-top:3px;margin-right:3px}
+.leaderboard{float:right;margin-top:3px;margin-right:3px;padding-left:3px;margin-bottom:3px;border-left:1px solid #ddd;}
+.leaderboard img{display:block}
+header .social-media{width:230px;float:left;position:relative;z-index:2;text-align:center;}
+header .social-media h2{text-align:left;margin-left:10px;color:#fff;text-shadow:0 -1px 1px #333;margin-bottom:8px;font-size:.8em;text-transform:uppercase;letter-spacing:1px;padding-top:4px}
+header .social-media .inner{padding-top:5px;}
+header .social-media .inner .icons{margin-left:10px;text-align:left;}
+header .social-media .inner .icons img{opacity:.5;padding-right:13px;width:25px;height:25px;-webkit-transition:opacity,.25s linear;-moz-transition:opacity,.25s linear;-o-transition:opacity,.25s linear;transition:opacity,.25s linear}
+header .social-media .inner .icons a:hover img{opacity:1}
+header .social-media .inner .icons img.last{padding-right:0}

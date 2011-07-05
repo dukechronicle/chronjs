@@ -41,6 +41,15 @@ transition()
 	transition arguments
 
 body
+	#sidebar
+		.container
+
+			h1, h2, h3, h4, h5
+				text-shadow 0px 1px 1px white
+			width 300px + (container-padding) * 2
+
+			.rounded
+				width 300px
 	.container
 		margin-top -1em
 		position relative
@@ -94,31 +103,24 @@ body
 
 
 	.rounded
-		padding container-padding
+		padding (container-padding + 2) container-padding
 
 		a.hover.right
 			margin-right container-padding * -2
 		a.hover.left
 			margin-left container-padding * -2
 
-	.container.sidebar
+	.rounded-hover
+		padding container-padding (container-padding - 1)
 
-		h1, h2, h3, h4, h5
-			text-shadow 0px 1px 1px white
-		width 300px + (container-padding) * 2
 
-		.rounded
-			width 300px
-
-		.rounded-hover
-			padding container-padding (container-padding - 1)
-
-	.container.advertisement
-		img
-			border-radius 4px
-			display block
-		.content-container
-			padding 0px
+	.image-container
+		.container
+			img
+				border-radius 4px
+				display block
+			.content-container
+				padding 0px
 		
 	.container.twitter
 		.text

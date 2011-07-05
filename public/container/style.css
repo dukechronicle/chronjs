@@ -26,8 +26,9 @@ body a.list-story.last{padding-bottom:2px}
 body a.hover:hover{color:#36c;border-bottom-color:#4d90f0}
 body .vertical-container{font-size:1em;writing-mode:tb-rl;filter:flipv fliph;-webkit-transform:rotate(-90deg);-moz-transform:rotate(-90deg);-o-transform:rotate(-90deg);white-space:nowrap;display:block;float:left;-webkit-transform-origin-x:0;-webkit-transform-origin-y:100%;-moz-transform-origin:0 100%;position:relative;left:1px;}
 body .vertical-container .vertical{font-size:.9em;color:#999;letter-spacing:1px;text-shadow:0 1px 1px #fff;text-transform:uppercase}
-body .most-popular li{list-style:decimal inside}
-body .most-popular ol{font-family:Georgia,"Century Schoolbook","Times New Roman",Times,serif}
+body .most-popular ol li{list-style:decimal outside}
+body .most-popular ol li h2{margin-left:-7px}
+body .most-popular ol{margin-left:20px;font-family:Georgia,"Century Schoolbook","Times New Roman",Times,serif}
 body .clearfixafter{content:".";display:block;clear:both;visibility:hidden;line-height:0;height:0}
 body .clearfix{display:inline-block}
 body html[xmlns] .clearfix{display:block}

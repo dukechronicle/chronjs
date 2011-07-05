@@ -32,6 +32,9 @@ html(lang="en")
 							a(href='#') Multimedia
 						h2.last
 							a(href='#') Blogs
+
+					form#search-box(method='GET')
+						input(type='search', placeholder='Search archives', results='5')
 			section
 				#main
 					!=partial('slideshow')

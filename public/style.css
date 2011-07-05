@@ -4,7 +4,7 @@ body{font-family:"Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,s
 body a{text-decoration:none;color:#36c;}
 body a *{color:#333}
 body h1,body h2,body h3,body h4,body h5,body h6{font-family:Georgia,"Century Schoolbook","Times New Roman",Times,serif;text-shadow:0 1px 0 #fff}
-body h1{font-weight:bold}
+body h1{font-weight:bold;float:left}
 body #shell{margin:0 auto;width:972px}
 body header,body section,body footer{width:972px}
 body header{position:relative}
@@ -25,3 +25,5 @@ body section{margin-top:20px}
 .clear-both{clear:both}
 .full-banner,.full-banner .container{width:474px}
 span.timestamp{color:#036;font-size:.5em;display:block}
+#search-box{float:right;margin-right:5px;font-size:.8em;margin-top:57px;}
+#search-box input{background:#fff url("/images/search-button.png") no-repeat;border-radius:10px;border:2px inset;width:150px}

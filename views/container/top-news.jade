@@ -7,19 +7,39 @@
 		
 			.left.align-element
 				a.hover.left.first.teaser(href='#')
+					//span.timestamp #{news.top.timestamp}
 					h2 #{news.top.title}
 					p #{news.top.teaser}
-				a.hover.left(href='#')
-					h3 #{news.second.title}
-				a.hover.left(href='#')
-					h3 #{news.third.title}
+				ul
+					li
+						a.hover.left(href='#')
+							//span.timestamp #{news.second.timestamp}
+							h3 #{news.second.title}
+					li
+						a.hover.left(href='#')
+							//span.timestamp #{news.third.timestamp}
+							h3 #{news.third.title}
+					li
+						a.hover.left(href='#')
+							//span.timestamp #{news.forth.timestamp}
+							h3 #{news.forth.title}
 			.right.clear-fix.align-element
 				a.hover.right.first.teaser(href='#')
+					//span.timestamp #{sports.top.timestamp}
 					h2 #{sports.top.title}
 					p #{sports.top.teaser}
-				a.hover.right(href='#')
-					h3 #{sports.second.title}
-				a.hover.right(href='#')
-					h3 #{sports.third.title}
+				ul
+					li
+						a.hover.right(href='#')
+							//span.timestamp #{sports.second.timestamp}
+							h3 #{sports.second.title}
+					li
+						a.hover.right(href='#')
+							//span.timestamp #{sports.third.timestamp}
+							h3 #{sports.third.title}
+					li
+						a.hover.right(href='#')
+							//span.timestamp #{sports.forth.timestamp}
+							h3 #{sports.forth.title}
 			.clear-both
 	.clear-both

@@ -39,7 +39,7 @@ html(lang="en")
 			section
 				#main
 					!=partial('slideshow')
-					.top-news!=partial('container/top-news', model.top)
+					.top-news!=partial('container/top-news', model.headlines)
 					div
 						.image-container.print-edition!=partial('container/image', model.printEdition)
 						.image-container.full-banner.advertisement!=partial('container/image', model.adFullBanner)

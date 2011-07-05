@@ -52,7 +52,7 @@ app.error(function(err, req, res, next){
 var homeModel = {
 	twitter: {
 		title: 'Twitter',
-		imageUrl: 'https://si0.twimg.com/profile_images/1157619932/Duke_Chronicle_reasonably_small.jpeg',
+		imageUrl: '/images/twitter-dukechronicle.png',
 		user: 'DukeChronicle',
 		tweet: 'RT @fhi_duke: "Why Tell Stories?" Edwidge Danticat on power of testimony in face of catastrophe http://bit.ly/gu4K8h Thanks @DukeChronicle!'
 	},
@@ -74,31 +74,45 @@ var homeModel = {
 	adFullRectangle: {
 		title: 'Advertisement',
 		imageUrl: '/images/ads/monster.png',
-		url: 'http://google.com'
+		url: 'http://google.com',
+		width: '300px',
+		height: '250px'
 	},
 	adFullBanner: {
 		title: 'Ad',
 		imageUrl: '/images/ads/full-banner.jpg',
-		url: 'http://google.com'
+		url: 'http://google.com',
+		width: '468px',
+		height: '60px'
 	},
 	printEdition: {
 		title: 'Print',
 		imageUrl: '/images/issuu-thumb.png',
-		url: 'http://google.com'
+		url: 'http://google.com',
+		width: '136px',
+		height: '60px'
 	},
-	top: {
-		title: 'Headlines',
+	headlines: {
+		title: 'Week\'s Headlines',
 		news: {
-			'top': {title: 'A PRESIDENTIAL VISIT', 
-					teaser: 'Although the economic recession sparked some sacrifice across the University, Duke’s revered Talent Identification Program has continued to grow during the past several years.'},
-			'second': {title: 'New center for Judicial Studies created'},
-			'third': {title: 'Math department earns top 10 world ranking'}
+			'top': {title: 'A PRESIDENTIAL VISIT',
+						timestamp: 'today',
+						teaser: 'Although the economic recession sparked some sacrifice across the University, Duke’s revered Talent Identification Program has continued.'},
+			'second': {title: 'New center for Judicial Studies created',
+						timestamp: 'yesterday'},
+			'third': {title: 'Math department earns top 10 world ranking',
+						timestamp: '2 days ago'},
+			'forth': {title: 'Admissions yield steady as app numbers skyrocket'}
 		},
 		sports: {
 			'top': {title: 'Bottorff crowned in Iowa',
+					timestamp: '1 hour ago',
 					teaser: 'When Juliet Bottorff first stepped on the track at the NCAA championships, winning was not on her mind.'},
-			'second': {title: 'Duke plans for upcoming season'},
-			'third': {title: 'Duke falls in match play semis'}
+			'second': {title: 'Duke plans for upcoming season',
+					timestamp: 'today'},
+			'third': {title: 'Duke falls in match play semis',
+					timestamp: '3 days ago'},
+			'forth': {title: 'EXPANDING THE BRAND'}
 		}
 	},
 	opinion: {

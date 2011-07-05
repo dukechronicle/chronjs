@@ -1,0 +1,19 @@
+#sidebar{float:right;margin-top:-1px}
+#main{float:left;width:636px;}
+#main .rounded{padding:4px;}
+#main .rounded a.hover.right{margin-right:-7px}
+#main .rounded a.hover.left{margin-left:-7px}
+.full-banner{float:right}
+.print-edition{float:left;width:140px}
+#main .top-news .container{width:636px;}
+#main .top-news .container .rounded{width:628px}
+#main .top-news .rounded .content-container > .left{width:302px;float:left;}
+#main .top-news .rounded .content-container > .left a.hover{padding-left:10px}
+#main .top-news .rounded .content-container > .right{width:302px;float:right;}
+#main .top-news .rounded .content-container > .right a.hover{padding-right:10px}
+#main .top-news .rounded a.hover h2,#main .top-news .rounded h3{font-size:1.2em;margin-bottom:3px}
+#main .top-news .rounded a.hover h3{padding-left:10px;margin-bottom:0;font-size:1.1em}
+#main .top-news .rounded a.hover{padding-top:3px;padding-bottom:3px}
+#main .top-news .rounded a.hover.teaser{padding-bottom:7px}
+#main .top-news .rounded p{font-size:.9em}
+#main .top-news .rounded ul li h3{background:url("/images/bullet.gif") no-repeat left 7px}

@@ -137,6 +137,10 @@ app.get('/', function(req, res) {
 	res.render('index', {layout: false, model: homeModel});
 });
 
+// image upload test
+app.get('/test-upload', function(req, res) {
+	res.render('test-upload');
+});
 
 app.get('/article-list', function(req, http_res) {
     api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(err, groups) {

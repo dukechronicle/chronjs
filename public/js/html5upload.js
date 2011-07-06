@@ -1,4 +1,5 @@
 var numImages = 0;
+var imagesLeft = 0;
 var IMAGE_HTML = "<img id='tempPreview' />";
 var dropLabelStartText = "";
 
@@ -45,9 +46,18 @@ function drop(evt) {
 
 
 function handleFiles(files) {
+	imagesLeft = files.length;
+
 	for(var i = 0; i < files.length; i ++)	
 	{
-		document.getElementById("droplabel").innerHTML = "Processing " + files[i].name;
+		if(files.length == 1)
+		{
+			document.getElementById("droplabel").innerHTML = "Processing " + files[0].name;
+		}
+		else
+		{
+			document.getElementById("droplabel").innerHTML = "Processing files...";
+		}
 
 		var reader = new FileReader();
 
@@ -81,5 +91,11 @@ function handleReaderLoadEnd(evt) {
 	img.src = evt.target.result;
 	img.width = "200";
 	img.height = "200";
-	document.getElementById("droplabel").innerHTML = dropLabelStartText;
+	
+	imagesLeft --;
+
+	if(imagesLeft == 0)
+	{
+		document.getElementById("droplabel").innerHTML = dropLabelStartText;
+	}
 }

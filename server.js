@@ -142,6 +142,10 @@ app.get('/test-upload', function(req, res) {
 	res.render('test-upload');
 });
 
+app.post('/test-upload', function(req, res) {
+	res.render('test-upload');
+});
+
 app.get('/article-list', function(req, http_res) {
     api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(err, groups) {
         if(err) {

@@ -5,7 +5,7 @@ var dropLabelStartText = "";
 
 $(document).ready(function() {
 	var dropbox = document.getElementById("dropbox")
-	dropLabelStartText = document.getElementById("droplabel").innerHTML;
+	dropLabelStartText = $("#droplabel").text();
 
 	// init event handlers
 	dropbox.addEventListener("dragenter", dragEnter, false);
@@ -52,11 +52,11 @@ function handleFiles(files) {
 	{
 		if(files.length == 1)
 		{
-			document.getElementById("droplabel").innerHTML = "Processing " + files[0].name;
+			$("#droplabel").text("Processing " + files[0].name);
 		}
 		else
 		{
-			document.getElementById("droplabel").innerHTML = "Processing files...";
+			$("#droplabel").text("Processing files...");
 		}
 
 		var reader = new FileReader();
@@ -81,21 +81,20 @@ function handleReaderProgress(evt) {
 function handleReaderLoadEnd(evt) {
 	//$("#progressbar").progressbar({ value: 100 });
 
-	var holder = document.getElementById("pictureholder");
-	$(holder).append(IMAGE_HTML);
+	$("#pictureholder").append(IMAGE_HTML);
 
-	var img = document.getElementById("tempPreview");
-	img.id = "picture"+numImages;
+	var img = $("#tempPreview");
+	img.attr("id","picture"+numImages);
 	numImages++;
 
-	img.src = evt.target.result;
-	img.width = "200";
-	img.height = "200";
+	img.attr("src",evt.target.result);
+	img.attr("width","200");
+	img.attr("height","200");
 	
 	imagesLeft --;
 
 	if(imagesLeft == 0)
 	{
-		document.getElementById("droplabel").innerHTML = dropLabelStartText;
+		$("#droplabel").text(dropLabelStartText);
 	}
 }

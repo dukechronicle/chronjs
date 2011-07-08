@@ -11,48 +11,7 @@ html(lang="en")
 	body
 		#shell
 			header
-				img(src='images/header-overlay.png', id='header-overlay', width='149px', height='177px')
-
-				#header-top
-					.social-media
-						.inner
-							h2 Stay Connected
-							.icons
-								a(href='http://facebook.com')
-									img.first(src='/images/icons/facebook.png')
-								a(href='http://twitter.com')
-									img(src='/images/icons/twitter.png')
-								a(href='http://youtube.com')
-									img(src='/images/icons/youtube.png')
-								a(href='http://foursquare.com')
-									img(src='/images/icons/foursquare.png')
-								a(href='http://reader.google.com.com')
-									img(src='/images/icons/rss.png')
-								a(href='#')
-									img.last(src='/images/icons/email.png')
-					.leaderboard
-						img(src='/images/ads/leaderboard.png', width='728px', height='90px')
-				#header-bottom
-					h1
-						a(href='/') The Chronicle
-					nav
-						h2.first
-							a(href='#') News
-						h2
-							a(href='#') Sports
-						h2
-							a(href='#') Opinion
-						h2
-							a(href='#') Recess
-						h2
-							a(href='#') Towerview
-						h2
-							a(href='#') Multimedia
-						h2.last
-							a(href='#') Blogs
-
-					form#search-box(method='GET')
-						input(type='search', placeholder='Search archives', results='5')
+				!=partial('layout/header')
 			section
 				#main
 					!=partial('slideshow')

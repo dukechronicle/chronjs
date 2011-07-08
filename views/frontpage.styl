@@ -36,29 +36,29 @@ full()
 			leftColumnWidth = width/2
 
 
-			.content-container > .left
-				width leftColumnWidth - padding
-				float left
+			.content-container
+				> .left
+					width leftColumnWidth - padding
+					float left
 
-				a.hover
-					padding-left padding
+					a.hover
+						padding-left padding
 
-			.content-container > .right
-				width (width - leftColumnWidth) - padding
-				float right
-				
-				a.hover
-					padding-right padding
+				> .right
+					width (width - leftColumnWidth) - padding
+					float right
+
+					a.hover
+						padding-right padding
 
 			a.hover h2, h3
 				font-size 1.2em
 				margin-bottom 3px
 
 			a.hover h3
-				padding-left 10px
-				margin-bottom 0px
+				margin-top 0px
 				font-size 1.1em
-
+				
 			a.hover
 				padding-top 3px
 				padding-bottom 3px

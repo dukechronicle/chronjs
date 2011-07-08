@@ -54,14 +54,12 @@ top-content-full()
 				.content-container
 					> .left
 						width leftColumnWidth - padding
-						float left
 
 						a.hover
 							padding-left padding
 
 					> .right
 						width (width - leftColumnWidth) - padding
-						float right
 
 						a.hover
 							padding-right padding
@@ -83,6 +81,7 @@ top-content-full()
 
 				p
 					font-size 0.9em
+					
 				ul li h3
 						background url('/images/bullet.gif') no-repeat left 7px
 
@@ -96,7 +95,11 @@ top-content-full()
 		h4
 			font-size 1.1em
 
+		.left
+			width ((container-width - 4)/2)
 
+		.right
+			width (container-width/2)
 
 #news
 	float left

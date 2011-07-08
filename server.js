@@ -3,6 +3,7 @@ var PORT = process.env.PORT || 4000;
 var FRONTPAGE_GROUP_NAMESPACE = ['section'];
 
 /* require npm nodejs modules */
+var fs = require('fs');
 var express = require('express');
 require('express-namespace');
 var stylus = require('stylus');
@@ -49,7 +50,7 @@ app.error(function(err, req, res, next){
   	globalFunctions.log('ERROR: ' + err.stack);
 });
 
-var homeModel = JSON.parse(fs.readFileSync('sample-data/frontpage.json'));
+var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
 
 /*** FRONTEND ***/
 app.get('/', function(req, res) {

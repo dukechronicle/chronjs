@@ -5,10 +5,20 @@ full()
 	width main-width
 	.rounded
 		width (main-width - (container-padding * 2))
-#sidebar
+.sidebar
 	float right
 	margin-top -1px
-#main
+
+	.container
+		width 300px + 3 * 2
+
+		h1, h2, h3, h4, h5
+			text-shadow 0px 1px 1px white
+
+		.rounded
+			width 300px
+
+#top > .content
 	float left
 	width main-width
 
@@ -26,7 +36,7 @@ full()
 .print-edition
 	float left
 	width 140px
-#main
+#top > .content
 	.top-news
 		.container
 			full()

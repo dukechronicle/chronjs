@@ -1,6 +1,3 @@
-body #sidebar .container{width:306px;}
-body #sidebar .container h1,body #sidebar .container h2,body #sidebar .container h3,body #sidebar .container h4,body #sidebar .container h5{text-shadow:0 1px 1px #fff}
-body #sidebar .container .rounded{width:300px}
 body .container{margin-top:-1em;position:relative;font-size:.8em;padding-left:0;}
 body .container .content-container{padding:3px}
 body .container a.hover{display:block;border-right:1px solid transparent;border-left:1px solid transparent;-webkit-transition-property:color,border-color;-moz-transition-property:color,border-color;-o-transition-property:color,border-color;-webkit-transition-duration:.25s,.25s;-moz-transition-duration:.25s,.25s;-o-transition-duration:.25s,.25s;-webkit-transition-duration:linear,linear;-moz-transition-duration:linear,linear;-o-transition-duration:linear,linear;}
@@ -29,7 +26,3 @@ body .vertical-container .vertical{font-size:.9em;color:#999;letter-spacing:1px;
 body .most-popular ol li{list-style:decimal outside}
 body .most-popular ol li h2{margin-left:-7px}
 body .most-popular ol{margin-left:20px;font-family:Georgia,"Century Schoolbook","Times New Roman",Times,serif}
-body .clearfixafter{content:".";display:block;clear:both;visibility:hidden;line-height:0;height:0}
-body .clearfix{display:inline-block}
-body html[xmlns] .clearfix{display:block}
-body * html .clearfix{height:1%}

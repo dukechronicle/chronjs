@@ -66,17 +66,59 @@
 	},
 	"opinion": {
 		"title": "Opinion",
-		"stories": {
-			"1": {"title": "Egypt an academic opportunity",
+		"stories": [
+			{"title": "Egypt an academic opportunity",
 				"comments": "3", "cssClass": "first", "author": "Editorial Board"},
-			"2": {"title": "Make my day",
+			{"title": "Make my day",
 				"comments": "1", "author": "Carol Apollonio"},
-			"3": {"title": "Arab dictators stuck in yesteryear",
+			{"title": "Arab dictators stuck in yesteryear",
 				"comments": "5", "author": "Chris Bassil"},
-			"4": {"title": "The right to obstain",
+			{"title": "The right to obstain",
 				"comments": "0", "author": "Christine Hall"},
-			"5": {"title": "I read programming books for fun",
+			{"title": "I read programming books for fun",
 				"comments": "14", "cssClass": "last", "author": "Dean Chen"}
-		}
+		]
+	},
+	"news": {
+		"title": "News",
+		"stories": [
+			{"title": "Duke renovates steam plant to reduce carbon footprint",
+				"comments": "3", "cssClass": "first", "author": "Editorial Board"},
+			{"title": "Successful initiatives have Durham crime rates dropping",
+				"comments": "1", "author": "Carol Apollonio"},
+			{"title": "In sixth year, Duke-NUS sees first graduating class",
+				"comments": "5", "author": "Chris Bassil"},
+			{"title": "Food Factory takes over Devil’s Bistro on Central Campus",
+				"comments": "0", "author": "Christine Hall"},
+			{"title": "Food Factory takes over Devil’s Bistro on Central Campus",
+				"comments": "0", "author": "Christine Hall"},
+			{"title": "Food Factory takes over Devil’s Bistro on Central Campus",
+				"comments": "0", "author": "Christine Hall"},
+			{"title": "Food Factory takes over Devil’s Bistro on Central Campus",
+				"comments": "0", "author": "Christine Hall"},
+			{"title": "Duke University Health System continues construction",
+				"comments": "14", "cssClass": "last", "author": "Dean Chen"}
+		]
+	},
+	"sports": {
+		"title": "Sports",
+		"stories": [
+			{"title": "EXPANDING THE BRAND",
+				"comments": "3", "cssClass": "first", "author": "Editorial Board"},
+			{"title": "Successful initiatives have Durham crime rates dropping",
+				"comments": "1", "author": "Carol Apollonio"},
+			{"title": "In sixth year, Duke-NUS sees first graduating class",
+				"comments": "5", "author": "Chris Bassil"},
+			{"title": "Food Factory takes over Devil’s Bistro on Central Campus",
+				"comments": "0", "author": "Christine Hall"},
+			{"title": "Food Factory takes over Devil’s Bistro on Central Campus",
+				"comments": "0", "author": "Christine Hall"},
+			{"title": "Food Factory takes over Devil’s Bistro on Central Campus",
+				"comments": "0", "author": "Christine Hall"},
+			{"title": "Food Factory takes over Devil’s Bistro on Central Campus",
+				"comments": "0", "author": "Christine Hall"},
+			{"title": "Duke University Health System continues construction",
+				"comments": "14", "cssClass": "last", "author": "Dean Chen"}
+		]
 	}
 }

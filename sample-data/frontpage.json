@@ -42,7 +42,7 @@
 		"height": "60px"
 	},
 	"headlines": {
-		"title": "Week\"s Headlines",
+		"title": "Week's Headlines",
 		"news": [
 			{"title": "A PRESIDENTIAL VISIT",
 						"timestamp": "today",
@@ -83,6 +83,7 @@
 		"title": "News",
 		"stories": [
 			{"title": "Duke renovates steam plant to reduce carbon footprint",
+				"teaser": "Walking down Coal Pile Drive, students were once greeted by a heap of coal that rivaled the height of the nearby Bryan Research Center.",
 				"comments": "3", "cssClass": "first", "author": "Editorial Board"},
 			{"title": "Successful initiatives have Durham crime rates dropping",
 				"comments": "1", "author": "Carol Apollonio"},

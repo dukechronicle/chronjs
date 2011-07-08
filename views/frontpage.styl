@@ -1,10 +1,14 @@
+page-width = 972px
 link-color = #36c
 container-padding = 4px
-main-width =  636px
-full()
-	width main-width
+top-content-width =  636px
+
+container-vertical-spacing = 30px
+
+top-content-full()
+	width top-content-width
 	.rounded
-		width (main-width - (container-padding * 2))
+		width (top-content-width - (container-padding * 2))
 .sidebar
 	float right
 	margin-top -1px
@@ -18,65 +22,84 @@ full()
 		.rounded
 			width 300px
 
-#top > .content
-	float left
-	width main-width
-
-	.rounded
-		padding container-padding
-
-		a.hover.right
-			margin-right container-padding * -2 + 1
-		a.hover.left
-			margin-left container-padding * -2 + 1
-
 .full-banner
 	float right
 
 .print-edition
 	float left
 	width 140px
-#top > .content
-	.top-news
-		.container
-			full()
+#top
+	margin-bottom 10px
+	> .content
+		float left
+		width top-content-width
+
 		.rounded
-			padding = 10px
-			width = main-width - 2 - padding
-			leftColumnWidth = width/2
+			padding container-padding
+
+			a.hover.highlight-right
+				margin-right container-padding * -2 + 1
+			a.hover.highlight-left
+				margin-left container-padding * -2 + 1
+
+		.top-news
+			.container
+				top-content-full()
+			.rounded
+				padding = 10px
+				width = top-content-width - 2 - padding
+				leftColumnWidth = width/2
 
 
-			.content-container
-				> .left
-					width leftColumnWidth - padding
-					float left
+				.content-container
+					> .left
+						width leftColumnWidth - padding
+						float left
 
-					a.hover
-						padding-left padding
+						a.hover
+							padding-left padding
 
-				> .right
-					width (width - leftColumnWidth) - padding
-					float right
+					> .right
+						width (width - leftColumnWidth) - padding
+						float right
 
-					a.hover
-						padding-right padding
+						a.hover
+							padding-right padding
 
-			a.hover h2, h3
-				font-size 1.2em
-				margin-bottom 3px
+				a.hover h2, h3
+					font-size 1.2em
+					margin-bottom 3px
 
-			a.hover h3
-				margin-top 0px
-				font-size 1.1em
-				
-			a.hover
-				padding-top 3px
-				padding-bottom 3px
+				a.hover h3
+					margin-top 0px
+					font-size 1.1em
 
-			a.hover.teaser
-				padding-bottom 7px
+				a.hover
+					padding-top 3px
+					padding-bottom 3px
 
-			p
-				font-size 0.9em
-			ul li h3
-					background url('/images/bullet.gif') no-repeat left 7px
+				a.hover.teaser
+					padding-bottom 7px
+
+				p
+					font-size 0.9em
+				ul li h3
+						background url('/images/bullet.gif') no-repeat left 7px
+
+#news, #sports
+	container-width = (page-width/2 - container-vertical-spacing/2)
+	width container-width
+
+	.content-container
+		h2, h3
+			font-size 1.2em
+		h4
+			font-size 1.1em
+
+
+
+#news
+	float left
+
+#sports
+	float right

@@ -3,38 +3,36 @@
 		h2.vertical #{title}
 	
 	.rounded
-		.content-container.align-group
+		.content-container.align-group.clearfix
 		
 			.left.align-element
-				a.hover.left.first.teaser(href='#')
+				a.hover.highlight-left.first.teaser(href='#')
 					//span.timestamp #{news.top.timestamp}
 					h2 #{news[0].title}
 					p #{news[0].teaser}
 
-				a.hover.left(href='#')
+				a.hover.highlight-left(href='#')
 					//span.timestamp #{news.second.timestamp}
 					h3 #{news[1].title}
 
-				a.hover.left(href='#')
+				a.hover.highlight-left(href='#')
 					//span.timestamp #{news.third.timestamp}
 					h3 #{news[2].title}
-				a.hover.left(href='#')
+				a.hover.highlight-left(href='#')
 					//span.timestamp #{news.forth.timestamp}
 					h3 #{news[3].title}
-			.right.clear-fix.align-element
-				a.hover.right.first.teaser(href='#')
+			.right.align-element
+				a.hover.highlight-right.first.teaser(href='#')
 					//span.timestamp #{sports.top.timestamp}
 					h2 #{sports[0].title}
 					p #{sports[0].teaser}
 
-				a.hover.right(href='#')
+				a.hover.highlight-right(href='#')
 					//span.timestamp #{sports.second.timestamp}
 					h3 #{sports[1].title}
-				a.hover.right(href='#')
+				a.hover.highlight-right(href='#')
 					//span.timestamp #{sports.third.timestamp}
 					h3 #{sports[2].title}
-				a.hover.right(href='#')
+				a.hover.highlight-right(href='#')
 					//span.timestamp #{sports.forth.timestamp}
 					h3 #{sports[3].title}
-			.clear-both
-	.clear-both

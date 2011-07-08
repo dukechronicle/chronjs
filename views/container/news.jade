@@ -1,25 +1,26 @@
-.container.clear-fix
+.container.clearfix
 	.vertical-container
 		h2.vertical #{title}
 	
 	.rounded
 		.content-container
 			.top
-				a.hover.right(href='#')
+				a.hover.highlight-right(href='#')
 					h2 #{stories[0].title}
 					p #{stories[0].teaser}
+
+			.clear-both
 			.left
-				a.hover.left.first(href='#')
-					h2 #{stories[1].title}
+				a.hover.highlight-left.first(href='#')
+					h3 #{stories[1].title}
 					p #{stories[1].teaser}
 
-				a.hover.left(href='#')
-					h2 #{stories[2].title}
-					h2 #{stories[2].teaser}
+				a.hover.highlight-left(href='#')
+					h3 #{stories[2].title}
+					p #{stories[2].teaser}
 
 			.right
 				- each story, index in stories
 					- if (index > 2)
-						h2 #{story.title}
-			.clear-both
-	.clear-both
+						a.hover.highlight-right(href='#')
+							h4 #{story.title}

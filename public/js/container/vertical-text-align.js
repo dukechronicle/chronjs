@@ -34,12 +34,16 @@ $(function() {
 	});
 
 	// align main and sidebar height
-	var extraHeight = $('#sidebar').height()-$('#main').height();
-	//console.log(extraHeight);
-	var contentContainer = $('#main .top-news .content-container');
-	var currentPadding = contentContainer.css('padding-bottom');
-	contentContainer.css('padding-bottom', 3 + extraHeight);
-	//console.log($('#sidebar').height()-$('#main').height())
+	(function() {
+		var extraHeight = $('#top > .sidebar').height()-$('#top > .content').height();
+		console.log(extraHeight);
+		//console.log(extraHeight);
+		var contentContainer = $('#top > .content .top-news .content-container');
+		var currentPadding = contentContainer.css('padding-bottom');
+		contentContainer.css('padding-bottom', 3 + extraHeight);
+
+		console.log($('#top > .sidebar').height()-$('#top > .content').height());
+	}) ();
 /*
 	$(".hover-highlight").each(function(i) {
 		var element = $(this);

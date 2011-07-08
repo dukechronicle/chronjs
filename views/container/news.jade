@@ -1,0 +1,25 @@
+.container.clear-fix
+	.vertical-container
+		h2.vertical #{title}
+	
+	.rounded
+		.content-container
+			.top
+				a.hover.right(href='#')
+					h2 #{stories[0].title}
+					p #{stories[0].teaser}
+			.left
+				a.hover.left.first(href='#')
+					h2 #{stories[1].title}
+					p #{stories[1].teaser}
+
+				a.hover.left(href='#')
+					h2 #{stories[2].title}
+					h2 #{stories[2].teaser}
+
+			.right
+				- each story, index in stories
+					- if (index > 2)
+						h2 #{story.title}
+			.clear-both
+	.clear-both

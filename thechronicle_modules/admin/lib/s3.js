@@ -3,10 +3,12 @@ var exports = module.exports = s3;
 
 var knox = require('knox');
 var fs = require('fs');
-var BUCKET_NAME = 'alga';
+var BUCKET_NAME = 'chron_bucket1';
+var KEY = "AKIAISXHLL6NIXD24OVQ";
+var SECRET = "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";
 
 s3.put = function(buf, key, type, callback) {
-    _getClient(function(err, client) {
+    _getClientStatic(function(err, client) {
         var req = client.put(key, {
             'Content-Length': buf.length,
             'Content-Type': type
@@ -31,6 +33,15 @@ function _getClient(callback) {
         });
         callback(null, client);
     });
+}
+
+function _getClientStatic(callback) {
+    var client = knox.createClient({
+   	    key: KEY,
+            secret: SECRET,
+            bucket: BUCKET_NAME
+     });
+     callback(null, client);
 }
 /*
 fs.readFile('README.md', function(err, buf) {

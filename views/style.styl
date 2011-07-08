@@ -109,27 +109,30 @@ body
 		nav
 			position absolute
 			z-index 2
-			top 159px
+			top 161px
 
 			h2
-				color #333
-				font-size 0.8em
-				text-transform uppercase
 				float left
-				margin-right 20px
-				letter-spacing 1px
-				text-shadow 0px 1px 0px white
-				border-bottom 1px solid white
-				padding-bottom 3px
-				transition(border-color, .25s, linear)
 
-				.active
+				a
+					letter-spacing 1px
+					text-shadow 0px 1px 0px white
+					border-bottom 1px solid transparent
+					font-size 0.8em
+					text-transform uppercase
+					color #333
+					display block
+					border-bottom 1px solid transparent
+					padding-left 15px
+					padding-right 11px
+					padding-bottom 1px
+					transition(border-color, .25s, linear)
+				a:hover, .active
 					border-bottom-color #4D90F0
-			h2:hover
-				border-bottom-color #4D90F0
-				
+					color black
+
 			h2.first
-				margin-left 1em
+				margin-left 3px
 			
 			h2.last
 			
@@ -183,7 +186,7 @@ header
 		h2
 			text-align left
 			margin-left 10px
-			color white
+			color #ccc
 			text-shadow 0px -1px 1px #333
 			margin-bottom 8px
 			font-size 0.8em

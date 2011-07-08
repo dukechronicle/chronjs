@@ -11,9 +11,9 @@
 #top > .content .rounded a.hover.highlight-left{margin-left:-7px}
 #top > .content .top-news .container{width:636px;}
 #top > .content .top-news .container .rounded{width:628px}
-#top > .content .top-news .rounded .content-container > .left{width:302px;float:left;}
+#top > .content .top-news .rounded .content-container > .left{width:302px;}
 #top > .content .top-news .rounded .content-container > .left a.hover{padding-left:10px}
-#top > .content .top-news .rounded .content-container > .right{width:302px;float:right;}
+#top > .content .top-news .rounded .content-container > .right{width:302px;}
 #top > .content .top-news .rounded .content-container > .right a.hover{padding-right:10px}
 #top > .content .top-news .rounded a.hover h2,#top > .content .top-news .rounded h3{font-size:1.2em;margin-bottom:3px}
 #top > .content .top-news .rounded a.hover h3{margin-top:0;font-size:1.1em}
@@ -24,5 +24,7 @@
 #news,#sports{width:471px;}
 #news .content-container h2,#sports .content-container h2,#news .content-container h3,#sports .content-container h3{font-size:1.2em}
 #news .content-container h4,#sports .content-container h4{font-size:1.1em}
+#news .content-container .left,#sports .content-container .left{width:467px/2}
+#news .content-container .right,#sports .content-container .right{width:235.5px}
 #news{float:left}
 #sports{float:right}

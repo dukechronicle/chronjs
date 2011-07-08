@@ -6,6 +6,6 @@
 		.content-container
 			- each story in stories
 				h2
-					a.list-story.hover.right(href='#', class='#{story.cssClass}')
+					a.list-story.hover.highlight-right(href='#', class='#{story.cssClass}')
 						#{story.title}
 						p.author #{story.author}

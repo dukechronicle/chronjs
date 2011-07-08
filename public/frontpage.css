@@ -2,12 +2,13 @@
 .sidebar .container{width:306px;}
 .sidebar .container h1,.sidebar .container h2,.sidebar .container h3,.sidebar .container h4,.sidebar .container h5{text-shadow:0 1px 1px #fff}
 .sidebar .container .rounded{width:300px}
-#top > .content{float:left;width:636px;}
-#top > .content .rounded{padding:4px;}
-#top > .content .rounded a.hover.right{margin-right:-7px}
-#top > .content .rounded a.hover.left{margin-left:-7px}
 .full-banner{float:right}
 .print-edition{float:left;width:140px}
+#top{margin-bottom:10px;}
+#top > .content{float:left;width:636px;}
+#top > .content .rounded{padding:4px;}
+#top > .content .rounded a.hover.highlight-right{margin-right:-7px}
+#top > .content .rounded a.hover.highlight-left{margin-left:-7px}
 #top > .content .top-news .container{width:636px;}
 #top > .content .top-news .container .rounded{width:628px}
 #top > .content .top-news .rounded .content-container > .left{width:302px;float:left;}
@@ -20,3 +21,8 @@
 #top > .content .top-news .rounded a.hover.teaser{padding-bottom:7px}
 #top > .content .top-news .rounded p{font-size:.9em}
 #top > .content .top-news .rounded ul li h3{background:url("/images/bullet.gif") no-repeat left 7px}
+#news,#sports{width:471px;}
+#news .content-container h2,#sports .content-container h2,#news .content-container h3,#sports .content-container h3{font-size:1.2em}
+#news .content-container h4,#sports .content-container h4{font-size:1.1em}
+#news{float:left}
+#sports{float:right}

@@ -28,7 +28,9 @@ html(lang="en")
 						.image-container.advertisement!=partial('container/image', model.adFullRectangle)
 						.opinion!=partial('container/opinion', model.opinion)
 				#middle
-						//#news!=partial('container/news', model.news)
+					#news-sports
+						#news!=partial('container/news', model.news)
+						#sports!=partial('container/news', model.news)
 			footer
 
 	script(src='js/jquery.js')

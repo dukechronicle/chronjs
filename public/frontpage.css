@@ -29,7 +29,7 @@
 #news .content-container p.teaser,#sports .content-container p.teaser{margin-top:5px}
 #news .content-container .top,#sports .content-container .top{padding-bottom:5px;margin-bottom:15px;}
 #news .content-container .top a.hover,#sports .content-container .top a.hover{margin-left:-13px;padding-left:13px}
-#news .content-container .top img,#sports .content-container .top img{float:right;border-radius:4px}
+#news .content-container .top img,#sports .content-container .top img{float:right;border-radius:4px;box-shadow:0 0 2px #666}
 #news .content-container .top .text,#sports .content-container .top .text{float:left;width:240px;height:115px}
 #news .content-container .bottom,#sports .content-container .bottom{padding-top:10px;clear:both;}
 #news .content-container .bottom .left,#sports .content-container .bottom .left{width:240px;}

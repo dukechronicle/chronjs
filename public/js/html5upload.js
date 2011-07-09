@@ -2,6 +2,9 @@ var numImages = 0;
 var imagesLeft = 0;
 var IMAGE_HTML = "<img id='tempPreview' />";
 var dropLabelStartText = "";
+var imageNames = {};
+var uploading = false;
+var imgCount = 0;
 
 $(document).ready(function() {
 	dropLabelStartText = $("#droplabel").text();
@@ -32,9 +35,12 @@ $(document).ready(function() {
 		var count = files.length;
 
 		// Only call the handler if 1 or more files was dropped.
-		if (count > 0) {
+		if (count > 0 && !uploading) {
 			imagesLeft = count;
+			imgCount += count;
 			
+			uploading = true;
+
 			if(count == 1) {
 				$("#droplabel").text("Processing " + files[0].name);
 			}
@@ -49,7 +55,8 @@ $(document).ready(function() {
 				// init the reader event handlers
 				reader.onprogress = handleReaderProgress;
 				reader.onloadend = handleReaderLoadEnd;
-
+				
+				imageNames[index] = file.name;
 				reader.readAsDataURL(file);
 			});
 		}
@@ -69,12 +76,25 @@ function handleReaderProgress(evt) {
 
 function handleReaderLoadEnd(evt) {
 	//$("#progressbar").progressbar({ value: 100 });
+	
+	/*
+	 * Per the Data URI spec, the only comma that appears is right after
+	 * 'base64' and before the encoded content.
+	 */
+	var imageData = evt.target.result.substring(evt.target.result.indexOf(',') + 1);
+	
+	// set image type to MIME type in data uri string	
+	var imageType = evt.target.result.split(';',1);
+	imageType = imageType[0].substring(5);
 
 	$.ajax({
    		type: "POST",
   		url: "/test-upload",
-   		data: "imagedata="+evt.target.result,
-
+   		data: {
+			imagedata: imageData,
+			imagename: imageNames[numImages],
+			imagetype: imageType		
+		},
 		error: function(msg) {
 			alert(msg);
 		},
@@ -85,8 +105,7 @@ function handleReaderLoadEnd(evt) {
 			var img = $("#tempPreview");
 
 			img.hide();
-			img.attr("id","picture"+numImages);
-			numImages++;
+			img.attr("id","picture"+(imgCount - imagesLeft));
 
 			img.attr("src",evt.target.result);
 			img.attr("width","200");
@@ -98,8 +117,13 @@ function handleReaderLoadEnd(evt) {
 
 			if(imagesLeft == 0)	
 			{
-				$("#droplabel").text(dropLabelStartText);	
+				$("#droplabel").text(dropLabelStartText);
+				uploading = false;
+				imageNames = {};
+				numImages = 0;
 			}
    		}
- 	});	
+ 	});
+
+	numImages ++;	
 }

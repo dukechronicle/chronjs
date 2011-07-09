@@ -5,22 +5,26 @@
 	.rounded
 		.content-container
 			.top
-				a.hover.highlight-right(href='#')
-					h2 #{stories[0].title}
-					p #{stories[0].teaser}
+				a.hover.highlight-left.clearfix(href='#')
+					img(src=stories[0].image)
+					.text
+						h2 #{stories[0].title}
+						p.teaser #{stories[0].teaser}
 
-			.clear-both
-			.left
-				a.hover.highlight-left.first(href='#')
-					h3 #{stories[1].title}
-					p #{stories[1].teaser}
+			.bottom.clearfix
+				.left
+					a.hover.highlight-left.first(href='#')
+						h3 #{stories[1].title}
+						p.teaser #{stories[1].teaser}
 
-				a.hover.highlight-left(href='#')
-					h3 #{stories[2].title}
-					p #{stories[2].teaser}
+					a.hover.highlight-left.last(href='#')
+						h3 #{stories[2].title}
+						p.teaser #{stories[2].teaser}
 
-			.right
-				- each story, index in stories
-					- if (index > 2)
-						a.hover.highlight-right(href='#')
-							h4 #{story.title}
+				.right
+					ul
+						- each story, index in stories
+							- if (index > 2)
+								li
+									a.hover.highlight-right(href='#')
+										h4 #{story.title}

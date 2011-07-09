@@ -15,11 +15,11 @@
 #top > .content .top-news .rounded .content-container > .left a.hover{padding-left:10px}
 #top > .content .top-news .rounded .content-container > .right{width:302px;}
 #top > .content .top-news .rounded .content-container > .right a.hover{padding-right:10px}
-#top > .content .top-news .rounded a.hover h2,#top > .content .top-news .rounded h3{font-size:1.2em;margin-bottom:3px}
-#top > .content .top-news .rounded a.hover h3{margin-top:0;font-size:1.1em}
+#top > .content .top-news .rounded a.hover h2,#top > .content .top-news .rounded h3{font-size:1.2em;margin-bottom:7px}
+#top > .content .top-news .rounded a.hover h3{margin-top:0;font-size:1.2em}
 #top > .content .top-news .rounded a.hover{padding-top:3px;padding-bottom:3px}
-#top > .content .top-news .rounded a.hover.teaser{padding-bottom:7px}
-#top > .content .top-news .rounded p{font-size:.9em}
+#top > .content .top-news .rounded a.hover.teaser{padding-bottom:20px}
+#top > .content .top-news .rounded p{font-size:1em}
 #top > .content .top-news .rounded ul li h3{background:url("/images/bullet.gif") no-repeat left 7px}
 #news,#sports{width:471px;}
 #news .rounded,#sports .rounded{padding:10px;width:451px}

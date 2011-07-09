@@ -1,6 +1,6 @@
 body .container{margin-top:-1em;position:relative;font-size:.8em;padding-left:0;}
 body .container .content-container{padding:3px}
-body .container a.hover{display:block;border-right:1px solid transparent;border-left:1px solid transparent;-webkit-transition-property:color,border-color;-moz-transition-property:color,border-color;-o-transition-property:color,border-color;-webkit-transition-duration:.25s,.25s;-moz-transition-duration:.25s,.25s;-o-transition-duration:.25s,.25s;-webkit-transition-duration:linear,linear;-moz-transition-duration:linear,linear;-o-transition-duration:linear,linear;}
+body .container a.hover{display:block;border-right:1px solid transparent;border-left:1px solid transparent;-webkit-transition-property:color,border-color;-moz-transition-property:color,border-color;-o-transition-property:color,border-color;-webkit-transition-duration:.25s,.25s,.25s;-moz-transition-duration:.25s,.25s;-o-transition-duration:.25s,.25s;-webkit-transition-duration:linear,linear,linear;-moz-transition-duration:linear,linear;-o-transition-duration:linear,linear;}
 body .container a.hover h1,body .container a.hover h2,body .container a.hover h3,body .container a.hover h4,body .container a.hover h5,body .container a.hover p{-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear;color:#000}
 body .container a.hover p{color:#444;line-height:1.4em}
 body .container a.hover:hover{color:#36c;border-right-color:#4d90f0}

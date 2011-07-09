@@ -28,9 +28,11 @@
 #news .content-container h4,#sports .content-container h4{font-size:1em;line-height:1.4em}
 #news .content-container p.teaser,#sports .content-container p.teaser{margin-top:5px}
 #news .content-container .top,#sports .content-container .top{padding-bottom:5px;margin-bottom:15px;}
+#news .content-container .top p.teaser,#sports .content-container .top p.teaser{vertical-align:text-bottom}
 #news .content-container .top a.hover,#sports .content-container .top a.hover{margin-left:-13px;padding-left:13px}
-#news .content-container .top img,#sports .content-container .top img{float:right;border-radius:4px;box-shadow:0 0 2px #666}
+#news .content-container .top img,#sports .content-container .top img{float:right;border-radius:4px;-webkit-box-shadow:0 0 4px #999;-webkit-transition:box-shadow .25s linear}
 #news .content-container .top .text,#sports .content-container .top .text{float:left;width:240px;height:115px}
+#news .content-container .top a.hover:hover img,#sports .content-container .top a.hover:hover img{-webkit-box-shadow:0 0 4px #000}
 #news .content-container .bottom,#sports .content-container .bottom{padding-top:10px;clear:both;}
 #news .content-container .bottom .left,#sports .content-container .bottom .left{width:240px;}
 #news .content-container .bottom .left a.hover,#sports .content-container .bottom .left a.hover{padding-top:8px;padding-bottom:8px;margin-left:-13px;padding-left:13px}

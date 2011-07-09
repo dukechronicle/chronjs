@@ -110,6 +110,8 @@ top-content-full()
 				margin-top 5px
 				
 		.top
+			p.teaser
+				vertical-align text-bottom
 			padding-bottom 5px
 			margin-bottom 15px
 			// fix highlight locaiton
@@ -119,11 +121,16 @@ top-content-full()
 			img
 				float right
 				border-radius 4px
-				box-shadow 0px 0px 2px #666
+				-webkit-box-shadow 0px 0px 4px #999
+				-webkit-transition box-shadow 0.25s linear
 			.text
 				float left
 				width 240px
 				height 115px
+
+			a.hover:hover img
+
+				-webkit-box-shadow 0px 0px 4px black
 
 		.bottom
 			padding-top 10px

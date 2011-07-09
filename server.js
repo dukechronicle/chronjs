@@ -62,8 +62,45 @@ app.get('/test-upload', function(req, res) {
 	res.render('test-upload');
 });
 
-app.post('/test-upload', function(req, res) {
-	res.render('test-upload');
+var s3 = require('./thechronicle_modules/admin/lib/s3');
+fs = require('fs');
+app.post('/test-upload', function(req, resMain) {
+	var imageData = req.body.imagedata;
+	var imageName = req.body.imagename;
+	var imageType = req.body.imagetype;
+
+	var buf = new Buffer(imageData, 'base64');
+	fs.writeFile('image2.png', buf, function(err) {
+		fs.readFile('image2.png', function (err, data) {
+	 		if (err) {
+			 throw err;
+			}
+			s3.put(data, imageName, imageType, function(err, url) {
+			 	if(err) { 
+					console.log(err);
+					globalFunctions.showError(httpRes, err);
+				}
+			 	else {
+			       		api.image.createOriginal(imageName, url, '', imageType, {
+					        photographer: 'None',
+						caption: 'None',
+				                date: 'None',
+				                location: 'None'
+				         },
+				         function(err2, res) {
+				         	if(err2) {
+							globalFunctions.showError(resMain, err2);
+							console.log(err2);
+				                }
+						else {
+							console.log('Image uploaded: ' + url + ' and stored in DB: ' + res);
+							resMain.render('test-upload');
+						}
+				         });
+				}
+		       });
+		});
+	});
 });
 
 app.get('/article-list', function(req, http_res) {

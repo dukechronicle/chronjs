@@ -13,10 +13,9 @@ body h1{font-weight:bold;float:left}
 body #shell{margin:0 auto;width:972px}
 body header,body section,body footer{width:972px}
 body header{position:relative}
-body #header-overlay{position:absolute;left:60px;top:10px}
+body #header-overlay{position:absolute;left:60px;top:13px}
 body #header-top{height:96px;border-bottom-right-radius:5px;border-bottom-left-radius:5px}
-body #header-bottom{height:70px;}
-body #header-bottom h1{position:relative;z-index:2;padding-top:3px;}
+body #header-bottom h1{position:relative;z-index:2;padding-top:3px;padding-bottom:3px;}
 body #header-bottom h1 a{color:#111;font-family:didot;font-size:38px;font-weight:normal;letter-spacing:-1px;padding-left:0;text-shadow:0 1px 1px #fff;-webkit-transition:text-shadow .2s linear;-moz-transition:text-shadow .2s linear}
 body #header-bottom nav{position:relative;z-index:2;clear:both;}
 body #header-bottom nav h2{float:left;}
@@ -29,15 +28,18 @@ body section{margin-top:12px}
 .clear-both{clear:both}
 .full-banner,.full-banner .container{width:474px}
 span.timestamp{color:#036;font-size:.5em;display:block}
-#search-box{position:absolute;top:60px;left:820px;float:right;font-size:.8em;margin-top:49px;}
+#search-box{position:absolute;top:94px;left:820px;float:right;font-size:.8em;margin-top:49px;}
 #search-box input{background:#fff url("/images/search-button.png") no-repeat;border-radius:10px;border:2px inset;width:150px}
-.leaderboard{float:right;margin-top:3px;margin-right:3px;padding-left:3px;margin-bottom:3px;}
-.leaderboard img{display:block;-webkit-box-shadow:0 0 3px #ccc;opacity:.85;-webkit-transition:opacity .25s linear;-moz-transition:opacity .25s linear;-o-transition:opacity .25s linear;transition:opacity .25s linear}
+.leaderboard{float:right;margin-top:3px;padding-left:3px;margin-bottom:3px;}
+.leaderboard img{display:block;-webkit-box-shadow:0 0 3px #ccc;opacity:.8;-webkit-transition:opacity .25s linear;-moz-transition:opacity .25s linear;-o-transition:opacity .25s linear;transition:opacity .25s linear}
 .leaderboard a:hover img{opacity:1}
-header .social-media{width:230px;float:left;position:relative;z-index:2;text-align:center;}
-header .social-media h2{text-align:left;color:#999;text-shadow:0 1px 0 #fff;margin-bottom:8px;font-size:.8em;text-transform:uppercase;letter-spacing:1px;padding-top:4px}
-header .social-media .inner{padding-top:4px;}
-header .social-media .inner .icons{text-align:left;}
-header .social-media .inner .icons img{opacity:.5;padding-right:13px;width:25px;height:25px;-webkit-transition:opacity,.25s linear;-moz-transition:opacity,.25s linear;-o-transition:opacity,.25s linear;transition:opacity,.25s linear}
-header .social-media .inner .icons a:hover img{opacity:1}
-header .social-media .inner .icons img.last{padding-right:0}
+header .content{width:230px;float:left;}
+header .content .social-media{float:left;position:relative;z-index:2;text-align:center;margin-bottom:10px;}
+header .content .social-media .inner{padding-top:4px;}
+header .content .social-media .inner .icons{text-align:left;}
+header .content .social-media .inner .icons img{opacity:.5;padding-right:15px;width:25px;height:25px;-webkit-transition:opacity,.25s linear;-moz-transition:opacity,.25s linear;-o-transition:opacity,.25s linear;transition:opacity,.25s linear}
+header .content .social-media .inner .icons a:hover img{opacity:1}
+header .content .social-media .inner .icons img.last{padding-right:0}
+header .content .announcements{color:#666;text-shadow:0 1px 0 #fff;}
+header .content .announcements h4{text-align:left;margin-bottom:3px;font-size:.7em;text-transform:uppercase;letter-spacing:1px;padding-top:4px}
+header .content .announcements p{font-size:.7em}

@@ -29,7 +29,8 @@ go to url below to check that your database has been created
 
 ### Set S3 bucket name, key, and secret using env variables
 
-Can be found at: https://aws-portal.amazon.com/gp/aws/developer/account/index.html?action=access-key
+Keys and secret can be found at: https://aws-portal.amazon.com/gp/aws/developer/account/index.html?action=access-key
+Bucket name can be found at: https://console.aws.amazon.com/s3/home
 
     $ export S3_BUCKET=YOUR_BUCKET_NAME
     $ export S3_KEY=YOUR_KEY 

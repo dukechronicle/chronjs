@@ -1,6 +1,6 @@
 //link-color = link-color
 link-color = #36c
-corner-radius = 6px
+corner-radius = 5px
 container-padding = 3px
 border-color-grey = #DDD
 
@@ -58,11 +58,11 @@ body
 			-moz-transition-property color, border-color
 			-o-transition-property color, border-color
 
-			-webkit-transition-duration .25s, .25s
+			-webkit-transition-duration .25s, .25s, .25s
 			-moz-transition-duration .25s, .25s
 			-o-transition-duration .25s, .25s
 
-			-webkit-transition-duration linear, linear
+			-webkit-transition-duration linear, linear, linear
 			-moz-transition-duration linear, linear
 			-o-transition-duration linear, linear
 
@@ -109,7 +109,7 @@ body
 	.image-container
 		.container
 			img
-				border-radius 4px
+				border-radius corner-radius
 				display block
 			.content-container
 				padding 0px
@@ -130,13 +130,30 @@ body
 				height 67px
 	
 	.rounded, .rounded-hover
-		border-radius(4px)
+		border-radius(corner-radius)
 		shadow(0.398438, 0px, 1px, 3px)
 		background-color white
 		background -webkit-gradient(linear,left bottom,left top,color-stop(0, whiteSmoke),color-stop(0.33, white))
 		background -moz-linear-gradient(center bottom,whiteSmoke 0%,white 33%)
 		float right
-	
+
+	a.rounded-hover
+		border-left 1px solid transparent
+		border-right 1px solid transparent
+
+		img
+			opacity 0.8
+			transition opacity 0.25s linear
+
+		h3
+			transition color 0.25s linear
+		:hover
+			img
+				opacity 1
+			h3
+				color #39c
+
+
 	a.list-story
 		color black
 		display block

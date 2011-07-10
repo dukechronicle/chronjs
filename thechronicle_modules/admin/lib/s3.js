@@ -3,9 +3,14 @@ var exports = module.exports = s3;
 
 var knox = require('knox');
 var fs = require('fs');
-var BUCKET_NAME = 'chron_bucket1';
-var KEY = "AKIAISXHLL6NIXD24OVQ";
-var SECRET = "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";
+
+var BUCKET_NAME = process.env.S3_BUCKET;
+var KEY = process.env.S3_KEY;
+var SECRET = process.env.S3_SECRET;
+
+if(!BUCKET_NAME) throw "No AWS S3 Bucket specified. Please set using 'S3_BUCKET' environment variable";
+if(!KEY) throw "No AWS S3 Key specified.  Please set using 'S3_KEY' environment variable";
+if(!SECRET) throw "No AWS S3 Secret specified.  Please set using 'S3_SECRET' environment variable";
 
 s3.put = function(buf, key, type, callback) {
     _getClientStatic(function(err, client) {

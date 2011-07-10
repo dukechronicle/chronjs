@@ -13,7 +13,7 @@ body h1{font-weight:bold;float:left}
 body #shell{margin:0 auto;width:972px}
 body header,body section,body footer{width:972px}
 body header{position:relative}
-body #header-overlay{position:absolute;z-index:0;left:60px;top:13px}
+body #header-overlay{position:absolute;z-index:0;left:50px;top:0}
 body #header-top{height:96px;border-bottom-right-radius:5px;border-bottom-left-radius:5px;}
 body #header-top h1{position:relative;z-index:2;margin-top:55px;}
 body #header-top h1 a{color:#111;font-family:didot;font-size:38px;font-weight:normal;letter-spacing:-1px;padding-left:0;text-shadow:0 1px 1px #fff;-webkit-transition:text-shadow .2s linear;-moz-transition:text-shadow .2s linear}

@@ -46,12 +46,11 @@
 		"news": [
 			{"title": "A PRESIDENTIAL VISIT",
 						"timestamp": "today",
-						"teaser": "Although the economic recession sparked some sacrifice across the University, Duke’s revered Talent Identification Program has continued."},
+						"teaser": "Although the recession sparked some sacrifice across the University, Duke’s revered Talent Identification Program has continued."},
 			{"title": "New center for Judicial Studies created",
 						"timestamp": "yesterday"},
-			{"title": "Math department earns top 10 world ranking",
-						"timestamp": "2 days ago"},
-			{"title": "Admissions yield steady as apps skyrocket"}
+			{"title": "Math department earns top 10 ranking",
+						"timestamp": "2 days ago"}
 		],
 		"sports": [
 			{"title": "Bottorff crowned in Iowa",
@@ -60,8 +59,7 @@
 			{"title": "Duke plans for upcoming season",
 					"timestamp": "today"},
 			{"title": "Duke falls in match play semis",
-					"timestamp": "3 days ago"},
-			{"title": "EXPANDING THE BRAND"}
+					"timestamp": "3 days ago"}
 		]
 	},
 	"opinion": {
@@ -82,43 +80,53 @@
 	"news": {
 		"title": "News",
 		"stories": [
-			{"title": "Duke renovates steam plant to reduce carbon footprint",
+			{"title": "Duke renovates steam plant to reduce carbon footprint", "image": "/images/news-thumb.jpg",
 				"teaser": "Walking down Coal Pile Drive, students were once greeted by a heap of coal that rivaled the height of the nearby Bryan Research Center.",
 				"comments": "3", "cssClass": "first", "author": "Editorial Board"},
 			{"title": "Successful initiatives have Durham crime rates dropping",
+				"teaser": "Bull City’s finest is working with other law enforcement groups and civilian crime prevention initiatives to make Durham a little safer.",
 				"comments": "1", "author": "Carol Apollonio"},
 			{"title": "In sixth year, Duke-NUS sees first graduating class",
+				"teaser": "The Duke-National University of Singapore Graduate Medical School will soon bid farewell to its inaugural class, marking a major step in the school’s six-year history.",
 				"comments": "5", "author": "Chris Bassil"},
 			{"title": "Food Factory takes over Devil’s Bistro on Central Campus",
 				"comments": "0", "author": "Christine Hall"},
-			{"title": "Food Factory takes over Devil’s Bistro on Central Campus",
-				"comments": "0", "author": "Christine Hall"},
-			{"title": "Food Factory takes over Devil’s Bistro on Central Campus",
-				"comments": "0", "author": "Christine Hall"},
-			{"title": "Food Factory takes over Devil’s Bistro on Central Campus",
-				"comments": "0", "author": "Christine Hall"},
 			{"title": "Duke University Health System continues construction",
+				"comments": "0", "author": "Christine Hall"},
+			{"title": "Duke researchers key in Large Hadron Collider tests",
+				"comments": "0", "author": "Christine Hall"},
+			{"title": "Bus system misses mark on ridership goal",
+				"comments": "0", "author": "Christine Hall"},
+			{"title": "UNIVERSITY VENTURES EAST",
+				"comments": "14", "author": "Dean Chen"},
+			{"title": "Lemur Center makes strides in sustainability",
 				"comments": "14", "cssClass": "last", "author": "Dean Chen"}
+
 		]
 	},
 	"sports": {
 		"title": "Sports",
 		"stories": [
-			{"title": "EXPANDING THE BRAND",
+			{"title": "EXPANDING THE BRAND", "image": "/images/sports-thumb.jpg",
+				"teaser": "For the third consecutive summer, Mike Krzyzewski will lead a basketball team in competition abroad—but for the first time, it won’t be the United States nationals.",
 				"comments": "3", "cssClass": "first", "author": "Editorial Board"},
-			{"title": "Successful initiatives have Durham crime rates dropping",
+			{"title": "Beach takes seventh at USA Championships",
+				"teaser": "The word ‘competition’ took on a whole new meaning this past weekend when the Blue Devils sent six of their top athletes to contend",
 				"comments": "1", "author": "Carol Apollonio"},
-			{"title": "In sixth year, Duke-NUS sees first graduating class",
+			{"title": "Bowl time for Cutcliffe’s deepest Duke team",
+				"teaser": "For those that have followed my coverage of Duke football over the David Cutcliffe era, you have likely come to expect my annual proclamation",
 				"comments": "5", "author": "Chris Bassil"},
-			{"title": "Food Factory takes over Devil’s Bistro on Central Campus",
+			{"title": "Williams fills low post void for Blue Devils",
 				"comments": "0", "author": "Christine Hall"},
-			{"title": "Food Factory takes over Devil’s Bistro on Central Campus",
+			{"title": "Alaskan ready for Durham &nbsp; sun",
 				"comments": "0", "author": "Christine Hall"},
-			{"title": "Food Factory takes over Devil’s Bistro on Central Campus",
+			{"title": "Middleton brings NFL experience to Duke",
 				"comments": "0", "author": "Christine Hall"},
-			{"title": "Food Factory takes over Devil’s Bistro on Central Campus",
+			{"title": "Baseball is all business for Chris Capuano",
 				"comments": "0", "author": "Christine Hall"},
-			{"title": "Duke University Health System continues construction",
+			{"title": "Helton follows Cutcliffe from Tennessee",
+				"comments": "14", "author": "Dean Chen"},
+			{"title": "Defense spells doom for Blue Devils",
 				"comments": "14", "cssClass": "last", "author": "Dean Chen"}
 		]
 	}

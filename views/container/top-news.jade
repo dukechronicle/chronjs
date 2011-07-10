@@ -11,28 +11,19 @@
 					h2 #{news[0].title}
 					p #{news[0].teaser}
 
-				a.hover.highlight-left(href='#')
-					//span.timestamp #{news.second.timestamp}
-					h3 #{news[1].title}
+				- each story, index in news
+					- if (index > 0)
+						a.hover.highlight-left(href='#')
+							h3 #{story.title}
 
-				a.hover.highlight-left(href='#')
-					//span.timestamp #{news.third.timestamp}
-					h3 #{news[2].title}
-				a.hover.highlight-left(href='#')
-					//span.timestamp #{news.forth.timestamp}
-					h3 #{news[3].title}
 			.right.align-element
 				a.hover.highlight-right.first.teaser(href='#')
 					//span.timestamp #{sports.top.timestamp}
 					h2 #{sports[0].title}
 					p #{sports[0].teaser}
 
-				a.hover.highlight-right(href='#')
-					//span.timestamp #{sports.second.timestamp}
-					h3 #{sports[1].title}
-				a.hover.highlight-right(href='#')
-					//span.timestamp #{sports.third.timestamp}
-					h3 #{sports[2].title}
-				a.hover.highlight-right(href='#')
-					//span.timestamp #{sports.forth.timestamp}
-					h3 #{sports[3].title}
+				- each story, index in sports
+					- if (index > 0)
+						a.hover.highlight-right(href='#')
+							h3 #{story.title}
+

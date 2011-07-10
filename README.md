@@ -25,7 +25,15 @@ replace YOUR_DATABASE_NAME with desired database name(its a good idea to put you
 
 go to url below to check that your database has been created
 
-    http://chrondev:pikachu@chrondev.iriscouch.com/_utils 
+    http://chrondev:pikachu@chrondev.iriscouch.com/_utils
+
+### Set S3 bucket name, key, and secret using env variables
+
+Can be found at: https://aws-portal.amazon.com/gp/aws/developer/account/index.html?action=access-key
+
+    $ export S3_BUCKET=YOUR_BUCKET_NAME
+    $ export S3_KEY=YOUR_KEY 
+    $ export S3_SECRET=YOUR_SECRET
 
 ### Start server
 

@@ -57,7 +57,7 @@ app.get('/', function(req, res) {
 	res.render('index', {layout: false, model: homeModel});
 });
 
-// image upload test
+// image upload test - should be moved out of server.js into admin area some point
 app.get('/test-upload', function(req, res) {
 	res.render('test-upload');
 });
@@ -69,38 +69,47 @@ app.post('/test-upload', function(req, resMain) {
 	var imageName = req.body.imagename;
 	var imageType = req.body.imagetype;
 
-	var buf = new Buffer(imageData, 'base64');
-	fs.writeFile('image2.png', buf, function(err) {
-		fs.readFile('image2.png', function (err, data) {
-	 		if (err) {
-			 throw err;
-			}
-			s3.put(data, imageName, imageType, function(err, url) {
-			 	if(err) { 
-					console.log(err);
-					globalFunctions.showError(httpRes, err);
+	if(imageType != 'image/jpeg' && imageType != 'image/png' && imageType != 'image/gif') {
+		var err = "Invalid file type for " + imageName + ". Must be an image.";
+		console.log(err);
+		globalFunctions.showError(resMain, err);
+	}
+	else {
+		imageName = globalFunctions.randomString(8)+"-"+imageName;	
+	
+		var buf = new Buffer(imageData, 'base64');
+		fs.writeFile('image2.png', buf, function(err) {
+			fs.readFile('image2.png', function (err, data) {
+		 		if (err) {
+				 throw err;
 				}
-			 	else {
-			       		api.image.createOriginal(imageName, url, '', imageType, {
-					        photographer: 'None',
-						caption: 'None',
-				                date: 'None',
-				                location: 'None'
-				         },
-				         function(err2, res) {
-				         	if(err2) {
-							globalFunctions.showError(resMain, err2);
-							console.log(err2);
-				                }
-						else {
-							console.log('Image uploaded: ' + url + ' and stored in DB: ' + res);
-							resMain.render('test-upload');
-						}
-				         });
-				}
-		       });
+				s3.put(data, imageName, imageType, function(err, url) {
+				 	if(err) { 
+						console.log(err);
+						globalFunctions.showError(resMain, err);
+					}
+				 	else {
+				       		api.image.createOriginal(imageName, url, '', imageType, {
+							photographer: 'None',
+							caption: 'None',
+						        date: 'None',
+						        location: 'None'
+						 },
+						 function(err2, res) {
+						 	if(err2) {
+								globalFunctions.showError(resMain, err2);
+								console.log(err2);
+						        }
+							else {
+								console.log('Image uploaded: ' + url + ' and stored in DB: ' + res);
+								resMain.render('test-upload');
+							}
+						 });
+					}
+			       });
+			});
 		});
-	});
+	}
 });
 
 app.get('/article-list', function(req, http_res) {

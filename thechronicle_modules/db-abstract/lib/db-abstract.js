@@ -1,5 +1,6 @@
 var cradle = require('cradle');
 var _ = require('underscore');
+var db_design = require('./db_design');
 
 var DATABASE = process.env.COUCHDB_DATABASE || 'chronicle';
 
@@ -18,8 +19,19 @@ function connect(database) {
 	}); 
 	
 	var db = conn.database(database);
-    db.create();
-    return db;	
+	
+	db.exists(function (error,exists)
+	{
+	  	if(error) {
+			console.log(error);
+		}
+
+		if(!exists) {
+			db.create();
+			db_design.createViews(db);
+		}
+	});
+   	return db;	
 }
 
 // all functions defined inside of db variable will be available as a module function

@@ -19,14 +19,6 @@ replace YOUR_DATABASE_NAME with desired database name(its a good idea to put you
     $ export COUCHDB_URL=http://chrondev:pikachu@chrondev.iriscouch.com
     $ export COUCHDB_DATABASE=YOUR_DATABASE_NAME
 
-### Initialize database
-
-    $ node ./thechronicle_modules/db-abstract/db_design.js 
-
-go to url below to check that your database has been created
-
-    http://chrondev:pikachu@chrondev.iriscouch.com/_utils
-
 ### Set S3 bucket name, key, and secret using env variables
 
 Keys and secret can be found at: https://aws-portal.amazon.com/gp/aws/developer/account/index.html?action=access-key

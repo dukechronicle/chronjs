@@ -68,11 +68,15 @@ app.post('/test-upload', function(req, resMain) {
 	var imageData = req.body.imagedata;
 	var imageName = req.body.imagename;
 	var imageType = req.body.imagetype;
+	var imageID = req.body.imageid;
 
 	if(imageType != 'image/jpeg' && imageType != 'image/png' && imageType != 'image/gif') {
 		var err = "Invalid file type for " + imageName + ". Must be an image.";
-		console.log(err);
-		globalFunctions.showError(resMain, err);
+		globalFunctions.log(err);
+		globalFunctions.sendJSONResponse(resMain, {
+			error: err,
+			imageid: imageID
+		});
 	}
 	else {
 		imageName = globalFunctions.randomString(8)+"-"+imageName;	
@@ -85,8 +89,11 @@ app.post('/test-upload', function(req, resMain) {
 				}
 				s3.put(data, imageName, imageType, function(err, url) {
 				 	if(err) { 
-						console.log(err);
-						globalFunctions.showError(resMain, err);
+						globalFunctions.log(err);
+						globalFunctions.sendJSONResponse(resMain, {
+							error: err,
+							imageid: imageID
+						});
 					}
 				 	else {
 				       		api.image.createOriginal(imageName, url, '', imageType, {
@@ -97,12 +104,18 @@ app.post('/test-upload', function(req, resMain) {
 						 },
 						 function(err2, res) {
 						 	if(err2) {
-								globalFunctions.showError(resMain, err2);
-								console.log(err2);
+								globalFunctions.sendJSONResponse(resMain, {
+									error: err2,
+									imageid: imageID
+								});
+								globalFunctions.log(err2);
 						        }
 							else {
-								console.log('Image uploaded: ' + url + ' and stored in DB: ' + res);
-								resMain.render('test-upload');
+								globalFunctions.log('Image uploaded: ' + url + ' and stored in DB: ' + res);
+								globalFunctions.sendJSONResponse(resMain, {
+									imageid: imageID,
+									imageurl: url
+								});
 							}
 						 });
 					}

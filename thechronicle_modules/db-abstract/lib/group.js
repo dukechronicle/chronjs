@@ -42,7 +42,7 @@ group.docs = function(namespace, groupName, callback) {
     });
 }
 
-group.docsN = function(namespace, groupName, numDocs, callback) {
+group.docsN = function(namespace, groupName, baseDocNum, numDocs, callback) {
 	db.view('articles/group_docs', {
         key: [namespace, groupName]
     }, 
@@ -54,8 +54,10 @@ group.docsN = function(namespace, groupName, numDocs, callback) {
             
 	        for(var doc in res)
             {
-                if(counter > numDocs)
+                if(counter >= numDocs)
                     break;
+                if(counter < baseDocNum)
+                    continue;
                 resN[doc] = res[doc];
                 counter++;
             }

@@ -67,6 +67,19 @@ group.docs = function(namespace, groupName, callback) {
     });
 }
 
+group.docsN = function(namespace, groupName, numDocs, callback) {
+    var add = function(memo, item, cbk) {
+        memo[item] = function(acallback) {
+            db.group.docsN(namespace, item, numDocs, acallback);
+        };
+        cbk(null, memo);
+    };
+    nimble.reduce(groupName, add, {}, function(err, res) {
+        nimble.parallel(res, callback);
+    });
+}
+
+
 /*
 function _editGroup(docid, new_groups, callback) {
 	console.log(docid);

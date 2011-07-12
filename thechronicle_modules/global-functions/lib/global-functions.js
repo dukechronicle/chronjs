@@ -24,7 +24,7 @@ exports.randomString = function (length) {
 exports.sendJSONResponse = function(res,json_object) {
 	var json_string = JSON.stringify(json_object);
 	
-	res.render('ajax', {
+	res.render('json', {
         	locals: {
        		   json: json_string
        		},

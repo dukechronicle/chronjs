@@ -65,17 +65,17 @@ app.get('/test-upload', function(req, res) {
 var s3 = require('./thechronicle_modules/admin/lib/s3');
 fs = require('fs');
 app.post('/test-upload', function(req, resMain) {
-	var imageData = req.body.imagedata;
-	var imageName = req.body.imagename;
-	var imageType = req.body.imagetype;
-	var imageID = req.body.imageid;
+	var imageData = req.body.imageData;
+	var imageName = req.body.imageName;
+	var imageType = req.body.imageType;
+	var imageID = req.body.imageID;
 
 	if(imageType != 'image/jpeg' && imageType != 'image/png' && imageType != 'image/gif') {
 		var err = "Invalid file type for " + imageName + ". Must be an image.";
 		globalFunctions.log(err);
 		globalFunctions.sendJSONResponse(resMain, {
 			error: err,
-			imageid: imageID
+			imageID: imageID
 		});
 	}
 	else {
@@ -92,7 +92,7 @@ app.post('/test-upload', function(req, resMain) {
 						globalFunctions.log(err);
 						globalFunctions.sendJSONResponse(resMain, {
 							error: err,
-							imageid: imageID
+							imageID: imageID
 						});
 					}
 				 	else {
@@ -106,15 +106,15 @@ app.post('/test-upload', function(req, resMain) {
 						 	if(err2) {
 								globalFunctions.sendJSONResponse(resMain, {
 									error: err2,
-									imageid: imageID
+									imageID: imageID
 								});
 								globalFunctions.log(err2);
 						        }
 							else {
 								globalFunctions.log('Image uploaded: ' + url + ' and stored in DB: ' + res);
 								globalFunctions.sendJSONResponse(resMain, {
-									imageid: imageID,
-									imageurl: url
+									imageID: imageID,
+									imageUrl: url
 								});
 							}
 						 });

@@ -21,12 +21,12 @@ exports.randomString = function (length) {
 	return randomstring;
 }
 
-exports.sendJSONResponse = function(res,json_object) {
-	var json_string = JSON.stringify(json_object);
+exports.sendJSONResponse = function(res,jsonObject) {
+	var jsonString = JSON.stringify(jsonObject);
 	
 	res.render('json', {
         	locals: {
-       		   json: json_string
+       		   json: jsonString
        		},
 		layout: false
     	});

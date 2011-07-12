@@ -10,15 +10,25 @@
 	font-size: 2em;
 	font-family: Arial, sans-serif;
 }
-
 #progressbar {
 	margin-left: 20px;
 	margin-right: 20px;
 	position: relative;
 	top: 75%;
 }
-
 #droplabel {
 	position: relative;
 	top: 40%;
+}
+.inprogress {
+	border-color: yellow;
+	border-style: solid;
+	width: 200px;
+	height: 200px;
+}
+.done {
+	border-color: green;
+	border-style: solid;
+	width: 200px;
+	height: 200px;
 }

@@ -67,10 +67,10 @@ group.docs = function(namespace, groupName, callback) {
     });
 }
 
-group.docsN = function(namespace, groupName, numDocs, callback) {
+group.docsN = function(namespace, groupName, baseDocNum, numDocs, callback) {
     var add = function(memo, item, cbk) {
         memo[item] = function(acallback) {
-            db.group.docsN(namespace, item, numDocs, acallback);
+            db.group.docsN(namespace, item, baseDocNum, numDocs, acallback);
         };
         cbk(null, memo);
     };

@@ -14,6 +14,9 @@ var globalFunctions = require('./thechronicle_modules/global-functions');
 var api = require('./thechronicle_modules/api/lib/api');
 var admin = require('./thechronicle_modules/admin/lib/admin');
 
+/* yogoh stuff */
+var mobile_api = require('./thechronicle_modules/mobileapi/mobile_api');
+
 /* express configuration */
 var app = express.createServer();
 
@@ -176,6 +179,13 @@ app.get('/article/:url/edit', function(req, http_res) {
                 }
             });
         }
+    });
+});
+
+app.get('/yogoh',function(req,http_res){
+    mobile_api.getTopStories(10, function(asdf) {
+
+
     });
 });
 /*** !FRONTEND ***/

@@ -42,6 +42,38 @@ group.docs = function(namespace, groupName, callback) {
     });
 }
 
+group.docsN = function(namespace, groupName, numDocs, callback) {
+	db.view('articles/group_docs', {
+        key: [namespace, groupName]
+    }, 
+    function(err, res) {
+    	if (res) {
+    		// fetch each child document after getting their id
+            var resN = {};
+            var counter = 0;
+            
+	        for(var doc in res)
+            {
+                if(counter > numDocs)
+                    break;
+                resN[doc] = res[doc];
+                counter++;
+            }
+
+            nimble.map(resN, function(docId, cbck) {
+	            cbck(null, function(acallback) {
+	                    db.get(docId.value, acallback);
+	                });
+	            }, function(map_err, map_res) {
+	            nimble.parallel(map_res, callback);
+	        });
+	    } else {
+	    	callback(null, []);
+	    }
+    });
+}
+
+
 // add document to group
 group.add = function (docId, namespace, groupName, callback) {
     //check if group exists

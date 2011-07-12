@@ -42,10 +42,10 @@ $(document).ready(function() {
 			uploading = true;
 
 			if(count == 1) {
-				$("#droplabel").text("Processing " + files[0].name);
+				$("#droplabel").text("Uploading " + files[0].name);
 			}
 			else {
-				$("#droplabel").text("Processing files...");
+				$("#droplabel").text("Uploading files...");
 			}
 
 			$.each(files,function(index,file) {
@@ -87,43 +87,58 @@ function handleReaderLoadEnd(evt) {
 	var imageType = evt.target.result.split(';',1);
 	imageType = imageType[0].substring(5);
 
+	var imageID = "picture"+(imgCount - imagesLeft);
+
 	$.ajax({
    		type: "POST",
   		url: "/test-upload",
    		data: {
 			imagedata: imageData,
 			imagename: imageNames[numImages],
-			imagetype: imageType		
+			imagetype: imageType,
+			imageid: imageID		
 		},
 		error: function(msg) {
-			alert(msg);
+			alert('Error');
 		},
 
    		success: function(msg) {
-     			$("#pictureholder").append(IMAGE_HTML);
+			json = jQuery.parseJSON(msg);
 
-			var img = $("#tempPreview");
-
-			img.hide();
-			img.attr("id","picture"+(imgCount - imagesLeft));
-
-			img.attr("src",evt.target.result);
-			img.attr("width","200");
-			img.attr("height","200");
-
-			img.fadeIn('slow');
-
-			imagesLeft --;
-
-			if(imagesLeft == 0)	
-			{
-				$("#droplabel").text(dropLabelStartText);
-				uploading = false;
-				imageNames = {};
-				numImages = 0;
+			if(json.error) {
+				alert(json.error);
+				$("#"+json.imageid).fadeOut('slow');
+			}
+			else {
+				$("#"+json.imageid).css('border-color','green');			
 			}
    		}
  	});
 
-	numImages ++;	
+	numImages ++;
+
+	$("#pictureholder").append(IMAGE_HTML);
+
+	var img = $("#tempPreview");
+
+	img.hide();
+	img.attr("id",imageID);
+
+	img.attr("src",evt.target.result);
+	img.attr("width","200");
+	img.attr("height","200");
+	img.css('border-color','yellow');
+	img.css('border-style','solid');
+
+	img.fadeIn('slow');
+
+	imagesLeft --;
+
+	if(imagesLeft == 0)	
+	{
+		$("#droplabel").text(dropLabelStartText);
+		uploading = false;
+		imageNames = {};
+		numImages = 0;
+	}	
 }

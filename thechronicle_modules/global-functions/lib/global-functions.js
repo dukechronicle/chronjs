@@ -20,3 +20,14 @@ exports.randomString = function (length) {
 	}
 	return randomstring;
 }
+
+exports.sendJSONResponse = function(res,json_object) {
+	var json_string = JSON.stringify(json_object);
+	
+	res.render('ajax', {
+        	locals: {
+       		   json: json_string
+       		},
+		layout: false
+    	});
+}

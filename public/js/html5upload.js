@@ -6,7 +6,7 @@ var imageNames = {};
 var uploading = false;
 var imgCount = 0;
 
-$(document).ready(function() {
+$(function() {
 	dropLabelStartText = $("#droplabel").text();
 
 	// init event handlers
@@ -93,10 +93,10 @@ function handleReaderLoadEnd(evt) {
    		type: "POST",
   		url: "/test-upload",
    		data: {
-			imagedata: imageData,
-			imagename: imageNames[numImages],
-			imagetype: imageType,
-			imageid: imageID		
+			imageData: imageData,
+			imageName: imageNames[numImages],
+			imageType: imageType,
+			imageID: imageID		
 		},
 		error: function(msg) {
 			alert('Error');
@@ -107,10 +107,10 @@ function handleReaderLoadEnd(evt) {
 
 			if(json.error) {
 				alert(json.error);
-				$("#"+json.imageid).fadeOut('slow');
+				$("#"+json.imageID).fadeOut('slow');
 			}
 			else {
-				$("#"+json.imageid).css('border-color','green');			
+				$("#"+json.imageID).css('border-color','green');			
 			}
    		}
  	});

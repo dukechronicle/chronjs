@@ -110,7 +110,7 @@ function handleReaderLoadEnd(evt) {
 				$("#"+json.imageID).fadeOut('slow');
 			}
 			else {
-				$("#"+json.imageID).css('border-color','green');			
+				$("#"+json.imageID).addClass('done');			
 			}
    		}
  	});
@@ -125,10 +125,7 @@ function handleReaderLoadEnd(evt) {
 	img.attr("id",imageID);
 
 	img.attr("src",evt.target.result);
-	img.attr("width","200");
-	img.attr("height","200");
-	img.css('border-color','yellow');
-	img.css('border-style','solid');
+	img.addClass('inprogress');
 
 	img.fadeIn('slow');
 

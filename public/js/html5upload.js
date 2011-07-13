@@ -1,10 +1,10 @@
-var numImages = 0;
-var imagesLeft = 0;
 var IMAGE_HTML = "<img id='tempPreview' />";
+
+var imagesToProcess = 0;
 var dropLabelStartText = "";
-var imageNames = {};
-var uploading = false;
-var imgCount = 0;
+var imageNames = [];
+var isUploading = false;
+var totalImages = 0;
 
 $(function() {
 	dropLabelStartText = $("#droplabel").text();
@@ -34,12 +34,12 @@ $(function() {
 		var files = evt.dataTransfer.files;
 		var count = files.length;
 
-		// Only call the handler if 1 or more files was dropped.
-		if (count > 0 && !uploading) {
-			imagesLeft = count;
-			imgCount += count;
+		// Only call the handler if 1 or more files was dropped and files are not currently being uploaded
+		if (count > 0 && !isUploading) {
+			imagesToProcess = count;
+			totalImages += count;
 			
-			uploading = true;
+			isUploading = true;
 
 			if(count == 1) {
 				$("#droplabel").text("Uploading " + files[0].name);
@@ -87,14 +87,15 @@ function handleReaderLoadEnd(evt) {
 	var imageType = evt.target.result.split(';',1);
 	imageType = imageType[0].substring(5);
 
-	var imageID = "picture"+(imgCount - imagesLeft);
+	var imageID = "picture"+(totalImages - imagesToProcess);
 
+	// post image data to the server
 	$.ajax({
    		type: "POST",
   		url: "/test-upload",
    		data: {
 			imageData: imageData,
-			imageName: imageNames[numImages],
+			imageName: imageNames[imageNames.length - imagesToProcess],
 			imageType: imageType,
 			imageID: imageID		
 		},
@@ -107,35 +108,31 @@ function handleReaderLoadEnd(evt) {
 
 			if(json.error) {
 				alert(json.error);
-				$("#"+json.imageID).fadeOut('slow');
+				$("#"+json.imageID).fadeOut('slow'); // if error, remove image from the page
 			}
 			else {
-				$("#"+json.imageID).addClass('done');			
+				$("#"+json.imageID).addClass('done'); // if sucess, set the image's styling as 'done' uploading		
 			}
    		}
  	});
 
-	numImages ++;
+	imagesToProcess --;
 
+	// add the image to the page
 	$("#pictureholder").append(IMAGE_HTML);
 
 	var img = $("#tempPreview");
-
 	img.hide();
 	img.attr("id",imageID);
-
 	img.attr("src",evt.target.result);
-	img.addClass('inprogress');
 
+	img.addClass('inprogress'); // set the images styling as 'inprogress' uploading
 	img.fadeIn('slow');
 
-	imagesLeft --;
-
-	if(imagesLeft == 0)	
+	if(imagesToProcess == 0)	
 	{
 		$("#droplabel").text(dropLabelStartText);
-		uploading = false;
-		imageNames = {};
-		numImages = 0;
+		isUploading = false;
+		imageNames = [];
 	}	
 }

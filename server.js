@@ -72,60 +72,64 @@ app.post('/test-upload', function(req, resMain) {
 	var imageName = req.body.imageName;
 	var imageType = req.body.imageType;
 	var imageID = req.body.imageID;
-
-	if(imageType != 'image/jpeg' && imageType != 'image/png' && imageType != 'image/gif') {
-		var err = "Invalid file type for " + imageName + ". Must be an image.";
-		globalFunctions.log(err);
-		globalFunctions.sendJSONResponse(resMain, {
-			error: err,
-			imageID: imageID
-		});
-	}
-	else {
-		imageName = globalFunctions.randomString(8)+"-"+imageName;	
 	
-		var buf = new Buffer(imageData, 'base64');
-		fs.writeFile('image2.png', buf, function(err) {
-			fs.readFile('image2.png', function (err, data) {
-		 		if (err) {
-				 throw err;
-				}
-				s3.put(data, imageName, imageType, function(err, url) {
-				 	if(err) { 
-						globalFunctions.log(err);
-						globalFunctions.sendJSONResponse(resMain, {
-							error: err,
-							imageID: imageID
-						});
-					}
-				 	else {
-				       		api.image.createOriginal(imageName, url, '', imageType, {
-							photographer: 'None',
-							caption: 'None',
-						        date: 'None',
-						        location: 'None'
-						 },
-						 function(err2, res) {
-						 	if(err2) {
-								globalFunctions.sendJSONResponse(resMain, {
-									error: err2,
-									imageID: imageID
-								});
-								globalFunctions.log(err2);
-						        }
-							else {
-								globalFunctions.log('Image uploaded: ' + url + ' and stored in DB: ' + res);
-								globalFunctions.sendJSONResponse(resMain, {
-									imageID: imageID,
-									imageUrl: url
-								});
-							}
-						 });
-					}
-			       });
+	// use async library to call these functions in series, passing vars between them	
+	async.waterfall([
+		function(callback) {
+			if(imageType != 'image/jpeg' && imageType != 'image/png' && imageType != 'image/gif') {
+				callback("Invalid file type for " + imageName + ". Must be an image.");
+			}
+			else {
+				// create a unique name for the image to avoid s3 blob collisions				
+				imageName = globalFunctions.randomString(8)+"-"+imageName;	
+				callback(null)
+			}			
+		},
+		function(callback) {		
+			var buf = new Buffer(imageData, 'base64');
+			fs.writeFile('image2.png', buf, function(err) {
+				callback(err);				
 			});
-		});
-	}
+		},
+		function(callback) {
+			fs.readFile('image2.png', function (err, data) {
+		 		callback(err,data);
+			});
+		},
+		function(data, callback) {
+			//put image in AWS S3 storage
+			s3.put(data, imageName, imageType, function(err, url) {
+				callback(err,url);
+			});
+		},
+		function(url, callback) {
+			api.image.createOriginal(imageName, url, '', imageType, {
+				photographer: 'None',
+				caption: 'None',
+			        date: 'None',
+			        location: 'None'
+			},
+			function(err, res) {
+				callback(err,res,url);
+			});
+		}
+	],
+	function(err,result,url) {
+		if(err) { 
+			globalFunctions.log(err);
+			globalFunctions.sendJSONResponse(resMain, {
+				error: err,
+				imageID: imageID
+			});
+		}
+		else {
+			globalFunctions.log('Image uploaded: ' + url + ' and stored in DB: ' + result);
+			globalFunctions.sendJSONResponse(resMain, {
+				imageID: imageID,
+				imageUrl: url
+			});
+		}
+	});
 });
 
 app.get('/article-list', function(req, http_res) {

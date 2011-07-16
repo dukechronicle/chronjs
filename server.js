@@ -118,6 +118,11 @@ app.post('/test-upload', function(req, resMain) {
 	function(err,result,url) {
 		if(err) { 
 			globalFunctions.log(err);
+
+			if(typeof(err) == "object") {
+				err = "Error";			
+			}
+			
 			globalFunctions.sendJSONResponse(resMain, {
 				error: err,
 				imageID: imageID

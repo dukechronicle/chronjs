@@ -125,7 +125,9 @@ exports.init = function(app) {
 		    data.photographer = req.body.photographer;
 	 	    data.location = req.body.location;
 
-		    api.image.edit(id,data);
+		    api.image.edit(id,data, function(){
+		    	httpRes.redirect('/admin/image/'+data.name);
+		    });
 		    
 		});
 		

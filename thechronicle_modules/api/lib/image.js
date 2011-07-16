@@ -21,8 +21,8 @@ image.createOriginal = function(name, url, localPath, contentType, metadata, cal
     db.image.createOriginal(name, metadata, callback);
 }
 
-image.edit = function(imageID, data) {
-   db.image.edit(imageID, data);
+image.edit = function(imageID, data, callback) {
+   db.image.edit(imageID, data, callback);
 }
 
 image.createVersion = function(parentId, url, width, height, callback) {

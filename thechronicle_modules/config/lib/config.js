@@ -22,6 +22,7 @@ if (redisUrl) {
 	});
 
 } else {
+	console.log("WARNING: REDIS_URL is not set, configurations may be missing");
 	client = null;
 }
 

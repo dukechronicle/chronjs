@@ -21,7 +21,7 @@
 
 replace YOUR_DATABASE_NAME with desired database name(its a good idea to put your name in there so your name doesn't collide with someone else's)
 
-    $ export 
+    $ export COUCHDB_URL=http://user:pass@host
     $ export COUCHDB_DATABASE=YOUR_DATABASE_NAME
 
 ### Set S3 bucket name, key, and secret using env variables

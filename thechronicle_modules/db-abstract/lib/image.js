@@ -45,8 +45,6 @@ image.createVersion = function(parentId, options, callback) {
 }
 
 image.edit = function(imageID, data, callback) {
-    console.log(imageID);
-    console.log(data);
     db.merge(imageID, data, callback);
 }
 

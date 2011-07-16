@@ -21,11 +21,11 @@ html(lang="en")
 						.top-news!=partial('container/top-news', model.headlines)
 						div
 							.image-container.print-edition!=partial('container/image', model.printEdition)
-							.image-container.full-banner.advertisement!=partial('container/image', model.adFullBanner)
+							.image-container.full-banner!=partial('container/image', model.adFullBanner)
 					.sidebar
 						.twitter!=partial('container/twitter', model.twitter)
 						.most-popular!=partial('container/most-popular', model.popular)
-						.image-container.advertisement!=partial('container/image', model.adFullRectangle)
+						.image-container.medium-rectangle!=partial('container/image', model.adFullRectangle)
 						.opinion!=partial('container/opinion', model.opinion)
 				#middle
 					#news-sports

@@ -1,7 +1,8 @@
 var redis = require("redis");
 var url = require("url");
 
-var configHashKey = "config:dev";
+var configProfile = "dev";
+var configHashKey = "config:" + configProfile;
 
 // parse enviroment variable to extract login information
 var redisUrl = process.env.REDISTOGO_URL || process.env.REDIS_URL;
@@ -35,8 +36,8 @@ config.init = function(callback) {
 			if (err) throw err;
 
 			if (configCache === null) {
-				console.log("Loaded configuration:");
-				console.log( JSON.stringify(obj, null, "\t"));
+				console.log(configProfile + " configuration:");
+				console.log(JSON.stringify(obj, null, "\t"));
 			}
 			configCache = obj;
 
@@ -61,6 +62,14 @@ config.set = function(variable, value, callback) {
 		if (typeof callback !== "undefined") {
 			callback(null);
 		}
+	}
+};
+
+config.del = function(variable) {
+	if (client) {
+		client.HDEL(configHashKey, variable);
+	} else {
+		delete configCache[variable];
 	}
 };
 

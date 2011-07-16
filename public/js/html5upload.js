@@ -111,7 +111,8 @@ function handleReaderLoadEnd(evt) {
 				$("#"+json.imageID).fadeOut('slow'); // if error, remove image from the page
 			}
 			else {
-				$("#"+json.imageID).addClass('done'); // if sucess, set the image's styling as 'done' uploading		
+				$("#"+json.imageID).addClass('done'); // if sucess, set the image's styling as 'done' uploading	
+				$("#"+json.imageID).attr('onclick','location.href="/admin/image/' + json.imageName + '"');
 			}
    		}
  	});

@@ -79,9 +79,7 @@ app.post('/test-upload', function(req, resMain) {
 			if(imageType != 'image/jpeg' && imageType != 'image/png' && imageType != 'image/gif') {
 				callback("Invalid file type for " + imageName + ". Must be an image.");
 			}
-			else {
-				// create a unique name for the image to avoid s3 blob collisions				
-				imageName = globalFunctions.randomString(8)+"-"+imageName;	
+			else {					
 				callback(null)
 			}			
 		},
@@ -97,6 +95,9 @@ app.post('/test-upload', function(req, resMain) {
 			});
 		},
 		function(data, callback) {
+			// create a unique name for the image to avoid s3 blob collisions
+			imageName = globalFunctions.randomString(8)+"-"+imageName;
+			
 			//put image in AWS S3 storage
 			s3.put(data, imageName, imageType, function(err, url) {
 				callback(err,url);
@@ -126,7 +127,7 @@ app.post('/test-upload', function(req, resMain) {
 			globalFunctions.log('Image uploaded: ' + url + ' and stored in DB: ' + result);
 			globalFunctions.sendJSONResponse(resMain, {
 				imageID: imageID,
-				imageUrl: url
+				imageName: imageName
 			});
 		}
 	});

@@ -5,10 +5,10 @@ var config = require('../../config');
 
 var DATABASE = config.get("COUCHDB_DATABASE", "chronicle");
 
-// parse environment variable CLOUDANT_URL OR COUHDB_URL to extract authentication information
+// parse environment variable CLOUDANT_URL OR COUCHDB_URL to extract authentication information
 function connect(database) {
 	var cloudantUrlRegEx = new RegExp('(.*?)://(.*?):(.*?)@(.*)')
-	var connect_url = process.env.CLOUDANT_URL || process.env.COUCHDB_URL;
+	var connect_url = process.env.CLOUDANT_URL || config.get("COUCHDB_URL");
 	var cloudant_auth = cloudantUrlRegEx.exec(connect_url);
 	
 	if(!cloudant_auth) throw "No Cloudant URL specified...";

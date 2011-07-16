@@ -10,7 +10,7 @@ var DATABASE = config.get("COUCHDB_DATABASE", "chronicle");
 function connect(database) {
 	var couchdbUrl = process.env.CLOUDANT_URL || config.get("COUCHDB_URL");
 	if(!couchdbUrl) throw "No Cloudant URL specified...";
-
+	console.log(couchdbUrl);
 	couchdbUrl = url.parse(couchdbUrl);
 	couchdbUrl.auth = couchdbUrl.auth.split(":");
 
@@ -25,7 +25,7 @@ function connect(database) {
 	// initialize database if it doesn't already exist
 	db.exists(function (error,exists)
 	{
-	  	if(error) console.log(error);
+	  	if(error) console.log("ERROR db-abstract" + error);
 
 		if(!exists) {
 			db.create();

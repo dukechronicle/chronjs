@@ -50,8 +50,6 @@ config.init = function(callback) {
 	}
 };
 
-
-
 config.set = function(variable, value, callback) {
 	if (client) {
 		client.HSET(configHashKey, variable, value, function(err, result) {

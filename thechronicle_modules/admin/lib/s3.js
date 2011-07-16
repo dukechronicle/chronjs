@@ -3,10 +3,11 @@ var exports = module.exports = s3;
 
 var knox = require('knox');
 var fs = require('fs');
+var config = require("../../config");
 
-var BUCKET_NAME = process.env.S3_BUCKET;
-var KEY = process.env.S3_KEY;
-var SECRET = process.env.S3_SECRET;
+var BUCKET_NAME = config.get("S3_BUCKET");
+var KEY = config.get("S3_KEY");
+var SECRET = config.get("S3_SECRET");
 
 if(!BUCKET_NAME) throw "No AWS S3 Bucket specified. Please set using 'S3_BUCKET' environment variable";
 if(!KEY) throw "No AWS S3 Key specified.  Please set using 'S3_KEY' environment variable";

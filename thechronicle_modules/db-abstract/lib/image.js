@@ -44,6 +44,12 @@ image.createVersion = function(parentId, options, callback) {
     });
 }
 
+image.edit = function(imageID, data, callback) {
+    console.log(imageID);
+    console.log(data);
+    db.merge(imageID, data, callback);
+}
+
 image.originalsForPhotographer = function(photog, callback) {
     db.view('articles/photographers', {
         key: photog

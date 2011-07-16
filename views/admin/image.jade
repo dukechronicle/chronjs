@@ -20,12 +20,32 @@ h1 Crop
     });
   img#toCrop(src=url)
 p
-  form#coords(action='/admin/image', method='POST')
+  form#coords(action='/admin/image/crop', method='POST')
     input#x1(type='hidden', name='x1')
     input#x2(type='hidden', name='x2')
     input#y1(type='hidden', name='y1')
     input#y2(type='hidden', name='y2')
     input(type='hidden', name='name', value=name)
+    input(type='submit')
+p
+  br
+  form(action='/admin/image/info', method='POST')
+    !Name: 
+    input(type='text', name='name', value=name)
+    br
+    !Caption: 
+    input(type='text', name='caption', value=caption)
+    br
+    !Location: 
+    input(type='text', name='location', value=location)
+    br
+    !Photographer: 
+    input(type='text', name='photographer', value=photographer)
+    br
+    !Date: 
+    input(type='text', name='date', value=date)
+    input(type='hidden', name='id', value=id)
+    br
     input(type='submit')
 
 - if(versions.length > 0)

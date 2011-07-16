@@ -12,11 +12,16 @@
 
     $ npm install
 
+### Set configuration server url
+
+	$ export REDIS_URL=redis://redistogo:0235bf0a2db5e6cc087683952f60c59c@icefish.redistogo.com:9249/
+
+## Optional overwrites
 ### Set database url and name using env variables
 
 replace YOUR_DATABASE_NAME with desired database name(its a good idea to put your name in there so your name doesn't collide with someone else's)
 
-    $ export COUCHDB_URL=http://chrondev:pikachu@chrondev.iriscouch.com
+    $ export 
     $ export COUCHDB_DATABASE=YOUR_DATABASE_NAME
 
 ### Set S3 bucket name, key, and secret using env variables

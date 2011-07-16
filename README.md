@@ -16,6 +16,14 @@
 
 	$ export REDIS_URL=redis://redistogo:0235bf0a2db5e6cc087683952f60c59c@icefish.redistogo.com:9249/
 
+### Start server
+
+    $ node server.js
+
+server will be started on port 4000, you should be able to access the site at
+
+    http://localhost:4000
+
 ## Optional overwrites
 ### Set database url and name using env variables
 
@@ -33,10 +41,4 @@ Bucket name can be found at: https://console.aws.amazon.com/s3/home
     $ export S3_KEY=YOUR_KEY 
     $ export S3_SECRET=YOUR_SECRET
 
-### Start server
 
-    $ node server.js
-
-server will be started on port 4000, you should be able to access the site at
-
-    http://localhost:4000

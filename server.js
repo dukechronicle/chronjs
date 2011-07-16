@@ -2,6 +2,10 @@
 var PORT = process.env.PORT || 4000;
 var FRONTPAGE_GROUP_NAMESPACE = ['section'];
 
+var config = require('./thechronicle_modules/config');
+
+config.init(function() {
+
 /* require npm nodejs modules */
 var fs = require('fs');
 var express = require('express');
@@ -220,3 +224,4 @@ app = admin.init(app);
 
 console.log('Listening on port ' + PORT);
 app.listen(PORT);
+});

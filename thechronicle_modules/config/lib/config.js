@@ -20,6 +20,16 @@ client.auth(redisUrl.auth[1], function(err, reply) {
 var config = exports;
 var configCache = {};
 
+config.init = function(callback) {
+	client.HGETALL(configHashKey, function(err, obj) {
+		if (err) throw err;
+		configCache = obj;
+		if (typeof callback !== "undefined") {
+			callback(err, obj);
+		}
+	});
+};
+
 client.on("error", function (err) {
     console.log("Error " + err);
 });
@@ -30,20 +40,20 @@ client.HGETALL(configHashKey, function(err, obj) {
 });
 
 config.set = function(variable, value, callback) {
-	client.set(variable, value, function(err, result) {
+	client.HSET(configHashKey, variable, value, function(err, result) {
 		if (err) throw err;
-		config.refresh(callback);
+		config.init(callback);
 	});
 };
 
-config.refresh = function(callback) {
-	client.HGETALL(configHashKey, function(err, obj) {
-		if (err) throw err;
-		configCache = obj;
-		callback(err, obj);
-	});
-};
-
-config.get = function(variable) {
-	return configCache[variable];
+config.get = function(variable, defaultValue) {
+	// first check envrionment var, then redis, then defaultValue
+	if (process.env[variable]) {
+		return process.env[variable];
+	} else if (configCache[variable]) {
+		console.log(configCache);
+		return configCache[variable];
+	} else {
+		return defaultValue;
+	}
 };

@@ -1,7 +1,3 @@
-exports.config = require('./config.js');
-
-
-
 exports.showError = function (res, message) {
     res.render('error', {
         locals: {

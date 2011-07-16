@@ -102,6 +102,11 @@ exports.init = function(app) {
             		            locals: {
             		                url: orig.value.url,
             		                name: imageName,
+					id: orig.value._id,
+					caption: orig.value.caption,
+					location: orig.value.location,
+					photographer: orig.value.photographer,
+					date: orig.value.date,
             		                versions: versions
             		            }
             		        });
@@ -110,8 +115,21 @@ exports.init = function(app) {
 		        }
 		    });
 		});
+
+		app.post('/image/info', function(req, httpRes) {
+		    var data = {};
+		    var id = req.body.id;
+		    data.name = req.body.name;
+		    data.date = req.body.date;
+		    data.caption = req.body.caption;
+		    data.photographer = req.body.photographer;
+	 	    data.location = req.body.location;
+
+		    api.image.edit(id,data);
+		    
+		});
 		
-		app.post('/image', function(req, httpRes) {
+		app.post('/image/crop', function(req, httpRes) {
 		    var imageName = req.body.name;
 		    api.image.getOriginal(imageName, function(err, orig) {
 		        if(err) globalFunctions.showError(httpRes, err);

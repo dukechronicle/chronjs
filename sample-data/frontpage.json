@@ -6,7 +6,7 @@
 		"tweet": "RT @fhi_duke: \"Why Tell Stories?\" Edwidge Danticat on power of testimony in face of catastrophe http://bit.ly/gu4K8h Thanks @DukeChronicle!"
 	},
 	"popular": {
-		"title": "Most Popular",
+		"title": "Popular",
 		"stories": [
 			{"title": "Drinking policy should prioritize safety",
 				"comments": "3", "cssClass": "first"},

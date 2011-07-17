@@ -37,7 +37,7 @@
 #news .content-container .bottom .left a.hover.first,#sports .content-container .bottom .left a.hover.first{padding-top:6px}
 #news .content-container .bottom .left a.hover.last,#sports .content-container .bottom .left a.hover.last{padding-bottom:0}
 #news .content-container .bottom .right,#sports .content-container .bottom .right{width:190px;}
-#news .content-container .bottom .right ul li,#sports .content-container .bottom .right ul li{padding-left:11px;background:url("images/bullet.gif") no-repeat left 10px;}
+#news .content-container .bottom .right ul li,#sports .content-container .bottom .right ul li{padding-left:11px;background:url("images/bullet.gif") no-repeat left 1em;}
 #news .content-container .bottom .right ul li a.hover,#sports .content-container .bottom .right ul li a.hover{padding-top:6px;margin-right:-13px;padding-right:13px;padding-bottom:6px}
 #news{float:left;}
 #news .content-container h2{margin-top:-4px}

@@ -11,6 +11,7 @@ config.sync(function() {
 	require('express-namespace');
 	var stylus = require('stylus');
 	var async = require('async');
+	var im = require('imagemagick');
 
 	/* require internal nodejs modules */
 	var globalFunctions = require('./thechronicle_modules/global-functions');
@@ -25,6 +26,8 @@ config.sync(function() {
 
 	var publicDir = '/public';
 	var viewsDir = '/views';
+	
+	var THUMB_DIMENSIONS = '100x100';
 
 	function compile(str, path) {
 	  return stylus(str)
@@ -107,16 +110,32 @@ config.sync(function() {
 				});
 			},
 			function(url, callback) {
-				api.image.createOriginal(imageName, url, '', imageType, {
+			    im.convert(['image2.png', '-thumbnail', THUMB_DIMENSIONS, 'image2.thumb.png'], function(imErr, stdout, stderr) {
+			        callback(imErr, url);
+			    });
+			},
+			function(url, callback) {
+			    fs.readFile('image2.thumb.png', function(err, data) {
+			        callback(err, url, data);
+			    });
+			},
+			function(url, data, callback) {
+			    s3.put(data, 'thumb_' + imageName, imageType, function(err, thumbUrl) {
+					callback(err, url, thumbUrl);
+				});
+			},
+			function(url, thumbUrl, callback) {
+				api.image.createOriginal(imageName, url, 'image2.png', imageType, {
+				    thumbUrl: thumbUrl,
 					photographer: 'None',
 					caption: 'None',
-						date: 'None',
-						location: 'None'
+					date: 'None',
+					location: 'None'
 				},
 				function(err, res) {
-					callback(err,res,url);
+					callback(err, res, url);
 				});
-			}
+			},
 		],
 		function(err,result,url) {
 			if(err) {

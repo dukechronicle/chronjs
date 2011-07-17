@@ -11,6 +11,8 @@ EXTENSIONS['image/jpeg'] = 'jpg';
 EXTENSIONS['image/png'] = 'png';
 EXTENSIONS['image/gif'] = 'gif';
 
+var THUMB_DIMENSIONS = '100x100';
+
 function _getS3Filename(imageName, addition, type) {
     return imageName + addition + '.' + EXTENSIONS[type];
 }
@@ -54,10 +56,98 @@ exports.init = function(app) {
 		});
 		
 		app.get('/upload', function(req, httpRes) {
-		    httpRes.render('admin/upload');
+		    httpRes.render('test-upload');
 		});
 		
 		app.post('/upload', function(req, httpRes) {
+		    
+		    var imageData = req.body.imageData;
+    		var imageName = req.body.imageName;
+    		var imageType = req.body.imageType;
+    		var imageID = req.body.imageID;
+
+    		// use async library to call these functions in series, passing vars between them
+    		async.waterfall([
+    			function(callback) {
+    				if(imageType != 'image/jpeg' && imageType != 'image/png' && imageType != 'image/gif') {
+    					callback("Invalid file type for " + imageName + ". Must be an image.");
+    				}
+    				else {
+    					callback(null)
+    				}
+    			},
+    			function(callback) {
+    				var buf = new Buffer(imageData, 'base64');
+    				fs.writeFile('image2.png', buf, function(err) {
+    					callback(err);
+    				});
+    			},
+    			function(callback) {
+    				fs.readFile('image2.png', function (err, data) {
+    					callback(err,data);
+    				});
+    			},
+    			function(data, callback) {
+    				// create a unique name for the image to avoid s3 blob collisions
+    				imageName = globalFunctions.randomString(8)+"-"+imageName;
+
+    				//put image in AWS S3 storage
+    				s3.put(data, imageName, imageType, function(err, url) {
+    					callback(err,url);
+    				});
+    			},
+    			function(url, callback) {
+    			    im.convert(['image2.png', '-thumbnail', THUMB_DIMENSIONS, 'image2.thumb.png'], function(imErr, stdout, stderr) {
+    			        callback(imErr, url);
+    			    });
+    			},
+    			function(url, callback) {
+    			    fs.readFile('image2.thumb.png', function(err, data) {
+    			        callback(err, url, data);
+    			    });
+    			},
+    			function(url, data, callback) {
+    			    s3.put(data, 'thumb_' + imageName, imageType, function(err, thumbUrl) {
+    					callback(err, url, thumbUrl);
+    				});
+    			},
+    			function(url, thumbUrl, callback) {
+    				api.image.createOriginal(imageName, url, 'image2.png', imageType, {
+    				    thumbUrl: thumbUrl,
+    					photographer: 'None',
+    					caption: 'None',
+    					date: 'None',
+    					location: 'None'
+    				},
+    				function(err, res) {
+    					callback(err, res, url);
+    				});
+    			},
+    		],
+    		function(err,result,url) {
+    			if(err) {
+    				globalFunctions.log(err);
+
+    				if(typeof(err) == "object") {
+    					err = "Error";
+    				}
+
+    				globalFunctions.sendJSONResponse(httpRes, {
+    					error: err,
+    					imageID: imageID
+    				});
+    			}
+    			else {
+    				globalFunctions.log('Image uploaded: ' + url + ' and stored in DB: ' + result);
+    				globalFunctions.sendJSONResponse(httpRes, {
+    					imageID: imageID,
+    					imageName: imageName
+    				});
+    			}
+    		});
+		    
+		    
+		    /*
 		    var form = new formidable.IncomingForm();
 		    form.parse(req, function(err, fields, files) {
 		        if(err) globalFunctions.showError(httpRes, err);
@@ -88,6 +178,7 @@ exports.init = function(app) {
     		        });
 		        }
 		    });
+		    */
 		});
 		
 		app.get('/image/:imageName', function(req, httpRes) {

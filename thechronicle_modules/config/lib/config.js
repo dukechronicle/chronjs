@@ -67,7 +67,6 @@ config.del = function(variable) {
 	delete configCache[variable];
 	if (client) {
 		client.HDEL(configHashKey, variable);
-		config.sync();
 	}
 };
 
@@ -84,4 +83,4 @@ config.get = function(variable, defaultValue) {
 
 config.getAll = function() {
 	return configCache;
-}
+};

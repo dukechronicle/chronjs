@@ -42,7 +42,6 @@ group.create = function(namespace, name, callback) {
 };
 
 group.add = function(docId, namespace, groupName, callback) {
-	console.log("group add");
 	db.group.add(docId, namespace, groupName, callback);
 };
 

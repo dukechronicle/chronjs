@@ -267,7 +267,7 @@ exports.init = function(app) {
 		            var type = orig.value.contentType;
 		            var s3Name = versionNum + orig.value.name;
 		            s3.put(buf, s3Name, type, function(s3Err, url) {
-		                callback(err, orig, url);
+		                callback(s3Err, orig, url);
 		            });
 		        },
                 function(orig, url, callback) {

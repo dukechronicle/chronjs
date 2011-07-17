@@ -1,32 +1,31 @@
-.sidebar{float:right;margin-top:-1px;}
+.sidebar{float:right;margin-top:-3px;}
 .sidebar .container{width:306px;}
 .sidebar .container .rounded{width:300px}
 .full-banner{float:right}
 .print-edition{float:left;width:140px}
-#top{margin-bottom:10px;}
-#top > .content{float:left;width:636px;}
+#top > .content{float:left;width:642px;}
 #top > .content .rounded{padding:4px;}
 #top > .content .rounded a.hover.highlight-right{margin-right:-7px}
 #top > .content .rounded a.hover.highlight-left{margin-left:-7px}
-#top > .content .top-news .container{width:636px;}
-#top > .content .top-news .container .rounded{width:628px}
-#top > .content .top-news .rounded .content-container > .left{width:302px;}
+#top > .content .top-news .container{width:642px;}
+#top > .content .top-news .container .rounded{width:634px}
+#top > .content .top-news .rounded .content-container > .left{width:305px;}
 #top > .content .top-news .rounded .content-container > .left a.hover{padding-left:10px}
-#top > .content .top-news .rounded .content-container > .right{width:302px;}
+#top > .content .top-news .rounded .content-container > .right{width:305px;}
 #top > .content .top-news .rounded .content-container > .right a.hover{padding-right:10px}
-#top > .content .top-news .rounded a.hover h2,#top > .content .top-news .rounded h3{font-size:1.2em;margin-bottom:7px}
+#top > .content .top-news .rounded a.hover h2,#top > .content .top-news .rounded h3{font-size:1.2em;margin-bottom:.2em}
 #top > .content .top-news .rounded a.hover h3{margin-top:0;font-size:1.2em}
 #top > .content .top-news .rounded a.hover{padding-top:3px;padding-bottom:3px}
-#top > .content .top-news .rounded a.hover.teaser{padding-bottom:20px}
+#top > .content .top-news .rounded a.hover.teaser{padding-bottom:1em}
 #top > .content .top-news .rounded p{font-size:1em}
 #top > .content .top-news .rounded ul li h3{background:url("/images/bullet.gif") no-repeat left 7px}
-#news,#sports{width:471px;}
-#news .rounded,#sports .rounded{padding:10px;width:451px}
+#news,#sports{width:474.5px;}
+#news .rounded,#sports .rounded{padding:10px;width:454px}
 #news .content-container a.hover.highlight-right,#sports .content-container a.hover.highlight-right,#news .content-container a.hover.highlight-left,#sports .content-container a.hover.highlight-left{margin:0}
-#news .content-container h2,#sports .content-container h2,#news .content-container h3,#sports .content-container h3{font-size:1.2em;line-height:1.4em}
-#news .content-container h4,#sports .content-container h4{font-size:1em;line-height:1.4em}
+#news .content-container h2,#sports .content-container h2,#news .content-container h3,#sports .content-container h3,#news .content-container h4,#sports .content-container h4{font-size:1.2em;line-height:1.3em}
+#news .content-container h4,#sports .content-container h4{font-size:1em}
 #news .content-container p.teaser,#sports .content-container p.teaser{margin-top:5px}
-#news .content-container .top,#sports .content-container .top{padding-bottom:5px;margin-bottom:15px;}
+#news .content-container .top,#sports .content-container .top{margin-bottom:1em;}
 #news .content-container .top p.teaser,#sports .content-container .top p.teaser{vertical-align:text-bottom}
 #news .content-container .top a.hover,#sports .content-container .top a.hover{margin-left:-13px;padding-left:13px}
 #news .content-container .top img,#sports .content-container .top img{float:right;border-radius:4px;-webkit-box-shadow:0 0 4px #999;-webkit-transition:box-shadow .25s linear}
@@ -41,6 +40,6 @@
 #news .content-container .bottom .right ul li,#sports .content-container .bottom .right ul li{padding-left:11px;background:url("images/bullet.gif") no-repeat left 10px;}
 #news .content-container .bottom .right ul li a.hover,#sports .content-container .bottom .right ul li a.hover{padding-top:6px;margin-right:-13px;padding-right:13px;padding-bottom:6px}
 #news{float:left;}
-#news .content-container h2{margin-top:-4px;padding-bottom:4px}
+#news .content-container h2{margin-top:-4px}
 #sports{float:right;}
-#sports .content-container h2{margin-top:-4px;padding-bottom:7px}
+#sports .content-container h2{margin-top:-4px}

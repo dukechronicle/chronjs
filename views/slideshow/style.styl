@@ -1,4 +1,6 @@
 headlines-height = 50px
+width = 636px
+height = 393px
 
 shadow(opacity, height, width, offset)
 	-webkit-box-shadow rgba(0, 0, 0, opacity) height width offset
@@ -8,7 +10,7 @@ shadow(opacity, height, width, offset)
 
 
 .slideshow
-	width  636px
+	width width + 6
 	border-radius  4px
 	-webkit-border-radius  4px
 	-moz-border-radius  4px
@@ -25,7 +27,8 @@ shadow(opacity, height, width, offset)
 		-webkit-border-top-right-radius  4px
 		-moz-border-radius-topleft  4px
 		-moz-border-radius-topright  4px
-		width  630px
+		width width
+		height height
 		position absolute
 		left 0
 		top 0
@@ -37,10 +40,10 @@ shadow(opacity, height, width, offset)
 		-moz-border-radius-topleft  4px
 		-moz-border-radius-topright  4px
 		position relative
-		width 630px
+		width width
 		text-align left
 		overflow hidden
-		height 383px
+		height height
 		border 3px solid white
 		z-index 0
 		//border-color #E5E5E5 #DBDBDB #D2D2D2

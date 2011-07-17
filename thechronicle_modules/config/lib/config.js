@@ -30,7 +30,8 @@ if (redisUrl) {
 var config = exports;
 var configCache = null;
 
-config.init = function(callback) {
+// syncronizes the live redis config to local configCache variable so config.get does not need to be async
+config.sync = function(callback) {
 	if (client) {
 		client.HGETALL(configHashKey, function(err, obj) {
 			if (err) throw err;
@@ -51,25 +52,22 @@ config.init = function(callback) {
 	}
 };
 
-config.set = function(variable, value, callback) {
+// set a configuration variable to the given value
+// we set the local cache first so config.get does not have to wait for redis set operation to complete
+config.set = function(variable, value) {
+	configCache[variable] = value;
 	if (client) {
 		client.HSET(configHashKey, variable, value, function(err, result) {
 			if (err) throw err;
-			config.init(callback);
 		});
-	} else {
-		configCache[variable] = value;
-		if (typeof callback !== "undefined") {
-			callback(null);
-		}
 	}
 };
 
 config.del = function(variable) {
+	delete configCache[variable];
 	if (client) {
 		client.HDEL(configHashKey, variable);
-	} else {
-		delete configCache[variable];
+		config.sync();
 	}
 };
 
@@ -83,3 +81,7 @@ config.get = function(variable, defaultValue) {
 		return defaultValue;
 	}
 };
+
+config.getAll = function() {
+	return configCache;
+}

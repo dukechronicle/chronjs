@@ -62,6 +62,9 @@ exports.init = function(app) {
 		    
 		    var imageData = req.body.imageData;
     		var imageName = req.body.imageName;
+    		// create a unique name for the image to avoid s3 blob collisions
+			imageName = globalFunctions.randomString(8)+"-"+imageName;
+			var thumbName = 'thumb_' + imageName;
     		var imageType = req.body.imageType;
     		var imageID = req.body.imageID;
 
@@ -77,41 +80,38 @@ exports.init = function(app) {
     			},
     			function(callback) {
     				var buf = new Buffer(imageData, 'base64');
-    				fs.writeFile('image2.png', buf, function(err) {
+    				fs.writeFile(imageName, buf, function(err) {
     					callback(err);
     				});
     			},
     			function(callback) {
-    				fs.readFile('image2.png', function (err, data) {
+    				fs.readFile(imageName, function (err, data) {
     					callback(err,data);
     				});
     			},
     			function(data, callback) {
-    				// create a unique name for the image to avoid s3 blob collisions
-    				imageName = globalFunctions.randomString(8)+"-"+imageName;
-
     				//put image in AWS S3 storage
     				s3.put(data, imageName, imageType, function(err, url) {
     					callback(err,url);
     				});
     			},
     			function(url, callback) {
-    			    im.convert(['image2.png', '-thumbnail', THUMB_DIMENSIONS, 'image2.thumb.png'], function(imErr, stdout, stderr) {
+    			    im.convert([imageName, '-thumbnail', THUMB_DIMENSIONS, thumbName], function(imErr, stdout, stderr) {
     			        callback(imErr, url);
     			    });
     			},
     			function(url, callback) {
-    			    fs.readFile('image2.thumb.png', function(err, data) {
+    			    fs.readFile(thumbName, function(err, data) {
     			        callback(err, url, data);
     			    });
     			},
     			function(url, data, callback) {
-    			    s3.put(data, 'thumb_' + imageName, imageType, function(err, thumbUrl) {
+    			    s3.put(data, thumbName, imageType, function(err, thumbUrl) {
     					callback(err, url, thumbUrl);
     				});
     			},
     			function(url, thumbUrl, callback) {
-    				api.image.createOriginal(imageName, url, 'image2.png', imageType, {
+    				api.image.createOriginal(imageName, url, imageName, imageType, {
     				    thumbUrl: thumbUrl,
     					photographer: 'None',
     					caption: 'None',

@@ -7,13 +7,13 @@ var group = exports;
 // list all groups in the given namespace
 group.list = function(namespace, callback) {
 	var groupKey = {};
-	var startIndex = 0
+	var startIndex = 0;
 	if (namespace) {
 		groupKey = {
 	    	startkey: [namespace],
 	    	endkey: [namespace, {}]
-    	}
-    	startIndex = namespace.length
+    	};
+    	startIndex = namespace.length;
 	}
     db.group.list(groupKey, function(err, res) {
         if(err) {
@@ -25,7 +25,7 @@ group.list = function(namespace, callback) {
             }, callback);
         }
     });
-}
+};
 
 group.create = function(namespace, name, callback) {
     //check if group exists
@@ -39,11 +39,11 @@ group.create = function(namespace, name, callback) {
             callback("group already exists", null);
         }
     });
-}
+};
 
 group.add = function(docId, namespace, groupName, callback) {
 	db.group.add(docId, namespace, groupName, callback);
-}
+};
 
 group.remove = function(docid, namespace, name, callback) {
     nimble.map(name, function(item, cbck) {
@@ -53,7 +53,7 @@ group.remove = function(docid, namespace, name, callback) {
     }, function(map_err, map_res) {
         nimble.series(map_res, callback);
     });
-}
+};
 
 group.docs = function(namespace, groupName, callback) {
     var add = function(memo, item, cbk) {
@@ -77,7 +77,7 @@ group.docsN = function(namespace, groupName, baseDocNum, numDocs, callback) {
     nimble.reduce(groupName, add, {}, function(err, res) {
         nimble.parallel(res, callback);
     });
-}
+};
 
 
 /*

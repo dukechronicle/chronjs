@@ -1,7 +1,6 @@
 var api = require('../../api');
 var globalFunctions = require('../../global-functions');
 var async = require('async');
-var formidable = require('formidable');
 var fs = require('fs');
 var s3 = require('./s3.js');
 var im = require('imagemagick');
@@ -145,40 +144,6 @@ exports.init = function(app) {
     				});
     			}
     		});
-		    
-		    
-		    /*
-		    var form = new formidable.IncomingForm();
-		    form.parse(req, function(err, fields, files) {
-		        if(err) globalFunctions.showError(httpRes, err);
-		        else {
-		            var filename = files.upload.name;
-		            //have field for this instead
-		            var imageName = (fields.name === '') ? filename : fields.name;
-		            var s3Name = _getS3Filename(imageName, '', files.upload.type);
-    		        fs.readFile(files.upload.path, function(err2, data) {
-    		            if(err2) globalFunctions.showError(httpRes, err2);
-    		            else {
-    		                s3.put(data, s3Name, files.upload.type, function(err3, url) {
-                                if(err3) globalFunctions.showError(httpRes, err3);
-                                else {
-                                    api.image.createOriginal(imageName, url, files.upload.path, files.upload.type, {
-                                        photographer: fields.photographer,
-                                        caption: fields.caption,
-                                        date: fields.date,
-                                        location: fields.location
-                                    },
-                                    function(err4, res) {
-                                        if(err4) globalFunctions.showError(httpRes, err4);
-                                        else httpRes.redirect('/admin/image/' + imageName);
-                                    });
-                                }
-        		            });
-    		            }
-    		        });
-		        }
-		    });
-		    */
 		});
 		
 		app.get('/image/:imageName', function(req, httpRes) {

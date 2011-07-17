@@ -156,12 +156,11 @@ api.addNode = function(parent_path, name, callback) {
     callback);
 }
 
-api.listUrls = function(callback) {
-    db.view('articles/urls', callback);
-}
-
 api.docForUrl = function(url, callback) {
-    api.listUrls(function(err, res) {
+    db.view('articles/urls', {
+        key: url
+    },
+    function(err, res) {
         for(var i in res) {
             if(url === res[i].key) {
                 api.docsById(res[i].id, callback);

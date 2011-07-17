@@ -20,18 +20,18 @@ body #header-top h1 a{color:#111;font-family:didot;font-size:38px;font-weight:no
 body #header-bottom{padding-top:8px;}
 body #header-bottom nav{position:relative;z-index:2;clear:both;width:636px;}
 body #header-bottom nav h2{float:left;}
-body #header-bottom nav h2 a{letter-spacing:1px;text-shadow:0 1px 0 #fff;border-bottom:1px solid transparent;font-size:.8em;text-transform:uppercase;color:#333;display:block;border-bottom:1px solid transparent;padding-left:15px;padding-right:11px;padding-bottom:1px;-webkit-transition:border-color .25s linear;-moz-transition:border-color .25s linear;-o-transition:border-color .25s linear;transition:border-color .25s linear}
+body #header-bottom nav h2 a{letter-spacing:1px;text-shadow:0 1px 0 #fff;font-size:.8em;text-transform:uppercase;color:#333;display:block;padding-left:15px;padding-right:11px;-webkit-transition:border-color .25s linear;-moz-transition:border-color .25s linear;-o-transition:border-color .25s linear;transition:border-color .25s linear}
 body #header-bottom nav h2 a:hover,body #header-bottom nav h2 .active{color:#999}
 body #header-bottom nav h2.first a{padding-left:3px}
 body #header-bottom nav h2.last,body #header-bottom nav a{color:#333}
-body section{margin-top:17px}
+body section{margin-top:15px}
 .container{margin-bottom:15px}
 .clear-both{clear:both}
 .full-banner,.full-banner .container{width:474px}
 .full-banner .content-container{width:468px;height:60px}
 .medium-rectangle .content-container{width:300px;height:250px}
 span.timestamp{color:#036;font-size:.5em;display:block}
-#search-box{position:absolute;top:99px;right:0;font-size:16px;}
+#search-box{position:absolute;top:102px;right:0;}
 #search-box input{background:#fff url("/images/search-button.png") no-repeat;border-radius:10px;border:2px inset;width:140px}
 .leaderboard{float:right;margin-top:3px;padding-left:3px;margin-bottom:3px;}
 .leaderboard img{border-radius:5px;display:block;-webkit-box-shadow:0 0 3px #ccc;opacity:.8;-webkit-transition:opacity .25s linear;-moz-transition:opacity .25s linear;-o-transition:opacity .25s linear;transition:opacity .25s linear}
@@ -40,7 +40,7 @@ header .content{width:240px;float:left;position:relative;z-index:2;}
 header .content .announcements{display:none;color:#666;text-shadow:0 1px 0 #fff;}
 header .content .announcements h4{text-align:left;margin-bottom:3px;font-size:.7em;text-transform:uppercase;letter-spacing:1px;padding-top:4px}
 header .content .announcements p{font-size:.7em}
-header #header-bottom .social-media{position:absolute;top:100px;right:151px;}
+header #header-bottom .social-media{position:absolute;top:104px;right:151px;}
 header #header-bottom .social-media .inner .icons{text-align:left;}
 header #header-bottom .social-media .inner .icons img{opacity:.5;padding-right:7px;width:20px;height:20px;-webkit-transition:opacity,.25s linear;-moz-transition:opacity,.25s linear;-o-transition:opacity,.25s linear;transition:opacity,.25s linear}
 header #header-bottom .social-media .inner .icons a:hover img{opacity:1}

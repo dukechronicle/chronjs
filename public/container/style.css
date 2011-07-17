@@ -13,8 +13,8 @@ body .rounded a.hover.highlight-left{margin-left:-6px}
 body .rounded-hover{padding:3px 2px}
 body .image-container .container img{-webkit-border-radius:5px;-moz-border-radius:5px;-o-border-radius:5px;-khtml-border-radius:5px;border-top-left-radius:5px 5px;border-top-right-radius:5px 5px;border-bottom-right-radius:5px 5px;border-bottom-left-radius:5px 5px;display:block}
 body .image-container .container .content-container{padding:0}
-body .twitter .container .text h3{margin-bottom:3px}
-body .twitter .container .text p{font-size:.8em;line-height:1.2em;padding-left:1.25em}
+body .twitter .container .text h3{margin-top:-3px}
+body .twitter .container .text p{font-size:.85em;line-height:1.2em;padding-left:1.25em}
 body .twitter .container img{padding-left:3px;margin-left:3px;float:right;width:67px;height:67px}
 body .rounded,body .rounded-hover{-webkit-border-radius:5px;-moz-border-radius:5px;-o-border-radius:5px;-khtml-border-radius:5px;border-top-left-radius:5px 5px;border-top-right-radius:5px 5px;border-bottom-right-radius:5px 5px;border-bottom-left-radius:5px 5px;-webkit-box-shadow:rgba(0,0,0,0.398438) 0 1px 3px;-moz-box-shadow:rgba(0,0,0,0.398438) 0 1px 3px;box-shadow:rgba(0,0,0,0.398438) 0 1px 3px;background-color:#fff;background:-webkit-gradient(linear,left bottom,left top,color-stop(0,whiteSmoke),color-stop(.33,#fff));background:-moz-linear-gradient(center bottom,whiteSmoke 0%,#fff 33%);float:right}
 body a.rounded-hover{border-left:1px solid transparent;border-right:1px solid transparent;}
@@ -27,7 +27,7 @@ body a.list-story.first{padding-top:2px}
 body a.list-story.last{padding-bottom:2px}
 body a.hover:hover{color:#36c;border-bottom-color:#4d90f0}
 body .vertical-container{font-size:1em;writing-mode:tb-rl;filter:flipv fliph;-webkit-transform:rotate(-90deg);-moz-transform:rotate(-90deg);-o-transform:rotate(-90deg);white-space:nowrap;display:block;float:left;-webkit-transform-origin-x:0;-webkit-transform-origin-y:100%;-moz-transform-origin:0 100%;position:relative;left:1px;}
-body .vertical-container .vertical{font-size:.9em;color:#999;letter-spacing:1px;text-shadow:0 1px 1px #fff;text-transform:uppercase}
+body .vertical-container .vertical{font-size:.9em;color:#999;letter-spacing:1px;text-shadow:0 1px 1px #fff;text-transform:uppercase;margin-bottom:-2px}
 body .most-popular ol li{list-style:decimal outside}
 body .most-popular ol li h2{margin-left:-7px}
 body .most-popular ol{margin-left:20px;font-family:Georgia,"Century Schoolbook","Times New Roman",Times,serif}

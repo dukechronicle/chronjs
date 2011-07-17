@@ -14,9 +14,8 @@ image.getOriginal = function(name, callback) {
     });
 }
 
-image.createOriginal = function(name, url, localPath, contentType, metadata, callback) {
+image.createOriginal = function(name, url, contentType, metadata, callback) {
     metadata.url = url;
-    metadata.localPath = localPath;
     metadata.contentType = contentType;
     db.image.createOriginal(name, metadata, callback);
 }

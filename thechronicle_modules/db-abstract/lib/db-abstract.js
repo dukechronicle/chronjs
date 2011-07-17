@@ -10,12 +10,11 @@ var DATABASE = config.get("COUCHDB_DATABASE", "chronicle");
 function connect(database) {
 	var couchdbUrl = process.env.CLOUDANT_URL || config.get("COUCHDB_URL");
 	if(!couchdbUrl) throw "No Cloudant URL specified...";
-	console.log(couchdbUrl);
+	console.log("Connecting to " + couchdbUrl);
 	couchdbUrl = url.parse(couchdbUrl);
 	couchdbUrl.auth = couchdbUrl.auth.split(":");
 
-	(couchdbUrl.protocol === "https") ? couchdbUrl.port = 443 : couchdbUrl.port = 80;
-	
+	(couchdbUrl.protocol === "https:") ? couchdbUrl.port = 443 : couchdbUrl.port = 80;
 	var conn = new (cradle.Connection)(couchdbUrl.protocol + '//' + couchdbUrl.hostname, couchdbUrl.port, {
 		auth: {username: couchdbUrl.auth[0], password: couchdbUrl.auth[1]}
 	}); 
@@ -35,10 +34,10 @@ function connect(database) {
    	return db;	
 }
 
-// connect returns the cradle object
-_.extend(exports, connect(DATABASE));
-
 var db = exports;
+
+// assign all methods of the cradle object to db
+_.extend(db, connect(DATABASE));
 
 db.group = require('./group.js');
 db.image = require('./image.js');

@@ -1,9 +1,9 @@
 page-width = 972px
 link-color = #36c
 container-padding = 4px
-top-content-width =  636px
+top-content-width =  642px
 
-container-vertical-spacing = 30px
+container-vertical-spacing = 23px
 
 top-content-full()
 	width top-content-width
@@ -11,7 +11,8 @@ top-content-full()
 		width (top-content-width - (container-padding * 2))
 .sidebar
 	float right
-	margin-top -1px
+	// align side bar with main content bar
+	margin-top -3px
 
 	.container
 		width 300px + 3 * 2
@@ -26,7 +27,6 @@ top-content-full()
 	float left
 	width 140px
 #top
-	margin-bottom 10px
 	> .content
 		float left
 		width top-content-width
@@ -63,7 +63,7 @@ top-content-full()
 
 				a.hover h2, h3
 					font-size 1.2em
-					margin-bottom 7px
+					margin-bottom 0.2em
 
 				a.hover h3
 					margin-top 0px
@@ -74,7 +74,7 @@ top-content-full()
 					padding-bottom 3px
 
 				a.hover.teaser
-					padding-bottom 20px
+					padding-bottom 1em
 
 				p
 					font-size 1em
@@ -90,27 +90,25 @@ top-content-full()
 
 	.rounded
 		padding padding
-		width 451px
+		width 454px
 
 	.content-container
 		a.hover.highlight-right, a.hover.highlight-left
 			margin 0px
 			
-		h2, h3
+		h2, h3, h4
 			font-size 1.2em
-			line-height 1.4em
+			line-height 1.3em
 		h4
 			font-size 1em
-			line-height 1.4em
 
 		p.teaser
 				margin-top 5px
 				
 		.top
+			margin-bottom 1em
 			p.teaser
 				vertical-align text-bottom
-			padding-bottom 5px
-			margin-bottom 15px
 			// fix highlight locaiton
 			a.hover
 				margin-left -13px
@@ -166,9 +164,7 @@ top-content-full()
 	float left
 	.content-container h2
 		margin-top -4px
-		padding-bottom 4px
 #sports
 	float right
 	.content-container h2
 		margin-top -4px
-		padding-bottom 7px

@@ -29,7 +29,7 @@ html(lang="en")
 						.image-container.medium-rectangle!=partial('container/image', model.adFullRectangle)
 						.opinion!=partial('container/opinion', model.opinion)
 				#middle
-					#news-sports
+					#news-sports.clearfix
 						#news!=partial('container/news', model.news)
 						#sports!=partial('container/news', model.sports)
 			footer

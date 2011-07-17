@@ -65,7 +65,7 @@ group.docs = function(namespace, groupName, callback) {
     nimble.reduce(groupName, add, {}, function(err, res) {
         nimble.parallel(res, callback);
     });
-}
+};
 
 group.docsN = function(namespace, groupName, baseDocNum, numDocs, callback) {
     var add = function(memo, item, cbk) {

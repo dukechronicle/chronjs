@@ -26,7 +26,7 @@ function _getMagickString(x1, y1, x2, y2) {
 exports.init = function(app) {
 	app.namespace('/admin', function() {
 		app.get('/addgroup', function(req, http_res) {
-		    api.group.create(req.query.addgroup, function(err, res) {
+		    api.group.create(FRONTPAGE_GROUP_NAMESPACE, req.query.addgroup, function(err, res) {
 		        if(err) {
 		            globalFunctions.showError(http_res, err);
 		        } else {

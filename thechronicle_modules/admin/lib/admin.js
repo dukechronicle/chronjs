@@ -11,6 +11,8 @@ EXTENSIONS['image/jpeg'] = 'jpg';
 EXTENSIONS['image/png'] = 'png';
 EXTENSIONS['image/gif'] = 'gif';
 
+var FRONTPAGE_GROUP_NAMESPACE = ['section'];
+
 function _getS3Filename(imageName, addition, type) {
     return imageName + addition + '.' + EXTENSIONS[type];
 }
@@ -34,11 +36,15 @@ exports.init = function(app) {
 		});
 		
 		app.get('/add', function(req, http_res) {
-		    api.group.list(function(err, groups) {
-		        http_res.render('admin/add', {
-		            locals: {groups: groups}
-		        });
-		    });
+		    api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(err, groups) {
+			    if(err) {
+		            globalFunctions.showError(http_res, err);
+		        } else {
+					http_res.render('admin/add', {
+						locals: {groups: groups}
+					});
+			    }
+		    })
 		});
 		
 		app.get('/manage', function(req, http_res) {

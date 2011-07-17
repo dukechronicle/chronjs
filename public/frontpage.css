@@ -41,6 +41,6 @@
 #news .content-container .bottom .right ul li,#sports .content-container .bottom .right ul li{padding-left:11px;background:url("images/bullet.gif") no-repeat left 10px;}
 #news .content-container .bottom .right ul li a.hover,#sports .content-container .bottom .right ul li a.hover{padding-top:6px;margin-right:-13px;padding-right:13px;padding-bottom:6px}
 #news{float:left;}
-#news .content-container h2{padding-bottom:4px}
+#news .content-container h2{margin-top:-4px;padding-bottom:4px}
 #sports{float:right;}
-#sports .content-container h2{padding-bottom:7px}
+#sports .content-container h2{margin-top:-4px;padding-bottom:7px}

@@ -5,10 +5,10 @@
 .left{float:left}
 .right{float:right}
 html,body{width:100%;height:100%;background:#f5f6f7 url("images/bg.jpg") repeat-x}
-body{font-family:"Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif;}
+body{font-family:skolar,"Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif;}
 body a{text-decoration:none;color:#36c;}
 body a *{color:#333}
-body h1,body h2,body h3,body h4,body h5,body h6{font-family:Georgia,"Century Schoolbook","Times New Roman",Times,serif}
+body h1,body h2,body h3,body h4,body h5,body h6{font-family:skolar,Georgia,"Century Schoolbook","Times New Roman",Times,serif}
 body h1{font-weight:bold;float:left}
 body #shell{margin:0 auto;width:972px}
 body header,body section,body footer{width:972px}

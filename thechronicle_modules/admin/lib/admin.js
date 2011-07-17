@@ -193,7 +193,7 @@ exports.init = function(app) {
 		        if(err) globalFunctions.showError(httpRes, err);
 		        else {
 		            var path = orig.value.localPath;
-		            var dest = path + 'crop';
+		            var dest = 'crop_' + path;
 		            var geom = _getMagickString(
 		                parseInt(req.body.x1),
 		                parseInt(req.body.y1),

@@ -23,7 +23,7 @@ body #header-bottom nav h2 a{letter-spacing:1px;text-shadow:0 1px 0 #fff;font-si
 body #header-bottom nav h2 a:hover,body #header-bottom nav h2 .active{color:#999}
 body #header-bottom nav h2.first a{padding-left:3px}
 body #header-bottom nav h2.last,body #header-bottom nav a{color:#333}
-body section{margin-top:18px}
+body section{margin-top:16px}
 .container{margin-bottom:20px}
 .clear-both{clear:both}
 .full-banner,.full-banner .container{width:474px}

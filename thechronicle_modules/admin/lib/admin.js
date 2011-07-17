@@ -210,23 +210,13 @@ exports.init = function(app) {
 		                if(!(groups instanceof Array)) { //we will get a string if only one box is checked
 		                    groups = [groups];
 		                }
-		                async.map(groups, function(group) {
-		                	return ['section'].push(group);
-		                }, function(err, groups) {
-		                	console.log(groups)
-		                	api.group.add(res.id, groups, function(add_err, add_res) {
-			                    if(add_err) {
-			                        globalFunctions.showError(http_res, add_err);
-			                    } else {
-			                        http_res.redirect('article/' + url);
-			                    }
+						groups.forEach(function(group) {
+		                	api.group.add(res.id, FRONTPAGE_GROUP_NAMESPACE, group, function(add_err, add_res) {
+			                    if(add_err) globalFunctions.showError(http_res, add_err);
 			                });
-		                })
-		                
-		                
-		            } else {
-		                http_res.redirect('article/' + url);
+						});
 		            }
+		            http_res.redirect('article/' + url);
 		        }
 		    });
 		});

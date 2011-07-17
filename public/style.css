@@ -31,8 +31,8 @@ body section{margin-top:15px}
 .full-banner .content-container{width:468px;height:60px}
 .medium-rectangle .content-container{width:300px;height:250px}
 span.timestamp{color:#036;font-size:.5em;display:block}
-#search-box{position:absolute;top:102px;right:0;}
-#search-box input{background:#fff url("/images/search-button.png") no-repeat;border-radius:10px;border:2px inset;width:140px}
+#search-box{position:absolute;top:101px;right:0;}
+#search-box input{background:#fff url("/images/search-button.png") no-repeat;border-radius:10px;border:2px inset;width:140px;font-size:14px}
 .leaderboard{float:right;margin-top:3px;padding-left:3px;margin-bottom:3px;}
 .leaderboard img{border-radius:5px;display:block;-webkit-box-shadow:0 0 3px #ccc;opacity:.8;-webkit-transition:opacity .25s linear;-moz-transition:opacity .25s linear;-o-transition:opacity .25s linear;transition:opacity .25s linear}
 .leaderboard a:hover img{opacity:1}
@@ -42,6 +42,6 @@ header .content .announcements h4{text-align:left;margin-bottom:3px;font-size:.7
 header .content .announcements p{font-size:.7em}
 header #header-bottom .social-media{position:absolute;top:104px;right:151px;}
 header #header-bottom .social-media .inner .icons{text-align:left;}
-header #header-bottom .social-media .inner .icons img{opacity:.5;padding-right:7px;width:20px;height:20px;-webkit-transition:opacity,.25s linear;-moz-transition:opacity,.25s linear;-o-transition:opacity,.25s linear;transition:opacity,.25s linear}
+header #header-bottom .social-media .inner .icons img{opacity:.5;padding-right:7px;width:19px;height:19px;-webkit-transition:opacity,.25s linear;-moz-transition:opacity,.25s linear;-o-transition:opacity,.25s linear;transition:opacity,.25s linear}
 header #header-bottom .social-media .inner .icons a:hover img{opacity:1}
 header #header-bottom .social-media .inner .icons img.last{padding-right:0}

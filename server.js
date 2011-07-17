@@ -168,9 +168,14 @@ config.init(function() {
 			if(err) {
 				globalFunctions.showError(http_res, err);
 			} else {
-				http_res.render('article', {
-					locals: {doc: doc}
-				});
+			    var latestUrl = doc.urls[doc.urls.length - 1];
+			    if(url !== latestUrl) {
+			        http_res.redirect('/article/' + latestUrl);
+			    } else {
+			        http_res.render('article', {
+    					locals: {doc: doc}
+    				});
+			    }
 			}
 		});
 	});

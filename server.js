@@ -4,7 +4,7 @@ var FRONTPAGE_GROUP_NAMESPACE = ['section'];
 
 var config = require('./thechronicle_modules/config');
 
-config.init(function() {
+config.sync(function() {
 	/* require npm nodejs modules */
 	var fs = require('fs');
 	var express = require('express');
@@ -60,7 +60,7 @@ config.init(function() {
 
 	/*** FRONTEND ***/
 	app.get('/', function(req, res) {
-		res.render('index', {layout: false, model: homeModel});
+		res.render('index', {filename: 'views/index.jade',layout: false, model: homeModel});
 	});
 
 	// image upload test - should be moved out of server.js into admin area some point

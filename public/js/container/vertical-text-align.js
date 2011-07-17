@@ -6,6 +6,7 @@ function verticalAlign() {
 		var topSpacing = 3;
 		height = parseInt(height.substring(0, height.length - 2), 10) + topSpacing;
 		$(this).css('top', height + "px");
+		$(this).css('visibility', 'visible');
 	});
 }
 

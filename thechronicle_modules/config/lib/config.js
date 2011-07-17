@@ -38,7 +38,16 @@ config.sync = function(callback) {
 
 			if (configCache === null) {
 				console.log(configProfile + " configuration:");
-				console.log(JSON.stringify(obj, null, "\t"));
+				// show overwritten configs
+				var displayConfig = {};
+				Object.keys(obj).forEach(function(key) {
+					if (process.env[key]) {
+						displayConfig["**" + key + "**"] = process.env[key];
+					} else {
+						displayConfig[key] = obj[key];
+					}
+				});
+				console.log(JSON.stringify(displayConfig, null, "\t"));
 			}
 			configCache = obj;
 

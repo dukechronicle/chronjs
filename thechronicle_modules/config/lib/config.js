@@ -81,3 +81,7 @@ config.get = function(variable, defaultValue) {
 		return defaultValue;
 	}
 };
+
+config.getAll = function() {
+	return configCache;
+}

@@ -1,7 +1,6 @@
 var api = require('../../api');
 var globalFunctions = require('../../global-functions');
 var async = require('async');
-var formidable = require('formidable');
 var fs = require('fs');
 var s3 = require('./s3.js');
 var im = require('imagemagick');
@@ -11,6 +10,7 @@ EXTENSIONS['image/jpeg'] = 'jpg';
 EXTENSIONS['image/png'] = 'png';
 EXTENSIONS['image/gif'] = 'gif';
 
+var THUMB_DIMENSIONS = '100x100';
 var FRONTPAGE_GROUP_NAMESPACE = ['section'];
 
 function _getS3Filename(imageName, addition, type) {
@@ -60,40 +60,95 @@ exports.init = function(app) {
 		});
 		
 		app.get('/upload', function(req, httpRes) {
-		    httpRes.render('admin/upload');
+		    httpRes.render('test-upload');
 		});
 		
 		app.post('/upload', function(req, httpRes) {
-		    var form = new formidable.IncomingForm();
-		    form.parse(req, function(err, fields, files) {
-		        if(err) globalFunctions.showError(httpRes, err);
-		        else {
-		            var filename = files.upload.name;
-		            //have field for this instead
-		            var imageName = (fields.name === '') ? filename : fields.name;
-		            var s3Name = _getS3Filename(imageName, '', files.upload.type);
-    		        fs.readFile(files.upload.path, function(err2, data) {
-    		            if(err2) globalFunctions.showError(httpRes, err2);
-    		            else {
-    		                s3.put(data, s3Name, files.upload.type, function(err3, url) {
-                                if(err3) globalFunctions.showError(httpRes, err3);
-                                else {
-                                    api.image.createOriginal(imageName, url, files.upload.path, files.upload.type, {
-                                        photographer: fields.photographer,
-                                        caption: fields.caption,
-                                        date: fields.date,
-                                        location: fields.location
-                                    },
-                                    function(err4, res) {
-                                        if(err4) globalFunctions.showError(httpRes, err4);
-                                        else httpRes.redirect('/admin/image/' + imageName);
-                                    });
-                                }
-        		            });
-    		            }
-    		        });
-		        }
-		    });
+		    
+		    var imageData = req.body.imageData;
+    		var imageName = req.body.imageName;
+    		// create a unique name for the image to avoid s3 blob collisions
+			imageName = globalFunctions.randomString(8)+"-"+imageName;
+			var thumbName = 'thumb_' + imageName;
+    		var imageType = req.body.imageType;
+    		var imageID = req.body.imageID;
+
+    		// use async library to call these functions in series, passing vars between them
+    		async.waterfall([
+    			function(callback) {
+    				if(imageType != 'image/jpeg' && imageType != 'image/png' && imageType != 'image/gif') {
+    					callback("Invalid file type for " + imageName + ". Must be an image.");
+    				}
+    				else {
+    					callback(null)
+    				}
+    			},
+    			function(callback) {
+    				var buf = new Buffer(imageData, 'base64');
+    				fs.writeFile(imageName, buf, function(err) {
+    					callback(err);
+    				});
+    			},
+    			function(callback) {
+    				fs.readFile(imageName, function (err, data) {
+    					callback(err,data);
+    				});
+    			},
+    			function(data, callback) {
+    				//put image in AWS S3 storage
+    				s3.put(data, imageName, imageType, function(err, url) {
+    					callback(err,url);
+    				});
+    			},
+    			function(url, callback) {
+    			    im.convert([imageName, '-thumbnail', THUMB_DIMENSIONS, thumbName], function(imErr, stdout, stderr) {
+    			        callback(imErr, url);
+    			    });
+    			},
+    			function(url, callback) {
+    			    fs.readFile(thumbName, function(err, data) {
+    			        callback(err, url, data);
+    			    });
+    			},
+    			function(url, data, callback) {
+    			    s3.put(data, thumbName, imageType, function(err, thumbUrl) {
+    					callback(err, url, thumbUrl);
+    				});
+    			},
+    			function(url, thumbUrl, callback) {
+    				api.image.createOriginal(imageName, url, imageName, imageType, {
+    				    thumbUrl: thumbUrl,
+    					photographer: 'None',
+    					caption: 'None',
+    					date: 'None',
+    					location: 'None'
+    				},
+    				function(err, res) {
+    					callback(err, res, url);
+    				});
+    			},
+    		],
+    		function(err,result,url) {
+    			if(err) {
+    				globalFunctions.log(err);
+
+    				if(typeof(err) == "object") {
+    					err = "Error";
+    				}
+
+    				globalFunctions.sendJSONResponse(httpRes, {
+    					error: err,
+    					imageID: imageID
+    				});
+    			}
+    			else {
+    				globalFunctions.log('Image uploaded: ' + url + ' and stored in DB: ' + result);
+    				globalFunctions.sendJSONResponse(httpRes, {
+    					imageID: imageID,
+    					imageName: imageName
+    				});
+    			}
+    		});
 		});
 		
 		app.get('/image/:imageName', function(req, httpRes) {
@@ -143,7 +198,7 @@ exports.init = function(app) {
 		        if(err) globalFunctions.showError(httpRes, err);
 		        else {
 		            var path = orig.value.localPath;
-		            var dest = path + 'crop';
+		            var dest = 'crop_' + path;
 		            var geom = _getMagickString(
 		                parseInt(req.body.x1),
 		                parseInt(req.body.y1),

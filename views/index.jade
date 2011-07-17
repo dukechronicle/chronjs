@@ -8,6 +8,9 @@ html(lang="en")
 		link(rel='stylesheet', href='/container/style.css')
 		link(rel='stylesheet', href='/frontpage.css')
 
+		script(src='http://use.typekit.com/dwv2bjy.js')
+		script(src='/js/typekit.js')
+
 	body
 		#shell
 			header
@@ -30,13 +33,11 @@ html(lang="en")
 						#news!=partial('container/news', model.news)
 						#sports!=partial('container/news', model.sports)
 			footer
-	script(src='http://use.typekit.com/dwv2bjy.js')
-	!= "<script type='text/javascript'>"
-	!= "try{Typekit.load();}catch(e){}"
-	!= "</script>"
-	script(src='js/jquery.js')
-	//script(src='js/jquery-ui.js')
-	script(src='js/underscore-min.js')
-	script(src='js/container/vertical-text-align.js')
+
+
+	script(src='/js/jquery.js')
+	//script(src='/js/jquery-ui.js')
+	script(src='/js/underscore-min.js')
+	script(src='/js/container/vertical-text-align.js')
 	script(src='/js/align.js')
-	script(src='js/slideshow/slideshow.js')
+	script(src='/js/slideshow/slideshow.js')

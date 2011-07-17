@@ -1,4 +1,5 @@
-$(function() {
+//$(function() {
+function verticalAlign() {
 	// position vertical labels
 	$(".vertical-container").each(function(i) {
 		var height = $(this).css('width');
@@ -6,7 +7,7 @@ $(function() {
 		height = parseInt(height.substring(0, height.length - 2), 10) + topSpacing;
 		$(this).css('top', height + "px");
 	});
-
+}
 
 /*
 	$(".hover-highlight").each(function(i) {
@@ -22,4 +23,4 @@ $(function() {
 		})
 	});*/
 
-});
+//});

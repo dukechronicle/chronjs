@@ -1,4 +1,5 @@
-$(function() {	// align rows
+//$(function() {	// align rows
+function pageAlign() {
 	// find all align groups
 	$(".align-group").each(function(i) {
 		var groups = [];
@@ -36,4 +37,5 @@ $(function() {	// align rows
 
 		console.log($('#top > .sidebar').height()-$('#top > .content').height());
 	}) ();
-});
+}
+//});

@@ -131,9 +131,25 @@
 		]
 	},
 	"recess": {
-		"title": "Recess"
+		"title": "Recess",
+		"stories": [
+			{"title": "Rosebuds-Loud Planes Fly Low",
+				"teaser": "When it comes to breaking up, the world of indie rock usually responds like the rest of us."},
+			{"title": "Rosebuds-Loud Planes Fly Low"},
+			{"title": "Rosebuds-Loud Planes Fly Low"},
+			{"title": "Rosebuds-Loud Planes Fly Low"},
+			{"title": "Rosebuds-Loud Planes Fly Low"}
+		]
 	},
 	"towerview": {
-		"title": "Towerview"
+		"title": "Towerview",
+		"stories": [
+			{"title": "Rosebuds-Loud Planes Fly Low",
+				"teaser": "When it comes to breaking up, the world of indie rock usually responds like the rest of us."},
+			{"title": "Rosebuds-Loud Planes Fly Low"},
+			{"title": "Rosebuds-Loud Planes Fly Low"},
+			{"title": "Rosebuds-Loud Planes Fly Low"},
+			{"title": "Rosebuds-Loud Planes Fly Low"}
+		]
 	}
 }

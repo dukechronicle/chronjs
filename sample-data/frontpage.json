@@ -129,5 +129,11 @@
 			{"title": "Defense spells doom for Blue Devils",
 				"comments": "14", "cssClass": "last", "author": "Dean Chen"}
 		]
+	},
+	"recess": {
+		"title": "Recess"
+	},
+	"towerview": {
+		"title": "Towerview"
 	}
 }

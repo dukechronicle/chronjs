@@ -19,9 +19,6 @@ h1 Crop
       });
     });
   img#toCrop(src=url)
-- if(article)
-  p
-    a(href='/article/' + article + '/edit/?image=' + id) Add original to article
 p
   form#coords(action='/admin/image/crop', method='POST')
     input#x1(type='hidden', name='x1')
@@ -32,6 +29,9 @@ p
     - if(article)
       input(type='hidden', name='article', value=article)
     input(type='submit')
+- if(article)
+  p
+    a(href='/article/' + article + '/edit/?image=' + id) Add original to article
 p
   br
   form(action='/admin/image/info', method='POST')

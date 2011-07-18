@@ -9,13 +9,12 @@ body{font-family:skolar,"Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Ve
 body a{text-decoration:none;color:#36c;}
 body a *{color:#333}
 body h1,body h2,body h3,body h4,body h5,body h6{font-family:skolar,Georgia,"Century Schoolbook","Times New Roman",Times,serif}
-body h1{font-weight:bold;float:left}
 body #shell{margin:0 auto;width:972px}
 body header,body section,body footer{width:972px}
 body header{position:relative}
 body #header-overlay{position:absolute;z-index:0;left:50px;top:0}
 body #header-top{height:96px;border-bottom-right-radius:5px;border-bottom-left-radius:5px;}
-body #header-top h1{position:relative;z-index:2;margin-top:55px;}
+body #header-top h1{position:relative;z-index:2;margin-top:55px;font-weight:bold;float:left;}
 body #header-top h1 a{color:#111;font-family:didot;font-size:2.3em;font-weight:normal;letter-spacing:-1px;padding-left:0;text-shadow:0 1px 1px #fff;-webkit-transition:text-shadow .2s linear;-moz-transition:text-shadow .2s linear;-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear}
 body #header-top h1 a:hover{color:#999}
 body #header-bottom nav{position:relative;z-index:2;clear:both;width:636px;}
@@ -45,6 +44,6 @@ header #header-bottom .social-media .inner .icons{text-align:left;}
 header #header-bottom .social-media .inner .icons img{opacity:.5;padding-right:7px;width:19px;height:19px;-webkit-transition:opacity,.25s linear;-moz-transition:opacity,.25s linear;-o-transition:opacity,.25s linear;transition:opacity,.25s linear}
 header #header-bottom .social-media .inner .icons a:hover img{opacity:1}
 header #header-bottom .social-media .inner .icons img.last{padding-right:0}
-footer{color:#888;font-variant:small-caps;text-shadow:0 1px 1px #fff;font-size:.85em;padding-bottom:1.5em;}
+footer{clear:both;color:#888;font-variant:small-caps;text-shadow:0 1px 1px #fff;font-size:.85em;padding-bottom:1.5em;}
 footer p.copyright{display:inline;margin-right:20px}
 footer span.links a:hover{text-decoration:underline}

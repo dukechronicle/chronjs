@@ -25,6 +25,9 @@ p
     input#x2(type='hidden', name='x2')
     input#y1(type='hidden', name='y1')
     input#y2(type='hidden', name='y2')
+    select(name='type')
+      - each type in imageTypes
+        option(value=type) #{type}
     input(type='hidden', name='name', value=name)
     - if(article)
       input(type='hidden', name='article', value=article)

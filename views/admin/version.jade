@@ -7,4 +7,8 @@ table(border=1)
     td #{version.doc.width}
     td #{version.doc.height}
     td
-      img(src=version.doc.url)
+      - if(article)
+        a(href='/article/' + article + '/edit/?image=' + version.doc._id)
+          img(src=version.doc.url)
+      - else
+        img(src=version.doc.url)

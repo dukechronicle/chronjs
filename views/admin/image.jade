@@ -19,6 +19,9 @@ h1 Crop
       });
     });
   img#toCrop(src=url)
+- if(article)
+  p
+    a(href='/article/' + article + '/edit/?image=' + id) Add original to article
 p
   form#coords(action='/admin/image/crop', method='POST')
     input#x1(type='hidden', name='x1')
@@ -50,5 +53,8 @@ p
 
 - if(versions.length > 0)
   hr
-  h1 Existing Versions
-  #versions!= partial('version', {collection: versions})
+  - if(!article)
+    h1 Existing Versions
+  - else
+    h1 Existing Versions (click to add to article)
+  #versions!= partial('version', {collection: versions, locals: {article: article}})

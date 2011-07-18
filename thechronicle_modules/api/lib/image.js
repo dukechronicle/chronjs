@@ -37,3 +37,7 @@ image.createVersion = function(parentId, url, width, height, callback) {
 image.originalsForPhotographer = function(photog, callback) {
     db.image.originalsForPhotographer(photog, callback);
 }
+
+image.getAllOriginals = function(callback) {
+    db.image.listOriginals({}, callback);
+}

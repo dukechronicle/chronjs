@@ -107,24 +107,27 @@ config.sync(function() {
 		api.docForUrl(url, function(err, doc) {
 			if(err) {
 				globalFunctions.showError(http_res, err);
-			} else {
-			    
+			} else { 
 			    if(req.query.image) {
-			        var images = doc.images;
-			        if(!images) {
-			            images = [];
-			        }
-			        images.push(req.query.image);
-			        api.editDoc(doc._id, {images: images}, function(err, res) {
+			        api.addToDocArray(doc._id, 'images', req.query.image, function(err, res) {
 			            if(err) {
 			                globalFunctions.showError(http_res, err);
 			            } else {
 			                http_res.redirect('/article/' + url + '/edit');
 			            }
 			        })
-			    } else {
+			    } 
+			    else if(req.query.deleteImage) {
+			        api.removeFromDocArray(doc._id, 'images', req.query.deleteImage, function(err, res) {
+			            if(err) {
+			                globalFunctions.showError(http_res, err);
+			            } else {
+			                http_res.redirect('/article/' + url + '/edit');
+			            }
+			        })
+			    }
+			    else {
 			        api.docsById(doc.images, function(err, images) {
-			            console.log(images);
 			            if(err) {
 			                globalFunctions.showError(http_res, err);
 			            } else {

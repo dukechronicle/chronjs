@@ -59,4 +59,4 @@ p
     h1 Existing Versions
   - else
     h1 Existing Versions (click to add to article)
-  #versions!= partial('version', {collection: versions, locals: {article: article}})
+  #versions!= partial('version', {collection: versions, locals: {article: article, imageTypes: imageTypes}})

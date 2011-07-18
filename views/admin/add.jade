@@ -4,8 +4,11 @@ form(action='/admin/add', method='POST')
     label(for='title') Title:
     input#title(type='text', name='doc[title]')
   p
+    label(for='author') Author:
+    input#author(type='text', name='doc[author]')
+  p
     label(for='body') Body:
-    textarea#body(rows=5, cols=20, name='doc[body]')
+    textarea#body(rows=20, cols=30, name='doc[body]')
   p
     - each group, key in groups
       label(for=key) #{group}:

@@ -322,8 +322,12 @@ exports.init = function(app) {
 		});
 		
 		app.post('/add', function(req, http_res) {
-		    var fields = {body: req.body.doc.body};
-		    api.addDoc(fields, req.body.doc.title, function(err, res, url) {
+		    var fields = {
+			    body: req.body.doc.body,
+			    author: req.body.doc.author,
+			    title: req.body.doc.title
+		    };
+		    api.addDoc(fields, function(err, res, url) {
 		        if(err) {
 		            globalFunctions.showError(http_res, err);
 		        } else {

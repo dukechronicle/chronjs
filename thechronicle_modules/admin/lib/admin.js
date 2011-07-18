@@ -13,7 +13,7 @@ VALID_EXTENSIONS['image/png'] = 'png';
 VALID_EXTENSIONS['image/gif'] = 'gif';
 
 var THUMB_DIMENSIONS = '100x100';
-var FRONTPAGE_GROUP_NAMESPACE = ['section'];
+var FRONTPAGE_GROUP_NAMESPACE = ['section','frontpage'];
 
 function _getMagickString(x1, y1, x2, y2) {
     var w = x2 - x1;

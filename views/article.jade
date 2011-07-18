@@ -1,8 +1,7 @@
 h2 #{doc.title}
+.article!=doc.body
 p
-  #{doc.body}
-p
-  div(id="disqus_thread")
+	div(id="disqus_thread")
 script(src='/js/disqus.js', type='text/javascript')
 script
-  loadDisqus('!{doc.id}');
+	loadDisqus('!{doc.id}');

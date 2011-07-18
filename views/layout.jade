@@ -1,12 +1,28 @@
 !!! 5
-html
-  head
-    script(src='/js/jquery.js', type='text/javascript')
-    script(src='/js/jquery.Jcrop.js', type='text/javascript')
-    link(rel='stylesheet', href='/css/jquery.Jcrop.css')
-    title The Chronicle
-    
-  body
-  
-    #main
-      #container!= body
+html(lang="en")
+	head
+		title The Chronicle | Duke University's Daily Independent Newspaper
+		link(rel='stylesheet', href='/css/reset.css')
+		link(rel='stylesheet', href='/style.css')
+		link(rel='stylesheet', href='/slideshow/style.css')
+		link(rel='stylesheet', href='/container/style.css')
+		link(rel='stylesheet', href='/frontpage.css')
+		link(rel='stylesheet', href='/css/jquery.Jcrop.css')
+
+		script(src='http://use.typekit.com/dwv2bjy.js')
+		script(src='/js/typekit.js')
+
+	body
+		#shell
+			header
+				include layout/header
+			section!=body
+			footer
+				include layout/footer
+				
+	script(src='/js/jquery.js')
+	//script(src='/js/jquery-ui.js')
+	script(src='/js/underscore-min.js')
+	script(src='/js/container/vertical-text-align.js')
+	script(src='/js/align.js')
+	script(src='/js/slideshow/slideshow.js')

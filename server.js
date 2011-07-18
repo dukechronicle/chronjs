@@ -140,7 +140,8 @@ config.sync(function() {
             							locals: {doc: doc,
             									 groups: groups,
             									 images: images,
-            									 url: url}
+            									 url: url},
+							            layout: "layout-admin.jade"
             						});
             					}
             				});

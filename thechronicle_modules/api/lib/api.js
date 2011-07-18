@@ -129,15 +129,14 @@ api.docsByAuthor = function(author, callback) {
     callback);
 }
 
-api.addDoc = function(fields, title, callback) {
+api.addDoc = function(fields, callback) {
     
-    getAvailableUrl(_URLify(title, MAX_URL_LENGTH), 0, function(err, url) {
+    getAvailableUrl(_URLify(fields.title, MAX_URL_LENGTH), 0, function(err, url) {
         if(err) {
             callback(err, null, null);
         }
         else {
             var unix_timestamp = Math.round(new Date().getTime() / 1000);
-            fields.title = title;
             fields.created = unix_timestamp;
             fields.updated = unix_timestamp;
             fields.urls = [url];

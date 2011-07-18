@@ -322,10 +322,12 @@ exports.init = function(app) {
 		});
 		
 		app.post('/add', function(req, http_res) {
+			var form = req.body.doc;
 			var fields = {
-			    body: req.body.doc.body,
-			    author: req.body.doc.author,
-			    title: req.body.doc.title
+			    body: form.body,
+			    author: form.author,
+			    title: form.title,
+				teaser: form.teaser
 		    };
 			async.waterfall([
 		        	function(callback) {

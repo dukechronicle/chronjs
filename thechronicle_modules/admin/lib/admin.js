@@ -12,8 +12,6 @@ VALID_EXTENSIONS['image/jpeg'] = 'jpg';
 VALID_EXTENSIONS['image/png'] = 'png';
 VALID_EXTENSIONS['image/gif'] = 'gif';
 
-var IMAGE_TYPES = ['article', 'frontpage', 'slideshow'];
-
 var THUMB_DIMENSIONS = '100x100';
 var FRONTPAGE_GROUP_NAMESPACE = ['section'];
 
@@ -209,8 +207,7 @@ exports.init = function(app) {
 					                photographer: orig.value.photographer,
 					                date: orig.value.date,
             		                versions: versions,
-            		                article: req.query.article,
-            		                imageTypes: IMAGE_TYPES
+            		                article: req.query.article
             		            }
             		        });
 		                }

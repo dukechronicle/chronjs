@@ -76,11 +76,27 @@ body
 
 		a.hover:hover
 			color link-color
-			border-right-color #4D90F0
 
 		a.hover.highlight-left:hover
-			border-right-color transparent
 			border-left-color #4D90F0
+		a.hover.highlight-right:hover
+			border-right-color #4D90F0
+
+		a.hover.highlight-bottom
+			border-bottom 1px solid transparent
+			margin-bottom -12px
+			padding-bottom 11px
+		a.hover.highlight-bottom:hover
+			border-bottom-color #4D90F0
+
+
+		a.hover.highlight-top
+			border-top 1px solid transparent
+			margin-top -5px
+			padding-top 5px
+		a.hover.highlight-top:hover
+			border-top-color #4D90F0
+
 		a.hover:hover
 			h1, h2, h3, h4, h5
 				color link-color

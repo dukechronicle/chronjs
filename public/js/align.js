@@ -28,12 +28,12 @@ function pageAlign() {
 	// align main and sidebar height
 	(function() {
 		// sidebar is short by 1px for some reason
-		var extraHeight = $('#top > .sidebar').height()-$('#top > .content').height() - 1;
+		var extraHeight = $('#top > .sidebar').height()-$('#top > .content').height() - 3;
 		console.log(extraHeight);
 		//console.log(extraHeight);
 		var contentContainer = $('#top > .content .top-news .content-container');
 		var currentPadding = contentContainer.css('padding-bottom');
-		contentContainer.css('padding-bottom', 3 + extraHeight);
+		contentContainer.css('padding-bottom', extraHeight);
 
 		console.log($('#top > .sidebar').height()-$('#top > .content').height());
 	}) ();

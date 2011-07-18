@@ -50,7 +50,8 @@
 			{"title": "New center for Judicial Studies created",
 						"timestamp": "yesterday"},
 			{"title": "Math department earns top 10 ranking",
-						"timestamp": "2 days ago"}
+						"timestamp": "2 days ago"},
+			{"title": "Duke Health System continues construction"}
 		],
 		"sports": [
 			{"title": "Bottorff crowned in Iowa",
@@ -59,7 +60,8 @@
 			{"title": "Duke plans for upcoming season",
 					"timestamp": "today"},
 			{"title": "Duke falls in match play semis",
-					"timestamp": "3 days ago"}
+					"timestamp": "3 days ago"},
+			{"title": "Helton follows Cutcliffe from Tennessee"}
 		]
 	},
 	"opinion": {
@@ -133,23 +135,43 @@
 	"recess": {
 		"title": "Recess",
 		"stories": [
-			{"title": "Rosebuds-Loud Planes Fly Low",
+			{"title": "Rosebuds-Loud Planes Fly Low", "cssClass": "first",
+				"image": "http://dukechronicle.com/sites/default/files/images/07012011/Recess/155752%20Rosebuds%20PAT/rtlthumb_special.jpg",
 				"teaser": "When it comes to breaking up, the world of indie rock usually responds like the rest of us."},
-			{"title": "Rosebuds-Loud Planes Fly Low"},
-			{"title": "Rosebuds-Loud Planes Fly Low"},
-			{"title": "Rosebuds-Loud Planes Fly Low"},
-			{"title": "Rosebuds-Loud Planes Fly Low"}
+			{"title": "Rosebuds-Loud Planes Fly Low",
+				"image": "http://dukechronicle.com/sites/default/files/images/07012011/Towerview/155603%20DPAC-PATE/rtsthumb_Special.jpg",
+				"teaser": "When it comes to breaking up, the world of indie rock usually responds like the rest of us."},
+			{"title": "Rosebuds-Loud Planes Fly Low",
+				"image": "http://dukechronicle.com/sites/default/files/images/07012011/Towerview/155603%20DPAC-PATE/rtsthumb_Special.jpg",
+				"teaser": "When it comes to breaking up, the world of indie rock usually responds like the rest of us."},
+			{"title": "Rosebuds-Loud Planes Fly Low",
+				"image": "http://dukechronicle.com/sites/default/files/images/07012011/Towerview/155603%20DPAC-PATE/rtsthumb_Special.jpg",
+				"teaser": "When it comes to breaking up, the world of indie rock usually responds like the rest of us."},
+			{"title": "Rosebuds-Loud Planes Fly Low",
+				"image": "http://dukechronicle.com/sites/default/files/images/07012011/Towerview/155603%20DPAC-PATE/rtsthumb_Special.jpg",
+				"teaser": "When it comes to breaking up, the world of indie rock usually responds like the rest of us.",
+				"cssClass": "last"}
 		]
 	},
 	"towerview": {
 		"title": "Towerview",
 		"stories": [
-			{"title": "Rosebuds-Loud Planes Fly Low",
+			{"title": "The Advocates", "cssClass": "first",
+				"image": "http://dukechronicle.com/sites/default/files/images/07012011/Towerview/155602%20Peterson-OATE/rtlthumb_CassidyFleck.jpg",
 				"teaser": "When it comes to breaking up, the world of indie rock usually responds like the rest of us."},
-			{"title": "Rosebuds-Loud Planes Fly Low"},
-			{"title": "Rosebuds-Loud Planes Fly Low"},
-			{"title": "Rosebuds-Loud Planes Fly Low"},
-			{"title": "Rosebuds-Loud Planes Fly Low"}
+			{"title": "Rosebuds-Loud Planes Fly Low",
+				"image": "http://dukechronicle.com/sites/default/files/images/07012011/Towerview/155603%20DPAC-PATE/rtsthumb_Special.jpg",
+				"teaser": "When it comes to breaking up, the world of indie rock usually responds like the rest of us."},
+			{"title": "Rosebuds-Loud Planes Fly Low",
+				"image": "http://dukechronicle.com/sites/default/files/images/07012011/Towerview/155603%20DPAC-PATE/rtsthumb_Special.jpg",
+				"teaser": "When it comes to breaking up, the world of indie rock usually responds like the rest of us."},
+			{"title": "Rosebuds-Loud Planes Fly Low",
+				"image": "http://dukechronicle.com/sites/default/files/images/07012011/Towerview/155603%20DPAC-PATE/rtsthumb_Special.jpg",
+				"teaser": "When it comes to breaking up, the world of indie rock usually responds like the rest of us."},
+			{"title": "Rosebuds-Loud Planes Fly Low",
+				"image": "http://dukechronicle.com/sites/default/files/images/07012011/Towerview/155603%20DPAC-PATE/rtsthumb_Special.jpg",
+				"teaser": "When it comes to breaking up, the world of indie rock usually responds like the rest of us.",
+				"cssClass": "last"}
 		]
 	}
 }

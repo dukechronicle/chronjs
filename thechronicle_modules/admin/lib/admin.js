@@ -65,7 +65,7 @@ exports.init = function(app) {
 		
 		app.post('/upload', function(req, httpRes) {
 		    
-		    var imageData = req.body.imageData;
+		var imageData = req.body.imageData;
     		var imageName = req.body.imageName;
     		// create a unique name for the image to avoid s3 blob collisions
 			imageName = globalFunctions.randomString(8)+"-"+imageName;

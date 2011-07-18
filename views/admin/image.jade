@@ -29,6 +29,8 @@ p
     input#y1(type='hidden', name='y1')
     input#y2(type='hidden', name='y2')
     input(type='hidden', name='name', value=name)
+    - if(article)
+      input(type='hidden', name='article', value=article)
     input(type='submit')
 p
   br

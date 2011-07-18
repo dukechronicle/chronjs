@@ -128,10 +128,14 @@ config.sync(function() {
 		if(groupName == "top stories")
 		{
 			mobileApi.getTopStories(10,function(err, res) {
-				console.log(res);
-				globalFunctions.sendJSONResponse(http_res, res);
-			}
-			);
+                console.log(res); 
+                var tempModel = JSON.parse(res);
+                //api.docsById(res, function(err2, res2){
+                    //console.log(res2);
+                   // http_res.render('mobile', {layout: false, model: res2 } );
+                //});
+                http_res.render('mobile', {layout: false, model: tempModel } );
+            });
 
 		}
 		else {

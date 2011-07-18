@@ -1,6 +1,6 @@
 /* declare global configuration variables */
 var PORT = process.env.PORT || 4000;
-var FRONTPAGE_GROUP_NAMESPACE = ['section'];
+var FRONTPAGE_GROUP_NAMESPACE = ['section','frontpage'];
 
 var config = require('./thechronicle_modules/config');
 
@@ -60,7 +60,7 @@ config.sync(function() {
 
 	/*** FRONTEND ***/
 	app.get('/', function(req, res) {
-		res.render('index', {filename: 'views/index.jade',layout: false, model: homeModel});
+		res.render('index', {filename: 'views/index.jade', model: homeModel});
 	});
 
 	app.get('/article-list', function(req, http_res) {
@@ -95,7 +95,8 @@ config.sync(function() {
 			        http_res.redirect('/article/' + latestUrl);
 			    } else {
 			        http_res.render('article', {
-    					locals: {doc: doc}
+    					locals: {doc: doc},
+				        filename: 'views/article.jade'
     				});
 			    }
 			}

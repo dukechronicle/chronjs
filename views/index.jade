@@ -1,47 +1,20 @@
-!!! 5
-html(lang="en")
-	head
-		title The Chronicle | Duke University's Daily Independent Newspaper
-		link(rel='stylesheet', href='/css/reset.css')
-		link(rel='stylesheet', href='/style.css')
-		link(rel='stylesheet', href='/slideshow/style.css')
-		link(rel='stylesheet', href='/container/style.css')
-		link(rel='stylesheet', href='/frontpage.css')
+#top.clearfix
+	.content
+		#slideshow!=partial('slideshow')
+		.top-news!=partial('container/top-news', model.headlines)
+		div
+			.image-container.print-edition!=partial('container/image', model.printEdition)
+			.image-container.full-banner!=partial('container/image', model.adFullBanner)
+	.sidebar
+		.twitter!=partial('container/twitter', model.twitter)
+		.most-popular!=partial('container/most-popular', model.popular)
+		.image-container.medium-rectangle!=partial('container/image', model.adFullRectangle)
+		.opinion!=partial('container/opinion', model.opinion)
+#middle
+	#news-sports.clearfix
+		#news!=partial('container/news', model.news)
+		#sports!=partial('container/news', model.sports)
+#bottom
+	#recess!=partial('container/block-row', model.recess)
+	#towerview!=partial('container/block-row', model.towerview)
 
-		script(src='http://use.typekit.com/dwv2bjy.js')
-		script(src='/js/typekit.js')
-
-	body
-		#shell
-			header
-				include layout/header
-			section
-				#top.clearfix
-					.content
-						#slideshow!=partial('slideshow')
-						.top-news!=partial('container/top-news', model.headlines)
-						div
-							.image-container.print-edition!=partial('container/image', model.printEdition)
-							.image-container.full-banner!=partial('container/image', model.adFullBanner)
-					.sidebar
-						.twitter!=partial('container/twitter', model.twitter)
-						.most-popular!=partial('container/most-popular', model.popular)
-						.image-container.medium-rectangle!=partial('container/image', model.adFullRectangle)
-						.opinion!=partial('container/opinion', model.opinion)
-				#middle
-					#news-sports.clearfix
-						#news!=partial('container/news', model.news)
-						#sports!=partial('container/news', model.sports)
-				#bottom
-					#recess!=partial('container/block-row', model.recess)
-					#towerview!=partial('container/block-row', model.towerview)
-			footer
-				include layout/footer
-
-
-	script(src='/js/jquery.js')
-	//script(src='/js/jquery-ui.js')
-	script(src='/js/underscore-min.js')
-	script(src='/js/container/vertical-text-align.js')
-	script(src='/js/align.js')
-	script(src='/js/slideshow/slideshow.js')

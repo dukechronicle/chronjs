@@ -5,16 +5,16 @@ var fs = require('fs');
 var s3 = require('./s3.js');
 var im = require('imagemagick');
 
-var EXTENSIONS = {};
-EXTENSIONS['image/jpeg'] = 'jpg';
-EXTENSIONS['image/png'] = 'png';
-EXTENSIONS['image/gif'] = 'gif';
+var VALID_EXTENSIONS = {};
+VALID_EXTENSIONS['image/jpeg'] = 'jpg';
+VALID_EXTENSIONS['image/png'] = 'png';
+VALID_EXTENSIONS['image/gif'] = 'gif';
 
 var THUMB_DIMENSIONS = '100x100';
 var FRONTPAGE_GROUP_NAMESPACE = ['section'];
 
 function _getS3Filename(imageName, addition, type) {
-    return imageName + addition + '.' + EXTENSIONS[type];
+    return imageName + addition + '.' + VALID_EXTENSIONS[type];
 }
 
 function _getMagickString(x1, y1, x2, y2) {
@@ -76,7 +76,7 @@ exports.init = function(app) {
     		// use async library to call these functions in series, passing vars between them
     		async.waterfall([
     			function(callback) {
-    				if(imageType != 'image/jpeg' && imageType != 'image/png' && imageType != 'image/gif') {
+    				if(!imageType in VALID_EXTENSIONS) {
     					callback("Invalid file type for " + imageName + ". Must be an image.");
     				}
     				else {

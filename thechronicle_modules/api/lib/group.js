@@ -56,15 +56,8 @@ group.remove = function(docid, namespace, name, callback) {
 };
 
 group.docs = function(namespace, groupName, callback) {
-    var add = function(memo, item, cbk) {
-        memo[item] = function(acallback) {
-            db.group.docs(namespace, item, acallback);
-        };
-        cbk(null, memo);
-    };
-    nimble.reduce(groupName, add, {}, function(err, res) {
-        nimble.parallel(res, callback);
-    });
+
+    db.group.docs(namespace, groupName, callback);
 };
 
 group.docsN = function(namespace, groupName, baseDocNum, numDocs, callback) {

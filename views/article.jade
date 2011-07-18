@@ -1,7 +1,9 @@
 #article
 	article
-		h1 #{doc.title}
-		.content.rounded!=doc.body
+
+		.content.rounded
+			h1 #{doc.title}
+			!=doc.body
 
 	#disqus_thread.rounded
 	script(src='/js/disqus.js', type='text/javascript')

@@ -2,6 +2,7 @@ var api = {};
 var exports = module.exports = api;
 
 var nimble = require('nimble');
+var async = require('async');
 var db = require('../../db-abstract');
 
 api.group = require('./group');
@@ -61,7 +62,7 @@ api.getArticles= function(parent_node, count, callback) {
 };
 
 function _editDocument(docid, fields, callback) {
-    api.get_document_by_id(docid, function(geterr, res) {
+    api.docsById(docid, function(geterr, res) {
         if(geterr) {
             callback(geterr, null, null);
         } else {
@@ -173,4 +174,45 @@ api.docForUrl = function(url, callback) {
 
 api.docsByDate = function(callback) {
     db.view('articles/all_by_date', {descending: true}, callback);
+}
+
+api.addToDocArray = function(id, field, toAdd, callback) {
+    async.waterfall([
+        function(acallback) {
+            api.docsById(id, acallback);
+        },
+        function(doc, acallback) {
+            var arr = doc[field];
+            if(!arr) arr = [];
+            arr.push(toAdd);
+            var fields = {};
+            fields[field] = arr;
+            db.merge(id, fields, acallback);
+        }
+        ], 
+        callback
+    );
+}
+
+api.removeFromDocArray = function(id, field, toRemove, callback) {
+    async.waterfall([
+        function(acallback) {
+            api.docsById(id, acallback);
+        },
+        function(doc, acallback) {
+            var arr = doc[field];
+            var fields = {};
+            if(!arr) {
+                acallback('Field does not exist');
+            } else if(arr.indexOf(toRemove) == -1) {
+                acallback('Item not in array');
+            } else {
+                arr.splice(arr.indexOf(toRemove), 1);
+                fields[field] = arr;
+                db.merge(id, fields, acallback);
+            }
+        }
+        ], 
+        callback
+    );
 }

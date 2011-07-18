@@ -7,6 +7,9 @@ form(action='/admin/add', method='POST')
     label(for='author') Author:
     input#author(type='text', name='doc[author]')
   p
+    label(for='teaser') Teaser:
+    textarea#teaser(rows=2, cols=30, name='doc[teaser]')
+  p
     label(for='body') Body:
     textarea#body(rows=20, cols=30, name='doc[body]')
   p

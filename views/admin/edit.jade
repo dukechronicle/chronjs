@@ -18,9 +18,14 @@ form(action='/admin/edit', method='POST')
   p
     a(href='/article/' + url + '/image') Add images
   - if(images)
-    - each image in images
-      p
-        img(src=image.doc.url)
+    p
+    table(border=1)
+      - each image in images
+        tr
+          td
+            img(src=image.doc.url)
+          td
+            a(href='/article/' + url + '/edit/?deleteImage=' + image.doc._id) delete
   p
     input(type='submit', value='add')
     

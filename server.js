@@ -107,19 +107,59 @@ config.sync(function() {
 		api.docForUrl(url, function(err, doc) {
 			if(err) {
 				globalFunctions.showError(http_res, err);
-			} else {
-				api.group.list(['section'], function(group_err, groups) {
-					if(group_err) {
-						globalFunctions.showError(http_res, group_err);
-					} else {
-						http_res.render('admin/edit', {
-							locals: {doc: doc,
-									 groups: groups}
-						});
-					}
-				});
+			} else { 
+			    if(req.query.image) {
+			        api.addToDocArray(doc._id, 'images', req.query.image, function(err, res) {
+			            if(err) {
+			                globalFunctions.showError(http_res, err);
+			            } else {
+			                http_res.redirect('/article/' + url + '/edit');
+			            }
+			        })
+			    } 
+			    else if(req.query.deleteImage) {
+			        api.removeFromDocArray(doc._id, 'images', req.query.deleteImage, function(err, res) {
+			            if(err) {
+			                globalFunctions.showError(http_res, err);
+			            } else {
+			                http_res.redirect('/article/' + url + '/edit');
+			            }
+			        })
+			    }
+			    else {
+			        api.docsById(doc.images, function(err, images) {
+			            if(err) {
+			                globalFunctions.showError(http_res, err);
+			            } else {
+			                api.group.list(['section'], function(group_err, groups) {
+            					if(group_err) {
+            						globalFunctions.showError(http_res, group_err);
+            					} else {
+            						http_res.render('admin/edit', {
+            							locals: {doc: doc,
+            									 groups: groups,
+            									 images: images,
+            									 url: url}
+            						});
+            					}
+            				});
+			            }
+			        })
+			    }
 			}
 		});
+	});
+	
+	app.get('/article/:url/image', function(req, httpRes) {
+	    var url = req.params.url;
+	    api.image.getAllOriginals(function(err, origs) {
+	        httpRes.render('admin/articleimage', {
+	            locals: {
+	                origs: origs,
+	                url: url
+	            }
+	        });
+	    });
 	});
 
 	app.get('/mobile/:groupname', function(req, http_res) {

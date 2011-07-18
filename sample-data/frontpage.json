@@ -9,14 +9,19 @@
 		"title": "Popular",
 		"stories": [
 			{"title": "Drinking policy should prioritize safety",
+			 "url": "http://google.com",
 				"comments": "3", "cssClass": "first"},
 			{"title": "Why to take Russian Literature",
+			 "url": "http://google.com",
 				"comments": "1"},
 			{"title": "Starcraft 2 reaches new heights in the West",
+				 "url": "http://google.com",
 				"comments": "5"},
 			{"title": "Need for Pokemon Rights Policy Reform",
+				 "url": "http://google.com",
 				"comments": "0"},
 			{"title": "Random article written the day before",
+				 "url": "http://google.com",
 				"comments": "14", "cssClass": "last"}
 		]
 	},
@@ -45,13 +50,17 @@
 		"title": "Week's Headlines",
 		"news": [
 			{"title": "A PRESIDENTIAL VISIT",
+						"url": "http://google.com",
 						"timestamp": "today",
 						"teaser": "Although the recession sparked some sacrifice across the University, Duke’s revered Talent Identification Program has continued."},
 			{"title": "New center for Judicial Studies created",
+						 "url": "http://google.com",
 						"timestamp": "yesterday"},
 			{"title": "Math department earns top 10 ranking",
+						 "url": "http://google.com",
 						"timestamp": "2 days ago"},
-			{"title": "Duke Health System continues construction"}
+			{"title": "Duke Health System continues construction",
+			 "url": "http://google.com"}
 		],
 		"sports": [
 			{"title": "Bottorff crowned in Iowa",

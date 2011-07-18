@@ -16,6 +16,12 @@ form(action='/admin/edit', method='POST')
         input.check(type='checkbox', id=key, name='doc[groups]', value=group, checked='yes')
     input(type='hidden', name='doc[id]', value=doc.id)
   p
+    a(href='/article/' + url + '/image') Add images
+  - if(images)
+    - each image in images
+      p
+        img(src=image.doc.url)
+  p
     input(type='submit', value='add')
     
 form(action='/admin/addgroup', method='GET')

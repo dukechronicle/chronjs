@@ -108,18 +108,55 @@ config.sync(function() {
 			if(err) {
 				globalFunctions.showError(http_res, err);
 			} else {
-				api.group.list(['section'], function(group_err, groups) {
-					if(group_err) {
-						globalFunctions.showError(http_res, group_err);
-					} else {
-						http_res.render('admin/edit', {
-							locals: {doc: doc,
-									 groups: groups}
-						});
-					}
-				});
+			    
+			    if(req.query.image) {
+			        var images = doc.images;
+			        if(!images) {
+			            images = [];
+			        }
+			        images.push(req.query.image);
+			        api.editDoc(doc._id, {images: images}, function(err, res) {
+			            if(err) {
+			                globalFunctions.showError(http_res, err);
+			            } else {
+			                http_res.redirect('/article/' + url + '/edit');
+			            }
+			        })
+			    } else {
+			        api.docsById(doc.images, function(err, images) {
+			            console.log(images);
+			            if(err) {
+			                globalFunctions.showError(http_res, err);
+			            } else {
+			                api.group.list(['section'], function(group_err, groups) {
+            					if(group_err) {
+            						globalFunctions.showError(http_res, group_err);
+            					} else {
+            						http_res.render('admin/edit', {
+            							locals: {doc: doc,
+            									 groups: groups,
+            									 images: images,
+            									 url: url}
+            						});
+            					}
+            				});
+			            }
+			        })
+			    }
 			}
 		});
+	});
+	
+	app.get('/article/:url/image', function(req, httpRes) {
+	    var url = req.params.url;
+	    api.image.getAllOriginals(function(err, origs) {
+	        httpRes.render('admin/articleimage', {
+	            locals: {
+	                origs: origs,
+	                url: url
+	            }
+	        });
+	    });
 	});
 
 	app.get('/mobile/:groupname', function(req, http_res) {

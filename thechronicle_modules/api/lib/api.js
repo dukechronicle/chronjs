@@ -61,7 +61,7 @@ api.getArticles= function(parent_node, count, callback) {
 };
 
 function _editDocument(docid, fields, callback) {
-    api.get_document_by_id(docid, function(geterr, res) {
+    api.docsById(docid, function(geterr, res) {
         if(geterr) {
             callback(geterr, null, null);
         } else {

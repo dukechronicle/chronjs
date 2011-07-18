@@ -163,12 +163,13 @@ exports.init = function(app) {
             		            locals: {
             		                url: orig.value.url,
             		                name: imageName,
-					id: orig.value._id,
-					caption: orig.value.caption,
-					location: orig.value.location,
-					photographer: orig.value.photographer,
-					date: orig.value.date,
-            		                versions: versions
+					                id: orig.value._id,
+					                caption: orig.value.caption,
+					                location: orig.value.location,
+					                photographer: orig.value.photographer,
+					                date: orig.value.date,
+            		                versions: versions,
+            		                article: req.query.article
             		            }
             		        });
 		                }

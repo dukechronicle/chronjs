@@ -51,4 +51,4 @@ p
 - if(versions.length > 0)
   hr
   h1 Existing Versions
-  #versions!= partial('version', {collection: versions})
+  #versions!= partial('version', {collection: versions, locals: {article: article}})

@@ -3,12 +3,16 @@ table(border=1)
     td Width
     td Height
     td Image
+    td Add to Article
   tr
     td #{version.doc.width}
     td #{version.doc.height}
     td
-      - if(article)
-        a(href='/article/' + article + '/edit/?image=' + version.doc._id)
-          img(src=version.doc.url)
-      - else
-        img(src=version.doc.url)
+      img(src=version.doc.url)
+    - if(article)
+      td
+        form(action='/article/' + article + '/edit')
+          select(name='imageType')
+            - each type in imageTypes
+              option(value=type) #{type}
+          input(type='submit', value='add')

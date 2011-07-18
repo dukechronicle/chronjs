@@ -195,6 +195,7 @@ exports.init = function(app) {
 		
 		app.post('/image/crop', function(req, httpRes) {
 		    var imageName = req.body.name;
+		    var article = req.body.article;
 		    api.image.getOriginal(imageName, function(err, orig) {
 		        if(err) globalFunctions.showError(httpRes, err);
 		        else {
@@ -222,6 +223,7 @@ exports.init = function(app) {
 		                                    api.image.createVersion(orig.id, url, width, height,
 		                                    function(dbErr, dbRes) {
 		                                        if(dbErr) globalFunctions.showError(httpRes, dbErr);
+		                                        else if(article) httpRes.redirect('/admin/image/' + imageName + '?article=' + article);
 		                                        else httpRes.redirect('/admin/image/' + imageName);
 		                                    })
 		                                }

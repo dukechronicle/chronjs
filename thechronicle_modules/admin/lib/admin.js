@@ -92,7 +92,7 @@ exports.init = function(app) {
 		});
 		
 		app.get('/upload', function(req, httpRes) {
-		    httpRes.render('test-upload');
+		    httpRes.render('upload');
 		});
 		
 		app.post('/upload', function(req, httpRes) {

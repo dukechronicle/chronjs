@@ -93,6 +93,9 @@ body
 				text-shadow: 0px 1px 1px white
 				-webkit-transition text-shadow .2s linear
 				-moz-transition text-shadow .2s linear
+				transition(color, .25s, linear)
+			a:hover
+				color #999
 	#header-bottom
 		nav
 			position relative
@@ -113,7 +116,7 @@ body
 					padding-left 15px
 					padding-right 11px
 					//padding-bottom 1px
-					transition(border-color, .25s, linear)
+					transition(color, .25s, linear)
 				a:hover, .active
 					color #999
 

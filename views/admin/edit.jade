@@ -22,10 +22,11 @@ form(action='/admin/edit', method='POST')
     table(border=1)
       - each image in images
         tr
+          td #{image.imageType}
           td
-            img(src=image.doc.url)
+            img(src=image.url)
           td
-            a(href='/article/' + url + '/edit/?deleteImage=' + image.doc._id) delete
+            a(href='/article/' + url + '/edit/?deleteImage=' + image._id) delete
   p
     input(type='submit', value='add')
     

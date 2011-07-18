@@ -11,6 +11,7 @@ config.sync(function() {
 	require('express-namespace');
 	var stylus = require('stylus');
 	var async = require('async');
+	var nimble = require('nimble');
 
 	/* require internal nodejs modules */
 	var globalFunctions = require('./thechronicle_modules/global-functions');
@@ -30,6 +31,16 @@ config.sync(function() {
 	  return stylus(str)
 		.set('filename', path)
 		.set('compress', true);
+	}
+	
+	function _getImages(obj, callback) {
+	    nimble.map(obj, function(val, key, acallback) {
+	        api.docsById(val, function(err, res) {
+	            res.imageType = key;
+	            acallback(err, res)
+	        });
+	    },
+	    callback);
 	}
 
 	// add the stylus middleware, which re-compiles when
@@ -127,7 +138,8 @@ config.sync(function() {
 			        })
 			    }
 			    else {
-			        api.docsById(doc.images, function(err, images) {
+			        if(!doc.images) doc.images = {};
+			        _getImages(doc.images, function(err, images) {
 			            if(err) {
 			                globalFunctions.showError(http_res, err);
 			            } else {

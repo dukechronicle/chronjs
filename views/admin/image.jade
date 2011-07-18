@@ -29,9 +29,6 @@ p
     - if(article)
       input(type='hidden', name='article', value=article)
     input(type='submit')
-- if(article)
-  p
-    a(href='/article/' + article + '/edit/?image=' + id) Add original to article
 p
   br
   form(action='/admin/image/info', method='POST')

@@ -8,12 +8,6 @@ function grabArticles(namespace, groupName, baseDocNum, n,callback){
         } 
         else {
 
-            //groupDocs = The documents that are returned
-            //console.log(groupDocs);
-            //console.log(groupDocs[groupName]);
-            //console.log(groupDocs[groupName][0].title);
-
-            //
             callback(err,groupDocs[groupName]);
         }
     });

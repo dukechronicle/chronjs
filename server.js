@@ -60,7 +60,12 @@ config.sync(function() {
 
 	/*** FRONTEND ***/
 	app.get('/', function(req, res) {
-		res.render('index', {filename: 'views/index.jade', model: homeModel});
+
+		fetchGroup("opinion", "Opinion", function(err, groupDocs) {
+			homeModel.opinion = groupDocs;
+			res.render('index', {filename: 'views/index.jade', model: homeModel});
+		});
+
 	});
 
 	app.get('/article-list', function(req, http_res) {
@@ -194,4 +199,22 @@ config.sync(function() {
 
 	console.log('Listening on port ' + PORT);
 	app.listen(PORT);
+
+	function fetchGroup(groupName, title, callback) {
+		api.group.docs(FRONTPAGE_GROUP_NAMESPACE, groupName, function(err, result) {
+			var groupDocs = {
+				"title": title,
+				"stories": []
+			};
+			result.forEach(function (article, index, array) {
+				article.url = "/article/" + article.urls[article.urls.length - 1];
+				if (index === 0) article.cssClass = "first";
+				if (index === array.length) article.cssClass = "last";
+				groupDocs.stories.push(article);
+			});
+
+			callback(err, groupDocs);
+		});
+	}
 });
+

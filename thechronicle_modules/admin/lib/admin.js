@@ -73,7 +73,8 @@ exports.init = function(app) {
 		            globalFunctions.showError(http_res, err);
 		        } else {
 					http_res.render('admin/add', {
-						locals: {groups: groups}
+						locals: {groups: groups},
+						layout: "layout-admin.jade"
 					});
 			    }
 		    })
@@ -85,14 +86,17 @@ exports.init = function(app) {
 		            globalFunctions.showError(http_res, err);
 		        } else {
 		            http_res.render('admin/manage', {
-		                locals: {docs: res}
+		                locals: {docs: res},
+			            layout: "layout-admin.jade"
 		            });
 		        }
 		    });
 		});
 		
 		app.get('/upload', function(req, httpRes) {
-		    httpRes.render('upload');
+		    httpRes.render('upload', {
+		    layout: "layout-admin.jade"
+		    });
 		});
 		
 		app.post('/upload', function(req, httpRes) {
@@ -208,7 +212,8 @@ exports.init = function(app) {
 					                date: orig.value.date,
             		                versions: versions,
             		                article: req.query.article
-            		            }
+            		            },
+			                    layout: "layout-admin.jade"
             		        });
 		                }
 		            })

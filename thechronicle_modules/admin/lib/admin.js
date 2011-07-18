@@ -6,6 +6,7 @@ var s3 = require('./s3.js');
 var im = require('imagemagick');
 var http = require('http');
 var urlModule = require('url');
+var solr = require('solr');
 
 var VALID_EXTENSIONS = {};
 VALID_EXTENSIONS['image/jpeg'] = 'jpg';
@@ -95,98 +96,97 @@ exports.init = function(app) {
 		    httpRes.render('upload');
 		});
 		
-		app.post('/upload', function(req, httpRes) {
-		    
-		var imageData = req.body.imageData;
-    		var imageName = req.body.imageName;
-    		// create a unique name for the image to avoid s3 blob collisions
-			imageName = globalFunctions.randomString(8)+"-"+imageName;
-			var thumbName = 'thumb_' + imageName;
-    		var imageType = req.body.imageType;
-    		var imageID = req.body.imageID;
+		app.post('/upload', function(req, httpRes) {    
+			var imageData = req.body.imageData;
+	    		var imageName = req.body.imageName;
+	    		// create a unique name for the image to avoid s3 blob collisions
+				imageName = globalFunctions.randomString(8)+"-"+imageName;
+				var thumbName = 'thumb_' + imageName;
+	    		var imageType = req.body.imageType;
+	    		var imageID = req.body.imageID;
 
-    		// use async library to call these functions in series, passing vars between them
-    		async.waterfall([
-    			function(callback) {
-    				if(!imageType in VALID_EXTENSIONS) {
-    					callback("Invalid file type for " + imageName + ". Must be an image.");
-    				}
-    				else {
-    					callback(null)
-    				}
-    			},
-    			function(callback) {
-    				var buf = new Buffer(imageData, 'base64');
-    				fs.writeFile(imageName, buf, function(err) {
-    					callback(err);
-    				});
-    			},
-    			function(callback) {
-    				fs.readFile(imageName, function (err, data) {
-    					callback(err,data);
-    				});
-    			},
-    			function(data, callback) {
-    				//put image in AWS S3 storage
-    				s3.put(data, imageName, imageType, function(err, url) {
-    					callback(err,url);
-    				});
-    			},
-    			function(url, callback) {
-    			    im.convert([imageName, '-thumbnail', THUMB_DIMENSIONS, thumbName], function(imErr, stdout, stderr) {
-    			        callback(imErr, url);
-    			    });
-    			},
-    			function(url, callback) {
-    			    fs.readFile(thumbName, function(err, data) {
-    			        callback(err, url, data);
-    			    });
-    			},
-    			function(url, data, callback) {
-    			    s3.put(data, thumbName, imageType, function(err, thumbUrl) {
-    					callback(err, url, thumbUrl);
-    				});
-    			},
-    			function(url, thumbUrl, callback) {
-    				api.image.createOriginal(imageName, url, imageType, {
-    				    thumbUrl: thumbUrl,
-    					photographer: 'None',
-    					caption: 'None',
-    					date: 'None',
-    					location: 'None'
-    				},
-    				function(err, res) {
-    					callback(err, res, url);
-    				});
-    			},
-    			//clean up files
-    			function(res, url, callback) {
-    			    _deleteFiles([imageName, thumbName], function(err) {
-    			        callback(err, res, url);
-    			    });
-    			}
-    		],
-    		function(err,result,url) {
-    			if(err) {
-    				globalFunctions.log(err);
+	    		// use async library to call these functions in series, passing vars between them
+	    		async.waterfall([
+	    			function(callback) {
+	    				if(!imageType in VALID_EXTENSIONS) {
+	    					callback("Invalid file type for " + imageName + ". Must be an image.");
+	    				}
+	    				else {
+	    					callback(null)
+	    				}
+	    			},
+	    			function(callback) {
+	    				var buf = new Buffer(imageData, 'base64');
+	    				fs.writeFile(imageName, buf, function(err) {
+	    					callback(err);
+	    				});
+	    			},
+	    			function(callback) {
+	    				fs.readFile(imageName, function (err, data) {
+	    					callback(err,data);
+	    				});
+	    			},
+	    			function(data, callback) {
+	    				//put image in AWS S3 storage
+	    				s3.put(data, imageName, imageType, function(err, url) {
+	    					callback(err,url);
+	    				});
+	    			},
+	    			function(url, callback) {
+	    			    im.convert([imageName, '-thumbnail', THUMB_DIMENSIONS, thumbName], function(imErr, stdout, stderr) {
+	    			        callback(imErr, url);
+	    			    });
+	    			},
+	    			function(url, callback) {
+	    			    fs.readFile(thumbName, function(err, data) {
+	    			        callback(err, url, data);
+	    			    });
+	    			},
+	    			function(url, data, callback) {
+	    			    s3.put(data, thumbName, imageType, function(err, thumbUrl) {
+	    					callback(err, url, thumbUrl);
+	    				});
+	    			},
+	    			function(url, thumbUrl, callback) {
+	    				api.image.createOriginal(imageName, url, imageType, {
+	    				    thumbUrl: thumbUrl,
+	    					photographer: 'None',
+	    					caption: 'None',
+	    					date: 'None',
+	    					location: 'None'
+	    				},
+	    				function(err, res) {
+	    					callback(err, res, url);
+	    				});
+	    			},
+	    			//clean up files
+	    			function(res, url, callback) {
+	    			    _deleteFiles([imageName, thumbName], function(err) {
+	    			        callback(err, res, url);
+	    			    });
+	    			}
+	    		],
+	    		function(err,result,url) {
+	    			if(err) {
+	    				globalFunctions.log(err);
 
-    				if(typeof(err) == "object") {
-    					err = "Error";
-    				}
+	    				if(typeof(err) == "object") {
+	    					err = "Error";
+	    				}
 
-    				globalFunctions.sendJSONResponse(httpRes, {
-    					error: err,
-    					imageID: imageID
-    				});
-    			}
-    			else {
-    				globalFunctions.log('Image uploaded: ' + url + ' and stored in DB: ' + result);
-    				globalFunctions.sendJSONResponse(httpRes, {
-    					imageID: imageID,
-    					imageName: imageName
-    				});
-    			}
-    		});
+	    				globalFunctions.sendJSONResponse(httpRes, {
+	    					error: err,
+	    					imageID: imageID
+	    				});
+	    			}
+	    			else {
+	    				globalFunctions.log('Image uploaded: ' + url + ' and stored in DB: ' + result);
+	    				globalFunctions.sendJSONResponse(httpRes, {
+	    					imageID: imageID,
+	    					imageName: imageName
+	    				});
+	    			}
+	    		});
 		});
 		
 		app.get('/image/:imageName', function(req, httpRes) {
@@ -317,27 +317,52 @@ exports.init = function(app) {
 		});
 		
 		app.post('/add', function(req, http_res) {
-		    var fields = {body: req.body.doc.body};
-		    api.addDoc(fields, req.body.doc.title, function(err, res, url) {
-		        if(err) {
-		            globalFunctions.showError(http_res, err);
-		        } else {
-		            var groups = req.body.doc.groups;
-		            if(groups) {
-		                var fcns = [];
-		                if(!(groups instanceof Array)) { //we will get a string if only one box is checked
-		                    groups = [groups];
-		                }
+			var fields = {body: req.body.doc.body};
+			async.waterfall([
+		        	function(callback) {
+		            		api.addDoc(fields, req.body.doc.title, callback);
+		        	},
+				function(res,url,callback) {
+					var client = solr.createClient('http://index-east.websolr.com/','80','/c1af51aeb37','/solr');
+					var doc1 = {
+						id: '1',
+						type: 'article',
+						text: 'Fizz buzz frizzle'
+					};
+					client.add(doc1);
+    					client.commit(function(err, response) {
+						if(!err){console.log('Document added');}
+						callback(err,res,url);	
+					});
+				},
+				function(res,url,callback) {
+					var groups = req.body.doc.groups;
+		            		if(groups) {
+		                		var fcns = [];
+		                		if(!(groups instanceof Array)) { //we will get a string if only one box is checked
+		                    			groups = [groups];
+		                		}
 						groups.forEach(function(group) {
-		                	api.group.add(res.id, FRONTPAGE_GROUP_NAMESPACE, group, function(add_err, add_res) {
-			                    if(add_err) globalFunctions.showError(http_res, add_err);
-			                });
+		                			api.group.add(res.id, FRONTPAGE_GROUP_NAMESPACE, group, function(add_err, add_res) {
+			        	            		if(add_err) {
+									callback(add_err);
+						  		}
+			        	        	});
 						});
-		            }
-		            http_res.redirect('article/' + url);
-		        }
-		    });
-		});
+		           		 }
+					 callback(null,url);
+				}
+			],
+		    	function(err, url) {
+		        	if(err) {
+		           		globalFunctions.showError(http_res, err);
+					console.log(err);
+		        	}
+				else {
+					http_res.redirect('article/' + url);
+				}
+		    	});
+		});	    
 	});
 	
 	return app;

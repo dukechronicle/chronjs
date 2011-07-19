@@ -341,10 +341,11 @@ exports.init = function(app) {
 						text: 'Fizz buzz frizzle'
 					};
 					client.add(doc1);
-    					client.commit(function(err, response) {
-						if(!err){console.log('Document added');}
-						callback(err,res,url);	
-					});
+    					//client.commit(function(err, response) {
+					//	if(!err){console.log('Document added');}
+					//	callback(err,res,url);	
+					//});
+					callback(null,res,url);
 				},
 				function(res,url,callback) {
 					var groups = req.body.doc.groups;

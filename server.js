@@ -119,23 +119,13 @@ config.sync(function() {
 			if(err) {
 				globalFunctions.showError(http_res, err);
 			} else { 
-			    if(req.query.image) {
-			        api.addToDocArray(doc._id, 'images', req.query.image, function(err, res) {
-			            if(err) {
-			                globalFunctions.showError(http_res, err);
-			            } else {
-			                http_res.redirect('/article/' + url + '/edit');
-			            }
-			        })
-			    } 
-			    else if(req.query.deleteImage) {
-			        api.removeFromDocArray(doc._id, 'images', req.query.deleteImage, function(err, res) {
-			            if(err) {
-			                globalFunctions.showError(http_res, err);
-			            } else {
-			                http_res.redirect('/article/' + url + '/edit');
-			            }
-			        })
+			    if(req.query.deleteImage) {
+			        var newImages = doc.images;
+			        delete newImages[req.query.deleteImage];
+			        api.editDoc(doc._id, newImages, function(editErr, res) {
+			            if(editErr) globalFunctions.showError(http_res, editErr);
+			            else http_res.redirect('/article/' + url + '/edit');
+			        });
 			    }
 			    else {
 			        if(!doc.images) doc.images = {};

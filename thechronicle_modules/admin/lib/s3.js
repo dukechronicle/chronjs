@@ -20,11 +20,15 @@ s3.put = function(buf, key, type, callback) {
             'Content-Type': type
         });
         req.on('response', function(res) {
-            if (200 == res.statusCode) callback(null, req.url);
+            if (200 == res.statusCode) callback(null, _getUrl(key));
             else callback(res, null);
         });
         req.end(buf);
     });
+}
+
+function _getUrl(key) {
+    return 'http://s3.amazonaws.com/' + BUCKET_NAME + '/' + key;
 }
 
 //reading access keys from file for now...

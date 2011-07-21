@@ -165,10 +165,12 @@ config.sync(function() {
 	    var url = req.params.url;
 	    api.image.getAllOriginals(function(err, origs) {
 	        httpRes.render('admin/articleimage', {
+		        filename: 'views/admin/articleimage.jade',
 	            locals: {
 	                origs: origs,
 	                url: url
-	            }
+	            },
+		        layout: 'layout-admin.jade'
 	        });
 	    });
 	});

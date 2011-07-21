@@ -74,6 +74,7 @@ config.sync(function() {
 				globalFunctions.showError(http_res, err);
 			} else {
 				api.group.docs(FRONTPAGE_GROUP_NAMESPACE, groups, function(get_err, get_res) {
+					console.log("getting docs in group");
 					if(get_err) {
 						globalFunctions.showError(http_res, get_err);
 					} else {
@@ -137,7 +138,7 @@ config.sync(function() {
 			            if(err) {
 			                globalFunctions.showError(http_res, err);
 			            } else {
-			                api.group.list(['section'], function(group_err, groups) {
+			                api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(group_err, groups) {
             					if(group_err) {
             						globalFunctions.showError(http_res, group_err);
             					} else {

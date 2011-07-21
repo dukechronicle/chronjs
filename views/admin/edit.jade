@@ -23,9 +23,9 @@ form(action='/admin/edit', method='POST')
       - each image in images
         tr
           td
-            //img(src=image.doc.url)
+            img(src=image.doc.url)
           td
-            //a(href='/article/#{url}/edit/?deleteImage=' + image.doc._id) delete
+            a(href='/article/#{url}/edit/?deleteImage=' + image.doc._id) delete
   p
     input(type='submit', value='add')
     

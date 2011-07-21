@@ -111,10 +111,12 @@ config.sync(function() {
 
 	app.get('/article/:url/edit', function(req, http_res) {
 		var url = req.params.url;
+		console.log("test");
 		api.docForUrl(url, function(err, doc) {
 			if(err) {
 				globalFunctions.showError(http_res, err);
-			} else { 
+			} else {
+				console.log("test");
 			    if(req.query.image) {
 			        api.addToDocArray(doc._id, 'images', req.query.image, function(err, res) {
 			            if(err) {
@@ -134,28 +136,30 @@ config.sync(function() {
 			        })
 			    }
 			    else {
+				    /*
 			        api.docsById(doc.images, function(err, images) {
+				        console.log("test");
 			            if(err) {
 			                globalFunctions.showError(http_res, err);
-			            } else {
+			            } else {*/
 			                api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(group_err, groups) {
             					if(group_err) {
             						globalFunctions.showError(http_res, group_err);
             					} else {
-						            console.log(images);
             						http_res.render('admin/edit', {
 							            locals: {
 											doc: doc,
 											groups: groups,
-											images: images,
+											images: null,
 											url: url
 							            },
 							            layout: "layout-admin.jade"
             						});
             					}
             				});
+				    /*
 			            }
-			        })
+			        })*/
 			    }
 			}
 		});

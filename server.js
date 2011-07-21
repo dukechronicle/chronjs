@@ -142,11 +142,14 @@ config.sync(function() {
             					if(group_err) {
             						globalFunctions.showError(http_res, group_err);
             					} else {
+						            console.log(images);
             						http_res.render('admin/edit', {
-            							locals: {doc: doc,
-            									 groups: groups,
-            									 images: images,
-            									 url: url},
+							            locals: {
+											doc: doc,
+											groups: groups,
+											images: images,
+											url: url
+							            },
 							            layout: "layout-admin.jade"
             						});
             					}

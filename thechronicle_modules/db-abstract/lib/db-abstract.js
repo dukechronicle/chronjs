@@ -20,7 +20,7 @@ function connect(database) {
 	}); 
 	
 	var db = conn.database(database);
-
+	db_design.createViews(db);
 	// initialize database if it doesn't already exist
 	db.exists(function (error,exists)
 	{

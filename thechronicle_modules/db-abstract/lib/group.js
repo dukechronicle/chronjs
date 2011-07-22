@@ -1,5 +1,6 @@
 var db = require('./db-abstract');
 var nimble = require('nimble');
+var _ = require("underscore");
 
 var group = exports;
 
@@ -20,13 +21,32 @@ group.list = function(options, callback) {
 	        callback(err, res);
 	    }
 	);
-}
+};
 
-group.docs = function(namespace, groupName, callback) {
-	db.view('articles/group_docs', {
-        key: [namespace, groupName]
-    }, 
+group.docs = function(namespace, groups, callback) {
+	var query = {};
+	console.log(namespace);
+	if (groups === null) {
+		// fetch all docs in namespace
+		query.startKey = [namespace];
+		query.endKey = [namespace, {}];
+	} else {
+		// fetch all docs in groups
+		if (!_.isArray(groups)) {
+			groups = [groups];
+		}
+
+		query.keys = [];
+		groups.forEach(function(group) {
+			query.keys.push([namespace, group]);
+		});
+	}
+
+	console.log(query);
+	db.view('articles/group_docs', query,
     function(err, res) {
+	    console.log(res);
+	    if (err) callback(err);
     	if (res) {
     		// fetch each child document after getting their id
 	        nimble.map(res, function(docId, cbck) {

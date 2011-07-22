@@ -1,12 +1,8 @@
 h1 The Chronicle
 | You're actually reading this?
-a(id='lol', data-disqus-identifier='a50b2a8b2cd17214a6dc7e6438000182', href='/#disqus_thread') hello
 - each docs, group_name in groups
   div.bin
     h4 #{group_name}
     - each doc in docs
       p
-        a(href='article/' + doc.urls[doc.urls.length - 1] + '#disqus_thread', data-disqus-identifier=doc.id) #{doc.title}
-script(src='/js/disqus.js', type='text/javascript')
-script
-      loadDisqus();
+        a(href='article/' + doc.urls[doc.urls.length - 1]) #{doc.title}

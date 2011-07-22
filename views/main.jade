@@ -1,8 +1,0 @@
-h1 The Chronicle
-| You're actually reading this?
-- each docs, group_name in groups
-  div.bin
-    h4 #{group_name}
-    - each doc in docs
-      p
-        a(href='article/' + doc.urls[doc.urls.length - 1]) #{doc.title}

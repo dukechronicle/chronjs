@@ -360,7 +360,7 @@ exports.init = function(app) {
 						type: 'article',
 						text: 'Fizz buzz frizzle'
 					};
-					client.add(doc1);
+					//client.add(doc1);
     					//client.commit(function(err, response) {
 					//	if(!err){console.log('Document added');}
 					//	callback(err,res,url);	

@@ -93,6 +93,13 @@ exports.createViews = function(db) {
 		        emit(doc.photographer, doc);
 		    }
 		}
+	    },
+	    image_versions: {
+	        map: function(doc) {
+	            if(doc.original) {
+	                emit(doc.original, doc);
+	            }
+	        }
 	    }
 	};
 

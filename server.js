@@ -69,18 +69,20 @@ config.sync(function() {
 	});
 
 	app.get('/article-list', function(req, http_res) {
-		api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(err, groups) {
+		api.group.list(['section'], function(err, groups) {
 			if(err) {
 				globalFunctions.showError(http_res, err);
 			} else {
-				api.group.docs(FRONTPAGE_GROUP_NAMESPACE, groups, function(get_err, get_res) {
-					console.log("getting docs in group");
+				api.group.docs(['section'], groups, function(get_err, get_res) {
+					get_res.forEach(function(article) {
+						console.log(article.urls.length);
+					})
 					if(get_err) {
 						globalFunctions.showError(http_res, get_err);
 					} else {
 						http_res.render('main', {
 							locals: {
-								groups: get_res
+								docs: get_res
 							}
 						});
 					}

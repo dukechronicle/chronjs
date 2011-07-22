@@ -55,9 +55,8 @@ group.remove = function(docid, namespace, name, callback) {
     });
 };
 
-group.docs = function(namespace, groupName, callback) {
-
-    db.group.docs(namespace, groupName, callback);
+group.docs = function(namespace, groups, callback) {
+    db.group.docs(namespace, groups, callback);
 };
 
 group.docsN = function(namespace, groupName, baseDocNum, numDocs, callback) {

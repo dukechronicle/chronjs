@@ -73,10 +73,9 @@ config.sync(function() {
 		api.docsByDate(function(err, docs) {
 			if (err) globalFunctions.showError(http_res, err);
 			docs = _.map(docs, function(doc) {
-				console.log(doc.value.title);
 				return doc.value;
 			});
-			http_res.render('all', {locals:{docs:docs}} );
+			http_res.render('all', {locals:{docs:docs}, layout: 'layout-admin.jade'} );
 		});
 		/*
 		api.group.list(['section'], function(err, groups) {

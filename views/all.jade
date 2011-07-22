@@ -1,3 +1,11 @@
-- each doc in docs
-	p
-		a(href='article/' + doc.urls[doc.urls.length - 1]) #{doc.title}
+table
+	th title
+	th section
+	- each doc in docs
+		tr
+			td
+				a(href='article/' + doc.urls[doc.urls.length - 1] + '/edit') #{doc.title}
+			- if (doc.section)
+				td
+					#{doc.section[0]}
+

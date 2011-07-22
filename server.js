@@ -11,8 +11,9 @@ config.sync(function() {
 	require('express-namespace');
 	var stylus = require('stylus');
 	var async = require('async');
+	var _ = require("underscore");
 	var nimble = require('nimble');
-
+	
 	/* require internal nodejs modules */
 	var globalFunctions = require('./thechronicle_modules/global-functions');
 	var api = require('./thechronicle_modules/api/lib/api');
@@ -80,6 +81,15 @@ config.sync(function() {
 	});
 
 	app.get('/article-list', function(req, http_res) {
+		api.docsByDate(function(err, docs) {
+			if (err) globalFunctions.showError(http_res, err);
+			docs = _.map(docs, function(doc) {
+				console.log(doc.value.title);
+				return doc.value;
+			});
+			http_res.render('all', {locals:{docs:docs}} );
+		});
+		/*
 		api.group.list(['section'], function(err, groups) {
 			if(err) {
 				globalFunctions.showError(http_res, err);
@@ -99,7 +109,7 @@ config.sync(function() {
 					}
 				});
 			}
-		});
+		});*/
 	});
 
 	app.get('/article/:url', function(req, http_res) {

@@ -1,4 +1,4 @@
-#article h1{font-size:1.8em;text-shadow:0 1px 1px #fff;margin-bottom:.5em}
+#article h1{font-size:1.8em;text-shadow:0 1px 1px #fff;margin-bottom:.5em;line-height:1.3em}
 #article .content{width:520px;float:left;padding:1em 2em .6em 2em;background:#fff;}
 #article .content p{color:#333;margin-bottom:1em;font-size:1em;line-height:1.6em}
 #article #disqus_thread{float:left;margin-top:2em;width:520px;padding:.5em 2em 0 2em;clear:both;}

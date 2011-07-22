@@ -5,10 +5,8 @@ table
 		tr
 			td
 				a(href='article/' + doc.urls[doc.urls.length - 1] + '/edit') #{doc.title}
-				br
-				a(href='article/' + doc.urls[doc.urls.length - 1] + '#disqus_thread', data-disqus-identifier=doc.id) View Comments
-				br
-				br
+				&nbsp;
+				a(href='article/' + doc.urls[doc.urls.length - 1] + '#disqus_thread', data-disqus-identifier=doc.id) -
 			- if (doc.section)
 				td
 					#{doc.section[0]}

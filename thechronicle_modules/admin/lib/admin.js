@@ -13,6 +13,8 @@ VALID_EXTENSIONS['image/jpeg'] = 'jpg';
 VALID_EXTENSIONS['image/png'] = 'png';
 VALID_EXTENSIONS['image/gif'] = 'gif';
 
+var IMAGE_TYPES = ['article', 'frontpage', 'slideshow'];
+
 var THUMB_DIMENSIONS = '100x100';
 var FRONTPAGE_GROUP_NAMESPACE = ['section','frontpage'];
 
@@ -211,6 +213,7 @@ exports.init = function(app) {
 					                photographer: orig.value.photographer,
 					                date: orig.value.date,
             		                versions: versions,
+            		                imageTypes: IMAGE_TYPES,
             		                article: req.query.article
             		            },
 			                    layout: "layout-admin.jade"
@@ -302,23 +305,40 @@ exports.init = function(app) {
 		});
 		
 		app.post('/edit', function(req, http_res) {
-		    var id = req.body.doc.id;
-		    var new_groups = req.body.doc.groups;
-		    if(!(new_groups instanceof Array)) { //we will get a string if only one box is checked
-		        new_groups = [new_groups];
+		    if(req.body.versionId) {
+		        //adding image to article
+		        
+		        api.docForUrl(req.body.article, function(err, doc) {
+		            var images = doc.images;
+		            if(!images) images = {};
+		            images[req.body.imageType] = req.body.versionId;
+		            api.editDoc(doc._id, {
+		                images: images
+		            },
+		            function(err2, res) {
+		                if(err2) globalFunctions.showError(http_res, err2);
+		                else http_res.redirect('/article/'+ req.body.article + '/edit');
+		            })
+		        });
+		    } else {
+		        var id = req.body.doc.id;
+    		    var new_groups = req.body.doc.groups;
+    		    if(!(new_groups instanceof Array)) { //we will get a string if only one box is checked
+    		        new_groups = [new_groups];
+    		    }
+    		    var fields = {
+    		        title: req.body.doc.title,
+    		        body: req.body.doc.body,
+    		        groups: new_groups
+    		    };
+    		    api.editDoc(id, fields, function(err, res) {
+    		        if(err) {
+    		            globalFunctions.showError(http_res, err);
+    		        } else {
+    		            http_res.redirect('/article/' + res.merge[1] + '/edit');
+    		        }
+    		    });
 		    }
-		    var fields = {
-		        title: req.body.doc.title,
-		        body: req.body.doc.body,
-		        groups: new_groups
-		    };
-		    api.editDoc(id, fields, function(err, res) {
-		        if(err) {
-		            globalFunctions.showError(http_res, err);
-		        } else {
-		            http_res.redirect('/article/' + res.merge[1] + '/edit');
-		        }
-		    });
 		});
 		
 		app.post('/add', function(req, http_res) {

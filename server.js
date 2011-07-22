@@ -11,6 +11,7 @@ config.sync(function() {
 	require('express-namespace');
 	var stylus = require('stylus');
 	var async = require('async');
+	var nimble = require('nimble');
 
 	/* require internal nodejs modules */
 	var globalFunctions = require('./thechronicle_modules/global-functions');
@@ -30,6 +31,16 @@ config.sync(function() {
 	  return stylus(str)
 		.set('filename', path)
 		.set('compress', true);
+	}
+	
+	function _getImages(obj, callback) {
+	    nimble.map(obj, function(val, key, acallback) {
+	        api.docsById(val, function(err, res) {
+	            res.imageType = key;
+	            acallback(err, res)
+	        });
+	    },
+	    callback);
 	}
 
 	// add the stylus middleware, which re-compiles when
@@ -111,37 +122,24 @@ config.sync(function() {
 
 	app.get('/article/:url/edit', function(req, http_res) {
 		var url = req.params.url;
-		console.log("test");
 		api.docForUrl(url, function(err, doc) {
 			if(err) {
 				globalFunctions.showError(http_res, err);
-			} else {
-				console.log("test");
-			    if(req.query.image) {
-			        api.addToDocArray(doc._id, 'images', req.query.image, function(err, res) {
-			            if(err) {
-			                globalFunctions.showError(http_res, err);
-			            } else {
-			                http_res.redirect('/article/' + url + '/edit');
-			            }
-			        })
-			    } 
-			    else if(req.query.deleteImage) {
-			        api.removeFromDocArray(doc._id, 'images', req.query.deleteImage, function(err, res) {
-			            if(err) {
-			                globalFunctions.showError(http_res, err);
-			            } else {
-			                http_res.redirect('/article/' + url + '/edit');
-			            }
-			        })
+			} else { 
+			    if(req.query.deleteImage) {
+			        var newImages = doc.images;
+			        delete newImages[req.query.deleteImage];
+			        api.editDoc(doc._id, newImages, function(editErr, res) {
+			            if(editErr) globalFunctions.showError(http_res, editErr);
+			            else http_res.redirect('/article/' + url + '/edit');
+			        });
 			    }
 			    else {
-				    /*
-			        api.docsById(doc.images, function(err, images) {
-				        console.log("test");
+			        if(!doc.images) doc.images = {};
+			        _getImages(doc.images, function(err, images) {
 			            if(err) {
 			                globalFunctions.showError(http_res, err);
-			            } else {*/
+			            } else {
 			                api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(group_err, groups) {
             					if(group_err) {
             						globalFunctions.showError(http_res, group_err);
@@ -150,16 +148,15 @@ config.sync(function() {
 							            locals: {
 											doc: doc,
 											groups: groups,
-											images: null,
+											images: images,
 											url: url
 							            },
 							            layout: "layout-admin.jade"
             						});
             					}
             				});
-				    /*
 			            }
-			        })*/
+			        })
 			    }
 			}
 		});

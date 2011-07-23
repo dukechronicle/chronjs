@@ -138,6 +138,7 @@ config.sync(function() {
 
 	app.get('/article/:url/edit', function(req, http_res) {
 		var url = req.params.url;
+		
 		api.docForUrl(url, function(err, doc) {
 			if(err) {
 				globalFunctions.showError(http_res, err);
@@ -152,27 +153,31 @@ config.sync(function() {
 			    }
 			    else {
 			        if(!doc.images) doc.images = {};
-			        _getImages(doc.images, function(err, images) {
-			            if(err) {
-			                globalFunctions.showError(http_res, err);
-			            } else {
-			                api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(group_err, groups) {
-            					if(group_err) {
-            						globalFunctions.showError(http_res, group_err);
-            					} else {
-            						http_res.render('admin/edit', {
-							            locals: {
-											doc: doc,
-											groups: groups,
-											images: images,
-											url: url
-							            },
-							            layout: "layout-admin.jade"
-            						});
-            					}
-            				});
+			        
+			        async.waterfall([
+			            function(callback) {
+			                _getImages(doc.images, callback);
+			            },
+			            function(images, callback) {
+			                api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(err, groups) {
+			                    callback(err, groups, images);
+			                });
 			            }
-			        })
+			        ],
+			        function(err, groups, images) {
+			            if(err) globalFunctions.showError(http_res, err);
+			            else {
+			                http_res.render('admin/edit', {
+    				            locals: {
+    								doc: doc,
+    								groups: groups,
+    								images: images,
+    								url: url
+    				            },
+    				            layout: "layout-admin.jade"
+    						});
+			            }
+			        });			        
 			    }
 			}
 		});

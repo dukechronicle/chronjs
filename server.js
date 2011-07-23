@@ -13,6 +13,7 @@ config.sync(function() {
 	var async = require('async');
 	var _ = require("underscore");
 	var nimble = require('nimble');
+	var md = require('node-markdown').Markdown;
 	
 	/* require internal nodejs modules */
 	var globalFunctions = require('./thechronicle_modules/global-functions');
@@ -118,6 +119,10 @@ config.sync(function() {
 			if(err) {
 				globalFunctions.showError(http_res, err);
 			} else {
+			    if(doc.body) {
+			        //Convert body markdown to html
+			        doc.body = md(doc.body);
+			    }
 			    var latestUrl = doc.urls[doc.urls.length - 1];
 			    if(url !== latestUrl) {
 			        http_res.redirect('/article/' + latestUrl);

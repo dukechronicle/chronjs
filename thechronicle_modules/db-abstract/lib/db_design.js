@@ -54,23 +54,22 @@ exports.createViews = function(db) {
 		    }
 		}
 	    },
-	    // list all groups keyed by path
-	    group_list: {
-		map: function(doc) {
-		    if(doc.type == 'group') {
-		        emit([doc.namespace, doc.name], doc);
-		    }
-		}
-	    },
 	    // get the uuid of all children keyed by fully qualified group name
-	    group_docs: {
+	    groups: {
 		map: function(doc) {
-		    if(doc.type == 'group') {
-		        doc.docs.forEach(function(doc_id) {
-		            emit([doc.namespace, doc.name], doc_id);
-		        });
-		    }
-		}
+            if(doc.groups) {
+                doc.groups.forEach(function(group) {
+                    emit(group[0], {weight: group[1], title: doc.title});
+                });
+            }
+		},
+        reduce: function(keys, values, rereduce) {
+          if (rereduce) {
+            return sum(values);
+          } else {
+            return values.length;
+          }
+        }
 	    },
 	    // return articles keyed by date
 	    all_by_date: {

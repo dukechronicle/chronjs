@@ -2,6 +2,10 @@
 
     https://github.com/joyent/node/wiki/Installation
 
+### Install imagemagick
+
+    $ sudo apt-get install imagemagick
+
 ### Clone this repository on to hard drive
 
     $ git clone git@github.com:thechronicle/website.git

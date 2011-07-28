@@ -16,7 +16,7 @@ group.create = function(namespace, name, callback) {
 
 // lists all groups with given query options
 group.list = function(options, callback) {
-    db.view('articles/group_list', options,
+    db.view('articles/groups', options,
 	    function(err, res) {
 	        callback(err, res);
 	    }
@@ -25,7 +25,9 @@ group.list = function(options, callback) {
 
 group.docs = function(namespace, groups, callback) {
 	var query = {};
-	console.log(namespace);
+	query.reduce = false;
+    query.include_docs = true;
+    
 	if (groups === null) {
 		// fetch all docs in namespace
 		query.startKey = [namespace];
@@ -41,21 +43,12 @@ group.docs = function(namespace, groups, callback) {
 			query.keys.push([namespace, group]);
 		});
 	}
-
 	console.log(query);
-	db.view('articles/group_docs', query,
+	db.view('articles/groups', query,
     function(err, res) {
-	    console.log(res);
 	    if (err) callback(err);
     	if (res) {
-    		// fetch each child document after getting their id
-	        nimble.map(res, function(docId, cbck) {
-	            cbck(null, function(acallback) {
-	                db.get(docId.value, acallback);
-	            });
-	        }, function(map_err, map_res) {
-	            nimble.parallel(map_res, callback);
-	        });
+    		callback(null, res);
 	    } else {
 	    	callback(null, []);
 	    }

@@ -23,6 +23,8 @@
 		"redis":            "0.6.x",
 		"hiredis":          "0.1.x",
 		"node-markdown":	"0.1.x",
-		"solr":		    "0.1.x"
+		"solr":		        "0.1.x",
+
+        "expresso":         "0.8.x"
 	}
 }

@@ -1,11 +1,15 @@
 var db = require('./db-abstract');
 
 var taxonomy = exports;
-taxonomy.docs = function(taxonomyPath, callback) {
+taxonomy.docs = function(taxonomyPath, limit, callback) {
     var query = {
         startkey: taxonomyPath,
         endkey: taxonomyPath.concat({})
     };
+
+    if (limit) {
+        query.limit = limit;
+    }
 
     db.view(
         'articles/tree',

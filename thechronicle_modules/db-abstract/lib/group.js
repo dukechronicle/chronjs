@@ -25,9 +25,10 @@ group.list = function(options, callback) {
 
 group.docs = function(namespace, groups, callback) {
 	var query = {};
+
 	query.reduce = false;
     query.include_docs = true;
-    
+
 	if (groups === null) {
 		// fetch all docs in namespace
 		query.startKey = [namespace];
@@ -43,8 +44,10 @@ group.docs = function(namespace, groups, callback) {
 			query.keys.push([namespace, group]);
 		});
 	}
+
 	console.log(query);
 	db.view('articles/groups', query,
+
     function(err, res) {
 	    if (err) callback(err);
     	if (res) {

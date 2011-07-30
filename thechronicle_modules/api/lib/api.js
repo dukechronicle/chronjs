@@ -1,21 +1,22 @@
 var api = {};
 var exports = module.exports = api;
 
-var nimble = require('nimble');
-var async = require('async');
-var db = require('../../db-abstract');
+var nimble = require("nimble");
+var async = require("async");
+var db = require("../../db-abstract");
 
-api.group = require('./group');
-api.image = require('./image');
+api.group = require("./group");
+api.image = require("./image");
+api.taxonomy = require("./taxonomy");
 
 var MAX_URL_LENGTH = 50;
 
 function getAvailableUrl(url, n, callback) {
     var new_url = url;
     if(n != 0) {
-        new_url = new_url + '-' + n;
+        new_url = new_url + "-" + n;
     }
-    db.view('articles/urls', {key: new_url}, function(err, res) {
+    db.view("articles/urls", {key: new_url}, function(err, res) {
         if(err) {
             callback(err, null);
         }
@@ -40,12 +41,12 @@ function _URLify(s, maxChars) {
                   "since", "than", "the", "this", "that", "to", "up", "via",
                   "with"];
     
-	r = new RegExp('\\b(' + removelist.join('|') + ')\\b', 'gi');
-    s = s.replace(r, '');
+	r = new RegExp("\\b(" + removelist.join("|") + ")\\b", "gi");
+    s = s.replace(r, "");
 	
-    s = s.replace(/[^-\w\s]/g, '');  // remove unneeded chars
-    s = s.replace(/^\s+|\s+$/g, ''); // trim leading/trailing spaces
-    s = s.replace(/[-\s]+/g, '-');   // convert spaces to hyphens
+    s = s.replace(/[^-\w\s]/g, "");  // remove unneeded chars
+    s = s.replace(/^\s+|\s+$/g, ""); // trim leading/trailing spaces
+    s = s.replace(/[-\s]+/g, "-");   // convert spaces to hyphens
     s = s.toLowerCase();             // convert to lowercase
     return s.substring(0, maxChars);// trim to first num_chars chars
 }
@@ -53,7 +54,7 @@ function _URLify(s, maxChars) {
 api.getArticles= function(parent_node, count, callback) {
     var start = [parent_node];
     var end = [parent_node, {}];
-    db.view('articles/descendants', {
+    db.view("articles/descendants", {
         startkey: start,
         endkey: end,
         limit: count
@@ -94,12 +95,12 @@ api.editDoc = function(docid, fields, callback) {
     var fcns = {};
     var groups = fields.groups;
     if(fields.groups) {
-        fcns['groups'] = function(acallback) {
+        fcns["groups"] = function(acallback) {
             _edit_group(docid, groups, acallback);
         };
         delete fields.groups; //we will edit this field in group.edit
     }
-    fcns['merge'] = function(acallback) {
+    fcns["merge"] = function(acallback) {
         _editDocument(docid, fields, acallback);
     };
     nimble.series(fcns, callback);
@@ -110,7 +111,7 @@ api.docsById = function(id, callback) {
 };
 
 api.docsByAuthor = function(author, callback) {
-    db.view('articles/authors', {
+    db.view("articles/authors", {
         startkey: author,
         endkey: author
     }, 
@@ -145,7 +146,7 @@ api.addNode = function(parent_path, name, callback) {
 }
 
 api.docForUrl = function(url, callback) {
-    db.view('articles/urls', {
+    db.view("articles/urls", {
         key: url
     },
     function(err, res) {
@@ -160,7 +161,7 @@ api.docForUrl = function(url, callback) {
 }
 
 api.docsByDate = function(callback) {
-    db.view('articles/all_by_date', {descending: true}, callback);
+    db.view("articles/all_by_date", {descending: true}, callback);
 }
 
 api.addToDocArray = function(id, field, toAdd, callback) {
@@ -190,9 +191,9 @@ api.removeFromDocArray = function(id, field, toRemove, callback) {
             var arr = doc[field];
             var fields = {};
             if(!arr) {
-                acallback('Field does not exist');
+                acallback("Field does not exist");
             } else if(arr.indexOf(toRemove) == -1) {
-                acallback('Item not in array');
+                acallback("Item not in array");
             } else {
                 arr.splice(arr.indexOf(toRemove), 1);
                 fields[field] = arr;

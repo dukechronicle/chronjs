@@ -105,18 +105,6 @@ api.editDoc = function(docid, fields, callback) {
     nimble.series(fcns, callback);
 }
 
-api.getTaxonomy = function(callback) {
-    db.view('articles/tree',
-    function(err, res) {
-        if (err) {
-            callback(err, res);
-        }
-        else {
-            callback(err, res[0]["value"]);
-        }
-    });
-};
-
 api.docsById = function(id, callback) {
     db.get(id, callback);
 };

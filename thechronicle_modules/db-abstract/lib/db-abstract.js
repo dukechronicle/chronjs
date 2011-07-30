@@ -41,4 +41,5 @@ _.extend(db, connect(DATABASE));
 
 db.group = require('./group.js');
 db.image = require('./image.js');
+db.taxonomy = require('./taxonomy.js');
 

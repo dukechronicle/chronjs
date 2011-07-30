@@ -2,9 +2,9 @@ exports.createViews = function(db) {
 	var views = {
 	    descendants: {
 		map: function(doc) {
-		    if (doc.title) {
-		        for (var i in doc.path) {
-		            emit([doc.path[i], doc.path], doc)
+		    if (doc.taxonomy) {
+		        for (var i in doc.taxonomy) {
+		            emit([doc.taxonomy[i], doc.path], doc)
 		        }
 		    }
 		}

@@ -11,28 +11,9 @@ exports.createViews = function(db) {
 	    },
 	    tree: {
 		map: function(doc) {
-		    if (doc.type == "node") {
-		        emit(doc.path, doc)
+		    if (doc.taxonomy) {
+		        emit(doc.taxonomy, doc)
 		    }
-		},
-		reduce: function(keys, vals, rereduce) {
-		    if (rereduce) {
-		        return {};
-		    }
-		    tree = {};
-		    for (var i in vals)
-		    {
-		        current = tree;
-		        for (var j in vals[i].path)
-		        {
-		            child = vals[i].path[j];
-		            if (current[child] == undefined) {
-		                current[child] = {};
-		            }
-		            current = current[child];
-		        }
-		    }
-		    return tree;
 		}
 	    },
 	    // return all doc ids keyed by doc url if one exists

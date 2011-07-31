@@ -25,19 +25,24 @@ function _getImages(obj, callback) {
 }
 
 function fetchGroup(groupName, title, callback) {
-	api.group.docs(FRONTPAGE_GROUP_NAMESPACE, groupName, function(err, result) {
+	api.group.docs(FRONTPAGE_GROUP_NAMESPACE, groupName, function(err, res) {
+        if (err) console.log(err);
+        
 		var groupDocs = {
 			"title": title,
 			"stories": []
 		};
-		result.forEach(function (article, index, array) {
-			article.url = "/article/" + article.urls[article.urls.length - 1];
-			if (index === 0) article.cssClass = "first";
-			if (index === array.length) article.cssClass = "last";
-			groupDocs.stories.push(article);
-		});
-
-		callback(err, groupDocs);
+        if (res) {
+            res.forEach(function (article, index, array) {
+                // canonical url is the last element of the url array
+                article.url = "/article/" + article.urls[article.urls.length - 1];
+                if (index === 0) article.cssClass = "first";
+                if (index === array.length) article.cssClass = "last";
+                groupDocs.stories.push(article);
+            });
+            console.log("finished");
+            callback(err, groupDocs);
+        }
 	});
 }
 

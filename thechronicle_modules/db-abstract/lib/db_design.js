@@ -40,7 +40,7 @@ exports.createViews = function(db) {
 		map: function(doc) {
             if(doc.groups) {
                 doc.groups.forEach(function(group) {
-                    emit(group[0], {weight: group[1], title: doc.title});
+                    emit(group, {title: doc.title});
                 });
             }
 		},

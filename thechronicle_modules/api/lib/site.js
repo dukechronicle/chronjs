@@ -11,7 +11,7 @@ var nimble = require('nimble');
 var fs = require('fs');
 var md = require('node-markdown').Markdown;
 
-var FRONTPAGE_GROUP_NAMESPACE = ['section','frontpage'];
+var FRONTPAGE_GROUP_NAMESPACE = ['Layouts','Frontpage'];
 var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
 
 function _getImages(obj, callback) {
@@ -27,7 +27,7 @@ function _getImages(obj, callback) {
 function fetchGroup(groupName, title, callback) {
 	api.group.docs(FRONTPAGE_GROUP_NAMESPACE, groupName, function(err, res) {
         if (err) console.log(err);
-        
+
 		var groupDocs = {
 			"title": title,
 			"stories": []
@@ -38,9 +38,9 @@ function fetchGroup(groupName, title, callback) {
                 article.url = "/article/" + article.urls[article.urls.length - 1];
                 if (index === 0) article.cssClass = "first";
                 if (index === array.length) article.cssClass = "last";
+                
                 groupDocs.stories.push(article);
             });
-            console.log("finished");
             callback(err, groupDocs);
         }
 	});

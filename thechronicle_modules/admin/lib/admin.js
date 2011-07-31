@@ -16,7 +16,7 @@ VALID_EXTENSIONS['image/gif'] = 'gif';
 var IMAGE_TYPES = ['article', 'frontpage', 'slideshow'];
 
 var THUMB_DIMENSIONS = '100x100';
-var FRONTPAGE_GROUP_NAMESPACE = ['section','frontpage'];
+var FRONTPAGE_GROUP_NAMESPACE = ['Layouts','Frontpage'];
 
 function _getMagickString(x1, y1, x2, y2) {
     var w = x2 - x1;
@@ -60,12 +60,36 @@ function _deleteFiles(paths, callback) {
 
 exports.init = function(app) {
 	app.namespace('/admin', function() {
-		app.get('/addgroup', function(req, http_res) {
-		    api.group.create(FRONTPAGE_GROUP_NAMESPACE, req.query.addgroup, function(err, res) {
+
+        app.get('/layout/frontpage', function(req, res) {
+            api.docsByDate(function(err, docs) {
+                if (err) globalFunctions.showError(res, err);
+                
+                res.render('admin/layout/frontpage', {
+                        layout: "layout-admin.jade",
+                        locals: {"stories": docs}
+                });
+            });
+
+        });
+
+        app.post('/layout/frontpage', function(req, res) {
+            res.render('/');
+        });
+
+		app.post('/group/add', function(req, res) {
+            var _res = res;
+
+            var docId = req.body.docId;
+            var nameSpace = req.body.nameSpace;
+            var groupName = req.body.groupName;
+            var weight = req.body.weight;
+            
+		    api.group.add(nameSpace, groupName, docId, weight, function(err, res) {
 		        if(err) {
-		            globalFunctions.showError(http_res, err);
+		            _res.send("false");
 		        } else {
-		            http_res.redirect('/admin/add');
+		            _res.send("true");
 		        }
 		    })
 		});
@@ -349,10 +373,25 @@ exports.init = function(app) {
 			    title: form.title,
 				teaser: form.teaser
 		    };
+
+            var groups = req.body.doc.groups;
+            if(groups) {
+                // we will get a string if only one box is checked
+                if(!(groups instanceof Array)) {
+                        groups = [groups];
+                }
+                groups.map(function(group) {
+                    fullyQualifiedName = [FRONTPAGE_GROUP_NAMESPACE, group];
+                    return [fullyQualifiedName, null];
+                });
+
+                fields.groups = groups;
+            }
+
 			async.waterfall([
-		        	function(callback) {
-		            		api.addDoc(fields, callback);
-		        	},
+		        function(callback) {
+		            api.addDoc(fields, callback);
+		        },
 				function(res,url,callback) {
 					var client = solr.createClient('http://index-east.websolr.com/','80','/c1af51aeb37','/solr');
 					var doc1 = {
@@ -366,23 +405,6 @@ exports.init = function(app) {
 					//	callback(err,res,url);	
 					//});
 					callback(null,res,url);
-				},
-				function(res,url,callback) {
-					var groups = req.body.doc.groups;
-		            		if(groups) {
-		                		var fcns = [];
-		                		if(!(groups instanceof Array)) { //we will get a string if only one box is checked
-		                    			groups = [groups];
-		                		}
-						groups.forEach(function(group) {
-		                			api.group.add(res.id, FRONTPAGE_GROUP_NAMESPACE, group, function(add_err, add_res) {
-			        	            		if(add_err) {
-									callback(add_err);
-						  		}
-			        	        	});
-						});
-		           		 }
-					 callback(null,url);
 				}
 			],
 		    	function(err, url) {

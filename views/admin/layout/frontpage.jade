@@ -1,0 +1,33 @@
+link(rel='stylesheet', href='/admin/layout/styles.css')
+script(src='/js/admin/layout.js')
+
+h2 Frontpage Layout
+
+#layout
+    <h2>Slideshow</h2>
+    #slideshow.container(data-group='[["Layouts", "Frontpage"], "Slideshow"]')
+    
+    <h2>Headlines</h2>
+    #headlines.container(data-group='[["Layouts", "Frontpage"], "Headlines"]')
+
+    <h2>Opinion</h2>
+    #opinion.container(data-group='[["Layouts", "Frontpage"], "Opinion"]')
+
+    <h2>News</h2>
+    #news.container(data-group='[["Layouts", "Frontpage"], "News"]')
+
+    <h2>Sports</h2>
+    #sports.container(data-group='[["Layouts", "Frontpage"], "Sports"]')
+
+    <h2>Recess</h2>
+    #recess.container(data-group='[["Layouts", "Frontpage"], "Recess"]')
+
+    <h2>Towerview</h2>
+    #towerview.container(data-group='[["Layouts", "Frontpage"], "Towerview"]')
+
+#stories
+    - each story, id in stories
+        .story(draggable="true", id="#{story._id}")
+            #{story.title}
+
+

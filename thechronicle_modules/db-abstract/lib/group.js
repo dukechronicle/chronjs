@@ -23,29 +23,22 @@ group.list = function(options, callback) {
 	);
 };
 
-group.docs = function(namespace, groups, callback) {
+// fetch documents from namespace or groups
+group.docs = function(namespace, group, callback) {
 	var query = {};
 
 	query.reduce = false;
     query.include_docs = true;
 
-	if (groups === null) {
+	if (group === null) {
 		// fetch all docs in namespace
-		query.startKey = [namespace];
-		query.endKey = [namespace, {}];
+		query.startKey = [[namespace]];
+		query.endKey = [[namespace], {}];
 	} else {
-		// fetch all docs in groups
-		if (!_.isArray(groups)) {
-			groups = [groups];
-		}
-
-		query.keys = [];
-		groups.forEach(function(group) {
-			query.keys.push([namespace, group]);
-		});
+		query.startKey = [[namespace], group];
+		query.endKey = [namespace, group, {}];
 	}
-
-	console.log(query);
+    
 	db.view('articles/groups', query,
 
     function(err, res) {
@@ -93,33 +86,47 @@ group.docsN = function(namespace, groupName, baseDocNum, numDocs, callback) {
 
 
 // add document to group
-group.add = function (docId, namespace, groupName, callback) {
-    //check if group exists
-    db.group.list({
-        key: [namespace, groupName]
-    },
-    function(err, res) {
-        if(err) {
-            callback(err, null);
-        }
-        else if (res.length == 0) {
-            callback("group does not exist", null);
-        }
-        else {
-        	// if group exists and doc isn't already in group 
-        	// add docid to children array of group
-        	var groupDoc = res[0];
-            var docs = groupDoc.value.docs;
-            if (docs.indexOf(docId) != -1) {
-                callback("Document already in this group", null);
-            } else {
-                docs.push(docId);
-				//update group document
-			    db.merge(groupDoc.id, {
-			        docs: docs
-			    }, callback);
+group.add = function (nameSpace, groupName, docId, weight, callback) {
+
+    db.get(docId, function(err, doc) {
+        if(err) callback(err);
+
+        var groups = doc.groups
+        if (!groups) groups = [];
+
+        // remove existing entry
+        var updated = false;
+        _.map(groups, function(groupEntry) {
+            // [nameSpace, groupName, weight]
+            // need toString to compare arrays
+            if (groupEntry[0].toString() == nameSpace.toString() &&
+                groupEntry[1] == groupName) {
+                groupEntry[2] = weight;
+                updated = true;
             }
+            return groupEntry;
+        });
+
+        if (!updated) {
+            groups.push([nameSpace, groupName, weight]);
         }
+
+        console.log("merging");
+        console.log(groups);
+        db.merge(docId, {
+                groups: groups
+        }, callback);
+        /*
+        var docs = groupDoc.value.docs;
+        if (docs.indexOf(docId) != -1) {
+            callback("Document already in this group", null);
+        } else {
+            docs.push(docId);
+            //update group document
+            db.merge(groupDoc.id, {
+                docs: docs
+            }, callback);
+        }*/
     });
 }
 

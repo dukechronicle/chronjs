@@ -26,7 +26,7 @@ group.list = function(namespace, callback) {
         }
     });
 };
-
+/*
 group.create = function(namespace, name, callback) {
     //check if group exists
     db.group.list({
@@ -54,9 +54,28 @@ group.remove = function(docid, namespace, name, callback) {
         nimble.series(map_res, callback);
     });
 };
+*/
+group.docs = function(namespace, group, callback) {
+    db.group.docs(namespace, group, function(err, res) {
+        // if querying name space, map each group to it's own object
+        if (err) callback(err);
+        else {
+            if (!group) {
+                var groupedResults = {};
+                for (var i = 0; i < res.length; i++) {
+                    var doc = res[i];
+                    var groupName = doc.key[1];
+                    if (!groupedResults[groupName]) {
+                        groupedResults[groupName] = [];
+                    }
+                    groupedResults[groupName].push(doc.doc);
+                }
 
-group.docs = function(namespace, groups, callback) {
-    db.group.docs(namespace, groups, callback);
+                console.log(groupedResults);
+                callback(null, groupedResults);
+            }
+        }
+    });
 };
 
 group.docsN = function(namespace, groupName, baseDocNum, numDocs, callback) {
@@ -71,6 +90,10 @@ group.docsN = function(namespace, groupName, baseDocNum, numDocs, callback) {
     });
 };
 
+
+group.add = function(nameSpace, groupName, docId, weight, callback) {
+    db.group.add(nameSpace, groupName, docId, weight, callback);
+};
 
 /*
 function _editGroup(docid, new_groups, callback) {

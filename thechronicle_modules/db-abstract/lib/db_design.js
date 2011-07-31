@@ -55,7 +55,7 @@ exports.createViews = function(db) {
 	    // return articles keyed by date
 	    all_by_date: {
 		map: function(doc) {
-		    if(doc.title && doc.urls) {
+		    if(doc.urls) {
 		        emit(doc.created, doc);
 		    }
 		}

@@ -21,10 +21,17 @@ $(function() {
     $("#layout").delegate(".container", "drop", function(e) {
         if (e.stopPropagation) e.stopPropagation();
 
-        var element = $("#" + e.dataTransfer.getData("Text"));
+
+        var docId = e.dataTransfer.getData("Text");
+        var groupName = $(this).data("groupname");
+        var nameSpace = ["Layouts", "Frontpage"];
+
+        var element = $("#" + docId);
 
         element.addClass("exists");
         $(this).append(element.get(0));
+        console.log(groupName);
+        $.post("/admin/group/add", {docId: docId, groupName: groupName, nameSpace: nameSpace, weight: 0});
         
         $(this).removeClass("over");
     });

@@ -42,14 +42,16 @@ $(function() {
         element.attr("draggable", false);
         //$(this).append(element.get(0));
 
-
-
-        $.post("/admin/group/add", {
-            docId: docId,
-            groupName: $(this).data("groupname"),
-            nameSpace: ["Layouts", "Frontpage"],
-            weight: containerElement.index()
-        });
+        if (element.parent().data("groupname") !== $(this).data("groupname")) {
+            removeFromPrevious(docId, element, $(this).data("groupname"), containerElement);
+        } else {
+            $.post("/admin/group/add", {
+                docId: docId,
+                groupName: $(this).data("groupname"),
+                nameSpace: ["Layouts", "Frontpage"],
+                weight: containerElement.index()
+            });
+        }
         
         $(this).removeClass("over");
     });
@@ -66,33 +68,7 @@ $(function() {
 
         // story has changed groups
         if (element.parent().data("groupname") !== $(this).parent().data("groupname")) {
-            var oldElementParent = element.parent();
-            nextSibling = element.next();
-
-            $.post("/admin/group/remove", {
-                docId: element.attr("id"),
-                groupName: oldElementParent.data("groupname"),
-                nameSpace: ["Layouts", "Frontpage"]
-            }, function() {
-                $.post("/admin/group/add", {
-                docId: docId,
-                groupName: $(_this).parent().data("groupname"),
-                nameSpace: ["Layouts", "Frontpage"],
-                weight: newElement.index()
-            });
-            });
-            element.remove();
-
-            if (nextSibling.length>0) {
-                do {
-                    $.post("/admin/group/add", {
-                        docId: nextSibling.attr("id"),
-                        groupName: oldElementParent.data("groupname"),
-                        nameSpace: ["Layouts", "Frontpage"],
-                        weight: nextSibling.index()
-                    });
-                } while ((nextSibling = nextSibling.next()) && (nextSibling.length > 0));
-            }
+            removeFromPrevious(docId, element, $(_this).parent().data("groupname"), newElement);
         } else {
 
             $.post("/admin/group/add", {
@@ -122,6 +98,34 @@ $(function() {
         console.log("dragstart"); 
     });
 
+    function removeFromPrevious(docId, element, newGroupName, newElement) {
+        var oldElementParent = element.parent();
+            nextSibling = element.next();
 
+            $.post("/admin/group/remove", {
+                docId: element.attr("id"),
+                groupName: oldElementParent.data("groupname"),
+                nameSpace: ["Layouts", "Frontpage"]
+            }, function() {
+                $.post("/admin/group/add", {
+                docId: docId,
+                groupName: newGroupName,
+                nameSpace: ["Layouts", "Frontpage"],
+                weight: newElement.index()
+            });
+            });
+            element.remove();
+
+            if (nextSibling.length>0) {
+                do {
+                    $.post("/admin/group/add", {
+                        docId: nextSibling.attr("id"),
+                        groupName: oldElementParent.data("groupname"),
+                        nameSpace: ["Layouts", "Frontpage"],
+                        weight: nextSibling.index()
+                    });
+                } while ((nextSibling = nextSibling.next()) && (nextSibling.length > 0));
+            }
+    }
 });
 

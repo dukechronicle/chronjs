@@ -95,6 +95,10 @@ group.add = function(nameSpace, groupName, docId, weight, callback) {
     db.group.add(nameSpace, groupName, docId, weight, callback);
 };
 
+group.remove = function(nameSpace, groupName, docId, callback) {
+    db.group.remove(nameSpace, groupName, docId, callback);
+};
+
 /*
 function _editGroup(docid, new_groups, callback) {
 	console.log(docid);

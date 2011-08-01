@@ -47,10 +47,9 @@ function fetchGroup(groupName, title, callback) {
 }
 
 site.renderRoot = function(req, res) {
-    fetchGroup("opinion", "Opinion", function(err, groupDocs) {
-		homeModel.opinion = groupDocs;
+
 		res.render('index', {filename: 'views/index.jade', model: homeModel});
-	});
+
 };
 
 site.renderArticleList = function(req, http_res) {

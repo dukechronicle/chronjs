@@ -62,12 +62,19 @@ exports.init = function(app) {
 	app.namespace('/admin', function() {
 
         app.get('/layout/frontpage', function(req, res) {
+            // TODO make requests concurrent
             api.docsByDate(function(err, docs) {
                 if (err) globalFunctions.showError(res, err);
-                
-                res.render('admin/layout/frontpage', {
-                        layout: "layout-admin.jade",
-                        locals: {"stories": docs}
+                var stories = docs;
+                api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, model) {
+                    console.log(model);
+                    res.render('admin/layout/frontpage', {
+                            layout: "layout-admin.jade",
+                            locals: {
+                                stories: stories,
+                                model: model
+                            }
+                    });
                 });
             });
 
@@ -86,6 +93,22 @@ exports.init = function(app) {
             var weight = req.body.weight;
             
 		    api.group.add(nameSpace, groupName, docId, weight, function(err, res) {
+		        if(err) {
+		            _res.send("false");
+		        } else {
+		            _res.send("true");
+		        }
+		    })
+		});
+
+        app.post('/group/remove', function(req, res) {
+            var _res = res;
+
+            var docId = req.body.docId;
+            var nameSpace = req.body.nameSpace;
+            var groupName = req.body.groupName;
+
+		    api.group.remove(nameSpace, groupName, docId, function(err, res) {
 		        if(err) {
 		            _res.send("false");
 		        } else {

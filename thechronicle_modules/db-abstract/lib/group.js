@@ -102,6 +102,7 @@ group.add = function (nameSpace, groupName, docId, weight, callback) {
             if (groupEntry[0].toString() == nameSpace.toString() &&
                 groupEntry[1] == groupName) {
                 groupEntry[2] = weight;
+                console.log(updated);
                 updated = true;
             }
             return groupEntry;
@@ -110,7 +111,7 @@ group.add = function (nameSpace, groupName, docId, weight, callback) {
         if (!updated) {
             groups.push([nameSpace, groupName, weight]);
         }
-
+        console.log("adding " + doc.title + " to " + groupName);
         db.merge(docId, {
                 groups: groups
         }, callback);

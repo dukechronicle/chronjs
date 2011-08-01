@@ -14,7 +14,7 @@ config.sync(function() {
 	var api = require('./thechronicle_modules/api/lib/api');
 	var site = require('./thechronicle_modules/api/lib/site');
 	var admin = require('./thechronicle_modules/admin/lib/admin');
-
+    var mobileapi = require('./thechronicle_modules/mobileapi/lib/mobileapi');
 	/* express configuration */
 	var app = express.createServer();
 
@@ -57,11 +57,11 @@ config.sync(function() {
 	app.get('/article/:url', site.renderArticle);
 	app.get('/article/:url/edit', site.renderArticleEdit);
 	app.get('/article/:url/image', site.renderImageList);
-	app.get('/mobile/:groupname', site.renderMobileGroup);
 	/*** !FRONTEND ***/
 	
 	/*** ADMIN ***/
 	app = admin.init(app);
+    app = mobileapi.init(app);
 
 	/*** !ADMIN ***/
 

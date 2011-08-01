@@ -96,7 +96,7 @@ group.add = function (nameSpace, groupName, docId, weight, callback) {
 
         // remove existing entry
         var updated = false;
-        _.map(groups, function(groupEntry) {
+        groups = groups.map(function(groupEntry) {
             // [nameSpace, groupName, weight]
             // need toString to compare arrays
             if (groupEntry[0].toString() == nameSpace.toString() &&
@@ -111,48 +111,39 @@ group.add = function (nameSpace, groupName, docId, weight, callback) {
             groups.push([nameSpace, groupName, weight]);
         }
 
-        console.log("merging");
-        console.log(groups);
         db.merge(docId, {
                 groups: groups
         }, callback);
-        /*
-        var docs = groupDoc.value.docs;
-        if (docs.indexOf(docId) != -1) {
-            callback("Document already in this group", null);
-        } else {
-            docs.push(docId);
-            //update group document
-            db.merge(groupDoc.id, {
-                docs: docs
-            }, callback);
-        }*/
+
     });
 }
 
-group.remove = function(docId, namespace, group, callback) {
-    //check if group exists
-    db.group.list({
-        key: [namespace, group]
-    },
-    function(err, res) {
-        if (res.length == 0) {
-            callback("group does not exist", null);
-        }
-        else {
-        	var groupDoc = res[0];
-            var docs = groupDoc.value.docs;
-            if (docs.indexOf(docId) == -1) {
-                callback("Document not in this group", null);
+// add document to group
+group.remove = function (nameSpace, groupName, docId, callback) {
+    db.get(docId, function(err, doc) {
+        if(err) callback(err);
+
+        var groups = doc.groups
+        if (!groups) groups = [];
+
+        // remove existing entry
+        var updated = false;
+        groups = groups.map(function(groupEntry) {
+            // [nameSpace, groupName, weight]
+            // need toString to compare arrays
+            if (groupEntry[0].toString() == nameSpace.toString() &&
+                groupEntry[1] == groupName) {
+                updated = true;
+                return null;
             }
-            else {
-                arr.splice(arr.indexOf(obj), 1);
-			    
-			    //update group document
-			    db.merge(groupDoc.id, {
-			        docs: docs
-			    }, callback);
-            }
+            console.log("keeping" + groupEntry);
+            return groupEntry;
+        });
+
+        if (updated) {
+            db.merge(docId, {
+                    groups: _.compact(groups)
+            }, callback);
         }
     });
 }

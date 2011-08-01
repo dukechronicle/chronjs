@@ -340,6 +340,22 @@ exports.init = function(app) {
     		    });
 		    }
 		});
+
+		// test the solr search functionality. Currently only returns the ids of articles with the exact title specified to the console.
+		app.get('/search/:articleTitle', function(req, http_res) {
+			// spaces must be replaced with dashes to be able to match			
+			var title = req.params.articleTitle.replace(' ','-');			
+			var query = "q=title_text:'"+title+"'";
+			console.log(query);
+			var client = solr.createClient('index.websolr.com','80','/c1af51aeb37','/solr');
+			client.rawQuery(query, function(err,response) {
+				if(err) {
+					console.log(err);
+				}
+				console.log(response);
+				http_res.redirect('/');
+			});
+		});
 		
 		app.post('/add', function(req, http_res) {
 			var form = req.body.doc;
@@ -347,27 +363,31 @@ exports.init = function(app) {
 			    body: form.body,
 			    author: form.author,
 			    title: form.title,
-				teaser: form.teaser
-		    };
+			    teaser: form.teaser
+		   	 };
 			async.waterfall([
 		        	function(callback) {
 		            		api.addDoc(fields, callback);
 		        	},
 				function(res,url,callback) {
-					var client = solr.createClient('http://index-east.websolr.com/','80','/c1af51aeb37','/solr');
-					var doc1 = {
-						id: '1',
+					// adds the article to the solr database for searching	
+					var client = solr.createClient('index.websolr.com','80','/c1af51aeb37','/solr');
+					var solrDoc = {
+						id: res.id,
 						type: 'article',
-						text: 'Fizz buzz frizzle'
+						title_text: fields.title,
+						body_text: fields.body
 					};
-					//client.add(doc1);
-    					//client.commit(function(err, response) {
-					//	if(!err){console.log('Document added');}
-					//	callback(err,res,url);	
-					//});
-					callback(null,res,url);
+					client.add(solrDoc, function(err, response) {
+						callback(err,response,res.id,url,client);
+					});
 				},
-				function(res,url,callback) {
+				function(res,id,url,client,callback) {
+					client.commit(function(err, response) {							
+						callback(err,response,id,url);
+					});
+				},
+				function(res,id,url,callback) {
 					var groups = req.body.doc.groups;
 		            		if(groups) {
 		                		var fcns = [];
@@ -375,7 +395,7 @@ exports.init = function(app) {
 		                    			groups = [groups];
 		                		}
 						groups.forEach(function(group) {
-		                			api.group.add(res.id, FRONTPAGE_GROUP_NAMESPACE, group, function(add_err, add_res) {
+		                			api.group.add(id, FRONTPAGE_GROUP_NAMESPACE, group, function(add_err, add_res) {
 			        	            		if(add_err) {
 									callback(add_err);
 						  		}

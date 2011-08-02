@@ -16,7 +16,7 @@ VALID_EXTENSIONS['image/gif'] = 'gif';
 var IMAGE_TYPES = ['article', 'frontpage', 'slideshow'];
 
 var THUMB_DIMENSIONS = '100x100';
-var FRONTPAGE_GROUP_NAMESPACE = ['section','frontpage'];
+var FRONTPAGE_GROUP_NAMESPACE = ['Layouts','Frontpage'];
 
 function _getMagickString(x1, y1, x2, y2) {
     var w = x2 - x1;
@@ -60,12 +60,59 @@ function _deleteFiles(paths, callback) {
 
 exports.init = function(app) {
 	app.namespace('/admin', function() {
-		app.get('/addgroup', function(req, http_res) {
-		    api.group.create(FRONTPAGE_GROUP_NAMESPACE, req.query.addgroup, function(err, res) {
+
+        app.get('/layout/frontpage', function(req, res) {
+            // TODO make requests concurrent
+            api.docsByDate(function(err, docs) {
+                if (err) globalFunctions.showError(res, err);
+                var stories = docs;
+                api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, model) {
+                    console.log(model);
+                    res.render('admin/layout/frontpage', {
+                            layout: "layout-admin.jade",
+                            locals: {
+                                stories: stories,
+                                model: model
+                            }
+                    });
+                });
+            });
+
+        });
+
+        app.post('/layout/frontpage', function(req, res) {
+            res.render('/');
+        });
+
+		app.post('/group/add', function(req, res) {
+            var _res = res;
+
+            var docId = req.body.docId;
+            var nameSpace = req.body.nameSpace;
+            var groupName = req.body.groupName;
+            var weight = req.body.weight;
+            
+		    api.group.add(nameSpace, groupName, docId, weight, function(err, res) {
 		        if(err) {
-		            globalFunctions.showError(http_res, err);
+		            _res.send("false");
 		        } else {
-		            http_res.redirect('/admin/add');
+		            _res.send("true");
+		        }
+		    })
+		});
+
+        app.post('/group/remove', function(req, res) {
+            var _res = res;
+
+            var docId = req.body.docId;
+            var nameSpace = req.body.nameSpace;
+            var groupName = req.body.groupName;
+
+		    api.group.remove(nameSpace, groupName, docId, function(err, res) {
+		        if(err) {
+		            _res.send("false");
+		        } else {
+		            _res.send("true");
 		        }
 		    })
 		});
@@ -322,14 +369,15 @@ exports.init = function(app) {
 		        });
 		    } else {
 		        var id = req.body.doc.id;
+			    /*
     		    var new_groups = req.body.doc.groups;
     		    if(!(new_groups instanceof Array)) { //we will get a string if only one box is checked
     		        new_groups = [new_groups];
-    		    }
+    		    }*/
     		    var fields = {
     		        title: req.body.doc.title,
     		        body: req.body.doc.body,
-    		        groups: new_groups
+			        //groups: new_groups
     		    };
     		    api.editDoc(id, fields, function(err, res) {
     		        if(err) {
@@ -363,12 +411,27 @@ exports.init = function(app) {
 			    body: form.body,
 			    author: form.author,
 			    title: form.title,
-			    teaser: form.teaser
-		   	 };
+				teaser: form.teaser
+		    };
+			/*
+            var groups = req.body.doc.groups;
+            if(groups) {
+                // we will get a string if only one box is checked
+                if(!(groups instanceof Array)) {
+                        groups = [groups];
+                }
+                groups.map(function(group) {
+                    fullyQualifiedName = [FRONTPAGE_GROUP_NAMESPACE, group];
+                    return [fullyQualifiedName, null];
+                });
+
+                fields.groups = groups;
+            }*/
+
 			async.waterfall([
-		        	function(callback) {
-		            		api.addDoc(fields, callback);
-		        	},
+		        function(callback) {
+		            api.addDoc(fields, callback);
+		        },
 				function(res,url,callback) {
 					// adds the article to the solr database for searching	
 					var client = solr.createClient('index.websolr.com','80','/c1af51aeb37','/solr');

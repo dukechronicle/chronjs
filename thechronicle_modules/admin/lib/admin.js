@@ -369,14 +369,15 @@ exports.init = function(app) {
 		        });
 		    } else {
 		        var id = req.body.doc.id;
+			    /*
     		    var new_groups = req.body.doc.groups;
     		    if(!(new_groups instanceof Array)) { //we will get a string if only one box is checked
     		        new_groups = [new_groups];
-    		    }
+    		    }*/
     		    var fields = {
     		        title: req.body.doc.title,
     		        body: req.body.doc.body,
-    		        groups: new_groups
+			        //groups: new_groups
     		    };
     		    api.editDoc(id, fields, function(err, res) {
     		        if(err) {
@@ -396,7 +397,7 @@ exports.init = function(app) {
 			    title: form.title,
 				teaser: form.teaser
 		    };
-
+			/*
             var groups = req.body.doc.groups;
             if(groups) {
                 // we will get a string if only one box is checked
@@ -409,7 +410,7 @@ exports.init = function(app) {
                 });
 
                 fields.groups = groups;
-            }
+            }*/
 
 			async.waterfall([
 		        function(callback) {

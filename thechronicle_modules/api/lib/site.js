@@ -153,12 +153,14 @@ site.renderArticleEdit = function(req, http_res) {
 		        async.waterfall([
 		            function(callback) {
 		                _getImages(doc.images, callback);
-		            },
+		            }/*,
+
 		            function(images, callback) {
+			            /*
 		                api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(err, groups) {
 		                    callback(err, groups, images);
-		                });
-		            }
+		                });*/
+		            //}
 		        ],
 		        function(err, groups, images) {
 		            if(err) globalFunctions.showError(http_res, err);
@@ -166,7 +168,8 @@ site.renderArticleEdit = function(req, http_res) {
 		                http_res.render('admin/edit', {
 				            locals: {
 								doc: doc,
-								groups: groups,
+								//groups: groups,
+					            groups: [],
 								images: images,
 								url: url
 				            },

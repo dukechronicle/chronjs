@@ -1,6 +1,9 @@
-#article h1{font-size:1.8em;text-shadow:0 1px 1px #fff;margin-bottom:.5em;line-height:1.3em}
-#article .content{width:520px;float:left;padding:1em 2em .6em 2em;background:#fff;}
-#article .content p{color:#333;margin-bottom:1em;font-size:1em;line-height:1.6em}
+#article h1{font-size:1.8em;text-shadow:0 1px 1px #fff;line-height:1.3em}
+#article .metadata{color:#777;font-size:.8em;margin:1em 0}
+#article .social-media{float:right;margin-left:1.5em;margin-top:4px;}
+#article .social-media > div{margin-bottom:.3em}
+#article .content{width:580px;float:none;padding:.9em 1.5em .6em 1.5em;background:#fff;}
+#article .content p{color:#333;margin-bottom:1em;font-size:.95em;line-height:1.6em}
 #article #disqus_thread{float:left;margin-top:2em;width:520px;padding:.5em 2em 0 2em;clear:both;}
 #article #disqus_thread #dsq-global-toolbar{position:relative;z-index:3}
 #article #disqus_thread #dsq-content{font-size:.9em;}

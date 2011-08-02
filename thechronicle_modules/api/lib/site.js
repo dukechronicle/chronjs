@@ -94,10 +94,35 @@ site.renderArticle = function(req, http_res) {
 		        //Convert body markdown to html
 		        doc.body = md(doc.body);
 		    }
+
+            // convert timestamp
+            if (doc.created) {
+                var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+                    "October", "November", "December"];
+                var timestamp = doc.created;
+                var date = new Date(timestamp*1000);
+                doc.date = month[date.getMonth()] + " " + date.getDay() + ", " + date.getFullYear();
+            }
+
+			// format authors
+			if (doc.authors && doc.authors.length > 0) {
+				doc.authors.map(function(author) {
+					return "<a href='/staff/" + author + "'>" + author + "</a>";
+				})
+				/*
+				var count = doc.authors.length;
+				doc.authors.forEach(function(author, index) {
+					if (index > 0) {
+						
+					}
+				});*/
+			}
+
 		    var latestUrl = doc.urls[doc.urls.length - 1];
 		    if(url !== latestUrl) {
 		        http_res.redirect('/article/' + latestUrl);
 		    } else {
+			    doc.fullUrl = "http://dukechronicle.com/article/" + latestUrl;
 		        http_res.render('article', {
 					locals: {doc: doc},
 			        filename: 'views/article.jade'

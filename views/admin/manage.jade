@@ -2,6 +2,6 @@ table(border=1)
   - each doc in docs
     tr
       td
-        #{doc.value.title}
+        a(href='/article/' + doc.urls[doc.urls.length - 1]) #{doc.title}
       td
-        a(href='/article/' + doc.value.urls[doc.value.urls.length - 1] + '/edit') Edit
+        a(href='/article/' + doc.urls[doc.urls.length - 1] + '/edit') Edit

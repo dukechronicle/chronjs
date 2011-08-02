@@ -393,14 +393,17 @@ exports.init = function(app) {
 		app.get('/search/:articleTitle', function(req, http_res) {
 			// spaces must be replaced with dashes to be able to match			
 			var title = req.params.articleTitle.replace(' ','-');			
-			var query = "q=title_text:'"+title+"'";
-			console.log(query);
-			var client = solr.createClient('index.websolr.com','80','/c1af51aeb37','/solr');
-			client.rawQuery(query, function(err,response) {
+			var query = "title_text:"+title;
+			
+			// The host, port, core, and path should come from redis eventually
+			var client = solr.createClient('index.websolr.com','80','/c1af51aeb37','/solr'); 
+			client.query(query, function(err,response) {
 				if(err) {
 					console.log(err);
 				}
-				console.log(response);
+				var responseObj = JSON.parse(response);
+				console.log(responseObj);
+				console.log(responseObj.response.docs);
 				http_res.redirect('/');
 			});
 		});
@@ -429,9 +432,9 @@ exports.init = function(app) {
             }*/
 
 			async.waterfall([
-		        function(callback) {
-		            api.addDoc(fields, callback);
-		        },
+		        	function(callback) {
+		          	  api.addDoc(fields, callback);
+		       		},
 				function(res,url,callback) {
 					// adds the article to the solr database for searching	
 					var client = solr.createClient('index.websolr.com','80','/c1af51aeb37','/solr');

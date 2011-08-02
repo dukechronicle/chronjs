@@ -28,15 +28,15 @@ function grabArticles(groupName, baseDocNum, n,callback){
 }
 
 function getUniversity(n,callback){
-    grabArticles(["University"],0,n,callback);
+    grabArticles("University",0,n,callback);
 }
 
 function getNews(n,callback){
-    grabArticles(["News"],0,n,callback);
+    grabArticles("News",0,n,callback);
 }
 
 function getSports(n,callback){
-    grabArticles(["Sports"],0,n,callback);
+    grabArticles("Sports",0,n,callback);
 }
 
 function capitalizeName(str) {

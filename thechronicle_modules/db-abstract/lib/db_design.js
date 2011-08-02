@@ -1,18 +1,11 @@
 exports.createViews = function(db) {
 	var views = {
-	    descendants: {
+	    taxonomy: {
 		map: function(doc) {
 		    if (doc.taxonomy) {
-		        for (var i in doc.taxonomy) {
-		            emit([doc.taxonomy[i], doc.path], doc)
-		        }
-		    }
-		}
-	    },
-	    tree: {
-		map: function(doc) {
-		    if (doc.taxonomy) {
-		        emit(doc.taxonomy, doc)
+			    for (var i in doc.taxonomy) {
+		            emit([doc.taxonomy[i], doc.created], doc);
+			    }
 		    }
 		}
 	    },

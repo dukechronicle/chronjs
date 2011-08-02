@@ -101,6 +101,21 @@
 
 		]
 	},
+    "opinion": {
+		"title": "Opinion",
+		"stories": [
+			{"title": "Egypt an academic opportunity",
+				"comments": "3", "cssClass": "first", "author": "Editorial Board"},
+			{"title": "Make my day",
+				"comments": "1", "author": "Carol Apollonio"},
+			{"title": "Arab dictators stuck in yesteryear",
+				"comments": "5", "author": "Chris Bassil"},
+			{"title": "The right to obstain",
+				"comments": "0", "author": "Christine Hall"},
+			{"title": "I read programming books for fun",
+				"comments": "14", "cssClass": "last", "author": "Dean Chen"}
+		]
+	},
 	"sports": {
 		"title": "Sports",
 		"stories": [

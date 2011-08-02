@@ -3,8 +3,9 @@ var db = require('./db-abstract');
 var taxonomy = exports;
 taxonomy.docs = function(taxonomyTerm, limit, callback) {
     var query = {
-        startkey: [taxonomyTerm],
-        endkey: [taxonomyTerm, {}]
+        startkey: [taxonomyTerm, {}],
+        endkey: [taxonomyTerm],
+	    descending: true
     };
 
     if (limit) {

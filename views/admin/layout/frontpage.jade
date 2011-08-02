@@ -11,10 +11,17 @@ h2 Frontpage Layout
                 .story(draggable='true', id='#{story._id}')
                     #{story.title}
     
-    <h2>Headlines</h2>
-    #headlines.container(data-groupname='Headlines')
-        - if (model.Headlines)
-            - each story, id in model.Headlines
+    <h2>News Headlines</h2>
+    #headlines.container(data-groupname='NewsHeadlines')
+        - if (model.NewsHeadlines)
+            - each story, id in model.NewsHeadlines
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+
+    <h2>Sports Headlines</h2>
+    #headlines.container(data-groupname='SportsHeadlines')
+        - if (model.SportsHeadlines)
+            - each story, id in model.SportsHeadlines
                 .story(draggable='true', id='#{story._id}')
                     #{story.title}
 

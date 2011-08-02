@@ -389,15 +389,15 @@ exports.init = function(app) {
 		    }
 		});
 
-		// test the solr search functionality. Currently only returns the ids of articles with the exact title specified to the console.
+		// test the solr search functionality. Currently returns the ids,score of articles containing one of more of search words in title.
 		app.get('/search/:articleTitle', function(req, http_res) {
 			// spaces must be replaced with dashes to be able to match			
-			var title = req.params.articleTitle.replace(' ','-');			
-			var query = "title_text:"+title;
+			var title = req.params.articleTitle.replace(/ /g,'* OR ');			
+			var query = "title_text:"+title+"*";
 			
 			// The host, port, core, and path should come from redis eventually
 			var client = solr.createClient('index.websolr.com','80','/c1af51aeb37','/solr'); 
-			client.query(query, function(err,response) {
+			client.query(query, {fl: "*,score", sort: "score desc"}, function(err,response) {
 				if(err) {
 					console.log(err);
 				}

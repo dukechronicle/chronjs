@@ -4,7 +4,8 @@
 		.content.rounded
 			h1 #{doc.title}
 			.metadata
-				span.credit By #{doc.authors[0]} &nbsp; | &nbsp; #{doc.date}
+				span.credit
+					| By #{doc.authorsHtml} &nbsp; | &nbsp; #{doc.date}
 
 			.social-media
 				.facebook

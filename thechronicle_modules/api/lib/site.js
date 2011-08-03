@@ -106,9 +106,12 @@ site.renderArticle = function(req, http_res) {
 
 			// format authors
 			if (doc.authors && doc.authors.length > 0) {
+				/*
 				doc.authors.map(function(author) {
 					return "<a href='/staff/" + author + "'>" + author + "</a>";
-				})
+				})*/
+
+				doc.authorsHtml = doc.authors[0];
 				/*
 				var count = doc.authors.length;
 				doc.authors.forEach(function(author, index) {
@@ -117,7 +120,7 @@ site.renderArticle = function(req, http_res) {
 					}
 				});*/
 			}
-
+			console.log(doc.authorsHtml);
 		    var latestUrl = doc.urls[doc.urls.length - 1];
 		    if(url !== latestUrl) {
 		        http_res.redirect('/article/' + latestUrl);

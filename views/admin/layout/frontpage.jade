@@ -1,0 +1,68 @@
+link(rel='stylesheet', href='/admin/layout/styles.css')
+script(src='/js/admin/layout.js')
+
+h2 Frontpage Layout
+
+#layout
+    <h2>Slideshow</h2>
+    #slideshow.container(data-groupName='Slideshow')
+        - if (model.Slideshow)
+            - each story, id in model.Slideshow
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+    
+    <h2>News Headlines</h2>
+    #headlines.container(data-groupname='NewsHeadlines')
+        - if (model.NewsHeadlines)
+            - each story, id in model.NewsHeadlines
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+
+    <h2>Sports Headlines</h2>
+    #headlines.container(data-groupname='SportsHeadlines')
+        - if (model.SportsHeadlines)
+            - each story, id in model.SportsHeadlines
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+
+    <h2>Opinion</h2>
+    #opinion.container(data-groupname='Opinion')
+        - if (model.Opinion)
+            - each story, id in model.Opinion
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+
+    <h2>News</h2>
+    #news.container(data-groupname='News')
+        - if (model.News)
+            - each story, id in model.News
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+
+    <h2>Sports</h2>
+    #sports.container(data-groupname='Sports')
+        - if (model.Sports)
+            - each story, id in model.Sports
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+
+    <h2>Recess</h2>
+    #recess.container(data-groupname='Recess')
+        - if (model.Recess)
+            - each story, id in model.Recess
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+
+    <h2>Towerview</h2>
+    #towerview.container(data-groupname='Towerview')
+        - if (model.Towerview)
+            - each story, id in model.Towerview
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+
+#stories
+    - each story, id in stories
+        .story(draggable="true", id="#{story._id}")
+            #{story.title}
+
+

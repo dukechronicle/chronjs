@@ -20,6 +20,15 @@ exports.init = function(app) {
 	return app;
 }
 
+function grabArticles(groupName, baseDocNum, n,callback){
+    api.taxonomy.docs(groupName,n,function(err,test){
+        if(err)
+            callback(err,null);
+        else
+            callback(err,test);
+    });
+}
+
 function capitalizeName(str) {
     return str.toLowerCase().replace(/\b[a-z]/g, upper);
     function upper() {
@@ -45,17 +54,4 @@ function getGroup(groupName,n,callback){
     else{
         callback("error", "noob");
     }
-}
-
-function grabArticles(groupName, baseDocNum, n,callback){
-    console.log(groupName);
-    api.taxonomy.docs(groupName, n,function(err,groupDocs){
-        console.log(groupDocs);
-        if(err){
-            callback(err,null);
-        } 
-        else {
-            callback(err,groupDocs);
-        }
-    });
 }

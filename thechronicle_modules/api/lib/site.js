@@ -11,7 +11,7 @@ var nimble = require('nimble');
 var fs = require('fs');
 var md = require('node-markdown').Markdown;
 
-var FRONTPAGE_GROUP_NAMESPACE = ['section','frontpage'];
+var FRONTPAGE_GROUP_NAMESPACE = ['Layouts','Frontpage'];
 var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
 
 function _getImages(obj, callback) {
@@ -25,27 +25,31 @@ function _getImages(obj, callback) {
 }
 
 function fetchGroup(groupName, title, callback) {
-	api.group.docs(FRONTPAGE_GROUP_NAMESPACE, groupName, function(err, result) {
+	api.group.docs(FRONTPAGE_GROUP_NAMESPACE, groupName, function(err, res) {
+        if (err) console.log(err);
+
 		var groupDocs = {
 			"title": title,
 			"stories": []
 		};
-		result.forEach(function (article, index, array) {
-			article.url = "/article/" + article.urls[article.urls.length - 1];
-			if (index === 0) article.cssClass = "first";
-			if (index === array.length) article.cssClass = "last";
-			groupDocs.stories.push(article);
-		});
-
-		callback(err, groupDocs);
+        if (res) {
+            res.forEach(function (article, index, array) {
+                // canonical url is the last element of the url array
+                article.url = "/article/" + article.urls[article.urls.length - 1];
+                if (index === 0) article.cssClass = "first";
+                if (index === array.length) article.cssClass = "last";
+                
+                groupDocs.stories.push(article);
+            });
+            callback(err, groupDocs);
+        }
 	});
 }
 
 site.renderRoot = function(req, res) {
-    fetchGroup("opinion", "Opinion", function(err, groupDocs) {
-		homeModel.opinion = groupDocs;
+
 		res.render('index', {filename: 'views/index.jade', model: homeModel});
-	});
+
 };
 
 site.renderArticleList = function(req, http_res) {
@@ -90,10 +94,38 @@ site.renderArticle = function(req, http_res) {
 		        //Convert body markdown to html
 		        doc.body = md(doc.body);
 		    }
+
+            // convert timestamp
+            if (doc.created) {
+                var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+                    "October", "November", "December"];
+                var timestamp = doc.created;
+                var date = new Date(timestamp*1000);
+                doc.date = month[date.getMonth()] + " " + date.getDay() + ", " + date.getFullYear();
+            }
+
+			// format authors
+			if (doc.authors && doc.authors.length > 0) {
+				/*
+				doc.authors.map(function(author) {
+					return "<a href='/staff/" + author + "'>" + author + "</a>";
+				})*/
+
+				doc.authorsHtml = doc.authors[0];
+				/*
+				var count = doc.authors.length;
+				doc.authors.forEach(function(author, index) {
+					if (index > 0) {
+						
+					}
+				});*/
+			}
+			console.log(doc.authorsHtml);
 		    var latestUrl = doc.urls[doc.urls.length - 1];
 		    if(url !== latestUrl) {
 		        http_res.redirect('/article/' + latestUrl);
 		    } else {
+			    doc.fullUrl = "http://dukechronicle.com/article/" + latestUrl;
 		        http_res.render('article', {
 					locals: {doc: doc},
 			        filename: 'views/article.jade'
@@ -124,12 +156,14 @@ site.renderArticleEdit = function(req, http_res) {
 		        async.waterfall([
 		            function(callback) {
 		                _getImages(doc.images, callback);
-		            },
+		            }/*,
+
 		            function(images, callback) {
+			            /*
 		                api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(err, groups) {
 		                    callback(err, groups, images);
-		                });
-		            }
+		                });*/
+		            //}
 		        ],
 		        function(err, groups, images) {
 		            if(err) globalFunctions.showError(http_res, err);
@@ -137,7 +171,8 @@ site.renderArticleEdit = function(req, http_res) {
 		                http_res.render('admin/edit', {
 				            locals: {
 								doc: doc,
-								groups: groups,
+								//groups: groups,
+					            groups: [],
 								images: images,
 								url: url
 				            },

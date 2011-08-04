@@ -161,7 +161,14 @@ api.docForUrl = function(url, callback) {
 }
 
 api.docsByDate = function(callback) {
-    db.view("articles/all_by_date", {descending: true}, callback);
+    db.view("articles/all_by_date", {descending: true}, function(err, results) {
+        if (err) callback(err);
+
+        // return only the array of the result values
+        callback(null, results.map(function(result) {
+            return result;
+        }));
+    });
 }
 
 api.addToDocArray = function(id, field, toAdd, callback) {

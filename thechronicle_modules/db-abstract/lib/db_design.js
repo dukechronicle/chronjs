@@ -1,18 +1,11 @@
 exports.createViews = function(db) {
 	var views = {
-	    descendants: {
-		map: function(doc) {
-		    if (doc.title) {
-		        for (var i in doc.path) {
-		            emit([doc.path[i], doc.path], doc)
-		        }
-		    }
-		}
-	    },
-	    tree: {
+	    taxonomy: {
 		map: function(doc) {
 		    if (doc.taxonomy) {
-		        emit(doc.taxonomy, doc)
+			    for (var i in doc.taxonomy) {
+		            emit([doc.taxonomy[i], doc.created], doc);
+			    }
 		    }
 		}
 	    },
@@ -35,28 +28,27 @@ exports.createViews = function(db) {
 		    }
 		}
 	    },
-	    // list all groups keyed by path
-	    group_list: {
-		map: function(doc) {
-		    if(doc.type == 'group') {
-		        emit([doc.namespace, doc.name], doc);
-		    }
-		}
-	    },
 	    // get the uuid of all children keyed by fully qualified group name
-	    group_docs: {
+	    groups: {
 		map: function(doc) {
-		    if(doc.type == 'group') {
-		        doc.docs.forEach(function(doc_id) {
-		            emit([doc.namespace, doc.name], doc_id);
-		        });
-		    }
-		}
+            if(doc.groups) {
+                doc.groups.forEach(function(group) {
+                    emit(group, {title: doc.title});
+                });
+            }
+		},
+        reduce: function(keys, values, rereduce) {
+          if (rereduce) {
+            return sum(values);
+          } else {
+            return values.length;
+          }
+        }
 	    },
 	    // return articles keyed by date
 	    all_by_date: {
 		map: function(doc) {
-		    if(doc.title && doc.urls) {
+		    if(doc.urls) {
 		        emit(doc.created, doc);
 		    }
 		}

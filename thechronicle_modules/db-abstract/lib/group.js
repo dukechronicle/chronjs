@@ -16,46 +16,35 @@ group.create = function(namespace, name, callback) {
 
 // lists all groups with given query options
 group.list = function(options, callback) {
-    db.view('articles/group_list', options,
+    db.view('articles/groups', options,
 	    function(err, res) {
 	        callback(err, res);
 	    }
 	);
 };
 
-group.docs = function(namespace, groups, callback) {
+// fetch documents from namespace or groups
+group.docs = function(namespace, group, callback) {
 	var query = {};
-	console.log(namespace);
-	if (groups === null) {
+
+	query.reduce = false;
+    query.include_docs = true;
+
+	if (group === null) {
 		// fetch all docs in namespace
-		query.startKey = [namespace];
-		query.endKey = [namespace, {}];
+		query.startKey = [[namespace]];
+		query.endKey = [[namespace], {}];
 	} else {
-		// fetch all docs in groups
-		if (!_.isArray(groups)) {
-			groups = [groups];
-		}
-
-		query.keys = [];
-		groups.forEach(function(group) {
-			query.keys.push([namespace, group]);
-		});
+		query.startKey = [[namespace], group];
+		query.endKey = [namespace, group, {}];
 	}
+    
+	db.view('articles/groups', query,
 
-	console.log(query);
-	db.view('articles/group_docs', query,
     function(err, res) {
-	    console.log(res);
 	    if (err) callback(err);
     	if (res) {
-    		// fetch each child document after getting their id
-	        nimble.map(res, function(docId, cbck) {
-	            cbck(null, function(acallback) {
-	                db.get(docId.value, acallback);
-	            });
-	        }, function(map_err, map_res) {
-	            nimble.parallel(map_res, callback);
-	        });
+    		callback(null, res);
 	    } else {
 	    	callback(null, []);
 	    }
@@ -97,59 +86,65 @@ group.docsN = function(namespace, groupName, baseDocNum, numDocs, callback) {
 
 
 // add document to group
-group.add = function (docId, namespace, groupName, callback) {
-    //check if group exists
-    db.group.list({
-        key: [namespace, groupName]
-    },
-    function(err, res) {
-        if(err) {
-            callback(err, null);
-        }
-        else if (res.length == 0) {
-            callback("group does not exist", null);
-        }
-        else {
-        	// if group exists and doc isn't already in group 
-        	// add docid to children array of group
-        	var groupDoc = res[0];
-            var docs = groupDoc.value.docs;
-            if (docs.indexOf(docId) != -1) {
-                callback("Document already in this group", null);
-            } else {
-                docs.push(docId);
-				//update group document
-			    db.merge(groupDoc.id, {
-			        docs: docs
-			    }, callback);
+group.add = function (nameSpace, groupName, docId, weight, callback) {
+
+    db.get(docId, function(err, doc) {
+        if(err) callback(err);
+
+        var groups = doc.groups
+        if (!groups) groups = [];
+
+        // remove existing entry
+        var updated = false;
+        groups = groups.map(function(groupEntry) {
+            // [nameSpace, groupName, weight]
+            // need toString to compare arrays
+            if (groupEntry[0].toString() == nameSpace.toString() &&
+                groupEntry[1] == groupName) {
+                groupEntry[2] = weight;
+                console.log(updated);
+                updated = true;
             }
+            return groupEntry;
+        });
+
+        if (!updated) {
+            groups.push([nameSpace, groupName, weight]);
         }
+        console.log("adding " + doc.title + " to " + groupName);
+        db.merge(docId, {
+                groups: groups
+        }, callback);
+
     });
 }
 
-group.remove = function(docId, namespace, group, callback) {
-    //check if group exists
-    db.group.list({
-        key: [namespace, group]
-    },
-    function(err, res) {
-        if (res.length == 0) {
-            callback("group does not exist", null);
-        }
-        else {
-        	var groupDoc = res[0];
-            var docs = groupDoc.value.docs;
-            if (docs.indexOf(docId) == -1) {
-                callback("Document not in this group", null);
+// add document to group
+group.remove = function (nameSpace, groupName, docId, callback) {
+    db.get(docId, function(err, doc) {
+        if(err) callback(err);
+
+        var groups = doc.groups
+        if (!groups) groups = [];
+
+        // remove existing entry
+        var updated = false;
+        groups = groups.map(function(groupEntry) {
+            // [nameSpace, groupName, weight]
+            // need toString to compare arrays
+            if (groupEntry[0].toString() == nameSpace.toString() &&
+                groupEntry[1] == groupName) {
+                updated = true;
+                return null;
             }
-            else {
-                arr.splice(arr.indexOf(obj), 1);
-			    
-			    //update group document
-			    db.merge(groupDoc.id, {
-			        docs: docs
-			    }, callback);
-            }
+            console.log("keeping" + groupEntry);
+            return groupEntry;
+        });
+
+        if (updated) {
+            db.merge(docId, {
+                    groups: _.compact(groups)
+            }, callback);
         }
     });
 }

@@ -1,9 +1,8 @@
 var api = require('../../api/lib/api');
-var taxonomyGroups = ["News","University","Sports"];
+var taxonomyGroups = ["News","Sports","Opinion","Recess","Towerview"];
 
 exports.init = function(app) {
 	app.namespace('/mobile', function() {
-		
 		app.get('/:groupname', function(req, http_res) {
             var groupName = req.params.groupname;
             //console.log("server.js/mobile" + groupName);
@@ -21,24 +20,6 @@ exports.init = function(app) {
 	return app;
 }
 
-function grabArticles(groupName, baseDocNum, n,callback){
-    api.taxonomy.docs(groupName,n,function(err,test){
-        callback(err,test);
-    });
-}
-
-function getUniversity(n,callback){
-    grabArticles(["University"],0,n,callback);
-}
-
-function getNews(n,callback){
-    grabArticles(["News"],0,n,callback);
-}
-
-function getSports(n,callback){
-    grabArticles(["Sports"],0,n,callback);
-}
-
 function capitalizeName(str) {
     return str.toLowerCase().replace(/\b[a-z]/g, upper);
     function upper() {
@@ -46,10 +27,8 @@ function capitalizeName(str) {
     }
 }
 
-function contains(obj, array)
-{
-    for(i in array)
-    {
+function contains(obj, array){
+    for(i in array){
         if(array[i] == obj)
             return true;
     }
@@ -57,12 +36,26 @@ function contains(obj, array)
 }
 
 
-function getGroup(groupName,n,callback)
-{
+function getGroup(groupName,n,callback){
     console.log(groupName);
-    groupName = capitalizeName(groupName);
-    if(contains(groupName,taxonomyGroups))
-    {
+    groupName = capitalizeName(groupName).trim();
+    if(contains(groupName,taxonomyGroups)){
         grabArticles([groupName],0,n,callback);
     }
+    else{
+        callback("error", "noob");
+    }
+}
+
+function grabArticles(groupName, baseDocNum, n,callback){
+    console.log(groupName);
+    api.taxonomy.docs(groupName, n,function(err,groupDocs){
+        console.log(groupDocs);
+        if(err){
+            callback(err,null);
+        } 
+        else {
+            callback(err,groupDocs);
+        }
+    });
 }

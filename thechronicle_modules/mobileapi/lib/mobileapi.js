@@ -21,7 +21,8 @@ exports.init = function(app) {
 }
 
 function grabArticles(groupName, baseDocNum, n,callback){
-    api.taxonomy.docs(groupName,n,function(err,test){
+    api.taxonomy.docs(groupName[0],n,function(err,test){
+        console.log(test);
         if(err)
             callback(err,null);
         else

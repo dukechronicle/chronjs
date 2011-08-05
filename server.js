@@ -54,9 +54,15 @@ config.sync(function() {
 	/*** FRONTEND ***/
 	app.get('/', site.renderRoot);
 	app.get('/article-list', site.renderArticleList);
-	app.get('/article/:url', site.renderArticle);
-	app.get('/article/:url/edit', site.renderArticleEdit);
-	app.get('/article/:url/image', site.renderImageList);
+	app.get('/article/:url', function(req, http_res) {
+	    site.renderArticle(req, http_res, req.params.url);
+	});
+	app.get('/article/:url/edit', function(req, http_res) {
+	    site.renderArticleEdit(req, http_res, req.params.url);
+	});
+	app.get('/article/:url/image', function(req, http_res) {
+	    site.renderImageList(req, http_res, req.params.url);
+	});
 	/*** !FRONTEND ***/
 	
 	/*** ADMIN ***/

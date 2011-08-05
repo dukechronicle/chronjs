@@ -106,6 +106,7 @@ api.editDoc = function(docid, fields, callback) {
     nimble.series(fcns, callback);
 }
 
+// can take one id, or an array of ids
 api.docsById = function(id, callback) {
     db.get(id, callback);
 };

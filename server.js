@@ -54,6 +54,9 @@ config.sync(function() {
 	/*** FRONTEND ***/
 	app.get('/', site.renderRoot);
 	app.get('/article-list', site.renderArticleList);
+	app.get('/article-list/:titleSearch', function(req, http_res) {
+		site.renderArticleListSearch(req, http_res, req.params.titleSearch);
+	});
 	app.get('/article/:url', function(req, http_res) {
 	    site.renderArticle(req, http_res, req.params.url);
 	});

@@ -83,8 +83,7 @@ site.renderArticleList = function(req, http_res) {
 	});*/
 };
 
-site.renderArticle = function(req, http_res) {
-    var url = req.params.url;
+site.renderArticle = function(req, http_res, url) {
 
 	api.docForUrl(url, function(err, doc) {
 		if(err) {
@@ -135,8 +134,7 @@ site.renderArticle = function(req, http_res) {
 	});
 };
 
-site.renderArticleEdit = function(req, http_res) {
-    var url = req.params.url;
+site.renderArticleEdit = function(req, http_res, url) {
 	
 	api.docForUrl(url, function(err, doc) {
 		if(err) {
@@ -185,8 +183,7 @@ site.renderArticleEdit = function(req, http_res) {
 	});
 };
 
-site.renderImageList = function(req, httpRes) {
-    var url = req.params.url;
+site.renderImageList = function(req, httpRes, url) {
     api.image.getAllOriginals(function(err, origs) {
         httpRes.render('admin/articleimage', {
 	        filename: 'views/admin/articleimage.jade',

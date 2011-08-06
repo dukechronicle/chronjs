@@ -10,7 +10,6 @@ var async = require('async');
 var nimble = require('nimble');
 var fs = require('fs');
 var md = require('node-markdown').Markdown;
-var solr = require('solr');
 
 var FRONTPAGE_GROUP_NAMESPACE = ['Layouts','Frontpage'];
 var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
@@ -134,45 +133,9 @@ site.renderArticle = function(req, http_res, url) {
 
 // test the solr search functionality. Currently returns the ids,score of articles containing one of more of search words in title.
 site.renderArticleListSearch = function(req, http_res, titleSearchQuery) {
-	var title = titleSearchQuery.replace(/ /g,'* OR ');			
-	var query = "title_text:"+title+"*";
-			
-	// The host, port, core, and path should come from redis eventually
-	var client = solr.createClient('index.websolr.com','80','/c1af51aeb37','/solr'); 
-	client.query(query, {fl: "*,score", sort: "score desc"}, function(err,response) {
-		if(err) {
-			console.log(err);
-		}
-		var responseObj = JSON.parse(response);
-		console.log(responseObj);
-		
-		var ids = [];
-		var docs = responseObj.response.docs;
-		console.log(docs);
-		for(var docNum in docs)
-		{
-			ids.push(docs[docNum].id);
-		}
-		
-		api.docsById(ids,function(err, docs) {
-			if (err) globalFunctions.showError(http_res, err);
-
-			// replace each array element with the actual document data for that element			
-			docs = _.map(docs, function(doc) {
-				return doc.doc;
-			});
-			
-			// remove any null array elements.
-			// while null should not be in the array in a production set up,
-			// solr may be referencing the ids of documents contained in a different db than
-			// the one that this has been configured to use (due to an EXPORT COUCHDB_DATABASE...)
-			// so we must incorporate defensive programming and check for nulls
-			// to stop jade from throwing an undefined exception on something like
-			// doc.urls when the doc itself is null
-			docs = _.compact(docs);
-			
-			http_res.render('all', {locals:{docs:docs}, layout: 'layout-admin.jade'} );
-		});
+	api.docsByTitleSearch(titleSearchQuery,function(err, docs) {
+		if (err) globalFunctions.showError(http_res, err);
+		http_res.render('all', {locals:{docs:docs}, layout: 'layout-admin.jade'} );
 	});
 };
 

@@ -82,7 +82,6 @@ exports.init = function(app) {
 						docs = docs.map(function(doc) {
 							return doc;
 						});
-						console.log(docs);
 						renderPage(docs);
 					}
 				});

@@ -1,4 +1,15 @@
 $(function() {
+
+	$("#taxonomy").change(function() {
+		var section = $(this).attr('value');
+		var plainUrl = $(location).attr('href').split("?")[0];
+		$("#stories-container").load(plainUrl + "?section=" + section + " #stories");
+
+	});
+
+	/*
+	 * Bindings for drag and drop
+	 */
     // http://weblog.bocoup.com/using-datatransfer-with-jquery-events
     jQuery.event.props.push('dataTransfer'); // solves dataTransfer undefined issue
 

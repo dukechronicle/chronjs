@@ -4,9 +4,9 @@ table
 	- each doc in docs
 		tr
 			td
-				a(href='article/' + doc.urls[doc.urls.length - 1] + '/edit') #{doc.title}
+				a(href='/article/' + doc.urls[doc.urls.length - 1] + '/edit') #{doc.title}
 				&nbsp;
-				a(href='article/' + doc.urls[doc.urls.length - 1] + '#disqus_thread', data-disqus-identifier=doc.id) -
+				a(href='/article/' + doc.urls[doc.urls.length - 1] + '#disqus_thread', data-disqus-identifier=doc.id) -
 			- if (doc.section)
 				td
 					#{doc.section[0]}

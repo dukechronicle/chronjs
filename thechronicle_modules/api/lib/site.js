@@ -81,7 +81,6 @@ site.renderArticleList = function(req, http_res) {
 };
 
 site.renderArticle = function(req, http_res, url) {
-
 	api.docForUrl(url, function(err, doc) {
 		if(err) {
 			globalFunctions.showError(http_res, err);

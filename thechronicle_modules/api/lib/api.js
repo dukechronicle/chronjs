@@ -180,15 +180,20 @@ api.docForUrl = function(url, callback) {
     });
 }
 
-api.docsByDate = function(callback) {
-    db.view("articles/all_by_date", {descending: true}, function(err, results) {
-        if (err) callback(err);
+api.docsByDate = function(limit, callback) {
+	var query = {descending: true};
 
-        // return only the array of the result values
-        callback(null, results.map(function(result) {
-            return result;
-        }));
-    });
+	if (limit) {
+		query.limit = limit;
+	}
+		db.view("articles/all_by_date", query, function(err, results) {
+			if (err) callback(err);
+
+			// return only the array of the result values
+			callback(null, results.map(function(result) {
+				return result;
+			}));
+		});
 }
 
 api.addToDocArray = function(id, field, toAdd, callback) {

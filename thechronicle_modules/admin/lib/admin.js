@@ -76,7 +76,7 @@ exports.init = function(app) {
 			// TODO make requests concurrent
 			var filter = req.param("section", null);
 			if (filter) {
-				api.taxonomy.docs(filter, 0, function(err, docs) {
+				api.taxonomy.docs(filter, 20, function(err, docs) {
 					if(err) globalFunctions.showError(res, err);
 					else {
 						docs = docs.map(function(doc) {
@@ -86,7 +86,7 @@ exports.init = function(app) {
 					}
 				});
 			} else {
-				api.docsByDate(function(err, docs) {
+				api.docsByDate(20, function(err, docs) {
 					if (err) globalFunctions.showError(res, err);
 					renderPage(docs);
 				});
@@ -147,7 +147,7 @@ exports.init = function(app) {
 		});
 		
 		app.get('/manage', function(req, http_res) {
-		    api.docsByDate(function(err, res) {
+		    api.docsByDate(null, function(err, res) {
 		        if(err) {
 		            globalFunctions.showError(http_res, err);
 		        } else {

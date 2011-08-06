@@ -53,7 +53,7 @@ site.renderRoot = function(req, res) {
 };
 
 site.renderArticleList = function(req, http_res) {
-    api.docsByDate(function(err, docs) {
+    api.docsByDate(null, function(err, docs) {
 		if (err) globalFunctions.showError(http_res, err);
 		http_res.render('all', {locals:{docs:docs}, layout: 'layout-admin.jade'} );
 	});

@@ -60,23 +60,38 @@ function _deleteFiles(paths, callback) {
 
 exports.init = function(app) {
 	app.namespace('/admin', function() {
-
-        app.get('/layout/frontpage', function(req, res) {
-            // TODO make requests concurrent
-            api.docsByDate(function(err, docs) {
-                if (err) globalFunctions.showError(res, err);
-                var stories = docs;
-                api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, model) {
-                    console.log(model);
-                    res.render('admin/layout/frontpage', {
-                            layout: "layout-admin.jade",
-                            locals: {
-                                stories: stories,
-                                model: model
-                            }
-                    });
-                });
-            });
+		app.get('/layout/frontpage', function(req, res) {
+			function renderPage(docs) {
+				var stories = docs;
+				api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, model) {
+					res.render('admin/layout/frontpage', {
+							layout: "layout-admin.jade",
+							locals: {
+								stories: stories,
+								model: model
+							}
+					});
+				});
+			}
+			// TODO make requests concurrent
+			var filter = req.param("section", null);
+			if (filter) {
+				api.taxonomy.docs(filter, 0, function(err, docs) {
+					if(err) globalFunctions.showError(res, err);
+					else {
+						docs = docs.map(function(doc) {
+							return doc;
+						});
+						console.log(docs);
+						renderPage(docs);
+					}
+				});
+			} else {
+				api.docsByDate(function(err, docs) {
+					if (err) globalFunctions.showError(res, err);
+					renderPage(docs);
+				});
+	        }
 
         });
 

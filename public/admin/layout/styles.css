@@ -3,5 +3,5 @@
 #layout .container.over{background-color:#ccc}
 .story{font-size:.8em;border:1px solid #000;margin:5px 0;padding:5px}
 .story.over{background-color:#ccc}
-#stories{width:200px;float:right;}
-#stories .story.exists{opacity:.4}
+#sidebar{width:200px;float:right;}
+#sidebar .story.exists{opacity:.4}

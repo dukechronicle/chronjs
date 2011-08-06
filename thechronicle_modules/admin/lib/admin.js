@@ -419,24 +419,6 @@ exports.init = function(app) {
 		          	  api.addDoc(fields, callback);
 		       		},
 				function(res,url,callback) {
-					// adds the article to the solr database for searching	
-					var client = solr.createClient('index.websolr.com','80','/c1af51aeb37','/solr');
-					var solrDoc = {
-						id: res.id,
-						type: 'article',
-						title_text: fields.title,
-						body_text: fields.body
-					};
-					client.add(solrDoc, function(err, response) {
-						callback(err,response,res.id,url,client);
-					});
-				},
-				function(res,id,url,client,callback) {
-					client.commit(function(err, response) {							
-						callback(err,response,id,url);
-					});
-				},
-				function(res,id,url,callback) {
 					var groups = req.body.doc.groups;
 		            		if(groups) {
 		                		var fcns = [];
@@ -444,7 +426,7 @@ exports.init = function(app) {
 		                    			groups = [groups];
 		                		}
 						groups.forEach(function(group) {
-		                			api.group.add(id, FRONTPAGE_GROUP_NAMESPACE, group, function(add_err, add_res) {
+		                			api.group.add(res.id, FRONTPAGE_GROUP_NAMESPACE, group, function(add_err, add_res) {
 			        	            		if(add_err) {
 									callback(add_err);
 						  		}

@@ -4,6 +4,8 @@ var exports = module.exports = api;
 var nimble = require("nimble");
 var async = require("async");
 var db = require("../../db-abstract");
+var solr = require('solr');
+var _ = require("underscore");
 
 api.group = require("./group");
 api.image = require("./image");
@@ -130,8 +132,25 @@ api.addDoc = function(fields, callback) {
             fields.created = unix_timestamp;
             fields.updated = unix_timestamp;
             fields.urls = [url];
+	    fields.indexedBySolr = true;
+
             db.save(fields, function(db_err, res) {
-                callback(db_err, res, url);
+		    
+		    if(db_err) callback(db_err);
+			
+		    // adds the article to the solr database for searching	
+		    var client = solr.createClient('index.websolr.com','80','/c1af51aeb37','/solr');
+		    var solrDoc = {
+			id: res.id,
+			type: 'article',
+			title_text: fields.title.toLowerCase(),
+			body_text: fields.body.toLowerCase(),
+			database_text: db.getDatabaseName()
+		    };
+
+		    client.add(solrDoc, {commit:true}, function(err, response) {
+			callback(err,response,url);
+		    });
             });
         }
     });
@@ -211,4 +230,42 @@ api.removeFromDocArray = function(id, field, toRemove, callback) {
         ], 
         callback
     );
+}
+
+api.docsByTitleSearch = function(title, callback) {
+	title = title.toLowerCase().replace(/ /g,'* OR ');			
+	var query = "database_text:"+db.getDatabaseName()+" AND title_text:"+title+"*";
+	
+	// The host, port, core, and path should come from redis eventually
+	var client = solr.createClient('index.websolr.com','80','/c1af51aeb37','/solr'); 		
+	client.query(query, {fl: "*,score", sort: "score desc"}, function(err,response) {
+		if(err) {
+			callback(err);
+		}
+
+		var responseObj = JSON.parse(response);
+		console.log(responseObj);
+		
+		var ids = [];
+		var docs = responseObj.response.docs;
+		console.log(docs);
+		for(var docNum in docs)
+		{
+			ids.push(docs[docNum].id);
+		}
+		
+		api.docsById(ids,function(err, docs) {
+			if (err) callback(err);
+
+			// replace each array element with the actual document data for that element			
+			docs = _.map(docs, function(doc) {
+				return doc.doc;
+			});
+			
+			// remove any null array elements.
+			docs = _.compact(docs);
+
+			callback(null,docs);
+		});
+	});
 }

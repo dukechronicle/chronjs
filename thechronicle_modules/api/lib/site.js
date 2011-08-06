@@ -56,9 +56,6 @@ site.renderRoot = function(req, res) {
 site.renderArticleList = function(req, http_res) {
     api.docsByDate(function(err, docs) {
 		if (err) globalFunctions.showError(http_res, err);
-		docs = _.map(docs, function(doc) {
-			return doc.value;
-		});
 		http_res.render('all', {locals:{docs:docs}, layout: 'layout-admin.jade'} );
 	});
 	/*

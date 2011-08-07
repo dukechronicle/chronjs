@@ -81,6 +81,10 @@ group.docs = function(namespace, group, callback) {
 	                }
                     groupedResults[groupName].push(doc.doc);
                 }
+
+
+	            groupedResults[prevGroupName][groupedResults[prevGroupName].length - 1].cssClass = "last";
+
                 callback(null, groupedResults);
             }
         }

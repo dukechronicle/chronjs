@@ -8,4 +8,5 @@
 				h2
 					a.list-story.hover.highlight-right(href='#{story.url}', class='#{story.cssClass}')
 						#{story.title}
-						p.author #{story.author}
+						- if (story.authors)
+							p.author #{story.authors[0]}

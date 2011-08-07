@@ -1,7 +1,7 @@
 #top.clearfix
 	.content
 		#slideshow!=partial('slideshow')
-		.top-news!=partial('container/top-news', model.headlines)
+		.top-news!=partial('container/top-news', {title: "Week's Headlines", news: model.NewsHeadlines, sports: model.SportsHeadlines})
 		div
 			.image-container.print-edition!=partial('container/image', model.printEdition)
 			.image-container.full-banner!=partial('container/image', model.adFullBanner)
@@ -9,12 +9,12 @@
 		.twitter!=partial('container/twitter', model.twitter)
 		.most-popular!=partial('container/most-popular', model.popular)
 		.image-container.medium-rectangle!=partial('container/image', model.adFullRectangle)
-		.opinion!=partial('container/opinion', model.opinion)
+		.opinion!=partial('container/opinion', {title: "Opinion", stories: model.Opinion})
 #middle
 	#news-sports.clearfix
-		#news!=partial('container/news', model.news)
-		#sports!=partial('container/news', model.sports)
+		#news!=partial('container/news', {title: "News", stories: model.News})
+		#sports!=partial('container/news', {title: "Sports", stories: model.Sports})
 #bottom
-	#recess!=partial('container/block-row', model.recess)
-	#towerview!=partial('container/block-row', model.towerview)
+	#recess!=partial('container/block-row', {title: "Recess", stories: model.Recess})
+	#towerview!=partial('container/block-row', {title: "Towerview", stories: model.Towerview})
 

@@ -62,12 +62,23 @@ group.docs = function(namespace, group, callback) {
         else {
             if (!group) {
                 var groupedResults = {};
+	            var groupName;
+	            var prevGroupName;
                 for (var i = 0; i < res.length; i++) {
                     var doc = res[i];
-                    var groupName = doc.key[1];
+	                prevGroupName = groupName;
+                    groupName = doc.key[1];
                     if (!groupedResults[groupName]) {
                         groupedResults[groupName] = [];
+	                    doc.doc.cssClass = "first";
+
+	                    if (prevGroupName) {
+	                        groupedResults[prevGroupName][groupedResults[prevGroupName].length - 1].cssClass = "last";
+	                    }
                     }
+	                if (doc.doc.urls) {
+		                doc.doc.url = "/article/" + doc.doc.urls[doc.doc.urls.length - 1];
+	                }
                     groupedResults[groupName].push(doc.doc);
                 }
                 callback(null, groupedResults);

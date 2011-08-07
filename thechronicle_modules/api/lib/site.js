@@ -47,9 +47,11 @@ function fetchGroup(groupName, title, callback) {
 }
 
 site.renderRoot = function(req, res) {
-
-		res.render('index', {filename: 'views/index.jade', model: homeModel});
-
+		api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, result) {
+			_.defaults(result, homeModel);
+			console.log(result);
+			res.render('index', {filename: 'views/index.jade', model: result});
+		})
 };
 
 site.renderArticleList = function(req, http_res) {

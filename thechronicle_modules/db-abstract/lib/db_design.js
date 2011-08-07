@@ -85,7 +85,7 @@ exports.createViews = function(db) {
 exports.viewsAreUpToDate = function(db, callback) {
 	db.get(DESIGN_DOCUMENT_NAME, function (err, response) {
 		// if the design document does not exists, or the version # of the design doc does not exist, return false
-		callback(false);
+		callback(true);
 		return;
 		if(response == null || response.views.version == null) callback(false); 
 

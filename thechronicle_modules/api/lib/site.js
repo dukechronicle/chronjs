@@ -49,7 +49,12 @@ function fetchGroup(groupName, title, callback) {
 site.renderRoot = function(req, res) {
 		api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, result) {
 			_.defaults(result, homeModel);
-			res.render('index', {filename: 'views/index.jade', model: result});
+
+			api.docsByDate(5, function(err, docs) {
+				homeModel.popular.stories = docs;
+				res.render('index', {filename: 'views/index.jade', model: result});
+			})
+
 		})
 };
 

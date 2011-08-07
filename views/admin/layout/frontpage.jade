@@ -59,6 +59,12 @@ h2 Frontpage Layout
 			- each story, id in model.Towerview
 				.story(draggable='true', id='#{story._id}')
 					#{story.title}
+	<h2>Popular</h2>
+	#popular.container(data-groupname='Popular')
+		- if (model.Popular)
+			- each story, id in model.Popular
+				.story(draggable='true', id='#{story._id}')
+					#{story.title}
 
 #sidebar
 	.fixed-container

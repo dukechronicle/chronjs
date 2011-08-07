@@ -40,9 +40,12 @@ $(function() {
     });
 
     $("#layout").delegate(".container", "drop", function(e) {
+
         if (e.stopPropagation) e.stopPropagation();
 
         var docId = e.dataTransfer.getData("Text");
+
+	    console.log("dropping " + docId);
 
         var element = $("#" + docId);
 
@@ -53,7 +56,7 @@ $(function() {
         element.attr("draggable", false);
         //$(this).append(element.get(0));
 
-        if (element.parent().data("groupname") !== $(this).data("groupname")) {
+        if (element.parent().data("groupname") && (element.parent().data("groupname") !== $(this).data("groupname"))) {
             removeFromPrevious(docId, element, $(this).data("groupname"), containerElement);
         } else {
             $.post("/admin/group/add", {
@@ -78,7 +81,7 @@ $(function() {
         newElement.insertBefore($(this));
 
         // story has changed groups
-        if (element.parent().data("groupname") !== $(this).parent().data("groupname")) {
+        if (element.parent().data("groupname") && (element.parent().data("groupname") !== $(this).parent().data("groupname"))) {
             removeFromPrevious(docId, element, $(_this).parent().data("groupname"), newElement);
         } else {
 

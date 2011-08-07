@@ -18,7 +18,7 @@ body #top > .content .top-news .rounded a.hover h2,body #top > .content .top-new
 body #top > .content .top-news .rounded a.hover h3{margin-top:0}
 body #top > .content .top-news .rounded a.hover{padding-top:3px;padding-bottom:3px}
 body #top > .content .top-news .rounded a.hover.teaser{padding-bottom:1em}
-body #top > .content .top-news .rounded p{font-size:1em}
+body #top > .content .top-news .rounded p{font-size:1em;margin-top:5px}
 body #top > .content .top-news .rounded ul li h3{background:url("/images/bullet.gif") no-repeat left 7px}
 body #news,body #sports{width:474.5px;}
 body #news .rounded,body #sports .rounded{padding:10px;width:454px}

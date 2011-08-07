@@ -12,7 +12,9 @@ function connect(database) {
 	if(!couchdbUrl) throw "No Cloudant URL specified...";
 	console.log("Connecting to " + couchdbUrl);
 	couchdbUrl = url.parse(couchdbUrl);
-	couchdbUrl.auth = couchdbUrl.auth.split(":");
+	if (couchdbUrl.auth) {
+		couchdbUrl.auth = couchdbUrl.auth.split(":");
+	}
 
 	if (!couchdbUrl.port) {
 		(couchdbUrl.protocol === "https:") ? couchdbUrl.port = 443 : couchdbUrl.port = 80;

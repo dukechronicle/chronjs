@@ -25,16 +25,22 @@ function connect(database) {
 	}); 
 	
 	var db = conn.database(database);
-	db_design.createViews(db);
-	// initialize database if it doesn't already exist
+	
 	db.exists(function (error,exists)
 	{
 	  	if(error) console.log("ERROR db-abstract" + error);
 
+		// initialize database if it doesn't already exist
 		if(!exists) {
 			db.create();
-			db_design.createViews(db);
 		}
+		
+		db_design.viewsAreUpToDate(db, function(upToDate) {
+			if(!upToDate) {
+				console.log('updating views to newest version');
+				db_design.createViews(db);
+			}		
+		});
 	});
    	return db;	
 }

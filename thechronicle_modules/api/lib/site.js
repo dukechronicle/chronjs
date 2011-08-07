@@ -27,7 +27,7 @@ function _getImages(obj, callback) {
 function fetchGroup(groupName, title, callback) {
 	api.group.docs(FRONTPAGE_GROUP_NAMESPACE, groupName, function(err, res) {
         if (err) console.log(err);
-
+		
 		var groupDocs = {
 			"title": title,
 			"stories": []

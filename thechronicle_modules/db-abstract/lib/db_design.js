@@ -1,6 +1,5 @@
-var DESIGN_DOCUMENT_NAME = '_design/articles';
-
 var views = {
+
 	taxonomy: {
 	map: function(doc) {
 			if (doc.taxonomy) {
@@ -76,19 +75,9 @@ var views = {
 			}
 		}
 	}
-};
 
-exports.createViews = function(db) {
-	db.save(DESIGN_DOCUMENT_NAME, views);
 }
 
-exports.viewsAreUpToDate = function(db, callback) {
-	db.get(DESIGN_DOCUMENT_NAME, function (err, response) {
-		// if the design document does not exists, or the version # of the design doc does not exist, return false
-		callback(false);
-		return;
-		if(response == null || response.views.version == null) callback(false); 
-
-		else callback(response.views.version >= views.version);
-	});
+exports.getViews = function() {
+	return views;
 }

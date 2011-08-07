@@ -49,7 +49,6 @@ function fetchGroup(groupName, title, callback) {
 site.renderRoot = function(req, res) {
 		api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, result) {
 			_.defaults(result, homeModel);
-			console.log(result);
 			res.render('index', {filename: 'views/index.jade', model: result});
 		})
 };

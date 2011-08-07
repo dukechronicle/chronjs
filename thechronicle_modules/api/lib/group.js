@@ -70,8 +70,6 @@ group.docs = function(namespace, group, callback) {
                     }
                     groupedResults[groupName].push(doc.doc);
                 }
-
-                console.log(groupedResults);
                 callback(null, groupedResults);
             }
         }

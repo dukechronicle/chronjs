@@ -375,6 +375,8 @@ exports.init = function(app) {
 		            var images = doc.images;
 		            if(!images) images = {};
 		            images[req.body.imageType] = req.body.versionId;
+			        console.log("jsfljwelf");
+			        console.log(doc._id);
 		            api.editDoc(doc._id, {
 		                images: images
 		            },
@@ -384,6 +386,7 @@ exports.init = function(app) {
 		            })
 		        });
 		    } else {
+
 		        var id = req.body.doc.id;
 			    /*
     		    var new_groups = req.body.doc.groups;
@@ -393,13 +396,15 @@ exports.init = function(app) {
     		    var fields = {
     		        title: req.body.doc.title,
     		        body: req.body.doc.body,
+			        teaser: req.body.doc.teaser
+			        //author: req.body.doc.author
 			        //groups: new_groups
     		    };
-    		    api.editDoc(id, fields, function(err, res) {
+    		    api.editDoc(id, fields, function(err, res, url) {
     		        if(err) {
     		            globalFunctions.showError(http_res, err);
     		        } else {
-    		            http_res.redirect('/article/' + res.merge[1] + '/edit');
+    		            http_res.redirect('/article/' + url + '/edit');
     		        }
     		    });
 		    }

@@ -16,7 +16,7 @@ body #top > .content .top-news .rounded .content-container > .right{width:305px;
 body #top > .content .top-news .rounded .content-container > .right a.hover{padding-right:10px}
 body #top > .content .top-news .rounded a.hover h2,body #top > .content .top-news .rounded a.hover h3{font-size:1.2em}
 body #top > .content .top-news .rounded a.hover h3{margin-top:0}
-body #top > .content .top-news .rounded a.hover{padding-top:1px;padding-bottom:1px}
+body #top > .content .top-news .rounded a.hover{padding-top:3px;padding-bottom:3px}
 body #top > .content .top-news .rounded a.hover.teaser{padding-bottom:1em}
 body #top > .content .top-news .rounded p{font-size:1em}
 body #top > .content .top-news .rounded ul li h3{background:url("/images/bullet.gif") no-repeat left 7px}

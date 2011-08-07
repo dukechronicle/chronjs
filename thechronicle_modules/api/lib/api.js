@@ -69,7 +69,9 @@ function _editDocument(docid, fields, callback) {
         if(geterr) {
             callback(geterr, null, null);
         } else {
-            if(fields.title && (fields.title !== res.title)) {
+            if(fields.title && (_URLify(fields.title, MAX_URL_LENGTH) !== _URLify(res.title, MAX_URL_LENGTH))) {
+	            console.log("new url");
+	            console.log(fields.title);
                 getAvailableUrl(_URLify(fields.title, MAX_URL_LENGTH), 0, function(err, url) {
                     if(err) {
                         callback(err, null, null);
@@ -77,8 +79,8 @@ function _editDocument(docid, fields, callback) {
                     else {
                         var unix_timestamp = Math.round(new Date().getTime() / 1000);
                         fields.updated = unix_timestamp;
-                        fields.urls = res.urls;
-                        fields.urls.push(url);
+							fields.urls = res.urls;
+							fields.urls.push(url);
                         db.merge(docid, fields, function(db_err, db_res) {
                             callback(db_err, db_res, url);
                         });
@@ -86,7 +88,10 @@ function _editDocument(docid, fields, callback) {
                 });
             } else {
                 db.merge(docid, fields, function(db_err, db_res) {
-                    callback(db_err, db_res, res.urls[res.urls.length - 1]);
+	                if (db_err) callback(db_err)
+	                else {
+                        callback(db_err, db_res, res.urls[res.urls.length - 1]);
+	                }
                 });
             }
         }
@@ -94,18 +99,16 @@ function _editDocument(docid, fields, callback) {
 }
 
 api.editDoc = function(docid, fields, callback) {
-    var fcns = {};
+	/*
     var groups = fields.groups;
     if(fields.groups) {
         fcns["groups"] = function(acallback) {
             _edit_group(docid, groups, acallback);
         };
         delete fields.groups; //we will edit this field in group.edit
-    }
-    fcns["merge"] = function(acallback) {
-        _editDocument(docid, fields, acallback);
-    };
-    nimble.series(fcns, callback);
+    }*/
+
+        _editDocument(docid, fields, callback);
 }
 
 // can take one id, or an array of ids

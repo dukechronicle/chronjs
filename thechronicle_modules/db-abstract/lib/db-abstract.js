@@ -14,7 +14,10 @@ function connect(database) {
 	couchdbUrl = url.parse(couchdbUrl);
 	couchdbUrl.auth = couchdbUrl.auth.split(":");
 
-	(couchdbUrl.protocol === "https:") ? couchdbUrl.port = 443 : couchdbUrl.port = 80;
+	if (!couchdbUrl.port) {
+		(couchdbUrl.protocol === "https:") ? couchdbUrl.port = 443 : couchdbUrl.port = 80;
+	}
+	
 	var conn = new (cradle.Connection)(couchdbUrl.protocol + '//' + couchdbUrl.hostname, couchdbUrl.port, {
 		auth: {username: couchdbUrl.auth[0], password: couchdbUrl.auth[1]}
 	}); 

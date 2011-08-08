@@ -4,6 +4,7 @@ var exports = module.exports = api;
 var nimble = require("nimble");
 var async = require("async");
 var db = require("../../db-abstract");
+var config = require("../../config");
 var solr = require('solr');
 var _ = require("underscore");
 
@@ -142,7 +143,7 @@ api.addDoc = function(fields, callback) {
 		    if(db_err) callback(db_err);
 			
 		    // adds the article to the solr database for searching	
-		    var client = solr.createClient('index.websolr.com','80','/c1af51aeb37','/solr');
+		    var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH'));
 		    var solrDoc = {
 			id: res.id,
 			type: 'article',
@@ -244,8 +245,7 @@ api.docsByTitleSearch = function(title, callback) {
 	title = title.toLowerCase().replace(/ /g,'* OR ');			
 	var query = "database_text:"+db.getDatabaseName()+" AND title_text:"+title+"*";
 	
-	// The host, port, core, and path should come from redis eventually
-	var client = solr.createClient('index.websolr.com','80','/c1af51aeb37','/solr'); 		
+	var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH')); 		
 	client.query(query, {fl: "*,score", sort: "score desc"}, function(err,response) {
 		if(err) {
 			callback(err);

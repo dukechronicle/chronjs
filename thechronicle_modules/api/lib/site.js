@@ -173,7 +173,8 @@ site.renderArticleEdit = function(req, http_res, url) {
 		                });*/
 		            //}
 		        ],
-		        function(err, groups, images) {
+		        function(err, images) {
+		        //function(err, groups, images) {
 		            if(err) globalFunctions.showError(http_res, err);
 		            else {
 		                http_res.render('admin/edit', {

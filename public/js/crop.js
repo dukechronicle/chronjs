@@ -10,8 +10,9 @@ function setSizes(s) {
     sizes = eval('(' + s + ')');
 }
 
-function crop(ratio) {
-    cropOptions.aspectRatio = ratio;
+function crop(dim) {
+    cropOptions.aspectRatio = dim.width / dim.height;
+    cropOptions.minSize = [dim.width, dim.height];
     jQuery(function() {
         jQuery('#toCrop').Jcrop(cropOptions);
     });
@@ -21,7 +22,7 @@ function updateCropSize() {
     var select = document.getElementById("sizes");
     var chosen = select.options[select.selectedIndex].value;
     var size = sizes[chosen];
-    crop(size.width / size.height);
+    crop(size);
 }
 
 function showCoords(c) {

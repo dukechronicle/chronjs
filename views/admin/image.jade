@@ -1,6 +1,20 @@
 h1 Crop
 - if(url)
   script
+  
+    var cropOptions = {
+      onChange:   showCoords,
+      onSelect:   showCoords,
+      onRelease:  clearCoords
+    };
+    
+    function crop(ratio) {
+      cropOptions.aspectRatio = ratio;
+      jQuery(function() {
+        jQuery('#toCrop').Jcrop(cropOptions);
+      });
+    }
+    
     function showCoords(c) {
       $('#x1').val(c.x);
       $('#y1').val(c.y);
@@ -11,13 +25,8 @@ h1 Crop
       $('#coords input').val('');
     };
     
-    jQuery(function() {
-      jQuery('#toCrop').Jcrop({
-        onChange:   showCoords,
-        onSelect:   showCoords,
-        onRelease:  clearCoords
-      });
-    });
+    crop();
+    
   img#toCrop(src=url)
 p
   form#coords(action='/admin/image/crop', method='POST')

@@ -33,5 +33,3 @@ function showCoords(c) {
 function clearCoords() {
     $('#coords input').val('');
 };
-
-crop();

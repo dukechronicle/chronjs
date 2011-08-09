@@ -14,6 +14,16 @@ VALID_EXTENSIONS['image/png'] = 'png';
 VALID_EXTENSIONS['image/gif'] = 'gif';
 
 var IMAGE_TYPES = ['article', 'frontpage', 'slideshow'];
+var CROP_SIZES = {
+    large: {
+        width: 636,
+        height: 393
+    },
+    square: {
+        width: 300,
+        height: 300
+    }
+};
 
 var THUMB_DIMENSIONS = '100x100';
 var FRONTPAGE_GROUP_NAMESPACE = ['Layouts','Frontpage'];
@@ -277,7 +287,8 @@ exports.init = function(app) {
 					                date: orig.value.date,
             		                versions: versions,
             		                imageTypes: IMAGE_TYPES,
-            		                article: req.query.article
+            		                article: req.query.article,
+            		                cropSizes: CROP_SIZES
             		            },
 			                    layout: "layout-admin.jade"
             		        });

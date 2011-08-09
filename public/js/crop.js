@@ -1,8 +1,14 @@
+var sizes;
+
 var cropOptions = {
     onChange: showCoords,
     onSelect: showCoords,
     onRelease: clearCoords
 };
+
+function setSizes(s) {
+    sizes = eval('(' + s + ')');
+}
 
 function crop(ratio) {
     cropOptions.aspectRatio = ratio;
@@ -13,8 +19,9 @@ function crop(ratio) {
 
 function updateCropSize() {
     var select = document.getElementById("sizes");
-    var chosen = select.options[select.selectedIndex];
-    console.log(sizes[chosen.value]);
+    var chosen = select.options[select.selectedIndex].value;
+    var size = sizes[chosen];
+    crop(size.width / size.height);
 }
 
 function showCoords(c) {

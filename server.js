@@ -1,19 +1,15 @@
 /* declare global configuration variables */
 var PORT = process.env.PORT || 4000;
 
-var config = require('./thechronicle_modules/config');
-
 /* require npm nodejs modules */
 var express = require('express');
 require('express-namespace');
 var stylus = require('stylus');
 
-/* require internal nodejs modules */
+/* require internal modules */
 var globalFunctions = require('./thechronicle_modules/global-functions');
-var api = require('./thechronicle_modules/api/lib/api');
-var site = require('./thechronicle_modules/api/lib/site');
-var admin = require('./thechronicle_modules/admin/lib/admin');
-var mobileapi = require('./thechronicle_modules/mobileapi/lib/mobileapi');
+var config = require('./thechronicle_modules/config');
+
 /* express configuration */
 var app = express.createServer();
 
@@ -35,7 +31,6 @@ app.use(stylus.middleware({
   , dest: __dirname + publicDir
   , compile: compile
 }));
-
 app.set('view engine', 'jade');
 
 // the middleware itself does not serve the static
@@ -50,28 +45,54 @@ app.error(function(err, req, res, next){
 	globalFunctions.log('ERROR: ' + err.stack);
 });
 
-/*** FRONTEND ***/
-app.get('/', site.renderRoot);
-app.get('/article-list', site.renderArticleList);
-app.get('/article-list/:titleSearch', function(req, http_res) {
-	site.renderArticleListSearch(req, http_res, req.params.titleSearch);
-});
-app.get('/article/:url', function(req, http_res) {
-    site.renderArticle(req, http_res, req.params.url);
-});
-app.get('/article/:url/edit', function(req, http_res) {
-    site.renderArticleEdit(req, http_res, req.params.url);
-});
-app.get('/article/:url/image', function(req, http_res) {
-    site.renderImageList(req, http_res, req.params.url);
-});
-/*** !FRONTEND ***/
+if(!config.isSetUp())
+{
+	app.get('/', function(req, res, next) {
+		if(!config.isSetUp()) res.render('admin/config', {locals:{configParams:config.getParameters()}, layout: 'layout-admin.jade'} );
+		else next();
+	});
 
-/*** ADMIN ***/
-app = admin.init(app);
-app = mobileapi.init(app);
-
-/*** !ADMIN ***/
+	app.post('/', function(req, res) {
+		config.setUp(req.body, function(err) {
+			if(err == null) runSite();
+			res.redirect('/');
+		});
+	});
+}
+else runSite();
 
 console.log('Listening on port ' + PORT);
 app.listen(PORT);
+
+function runSite()
+{
+	/* require internal nodejs modules */
+	var api = require('./thechronicle_modules/api/lib/api');
+	var site = require('./thechronicle_modules/api/lib/site');
+	var admin = require('./thechronicle_modules/admin/lib/admin');
+	var mobileapi = require('./thechronicle_modules/mobileapi/lib/mobileapi');
+	
+
+	/*** FRONTEND ***/
+	app.get('/', site.renderRoot);
+
+	app.get('/article-list', site.renderArticleList);
+	app.get('/article-list/:titleSearch', function(req, http_res) {
+		site.renderArticleListSearch(req, http_res, req.params.titleSearch);
+	});
+	app.get('/article/:url', function(req, http_res) {
+	    site.renderArticle(req, http_res, req.params.url);
+	});
+	app.get('/article/:url/edit', function(req, http_res) {
+	    site.renderArticleEdit(req, http_res, req.params.url);
+	});
+	app.get('/article/:url/image', function(req, http_res) {
+	    site.renderImageList(req, http_res, req.params.url);
+	});
+	/*** !FRONTEND ***/
+
+	/*** ADMIN ***/
+	app = admin.init(app);
+	app = mobileapi.init(app);
+	/*** !ADMIN ***/
+}

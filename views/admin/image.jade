@@ -12,6 +12,8 @@ script
   updateCropSize();
 p
   form#coords(action='/admin/image/crop', method='POST')
+    input#fWidth(type='hidden', name='finalWidth')
+    input#fHeight(type='hidden', name='finalHeight')
     input#x1(type='hidden', name='x1')
     input#x2(type='hidden', name='x2')
     input#y1(type='hidden', name='y1')

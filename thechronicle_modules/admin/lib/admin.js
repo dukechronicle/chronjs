@@ -321,8 +321,8 @@ exports.init = function(app) {
                 parseInt(req.body.y1),
                 parseInt(req.body.x2),
                 parseInt(req.body.y2));
-            var width = req.body.x2 - req.body.x1;
-            var height = req.body.y2 - req.body.y1;
+            var width = req.body.finalWidth;
+            var height = req.body.finalHeight;
             var croppedName = '';
 		    
 		    async.waterfall([
@@ -337,7 +337,8 @@ exports.init = function(app) {
 		            });
 		        },
 		        function(orig, callback) {		            
-		            im.convert([orig.value.name, '-crop', geom, croppedName], function(imErr, stdout, stderr) {
+		            im.convert([orig.value.name, '-crop', geom, 
+		                    '-resize', width.toString() + 'x' + height.toString(), croppedName], function(imErr, stdout, stderr) {
 		                callback(imErr, orig);
 		            });
 		        },

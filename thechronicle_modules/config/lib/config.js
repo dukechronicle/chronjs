@@ -1,6 +1,5 @@
 var configParams = require('./config-params.js');
 var globalFunctions = require('../../global-functions');
-var configFile = require('../../../config.js');
 
 var fs = require('fs');
 
@@ -8,16 +7,21 @@ var CONFIG_FILE_PATH = "./config.js";
 
 var configuration = null;
 var activieProfile = null;
-	
+var configFile = null;
+
 initConfig();	
 
 function initConfig()
 {
+	try {
+		configFile = require('../../../config.js');
+	}
+	catch(err) {
+		// config file hasn't been created yet so try to make the config info accessible
+		return;
+	}
+
 	configuration = configFile.getConfiguration();
-
-	// if a configuration has not been created yet, return
-	if(configuration == null) return;
-
 	activeProfile = configuration.profiles[configuration.activeConfigurationProfile];
 
 	if(activeProfile == null) {
@@ -36,6 +40,8 @@ exports.isSetUp = function() {
 }
 
 exports.setUp = function(params, callback) {
+	var addToConfigFile = "exports.getConfiguration = function(){try {return configuration;}catch(err) {return null;}}"; 	
+
 	// build the configuration object	
 	configuration = {};
 	configuration.activeConfigurationProfile = params.profile_name;
@@ -51,12 +57,10 @@ exports.setUp = function(params, callback) {
 
 	activeProfile = configuration.profiles[configuration.activeConfigurationProfile];
 
-	fs.readFile(CONFIG_FILE_PATH, 'utf8', function(err, data) {
-
-		var writeToFile = 'var configuration = \n'+ JSON.stringify(configuration) + ';\n\n' + data;
-		fs.writeFile(CONFIG_FILE_PATH, writeToFile, function(err) {
-			callback(null);
-		});
+	// write the config file
+	var writeToFile = 'var configuration = \n'+ JSON.stringify(configuration) + ';\n\n' + addToConfigFile;
+	fs.writeFile(CONFIG_FILE_PATH, writeToFile, function(err) {
+		callback(null);
 	});
 }
 

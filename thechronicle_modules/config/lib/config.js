@@ -4,10 +4,12 @@ var globalFunctions = require('../../global-functions');
 var fs = require('fs');
 
 var CONFIG_FILE_PATH = "./config.js";
+var DEFAULT_PROFILE_NAME = "production";
 
 var configuration = null;
 var activieProfile = null;
 var configFile = null;
+var activeProfileName = null;
 
 initConfig();	
 
@@ -22,7 +24,8 @@ function initConfig()
 	}
 
 	configuration = configFile.getConfiguration();
-	activeProfile = configuration.profiles[configuration.activeConfigurationProfile];
+	activeProfileName = configuration.activeConfigurationProfile;
+	activeProfile = configuration.profiles[activeProfileName];
 
 	if(activeProfile == null) {
 		if(configuration.activeConfigurationProfile == null) globalFunctions.log('Active configuration profile is not defined!');
@@ -36,34 +39,54 @@ exports.get = function(variable) {
 };
 
 exports.isSetUp = function() {
-	return configuration != null;
+	return exports.getUndefinedParameters().length == 0; // if all config params are defined, it is set up
 }
 
 exports.setUp = function(params, callback) {
 	var addToConfigFile = "exports.getConfiguration = function(){try {return configuration;}catch(err) {return null;}}"; 	
 
-	// build the configuration object	
-	configuration = {};
+	// build the configuration object if needed
+	if(configuration == null) configuration = {};
+	if(configuration.profiles == null) configuration.profiles = {};
+	if(configuration.profiles[params.profile_name] == null)	configuration.profiles[params.profile_name] = {};
+	
 	configuration.activeConfigurationProfile = params.profile_name;
-	configuration.profiles = {};
-	configuration.profiles[params.profile_name] = {};
 
 	// remove configuration profile name from parameter set as it is not a configuration parameter	
 	delete params.profile_name;
 
 	for(configKey in params) {
-		configuration.profiles[configuration.activeConfigurationProfile][configKey] = params[configKey];
+		if(params[configKey].length > 0) {
+			configuration.profiles[configuration.activeConfigurationProfile][configKey] = params[configKey];
+		}
 	}
-
-	activeProfile = configuration.profiles[configuration.activeConfigurationProfile];
+	
+	activeProfileName = configuration.activeConfigurationProfile;
+	activeProfile = configuration.profiles[activeProfileName];
 
 	// write the config file
 	var writeToFile = 'var configuration = \n'+ JSON.stringify(configuration) + ';\n\n' + addToConfigFile;
 	fs.writeFile(CONFIG_FILE_PATH, writeToFile, function(err) {
-		callback(null);
+		if(exports.getUndefinedParameters().length == 0) callback(null);
+		else callback('some parameters still undefined');
 	});
 }
 
-exports.getParameters = function() {
-	return configParams.getParameters();
+exports.getUndefinedParameters = function() {
+	if(configuration == null) return configParams.getParameters();
+
+	var parameters = configParams.getParameters();
+	var returnParameters = [];
+
+	// find the undefined params and return them
+	for(i = 0; i < parameters.length; i ++) {
+		// if a parameter is undefined, add it to return array
+		if(activeProfile[parameters[i].name] == null) returnParameters.push(parameters[i]); 
+	}
+
+	return returnParameters;
+}
+
+exports.getActiveProfileName = function() {
+	return activeProfileName || DEFAULT_PROFILE_NAME;
 }

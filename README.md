@@ -34,7 +34,7 @@ All configuration properties have a default value currently except S3 Key and Se
 
 ### Adding your own configuration properties
 
-As you continue to extend the Chronicle framework, you may find that defining some configuration globals would be useful. To add a configuration parameter to appear in the initial configuration set up web page, navigate to /thechronicle_modules/config/lib/config-params.js and add your new configuration parameter (name, description, and default value [if desired]) to the configParams object. Then delete the configuration json object in /config.js (make sure you remember the details that were in there so you can reconfigure the framework!) and start the server to reconfigure the framework, including your new configuration option.
+As you continue to extend the Chronicle framework, you may find that defining some configuration globals would be useful. To add a configuration parameter to appear in the initial configuration set up web page, navigate to /thechronicle_modules/config/lib/config-params.js and add your new configuration parameter (name, description, and default value [if desired]) to the configParams object. Then restart the server to and go to localhost:4000/ to define a value for your new configuration option.
 
 ### Accessing configuration properties
 

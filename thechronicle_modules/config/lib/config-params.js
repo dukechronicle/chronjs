@@ -1,4 +1,9 @@
-var configParams = [
+var configParams = [	
+	{
+		name: 'SERVER_PORT',
+		description: 'Port to run the chronicle site on',
+		default: '4000'
+	},
 	{
 		name: 'COUCHDB_URL',
 		description: 'CouchDB Server URL',

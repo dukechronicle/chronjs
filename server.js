@@ -47,10 +47,11 @@ if(!config.isSetUp())
 {
 	app.get('/', function(req, res, next) {
 		if(!config.isSetUp()) {
-			res.render('admin/config', {
+			res.render('config/config', {
 				locals: {
 					configParams:config.getUndefinedParameters(),
-					profileName:config.getActiveProfileName()
+					profileName:config.getProfileNameKey(),
+					profileValue:config.getActiveProfileName()
 				},
 				layout: 'layout-admin.jade'
 			});

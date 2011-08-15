@@ -1,6 +1,3 @@
-/* declare global configuration variables */
-var PORT = process.env.PORT || 4000;
-
 /* require npm nodejs modules */
 var express = require('express');
 require('express-namespace');
@@ -15,6 +12,7 @@ var app = express.createServer();
 
 var publicDir = '/public';
 var viewsDir = '/views';
+var port = 4000;
 
 function compile(str, path) {
   return stylus(str)
@@ -48,7 +46,15 @@ app.error(function(err, req, res, next){
 if(!config.isSetUp())
 {
 	app.get('/', function(req, res, next) {
-		if(!config.isSetUp()) res.render('admin/config', {locals:{configParams:config.getParameters()}, layout: 'layout-admin.jade'} );
+		if(!config.isSetUp()) {
+			res.render('admin/config', {
+				locals: {
+					configParams:config.getUndefinedParameters(),
+					profileName:config.getActiveProfileName()
+				},
+				layout: 'layout-admin.jade'
+			});
+		}		
 		else next();
 	});
 
@@ -61,11 +67,13 @@ if(!config.isSetUp())
 }
 else runSite();
 
-console.log('Listening on port ' + PORT);
-app.listen(PORT);
+console.log('Listening on port ' + port);
+app.listen(port);
 
 function runSite()
 {
+	port = config.get('SERVER_PORT');
+
 	/* require internal nodejs modules */
 	var api = require('./thechronicle_modules/api/lib/api');
 	var site = require('./thechronicle_modules/api/lib/site');

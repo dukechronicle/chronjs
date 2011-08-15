@@ -8,7 +8,11 @@ exports.init = function(app) {
             var groupName = req.params.groupname;
             //console.log("server.js/mobile" + groupName);
             getGroup(groupName,10,function(err,res){
-                console.log(res.teaser);
+                if(res == null)
+                {
+                     console.log("mobileapi: res is null");
+                     http_res.send(err,res);
+                }
                 var result = [];
                 result = _.map(res,function(doc){
                     return {"title": doc.value.title, "teaser": doc.value.teaser, "urls": doc.value.urls};
@@ -56,7 +60,6 @@ function contains(obj, array){
 
 function getGroup(groupName,n,callback){
     console.log(groupName);
-    groupName = capitalizeName(groupName).trim();
     if(contains(groupName,taxonomyGroups)){
         grabArticles([groupName],0,n,callback);
     }

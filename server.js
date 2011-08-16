@@ -6,6 +6,10 @@ var stylus = require('stylus');
 /* require internal modules */
 var globalFunctions = require('./thechronicle_modules/global-functions');
 var config = require('./thechronicle_modules/config');
+var api = require('./thechronicle_modules/api/lib/api');
+var site = require('./thechronicle_modules/api/lib/site');
+var admin = require('./thechronicle_modules/admin/lib/admin');
+var mobileapi = require('./thechronicle_modules/mobileapi/lib/mobileapi');
 
 /* express configuration */
 var app = express.createServer();
@@ -36,6 +40,11 @@ app.set('view engine', 'jade');
 app.use(express.static(__dirname + publicDir));
 app.use(express.bodyParser());
 
+
+// set up session. should be changed to redis session eventually
+app.use(express.cookieParser());
+app.use(express.session({ secret: "i'll make you my dirty little secret" }));
+
 app.set('views', __dirname + viewsDir);
 
 app.error(function(err, req, res, next){
@@ -46,34 +55,45 @@ app.error(function(err, req, res, next){
 if(!config.isSetUp())
 {
 	app.get('/', function(req, res, next) {
-		if(!config.isSetUp()) {
-			res.render('admin/config', {
-				locals: {
-					configParams:config.getUndefinedParameters(),
-					profileName:config.getActiveProfileName()
-				},
-				layout: 'layout-admin.jade'
-			});
-		}		
-		else next();
+		if(api.accounts.isAdmin(req.session)) {					
+			if(!config.isSetUp()) {
+				res.render('config/config', {
+					locals: {
+						configParams:config.getUndefinedParameters(),
+						profileName:config.getProfileNameKey(),
+						profileValue:config.getActiveProfileName()
+					},
+					layout: 'layout-admin.jade'
+				});
+			}		
+			else next();
+		}
+		else {
+			site.askForLogin(res,'/');
+		}
 	});
 
 	app.post('/', function(req, res) {
-		config.setUp(req.body, function(err) {
-			if(err == null) runSite();
-			res.redirect('/');
-		});
+		if(api.accounts.isAdmin(req.session)) {
+			config.setUp(req.body, function(err) {
+				if(err == null) runSite();
+				res.redirect('/');
+			});
+		}
+		else {
+			site.askForLogin(res,'/');
+		}
 	});
 }
 else runSite();
+
+site.assignLoginFunctionality(app);
 
 console.log('Listening on port ' + port);
 app.listen(port);
 
 function runSite()
 {
-	port = config.get('SERVER_PORT');
-
 	/* require internal nodejs modules */
 	var api = require('./thechronicle_modules/api/lib/api');
 	var site = require('./thechronicle_modules/api/lib/site');
@@ -102,9 +122,9 @@ function runSite()
         site.renderSmtpTest(req, http_res, req.params.email, req.params.first, req.params.last,req.params.num);
     });
 	/*** !FRONTEND ***/
+	port = config.get('SERVER_PORT');	
 
-	/*** ADMIN ***/
+	app = site.init(app);
 	app = admin.init(app);
 	app = mobileapi.init(app);
-	/*** !ADMIN ***/
 }

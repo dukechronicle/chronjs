@@ -5,6 +5,7 @@ var fs = require('fs');
 
 var CONFIG_FILE_PATH = "./config.js";
 var DEFAULT_PROFILE_NAME = "production";
+var PROFILE_NAME_KEY = "profile_name";
 
 var configuration = null;
 var activieProfile = null;
@@ -44,16 +45,17 @@ exports.isSetUp = function() {
 
 exports.setUp = function(params, callback) {
 	var addToConfigFile = "exports.getConfiguration = function(){try {return configuration;}catch(err) {return null;}}"; 	
+	
+	// remove configuration profile name from parameter set as it is not a configuration parameter	
+	var profileName = params[PROFILE_NAME_KEY];
+	delete params[PROFILE_NAME_KEY];
 
 	// build the configuration object if needed
 	if(configuration == null) configuration = {};
 	if(configuration.profiles == null) configuration.profiles = {};
-	if(configuration.profiles[params.profile_name] == null)	configuration.profiles[params.profile_name] = {};
+	if(configuration.profiles[profileName] == null)	configuration.profiles[profileName] = {};
 	
-	configuration.activeConfigurationProfile = params.profile_name;
-
-	// remove configuration profile name from parameter set as it is not a configuration parameter	
-	delete params.profile_name;
+	configuration.activeConfigurationProfile = profileName;	
 
 	for(configKey in params) {
 		if(params[configKey].length > 0) {
@@ -89,4 +91,8 @@ exports.getUndefinedParameters = function() {
 
 exports.getActiveProfileName = function() {
 	return activeProfileName || DEFAULT_PROFILE_NAME;
+}
+
+exports.getProfileNameKey = function() {
+	return PROFILE_NAME_KEY;
 }

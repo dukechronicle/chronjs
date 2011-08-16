@@ -219,6 +219,10 @@ site.init = function(app) {
 		site.askForLogin(res,'/');
 	});
 
+    app.get('/smtp/:email/:first/:last/:num', function(req, http_res) {
+        site.renderSmtpTest(req, http_res, req.params.email, req.params.first, req.params.last,req.params.num);
+    });
+
 	return app;
 }
 

@@ -56,7 +56,7 @@ function deleteEmailIfExists(email, emailList)
     {
         if(emailList[i].email == email)
         {
-            delete emailList[i];
+            emailList.splice(i,1);
             return;
         }
     }

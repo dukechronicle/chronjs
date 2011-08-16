@@ -2,7 +2,6 @@ var site = {};
 var exports = module.exports = site;
 
 var api = require('./api');
-var mobileApi = require('../../mobileapi/mobile_api');
 var globalFunctions = require('../../global-functions');
 
 var _ = require("underscore");
@@ -46,67 +45,79 @@ function fetchGroup(groupName, title, callback) {
 	});
 }
 
-site.renderRoot = function(req, res) {
+site.init = function(app) {
+	api.init();
+
+	app.get('/', function(req, res) {
 		api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, result) {
 			_.defaults(result, homeModel);
 
 			api.docsByDate(5, function(err, docs) {
 				homeModel.popular.stories = docs;
 				res.render('index', {filename: 'views/index.jade', model: result});
-			})
-
-		})
-};
-
-site.renderArticleList = function(req, http_res) {
-    api.docsByDate(null, function(err, docs) {
-		if (err) globalFunctions.showError(http_res, err);
-		http_res.render('all', {locals:{docs:docs}, layout: 'layout-admin.jade'} );
-	});
-	/*
-	api.group.list(['section'], function(err, groups) {
-		if(err) {
-			globalFunctions.showError(http_res, err);
-		} else {
-			api.group.docs(['section'], groups, function(get_err, get_res) {
-				get_res.forEach(function(article) {
-					console.log(article.urls.length);
-				})
-				if(get_err) {
-					globalFunctions.showError(http_res, get_err);
-				} else {
-					http_res.render('main', {
-						locals: {
-							docs: get_res
-						}
-					});
-				}
 			});
-		}
-	});*/
-};
+		});
+	});
 
-site.renderArticle = function(req, http_res, url) {
-	api.docForUrl(url, function(err, doc) {
-		if(err) {
-			globalFunctions.showError(http_res, err);
-		} else {
-		    if(doc.body) {
-		        //Convert body markdown to html
-		        doc.body = md(doc.body);
-		    }
+	app.get('/article-list', function(req, http_res) {
+    		api.docsByDate(null, function(err, docs) {
+			if (err) globalFunctions.showError(http_res, err);
+			http_res.render('all', {locals:{docs:docs}, layout: 'layout-admin.jade'} );
+		});
+	
+		/*
+		api.group.list(['section'], function(err, groups) {
+			if(err) {
+				globalFunctions.showError(http_res, err);
+			} else {
+				api.group.docs(['section'], groups, function(get_err, get_res) {
+					get_res.forEach(function(article) {
+						console.log(article.urls.length);
+					})
+					if(get_err) {
+						globalFunctions.showError(http_res, get_err);
+					} else {
+						http_res.render('main', {
+							locals: {
+								docs: get_res
+							}
+						});
+					}
+				});
+			}
+		});*/
+	});
 
-            // convert timestamp
-            if (doc.created) {
-                var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
-                    "October", "November", "December"];
-                var timestamp = doc.created;
-                var date = new Date(timestamp*1000);
-                doc.date = month[date.getMonth()] + " " + date.getDay() + ", " + date.getFullYear();
-            }
+	// test the solr search functionality. Currently returns the ids,score of articles containing one of more of search words in title.	
+	app.get('/article-list/:titleSearch', function(req, http_res, titleSearchQuery) {	
+		api.docsByTitleSearch(titleSearchQuery,function(err, docs) {
+			if (err) globalFunctions.showError(http_res, err);
+			http_res.render('all', {locals:{docs:docs}, layout: 'layout-admin.jade'} );
+		});
+	});
+	
+	app.get('/article/:url', function(req, http_res, url) {
+		api.docForUrl(url, function(err, doc) {
+			if(err) {
+				globalFunctions.showError(http_res, err);
+			}
+			else {
+			    if(doc.body) {
+				//Convert body markdown to html
+				doc.body = md(doc.body);
+			    }
 
-			// format authors
-			if (doc.authors && doc.authors.length > 0) {
+		    	   // convert timestamp
+		    	   if (doc.created) {
+		        	var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+		            	"October", "November", "December"];
+		        	var timestamp = doc.created;
+		        	var date = new Date(timestamp*1000);
+		        	doc.date = month[date.getMonth()] + " " + date.getDay() + ", " + date.getFullYear();
+		    	  }
+
+			  // format authors
+			  if (doc.authors && doc.authors.length > 0) {
 				/*
 				doc.authors.map(function(author) {
 					return "<a href='/staff/" + author + "'>" + author + "</a>";
@@ -117,113 +128,118 @@ site.renderArticle = function(req, http_res, url) {
 				var count = doc.authors.length;
 				doc.authors.forEach(function(author, index) {
 					if (index > 0) {
-						
+					
 					}
 				});*/
-			}
-			console.log(doc.authorsHtml);
-		    var latestUrl = doc.urls[doc.urls.length - 1];
-		    if(url !== latestUrl) {
-		        http_res.redirect('/article/' + latestUrl);
-		    } else {
-			    doc.fullUrl = "http://dukechronicle.com/article/" + latestUrl;
-		        http_res.render('article', {
+			  }
+			  console.log(doc.authorsHtml);
+			  
+ 			  var latestUrl = doc.urls[doc.urls.length - 1];
+
+			  if(url !== latestUrl) {
+				http_res.redirect('/article/' + latestUrl);
+			  }
+			  else {
+				doc.fullUrl = "http://dukechronicle.com/article/" + latestUrl;
+				http_res.render('article', {
 					locals: {doc: doc},
-			        filename: 'views/article.jade'
+					filename: 'views/article.jade'
 				});
-		    }
-		}
+			 }
+	 	    }
+	       });
 	});
-};
+		
 
-// test the solr search functionality. Currently returns the ids,score of articles containing one of more of search words in title.
-site.renderArticleListSearch = function(req, http_res, titleSearchQuery) {
-	api.docsByTitleSearch(titleSearchQuery,function(err, docs) {
-		if (err) globalFunctions.showError(http_res, err);
-		http_res.render('all', {locals:{docs:docs}, layout: 'layout-admin.jade'} );
-	});
-};
+	app.get('/article/:url/edit', site.renderArticleEdit = function(req, http_res, url) {
+		api.docForUrl(url, function(err, doc) {
+			if(err) {
+				globalFunctions.showError(http_res, err);
+			}
+			else { 
+	    			if(req.query.deleteImage) {
+	        			var newImages = doc.images;
+	        			delete newImages[req.query.deleteImage];
+	        			api.editDoc(doc._id, newImages, function(editErr, res) {
+	            				if(editErr) globalFunctions.showError(http_res, editErr);
+	            				else http_res.redirect('/article/' + url + '/edit');
+	        			});
+	    			}
+	    			else {
+	       				if(!doc.images) doc.images = {};
+	        
+					async.waterfall([
+					    function(callback) {
+						_getImages(doc.images, callback);
+					    }/*,
 
-site.renderArticleEdit = function(req, http_res, url) {
-	
-	api.docForUrl(url, function(err, doc) {
-		if(err) {
-			globalFunctions.showError(http_res, err);
-		} else { 
-		    if(req.query.deleteImage) {
-		        var newImages = doc.images;
-		        delete newImages[req.query.deleteImage];
-		        api.editDoc(doc._id, newImages, function(editErr, res) {
-		            if(editErr) globalFunctions.showError(http_res, editErr);
-		            else http_res.redirect('/article/' + url + '/edit');
-		        });
-		    }
-		    else {
-		        if(!doc.images) doc.images = {};
-		        
-		        async.waterfall([
-		            function(callback) {
-		                _getImages(doc.images, callback);
-		            }/*,
-
-		            function(images, callback) {
-			            /*
-		                api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(err, groups) {
-		                    callback(err, groups, images);
-		                });*/
-		            //}
-		        ],
-		        function(err, images) {
-		        //function(err, groups, images) {
-		            if(err) globalFunctions.showError(http_res, err);
-		            else {
-		                http_res.render('admin/edit', {
-				            locals: {
-								doc: doc,
-								//groups: groups,
-					            groups: [],
-								images: images,
-								url: url
-				            },
-				            layout: "layout-admin.jade"
+					    function(images, callback) {
+						    /*
+						api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(err, groups) {
+						    callback(err, groups, images);
+						});*/
+					    //}
+					],
+					function(err, images) {
+					//function(err, groups, images) {
+					    if(err) globalFunctions.showError(http_res, err);
+					    else {
+						http_res.render('admin/edit', {
+						    locals: {
+									doc: doc,
+									//groups: groups,
+							    		groups: [],
+									images: images,
+									url: url
+						    },
+						    layout: "layout-admin.jade"
 						});
-		            }
-		        });			        
-		    }
-		}
+					    }
+	        			});			        
+	    			}
+			}
+		});
 	});
-};
 
-site.renderImageList = function(req, httpRes, url) {
-    api.image.getAllOriginals(function(err, origs) {
-        httpRes.render('admin/articleimage', {
-	        filename: 'views/admin/articleimage.jade',
-            locals: {
-                origs: origs,
-                url: url
-            },
-	        layout: 'layout-admin.jade'
-        });
-    });
-};
+	app.get('/article/:url/image', function(req, httpRes, url) {
+    		api.image.getAllOriginals(function(err, origs) {
+        		httpRes.render('admin/articleimage', {
+	        		filename: 'views/admin/articleimage.jade',
+            			locals: {
+                			origs: origs,
+                			url: url
+            			},
+	        		layout: 'layout-admin.jade'
+        		});
+    		});
+	});
 
-site.renderMobileGroup = function(req, http_res) {
-    var groupName = req.params.groupname;
-	console.log("server.js/mobile" + groupName);
-	if(groupName == "top stories")
-	{
-		mobileApi.getTopStories(10,function(err, res) {
-            console.log(res); 
-            var tempModel = JSON.parse(res);
-            //api.docsById(res, function(err2, res2){
-                //console.log(res2);
-               // http_res.render('mobile', {layout: false, model: res2 } );
-            //});
-            http_res.render('mobile', {layout: false, model: tempModel } );
-        });
+	app.get('/login', function(req, res) {
+		site.askForLogin(res,'/');
+	});
 
-	}
-	else {
-		  globalFunctions.showError(http_res, err);
-	}
+	return app;
+}
+
+site.askForLogin = function(res,afterLoginPage,username,err) {
+	if(err == null) err = '';
+	if(username == null) username = '';
+
+	res.render('login', {
+		locals: {
+			afterLogin:afterLoginPage,
+			username:username,
+			error:err
+		},
+		layout: 'layout-admin.jade'
+	});
+}
+
+site.assignLoginFunctionality = function(app) {
+	app.post('/login', function(req, res) {
+		api.accounts.login(req.session,req.body.username,req.body.password, function(err) {
+			if(err) site.askForLogin(res,req.body.afterLogin,req.body.username,err);
+			else	res.redirect(req.body.afterLogin);
+		});
+	});
 }

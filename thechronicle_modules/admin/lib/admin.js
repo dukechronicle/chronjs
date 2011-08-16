@@ -69,6 +69,8 @@ function _deleteFiles(paths, callback) {
 }
 
 exports.init = function(app) {
+	s3.init();
+	
 	app.namespace('/admin', function() {
 		app.get('/layout/frontpage', function(req, res) {
 			function renderPage(docs) {

@@ -7,7 +7,7 @@ var fs = require('fs');
 var DESIGN_DOCUMENT_NAME = '_design/articles';
 var DESIGN_DOCUMENT_FILENAME = __dirname+'/db_design.js';
 var DESIGN_DOCUMENT_VERSION_NAME = DESIGN_DOCUMENT_NAME+'-versioning';
-var DATABASE = config.get("COUCHDB_DATABASE", "chronicle");
+var DATABASE = null;
 
 // parse environment variable CLOUDANT_URL OR COUCHDB_URL to extract authentication information
 function connect(database) {
@@ -50,9 +50,6 @@ function connect(database) {
 
 var db = exports;
 
-// assign all methods of the cradle object to db
-_.extend(db, connect(DATABASE));
-
 db.group = require('./group.js');
 db.image = require('./image.js');
 db.taxonomy = require('./taxonomy.js');
@@ -61,6 +58,12 @@ db.getDatabaseName = function() {
 	return DATABASE;
 }
 
+db.init = function() {
+	DATABASE = config.get("COUCHDB_DATABASE", "chronicle");
+
+	// assign all methods of the cradle object to db
+	_.extend(db, connect(DATABASE));
+}
 
 function createViews(db,modifiedTime) {
 	var design_doc = require(DESIGN_DOCUMENT_FILENAME);	

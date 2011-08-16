@@ -11,6 +11,7 @@ var _ = require("underscore");
 api.group = require("./group");
 api.image = require("./image");
 api.taxonomy = require("./taxonomy");
+api.accounts = require("./accounts");
 
 var MAX_URL_LENGTH = 50;
 
@@ -52,6 +53,10 @@ function _URLify(s, maxChars) {
     s = s.replace(/[-\s]+/g, "-");   // convert spaces to hyphens
     s = s.toLowerCase();             // convert to lowercase
     return s.substring(0, maxChars);// trim to first num_chars chars
+}
+
+api.init = function() {
+	db.init();
 }
 
 api.getArticles= function(parent_node, count, callback) {

@@ -25,6 +25,8 @@
 		"node-markdown":	"0.1.x",
 		"solr":		        "0.1.x",
 
-        "expresso":         "0.8.x"
+        "expresso":         "0.8.x",
+        
+        "nodemailer":       "0.2.x"
 	}
 }

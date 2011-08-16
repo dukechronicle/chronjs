@@ -100,27 +100,6 @@ function runSite()
 	var admin = require('./thechronicle_modules/admin/lib/admin');
 	var mobileapi = require('./thechronicle_modules/mobileapi/lib/mobileapi');
 	
-
-	/*** FRONTEND ***/
-	app.get('/', site.renderRoot);
-
-	app.get('/article-list', site.renderArticleList);
-	app.get('/article-list/:titleSearch', function(req, http_res) {
-		site.renderArticleListSearch(req, http_res, req.params.titleSearch);
-	});
-	app.get('/article/:url', function(req, http_res) {
-	    site.renderArticle(req, http_res, req.params.url);
-	});
-	app.get('/article/:url/edit', function(req, http_res) {
-	    site.renderArticleEdit(req, http_res, req.params.url);
-	});
-	app.get('/article/:url/image', function(req, http_res) {
-	    site.renderImageList(req, http_res, req.params.url);
-	});
-
-    app.get('/smtp/:email/:first/:last/:num', function(req, http_res) {
-        site.renderSmtpTest(req, http_res, req.params.email, req.params.first, req.params.last,req.params.num);
-    });
 	/*** !FRONTEND ***/
 	port = config.get('SERVER_PORT');	
 

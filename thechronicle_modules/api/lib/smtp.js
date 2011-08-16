@@ -2,7 +2,6 @@ var smtp = {};
 var exports = module.exports = smtp;
 
 var db = require("../../db-abstract");
-var _ = require("underscore");
 var nodemailer = require('nodemailer');
 
 var DB_LIST_NAME = "subscriberList";
@@ -49,7 +48,6 @@ smtp.addSubscriber = function(subscriberEmail, firstName, lastName, callback){
     });
 }
 
-
 function deleteEmailIfExists(email, emailList)
 {
     for(i in emailList)
@@ -61,6 +59,7 @@ function deleteEmailIfExists(email, emailList)
         }
     }
 }
+
 smtp.removeSubscriber = function(subscriberEmail, first, last, callback){
     db.get(DB_LIST_NAME,function(err, res){
         if(err && err.error != 'not_found') 
@@ -89,7 +88,6 @@ smtp.getSubscribers = function(callback)
 
 var sgusername = "app578498@heroku.com";
 var sgpassword = "0acabbaccfeafbb35a";
-
 
 nodemailer.SMTP = {
     host: 'smtp.sendgrid.net', // required

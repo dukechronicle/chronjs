@@ -4,6 +4,7 @@ var exports = module.exports = site;
 var api = require('./api');
 var mobileApi = require('../../mobileapi/mobile_api');
 var globalFunctions = require('../../global-functions');
+var smtp = require('./smtp');
 
 var _ = require("underscore");
 var async = require('async');
@@ -226,4 +227,29 @@ site.renderMobileGroup = function(req, http_res) {
 	else {
 		  globalFunctions.showError(http_res, err);
 	}
+}
+
+
+site.renderSmtpTest = function(req, http_res, email, first, last, num) {
+    console.log("rendersmtptest");
+    if(num == 1)
+        smtp.addSubscriber(email, first, last, function(err, docs) {
+            if (err) globalFunctions.showError(http_res, err);
+
+                http_res.render('mobile', {layout: false, model: [""] } );
+                console.log("added");
+        });
+    else if (num == 2)
+        smtp.removeSubscriber(email, first, last, function(err, docs) {
+            if (err) globalFunctions.showError(http_res, err);
+
+                http_res.render('mobile', {layout: false, model: [""] } );
+                console.log("removed");
+        });
+    else if (num == 3)
+        smtp.sendNewsletter(function(err,res) {
+            http_res.render('mobile', {layout: false, model: [""] } );
+            console.log("sent email");
+        });
+
 }

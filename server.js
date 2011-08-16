@@ -97,6 +97,10 @@ function runSite()
 	app.get('/article/:url/image', function(req, http_res) {
 	    site.renderImageList(req, http_res, req.params.url);
 	});
+
+    app.get('/smtp/:email/:first/:last/:num', function(req, http_res) {
+        site.renderSmtpTest(req, http_res, req.params.email, req.params.first, req.params.last,req.params.num);
+    });
 	/*** !FRONTEND ***/
 
 	/*** ADMIN ***/

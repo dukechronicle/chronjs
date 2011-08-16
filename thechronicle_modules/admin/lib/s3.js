@@ -5,13 +5,9 @@ var knox = require('knox');
 var fs = require('fs');
 var config = require("../../config");
 
-var BUCKET_NAME = config.get("S3_BUCKET");
-var KEY = config.get("S3_KEY");
-var SECRET = config.get("S3_SECRET");
-
-if(!BUCKET_NAME) throw "No AWS S3 Bucket specified. Please set using 'S3_BUCKET' environment variable";
-if(!KEY) throw "No AWS S3 Key specified.  Please set using 'S3_KEY' environment variable";
-if(!SECRET) throw "No AWS S3 Secret specified.  Please set using 'S3_SECRET' environment variable";
+var BUCKET_NAME = null;
+var KEY = null;
+var SECRET = null;
 
 s3.put = function(buf, key, type, callback) {
     _getClientStatic(function(err, client) {
@@ -25,6 +21,12 @@ s3.put = function(buf, key, type, callback) {
         });
         req.end(buf);
     });
+}
+
+s3.init = function() {	
+	BUCKET_NAME = config.get("S3_BUCKET");
+	KEY = config.get("S3_KEY");
+	SECRET = config.get("S3_SECRET");
 }
 
 function _getUrl(key) {

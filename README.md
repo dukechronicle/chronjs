@@ -41,3 +41,7 @@ As you continue to extend the Chronicle framework, you may find that defining so
 In the code, you can access global configuration settings by:
 	var config = require('./thechronicle_modules/config');
 	param_value = config.get(param_name);
+
+### Default Admin username and password
+
+You will need the admin username and password to change configuration settings. Currently, any username / password combination works.

@@ -34,6 +34,18 @@ function initConfig()
 	}
 }
 
+function getConfigParamObjectWithName(name) {
+	var params = configParams.getParameters();
+	
+	for(index in params) {
+		if(params[index].name == name) {
+			return params[index];
+		}
+	}
+
+	return null;
+}
+
 exports.get = function(variable) {
 	if(activeProfile == null) {
 		globalFunctions.log('Configuration is not defined!');
@@ -92,6 +104,23 @@ exports.getUndefinedParameters = function() {
 	}
 
 	return returnParameters;
+}
+
+exports.getParameters = function () {
+	if(configuration == null) return configParams.getParameters();
+	
+	var returnParams = exports.getUndefinedParameters();
+	
+
+	for(key in activeProfile) {
+		var newobj = {};
+		newobj.name = key;
+		newobj.description = getConfigParamObjectWithName(key).description;
+		newobj.default = activeProfile[key];
+		returnParams.push(newobj);
+	}
+
+	return returnParams;
 }
 
 exports.getActiveProfileName = function() {

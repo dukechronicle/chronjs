@@ -8,7 +8,7 @@ var DEFAULT_PROFILE_NAME = "production";
 var PROFILE_NAME_KEY = "profile_name";
 
 var configuration = null;
-var activieProfile = null;
+var activeProfile = null;
 var configFile = null;
 var activeProfileName = null;
 
@@ -35,6 +35,11 @@ function initConfig()
 }
 
 exports.get = function(variable) {
+	if(activeProfile == null) {
+		globalFunctions.log('Configuration is not defined!');
+		return null;
+	}
+
 	if(activeProfile[variable] == null) globalFunctions.log('Configuration property: "' + variable + '" not defined!');
 	return activeProfile[variable];
 };

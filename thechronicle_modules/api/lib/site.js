@@ -4,6 +4,7 @@ var exports = module.exports = site;
 var api = require('./api');
 var globalFunctions = require('../../global-functions');
 var smtp = require('./smtp');
+var config = require('../../config');
 
 var _ = require("underscore");
 var async = require('async');
@@ -240,12 +241,40 @@ site.askForLogin = function(res,afterLoginPage,username,err) {
 	});
 }
 
-site.assignLoginFunctionality = function(app) {
+site.assignPreInitFunctionality = function(app,server) {
 	app.post('/login', function(req, res) {
 		api.accounts.login(req.session,req.body.username,req.body.password, function(err) {
 			if(err) site.askForLogin(res,req.body.afterLogin,req.body.username,err);
 			else	res.redirect(req.body.afterLogin);
 		});
+	});
+
+	app.get('/config', function(req, res) {
+		if(api.accounts.isAdmin(req.session)) {					
+			res.render('config/config', {
+				locals: {
+					configParams:config.getParameters(),
+					profileName:config.getProfileNameKey(),
+					profileValue:config.getActiveProfileName()
+				},
+				layout: 'layout-admin.jade'
+			});
+		}
+		else {
+			site.askForLogin(res,'/config');
+		}
+	});
+
+	app.post('/config', function(req, res) {
+		if(api.accounts.isAdmin(req.session)) {
+			config.setUp(req.body, function(err) {
+				if(err == null) server.runSite();
+				res.redirect('/');
+			});
+		}
+		else {
+			site.askForLogin(res,'/config');
+		}
 	});
 }
 

@@ -5,6 +5,16 @@ var configParams = [
 		default: '4000'
 	},
 	{
+		name: 'ADMIN_USERNAME',
+		description: 'New administrator username to login with from now on',
+		default: ''
+	},
+	{
+		name: 'ADMIN_PASSWORD',
+		description: 'New administrator password to login with from now on',
+		default: ''
+	},
+	{
 		name: 'COUCHDB_URL',
 		description: 'CouchDB Server URL',
 		default: 'http://chrondev:pikachu@chrondev.iriscouch.com'

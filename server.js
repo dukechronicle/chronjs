@@ -48,7 +48,10 @@ app.use(express.session({ secret: "i'll make you my dirty little secret" }));
 app.set('views', __dirname + viewsDir);
 
 app.error(function(err, req, res, next){
-	res.send(500);
+	try {
+		res.send(500);
+	}
+	catch(err) {}
 	globalFunctions.log('ERROR: ' + err.stack);
 });
 

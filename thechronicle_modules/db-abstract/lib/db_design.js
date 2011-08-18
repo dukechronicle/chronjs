@@ -74,8 +74,15 @@ var views = {
 				emit(doc.original, doc);
 			}
 		}
+	},
+	// return all articles not indexed by Solr
+	not_indexed_by_solr: {
+		map: function(doc) {
+			if(doc.title && doc.body && !doc.indexedBySolr) {
+				emit(null, doc);
+			}
+		}
 	}
-
 }
 
 exports.getViews = function() {

@@ -57,6 +57,22 @@ function _URLify(s, maxChars) {
 
 api.init = function() {
 	db.init();
+
+	// check for unindexed articles and index them in solr. Shouldn't happen very often
+	api.docsNotIndexed(function(err, response) {
+		response.forEach(function(row) {
+      			console.log('indexing "' + row.title + '"');
+			api.indexArticle(row._id,row.title,row.body, function(error2, response2) {
+				if(error2) console.log(error2);
+				else {
+					db.merge(row._id, {indexedBySolr: true}, function(error3, response3) {
+   						if(error3) console.log(error3);
+						else console.log('indexed "' + row.title + '"');
+					});
+				}
+		    	});
+   		});
+	});
 }
 
 api.getArticles= function(parent_node, count, callback) {
@@ -130,6 +146,10 @@ api.docsByAuthor = function(author, callback) {
     callback);
 }
 
+api.docsNotIndexed = function(callback) {
+    db.view("articles/not_indexed_by_solr", callback);
+}
+
 api.addDoc = function(fields, callback) {
     
     getAvailableUrl(_URLify(fields.title, MAX_URL_LENGTH), 0, function(err, url) {
@@ -147,22 +167,27 @@ api.addDoc = function(fields, callback) {
 		    
 		    if(db_err) callback(db_err);
 			
-		    // adds the article to the solr database for searching	
-		    var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH'));
-		    var solrDoc = {
-			id: res.id,
-			type: 'article',
-			title_text: fields.title.toLowerCase(),
-			body_text: fields.body.toLowerCase(),
-			database_text: db.getDatabaseName()
-		    };
-
-		    client.add(solrDoc, {commit:true}, function(err, response) {
+		    api.indexArticle(res.id,fields.title,fields.body, function(err, response) {
 			callback(err,response,url);
 		    });
             });
         }
     });
+}
+
+api.indexArticle = function(id,title,body,callback) {
+	// adds the article to the solr database for searching	
+	var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH'));
+	
+	var solrDoc = {
+		id: id,
+		type: 'article',
+		title_text: escape(title.toLowerCase()),
+		body_text: escape(body.toLowerCase()),
+		database_text: db.getDatabaseName()
+	};
+
+	client.add(solrDoc, {commit:true}, callback);
 }
 
 api.addNode = function(parent_path, name, callback) {
@@ -247,7 +272,7 @@ api.removeFromDocArray = function(id, field, toRemove, callback) {
 }
 
 api.docsByTitleSearch = function(title, callback) {
-	title = title.toLowerCase().replace(/ /g,'* OR ');			
+	title = escape(title.toLowerCase().replace(/ /g,'* OR '));			
 	var query = "database_text:"+db.getDatabaseName()+" AND title_text:"+title+"*";
 	
 	var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH')); 		

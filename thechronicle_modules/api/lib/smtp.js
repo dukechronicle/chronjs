@@ -1,88 +1,34 @@
 var smtp = {};
 var exports = module.exports = smtp;
 
-var db = require("../../db-abstract");
 var nodemailer = require('nodemailer');
-
+var redisclient = require('./redisclient');
 var DB_LIST_NAME = "subscriberList";
 
-function containsEmail(obj, array){
-    for(i in array){
-        if(array[i] != null && array[i].email == obj.email)
-        {
-            console.log(array[i].email);
-            return true;
-        }
-    }
-    return false;
-}
-
-smtp.addSubscriber = function(subscriberEmail, firstName, lastName, callback){
-    db.get(DB_LIST_NAME,function(err, res){
-        if(err && err.error != 'not_found') 
-            callback(err);
-
-        var emailEntry = {email: subscriberEmail, first: firstName, last: lastName};  
-        var emailList = [];
-        if(res != null && res.list != null)
-        {
-            emailList = res.list;  
-
-            // Check if email exists
-            if(!containsEmail(emailEntry,emailList))
-            {
-                emailList.push(emailEntry);
-            }
-            else
-            {
-                callback(err,res);
-                return;
-            }
-        }
-        else
-        {
-            // First email of the list, initialize the list.
-            emailList = [emailEntry];
-        }
-        db.save(DB_LIST_NAME,{list: emailList}, callback);
+smtp.addSubscriber = function(subscriberEmail, callback){
+    redisclient.client.sadd(DB_LIST_NAME, subscriberEmail, function(err, res){
+        console.log(subscriberEmail);
+        if(err)
+            console.log(err);
+        callback(err,res);
     });
 }
 
-function deleteEmailIfExists(email, emailList)
-{
-    for(i in emailList)
-    {
-        if(emailList[i].email == email)
-        {
-            emailList.splice(i,1);
-            return;
-        }
-    }
-}
-
-smtp.removeSubscriber = function(subscriberEmail, first, last, callback){
-    db.get(DB_LIST_NAME,function(err, res){
-        if(err && err.error != 'not_found') 
-            callback(err);
-
-        // Get the list, delete entry, update.
-        var emailList = res.list;
-        deleteEmailIfExists(subscriberEmail, emailList);
-
-        db.save(DB_LIST_NAME, {list: emailList}, callback);
+smtp.removeSubscriber = function(subscriberEmail, callback){
+    redisclient.client.srem(DB_LIST_NAME, subscriberEmail, function(err, res){
+        console.log(subscriberEmail);
+        if(err)
+            console.log(err);
+        callback(err,res);
     });
 }
 
 smtp.getSubscribers = function(callback)
 {
-    db.get(DB_LIST_NAME,function(err, res){
-        if(err) 
-            callback(err);
-        if(res == null)
-        {
-            callback(err, {});
-        }
-        callback(err, res.list);
+    redisclient.client.smembers(DB_LIST_NAME, function(err, res){
+        if(err)
+            console.log(err);
+        callback(err,res);
     });
 }
 
@@ -97,16 +43,48 @@ nodemailer.SMTP = {
     pass : sgpassword
 }
 
-smtp.sendNewsletter = function(callback)
+function generateHTML(msgBody)
 {
+    jsdom.env({
+        html: "<html><body></body></html>",
+        scripts: [
+            'http://code.jquery.com/jquery-1.5.min.js'
+        ]
+    }, function (err, window) {
+        var $ = document.getElementById;
+
+        $('body').append("<div class='testing'>Hello World</div>");
+    });
+
+    return $('html').html();
+}
+
+function generatePlainText(msgBody)
+{
+    var plainText;
+
+    for(i in msgBody)
+    {
+        var article = msgBody[i];
+        plainText.append(article.title + "\n");
+        plainText.append(article.teaser + "\n");
+        plainText.append("\n\n");
+    }
+    return plainText;
+}
+
+smtp.sendNewsletter = function(msgBody,callback)
+{
+    console.log(msgBody);
+    var htmlMsg = generateHTML(msgBody);
+    var bodyMsg = generatePlainText(msgBody);
     smtp.getSubscribers(function(err,res){
-        console.log(res);
         for(i in res)
         {
-             var emailDest = res[i].email; 
+             var emailDest = res[i]; 
              console.log(emailDest);
 
-             nodemailer.send_mail({
+             /*nodemailer.send_mail(
                     sender : "chronicle@duke.edu",
                     to : emailDest,
                     subject : "This is a subject",
@@ -118,7 +96,7 @@ smtp.sendNewsletter = function(callback)
                         console.log(err2);
                     }
                 }
-             );
+             );*/
         }
         callback(err,res);
     });

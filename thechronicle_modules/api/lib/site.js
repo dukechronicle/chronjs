@@ -4,6 +4,7 @@ var exports = module.exports = site;
 var api = require('./api');
 var globalFunctions = require('../../global-functions');
 var smtp = require('./smtp');
+var redis = require('./redisclient');
 
 var _ = require("underscore");
 var async = require('async');
@@ -26,7 +27,8 @@ function _getImages(obj, callback) {
 
 function fetchGroup(groupName, title, callback) {
 	api.group.docs(FRONTPAGE_GROUP_NAMESPACE, groupName, function(err, res) {
-        if (err) console.log(err);
+        if (err) 
+            console.log(err);
 		
 		var groupDocs = {
 			"title": title,
@@ -219,8 +221,14 @@ site.init = function(app) {
 		site.askForLogin(res,'/');
 	});
 
-    app.get('/smtp/:email/:first/:last/:num', function(req, http_res) {
-        site.renderSmtpTest(req, http_res, req.params.email, req.params.first, req.params.last,req.params.num);
+    app.get('/smtp', function(req, http_res) {
+        http_res.render('smtp', {layout: false, model: [""] } );
+    });
+
+    app.post('/smtp', function(req, http_res) {
+        var postData = req.body;
+        console.log(postData);
+        site.renderSmtpTest(req, http_res, req.body.email, req.body.num);
     });
 
 	return app;
@@ -250,26 +258,33 @@ site.assignLoginFunctionality = function(app) {
 }
 
 
-site.renderSmtpTest = function(req, http_res, email, first, last, num) {
+site.renderSmtpTest = function(req, http_res, email, num) {
     console.log("rendersmtptest");
     if(num == 1)
-        smtp.addSubscriber(email, first, last, function(err, docs) {
-            if (err) globalFunctions.showError(http_res, err);
-
-                http_res.render('mobile', {layout: false, model: [""] } );
-                console.log("added");
+        smtp.addSubscriber(email, function(err, docs) {
+            if (err) 
+                globalFunctions.showError(http_res, err);
+            http_res.render('mobile', {layout: false, model: [""] } );
+            console.log("added");
         });
     else if (num == 2)
-        smtp.removeSubscriber(email, first, last, function(err, docs) {
-            if (err) globalFunctions.showError(http_res, err);
-
-                http_res.render('mobile', {layout: false, model: [""] } );
-                console.log("removed");
+        smtp.removeSubscriber(email, function(err, docs) {
+            if (err)
+                globalFunctions.showError(http_res, err);
+            http_res.render('mobile', {layout: false, model: [""] } );
+            console.log("removed");
         });
     else if (num == 3)
-        smtp.sendNewsletter(function(err,res) {
-            http_res.render('mobile', {layout: false, model: [""] } );
-            console.log("sent email");
-        });
+    {
+        api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, result) {
+            _.defaults(result, homeModel);
 
+            api.docsByDate(5, function(err, docs) {
+                smtp.sendNewsletter(docs, function(err2,res2) {
+                    http_res.render('mobile', {layout: false, model: [""] } );
+                    console.log("sent email");
+                });
+            });
+		});
+    }
 }

@@ -48,59 +48,35 @@ app.use(express.session({ secret: "i'll make you my dirty little secret" }));
 app.set('views', __dirname + viewsDir);
 
 app.error(function(err, req, res, next){
-	res.send(500);
+	try {
+		res.send(500);
+	}
+	catch(err) {}
 	globalFunctions.log('ERROR: ' + err.stack);
 });
 
 if(!config.isSetUp())
 {
 	app.get('/', function(req, res, next) {
-		if(api.accounts.isAdmin(req.session)) {					
-			if(!config.isSetUp()) {
-				res.render('config/config', {
-					locals: {
-						configParams:config.getUndefinedParameters(),
-						profileName:config.getProfileNameKey(),
-						profileValue:config.getActiveProfileName()
-					},
-					layout: 'layout-admin.jade'
-				});
-			}		
-			else next();
-		}
-		else {
-			site.askForLogin(res,'/');
-		}
-	});
-
-	app.post('/', function(req, res) {
-		if(api.accounts.isAdmin(req.session)) {
-			config.setUp(req.body, function(err) {
-				if(err == null) runSite();
-				res.redirect('/');
-			});
-		}
-		else {
-			site.askForLogin(res,'/');
-		}
+		if(!config.isSetUp()) {
+			res.redirect('/config');
+		}		
+		else next();
 	});
 }
 else runSite();
 
-site.assignLoginFunctionality(app);
+site.assignPreInitFunctionality(app,this);
 
 console.log('Listening on port ' + port);
 app.listen(port);
 
-function runSite()
-{
-	/* require internal nodejs modules */
-	var api = require('./thechronicle_modules/api/lib/api');
-	var site = require('./thechronicle_modules/api/lib/site');
-	var admin = require('./thechronicle_modules/admin/lib/admin');
-	var mobileapi = require('./thechronicle_modules/mobileapi/lib/mobileapi');
-	
-	/*** !FRONTEND ***/
+exports.runSite = function()
+{	
+	runSite();
+}
+
+function runSite() {
 	port = config.get('SERVER_PORT');	
 
 	app = site.init(app);

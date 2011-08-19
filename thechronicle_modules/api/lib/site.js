@@ -5,6 +5,7 @@ var api = require('./api');
 var globalFunctions = require('../../global-functions');
 var smtp = require('./smtp');
 var redis = require('./redisclient');
+var config = require('../../config');
 
 var _ = require("underscore");
 var async = require('async');
@@ -92,14 +93,16 @@ site.init = function(app) {
 	});
 
 	// test the solr search functionality. Currently returns the ids,score of articles containing one of more of search words in title.	
-	app.get('/article-list/:titleSearch', function(req, http_res, titleSearchQuery) {	
-		api.docsByTitleSearch(titleSearchQuery,function(err, docs) {
+	app.get('/article-list/:titleSearchQuery', function(req, http_res) {	
+		api.docsByTitleSearch(req.params.titleSearchQuery,function(err, docs) {
 			if (err) globalFunctions.showError(http_res, err);
 			http_res.render('all', {locals:{docs:docs}, layout: 'layout-admin.jade'} );
 		});
 	});
 	
-	app.get('/article/:url', function(req, http_res, url) {
+	app.get('/article/:url', function(req, http_res) {
+		var url = req.params.url;
+		
 		api.docForUrl(url, function(err, doc) {
 			if(err) {
 				globalFunctions.showError(http_res, err);
@@ -154,7 +157,9 @@ site.init = function(app) {
 	});
 		
 
-	app.get('/article/:url/edit', site.renderArticleEdit = function(req, http_res, url) {
+	app.get('/article/:url/edit', site.renderArticleEdit = function(req, http_res) {
+		var url = req.params.url;
+
 		api.docForUrl(url, function(err, doc) {
 			if(err) {
 				globalFunctions.showError(http_res, err);
@@ -204,13 +209,13 @@ site.init = function(app) {
 		});
 	});
 
-	app.get('/article/:url/image', function(req, httpRes, url) {
+	app.get('/article/:url/image', function(req, httpRes) {
     		api.image.getAllOriginals(function(err, origs) {
         		httpRes.render('admin/articleimage', {
 	        		filename: 'views/admin/articleimage.jade',
             			locals: {
                 			origs: origs,
-                			url: url
+                			url: req.params.url
             			},
 	        		layout: 'layout-admin.jade'
         		});
@@ -234,6 +239,7 @@ site.init = function(app) {
 	return app;
 }
 
+// redirects to login page
 site.askForLogin = function(res,afterLoginPage,username,err) {
 	if(err == null) err = '';
 	if(username == null) username = '';
@@ -248,12 +254,41 @@ site.askForLogin = function(res,afterLoginPage,username,err) {
 	});
 }
 
-site.assignLoginFunctionality = function(app) {
+// assigns the functionality needed before different modules are ready to be initilized (before config settings have been set)
+site.assignPreInitFunctionality = function(app,server) {
 	app.post('/login', function(req, res) {
 		api.accounts.login(req.session,req.body.username,req.body.password, function(err) {
 			if(err) site.askForLogin(res,req.body.afterLogin,req.body.username,err);
 			else	res.redirect(req.body.afterLogin);
 		});
+	});
+
+	app.get('/config', function(req, res) {
+		if(api.accounts.isAdmin(req.session)) {					
+			res.render('config/config', {
+				locals: {
+					configParams:config.getParameters(),
+					profileName:config.getProfileNameKey(),
+					profileValue:config.getActiveProfileName()
+				},
+				layout: 'layout-admin.jade'
+			});
+		}
+		else {
+			site.askForLogin(res,'/config');
+		}
+	});
+
+	app.post('/config', function(req, res) {
+		if(api.accounts.isAdmin(req.session)) {
+			config.setUp(req.body, function(err) {
+				if(err == null) server.runSite();
+				res.redirect('/');
+			});
+		}
+		else {
+			site.askForLogin(res,'/config');
+		}
 	});
 }
 

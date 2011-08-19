@@ -8,7 +8,7 @@ var DEFAULT_PROFILE_NAME = "production";
 var PROFILE_NAME_KEY = "profile_name";
 
 var configuration = null;
-var activieProfile = null;
+var activeProfile = null;
 var configFile = null;
 var activeProfileName = null;
 
@@ -34,7 +34,24 @@ function initConfig()
 	}
 }
 
+function getConfigParamObjectWithName(name) {
+	var params = configParams.getParameters();
+	
+	for(index in params) {
+		if(params[index].name == name) {
+			return params[index];
+		}
+	}
+
+	return null;
+}
+
 exports.get = function(variable) {
+	if(activeProfile == null) {
+		globalFunctions.log('Configuration is not defined!');
+		return null;
+	}
+
 	if(activeProfile[variable] == null) globalFunctions.log('Configuration property: "' + variable + '" not defined!');
 	return activeProfile[variable];
 };
@@ -87,6 +104,23 @@ exports.getUndefinedParameters = function() {
 	}
 
 	return returnParameters;
+}
+
+exports.getParameters = function () {
+	if(configuration == null) return configParams.getParameters();
+	
+	var returnParams = exports.getUndefinedParameters();
+	
+
+	for(key in activeProfile) {
+		var newobj = {};
+		newobj.name = key;
+		newobj.description = getConfigParamObjectWithName(key).description;
+		newobj.default = activeProfile[key];
+		returnParams.push(newobj);
+	}
+
+	return returnParams;
 }
 
 exports.getActiveProfileName = function() {

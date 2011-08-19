@@ -26,7 +26,9 @@ server will be started on port 4000, you should be able to access the site at
 
 ### Set Chronicle configuration settings
 
-Navigate to http://localhost:4000 and fill out all fields of the configuration form you are presented with. This page only shows up when your chronicle environment has no configuration settings defined. After you set your config settings, the site will work as normal. To change config settings after you have initially set them through this web page, edit the configuration json object in config.js (located in the root directory).
+Navigate to http://localhost:4000 and fill out all fields of the configuration form you are presented with. This page only shows up when your chronicle environment has no configuration settings defined. After you set your config settings, the site will work as normal.
+
+To change config settings after you have initially set them through this web page, go to http://localhost:4000/config and edit the settings.
 
 ### S3 key and secret - config properties
 
@@ -44,4 +46,4 @@ In the code, you can access global configuration settings by:
 
 ### Default Admin username and password
 
-You will need the admin username and password to change configuration settings. Currently, any username / password combination works.
+You will need the admin username and password to change configuration settings (including setting the new admin username and password). Currently, the default admin username is 'admin' and the default admin password is 'password'. These should be changed to more secure strings when you set the configuration settings.

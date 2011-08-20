@@ -46,4 +46,4 @@ In the code, you can access global configuration settings by:
 
 ### Default Admin username and password
 
-You will need the admin username and password to change configuration settings (including setting the new admin username and password). Currently, the default admin username is 'admin' and the default admin password is 'password'. These should be changed to more secure strings when you set the configuration settings.
+You will need the admin username and password to change configuration settings (including setting the new admin username and password). Currently, the default admin username is 'admin' and the default admin password is 'chronicle'. These should be changed to more secure strings when you set the configuration settings.

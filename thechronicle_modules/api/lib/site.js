@@ -232,7 +232,6 @@ site.init = function(app) {
 
     app.post('/smtp', function(req, http_res) {
         var postData = req.body;
-        console.log(postData);
         site.renderSmtpTest(req, http_res, req.body.email, req.body.num);
     });
 
@@ -316,7 +315,7 @@ site.renderSmtpTest = function(req, http_res, email, num) {
 
             api.docsByDate(5, function(err, docs) {
                 smtp.sendNewsletter(docs, function(err2,res2) {
-                    http_res.render('mobile', {layout: false, model: [""] } );
+                    http_res.send(res2);
                     console.log("sent email");
                 });
             });

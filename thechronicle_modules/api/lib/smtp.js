@@ -3,7 +3,9 @@ var exports = module.exports = smtp;
 
 var nodemailer = require('nodemailer');
 var redisclient = require('./redisclient');
+var jsdom = require("jsdom");
 var DB_LIST_NAME = "subscriberList";
+var $ = require("jquery");
 
 smtp.addSubscriber = function(subscriberEmail, callback){
     redisclient.client.sadd(DB_LIST_NAME, subscriberEmail, function(err, res){
@@ -43,61 +45,78 @@ nodemailer.SMTP = {
     pass : sgpassword
 }
 
-function generateHTML(msgBody)
+function generateHTML(msgBody, callback)
 {
     jsdom.env({
         html: "<html><body></body></html>",
         scripts: [
             'http://code.jquery.com/jquery-1.5.min.js'
         ]
-    }, function (err, window) {
-        var $ = document.getElementById;
+    }, function (err, res) {
 
-        $('body').append("<div class='testing'>Hello World</div>");
+        // Clean out previous items first.
+        $('body').empty();
+
+        // Iterate and add each article to generated html.
+        for(i in msgBody)
+        {
+            var article = msgBody[i];
+            var articleContainer = $('<div />');
+            articleContainer.append("<h3>"+ article.title + "</h3>");
+            articleContainer.append("<p>" + article.teaser + "</p>");
+
+            $('body').append(articleContainer);
+        }
+
+        var ret = "<html>" + $('html').html() + "</html>";
+        
+        callback(err, ret);
     });
-
-    return $('html').html();
 }
 
 function generatePlainText(msgBody)
 {
-    var plainText;
+    var plainText = "";
 
     for(i in msgBody)
     {
         var article = msgBody[i];
-        plainText.append(article.title + "\n");
-        plainText.append(article.teaser + "\n");
-        plainText.append("\n\n");
+        plainText += article.title + "\n";
+        plainText += article.teaser + "\n";
+        plainText += "\n\n";
     }
     return plainText;
 }
 
 smtp.sendNewsletter = function(msgBody,callback)
 {
-    console.log(msgBody);
-    var htmlMsg = generateHTML(msgBody);
-    var bodyMsg = generatePlainText(msgBody);
-    smtp.getSubscribers(function(err,res){
-        for(i in res)
-        {
-             var emailDest = res[i]; 
-             console.log(emailDest);
+    //console.log(msgBody);
+    generateHTML(msgBody, function(err2, htmlres){
+        console.log("htmlmsg");
+        console.log(htmlres);
+        //var bodyMsg = generatePlainText(msgBody);
+        smtp.getSubscribers(function(err,res){
+            for(i in res)
+            {
+                 var emailDest = res[i];
+                 console.log(emailDest);
 
-             /*nodemailer.send_mail(
-                    sender : "chronicle@duke.edu",
-                    to : emailDest,
-                    subject : "This is a subject",
-                    body: "Hello, this is a test body",
-                    html: "<b> test</b>alskdfj",
-                },
-                function(err2, result){
-                    if(err2){
-                        console.log(err2);
+                 /*nodemailer.send_mail(
+                        sender : "chronicle@duke.edu",
+                        to : emailDest,
+                        subject : "This is a subject",
+                        body: "Hello, this is a test body",
+                        html: "<b> test</b>alskdfj",
+                    },
+                    function(err2, result){
+                        if(err2){
+                            console.log(err2);
+                        }
                     }
-                }
-             );*/
-        }
-        callback(err,res);
+                 );*/
+            }
+            callback(err,htmlres);
+        });
     });
+
 }

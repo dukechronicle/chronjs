@@ -27,6 +27,8 @@
 
         "expresso":         "0.8.x",
         
-        "nodemailer":       "0.2.x"
+        "nodemailer":       "0.2.x",
+        "jsdom":            "0.2.x",
+        "jquery":           "1.5.x"
 	}
 }

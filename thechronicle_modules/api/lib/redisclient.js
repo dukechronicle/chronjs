@@ -1,9 +1,9 @@
 var redis = require("redis");
 var url = require("url");
-var configProfile = "dev";
-var configHashKey = "config:" + configProfile;
-// parse enviroment variable to extract login information
-var redisUrl = process.env.REDISTOGO_URL || process.env.REDIS_URL;
+var config = require('../../config');
+
+// Grab redis URL from config settings.
+redisUrl = config.get("REDIS_URL");
 
 var client;
 

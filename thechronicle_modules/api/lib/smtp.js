@@ -94,25 +94,34 @@ smtp.sendNewsletter = function(msgBody,callback)
     generateHTML(msgBody, function(err2, htmlres){
         console.log("htmlmsg");
         console.log(htmlres);
-        //var bodyMsg = generatePlainText(msgBody);
+        var bodyMsg = generatePlainText(msgBody);
+        
         smtp.getSubscribers(function(err,res){
+            var now = new Date();
+            var dateStr = now.toDateString();
+            var subjectStr = "[Chronicle Newsletter] " + dateStr + ": Joe wants braces!!!"
+
+            var mailContent = {
+                        sender : "chronicle@duke.edu",
+                        to : emailDest,
+                        subject : subjectStr,
+                        body: bodyMsg,
+                        html: htmlres
+                     }
+
+            console.log(mailContent);
             for(i in res)
             {
                  var emailDest = res[i];
                  console.log(emailDest);
 
                  /*nodemailer.send_mail(
-                        sender : "chronicle@duke.edu",
-                        to : emailDest,
-                        subject : "This is a subject",
-                        body: "Hello, this is a test body",
-                        html: "<b> test</b>alskdfj",
-                    },
-                    function(err2, result){
-                        if(err2){
-                            console.log(err2);
+                     mailContent,
+                     function(err3){
+                        if(err3){
+                            console.log(err3);
                         }
-                    }
+                     }
                  );*/
             }
             callback(err,htmlres);

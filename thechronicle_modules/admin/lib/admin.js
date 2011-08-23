@@ -69,7 +69,12 @@ function _deleteFiles(paths, callback) {
 }
 
 exports.init = function(app, callback) {
-	s3.init(function(){
+	s3.init(function(err){
+        if(err)
+        {
+            console.log("S3 init failed!");
+            return callback(err);
+        }
         app.namespace('/admin', function() {
             app.get('/layout/frontpage', function(req, res) {
                 function renderPage(docs) {
@@ -479,6 +484,7 @@ exports.init = function(app, callback) {
                     });
             });
         });
-        callback();
+
+        callback(null);
     });
 }

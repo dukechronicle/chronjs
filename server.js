@@ -79,9 +79,16 @@ exports.runSite = function()
 function runSite() {
 	port = config.get('SERVER_PORT');	
 
-	site.init(app, function(){
-         admin.init(app, function(){
-            mobileapi.init(app, function(){});
+	site.init(app, function(err){
+         if(err)
+             return console.log("Site.init Failed!");
+         admin.init(app, function(err2){
+             if(err2)
+                 return console.log("Admin.init Failed!");
+             mobileapi.init(app, function(err3){
+                 if(err3)
+                    return console.log("mobile.init Failed!");
+             });
          });
     });
 

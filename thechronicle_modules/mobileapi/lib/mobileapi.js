@@ -30,7 +30,7 @@ exports.init = function(app, callback) {
         });
 	});
 
-    callback();
+    callback(null);
 }
 
 function grabArticles(groupName, baseDocNum, n,callback){

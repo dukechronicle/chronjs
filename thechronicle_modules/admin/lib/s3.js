@@ -28,7 +28,7 @@ s3.init = function(callback) {
 	KEY = config.get("S3_KEY");
 	SECRET = config.get("S3_SECRET");
     
-    callback();
+    callback(null);
 }
 
 function _getUrl(key) {

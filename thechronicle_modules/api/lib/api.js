@@ -56,7 +56,12 @@ function _URLify(s, maxChars) {
 }
 
 api.init = function(callback) {
-	db.init(function(){
+	db.init(function(error){
+        if(error)
+        {
+            console.log("db init failed!");
+            return callback(error);
+        }
         // check for unindexed articles and index them in solr. Shouldn't happen very often
         api.docsNotIndexed(function(err, response) {
             // Attempt to index each file in row.
@@ -73,7 +78,7 @@ api.init = function(callback) {
                     });
             });
 
-            callback();
+            callback(null);
         });
     });
 }

@@ -10,7 +10,7 @@ var DESIGN_DOCUMENT_VERSION_NAME = DESIGN_DOCUMENT_NAME+'-versioning';
 var DATABASE = null;
 
 // parse environment variable CLOUDANT_URL OR COUCHDB_URL to extract authentication information
-function connect(database, callback) {
+function connect(database) {
 	var couchdbUrl = process.env.CLOUDANT_URL || config.get("COUCHDB_URL");
 	if(!couchdbUrl) throw "No Cloudant URL specified...";
 	console.log("Connecting to " + couchdbUrl);
@@ -27,10 +27,11 @@ function connect(database, callback) {
 		auth: {username: couchdbUrl.auth[0], password: couchdbUrl.auth[1]}
 	}); 
 	
-	var db = conn.database(database);
+	return conn.database(database);
+}
 
-    var isFinished = false;
-
+function updateViews(callback)
+{
 	db.exists(function (error,exists)
 	{
 	  	if(error)
@@ -49,13 +50,10 @@ function connect(database, callback) {
                     callback();
                 });
 			}
-            
+
             callback();
 		});
-
 	});
-
-    return db;
 }
 
 var db = exports;
@@ -72,7 +70,8 @@ db.init = function(callback) {
 	DATABASE = config.get("COUCHDB_DATABASE", "chronicle");
 
 	// assign all methods of the cradle object to db
-	_.extend(db, connect(DATABASE,callback));
+	_.extend(db, connect(DATABASE));
+    updateViews(callback);
 }
 
 function createViews(db,modifiedTime, callback) {

@@ -64,7 +64,7 @@ if(!config.isSetUp())
 		else next();
 	});
 }
-else runSite();
+else runSite(function() {});
 
 site.assignPreInitFunctionality(app,this);
 
@@ -88,7 +88,7 @@ function runSite(callback) {
              mobileapi.init(app, function(err3){
                  if(err3)
                     return console.log("mobile.init Failed!");
-                 if(callback != null) return callback();
+                 return callback();
              });
          });
     });

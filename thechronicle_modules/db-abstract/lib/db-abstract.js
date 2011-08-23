@@ -46,11 +46,11 @@ function connect(database, callback) {
 			if(!isUpToDate) {
 				console.log('updating views to newest version: ' + newestModifiedTime);
 				createViews(db,newestModifiedTime, function(){
-                    return callback();
+                    callback();
                 });
 			}
             
-            return callback();
+            callback();
 		});
 
 	});

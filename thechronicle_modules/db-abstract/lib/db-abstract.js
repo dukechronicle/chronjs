@@ -30,7 +30,7 @@ function connect(database) {
 	return conn.database(database);
 }
 
-function updateViews(callback)
+function updateViews(db, callback)
 {
 	db.exists(function (error,exists)
 	{
@@ -70,8 +70,9 @@ db.init = function(callback) {
 	DATABASE = config.get("COUCHDB_DATABASE", "chronicle");
 
 	// assign all methods of the cradle object to db
-	_.extend(db, connect(DATABASE));
-    updateViews(callback);
+    var database = connect(DATABASE);
+	_.extend(db, database);
+    updateViews(database, callback);
 }
 
 function createViews(db,modifiedTime, callback) {

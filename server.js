@@ -79,7 +79,11 @@ exports.runSite = function()
 function runSite() {
 	port = config.get('SERVER_PORT');	
 
-	app = site.init(app);
-	app = admin.init(app);
-	app = mobileapi.init(app);
+	site.init(app, function(){
+         admin.init(app, function(){
+            mobileapi.init(app, function(){});
+         });
+    });
+
+
 }

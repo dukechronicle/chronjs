@@ -30,32 +30,17 @@ function connect(database) {
 	return conn.database(database);
 }
 
-function updateViews(db, callback)
+function updateViews(callback)
 {
-	db.exists(function (error,exists)
-	{
-	  	if(error)
-        {
-            console.log("ERROR db-abstract" + error);
-            return callback(error);
-        }
-
-		// initialize database if it doesn't already exist
-		if(!exists) {
-			db.create();
+    // Check if views are up to date
+    viewsAreUpToDate(function(isUpToDate,newestModifiedTime) {
+		if(!isUpToDate) {
+			console.log('updating views to newest version: ' + newestModifiedTime);
+			createViews(newestModifiedTime, function(err){
+                return callback(err);
+            });
 		}
-
-        // Check if views are up to date
-		viewsAreUpToDate(db, function(isUpToDate,newestModifiedTime) {
-			if(!isUpToDate) {
-				console.log('updating views to newest version: ' + newestModifiedTime);
-				createViews(db,newestModifiedTime, function(err){
-                    return callback(err);
-                });
-			}
-
-            return callback(null);
-		});
+        return callback(null);
 	});
 }
 
@@ -75,10 +60,36 @@ db.init = function(callback) {
 	// assign all methods of the cradle object to db
     var database = connect(DATABASE);
 	_.extend(db, database);
-    updateViews(database, callback);
+
+    db.exists(function (error,exists) {
+	  	if(error)
+        {
+            console.log("ERROR db-abstract" + error);
+            return callback(error);
+        }
+
+		// initialize database if it doesn't already exist
+		if(!exists) {
+            db.create();
+            whenDBExists(function() {
+                updateViews(callback);
+            });
+		}
+        else {
+                updateViews(callback);
+        }
+    });
 }
 
-function createViews(db,modifiedTime, callback) {
+// only calls the callback when the DB exists, loops until then. Should not be used anywhere other than db init due to its blocking nature
+function whenDBExists(callback) {
+     db.exists(function (error,exists) {
+        if(exists) callback();
+        else whenDBExists(callback);     
+     });
+}
+
+function createViews(modifiedTime, callback) {
 	var design_doc = require(DESIGN_DOCUMENT_FILENAME);
 
 	db.save(DESIGN_DOCUMENT_NAME, design_doc.getViews(), function(err, response) {
@@ -92,7 +103,7 @@ function createViews(db,modifiedTime, callback) {
 	});
 }
 
-function viewsAreUpToDate(db, callback) {
+function viewsAreUpToDate(callback) {
 	fs.stat(DESIGN_DOCUMENT_FILENAME, function(err, stats) {
 		db.get(DESIGN_DOCUMENT_VERSION_NAME, function (err, response) {
 			// if the design document does not exists, or the modified time of the design doc does not exist, return false

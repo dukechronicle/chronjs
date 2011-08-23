@@ -50,7 +50,12 @@ function fetchGroup(groupName, title, callback) {
 }
 
 site.init = function(app, callback) {
-	api.init(function(){
+	api.init(function(err){
+        if(err)
+        {
+            console.log("api init failed!");
+            return callback(err);
+        }
         app.get('/', function(req, res) {
             api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, result) {
                 _.defaults(result, homeModel);
@@ -233,7 +238,7 @@ site.init = function(app, callback) {
             site.renderSmtpTest(req, http_res, req.body.email, req.body.num);
         });
 
-        callback();
+        callback(null);
     });
 }
 

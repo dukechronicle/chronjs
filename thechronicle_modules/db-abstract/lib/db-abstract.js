@@ -35,7 +35,10 @@ function updateViews(db, callback)
 	db.exists(function (error,exists)
 	{
 	  	if(error)
-            return console.log("ERROR db-abstract" + error);
+        {
+            console.log("ERROR db-abstract" + error);
+            return callback(error);
+        }
 
 		// initialize database if it doesn't already exist
 		if(!exists) {
@@ -46,12 +49,12 @@ function updateViews(db, callback)
 		viewsAreUpToDate(db, function(isUpToDate,newestModifiedTime) {
 			if(!isUpToDate) {
 				console.log('updating views to newest version: ' + newestModifiedTime);
-				createViews(db,newestModifiedTime, function(){
-                    callback();
+				createViews(db,newestModifiedTime, function(err){
+                    return callback(err);
                 });
 			}
 
-            callback();
+            return callback(null);
 		});
 	});
 }
@@ -81,7 +84,10 @@ function createViews(db,modifiedTime, callback) {
 	db.save(DESIGN_DOCUMENT_NAME, design_doc.getViews(), function(err, response) {
 		// update the versioning info for the design document
 		db.save(DESIGN_DOCUMENT_VERSION_NAME, {lastModified: modifiedTime}, function(err2,res2){
-            return callback();
+
+            // More error messages here needed.
+
+            return callback(err2);
         });
 	});
 }

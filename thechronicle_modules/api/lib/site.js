@@ -285,8 +285,14 @@ site.assignPreInitFunctionality = function(app,server) {
 	app.post('/config', function(req, res) {
 		if(api.accounts.isAdmin(req.session)) {
 			config.setUp(req.body, function(err) {
-				if(err == null) server.runSite();
-				res.redirect('/');
+				if(err == null) {
+                    server.runSite(function() {
+				        res.redirect('/');
+                    });
+                }
+                else {
+                    res.redirect('/');
+                }
 			});
 		}
 		else {

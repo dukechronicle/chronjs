@@ -71,12 +71,12 @@ site.assignPreInitFunctionality(app,this);
 console.log('Listening on port ' + port);
 app.listen(port);
 
-exports.runSite = function()
+exports.runSite = function(callback)
 {	
-	runSite();
+	runSite(callback);
 }
 
-function runSite() {
+function runSite(callback) {
 	port = config.get('SERVER_PORT');	
 
 	site.init(app, function(err){
@@ -88,6 +88,7 @@ function runSite() {
              mobileapi.init(app, function(err3){
                  if(err3)
                     return console.log("mobile.init Failed!");
+                 if(callback != null) return callback();
              });
          });
     });

@@ -55,24 +55,27 @@ function _URLify(s, maxChars) {
     return s.substring(0, maxChars);// trim to first num_chars chars
 }
 
-api.init = function() {
-	db.init();
+api.init = function(callback) {
+	db.init(function(){
+        // check for unindexed articles and index them in solr. Shouldn't happen very often
+        api.docsNotIndexed(function(err, response) {
+            // Attempt to index each file in row.
+            response.forEach(function(row) {
+                    console.log('indexing "' + row.title + '"');
+                api.indexArticle(row._id,row.title,row.body, function(error2, response2) {
+                    if(error2) console.log(error2);
+                    else {
+                        db.merge(row._id, {indexedBySolr: true}, function(error3, response3) {
+                            if(error3) console.log(error3);
+                            else console.log('indexed "' + row.title + '"');
+                        });
+                    }
+                    });
+            });
 
-	// check for unindexed articles and index them in solr. Shouldn't happen very often
-	api.docsNotIndexed(function(err, response) {
-		response.forEach(function(row) {
-      			console.log('indexing "' + row.title + '"');
-			api.indexArticle(row._id,row.title,row.body, function(error2, response2) {
-				if(error2) console.log(error2);
-				else {
-					db.merge(row._id, {indexedBySolr: true}, function(error3, response3) {
-   						if(error3) console.log(error3);
-						else console.log('indexed "' + row.title + '"');
-					});
-				}
-		    	});
-   		});
-	});
+            callback();
+        });
+    });
 }
 
 api.getArticles= function(parent_node, count, callback) {
@@ -88,35 +91,35 @@ api.getArticles= function(parent_node, count, callback) {
 
 function _editDocument(docid, fields, callback) {
     api.docsById(docid, function(geterr, res) {
-        if(geterr) {
-            callback(geterr, null, null);
+        if(geterr)
+            return callback(geterr, null, null);
+
+        if(fields.title && (_URLify(fields.title, MAX_URL_LENGTH) !== _URLify(res.title, MAX_URL_LENGTH))) {
+            console.log("new url");
+            console.log(fields.title);
+            getAvailableUrl(_URLify(fields.title, MAX_URL_LENGTH), 0, function(err, url) {
+                if(err) {
+                    callback(err, null, null);
+                }
+                else {
+                    var unix_timestamp = Math.round(new Date().getTime() / 1000);
+                    fields.updated = unix_timestamp;
+                        fields.urls = res.urls;
+                        fields.urls.push(url);
+                    db.merge(docid, fields, function(db_err, db_res) {
+                        callback(db_err, db_res, url);
+                    });
+                }
+            });
         } else {
-            if(fields.title && (_URLify(fields.title, MAX_URL_LENGTH) !== _URLify(res.title, MAX_URL_LENGTH))) {
-	            console.log("new url");
-	            console.log(fields.title);
-                getAvailableUrl(_URLify(fields.title, MAX_URL_LENGTH), 0, function(err, url) {
-                    if(err) {
-                        callback(err, null, null);
-                    }
-                    else {
-                        var unix_timestamp = Math.round(new Date().getTime() / 1000);
-                        fields.updated = unix_timestamp;
-							fields.urls = res.urls;
-							fields.urls.push(url);
-                        db.merge(docid, fields, function(db_err, db_res) {
-                            callback(db_err, db_res, url);
-                        });
-                    }
-                });
-            } else {
-                db.merge(docid, fields, function(db_err, db_res) {
-	                if (db_err) callback(db_err)
-	                else {
-                        callback(db_err, db_res, res.urls[res.urls.length - 1]);
-	                }
-                });
-            }
+            db.merge(docid, fields, function(db_err, db_res) {
+                if (db_err) callback(db_err)
+                else {
+                    callback(db_err, db_res, res.urls[res.urls.length - 1]);
+                }
+            });
         }
+            
     });
 }
 
@@ -153,8 +156,8 @@ api.docsNotIndexed = function(callback) {
 api.addDoc = function(fields, callback) {
     
     getAvailableUrl(_URLify(fields.title, MAX_URL_LENGTH), 0, function(err, url) {
-        if(err) {
-            callback(err, null, null);
+        if(err){
+            return callback(err, null, null);
         }
         else {
             var unix_timestamp = Math.round(new Date().getTime() / 1000);

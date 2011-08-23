@@ -58,7 +58,8 @@ group.remove = function(docid, namespace, name, callback) {
 group.docs = function(namespace, group, callback) {
     db.group.docs(namespace, group, function(err, res) {
         // if querying name space, map each group to it's own object
-        if (err) callback(err);
+        if (err)
+            callback(err);
         else {
             if (!group) {
                 var groupedResults = {};
@@ -82,7 +83,6 @@ group.docs = function(namespace, group, callback) {
                     groupedResults[groupName].push(doc.doc);
                 }
 
-
 	            groupedResults[prevGroupName][groupedResults[prevGroupName].length - 1].cssClass = "last";
 
                 callback(null, groupedResults);
@@ -90,19 +90,6 @@ group.docs = function(namespace, group, callback) {
         }
     });
 };
-
-group.docsN = function(namespace, groupName, baseDocNum, numDocs, callback) {
-    var add = function(memo, item, cbk) {
-        memo[item] = function(acallback) {
-            db.group.docsN(namespace, item, baseDocNum, numDocs, acallback);
-        };
-        cbk(null, memo);
-    };
-    nimble.reduce(groupName, add, {}, function(err, res) {
-        nimble.parallel(res, callback);
-    });
-};
-
 
 group.add = function(nameSpace, groupName, docId, weight, callback) {
     db.group.add(nameSpace, groupName, docId, weight, callback);

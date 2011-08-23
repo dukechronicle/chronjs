@@ -2,7 +2,7 @@ var api = require('../../api/lib/api');
 var taxonomyGroups = ["News","Sports","Opinion","Recess","Towerview"];
 var _ = require('underscore');
 
-exports.init = function(app) {
+exports.init = function(app, callback) {
 	app.namespace('/mobile', function() {
 		app.get('/:groupname', function(req, http_res) {
             var groupName = req.params.groupname;
@@ -29,16 +29,16 @@ exports.init = function(app) {
             });
         });
 	});
-	
-	return app;
+
+    callback();
 }
 
 function grabArticles(groupName, baseDocNum, n,callback){
     api.taxonomy.docs(groupName[0],n,function(err,test){
         if(err)
-            callback(err,null);
-        else
-            callback(err,test);
+            return callback(err,null);
+        
+        return callback(err,test);
     });
 }
 
@@ -64,6 +64,6 @@ function getGroup(groupName,n,callback){
         grabArticles([groupName],0,n,callback);
     }
     else{
-        callback("error", "noob");
+        return callback("error", "noob");
     }
 }

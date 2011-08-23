@@ -23,10 +23,12 @@ s3.put = function(buf, key, type, callback) {
     });
 }
 
-s3.init = function() {	
+s3.init = function(callback) {
 	BUCKET_NAME = config.get("S3_BUCKET");
 	KEY = config.get("S3_KEY");
 	SECRET = config.get("S3_SECRET");
+    
+    callback();
 }
 
 function _getUrl(key) {

@@ -28,7 +28,7 @@ server will be started on port 4000, you should be able to access the site at
 
 Navigate to http://localhost:4000 and fill out all fields of the configuration form you are presented with. This page only shows up when your chronicle environment has no configuration settings defined. After you set your config settings, the site will work as normal.
 
-To change config settings after you have initially set them through this web page, go to http://localhost:4000/config and edit the settings.
+To change config settings after you have initially set them, go to http://localhost:4000/config and edit the settings. Alternatively, you can directly edit config.js in the root directory to change config settings, or to create and activiate new configuration profiles.
 
 ### S3 key and secret - config properties
 
@@ -36,7 +36,7 @@ All configuration properties have a default value currently except S3 Key and Se
 
 ### Adding your own configuration properties
 
-As you continue to extend the Chronicle framework, you may find that defining some configuration globals would be useful. To add a configuration parameter to appear in the initial configuration set up web page, navigate to /thechronicle_modules/config/lib/config-params.js and add your new configuration parameter (name, description, and default value [if desired]) to the configParams object. Then restart the server to and go to localhost:4000/ to define a value for your new configuration option.
+As you continue to extend the Chronicle framework, you may find that defining some configuration globals would be useful. To add a configuration parameter to appear in the initial configuration set up web page, navigate to /thechronicle_modules/config/lib/config-params.js and add your new configuration parameter (name, description, and default value [if desired]) to the configParams object. Then restart the server and go to localhost:4000/ to define a value for your new configuration option.
 
 ### Accessing configuration properties
 

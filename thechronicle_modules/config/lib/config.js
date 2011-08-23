@@ -84,7 +84,7 @@ exports.setUp = function(params, callback) {
 	activeProfile = configuration.profiles[activeProfileName];
 
 	// write the config file
-	var writeToFile = 'var configuration = \n'+ JSON.stringify(configuration) + ';\n\n' + addToConfigFile;
+	var writeToFile = 'var configuration = \n'+ JSON.stringify(configuration, null, 4) + ';\n\n' + addToConfigFile;
 	fs.writeFile(CONFIG_FILE_PATH, writeToFile, function(err) {
 		if(exports.getUndefinedParameters().length == 0) callback(null);
 		else callback('some parameters still undefined');

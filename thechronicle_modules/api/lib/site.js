@@ -11,7 +11,6 @@ var _ = require("underscore");
 var async = require('async');
 var nimble = require('nimble');
 var fs = require('fs');
-var md = require('node-markdown').Markdown;
 
 var FRONTPAGE_GROUP_NAMESPACE = ['Layouts','Frontpage'];
 var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
@@ -112,11 +111,6 @@ site.init = function(app, callback) {
                     globalFunctions.showError(http_res, err);
                 }
                 else {
-                    if(doc.body) {
-                    //Convert body markdown to html
-                    doc.body = md(doc.body);
-                    }
-
                        // convert timestamp
                        if (doc.created) {
                         var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September",

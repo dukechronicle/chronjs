@@ -254,14 +254,21 @@ site.askForLogin = function(res,afterLoginPage,username,err) {
 // assigns the functionality needed before different modules are ready to be initilized (before config settings have been set)
 site.assignPreInitFunctionality = function(app,server) {
 	app.post('/login', function(req, res) {
-		api.accounts.login(req.session,req.body.username,req.body.password, function(err) {
+		api.accounts.login(req,req.body.username,req.body.password, function(err) {
 			if(err) site.askForLogin(res,req.body.afterLogin,req.body.username,err);
 			else	res.redirect(req.body.afterLogin);
 		});
 	});
 
+    app.get('/logout', function(req, res) {
+		api.accounts.logOut(req, function(err) {
+			  if(err) console.log(err);
+              res.redirect('/');
+		});
+	});
+
 	app.get('/config', function(req, res) {
-		if(api.accounts.isAdmin(req.session)) {					
+		if(api.accounts.isAdmin(req)) {					
 			res.render('config/config', {
 				locals: {
 					configParams:config.getParameters(),
@@ -277,7 +284,7 @@ site.assignPreInitFunctionality = function(app,server) {
 	});
 
 	app.post('/config', function(req, res) {
-		if(api.accounts.isAdmin(req.session)) {
+		if(api.accounts.isAdmin(req)) {
 			config.setUp(req.body, function(err) {
 				if(err == null) {
                     server.runSite(function() {

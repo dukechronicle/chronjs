@@ -6,33 +6,39 @@ var DEFAULT_PASSWORD = 'chronicle';
 
 var accounts = exports;
 
-function login(session,accountType) {
-	accounts.logOut();
-
-	session.isLoggedIn = true;
-	session.accountType = accountType;
+function login(req,accountType,callback) {
+    // prevent session fixation by doing a logout	
+    accounts.logOut(req, function(err) {
+	    if(err) return callback(err);
+        
+        req.session.account.isLoggedIn = true;
+	    req.session.account.accountType = accountType;
+        return callback(null);
+    });
 }
 
-accounts.isAdmin = function(session) {
-	return (session.isLoggedIn == true && session.accountType == ADMIN_ACCOUNT_TYPE);
+accounts.isAdmin = function(req) {
+    req.session.account = req.session.account || {};	
+    return (req.session.account.isLoggedIn == true && req.session.account.accountType == ADMIN_ACCOUNT_TYPE);
 }
 
-accounts.login = function(session,username,password,callback) {
+accounts.login = function(req,username,password,callback) {
 	var adminUsername = config.get('ADMIN_USERNAME') || DEFAULT_USERNAME;
 	var adminPassword = config.get('ADMIN_PASSWORD') || DEFAULT_PASSWORD;
-	var err = null;
 
 	if(adminUsername == username && adminPassword == password)
 	{
-		login(session,ADMIN_ACCOUNT_TYPE);
+		login(req,ADMIN_ACCOUNT_TYPE,callback);
 	}
 	else {
-		err = 'Invalid Username / Password Combination';
+		var err = 'Invalid Username / Password Combination';
+        return callback(err);
 	}
-
-	callback(err);
 }
 
-accounts.logOut = function(session) {
-	session = {};
+accounts.logOut = function(req, callback) {
+    req.session.regenerate(function(err) {
+        req.session.account = {};
+        return callback(err);
+    });
 }

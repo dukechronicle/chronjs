@@ -80,6 +80,24 @@ exports.init = function(app, callback) {
             console.log("S3 init failed!");
             return callback(err);
         }
+        
+        //Run this to render bodies for all articles
+        /*
+        api.docsByDate(null, function(err, docs) {
+            console.log("Got docs");
+            docs.forEach(function(doc, index) {
+                _renderBody(doc.body, function(err, rendered) {
+                    api.editDoc(doc._id, {
+                        renderedBody: rendered
+                    }, 
+                    function(err) {
+                        console.log("Updating " + index + " of " + docs.length);
+                    });
+                });
+            });
+        });
+        */
+        
         app.namespace('/admin',
         function() {
             app.get('/layout/frontpage',

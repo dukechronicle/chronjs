@@ -29,6 +29,10 @@ var CROP_SIZES = {
 var THUMB_DIMENSIONS = '100x100';
 var FRONTPAGE_GROUP_NAMESPACE = ['Layouts','Frontpage'];
 
+function _renderBody(body, callback) {
+    callback(null, md(body));
+}
+
 function _getMagickString(x1, y1, x2, y2) {
     var w = x2 - x1;
     var h = y2 - y1;
@@ -458,13 +462,16 @@ exports.init = function(app, callback) {
                         //author: req.body.doc.author
                         //groups: new_groups
                     };
-                    api.editDoc(id, fields,
-                    function(err, res, url) {
-                        if (err) {
-                            globalFunctions.showError(http_res, err);
-                        } else {
-                            http_res.redirect('/article/' + url + '/edit');
-                        }
+                    _renderBody(req.body.doc.body, function(err, rendered) {
+                        fields.renderedBody = rendered;
+                        api.editDoc(id, fields,
+                        function(err, res, url) {
+                            if (err) {
+                                globalFunctions.showError(http_res, err);
+                            } else {
+                                http_res.redirect('/article/' + url + '/edit');
+                            }
+                        });
                     });
                 }
             });
@@ -494,6 +501,12 @@ exports.init = function(app, callback) {
                 }*/
 
                 async.waterfall([
+                function(callback) {
+                    _renderBody(form.body, function(err, rendered) {
+                        fields.renderedBody = rendered;
+                        callback(null);
+                    });
+                },
                 function(callback) {
                     api.addDoc(fields, callback);
                 },

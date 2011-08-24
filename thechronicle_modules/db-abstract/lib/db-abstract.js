@@ -40,7 +40,10 @@ function updateViews(callback)
                 return callback(err);
             });
 		}
-        return callback(null);
+        else
+        {
+            return callback(null);
+        }
 	});
 }
 

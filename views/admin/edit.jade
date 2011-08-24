@@ -5,7 +5,7 @@ form(action='/admin/edit', method='POST')
 		input#title(type='text', name='doc[title]', value=doc.title)
 	p
 		label(for='author') Author:
-		input#author(type='text', name='doc[author]', value=doc.authors[0])
+		input#author(type='text', name='doc[author]', value=doc.author)
 	p
 		label(for='teaser') Teaser:
 		textarea#teaser(rows=3, cols=50, name='doc[teaser]', value)

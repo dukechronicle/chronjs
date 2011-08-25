@@ -29,24 +29,26 @@ var CROP_SIZES = {
 
 var THUMB_DIMENSIONS = '100x100';
 var FRONTPAGE_GROUP_NAMESPACE = ['Layouts','Frontpage'];
-
+var VIDEO_PLAYERS = {
+    "youtube": "<iframe width=\"560\" height=\"345\" src=\"http://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>",
+    "vimeo": "<iframe src=\"http://player.vimeo.com/video/%s?title=0&amp;byline=0&amp;portrait=0\" width=\"400\" height=\"225\" frameborder=\"0\"></iframe>"
+};
+var REGEX_FORMAT = "(\{%s:)([^}]+)(\})";
 
 function _renderBody(body, cbck) {
+    
     async.waterfall([
     function(callback) {
-        //replace {youtube} tags
-        var pattern = /(\{youtube:)([^}]+)(})/g;
-        var replaced = body.replace(pattern, 
-            function(match) {
-                var vidId = RegExp.$2;
-                return "<iframe width=\"560\" height=\"345\" src=\"http://www.youtube.com/embed/" + 
-                    vidId + "\" frameborder=\"0\" allowfullscreen></iframe>";
-            }
-        );
-        callback(null, replaced);
+        for(name in VIDEO_PLAYERS) {
+            var pattern = new RegExp(sprintf(REGEX_FORMAT, name), 'g');
+            body = body.replace(pattern, function(match) {
+                return sprintf(VIDEO_PLAYERS[name], RegExp.$2);
+            });
+        }
+        callback(null, body);
     },
-    function(imgs, callback) {
-        callback(null, md(imgs));
+    function(replaced, callback) {
+        callback(null, md(replaced));
     }
     ],
     cbck);

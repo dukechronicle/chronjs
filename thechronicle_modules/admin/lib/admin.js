@@ -8,6 +8,7 @@ var http = require('http');
 var urlModule = require('url');
 var solr = require('solr');
 var md = require('node-markdown').Markdown;
+var sprintf = require('sprintf').sprintf;
 
 var VALID_EXTENSIONS = {};
 VALID_EXTENSIONS['image/jpeg'] = 'jpg';
@@ -29,8 +30,26 @@ var CROP_SIZES = {
 var THUMB_DIMENSIONS = '100x100';
 var FRONTPAGE_GROUP_NAMESPACE = ['Layouts','Frontpage'];
 
-function _renderBody(body, callback) {
-    callback(null, md(body));
+
+function _renderBody(body, cbck) {
+    async.waterfall([
+    function(callback) {
+        //replace {youtube} tags
+        var pattern = /(\{youtube:)([^}]+)(})/g;
+        var replaced = body.replace(pattern, 
+            function(match) {
+                var vidId = RegExp.$2;
+                return "<iframe width=\"560\" height=\"345\" src=\"http://www.youtube.com/embed/" + 
+                    vidId + "\" frameborder=\"0\" allowfullscreen></iframe>";
+            }
+        );
+        callback(null, replaced);
+    },
+    function(imgs, callback) {
+        callback(null, md(imgs));
+    }
+    ],
+    cbck);
 }
 
 function _getMagickString(x1, y1, x2, y2) {

@@ -9,6 +9,7 @@ var urlModule = require('url');
 var solr = require('solr');
 var md = require('node-markdown').Markdown;
 var sprintf = require('sprintf').sprintf;
+var config = require("../../config");
 
 var VALID_EXTENSIONS = {};
 VALID_EXTENSIONS['image/jpeg'] = 'jpg';
@@ -221,6 +222,7 @@ exports.init = function(app, callback) {
 
             app.get('/manage',
             function(req, http_res) {
+                var db = config.get('COUCHDB_DATABASE');
                 api.docsByDate(null,
                 function(err, res) {
                     if (err) {
@@ -228,7 +230,8 @@ exports.init = function(app, callback) {
                     } else {
                         http_res.render('admin/manage', {
                             locals: {
-                                docs: res
+                                docs: res,
+                                db: db
                             },
                             layout: "layout-admin.jade"
                         });

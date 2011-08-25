@@ -6,4 +6,4 @@ table(border=1)
 			td
 				a(href='/article/' + doc.urls[doc.urls.length - 1] + '/edit') Edit
 			td
-				a(href='http://chrondev.iriscouch.com/_utils/document.html?production/' + doc._id) #{doc._id}
+				a(href='http://chrondev.iriscouch.com/_utils/document.html?' + db + '/' + doc._id) #{doc._id}

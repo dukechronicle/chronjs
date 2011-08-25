@@ -17,6 +17,7 @@ var app = express.createServer();
 var publicDir = '/public';
 var viewsDir = '/views';
 var port = 4000;
+var SECRET = "i'll make you my dirty little secret";
 
 function compile(str, path) {
   return stylus(str)
@@ -41,9 +42,9 @@ app.use(express.static(__dirname + publicDir));
 app.use(express.bodyParser());
 
 
-// set up session. should be changed to redis session eventually
+// set up session
 app.use(express.cookieParser());
-app.use(express.session({ secret: "i'll make you my dirty little secret" }));
+app.use(express.session({ secret: SECRET }));
 
 app.set('views', __dirname + viewsDir);
 
@@ -79,7 +80,22 @@ exports.runSite = function(callback)
 function runSite(callback) {
 	port = config.get('SERVER_PORT');	
 
-	site.init(app, function(err){
+    // use redis as our session store
+	var RedisStore = require('connect-redis')(express);
+    var redisClient = require('./thechronicle_modules/api/lib/redisclient');
+    redisClient.init(function (err0) {
+        if(err0) return console.log(err0);
+        app.use(express.session({
+            secret: SECRET,
+            store: new RedisStore({
+                host:redisClient.getHostname(),
+                port:redisClient.getPort(),
+                pass:redisClient.getPassword()
+            })
+        }));
+    });
+
+    site.init(app, function(err){
          if(err)
              return console.log("Site.init Failed!");
          admin.init(app, function(err2){

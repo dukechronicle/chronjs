@@ -6,7 +6,13 @@ html(lang="en")
 		link(rel='stylesheet', href='/style.css')
 		link(rel='stylesheet', href='/slideshow/style.css')
 		link(rel='stylesheet', href='/container/style.css')
-		link(rel='stylesheet', href='/frontpage.css')
+		link(rel='stylesheet', href='/site/frontpage.css')
+		link(rel='stylesheet', href='/news.css')
+		link(rel='stylesheet', href='/sports.css')
+		link(rel='stylesheet', href='/opinion.css')
+		link(rel='stylesheet', href='/recess.css')
+		link(rel='stylesheet', href='/towerview.css')
+		
 		link(rel='stylesheet', href='/article.css')
 		
 		script(src='http://use.typekit.com/dwv2bjy.js')
@@ -15,10 +21,10 @@ html(lang="en")
 	body
 		#shell
 			header
-				include /layout/header
+				include ../layout/header
 			section!=body
 			footer
-				include /layout/footer
+				include ../layout/footer
 				
 	script(src='/js/jquery.js')
 	//script(src='/js/jquery-ui.js')

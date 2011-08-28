@@ -71,7 +71,7 @@ else runSite(function() {});
 site.assignPreInitFunctionality(app,this);
 
 console.log('Listening on port ' + port);
-app.listen(port);
+app.listen(process.env.PORT || port);
 
 exports.runSite = function(callback)
 {	

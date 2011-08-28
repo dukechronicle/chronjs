@@ -81,31 +81,31 @@ site.init = function(app, callback) {
 
             app.get('/news', function(req, res) {
                 api.group.docs(NEWS_GROUP_NAMESPACE, null, function(err, result) {
-                    res.render('news', {filename: 'views/news.jade', model: result});
+                    res.render('site/news', {filename: 'views/site/news.jade', model: result});
                 });
             });
 
             app.get('/sports', function(req, res) {
                 api.group.docs(SPORTS_GROUP_NAMESPACE, null, function(err, result) {
-                    res.render('sports', {filename: 'views/sports.jade', model: result});
+                    res.render('site/sports', {filename: 'views/site/sports.jade', model: result});
                 });
             });
 
             app.get('/opinion', function(req, res) {
                 api.group.docs(OPINION_GROUP_NAMESPACE, null, function(err, result) {
-                    res.render('opinion', {filename: 'views/opinion.jade', model: result});
+                    res.render('site/opinion', {filename: 'views/site/opinion.jade', model: result});
                 });
             });
 
             app.get('/recess', function(req, res) {
                 api.group.docs(RECESS_GROUP_NAMESPACE, null, function(err, result) {
-                    res.render('recess', {filename: 'views/recess.jade', model: result});
+                    res.render('site/recess', {filename: 'views/site/recess.jade', model: result});
                 });
             });
 
             app.get('/towerview', function(req, res) {
                 api.group.docs(TOWERVIEW_GROUP_NAMESPACE, null, function(err, result) {
-                    res.render('towerview', {filename: 'views/towerview.jade', model: result});
+                    res.render('site/towerview', {filename: 'views/site/towerview.jade', model: result});
                 });
             });
 

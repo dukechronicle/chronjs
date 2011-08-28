@@ -13,6 +13,12 @@ var nimble = require('nimble');
 var fs = require('fs');
 
 var FRONTPAGE_GROUP_NAMESPACE = ['Layouts','Frontpage'];
+var NEWS_GROUP_NAMESPACE = ['Layouts','News'];
+var SPORTS_GROUP_NAMESPACE = ['Layouts','Sports'];
+var OPINION_GROUP_NAMESPACE = ['Layouts','Opinion'];
+var RECESS_GROUP_NAMESPACE = ['Layouts','Recess'];
+var TOWERVIEW_GROUP_NAMESPACE = ['Layouts','Towerview'];
+
 var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
 
 function _getImages(obj, callback) {
@@ -68,8 +74,38 @@ site.init = function(app, callback) {
 
                     api.docsByDate(5, function(err, docs) {
                         homeModel.popular.stories = docs;
-                        res.render('index', {filename: 'views/index.jade', model: result});
+                        res.render('site/index', {filename: 'views/site/index.jade', model: result});
                     });
+                });
+            });
+
+            app.get('/news', function(req, res) {
+                api.group.docs(NEWS_GROUP_NAMESPACE, null, function(err, result) {
+                    res.render('news', {filename: 'views/news.jade', model: result});
+                });
+            });
+
+            app.get('/sports', function(req, res) {
+                api.group.docs(SPORTS_GROUP_NAMESPACE, null, function(err, result) {
+                    res.render('sports', {filename: 'views/sports.jade', model: result});
+                });
+            });
+
+            app.get('/opinion', function(req, res) {
+                api.group.docs(OPINION_GROUP_NAMESPACE, null, function(err, result) {
+                    res.render('opinion', {filename: 'views/opinion.jade', model: result});
+                });
+            });
+
+            app.get('/recess', function(req, res) {
+                api.group.docs(RECESS_GROUP_NAMESPACE, null, function(err, result) {
+                    res.render('recess', {filename: 'views/recess.jade', model: result});
+                });
+            });
+
+            app.get('/towerview', function(req, res) {
+                api.group.docs(TOWERVIEW_GROUP_NAMESPACE, null, function(err, result) {
+                    res.render('towerview', {filename: 'views/towerview.jade', model: result});
                 });
             });
 

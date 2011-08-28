@@ -33,6 +33,7 @@ app.use(stylus.middleware({
 	src: __dirname + viewsDir
   , dest: __dirname + publicDir
   , compile: compile
+  , firebug: true
 }));
 app.set('view engine', 'jade');
 

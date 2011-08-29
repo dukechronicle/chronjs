@@ -2,8 +2,10 @@
 #article .metadata{color:#777;font-size:.8em;margin:1em 0}
 #article .social-media{float:right;margin-left:1.5em;margin-top:4px;}
 #article .social-media > div{margin-bottom:.3em}
-#article .content{width:580px;float:none;padding:.9em 1.5em .6em 1.5em;background:#fff;}
+#article .content{width:580px;float:left;padding:.9em 1.5em .6em 1.5em;background:#fff;}
 #article .content p{color:#333;margin-bottom:1em;font-size:.95em;line-height:1.6em}
+#article .sidebar{float:right;}
+#article .sidebar .container{width:306px}
 #article #disqus_thread{float:left;margin-top:2em;width:580px;padding:.3em 1.5em 0 1.5em;clear:both;}
 #article #disqus_thread #dsq-global-toolbar{position:relative;z-index:3}
 #article #disqus_thread #dsq-content{font-size:.9em;}

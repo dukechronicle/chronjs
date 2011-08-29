@@ -31,29 +31,6 @@ function _getImages(obj, callback) {
     callback);
 }
 
-function fetchGroup(groupName, title, callback) {
-	api.group.docs(FRONTPAGE_GROUP_NAMESPACE, groupName, function(err, res) {
-        if (err) 
-            console.log(err);
-		
-		var groupDocs = {
-			"title": title,
-			"stories": []
-		};
-        if (res) {
-            res.forEach(function (article, index, array) {
-                // canonical url is the last element of the url array
-                article.url = "/article/" + article.urls[article.urls.length - 1];
-                if (index === 0) article.cssClass = "first";
-                if (index === array.length) article.cssClass = "last";
-                
-                groupDocs.stories.push(article);
-            });
-            callback(err, groupDocs);
-        }
-	});
-}
-
 site.init = function(app, callback) {
 	redis.init(function(err) {
         if(err)
@@ -70,6 +47,7 @@ site.init = function(app, callback) {
             }
             app.get('/', function(req, res) {
                 api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, result) {
+	                console.log(Object.keys(result));
                     _.defaults(result, homeModel);
 
                     api.docsByDate(5, function(err, docs) {
@@ -81,6 +59,7 @@ site.init = function(app, callback) {
 
             app.get('/news', function(req, res) {
                 api.group.docs(NEWS_GROUP_NAMESPACE, null, function(err, result) {
+	                console.log(Object.keys(result));
                     res.render('site/news', {filename: 'views/site/news.jade', model: result});
                 });
             });
@@ -189,7 +168,18 @@ site.init = function(app, callback) {
                       else {
                         doc.fullUrl = "http://dukechronicle.com/article/" + latestUrl;
                         http_res.render('article', {
-                            locals: {doc: doc},
+                            locals: {
+	                            doc: doc,
+	                            model: {
+									"adFullRectangle": {
+										"title": "Advertisement",
+										"imageUrl": "/images/ads/monster.png",
+										"url": "http://google.com",
+										"width": "300px",
+										"height": "250px"
+									}
+								}
+                            },
                             filename: 'views/article.jade'
                         });
                      }

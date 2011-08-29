@@ -62,7 +62,7 @@ $(function() {
             $.post("/admin/group/add", {
                 docId: docId,
                 groupName: $(this).data("groupname"),
-                nameSpace: ["Layouts", "Frontpage"],
+                nameSpace: nameSpace,
                 weight: containerElement.index()
             });
         }

@@ -29,7 +29,14 @@ var CROP_SIZES = {
 };
 
 var THUMB_DIMENSIONS = '100x100';
+
 var FRONTPAGE_GROUP_NAMESPACE = ['Layouts','Frontpage'];
+var NEWS_GROUP_NAMESPACE = ['Layouts','News'];
+var SPORTS_GROUP_NAMESPACE = ['Layouts','Sports'];
+var OPINION_GROUP_NAMESPACE = ['Layouts','Opinion'];
+var RECESS_GROUP_NAMESPACE = ['Layouts','Recess'];
+var TOWERVIEW_GROUP_NAMESPACE = ['Layouts','Towerview'];
+
 var VIDEO_PLAYERS = {
     "youtube": "<iframe width=\"560\" height=\"345\" src=\"http://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>",
     "vimeo": "<iframe src=\"http://player.vimeo.com/video/%s?title=0&amp;byline=0&amp;portrait=0\" width=\"400\" height=\"225\" frameborder=\"0\"></iframe>"
@@ -123,42 +130,80 @@ exports.init = function(app, callback) {
         app.namespace('/admin',
         function() {
             app.get('/layout/frontpage',
-            function(req, res) {
-                function renderPage(docs) {
-                    var stories = docs;
-                    api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null,
-                    function(err, model) {
-                        res.render('admin/layout/frontpage', {
-                            layout: "layout-admin.jade",
-                            locals: {
-                                stories: stories,
-                                model: model
-                            }
-                        });
-                    });
-                }
-                // TODO make requests concurrent
-                var filter = req.param("section", null);
-                if (filter) {
-                    api.taxonomy.docs(filter, 20,
-                    function(err, docs) {
-                        if (err) globalFunctions.showError(res, err);
-                        else {
-                            docs = docs.map(function(doc) {
-                                return doc;
-                            });
-                            renderPage(docs);
-                        }
-                    });
-                } else {
-                    api.docsByDate(20,
-                    function(err, docs) {
-                        if (err) globalFunctions.showError(res, err);
-                        renderPage(docs);
-                    });
-                }
+				function(req, res) {
+					function renderPage(docs) {
+						var stories = docs;
+						api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null,
+						function(err, model) {
+							res.render('admin/layout/frontpage', {
+								layout: "layout-admin.jade",
+								locals: {
+									stories: stories,
+									model: model
+								}
+							});
+						});
+					}
+					// TODO make requests concurrent
+					var filter = req.param("section", null);
+					if (filter) {
+						api.taxonomy.docs(filter, 20,
+						function(err, docs) {
+							if (err) globalFunctions.showError(res, err);
+							else {
+								docs = docs.map(function(doc) {
+									return doc;
+								});
+								renderPage(docs);
+							}
+						});
+					} else {
+						api.docsByDate(20,
+						function(err, docs) {
+							if (err) globalFunctions.showError(res, err);
+							renderPage(docs);
+						});
+					}
+				}
+            );
 
-            });
+	        app.get('/layout/news',
+				function(req, res) {
+					function renderPage(docs) {
+						var stories = docs;
+						api.group.docs(NEWS_GROUP_NAMESPACE, null,
+						function(err, model) {
+							res.render('admin/layout/news', {
+								layout: "layout-admin.jade",
+								locals: {
+									stories: stories,
+									model: model
+								}
+							});
+						});
+					}
+					// TODO make requests concurrent
+					var filter = req.param("section", null);
+					if (filter) {
+						api.taxonomy.docs(filter, 20,
+						function(err, docs) {
+							if (err) globalFunctions.showError(res, err);
+							else {
+								docs = docs.map(function(doc) {
+									return doc;
+								});
+								renderPage(docs);
+							}
+						});
+					} else {
+						api.docsByDate(20,
+						function(err, docs) {
+							if (err) globalFunctions.showError(res, err);
+							renderPage(docs);
+						});
+					}
+				}
+            );
 
             app.post('/layout/frontpage',
             function(req, res) {

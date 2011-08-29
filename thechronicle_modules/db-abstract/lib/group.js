@@ -26,7 +26,7 @@ group.list = function(options, callback) {
 // fetch documents from namespace or groups
 group.docs = function(namespace, group, callback) {
 	var query = {};
-
+	
 	query.reduce = false;
     query.include_docs = true;
 
@@ -42,7 +42,7 @@ group.docs = function(namespace, group, callback) {
 	db.view('articles/groups', query,
 
     function(err, res) {
-	    if (err) callback(err);
+	    if (err) return callback(err);
     	if (res) {
     		callback(null, res);
 	    } else {
@@ -89,7 +89,7 @@ group.docsN = function(namespace, groupName, baseDocNum, numDocs, callback) {
 group.add = function (nameSpace, groupName, docId, weight, callback) {
 
     db.get(docId, function(err, doc) {
-        if(err) callback(err);
+        if(err) return callback(err);
 
         var groups = doc.groups
         if (!groups) groups = [];
@@ -122,7 +122,7 @@ group.add = function (nameSpace, groupName, docId, weight, callback) {
 // add document to group
 group.remove = function (nameSpace, groupName, docId, callback) {
     db.get(docId, function(err, doc) {
-        if(err) callback(err);
+        if(err) return callback(err);
 
         var groups = doc.groups
         if (!groups) groups = [];

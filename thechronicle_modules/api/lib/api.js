@@ -62,6 +62,7 @@ api.init = function(callback) {
             console.log("db init failed!");
             return callback(error);
         }
+
         // check for unindexed articles and index them in solr. Shouldn't happen very often
         api.docsNotIndexed(function(err, response) {
             // Attempt to index each file in row.
@@ -75,12 +76,12 @@ api.init = function(callback) {
                             else console.log('indexed "' + row.title + '"');
                         });
                     }
-                    });
+                });
             });
-
-            callback(null);
-        });
+       });
     });
+    
+    callback(null);
 }
 
 api.getArticles= function(parent_node, count, callback) {
@@ -186,12 +187,12 @@ api.addDoc = function(fields, callback) {
 api.indexArticle = function(id,title,body,callback) {
 	// adds the article to the solr database for searching	
 	var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH'));
-	
+	console.log((title));
 	var solrDoc = {
-		id: id,
+		id: id+"||"+db.getDatabaseName(), // since we may be using multiple dbs that all use the same db document id, to make each doc unique we append the db name to the back. otherwise, one db's indexes will overwrite another db's indexes in solr.
 		type: 'article',
-		title_text: escape(title.toLowerCase()),
-		body_text: escape(body.toLowerCase()),
+		title_text: title.toLowerCase(),
+		body_text:  body.toLowerCase(),
 		database_text: db.getDatabaseName()
 	};
 
@@ -279,8 +280,28 @@ api.removeFromDocArray = function(id, field, toRemove, callback) {
     );
 }
 
+// don't call this.
+// removes all indexes from solr for the db we are using and sets all documents in the db we are using to not being indexed by solr
+api.removeAllDocsFromSearch = function(callback) {
+    var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH')); 		
+    
+    api.docsByDate(null, function(err, response) {
+        response.forEach(function(row) {
+                console.log('unindexing "' + row.title + '"');
+                client.del(row._id+"||"+db.getDatabaseName(), null, function(err,resp) { 
+                    console.log(resp);
+                    db.merge(row._id, {indexedBySolr: false}, function(error3, response3) {
+                        if(error3) console.log(error3);
+                        else console.log('unindexed "' + row.title + '"');
+                    });
+                });
+        });
+    });     
+    callback(null);
+}
+
 api.docsByTitleSearch = function(title, callback) {
-	title = escape(title.toLowerCase().replace(/ /g,'* OR '));			
+	title = title.toLowerCase().replace(/ /g,'* OR ');			
 	var query = "database_text:"+db.getDatabaseName()+" AND title_text:"+title+"*";
 	
 	var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH')); 		
@@ -293,11 +314,13 @@ api.docsByTitleSearch = function(title, callback) {
 		console.log(responseObj);
 		
 		var ids = [];
+        var tempid;
 		var docs = responseObj.response.docs;
 		console.log(docs);
 		for(var docNum in docs)
 		{
-			ids.push(docs[docNum].id);
+            tempid = docs[docNum].id.split("||",1); // since our solr document ids are stored as db_id||DBNAME we need to parse out the db_id to use
+            ids.push(tempid[0]);
 		}
 		
 		api.docsById(ids,function(err, docs) {

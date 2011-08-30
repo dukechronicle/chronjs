@@ -187,7 +187,7 @@ site.init = function(app, callback) {
                    });
             });
 
-            app.get('/article/:url/edit', site.renderArticleEdit = function(req, http_res) {
+            app.get('/article/:url/edit', site.checkAdmin, site.renderArticleEdit = function(req, http_res) {
                 var url = req.params.url;
 
                 api.docForUrl(url, function(err, doc) {
@@ -268,6 +268,15 @@ site.init = function(app, callback) {
             callback(null);
         });
     });
+}
+
+site.checkAdmin = function(req,res,next) {
+    if(!api.accounts.isAdmin(req)) {	
+        site.askForLogin(res,req.url);
+    }
+    else {
+        next();
+    }
 }
 
 // redirects to login page

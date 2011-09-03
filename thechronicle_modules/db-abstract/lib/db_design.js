@@ -35,7 +35,7 @@ var views = {
 		   if(doc.groups) {
 			   doc.groups.forEach(function(group) {
 				   emit(group, {title: doc.title});
-				   if(doc.images.article) {
+				   if(doc.images && doc.images.article) {
 				       emit(doc._id, {_id: doc.images.article});
 				   }
 			   });

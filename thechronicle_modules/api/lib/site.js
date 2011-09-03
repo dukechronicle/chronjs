@@ -52,6 +52,7 @@ site.init = function(app, callback) {
 
                     api.docsByDate(5, function(err, docs) {
                         homeModel.popular.stories = docs;
+	                    console.log(result.DSG);
                         res.render('site/index', {filename: 'views/site/index.jade', model: result});
                     });
                 });
@@ -60,6 +61,7 @@ site.init = function(app, callback) {
             app.get('/news', function(req, res) {
                 api.group.docs(NEWS_GROUP_NAMESPACE, null, function(err, result) {
 	                console.log(Object.keys(result));
+
                     res.render('site/news', {filename: 'views/site/news.jade', model: result});
                 });
             });
@@ -195,46 +197,47 @@ site.init = function(app, callback) {
                         globalFunctions.showError(http_res, err);
                     }
                     else {
-                            if(req.query.deleteImage) {
-                                var newImages = doc.images;
-                                delete newImages[req.query.deleteImage];
-                                api.editDoc(doc._id, newImages, function(editErr, res) {
-                                        if(editErr) globalFunctions.showError(http_res, editErr);
-                                        else http_res.redirect('/article/' + url + '/edit');
-                                });
-                            }
-                            else {
-                                if(!doc.images) doc.images = {};
+						if(req.query.deleteImage) {
+							var newImages = doc.images;
+							delete newImages[req.query.deleteImage];
+							api.editDoc(doc._id, newImages, function(editErr, res) {
+									if(editErr) globalFunctions.showError(http_res, editErr);
+									else http_res.redirect('/article/' + url + '/edit');
+							});
+						}
+						else {
+							if(!doc.images) doc.images = {};
 
-                            async.waterfall([
-                                function(callback) {
-                                _getImages(doc.images, callback);
-                                }/*,
+							async.waterfall([
+								function(callback) {
+								_getImages(doc.images, callback);
+								}/*,
 
-                                function(images, callback) {
-                                    /*
-                                api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(err, groups) {
-                                    callback(err, groups, images);
-                                });*/
-                                //}
-                            ],
-                            function(err, images) {
-                            //function(err, groups, images) {
-                                if(err) globalFunctions.showError(http_res, err);
-                                else {
-                                http_res.render('admin/edit', {
-                                    locals: {
-                                            doc: doc,
-                                            //groups: groups,
-                                                groups: [],
-                                            images: images,
-                                            url: url
-                                    },
-                                    layout: "layout-admin.jade"
-                                });
-                                }
-                                });
-                            }
+								function(images, callback) {
+									/*
+								api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(err, groups) {
+									callback(err, groups, images);
+								});*/
+								//}
+								],
+								function(err, images) {
+								//function(err, groups, images) {
+									if(err) globalFunctions.showError(http_res, err);
+									else {
+										http_res.render('admin/edit', {
+											locals: {
+													doc: doc,
+													//groups: groups,
+														groups: [],
+													images: images,
+													url: url
+											},
+											layout: "layout-admin.jade"
+										});
+									}
+								}
+							);
+						}
                     }
                 });
             });

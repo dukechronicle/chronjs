@@ -73,7 +73,7 @@ group.docs = function(namespace, group, callback) {
                         groupedResults[groupName] = [];
 	                    doc.doc.cssClass = "first";
 
-	                    if (prevGroupName) {
+	                    if (prevGroupName && groupedResults[prevGroupName]) {
 	                        groupedResults[prevGroupName][groupedResults[prevGroupName].length - 1].cssClass = "last";
 	                    }
                     }
@@ -81,12 +81,12 @@ group.docs = function(namespace, group, callback) {
 		                doc.doc.url = "/article/" + doc.doc.urls[doc.doc.urls.length - 1];
 	                }
 
-
-
                     groupedResults[groupName].push(doc.doc);
                 }
 
-	            groupedResults[prevGroupName][groupedResults[prevGroupName].length - 1].cssClass = "last";
+                if (prevGroupName && groupedResults[prevGroupName]) {
+	                groupedResults[prevGroupName][groupedResults[prevGroupName].length - 1].cssClass = "last";
+                }
 				/*
 	            Object.keys(groupedResults).forEach(function(group) {
 		            async.map()

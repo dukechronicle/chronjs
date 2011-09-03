@@ -10,6 +10,7 @@ var solr = require('solr');
 var md = require('node-markdown').Markdown;
 var sprintf = require('sprintf').sprintf;
 var config = require("../../config");
+var site = require('../../api/lib/site.js');
 
 var VALID_EXTENSIONS = {};
 VALID_EXTENSIONS['image/jpeg'] = 'jpg';
@@ -129,7 +130,7 @@ exports.init = function(app, callback) {
         
         app.namespace('/admin',
         function() {
-            app.get('/layout/frontpage',
+            app.get('/layout/frontpage', site.checkAdmin,
 				function(req, res) {
 					function renderPage(docs) {
 						var stories = docs;
@@ -167,7 +168,7 @@ exports.init = function(app, callback) {
 				}
             );
 
-	        app.get('/layout/news',
+	        app.get('/layout/news', site.checkAdmin,
 				function(req, res) {
 					function renderPage(docs) {
 						var stories = docs;
@@ -205,12 +206,12 @@ exports.init = function(app, callback) {
 				}
             );
 
-            app.post('/layout/frontpage',
+            app.post('/layout/frontpage', site.checkAdmin,
             function(req, res) {
                 res.render('/');
             });
 
-            app.post('/group/add',
+            app.post('/group/add', site.checkAdmin,
             function(req, res) {
                 var _res = res;
 
@@ -229,7 +230,7 @@ exports.init = function(app, callback) {
                 })
             });
 
-            app.post('/group/remove',
+            app.post('/group/remove', site.checkAdmin,
             function(req, res) {
                 var _res = res;
 
@@ -247,7 +248,7 @@ exports.init = function(app, callback) {
                 })
             });
 
-            app.get('/add',
+            app.get('/add', site.checkAdmin,
             function(req, http_res) {
                 /*
                 api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(err, groups) {
@@ -265,7 +266,7 @@ exports.init = function(app, callback) {
                 })*/
             });
 
-            app.get('/manage',
+            app.get('/manage', site.checkAdmin,
             function(req, http_res) {
                 var db = config.get('COUCHDB_DATABASE');
                 api.docsByDate(null,
@@ -284,14 +285,14 @@ exports.init = function(app, callback) {
                 });
             });
 
-            app.get('/upload',
+            app.get('/upload', site.checkAdmin,
             function(req, httpRes) {
                 httpRes.render('upload', {
                     layout: "layout-admin.jade"
                 });
             });
 
-            app.post('/upload',
+            app.post('/upload', site.checkAdmin,
             function(req, httpRes) {
                 var imageData = req.body.imageData;
                 var imageName = req.body.imageName;
@@ -392,7 +393,7 @@ exports.init = function(app, callback) {
                 });
             });
 
-            app.get('/image/:imageName',
+            app.get('/image/:imageName', site.checkAdmin,
             function(req, httpRes) {
                 var imageName = req.params.imageName;
                 api.image.getOriginal(imageName,
@@ -425,7 +426,7 @@ exports.init = function(app, callback) {
                 });
             });
 
-            app.post('/image/info',
+            app.post('/image/info', site.checkAdmin,
             function(req, httpRes) {
                 var data = {};
                 var id = req.body.id;
@@ -442,7 +443,7 @@ exports.init = function(app, callback) {
 
             });
 
-            app.post('/image/crop',
+            app.post('/image/crop', site.checkAdmin,
             function(req, httpRes) {
                 var imageName = req.body.name;
                 var article = req.body.article;
@@ -515,7 +516,7 @@ exports.init = function(app, callback) {
                 );
             });
 
-            app.post('/edit',
+            app.post('/edit', site.checkAdmin,
             function(req, http_res) {
                 if (req.body.versionId) {
                     //adding image to article
@@ -563,7 +564,7 @@ exports.init = function(app, callback) {
                 }
             });
 
-            app.post('/add',
+            app.post('/add', site.checkAdmin,
             function(req, http_res) {
                 var form = req.body.doc;
                 var fields = {

@@ -91,32 +91,37 @@ site.init = function(app, callback) {
             });
 
             app.get('/article-list', function(req, http_res) {
-                    api.docsByDate(null, function(err, docs) {
-                    if (err) globalFunctions.showError(http_res, err);
-                    http_res.render('all', {locals:{docs:docs}, layout: 'layout-admin.jade'} );
-                });
+                    if(req.param('search') != null) {
+                        http_res.redirect('/article-list/'+req.param('search'));
+                    }                    
+                    else {                
+                        api.docsByDate(null, function(err, docs) {
+                        if (err) globalFunctions.showError(http_res, err);
+                        http_res.render('all', {locals:{docs:docs}, layout: 'layout-admin.jade'} );
+                       });
 
-                /*
-                api.group.list(['section'], function(err, groups) {
-                    if(err) {
-                        globalFunctions.showError(http_res, err);
-                    } else {
-                        api.group.docs(['section'], groups, function(get_err, get_res) {
-                            get_res.forEach(function(article) {
-                                console.log(article.urls.length);
-                            })
-                            if(get_err) {
-                                globalFunctions.showError(http_res, get_err);
+                        /*
+                        api.group.list(['section'], function(err, groups) {
+                            if(err) {
+                                globalFunctions.showError(http_res, err);
                             } else {
-                                http_res.render('main', {
-                                    locals: {
-                                        docs: get_res
+                                api.group.docs(['section'], groups, function(get_err, get_res) {
+                                    get_res.forEach(function(article) {
+                                        console.log(article.urls.length);
+                                    })
+                                    if(get_err) {
+                                        globalFunctions.showError(http_res, get_err);
+                                    } else {
+                                        http_res.render('main', {
+                                            locals: {
+                                                docs: get_res
+                                            }
+                                        });
                                     }
                                 });
                             }
-                        });
-                    }
-                });*/
+                        });*/
+                   }
             });
 
             // test the solr search functionality. Currently returns the ids,score of articles containing one of more of search words in title.
@@ -189,7 +194,7 @@ site.init = function(app, callback) {
                    });
             });
 
-            app.get('/article/:url/edit', site.renderArticleEdit = function(req, http_res) {
+            app.get('/article/:url/edit', site.checkAdmin, site.renderArticleEdit = function(req, http_res) {
                 var url = req.params.url;
 
                 api.docForUrl(url, function(err, doc) {
@@ -271,6 +276,15 @@ site.init = function(app, callback) {
             callback(null);
         });
     });
+}
+
+site.checkAdmin = function(req,res,next) {
+    if(!api.accounts.isAdmin(req)) {	
+        site.askForLogin(res,req.url);
+    }
+    else {
+        next();
+    }
 }
 
 // redirects to login page

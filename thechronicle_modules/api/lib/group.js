@@ -57,6 +57,7 @@ group.remove = function(docid, namespace, name, callback) {
 */
 group.docs = function(namespace, group, callback) {
     db.group.docs(namespace, group, function(err, res) {
+        console.log(res);
         // if querying name space, map each group to it's own object
         if (err)
             callback(err);
@@ -84,7 +85,6 @@ group.docs = function(namespace, group, callback) {
                 }
 
 	            groupedResults[prevGroupName][groupedResults[prevGroupName].length - 1].cssClass = "last";
-
                 callback(null, groupedResults);
             }
         }

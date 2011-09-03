@@ -58,13 +58,13 @@ group.remove = function(docid, namespace, name, callback) {
 group.docs = function(namespace, group, callback) {
     db.group.docs(namespace, group, function(err, res) {
         // if querying name space, map each group to it's own object
-        if (err)
-            callback(err);
+        if (err) return callback(err);
         else {
             if (!group) {
                 var groupedResults = {};
 	            var groupName;
 	            var prevGroupName;
+
                 for (var i = 0; i < res.length; i++) {
                     var doc = res[i];
 	                prevGroupName = groupName;
@@ -80,12 +80,24 @@ group.docs = function(namespace, group, callback) {
 	                if (doc.doc.urls) {
 		                doc.doc.url = "/article/" + doc.doc.urls[doc.doc.urls.length - 1];
 	                }
+
+
+
                     groupedResults[groupName].push(doc.doc);
                 }
 
 	            groupedResults[prevGroupName][groupedResults[prevGroupName].length - 1].cssClass = "last";
+				/*
+	            Object.keys(groupedResults).forEach(function(group) {
+		            async.map()
+		            _getImages(doc.images, function)
+	            });
+	            */
 
-                callback(null, groupedResults);
+	            callback(null, groupedResults);
+            } else {
+	            // TODO modify this
+	            return callback(null, {});
             }
         }
     });

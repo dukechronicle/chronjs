@@ -10,6 +10,8 @@ var api = require('./thechronicle_modules/api/lib/api');
 var site = require('./thechronicle_modules/api/lib/site');
 var admin = require('./thechronicle_modules/admin/lib/admin');
 var mobileapi = require('./thechronicle_modules/mobileapi/lib/mobileapi');
+var redisClient = require('./thechronicle_modules/api/lib/redisclient');
+var RedisStore = require('connect-redis')(express);
 
 /* express configuration */
 var app = express.createServer();
@@ -82,8 +84,6 @@ function runSite(callback) {
 	port = config.get('SERVER_PORT');	
 
     // use redis as our session store
-	var RedisStore = require('connect-redis')(express);
-    var redisClient = require('./thechronicle_modules/api/lib/redisclient');
     redisClient.init(function (err0) {
         if(err0) return console.log(err0);
         app.use(express.session({

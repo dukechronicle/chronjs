@@ -52,6 +52,7 @@ site.init = function(app, callback) {
 
                     api.docsByDate(5, function(err, docs) {
                         homeModel.popular.stories = docs;
+	                    console.log(result.DSG);
                         res.render('site/index', {filename: 'views/site/index.jade', model: result});
                     });
                 });
@@ -60,6 +61,7 @@ site.init = function(app, callback) {
             app.get('/news', function(req, res) {
                 api.group.docs(NEWS_GROUP_NAMESPACE, null, function(err, result) {
 	                console.log(Object.keys(result));
+
                     res.render('site/news', {filename: 'views/site/news.jade', model: result});
                 });
             });
@@ -89,32 +91,37 @@ site.init = function(app, callback) {
             });
 
             app.get('/article-list', function(req, http_res) {
-                    api.docsByDate(null, function(err, docs) {
-                    if (err) globalFunctions.showError(http_res, err);
-                    http_res.render('all', {locals:{docs:docs}, layout: 'layout-admin.jade'} );
-                });
+                    if(req.param('search') != null) {
+                        http_res.redirect('/article-list/'+req.param('search'));
+                    }                    
+                    else {                
+                        api.docsByDate(null, function(err, docs) {
+                        if (err) globalFunctions.showError(http_res, err);
+                        http_res.render('all', {locals:{docs:docs}, layout: 'layout-admin.jade'} );
+                       });
 
-                /*
-                api.group.list(['section'], function(err, groups) {
-                    if(err) {
-                        globalFunctions.showError(http_res, err);
-                    } else {
-                        api.group.docs(['section'], groups, function(get_err, get_res) {
-                            get_res.forEach(function(article) {
-                                console.log(article.urls.length);
-                            })
-                            if(get_err) {
-                                globalFunctions.showError(http_res, get_err);
+                        /*
+                        api.group.list(['section'], function(err, groups) {
+                            if(err) {
+                                globalFunctions.showError(http_res, err);
                             } else {
-                                http_res.render('main', {
-                                    locals: {
-                                        docs: get_res
+                                api.group.docs(['section'], groups, function(get_err, get_res) {
+                                    get_res.forEach(function(article) {
+                                        console.log(article.urls.length);
+                                    })
+                                    if(get_err) {
+                                        globalFunctions.showError(http_res, get_err);
+                                    } else {
+                                        http_res.render('main', {
+                                            locals: {
+                                                docs: get_res
+                                            }
+                                        });
                                     }
                                 });
                             }
-                        });
-                    }
-                });*/
+                        });*/
+                   }
             });
 
             // test the solr search functionality. Currently returns the ids,score of articles containing one of more of search words in title.
@@ -195,46 +202,47 @@ site.init = function(app, callback) {
                         globalFunctions.showError(http_res, err);
                     }
                     else {
-                            if(req.query.deleteImage) {
-                                var newImages = doc.images;
-                                delete newImages[req.query.deleteImage];
-                                api.editDoc(doc._id, newImages, function(editErr, res) {
-                                        if(editErr) globalFunctions.showError(http_res, editErr);
-                                        else http_res.redirect('/article/' + url + '/edit');
-                                });
-                            }
-                            else {
-                                if(!doc.images) doc.images = {};
+						if(req.query.deleteImage) {
+							var newImages = doc.images;
+							delete newImages[req.query.deleteImage];
+							api.editDoc(doc._id, newImages, function(editErr, res) {
+									if(editErr) globalFunctions.showError(http_res, editErr);
+									else http_res.redirect('/article/' + url + '/edit');
+							});
+						}
+						else {
+							if(!doc.images) doc.images = {};
 
-                            async.waterfall([
-                                function(callback) {
-                                _getImages(doc.images, callback);
-                                }/*,
+							async.waterfall([
+								function(callback) {
+								_getImages(doc.images, callback);
+								}/*,
 
-                                function(images, callback) {
-                                    /*
-                                api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(err, groups) {
-                                    callback(err, groups, images);
-                                });*/
-                                //}
-                            ],
-                            function(err, images) {
-                            //function(err, groups, images) {
-                                if(err) globalFunctions.showError(http_res, err);
-                                else {
-                                http_res.render('admin/edit', {
-                                    locals: {
-                                            doc: doc,
-                                            //groups: groups,
-                                                groups: [],
-                                            images: images,
-                                            url: url
-                                    },
-                                    layout: "layout-admin.jade"
-                                });
-                                }
-                                });
-                            }
+								function(images, callback) {
+									/*
+								api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(err, groups) {
+									callback(err, groups, images);
+								});*/
+								//}
+								],
+								function(err, images) {
+								//function(err, groups, images) {
+									if(err) globalFunctions.showError(http_res, err);
+									else {
+										http_res.render('admin/edit', {
+											locals: {
+													doc: doc,
+													//groups: groups,
+														groups: [],
+													images: images,
+													url: url
+											},
+											layout: "layout-admin.jade"
+										});
+									}
+								}
+							);
+						}
                     }
                 });
             });

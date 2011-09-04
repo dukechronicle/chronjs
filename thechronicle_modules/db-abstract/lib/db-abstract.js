@@ -13,7 +13,7 @@ var DATABASE = null;
 function connect(database) {
 	var couchdbUrl = process.env.CLOUDANT_URL || config.get("COUCHDB_URL");
 	if(!couchdbUrl) throw "No Cloudant URL specified...";
-	console.log("Connecting to " + couchdbUrl);
+	console.log("Connecting to " + database + " at " + couchdbUrl);
 	couchdbUrl = url.parse(couchdbUrl);
 	if (couchdbUrl.auth) {
 		couchdbUrl.auth = couchdbUrl.auth.split(":");

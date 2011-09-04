@@ -102,7 +102,7 @@ exports.getUndefinedParameters = function() {
 		// if a parameter is undefined, add it to return array
 		if(activeProfile[parameters[i].name] == null) returnParameters.push(parameters[i]); 
 	}
-
+    console.log(returnParameters);
 	return returnParameters;
 }
 

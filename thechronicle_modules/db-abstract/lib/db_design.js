@@ -36,18 +36,12 @@ var views = {
             doc.groups.forEach(function(group) {
                 emit(group, {title: doc.title});
                 var newgroup;
-                if (doc.images && doc.images.article) {
-                    newgroup = group.concat([doc._id, "article"]);
-                    emit(newgroup, {_id: doc.images.article});
-                }
-                if (doc.images && doc.images.frontpage) {
-                    newgroup = group.concat([doc._id, "frontpage"]);
-                    emit(newgroup, {_id: doc.images.frontpage});
-                }
-                if (doc.images && doc.images.slideshow) {
-                    newgroup = group.concat([doc._id, "slideshow"]);
-                    emit(newgroup, {_id: doc.images.slideshow});
-                }
+                ["article", "frontpage", "slideshow"].forEach(function(type) {
+                    if(doc.images && doc.images[type]) {
+                        newgroup = group.concat([doc._id, type]);
+                        emit(newgroup, {_id: doc.images[type]});
+                    }
+                });
             });
         }
     },

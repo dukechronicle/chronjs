@@ -31,16 +31,26 @@ var views = {
 	},
 	// get the uuid of all children keyed by fully qualified group name
 	groups: {
-	map: function(doc) {
-		   if(doc.groups) {
-			   doc.groups.forEach(function(group) {
-				   emit(group, {title: doc.title});
-				   if(doc.images && doc.images.article) {
-				       emit(doc._id, {_id: doc.images.article});
-				   }
-			   });
-		   }
-		},
+    map: function(doc) {
+        if (doc.groups) {
+            doc.groups.forEach(function(group) {
+                emit(group, {title: doc.title});
+                var newgroup;
+                if (doc.images && doc.images.article) {
+                    newgroup = group.concat([doc._id, "article"]);
+                    emit(newgroup, {_id: doc.images.article});
+                }
+                if (doc.images && doc.images.frontpage) {
+                    newgroup = group.concat([doc._id, "frontpage"]);
+                    emit(newgroup, {_id: doc.images.frontpage});
+                }
+                if (doc.images && doc.images.slideshow) {
+                    newgroup = group.concat([doc._id, "slideshow"]);
+                    emit(newgroup, {_id: doc.images.slideshow});
+                }
+            });
+        }
+    },
 	reduce: function(keys, values, rereduce) {
 			if (rereduce) {
 				return sum(values);

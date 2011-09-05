@@ -301,11 +301,11 @@ api.removeAllDocsFromSearch = function(callback) {
 }
 
 api.docsByTitleSearch = function(title, callback) {
-	title = title.toLowerCase().replace(/ /g,'* OR ');			
-	var query = "database_text:"+db.getDatabaseName()+" AND title_text:"+title+"*";
+	title = title.toLowerCase().replace(/ /g,'* OR title_text:');			
+	var query = "database_text:"+db.getDatabaseName()+" AND (title_text:"+title+"*)";
 	
 	var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH')); 		
-	client.query(query, {fl: "*,score", sort: "score desc"}, function(err,response) {
+	client.query(query, {rows: 25, fl: "*,score", sort: "score desc"}, function(err,response) {
 		if(err) {
 			callback(err);
 		}

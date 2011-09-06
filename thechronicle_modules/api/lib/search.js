@@ -45,24 +45,24 @@ search.docsNotIndexed = function(callback) {
 }
 
 search.indexArticle = function(id,title,body,callback) {
-	// adds the article to the solr database for searching	
-	var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH'));
-	console.log((title));
-	var solrDoc = {
-		id: createSolrIDFromDBID(id),
-		type: 'article',
-		title_text: title.toLowerCase(),
-		body_text:  body.toLowerCase(),
-		database_text: db.getDatabaseName()
-	};
+    // adds the article to the solr database for searching    
+    var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH'));
+    console.log((title));
+    var solrDoc = {
+        id: createSolrIDFromDBID(id),
+        type: 'article',
+        title_text: title.toLowerCase(),
+        body_text:  body.toLowerCase(),
+        database_text: db.getDatabaseName()
+    };
 
-	client.add(solrDoc, {commit:true}, callback);
+    client.add(solrDoc, {commit:true}, callback);
 }
 
 // don't call this.
 // removes all indexes from solr for the db we are using and sets all documents in the db we are using to not being indexed by solr
 search.removeAllDocsFromSearch = function(callback) {
-    var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH')); 		
+    var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH'));         
     
     api.docsByDate(null, function(err, response) {
         response.forEach(function(row) {
@@ -80,40 +80,40 @@ search.removeAllDocsFromSearch = function(callback) {
 }
 
 search.docsByTitleSearch = function(title, callback) {
-	title = title.toLowerCase().replace(/ /g,'* OR title_text:');			
-	var query = "database_text:"+db.getDatabaseName()+" AND (title_text:"+title+"*)";
-	
-	var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH')); 		
-	client.query(query, {rows: 25, fl: "*,score", sort: "score desc"}, function(err,response) {
-		if(err) {
-			callback(err);
-		}
+    title = title.toLowerCase().replace(/ /g,'* OR title_text:');            
+    var query = "database_text:"+db.getDatabaseName()+" AND (title_text:"+title+"*)";
+    
+    var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH'));         
+    client.query(query, {rows: 25, fl: "*,score", sort: "score desc"}, function(err,response) {
+        if(err) {
+            callback(err);
+        }
 
-		var responseObj = JSON.parse(response);
-		console.log(responseObj);
-		
-		var ids = [];
+        var responseObj = JSON.parse(response);
+        console.log(responseObj);
+        
+        var ids = [];
         var tempid;
-		var docs = responseObj.response.docs;
-		console.log(docs);
-		for(var docNum in docs)
-		{
+        var docs = responseObj.response.docs;
+        console.log(docs);
+        for(var docNum in docs)
+        {
             var tempid = getDBIDFromSolrID(docs[docNum].id);
             ids.push(tempid);
-		}
-		
-		api.docsById(ids,function(err, docs) {
-			if (err) callback(err);
+        }
+        
+        api.docsById(ids,function(err, docs) {
+            if (err) callback(err);
 
-			// replace each array element with the actual document data for that element			
-			docs = _.map(docs, function(doc) {
-				return doc.doc;
-			});
-			
-			// remove any null array elements.
-			docs = _.compact(docs);
+            // replace each array element with the actual document data for that element            
+            docs = _.map(docs, function(doc) {
+                return doc.doc;
+            });
+            
+            // remove any null array elements.
+            docs = _.compact(docs);
 
-			callback(null,docs);
-		});
-	});
+            callback(null,docs);
+        });
+    });
 }

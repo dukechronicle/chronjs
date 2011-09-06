@@ -3,8 +3,8 @@ var taxonomyGroups = ["News","Sports","Opinion","Recess","Towerview"];
 var _ = require('underscore');
 
 exports.init = function(app, callback) {
-	app.namespace('/mobile', function() {
-		app.get('/:groupname', function(req, http_res) {
+    app.namespace('/mobile', function() {
+        app.get('/:groupname', function(req, http_res) {
             var groupName = req.params.groupname;
             //console.log("server.js/mobile" + groupName);
             getGroup(groupName,10,function(err,res){
@@ -28,7 +28,7 @@ exports.init = function(app, callback) {
                 http_res.send(res);
             });
         });
-	});
+    });
 
     callback(null);
 }

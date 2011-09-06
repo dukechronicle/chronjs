@@ -1,5 +1,5 @@
 {
-	"name": "thechronicle-config",
-	"version" : "0.0.1",
-	"main" : "./lib/config.js"
+    "name": "thechronicle-config",
+    "version" : "0.0.1",
+    "main" : "./lib/config.js"
 }

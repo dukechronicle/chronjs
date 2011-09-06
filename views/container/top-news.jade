@@ -1,27 +1,27 @@
 .container.clearfix
-	.vertical-container
-		h2.vertical #{title}
-	
-	.rounded
-		.content-container.align-group.clearfix
-		
-			.left.align-element
-				a.hover.highlight-left.first.teaser(href='#{news[0].url}')
-					h2 #{news[0].title}
-					p #{news[0].teaser}
+    .vertical-container
+        h2.vertical #{title}
+    
+    .rounded
+        .content-container.align-group.clearfix
+        
+            .left.align-element
+                a.hover.highlight-left.first.teaser(href='#{news[0].url}')
+                    h2 #{news[0].title}
+                    p #{news[0].teaser}
 
-				- each story, index in news
-					- if (index > 0)
-						a.hover.highlight-left(href='#{story.url}')
-							h3 #{story.title}
+                - each story, index in news
+                    - if (index > 0)
+                        a.hover.highlight-left(href='#{story.url}')
+                            h3 #{story.title}
 
-			.right.align-element
-				a.hover.highlight-right.first.teaser(href='#{sports[0].url}')
-					h2 #{sports[0].title}
-					p #{sports[0].teaser}
+            .right.align-element
+                a.hover.highlight-right.first.teaser(href='#{sports[0].url}')
+                    h2 #{sports[0].title}
+                    p #{sports[0].teaser}
 
-				- each story, index in sports
-					- if (index > 0)
-						a.hover.highlight-right(href='#{story.url}')
-							h3 #{story.title}
+                - each story, index in sports
+                    - if (index > 0)
+                        a.hover.highlight-right(href='#{story.url}')
+                            h3 #{story.title}
 

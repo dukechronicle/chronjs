@@ -24,9 +24,9 @@ s3.put = function(buf, key, type, callback) {
 }
 
 s3.init = function(callback) {
-	BUCKET_NAME = config.get("S3_BUCKET");
-	KEY = config.get("S3_KEY");
-	SECRET = config.get("S3_SECRET");
+    BUCKET_NAME = config.get("S3_BUCKET");
+    KEY = config.get("S3_KEY");
+    SECRET = config.get("S3_SECRET");
     
     callback(null);
 }
@@ -51,7 +51,7 @@ function _getClient(callback) {
 
 function _getClientStatic(callback) {
     var client = knox.createClient({
-   	    key: KEY,
+           key: KEY,
             secret: SECRET,
             bucket: BUCKET_NAME
      });

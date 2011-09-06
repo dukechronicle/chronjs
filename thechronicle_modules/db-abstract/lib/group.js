@@ -6,9 +6,9 @@ var group = exports;
 
 // create a new entry for group
 group.create = function(namespace, name, callback) {
-	db.save({
-		type: 'group',
-		namespace: namespace,
+    db.save({
+        type: 'group',
+        namespace: namespace,
         name: name,
         docs: []
    }, callback);
@@ -17,51 +17,51 @@ group.create = function(namespace, name, callback) {
 // lists all groups with given query options
 group.list = function(options, callback) {
     db.view('articles/groups', options,
-	    function(err, res) {
-	        callback(err, res);
-	    }
-	);
+        function(err, res) {
+            callback(err, res);
+        }
+    );
 };
 
 // fetch documents from namespace or groups
 group.docs = function(namespace, group, callback) {
-	var query = {};
-	
-	query.reduce = false;
+    var query = {};
+    
+    query.reduce = false;
     query.include_docs = true;
 
-	if (group === null) {
-		// fetch all docs in namespace
-		query.startKey = [[namespace]];
-		query.endKey = [[namespace], {}];
-	} else {
-		query.startKey = [[namespace], group];
-		query.endKey = [namespace, group, {}];
-	}
+    if (group === null) {
+        // fetch all docs in namespace
+        query.startKey = [[namespace]];
+        query.endKey = [[namespace], {}];
+    } else {
+        query.startKey = [[namespace], group];
+        query.endKey = [namespace, group, {}];
+    }
     
-	db.view('articles/groups', query,
+    db.view('articles/groups', query,
 
     function(err, res) {
-	    if (err) return callback(err);
-    	if (res) {
-    		callback(null, res);
-	    } else {
-	    	callback(null, []);
-	    }
+        if (err) return callback(err);
+        if (res) {
+            callback(null, res);
+        } else {
+            callback(null, []);
+        }
     });
 }
 
 group.docsN = function(namespace, groupName, baseDocNum, numDocs, callback) {
-	db.view('articles/group_docs', {
+    db.view('articles/group_docs', {
         key: [namespace, groupName]
     }, 
     function(err, res) {
-    	if (res) {
-    		// fetch each child document after getting their id
+        if (res) {
+            // fetch each child document after getting their id
             var resN = {};
             var counter = 0;
             
-	        for(var doc in res)
+            for(var doc in res)
             {
                 if(counter >= numDocs)
                     break;
@@ -72,15 +72,15 @@ group.docsN = function(namespace, groupName, baseDocNum, numDocs, callback) {
             }
 
             nimble.map(resN, function(docId, cbck) {
-	            cbck(null, function(acallback) {
-	                    db.get(docId.value, acallback);
-	                });
-	            }, function(map_err, map_res) {
-	            nimble.parallel(map_res, callback);
-	        });
-	    } else {
-	    	callback(null, []);
-	    }
+                cbck(null, function(acallback) {
+                        db.get(docId.value, acallback);
+                    });
+                }, function(map_err, map_res) {
+                nimble.parallel(map_res, callback);
+            });
+        } else {
+            callback(null, []);
+        }
     });
 }
 

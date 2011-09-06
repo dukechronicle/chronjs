@@ -126,7 +126,7 @@ site.init = function(app, callback) {
 
             // test the solr search functionality. Currently returns the ids,score of articles containing one of more of search words in title.
             app.get('/article-list/:titleSearchQuery', function(req, http_res) {
-                api.docsByTitleSearch(req.params.titleSearchQuery,function(err, docs) {
+                api.search.docsByTitleSearch(req.params.titleSearchQuery,function(err, docs) {
                     if (err) globalFunctions.showError(http_res, err);
                     http_res.render('all', {locals:{docs:docs}, layout: 'layout-admin.jade'} );
                 });

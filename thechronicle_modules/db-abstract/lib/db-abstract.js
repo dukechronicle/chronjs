@@ -5,7 +5,7 @@ var url = require("url");
 var fs = require('fs');
 
 var DESIGN_DOCUMENT_NAME = '_design/articles';
-var DESIGN_DOCUMENT_FILENAME = __dirname+'/db_design.js';
+var DESIGN_DOCUMENT_FILENAME = __dirname+'/db-design.js';
 var DESIGN_DOCUMENT_VERSION_NAME = DESIGN_DOCUMENT_NAME+'-versioning';
 var DATABASE = null;
 

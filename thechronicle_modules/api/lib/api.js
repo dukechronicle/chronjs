@@ -56,32 +56,37 @@ function _URLify(s, maxChars) {
 }
 
 api.init = function(callback) {
-	db.init(function(error){
+	db.init(function(error) {
         if(error)
         {
             console.log("db init failed!");
             return callback(error);
         }
 
-        // check for unindexed articles and index them in solr. Shouldn't happen very often
-        api.docsNotIndexed(function(err, response) {
-            // Attempt to index each file in row.
-            response.forEach(function(row) {
-                    console.log('indexing "' + row.title + '"');
-                api.indexArticle(row._id,row.title,row.body, function(error2, response2) {
-                    if(error2) console.log(error2);
-                    else {
-                        db.merge(row._id, {indexedBySolr: true}, function(error3, response3) {
-                            if(error3) console.log(error3);
-                            else console.log('indexed "' + row.title + '"');
-                        });
-                    }
-                });
-            });
-       });
+        api.indexUnindexedArticles();
+
+        callback(null);
     });
-    
-    callback(null);
+}
+
+// check for unindexed articles and index them in solr.
+api.indexUnindexedArticles = function() {
+    console.log('looking for articles to index...');
+    api.docsNotIndexed(function(err, response) {
+        // Attempt to index each file in row.
+        response.forEach(function(row) {
+            console.log('indexing "' + row.title + '"');
+            api.indexArticle(row._id,row.title,row.body, function(error2, response2) {
+                if(error2) console.log(error2);
+                else {
+                    db.merge(row._id, {indexedBySolr: true}, function(error3, response3) {
+                        if(error3) console.log(error3);
+                        else console.log('indexed "' + row.title + '"');
+                    });
+                }
+            });
+        });
+    });
 }
 
 api.getArticles= function(parent_node, count, callback) {

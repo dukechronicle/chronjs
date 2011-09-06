@@ -248,6 +248,12 @@ exports.init = function(app, callback) {
                 })
             });
 
+            app.get('/index-articles', site.checkAdmin,
+            function(req, http_res) {
+                api.indexUnindexedArticles();                
+                http_res.redirect('/');
+            });
+
             app.get('/add', site.checkAdmin,
             function(req, http_res) {
                 /*

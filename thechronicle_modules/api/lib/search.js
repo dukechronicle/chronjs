@@ -1,5 +1,4 @@
 var solr = require('solr');
-var url = require("url");
 var config = require('../../config');
 var api = require("./api");
 var _ = require("underscore");
@@ -9,15 +8,15 @@ var search = {};
 var exports = module.exports = search;
 
 function getDBIDFromSolrID(solr_id) {
-    // since our solr document ids are stored as db_id||DBNAME we need to parse out the db_id to use
+    // since our solr document ids are stored as db_id||DBNAME||DBHOST we need to parse out the db_id to use
     tempid = solr_id.split("||",1); 
     return tempid[0];
 }
 
 function createSolrIDFromDBID(db_id) {
-    // since we may be using multiple dbs that all use the same db document id, to make each doc unique we append the db name
+    // since we may be using multiple dbs that all use the same db document id, to make each doc unique we append the db name and host
     // to the back. otherwise, one db's indexes will overwrite another db's indexes in solr.
-    return db_id+"||"+db.getDatabaseName();
+    return db_id+"||"+db.getDatabaseName()+"||"+db.getDatabaseHost();
 }
 
 // check for unindexed articles and index them in solr.
@@ -53,7 +52,8 @@ search.indexArticle = function(id,title,body,callback) {
 		type: 'article',
 		title_text: title.toLowerCase(),
 		body_text:  body.toLowerCase(),
-		database_text: db.getDatabaseName()
+		database_text: db.getDatabaseName(),
+        database_host_text: db.getDatabaseHost()
 	};
 
 	client.add(solrDoc, {commit:true}, callback);
@@ -81,7 +81,7 @@ search.removeAllDocsFromSearch = function(callback) {
 
 search.docsByTitleSearch = function(title, callback) {
 	title = title.toLowerCase().replace(/ /g,'* OR title_text:');			
-	var query = "database_text:"+db.getDatabaseName()+" AND (title_text:"+title+"*)";
+	var query = "database_host_text:"+db.getDatabaseHost()+" AND database_text:"+db.getDatabaseName()+" AND (title_text:"+title+"*)";
 	
 	var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH')); 		
 	client.query(query, {rows: 25, fl: "*,score", sort: "score desc"}, function(err,response) {

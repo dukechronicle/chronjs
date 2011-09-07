@@ -56,13 +56,13 @@ search.indexArticle = function(id,title,body,callback) {
         database_host_text: db.getDatabaseHost()
 	};
 
-	client.add(solrDoc, {commit:true}, callback);
+    client.add(solrDoc, {commit:true}, callback);
 }
 
 // don't call this.
 // removes all indexes from solr for the db we are using and sets all documents in the db we are using to not being indexed by solr
 search.removeAllDocsFromSearch = function(callback) {
-    var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH')); 		
+    var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH'));         
     
     api.docsByDate(null, function(err, response) {
         response.forEach(function(row) {
@@ -89,31 +89,31 @@ search.docsByTitleSearch = function(title, callback) {
 			callback(err);
 		}
 
-		var responseObj = JSON.parse(response);
-		console.log(responseObj);
-		
-		var ids = [];
+        var responseObj = JSON.parse(response);
+        console.log(responseObj);
+        
+        var ids = [];
         var tempid;
-		var docs = responseObj.response.docs;
-		console.log(docs);
-		for(var docNum in docs)
-		{
+        var docs = responseObj.response.docs;
+        console.log(docs);
+        for(var docNum in docs)
+        {
             var tempid = getDBIDFromSolrID(docs[docNum].id);
             ids.push(tempid);
-		}
-		
-		api.docsById(ids,function(err, docs) {
-			if (err) callback(err);
+        }
+        
+        api.docsById(ids,function(err, docs) {
+            if (err) callback(err);
 
-			// replace each array element with the actual document data for that element			
-			docs = _.map(docs, function(doc) {
-				return doc.doc;
-			});
-			
-			// remove any null array elements.
-			docs = _.compact(docs);
+            // replace each array element with the actual document data for that element            
+            docs = _.map(docs, function(doc) {
+                return doc.doc;
+            });
+            
+            // remove any null array elements.
+            docs = _.compact(docs);
 
-			callback(null,docs);
-		});
-	});
+            callback(null,docs);
+        });
+    });
 }

@@ -1,5 +1,5 @@
 {
-	"name": "thechronicle-global-functions",
-	"version" : "0.0.1",
-	"main" : "./lib/global-functions.js"
+    "name": "thechronicle-global-functions",
+    "version" : "0.0.1",
+    "main" : "./lib/global-functions.js"
 }

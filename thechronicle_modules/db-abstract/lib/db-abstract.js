@@ -12,40 +12,40 @@ var DB_HOST = null;
 
 // parse environment variable CLOUDANT_URL OR COUCHDB_URL to extract authentication information
 function connect(database) {
-	var couchdbUrl = process.env.CLOUDANT_URL || config.get("COUCHDB_URL");
-	if(!couchdbUrl) throw "No Cloudant URL specified...";
-	console.log("Connecting to " + database + " at " + couchdbUrl);
-	couchdbUrl = url.parse(couchdbUrl);
-	if (couchdbUrl.auth) {
-		couchdbUrl.auth = couchdbUrl.auth.split(":");
-	}
+    var couchdbUrl = process.env.CLOUDANT_URL || config.get("COUCHDB_URL");
+    if(!couchdbUrl) throw "No Cloudant URL specified...";
+    console.log("Connecting to " + database + " at " + couchdbUrl);
+    couchdbUrl = url.parse(couchdbUrl);
+    if (couchdbUrl.auth) {
+        couchdbUrl.auth = couchdbUrl.auth.split(":");
+    }
 
-	if (!couchdbUrl.port) {
-		(couchdbUrl.protocol === "https:") ? couchdbUrl.port = 443 : couchdbUrl.port = 80;
-	}
-	
-	var conn = new (cradle.Connection)(couchdbUrl.protocol + '//' + couchdbUrl.hostname, couchdbUrl.port, {
-		auth: {username: couchdbUrl.auth[0], password: couchdbUrl.auth[1]}
-	}); 
-	
-	return conn.database(database);
+    if (!couchdbUrl.port) {
+        (couchdbUrl.protocol === "https:") ? couchdbUrl.port = 443 : couchdbUrl.port = 80;
+    }
+    
+    var conn = new (cradle.Connection)(couchdbUrl.protocol + '//' + couchdbUrl.hostname, couchdbUrl.port, {
+        auth: {username: couchdbUrl.auth[0], password: couchdbUrl.auth[1]}
+    }); 
+    
+    return conn.database(database);
 }
 
 function updateViews(callback)
 {
     // Check if views are up to date
     viewsAreUpToDate(function(isUpToDate,newestModifiedTime) {
-		if(!isUpToDate) {
-			console.log('updating views to newest version: ' + newestModifiedTime);
-			createViews(newestModifiedTime, function(err){
+        if(!isUpToDate) {
+            console.log('updating views to newest version: ' + newestModifiedTime);
+            createViews(newestModifiedTime, function(err){
                 return callback(err);
             });
-		}
+        }
         else
         {
             return callback(null);
         }
-	});
+    });
 }
 
 var db = exports;
@@ -55,7 +55,7 @@ db.image = require('./image.js');
 db.taxonomy = require('./taxonomy.js');
 
 db.getDatabaseName = function() {
-	return DATABASE;
+    return DATABASE;
 }
 
 db.getDatabaseHost = function() {
@@ -66,24 +66,24 @@ db.init = function(callback) {
 	DATABASE = config.get("COUCHDB_DATABASE");
     DB_HOST = url.parse(config.get("COUCHDB_URL")).hostname;
 
-	// assign all methods of the cradle object to db
+    // assign all methods of the cradle object to db
     var database = connect(DATABASE);
-	_.extend(db, database);
+    _.extend(db, database);
 
     db.exists(function (error,exists) {
-	  	if(error)
+          if(error)
         {
             console.log("ERROR db-abstract" + error);
             return callback(error);
         }
 
-		// initialize database if it doesn't already exist
-		if(!exists) {
+        // initialize database if it doesn't already exist
+        if(!exists) {
             db.create();
             whenDBExists(function() {
                 updateViews(callback);
             });
-		}
+        }
         else {
                 updateViews(callback);
         }
@@ -99,24 +99,24 @@ function whenDBExists(callback) {
 }
 
 function createViews(modifiedTime, callback) {
-	var design_doc = require(DESIGN_DOCUMENT_FILENAME);
+    var design_doc = require(DESIGN_DOCUMENT_FILENAME);
 
-	db.save(DESIGN_DOCUMENT_NAME, design_doc.getViews(), function(err, response) {
-		// update the versioning info for the design document
-		db.save(DESIGN_DOCUMENT_VERSION_NAME, {lastModified: modifiedTime}, function(err2,res2){
+    db.save(DESIGN_DOCUMENT_NAME, design_doc.getViews(), function(err, response) {
+        // update the versioning info for the design document
+        db.save(DESIGN_DOCUMENT_VERSION_NAME, {lastModified: modifiedTime}, function(err2,res2){
 
             // More error messages here needed.
 
             return callback(err2);
         });
-	});
+    });
 }
 
 function viewsAreUpToDate(callback) {
-	fs.stat(DESIGN_DOCUMENT_FILENAME, function(err, stats) {
-		db.get(DESIGN_DOCUMENT_VERSION_NAME, function (err, response) {
-			// if the design document does not exists, or the modified time of the design doc does not exist, return false
-			if(response == null || response.lastModified == null)
+    fs.stat(DESIGN_DOCUMENT_FILENAME, function(err, stats) {
+        db.get(DESIGN_DOCUMENT_VERSION_NAME, function (err, response) {
+            // if the design document does not exists, or the modified time of the design doc does not exist, return false
+            if(response == null || response.lastModified == null)
                 return callback(false,stats.mtime);
 
             // check if the design doc file has been modified since the the last time it was updated in the db
@@ -124,7 +124,7 @@ function viewsAreUpToDate(callback) {
                 return callback(true,response.lastModified);
 
             return callback(false,stats.mtime);
-		});
-	});
+        });
+    });
 }
 

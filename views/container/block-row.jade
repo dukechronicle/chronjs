@@ -1,17 +1,17 @@
 .container.clearfix.block-row
-	.vertical-container
-		h2.vertical #{title}
+    .vertical-container
+        h2.vertical #{title}
 
-	.rounded
-		.content-container.clearfix
-			- each story, index in stories
-				a.list-story.hover.highlight-bottom(href='#{story.url}', class='#{story.cssClass}')
-					- if (story.cssClass !== "first")
-						h3 #{story.title}
-						p.teaser
-							#{story.teaser}
-					- else
-						h2 #{story.title}
-					- if (story.image)
-						img(src="#{story.image}")
+    .rounded
+        .content-container.clearfix
+            - each story, index in stories
+                a.list-story.hover.highlight-bottom(href='#{story.url}', class='#{story.cssClass}')
+                    - if (story.cssClass !== "first")
+                        h3 #{story.title}
+                        p.teaser
+                            #{story.teaser}
+                    - else
+                        h2 #{story.title}
+                    - if (story.image)
+                        img(src="#{story.image}")
 

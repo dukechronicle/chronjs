@@ -36,18 +36,18 @@ function getAvailableUrl(url, n, callback) {
 //from http://snipt.net/jpartogi/slugify-javascript/
 function _URLify(s, maxChars) {
 
-	if(maxChars === undefined) {
-	    max_chars = 100;
-	}
+    if(maxChars === undefined) {
+        max_chars = 100;
+    }
 
     removelist = ["a", "an", "as", "at", "before", "but", "by", "for", "from",
                   "is", "in", "into", "like", "of", "off", "on", "onto", "per",
                   "since", "than", "the", "this", "that", "to", "up", "via",
                   "with"];
     
-	r = new RegExp("\\b(" + removelist.join("|") + ")\\b", "gi");
+    r = new RegExp("\\b(" + removelist.join("|") + ")\\b", "gi");
     s = s.replace(r, "");
-	
+    
     s = s.replace(/[^-\w\s]/g, "");  // remove unneeded chars
     s = s.replace(/^\s+|\s+$/g, ""); // trim leading/trailing spaces
     s = s.replace(/[-\s]+/g, "-");   // convert spaces to hyphens
@@ -56,7 +56,7 @@ function _URLify(s, maxChars) {
 }
 
 api.init = function(callback) {
-	db.init(function(error) {
+    db.init(function(error) {
         if(error)
         {
             console.log("db init failed!");
@@ -115,7 +115,7 @@ function _editDocument(docid, fields, callback) {
 }
 
 api.editDoc = function(docid, fields, callback) {
-	/*
+    /*
     var groups = fields.groups;
     if(fields.groups) {
         fcns["groups"] = function(acallback) {
@@ -151,15 +151,15 @@ api.addDoc = function(fields, callback) {
             fields.created = unix_timestamp;
             fields.updated = unix_timestamp;
             fields.urls = [url];
-	        fields.indexedBySolr = true;
+            fields.indexedBySolr = true;
 
             db.save(fields, function(db_err, res) {
-		    
-		    if(db_err) callback(db_err);
-			
-		    api.search.indexArticle(res.id,fields.title,fields.body, function(err, response) {
-			callback(err,response,url);
-		    });
+            
+            if(db_err) callback(db_err);
+            
+            api.search.indexArticle(res.id,fields.title,fields.body, function(err, response) {
+            callback(err,response,url);
+            });
             });
         }
     });
@@ -190,19 +190,19 @@ api.docForUrl = function(url, callback) {
 }
 
 api.docsByDate = function(limit, callback) {
-	var query = {descending: true};
+    var query = {descending: true};
 
-	if (limit) {
-		query.limit = limit;
-	}
-		db.view("articles/all_by_date", query, function(err, results) {
-			if (err) callback(err);
+    if (limit) {
+        query.limit = limit;
+    }
+        db.view("articles/all_by_date", query, function(err, results) {
+            if (err) callback(err);
 
-			// return only the array of the result values
-			callback(null, results.map(function(result) {
-				return result;
-			}));
-		});
+            // return only the array of the result values
+            callback(null, results.map(function(result) {
+                return result;
+            }));
+        });
 }
 
 api.addToDocArray = function(id, field, toAdd, callback) {

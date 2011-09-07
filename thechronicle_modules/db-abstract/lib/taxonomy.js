@@ -5,7 +5,7 @@ taxonomy.docs = function(taxonomyTerm, limit, callback) {
     var query = {
         startkey: [taxonomyTerm, {}],
         endkey: [taxonomyTerm],
-	    descending: true
+        descending: true
     };
 
     if (limit) {

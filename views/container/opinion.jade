@@ -1,12 +1,12 @@
 .container.clearfix.opinion
-	.vertical-container
-		h2.vertical #{title}
+    .vertical-container
+        h2.vertical #{title}
 
-	.rounded
-		.content-container
-			- each story in stories
-				h2
-					a.list-story.hover.highlight-right(href='#{story.url}', class='#{story.cssClass}')
-						#{story.title}
-						- if (story.authors)
-							p.author #{story.authors[0]}
+    .rounded
+        .content-container
+            - each story in stories
+                h2
+                    a.list-story.hover.highlight-right(href='#{story.url}', class='#{story.cssClass}')
+                        #{story.title}
+                        - if (story.authors)
+                            p.author #{story.authors[0]}

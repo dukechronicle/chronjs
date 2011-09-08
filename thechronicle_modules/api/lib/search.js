@@ -79,14 +79,21 @@ search.removeAllDocsFromSearch = function(callback) {
     callback(null);
 }
 
-search.docsByTitleSearch = function(title, callback) {
-	title = title.toLowerCase().replace(/ /g,'* OR title_text:');			
-	var query = "database_host_text:"+db.getDatabaseHost()+" AND database_text:"+db.getDatabaseName()+" AND (title_text:"+title+"*)";
+search.docsBySearchQuery = function(query, callback) {
+	query = query.toLowerCase();
+    var words = query.split(" ");
+			
+	var fullQuery = "database_host_text:"+db.getDatabaseHost()+" AND database_text:"+db.getDatabaseName() +" AND (";
+    for(index in words) {
+        if(index != 0) fullQuery = fullQuery + " OR ";
+        fullQuery = fullQuery + "title_text:" + words[index] + "* OR body_text:" + words[index] + "*";
+    }
+    fullQuery = fullQuery + ")";
 	
 	var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH')); 		
-	client.query(query, {rows: 25, fl: "*,score", sort: "score desc"}, function(err,response) {
+	client.query(fullQuery, {rows: 25, fl: "*,score", sort: "score desc"}, function(err,response) {
 		if(err) {
-			callback(err);
+			return callback(err);
 		}
 
         var responseObj = JSON.parse(response);

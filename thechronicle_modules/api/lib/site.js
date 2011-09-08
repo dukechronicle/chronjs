@@ -125,8 +125,8 @@ site.init = function(app, callback) {
             });
 
             // test the solr search functionality. Currently returns the ids,score of articles containing one of more of search words in title.
-            app.get('/article-list/:titleSearchQuery', function(req, http_res) {
-                api.search.docsByTitleSearch(req.params.titleSearchQuery.replace('-',' '),function(err, docs) { // replace dashes with spaces
+            app.get('/article-list/:query', function(req, http_res) {
+                api.search.docsBySearchQuery(req.params.query.replace('-',' '),function(err, docs) { // replace dashes with spaces
                     if (err) globalFunctions.showError(http_res, err);
                     http_res.render('all', {locals:{docs:docs}, layout: 'layout-admin.jade'} );
                 });

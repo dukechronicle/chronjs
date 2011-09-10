@@ -1,6 +1,8 @@
 var db = require('./db-abstract');
 var nimble = require('nimble');
 var _ = require("underscore");
+var util = require('util');
+
 
 var group = exports;
 
@@ -26,29 +28,30 @@ group.list = function(options, callback) {
 // fetch documents from namespace or groups
 group.docs = function(namespace, group, callback) {
     var query = {};
-    
+    console.log(util.inspect(namespace, true, 5));
     query.reduce = false;
     query.include_docs = true;
 
+
     if (group === null) {
         // fetch all docs in namespace
-        query.startKey = [[namespace]];
-        query.endKey = [[namespace], {}];
+        query.startkey = [namespace];
+        query.endkey = [namespace, {}];
     } else {
-        query.startKey = [[namespace], group];
-        query.endKey = [namespace, group, {}];
+        query.startkey = [namespace, group];
+        query.endkey = [namespace, group, {}];
     }
-    
     db.view('articles/groups', query,
-
-    function(err, res) {
-        if (err) return callback(err);
-        if (res) {
-            callback(null, res);
-        } else {
-            callback(null, []);
+        function(err, res) {
+            if (err) return callback(err);
+            if (res) {
+                //console.log(res);
+                callback(null, res);
+            } else {
+                callback(null, []);
+            }
         }
-    });
+    );
 }
 
 group.docsN = function(namespace, groupName, baseDocNum, numDocs, callback) {

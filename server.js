@@ -2,6 +2,7 @@
 var express = require('express');
 require('express-namespace');
 var stylus = require('stylus');
+var cron = require('cron');
 
 /* require internal modules */
 var globalFunctions = require('./thechronicle_modules/global-functions');

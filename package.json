@@ -31,6 +31,7 @@
         "jsdom":            "0.2.x",
         "jquery":           "1.5.x",
         "sprintf":          "0.1.x",
-        "connect-redis":    "1.0.x"
+        "connect-redis":    "1.0.x",
+        "cron":             "0.1.x"
 	}
 }

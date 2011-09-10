@@ -191,7 +191,7 @@ site.init = function(app, callback) {
                         });
                      }
                     }
-                   });
+                });
             });
 
             app.get('/article/:url/edit', site.checkAdmin, site.renderArticleEdit = function(req, http_res) {

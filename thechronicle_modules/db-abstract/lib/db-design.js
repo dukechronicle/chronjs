@@ -34,11 +34,11 @@ var views = {
     map: function(doc) {
         if (doc.groups) {
             doc.groups.forEach(function(group) {
-                emit(group, {title: doc.title});
+                emit(group.concat("article"), {title: doc.title});
                 var newgroup;
                 ["article", "frontpage", "slideshow"].forEach(function(type) {
                     if(doc.images && doc.images[type]) {
-                        newgroup = group.concat([doc._id, type]);
+                        newgroup = group.concat(["image", type]);
                         emit(newgroup, {_id: doc.images[type]});
                     }
                 });

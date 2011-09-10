@@ -51,8 +51,8 @@ site.init = function(app, callback) {
                     _.defaults(result, homeModel);
 
                     api.docsByDate(5, function(err, docs) {
-                        homeModel.popular.stories = docs;
-                        console.log(result.DSG);
+                        result.popular.stories = docs;
+                        //console.log(result.DSG);
                         res.render('site/index', {filename: 'views/site/index.jade', model: result});
                     });
                 });

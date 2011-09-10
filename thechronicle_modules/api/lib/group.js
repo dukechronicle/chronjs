@@ -56,6 +56,7 @@ group.remove = function(docid, namespace, name, callback) {
 };
 */
 group.docs = function(namespace, group, callback) {
+    var DOC_TYPE_KEY = 3;
     db.group.docs(namespace, group, function(err, res) {
         // if querying name space, map each group to it's own object
         if (err) return callback(err);
@@ -64,35 +65,49 @@ group.docs = function(namespace, group, callback) {
                 var groupedResults = {};
                 var groupName;
                 var prevGroupName;
+                var currentArticle;
 
+                // loop through each document in result
                 for (var i = 0; i < res.length; i++) {
                     var doc = res[i];
-                    prevGroupName = groupName;
-                    groupName = doc.key[1];
-                    if (!groupedResults[groupName]) {
-                        groupedResults[groupName] = [];
-                        doc.doc.cssClass = "first";
 
-                        if (prevGroupName && groupedResults[prevGroupName]) {
-                            groupedResults[prevGroupName][groupedResults[prevGroupName].length - 1].cssClass = "last";
+                    var docType = doc.key[DOC_TYPE_KEY];
+                    
+                    if (docType === "article") {
+                        prevGroupName = groupName;
+                        groupName = doc.key[1];
+
+                        // start of a new group
+                        if (!groupedResults[groupName]) {
+                            groupedResults[groupName] = [];
+                            doc.doc.cssClass = "first";
+
+                            // assign css class to last article of previous group
+                            if (prevGroupName && groupedResults[prevGroupName]) {
+                                groupedResults[prevGroupName][groupedResults[prevGroupName].length - 1].cssClass = "last";
+                            }
                         }
-                    }
-                    if (doc.doc.urls) {
-                        doc.doc.url = "/article/" + doc.doc.urls[doc.doc.urls.length - 1];
-                    }
 
-                    groupedResults[groupName].push(doc.doc);
+                        if (doc.doc.urls) {
+                            doc.doc.url = "/article/" + doc.doc.urls[doc.doc.urls.length - 1];
+                        }
+
+                        groupedResults[groupName].push(doc.doc);
+
+                        // retain reference to current article so images that are processed next can easily access it
+                        currentArticle = groupedResults[groupName][groupedResults[groupName].length - 1];
+                    } else if (docType === "image") {
+                        // if it
+                        var imageType = doc.key[DOC_TYPE_KEY + 1];
+                        currentArticle.images[imageType] = doc.doc;
+                    }
                 }
 
+                // assign last css class since previous loop may have not hit it
                 if (prevGroupName && groupedResults[prevGroupName]) {
                     groupedResults[prevGroupName][groupedResults[prevGroupName].length - 1].cssClass = "last";
                 }
-                /*
-                Object.keys(groupedResults).forEach(function(group) {
-                    async.map()
-                    _getImages(doc.images, function)
-                });
-                */
+
                 callback(null, groupedResults);
             } else {
                 // TODO modify this

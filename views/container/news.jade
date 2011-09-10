@@ -1,30 +1,30 @@
 .container.clearfix
-	.vertical-container
-		h2.vertical #{title}
+    .vertical-container
+        h2.vertical #{title}
 
-	.rounded
-		.content-container
-			.top
-				a.hover.highlight-left.clearfix(href='#{stories[0].url}')
-					img(src=stories[0].image)
-					.text
-						h2 #{stories[0].title}
-						p.teaser #{stories[0].teaser}
+    .rounded
+        .content-container
+            .top
+                a.hover.highlight-left.clearfix(href='#{stories[0].url}')
+                    img(src=stories[0].image)
+                    .text
+                        h2 #{stories[0].title}
+                        p.teaser #{stories[0].teaser}
 
-			.bottom.clearfix
-				.left
-					a.hover.highlight-left.first(href='#{stories[1].url}')
-						h3 #{stories[1].title}
-						p.teaser #{stories[1].teaser}
+            .bottom.clearfix
+                .left
+                    a.hover.highlight-left.first(href='#{stories[1].url}')
+                        h3 #{stories[1].title}
+                        p.teaser #{stories[1].teaser}
 
-					a.hover.highlight-left.last(href='#{stories[2].url}')
-						h3 #{stories[2].title}
-						p.teaser #{stories[2].teaser}
+                    a.hover.highlight-left.last(href='#{stories[2].url}')
+                        h3 #{stories[2].title}
+                        p.teaser #{stories[2].teaser}
 
-				.right
-					ul
-						- each story, index in stories
-							- if (index > 2)
-								li
-									a.hover.highlight-right(href='#{story.url}')
-										h4 #{story.title}
+                .right
+                    ul
+                        - each story, index in stories
+                            - if (index > 2)
+                                li
+                                    a.hover.highlight-right(href='#{story.url}')
+                                        h4 #{story.title}

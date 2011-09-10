@@ -5,7 +5,7 @@ var configuration = {
             "ADMIN_USERNAME":"dean",
             "ADMIN_PASSWORD":"dean",
             "COUCHDB_URL":"http://chrondev:pikachu@chrondev.iriscouch.com",
-            "COUCHDB_DATABASE":"production",
+            "COUCHDB_DATABASE":"chronicle_dev",
             "S3_BUCKET":"chron_bucket1",
             "REDIS_URL":"redis://redistogo:0235bf0a2db5e6cc087683952f60c59c@icefish.redistogo.com:9249/",
             "SOLR_HOST":"index.websolr.com",

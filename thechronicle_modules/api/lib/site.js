@@ -32,7 +32,7 @@ function _getImages(obj, callback) {
 }
 
 site.init = function(app, callback) {
-	redis.init(function(err) {
+    redis.init(function(err) {
         if(err)
         {
             console.log("redisclient init failed!");
@@ -47,12 +47,12 @@ site.init = function(app, callback) {
             }
             app.get('/', function(req, res) {
                 api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, result) {
-	                console.log(Object.keys(result));
+                    console.log(Object.keys(result));
                     _.defaults(result, homeModel);
 
                     api.docsByDate(5, function(err, docs) {
                         homeModel.popular.stories = docs;
-	                    console.log(result.DSG);
+                        console.log(result.DSG);
                         res.render('site/index', {filename: 'views/site/index.jade', model: result});
                     });
                 });
@@ -60,7 +60,7 @@ site.init = function(app, callback) {
 
             app.get('/news', function(req, res) {
                 api.group.docs(NEWS_GROUP_NAMESPACE, null, function(err, result) {
-	                console.log(Object.keys(result));
+                    console.log(Object.keys(result));
 
                     res.render('site/news', {filename: 'views/site/news.jade', model: result});
                 });
@@ -92,7 +92,7 @@ site.init = function(app, callback) {
 
             app.get('/article-list', function(req, http_res) {
                     if(req.param('search') != null) {
-                        http_res.redirect('/article-list/'+req.param('search'));
+                        http_res.redirect('/article-list/'+req.param('search').replace(/ /g,'-')); // replace spaces with dashes for readibility
                     }                    
                     else {                
                         api.docsByDate(null, function(err, docs) {
@@ -125,8 +125,8 @@ site.init = function(app, callback) {
             });
 
             // test the solr search functionality. Currently returns the ids,score of articles containing one of more of search words in title.
-            app.get('/article-list/:titleSearchQuery', function(req, http_res) {
-                api.docsByTitleSearch(req.params.titleSearchQuery,function(err, docs) {
+            app.get('/article-list/:query', function(req, http_res) {
+                api.search.docsBySearchQuery(req.params.query.replace('-',' '),function(err, docs) { // replace dashes with spaces
                     if (err) globalFunctions.showError(http_res, err);
                     http_res.render('all', {locals:{docs:docs}, layout: 'layout-admin.jade'} );
                 });
@@ -176,16 +176,16 @@ site.init = function(app, callback) {
                         doc.fullUrl = "http://dukechronicle.com/article/" + latestUrl;
                         http_res.render('article', {
                             locals: {
-	                            doc: doc,
-	                            model: {
-									"adFullRectangle": {
-										"title": "Advertisement",
-										"imageUrl": "/images/ads/monster.png",
-										"url": "http://google.com",
-										"width": "300px",
-										"height": "250px"
-									}
-								}
+                                doc: doc,
+                                model: {
+                                    "adFullRectangle": {
+                                        "title": "Advertisement",
+                                        "imageUrl": "/images/ads/monster.png",
+                                        "url": "http://google.com",
+                                        "width": "300px",
+                                        "height": "250px"
+                                    }
+                                }
                             },
                             filename: 'views/article.jade'
                         });
@@ -202,47 +202,47 @@ site.init = function(app, callback) {
                         globalFunctions.showError(http_res, err);
                     }
                     else {
-						if(req.query.deleteImage) {
-							var newImages = doc.images;
-							delete newImages[req.query.deleteImage];
-							api.editDoc(doc._id, newImages, function(editErr, res) {
-									if(editErr) globalFunctions.showError(http_res, editErr);
-									else http_res.redirect('/article/' + url + '/edit');
-							});
-						}
-						else {
-							if(!doc.images) doc.images = {};
+                        if(req.query.deleteImage) {
+                            var newImages = doc.images;
+                            delete newImages[req.query.deleteImage];
+                            api.editDoc(doc._id, newImages, function(editErr, res) {
+                                    if(editErr) globalFunctions.showError(http_res, editErr);
+                                    else http_res.redirect('/article/' + url + '/edit');
+                            });
+                        }
+                        else {
+                            if(!doc.images) doc.images = {};
 
-							async.waterfall([
-								function(callback) {
-								_getImages(doc.images, callback);
-								}/*,
+                            async.waterfall([
+                                function(callback) {
+                                _getImages(doc.images, callback);
+                                }/*,
 
-								function(images, callback) {
-									/*
-								api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(err, groups) {
-									callback(err, groups, images);
-								});*/
-								//}
-								],
-								function(err, images) {
-								//function(err, groups, images) {
-									if(err) globalFunctions.showError(http_res, err);
-									else {
-										http_res.render('admin/edit', {
-											locals: {
-													doc: doc,
-													//groups: groups,
-														groups: [],
-													images: images,
-													url: url
-											},
-											layout: "layout-admin.jade"
-										});
-									}
-								}
-							);
-						}
+                                function(images, callback) {
+                                    /*
+                                api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(err, groups) {
+                                    callback(err, groups, images);
+                                });*/
+                                //}
+                                ],
+                                function(err, images) {
+                                //function(err, groups, images) {
+                                    if(err) globalFunctions.showError(http_res, err);
+                                    else {
+                                        http_res.render('admin/edit', {
+                                            locals: {
+                                                    doc: doc,
+                                                    //groups: groups,
+                                                        groups: [],
+                                                    images: images,
+                                                    url: url
+                                            },
+                                            layout: "layout-admin.jade"
+                                        });
+                                    }
+                                }
+                            );
+                        }
                     }
                 });
             });
@@ -279,7 +279,7 @@ site.init = function(app, callback) {
 }
 
 site.checkAdmin = function(req,res,next) {
-    if(!api.accounts.isAdmin(req)) {	
+    if(!api.accounts.isAdmin(req)) {    
         site.askForLogin(res,req.url);
     }
     else {
@@ -289,68 +289,68 @@ site.checkAdmin = function(req,res,next) {
 
 // redirects to login page
 site.askForLogin = function(res,afterLoginPage,username,err) {
-	if(err == null) err = '';
-	if(username == null) username = '';
+    if(err == null) err = '';
+    if(username == null) username = '';
 
-	res.render('login', {
-		locals: {
-			afterLogin:afterLoginPage,
-			username:username,
-			error:err
-		},
-		layout: 'layout-admin.jade'
-	});
+    res.render('login', {
+        locals: {
+            afterLogin:afterLoginPage,
+            username:username,
+            error:err
+        },
+        layout: 'layout-admin.jade'
+    });
 }
 
 // assigns the functionality needed before different modules are ready to be initilized (before config settings have been set)
 site.assignPreInitFunctionality = function(app,server) {
-	app.post('/login', function(req, res) {
-		api.accounts.login(req,req.body.username,req.body.password, function(err) {
-			if(err) site.askForLogin(res,req.body.afterLogin,req.body.username,err);
-			else	res.redirect(req.body.afterLogin);
-		});
-	});
+    app.post('/login', function(req, res) {
+        api.accounts.login(req,req.body.username,req.body.password, function(err) {
+            if(err) site.askForLogin(res,req.body.afterLogin,req.body.username,err);
+            else    res.redirect(req.body.afterLogin);
+        });
+    });
 
     app.get('/logout', function(req, res) {
-		api.accounts.logOut(req, function(err) {
-			  if(err) console.log(err);
+        api.accounts.logOut(req, function(err) {
+              if(err) console.log(err);
               res.redirect('/');
-		});
-	});
+        });
+    });
 
-	app.get('/config', function(req, res) {
-		if(api.accounts.isAdmin(req)) {					
-			res.render('config/config', {
-				locals: {
-					configParams:config.getParameters(),
-					profileName:config.getProfileNameKey(),
-					profileValue:config.getActiveProfileName()
-				},
-				layout: 'layout-admin.jade'
-			});
-		}
-		else {
-			site.askForLogin(res,'/config');
-		}
-	});
+    app.get('/config', function(req, res) {
+        if(api.accounts.isAdmin(req)) {                    
+            res.render('config/config', {
+                locals: {
+                    configParams:config.getParameters(),
+                    profileName:config.getProfileNameKey(),
+                    profileValue:config.getActiveProfileName()
+                },
+                layout: 'layout-admin.jade'
+            });
+        }
+        else {
+            site.askForLogin(res,'/config');
+        }
+    });
 
-	app.post('/config', function(req, res) {
-		if(api.accounts.isAdmin(req)) {
-			config.setUp(req.body, function(err) {
-				if(err == null) {
+    app.post('/config', function(req, res) {
+        if(api.accounts.isAdmin(req)) {
+            config.setUp(req.body, function(err) {
+                if(err == null) {
                     server.runSite(function() {
-				        res.redirect('/');
+                        res.redirect('/');
                     });
                 }
                 else {
                     res.redirect('/');
                 }
-			});
-		}
-		else {
-			site.askForLogin(res,'/config');
-		}
-	});
+            });
+        }
+        else {
+            site.askForLogin(res,'/config');
+        }
+    });
 }
 
 
@@ -381,6 +381,6 @@ site.renderSmtpTest = function(req, http_res, email, num) {
                     console.log("sent email");
                 });
             });
-		});
+        });
     }
 }

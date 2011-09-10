@@ -1,9 +1,9 @@
 {
-	"name": "thechronicle-admin",
-	"version" : "0.0.1",
-	"main" : "./lib/admin.js"
-	"dependencies": {
-		"knox":				"0.0.x",
-		"imagemagick":		"0.1.x"
-	}
+    "name": "thechronicle-admin",
+    "version" : "0.0.1",
+    "main" : "./lib/admin.js"
+    "dependencies": {
+        "knox":                "0.0.x",
+        "imagemagick":        "0.1.x"
+    }
 }

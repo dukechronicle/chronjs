@@ -131,79 +131,79 @@ exports.init = function(app, callback) {
         app.namespace('/admin',
         function() {
             app.get('/layout/frontpage', site.checkAdmin,
-				function(req, res) {
-					function renderPage(docs) {
-						var stories = docs;
-						api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null,
-						function(err, model) {
-							res.render('admin/layout/frontpage', {
-								layout: "layout-admin.jade",
-								locals: {
-									stories: stories,
-									model: model
-								}
-							});
-						});
-					}
-					// TODO make requests concurrent
-					var filter = req.param("section", null);
-					if (filter) {
-						api.taxonomy.docs(filter, 20,
-						function(err, docs) {
-							if (err) globalFunctions.showError(res, err);
-							else {
-								docs = docs.map(function(doc) {
-									return doc;
-								});
-								renderPage(docs);
-							}
-						});
-					} else {
-						api.docsByDate(20,
-						function(err, docs) {
-							if (err) globalFunctions.showError(res, err);
-							renderPage(docs);
-						});
-					}
-				}
+                function(req, res) {
+                    function renderPage(docs) {
+                        var stories = docs;
+                        api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null,
+                        function(err, model) {
+                            res.render('admin/layout/frontpage', {
+                                layout: "layout-admin.jade",
+                                locals: {
+                                    stories: stories,
+                                    model: model
+                                }
+                            });
+                        });
+                    }
+                    // TODO make requests concurrent
+                    var filter = req.param("section", null);
+                    if (filter) {
+                        api.taxonomy.docs(filter, 20,
+                        function(err, docs) {
+                            if (err) globalFunctions.showError(res, err);
+                            else {
+                                docs = docs.map(function(doc) {
+                                    return doc;
+                                });
+                                renderPage(docs);
+                            }
+                        });
+                    } else {
+                        api.docsByDate(20,
+                        function(err, docs) {
+                            if (err) globalFunctions.showError(res, err);
+                            renderPage(docs);
+                        });
+                    }
+                }
             );
 
-	        app.get('/layout/news', site.checkAdmin,
-				function(req, res) {
-					function renderPage(docs) {
-						var stories = docs;
-						api.group.docs(NEWS_GROUP_NAMESPACE, null,
-						function(err, model) {
-							res.render('admin/layout/news', {
-								layout: "layout-admin.jade",
-								locals: {
-									stories: stories,
-									model: model
-								}
-							});
-						});
-					}
-					// TODO make requests concurrent
-					var filter = req.param("section", null);
-					if (filter) {
-						api.taxonomy.docs(filter, 20,
-						function(err, docs) {
-							if (err) globalFunctions.showError(res, err);
-							else {
-								docs = docs.map(function(doc) {
-									return doc;
-								});
-								renderPage(docs);
-							}
-						});
-					} else {
-						api.docsByDate(20,
-						function(err, docs) {
-							if (err) globalFunctions.showError(res, err);
-							renderPage(docs);
-						});
-					}
-				}
+            app.get('/layout/news', site.checkAdmin,
+                function(req, res) {
+                    function renderPage(docs) {
+                        var stories = docs;
+                        api.group.docs(NEWS_GROUP_NAMESPACE, null,
+                        function(err, model) {
+                            res.render('admin/layout/news', {
+                                layout: "layout-admin.jade",
+                                locals: {
+                                    stories: stories,
+                                    model: model
+                                }
+                            });
+                        });
+                    }
+                    // TODO make requests concurrent
+                    var filter = req.param("section", null);
+                    if (filter) {
+                        api.taxonomy.docs(filter, 20,
+                        function(err, docs) {
+                            if (err) globalFunctions.showError(res, err);
+                            else {
+                                docs = docs.map(function(doc) {
+                                    return doc;
+                                });
+                                renderPage(docs);
+                            }
+                        });
+                    } else {
+                        api.docsByDate(20,
+                        function(err, docs) {
+                            if (err) globalFunctions.showError(res, err);
+                            renderPage(docs);
+                        });
+                    }
+                }
             );
 
             app.post('/layout/frontpage', site.checkAdmin,
@@ -246,6 +246,12 @@ exports.init = function(app, callback) {
                         _res.send("true");
                     }
                 })
+            });
+
+            app.get('/index-articles', site.checkAdmin,
+            function(req, http_res) {
+                api.search.indexUnindexedArticles();                
+                http_res.redirect('/');
             });
 
             app.get('/add', site.checkAdmin,

@@ -11,10 +11,12 @@
                         p.teaser
                             #{story.teaser}
                         - if (story.images && story.images.thumbLarge)
-                            img(src="#{story.images.thumbLarge.url}")
+                            img(src="#{story.images.thumbMediumSquare.url}")
                     - else
                         h2 #{story.title}
                         - if (story.images && story.images.thumbMediumSquare)
-                            img(src="#{story.images.thumbMediumSquare.url}")
+                            img(src="#{story.images.thumbLarge.url}")
+
+
 
 

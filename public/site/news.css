@@ -1,6 +1,7 @@
 body section > #news .left{float:left;margin-top:-3px;}
 body section > #news .left .container{width:206px;}
-body section > #news .left .container .content-container{margin-bottom:-4px}
+body section > #news .left .container .content-container{margin-bottom:-4px;}
+body section > #news .left .container .content-container h2{font-size:.9em}
 body section > #news .left .container .rounded{width:200px}
 body section > #news .right{float:right;margin-top:-3px;}
 body section > #news .right .container{width:262px;}

@@ -68,6 +68,12 @@ site.init = function(app, callback) {
 
             app.get('/sports', function(req, res) {
                 api.group.docs(SPORTS_GROUP_NAMESPACE, null, function(err, result) {
+                    result.Twitter = {
+                        "title": "Twitter",
+                        "imageUrl": "/images/twitter-dukechronicle.png",
+                        "user": "DukeChronicle",
+                        "tweet": "Special Projects Editor @TaylorDoherty is heading to China and the UAE with Duke men's basketball @dukeblueplanet http://t.co/zsreS0t"
+                    }
                     res.render('site/sports', {filename: 'views/site/sports.jade', model: result});
                 });
             });

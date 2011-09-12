@@ -20,7 +20,7 @@ body section > #sports
 
             
     width = 636px
-    right-width = 328px
+    right-width = 330px
     height = 393px
 
     shadow(opacity, height, width, offset)
@@ -28,83 +28,135 @@ body section > #sports
      -moz-box-shadow rgba(0, 0, 0, opacity) height width offset
      box-shadow rgba(0, 0, 0, opacity) height width offset
 
+    .top
+        margin-bottom 20px
+        margin-top -20px
+        
+        .slideshow-wrapper.right-select > .slideshow
+            width width + 6 + right-width
+
+            .slides img
+                width width
+                border-radius 4px
+
+            .slides
+                border-radius 4px
+                width width
+                float right
+
+            .headlines
+                 float left
+                 width right-width
+
+                 height height + 6px
+                 display block
+                 background transparent
 
 
-    .slideshow-wrapper.right-select > .slideshow
-        width width + 6 + right-width
+                 div
+                     width 630px margin 0 auto
+                 a.page
+                     padding-left = 3px
+                     padding-right = 8px
+                     margin = 19px + padding-left + padding-right
 
-        .slides img
-            width width
-            border-radius 4px
+                     text-align left
+                     cursor pointer
+                     width right-width - margin
+                     display inline-block
+                     margin 0px
+                     margin-bottom 13px
+                     padding-right padding-right
+                     padding-top 3px
 
-        .slides
-            border-radius 4px
-            width width
-            float left
+                     padding-left padding-left
+                     height 115px
+                     color #444
+                     line-height 1.3em
+                     -webkit-transition color linear .2s
+                     text-shadow 0px 1px 1px white
+                     float left
 
-        .headlines
-             float right
-             width right-width
+                     h2
+                        font-size 1.2em
+                        line-height 1.3em
+                        margin-bottom 8px
 
-             height height + 6px
-             display block
-             background transparent
-             
+                     p.teaser
+                        font-size 0.8em
+                        line-height 1.2em
+                        color #444
+                     img
+                        border-radius 4px
+                        height 118px
+                        width 118px
+                        float left
+                        margin-right 10px
 
-             div
-                 width 630px margin 0 auto
-             a.page
-                 padding-right = 3px
-                 padding-left = 8px
-                 left-margin = 10px + padding-left + padding-right
+                 a.page.last
+                    margin-bottom 0px
 
-                 text-align left
-                 cursor pointer
-                 width right-width - left-margin
-                 display inline-block
-                 margin 0px
-                 margin-bottom 13px
-                 padding-right padding-right
-                 padding-top 3px
+                 a.page:hover
+                     color black
+                     text-decoration none
+                 a.page.active
+                     color black
+                     text-shadow 0px 1px 0px white
+                 a.page.rounded
+                     box-shadow rgba(0,0,0,0.30) 0 1px 3px
+                     background -webkit-gradient(linear, left bottom, left top, from(#EDEDED), to(white))
 
-                 padding-left padding-left
-                 height 115px
-                 color #444
-                 line-height 1.3em
-                 -webkit-transition color linear .2s
-                 text-shadow 0px 1px 1px white
 
-                 h2
-                    font-size 1.2em
-                    line-height 1.2em
+    .middle
+        margin-bottom 6px
 
-                 img
-                    border-radius 4px
-                    height 118px
-                    width 118px
-                    float right
-                    margin-left 10px
+        .right
+            .column.first
+                margin-right 14px
+            .column
+                float left
+                .container.row
+                    margin-top -16px
+                    width 314px
+                    margin-bottom 9px
 
-             a.page.last
-                margin-bottom 0px
+                    .rounded-hover
+                        padding 0px
+                    img
+                        border-radius 4px
+                        width 89px
+                        height 89px
+                        float left
+                        margin-right 10px
 
-             a.page:hover
-                 color black
-                 text-decoration none
-             a.page.active
-                 color black
-                 text-shadow 0px 1px 0px white
-             a.page.rounded
-                 box-shadow rgba(0,0,0,0.30) 0 1px 3px
-                 background -webkit-gradient(linear, left bottom, left top, from(#EDEDED), to(white))
+                    h2
+                        font-size 1em
+                        line-height 1.2em
+                        margin-left 89px + 10px
+                        margin-bottom 5px
 
-        b.caret
-             display block
-             position absolute
-             width 13px
-             height 8px
-             margin 0 0 -8px -7px
-             background-image url('/images/caret-active.png')
-             -webkit-transition -webkit-transform linear 0.4s
-             -webkit-transform translate(0px, 20px)
+                    p
+                        color #444
+                        font-size 0.9em
+                        line-height 1.2em
+
+    .sport-block
+        width 311px
+        float left
+        margin-right 19px
+
+    .sport-block .rounded-hover
+        width 305px
+        height 305px
+
+
+    
+    .last > .sport-block
+        margin-right 0px
+
+    .bottom
+        .row
+            margin-bottom 6px
+        .row.last
+            margin-bottom 0px
 

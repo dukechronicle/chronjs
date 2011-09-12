@@ -1,17 +1,26 @@
 #sports
-    .top
+    .top.clearfix
         .slideshow-wrapper.right-select!=partial('slideshow/slideshow-right')
-    .middle
+    .middle.clearfix
         .left
-
+            .last!=partial('container/sports-block.jade')
         .right
-            .featured-sport.rounded
+            .column.first
+                .first!=partial('container/row.jade')
+                div!=partial('container/row.jade')
+                .last!=partial('container/row.jade')
+            .column
+                .first!=partial('container/row.jade')
+                div!=partial('container/row.jade')
+                .last!=partial('container/row.jade')
 
 
     .bottom
-        .m-basketball
-        .m-soccer
-        .m-tennis
-        .w-basketball
-        .w-soccer
-        .w-tennis
+        .row.clearfix
+            .m-basketball!=partial('container/sports-block.jade')
+            .m-soccer!=partial('container/sports-block.jade')
+            .m-tennis.last!=partial('container/sports-block.jade')
+        .row.clearfix.last
+            .w-basketball!=partial('container/sports-block.jade')
+            .w-soccer!=partial('container/sports-block.jade')
+            .w-tennis.last!=partial('container/sports-block.jade')

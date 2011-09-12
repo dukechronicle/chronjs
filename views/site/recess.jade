@@ -12,11 +12,11 @@
 
     .middle.clearfix
         // sandbox
-        .sandbox!=partial('container/block-row.jade')
+        .sandbox!=partial('container/block-row.jade', {title: 'Sandbox', stories: {}})
         // interviews
-        .interviews!=partial('container/block-row.jade')
+        .interviews!=partial('container/block-row.jade', {title: 'Interviews', stories: {}})
         // reviews
-        .reviews!=partial('container/block-row.jade')
+        .reviews!=partial('container/block-row.jade', {title: 'Reviews', stories: {}})
     .bottom
         // stories
         .row

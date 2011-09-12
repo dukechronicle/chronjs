@@ -7,9 +7,9 @@
             div!=partial('container/block.jade')
         .row
             // savvy
-            div!=partial('container/block-row.jade)
+            div!=partial('container/block-row.jade', {title: 'Sandbox', stories: {}})
             // wisdom
-            div!=partial('container/block-row.jade)
+            div!=partial('container/block-row.jade', {title: 'Sandbox', stories: {}})
         .row.last
             .blog!=partial('container/block.jade')
     .sidebar.clearfix

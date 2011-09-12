@@ -1,17 +1,24 @@
 #recess
     .top.clearfix
+        // features
         .main!=partial('container/featured-image.jade')
         .right
             .row.first
                 div!=partial('container/block.jade')
                 div!=partial('container/block.jade')
+            // rss feed
             .row.last
                 .blog!=partial('container/block.jade')
+
     .middle.clearfix
+        // sandbox
         .sandbox!=partial('container/block-row.jade')
+        // interviews
         .interviews!=partial('container/block-row.jade')
+        // reviews
         .reviews!=partial('container/block-row.jade')
     .bottom
+        // stories
         .row
             div!=partial('container/block.jade')
             div!=partial('container/block.jade')

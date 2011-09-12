@@ -1,19 +1,26 @@
 #opinion
     .top.clearfix
+        // feature
         .main!=partial('container/featured-image.jade')
         .right
             .row.first!=partial('container/row')
             .row.last!=partial('container/row')
+            
+        // columnist
         .row
             div!=partial('container/block.jade')
             div!=partial('container/block.jade')
             div!=partial('container/block.jade')
             .last!=partial('container/block.jade')
     .middle.clearfix
-        div!=partial('container/block.jade')
-        div!=partial('container/block.jade')
-        .last!=partial('container/block.jade')
+        // rss
+        .rss!=partial('container/block.jade')
+        // edit board
+        .editBoard!=partial('container/block.jade')
+        // most popular
+        .mostPopular.last!=partial('container/block.jade')
     .bottom
+        // more columnists
         .row
             div!=partial('container/block.jade')
             div!=partial('container/block.jade')

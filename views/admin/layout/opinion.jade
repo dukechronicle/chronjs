@@ -6,24 +6,31 @@ script
 h2 Opinion Layout
 
 #layout
-    <h2>DSG</h2>
-    #slideshow.container(data-groupName='DSG')
-        - if (model.DSG)
-            - each story, id in model.DSG
+    <h2>Feature</h2>
+    #slideshow.container(data-groupName='Feature')
+        - if (model.Feature)
+            - each story, id in model.Feature
                 .story(draggable='true', id='#{story._id}')
                     #{story.title}
 
-    <h2>DUU</h2>
-    #slideshow.container(data-groupName='DUU')
-        - if (model.DUU)
-            - each story, id in model.DUU
+    <h2>Columnists</h2>
+    #slideshow.container(data-groupName='Columnists')
+        - if (model.Columnists)
+            - each story, id in model.Columnists
                 .story(draggable='true', id='#{story._id}')
                     #{story.title}
 
-    <h2>China</h2>
-    #slideshow.container(data-groupName='China')
-        - if (model.China)
-            - each story, id in model.China
+    <h2>Edit Board</h2>
+    #slideshow.container(data-groupName='EditBoard')
+        - if (model.EditBoard)
+            - each story, id in model.EditBoard
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+
+    <h2>More Columnists</h2>
+    #slideshow.container(data-groupName='MoreColumnists')
+        - if (model.MoreColumnists)
+            - each story, id in model.MoreColumnists
                 .story(draggable='true', id='#{story._id}')
                     #{story.title}
 

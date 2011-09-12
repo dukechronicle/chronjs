@@ -6,24 +6,39 @@ script
 h2 Recess Layout
 
 #layout
-    <h2>DSG</h2>
-    #slideshow.container(data-groupName='DSG')
-        - if (model.DSG)
-            - each story, id in model.DSG
+    <h2>Features</h2>
+    #slideshow.container(data-groupName='Features')
+        - if (model.Features)
+            - each story, id in model.Features
                 .story(draggable='true', id='#{story._id}')
                     #{story.title}
 
-    <h2>DUU</h2>
-    #slideshow.container(data-groupName='DUU')
-        - if (model.DUU)
-            - each story, id in model.DUU
+    <h2>Sandbox</h2>
+    #slideshow.container(data-groupName='Sandbox')
+        - if (model.Sandbox)
+            - each story, id in model.Sandbox
                 .story(draggable='true', id='#{story._id}')
                     #{story.title}
 
-    <h2>China</h2>
-    #slideshow.container(data-groupName='China')
-        - if (model.China)
-            - each story, id in model.China
+
+    <h2>Interviews</h2>
+    #slideshow.container(data-groupName='Interviews')
+        - if (model.Interviews)
+            - each story, id in model.Interviews
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+
+    <h2>Reviews</h2>
+    #slideshow.container(data-groupName='Reviews')
+        - if (model.Reviews)
+            - each story, id in model.Reviews
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+
+    <h2>Stories</h2>
+    #slideshow.container(data-groupName='Stories')
+        - if (model.Stories)
+            - each story, id in model.Stories
                 .story(draggable='true', id='#{story._id}')
                     #{story.title}
 

@@ -184,6 +184,163 @@ exports.init = function(app, callback) {
                         });
                     }
                     // TODO make requests concurrent
+                    // sidebar filter by section
+                    var filter = req.param("section", null);
+                    if (filter) {
+                        api.taxonomy.docs(filter, 20,
+                        function(err, docs) {
+                            if (err) globalFunctions.showError(res, err);
+                            else {
+                                docs = docs.map(function(doc) {
+                                    return doc;
+                                });
+                                renderPage(docs);
+                            }
+                        });
+                    } else {
+                        api.docsByDate(20,
+                        function(err, docs) {
+                            if (err) globalFunctions.showError(res, err);
+                            renderPage(docs);
+                        });
+                    }
+                }
+            );
+
+            app.get('/layout/sports', site.checkAdmin,
+                function(req, res) {
+                    function renderPage(docs) {
+                        var stories = docs;
+                        api.group.docs(SPORTS_GROUP_NAMESPACE, null,
+                        function(err, model) {
+                            res.render('admin/layout/sports', {
+                                layout: "layout-admin.jade",
+                                locals: {
+                                    stories: stories,
+                                    model: model
+                                }
+                            });
+                        });
+                    }
+                    // TODO make requests concurrent
+                    // sidebar filter by section
+                    var filter = req.param("section", null);
+                    if (filter) {
+                        api.taxonomy.docs(filter, 20,
+                        function(err, docs) {
+                            if (err) globalFunctions.showError(res, err);
+                            else {
+                                docs = docs.map(function(doc) {
+                                    return doc;
+                                });
+                                renderPage(docs);
+                            }
+                        });
+                    } else {
+                        api.docsByDate(20,
+                        function(err, docs) {
+                            if (err) globalFunctions.showError(res, err);
+                            renderPage(docs);
+                        });
+                    }
+                }
+            );
+
+            app.get('/layout/opinion', site.checkAdmin,
+                function(req, res) {
+                    function renderPage(docs) {
+                        var stories = docs;
+                        api.group.docs(OPINION_GROUP_NAMESPACE, null,
+                        function(err, model) {
+                            res.render('admin/layout/opinion', {
+                                layout: "layout-admin.jade",
+                                locals: {
+                                    stories: stories,
+                                    model: model
+                                }
+                            });
+                        });
+                    }
+                    // TODO make requests concurrent
+                    // sidebar filter by section
+                    var filter = req.param("section", null);
+                    if (filter) {
+                        api.taxonomy.docs(filter, 20,
+                        function(err, docs) {
+                            if (err) globalFunctions.showError(res, err);
+                            else {
+                                docs = docs.map(function(doc) {
+                                    return doc;
+                                });
+                                renderPage(docs);
+                            }
+                        });
+                    } else {
+                        api.docsByDate(20,
+                        function(err, docs) {
+                            if (err) globalFunctions.showError(res, err);
+                            renderPage(docs);
+                        });
+                    }
+                }
+            );
+
+            app.get('/layout/recess', site.checkAdmin,
+                function(req, res) {
+                    function renderPage(docs) {
+                        var stories = docs;
+                        api.group.docs(RECESS_GROUP_NAMESPACE, null,
+                        function(err, model) {
+                            res.render('admin/layout/recess', {
+                                layout: "layout-admin.jade",
+                                locals: {
+                                    stories: stories,
+                                    model: model
+                                }
+                            });
+                        });
+                    }
+                    // TODO make requests concurrent
+                    // sidebar filter by section
+                    var filter = req.param("section", null);
+                    if (filter) {
+                        api.taxonomy.docs(filter, 20,
+                        function(err, docs) {
+                            if (err) globalFunctions.showError(res, err);
+                            else {
+                                docs = docs.map(function(doc) {
+                                    return doc;
+                                });
+                                renderPage(docs);
+                            }
+                        });
+                    } else {
+                        api.docsByDate(20,
+                        function(err, docs) {
+                            if (err) globalFunctions.showError(res, err);
+                            renderPage(docs);
+                        });
+                    }
+                }
+            );
+
+            app.get('/layout/towerview', site.checkAdmin,
+                function(req, res) {
+                    function renderPage(docs) {
+                        var stories = docs;
+                        api.group.docs(TOWERVIEW_GROUP_NAMESPACE, null,
+                        function(err, model) {
+                            res.render('admin/layout/towerview', {
+                                layout: "layout-admin.jade",
+                                locals: {
+                                    stories: stories,
+                                    model: model
+                                }
+                            });
+                        });
+                    }
+                    // TODO make requests concurrent
+                    // sidebar filter by section
                     var filter = req.param("section", null);
                     if (filter) {
                         api.taxonomy.docs(filter, 20,

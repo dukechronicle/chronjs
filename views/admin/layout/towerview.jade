@@ -6,24 +6,38 @@ script
 h2 Towerview Layout
 
 #layout
-    <h2>DSG</h2>
-    #slideshow.container(data-groupName='DSG')
-        - if (model.DSG)
-            - each story, id in model.DSG
+    <h2>Feature</h2>
+    #slideshow.container(data-groupName='Feature')
+        - if (model.Feature)
+            - each story, id in model.Feature
                 .story(draggable='true', id='#{story._id}')
                     #{story.title}
 
-    <h2>DUU</h2>
-    #slideshow.container(data-groupName='DUU')
-        - if (model.DUU)
-            - each story, id in model.DUU
+    <h2>Savvy</h2>
+    #slideshow.container(data-groupName='Savvy')
+        - if (model.Savvy)
+            - each story, id in model.Savvy
                 .story(draggable='true', id='#{story._id}')
                     #{story.title}
 
-    <h2>China</h2>
-    #slideshow.container(data-groupName='China')
-        - if (model.China)
-            - each story, id in model.China
+    <h2>Wisdom</h2>
+    #slideshow.container(data-groupName='Wisdom')
+        - if (model.Wisdom)
+            - each story, id in model.Wisdom
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+
+    <h2>Editors Note</h2>
+    #slideshow.container(data-groupName='EditorsNote')
+        - if (model.EditorsNote)
+            - each story, id in model.EditorsNote
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+
+    <h2>Prefix</h2>
+    #slideshow.container(data-groupName='Prefix')
+        - if (model.Prefix)
+            - each story, id in model.Prefix
                 .story(draggable='true', id='#{story._id}')
                     #{story.title}
 

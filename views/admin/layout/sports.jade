@@ -6,24 +6,17 @@ script
 h2 Sports Layout
 
 #layout
-    <h2>DSG</h2>
-    #slideshow.container(data-groupName='DSG')
-        - if (model.DSG)
-            - each story, id in model.DSG
+    <h2>Slideshow</h2>
+    #slideshow.container(data-groupName='Slideshow')
+        - if (model.Slideshow)
+            - each story, id in model.Slideshow
                 .story(draggable='true', id='#{story._id}')
                     #{story.title}
 
-    <h2>DUU</h2>
-    #slideshow.container(data-groupName='DUU')
-        - if (model.DUU)
-            - each story, id in model.DUU
-                .story(draggable='true', id='#{story._id}')
-                    #{story.title}
-
-    <h2>China</h2>
-    #slideshow.container(data-groupName='China')
-        - if (model.China)
-            - each story, id in model.China
+    <h2>Stories</h2>
+    #slideshow.container(data-groupName='Stories')
+        - if (model.Stories)
+            - each story, id in model.Stories
                 .story(draggable='true', id='#{story._id}')
                     #{story.title}
 

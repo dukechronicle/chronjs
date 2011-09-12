@@ -179,6 +179,7 @@ site.init = function(app, callback) {
                       }
                       else {
                         doc.fullUrl = "http://dukechronicle.com/article/" + latestUrl;
+                        doc.path = "/article/" + latestUrl;
                         http_res.render('article', {
                             locals: {
                                 doc: doc,

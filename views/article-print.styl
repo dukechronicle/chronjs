@@ -1,0 +1,44 @@
+#article-print
+    body 
+       background white
+       font-size 12pt
+         
+    #wrapper, #content 
+       width auto
+       margin 0 5%
+       padding 0
+       border 0
+       float none !important
+       color black
+       background transparent none
+       
+    div#content 
+       margin-left 10%
+       padding-top 0px
+       border-top 1px solid #ccc
+       
+    div#mast 
+       margin-bottom -8px
+       width auto
+       margin 0 5%
+       margin-left 10%
+       
+    div#mast h1
+       vertical-align bottom
+       font-family didot
+       margin-top 0px
+       margin-bottom 0px
+       
+    a:link, a:visited 
+       color #520
+       background transparent
+       font-weight bold
+       text-decoration underline
+       
+    #content a:link:after, #content a:visited:after 
+       content " (" attr(href) ") "
+       font-size 90%
+       
+    #content a[href^="/"]:after 
+       content " (http://www.alistapart.com" attr(href) ") "
+       

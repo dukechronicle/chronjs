@@ -1,0 +1,19 @@
+#recess
+    .top.clearfix
+        .main!=partial('container/featured-image.jade')
+        .right
+            .row.first
+                div!=partial('container/block.jade')
+                div!=partial('container/block.jade')
+            .row.last
+                .blog!=partial('container/block.jade')
+    .middle.clearfix
+        .sandbox!=partial('container/block-row.jade')
+        .interviews!=partial('container/block-row.jade')
+        .reviews!=partial('container/block-row.jade')
+    .bottom
+        .row
+            div!=partial('container/block.jade')
+            div!=partial('container/block.jade')
+            div!=partial('container/block.jade')
+            .last!=partial('container/block.jade')

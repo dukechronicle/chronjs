@@ -1,0 +1,33 @@
+link(rel='stylesheet', href='/admin/layout/styles.css')
+script(src='/js/admin/layout.js')
+script
+    nameSpace = ["Layouts", "Opinion"]
+
+h2 Opinion Layout
+
+#layout
+    <h2>DSG</h2>
+    #slideshow.container(data-groupName='DSG')
+        - if (model.DSG)
+            - each story, id in model.DSG
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+
+    <h2>DUU</h2>
+    #slideshow.container(data-groupName='DUU')
+        - if (model.DUU)
+            - each story, id in model.DUU
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+
+    <h2>China</h2>
+    #slideshow.container(data-groupName='China')
+        - if (model.China)
+            - each story, id in model.China
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+
+
+#sidebar!=partial('sidebar.jade')
+
+

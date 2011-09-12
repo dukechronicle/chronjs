@@ -3,11 +3,11 @@
         // features
         .main!=partial('container/featured-image.jade')
         .right
-            .row.first
+            .column.first
                 div!=partial('container/block.jade')
                 div!=partial('container/block.jade')
             // rss feed
-            .row.last
+            .column.last
                 .blog!=partial('container/block.jade')
 
     .middle.clearfix
@@ -19,7 +19,7 @@
         .reviews!=partial('container/block-row.jade', {title: 'Reviews', stories: {}})
     .bottom
         // stories
-        .row
+        .row.clearfix
             div!=partial('container/block.jade')
             div!=partial('container/block.jade')
             div!=partial('container/block.jade')

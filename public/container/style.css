@@ -1,4 +1,4 @@
-body .container{margin-top:-1em;position:relative;font-size:.8em;padding-left:0;}
+body .container{margin-top:0;position:relative;font-size:.8em;padding-left:0;}
 body .container .content-container{padding:3px}
 body .container a.hover{display:block;border-right:1px solid transparent;border-left:1px solid transparent;-webkit-transition-property:color,border-color;-moz-transition-property:color,border-color;-o-transition-property:color,border-color;-webkit-transition-duration:.25s,.25s,.25s;-moz-transition-duration:.25s,.25s;-o-transition-duration:.25s,.25s;-webkit-transition-duration:linear,linear,linear;-moz-transition-duration:linear,linear;-o-transition-duration:linear,linear;}
 body .container a.hover h1,body .container a.hover h2,body .container a.hover h3,body .container a.hover h4,body .container a.hover h5,body .container a.hover p{-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear;color:#000}
@@ -32,7 +32,7 @@ body a.list-story{color:#000;display:block;padding:3px 0 3px 2px}
 body a.list-story.first{padding-top:2px}
 body a.list-story.last{padding-bottom:2px}
 body a.hover:hover{color:#36c;border-bottom-color:#4d90f0}
-body .vertical-container{visibility:hidden;font-size:1em;writing-mode:tb-rl;filter:flipv fliph;-webkit-transform:rotate(-90deg);-moz-transform:rotate(-90deg);-o-transform:rotate(-90deg);white-space:nowrap;display:block;float:left;-webkit-transform-origin-x:0;-webkit-transform-origin-y:100%;-moz-transform-origin:0 100%;position:relative;left:1px;}
+body .vertical-container{visibility:hidden;font-size:1em;writing-mode:tb-rl;filter:flipv fliph;-webkit-transform:rotate(-90deg);-moz-transform:rotate(-90deg);-o-transform:rotate(-90deg);white-space:nowrap;display:block;float:left;-webkit-transform-origin-x:0;-webkit-transform-origin-y:100%;-moz-transform-origin:0 100%;position:absolute;margin-top:-12px;}
 body .vertical-container .vertical{font-size:.9em;color:#999;letter-spacing:1px;text-shadow:0 1px 1px #fff;text-transform:uppercase;margin-bottom:-2px}
 body .most-popular ol li{list-style:decimal outside}
 body .most-popular ol li h2{margin-left:-9px}

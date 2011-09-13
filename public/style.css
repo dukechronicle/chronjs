@@ -5,6 +5,10 @@ font-face{font-family:"didot";src:url("css/fonts/didot.eot");src:local("☺"),ur
 .left{float:left}
 .right{float:right}
 iframe,object{display:block}
+article,aside,details,figcaption,figure,footer,header,hgroup,nav,section{display:block}
+audio,canvas,video{display:inline-block;*display:inline;*zoom:1}
+audio:not([controls]){display:none}
+[hidden]{display:none}
 html,body{width:100%;height:100%;background:#f5f6f7 url("images/bg.jpg") repeat-x}
 body{font-family:skolar,"Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif;}
 body a{text-decoration:none;color:#36c;}

@@ -1,5 +1,8 @@
-body section > #recess .top > .main{width:460px;float:left;}
-body section > #recess .top > .main .rounded-hover{height:400px}
+body section > #recess p.teaser{color:#444}
+body section > #recess .top > .main{width:476px;float:left;}
+body section > #recess .top > .main .rounded-hover{height:400px;}
+body section > #recess .top > .main .rounded-hover h2{font-size:1.3em}
+body section > #recess .top > .main .rounded-hover img{width:470px}
 body section > #recess .top > .right{float:right;}
 body section > #recess .top > .right .column{float:left;width:234px}
 body section > #recess .top > .right .column.first{margin-right:20px;}

@@ -3,7 +3,7 @@
         .slideshow-wrapper.right-select!=partial('slideshow/slideshow-right')
     .middle.clearfix
         .left
-            .last!=partial('container/sports-block.jade')
+            .last!=partial('container/sports-block.jade', {title: "Blog"})
         .right
             .column.first
                 .first!=partial('container/row.jade')
@@ -17,10 +17,10 @@
 
     .bottom
         .row.clearfix
-            .m-basketball!=partial('container/sports-block.jade')
-            .m-soccer!=partial('container/sports-block.jade')
-            .m-tennis.last!=partial('container/sports-block.jade')
+            .m-basketball!=partial('container/sports-block.jade', {title: "Men's Basketball"})
+            .m-soccer!=partial('container/sports-block.jade', {title: "Men's Soccer"})
+            .m-tennis.last!=partial('container/sports-block.jade', {title: "Men's Tennis"})
         .row.clearfix.last
-            .w-basketball!=partial('container/sports-block.jade')
-            .w-soccer!=partial('container/sports-block.jade')
-            .w-tennis.last!=partial('container/sports-block.jade')
+            .w-basketball!=partial('container/sports-block.jade', {title: "Women's Basketball"})
+            .w-soccer!=partial('container/sports-block.jade', {title: "Women's Soccer"})
+            .w-tennis.last!=partial('container/sports-block.jade', {title: "Women's Tennis"})

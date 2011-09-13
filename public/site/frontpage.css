@@ -48,7 +48,7 @@ body section > #frontpage #sports .content-container h2{margin-top:-4px}
 body section > #frontpage .block-row img{border-radius:4px;-webkit-box-shadow:0 0 4px #999;-webkit-transition:box-shadow .25s linear}
 body section > #frontpage .block-row a.hover:hover img{-webkit-box-shadow:0 0 4px #000}
 body section > #frontpage .block-row .rounded{width:972px;padding:0;}
-body section > #frontpage .block-row .rounded h2,body section > #frontpage .block-row .rounded h3{font-size:1.2em;margin-bottom:.3em;height:47px;margin-top:-5px;line-height:1.3em}
+body section > #frontpage .block-row .rounded h2,body section > #frontpage .block-row .rounded h3{font-size:1em;margin-bottom:.5em;height:47px;margin-top:-5px;line-height:1.2em}
 body section > #frontpage .block-row .rounded h2{font-size:1.5em;line-height:1.3em}
 body section > #frontpage .block-row .rounded .content-container{padding:12px}
 body section > #frontpage .block-row a.hover{border:none;border-right:0;border-left:0;padding:0 15px;width:138.33333333333334px;height:229px;float:left;}

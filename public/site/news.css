@@ -11,11 +11,11 @@ body section > #news .middle .content-container h2{color:#000;font-size:1.2em}
 body section > #news .middle .content-container p.teaser{color:#444}
 body section > #news .middle .featured .content-container h2{color:#000;font-size:1.2em}
 body section > #news .middle .featured .content-container p.teaser{color:#444}
+body section > #news .middle .featured .content-container img{width:454px}
 body section > #news .middle .headline .content-container img{width:138px;float:left;margin-right:10px;margin-bottom:3px}
 body section > #news .middle .headline .content-container .text{margin-top:-4px}
 body section > #news .middle .headline .content-container h2{color:#000;font-size:1.2em;margin-left:148px}
 body section > #news .middle .headline .content-container p.teaser{color:#444;font-size:1em;line-height:1.3em}
-body section > #news .middle > .row{padding-top:15px;}
 body section > #news .middle > .row > .block{width:150px;float:left;padding-left:5px;}
 body section > #news .middle > .row > .block .container{width:150px}
 body section > #news .middle > .row > .block h2{font-size:1em;margin-bottom:3px;margin-top:-4px}

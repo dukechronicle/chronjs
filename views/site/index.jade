@@ -2,10 +2,11 @@
     #top.clearfix
         .content
             #slideshow!=partial('slideshow')
-            .top-news!=partial('container/top-news', {title: "Week's Headlines", news: model.NewsHeadlines, sports: model.SportsHeadlines})
-            div
+            .ads-row.clearfix
                 .image-container.print-edition!=partial('container/image', model.printEdition)
                 .image-container.full-banner!=partial('container/image', model.adFullBanner)
+            .top-news!=partial('container/top-news', {title: "Week's Headlines", news: model.NewsHeadlines, sports: model.SportsHeadlines})
+
         .sidebar
             .twitter!=partial('container/twitter', model.twitter)
             .most-popular!=partial('container/most-popular', model.popular)

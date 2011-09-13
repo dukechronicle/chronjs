@@ -9,13 +9,13 @@
         .headline!=partial('container/row')
         .headline!=partial('container/row')
         .row.clearfix
-            .block.first!=partial('container/block')
-            .block!=partial('container/block')
-            .block!=partial('container/block')
+            .block.first!=partial('container/block', {title: ""})
+            .block!=partial('container/block', {title: ""})
+            .block!=partial('container/block', {title: ""})
         .row.clearfix
-            .block.first!=partial('container/block')
-            .block!=partial('container/block')
-            .block!=partial('container/block')
+            .block.first!=partial('container/block', {title: ""})
+            .block!=partial('container/block', {title: ""})
+            .block!=partial('container/block', {title: ""})
 
     .right
         .videos!=partial('container/custom', {title: "Interview", url: "#", html: '<iframe width="250" height="170" src="http://www.youtube.com/embed/2iQyr_OkUz0?rel=0" frameborder="0" allowfullscreen></iframe>'})

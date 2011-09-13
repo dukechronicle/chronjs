@@ -83,7 +83,7 @@ exports.runSite = function(callback)
 
 function runSite(callback) {
 	port = config.get('SERVER_PORT');	
-
+    /*
     // use redis as our session store
     redisClient.init(function (err0) {
         if(err0) return console.log(err0);
@@ -95,7 +95,7 @@ function runSite(callback) {
                 pass:redisClient.getPassword()
             })
         }));
-    });
+    });*/
 
     site.init(app, function(err){
          if(err)

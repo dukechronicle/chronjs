@@ -1,20 +1,19 @@
 #towerview
     .main.clearfix
         // towerview features
-        .row.first!=partial('container/featured-image.jade')
-        .row
-            div!=partial('container/block.jade')
-            div!=partial('container/block.jade')
-        .row
-            // savvy
-            div!=partial('container/block-row.jade', {title: 'Sandbox', stories: {}})
-            // wisdom
-            div!=partial('container/block-row.jade', {title: 'Sandbox', stories: {}})
+        .row.first!=partial('container/featured-image.jade', {title: 'Feature'})
+        .row.feature.clearfix
+            .first!=partial('container/block.jade', {title: ''})
+            .last!=partial('container/block.jade',{title: ''})
         .row.last
-            .blog!=partial('container/block.jade')
+            // savvy
+            div!=partial('container/block-row.jade', {title: 'Savvy', stories: {}})
+            // wisdom
+            div!=partial('container/block-row.jade', {title: 'Wisdom', stories: {}})
+            
     .sidebar.clearfix
-        .editorsNote!=partial('container/block.jade')
+        .editorsNote!=partial('container/block.jade', {title: "Editor's Node"})
         // prefix
-        div!=partial('container/block.jade')
-        div!=partial('container/block.jade')
-        div!=partial('container/block.jade')
+        .prefix!=partial('container/block.jade', {title: 'Prefix'})
+        .prefix!=partial('container/block.jade', {title: ''})
+        .prefix!=partial('container/block.jade', {title: ''})

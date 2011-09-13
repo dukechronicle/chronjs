@@ -36,7 +36,7 @@ body section{margin-top:16px}
 .medium-rectangle .content-container{width:300px;height:250px}
 span.timestamp{color:#036;font-size:.5em;display:block}
 #search-box{position:absolute;top:96px;right:0;}
-#search-box input{background:#fff url("/images/search-button.png") no-repeat;border-radius:10px;border:2px inset;width:140px;font-size:14px}
+#search-box input{background:#fff url("/images/search-button.png") no-repeat;background-position:2px 1px;border-radius:10px;border:1px inset;width:120px;font-size:12px;padding-left:20px}
 .leaderboard{float:right;margin-top:3px;padding-left:3px;margin-bottom:3px;}
 .leaderboard img{border-radius:5px;display:block;-webkit-box-shadow:0 0 3px #ccc;opacity:.8;-webkit-transition:opacity .25s linear;-moz-transition:opacity .25s linear;-o-transition:opacity .25s linear;transition:opacity .25s linear}
 .leaderboard a:hover img{opacity:1}

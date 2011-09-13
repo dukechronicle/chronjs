@@ -28,7 +28,7 @@ group.list = function(options, callback) {
 // fetch documents from namespace or groups
 group.docs = function(namespace, group, callback) {
     var query = {};
-    console.log(util.inspect(namespace, true, 5));
+
     query.reduce = false;
     query.include_docs = true;
 
@@ -105,7 +105,6 @@ group.add = function (nameSpace, groupName, docId, weight, callback) {
             if (groupEntry[0].toString() == nameSpace.toString() &&
                 groupEntry[1] == groupName) {
                 groupEntry[2] = weight;
-                console.log(updated);
                 updated = true;
             }
             return groupEntry;

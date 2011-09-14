@@ -98,6 +98,7 @@ function runSite(callback) {
     });
 
     site.init(app, function(err){
+        search.removeAllDocsFromSearch();
          if(err)
              return console.log("Site.init Failed!");
          admin.init(app, function(err2){

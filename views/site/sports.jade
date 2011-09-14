@@ -11,24 +11,24 @@
         .slideshow-wrapper.right-select!=partial('slideshow/slideshow-right')
     .middle.clearfix
         .left
-            .last!=partial('container/sports-block.jade', {title: "Blog"})
+            .last!=partial('container/story-list', {title: "Blog", stories:{}})
         .right
             .column.first
-                .first!=partial('container/row.jade')
-                div!=partial('container/row.jade')
-                .last!=partial('container/row.jade')
+                .first!=partial('container/row')
+                div!=partial('container/row')
+                .last!=partial('container/row')
             .column
-                .first!=partial('container/row.jade')
-                div!=partial('container/row.jade')
-                .last!=partial('container/row.jade')
+                .first!=partial('container/row')
+                div!=partial('container/row')
+                .last!=partial('container/row')
 
-
-    .bottom
-        .row.clearfix
-            .m-basketball!=partial('container/sports-block.jade', {title: "Men's Basketball"})
-            .m-soccer!=partial('container/sports-block.jade', {title: "Men's Soccer"})
-            .m-tennis.last!=partial('container/sports-block.jade', {title: "Men's Tennis"})
-        .row.clearfix.last
-            .w-basketball!=partial('container/sports-block.jade', {title: "Women's Basketball"})
-            .w-soccer!=partial('container/sports-block.jade', {title: "Women's Soccer"})
-            .w-tennis.last!=partial('container/sports-block.jade', {title: "Women's Tennis"})
+    //
+        .bottom
+            .row.clearfix
+                .m-basketball!=partial('container/sports-block.jade', {title: "Men's Basketball"})
+                .m-soccer!=partial('container/sports-block.jade', {title: "Men's Soccer"})
+                .m-tennis.last!=partial('container/sports-block.jade', {title: "Men's Tennis"})
+            .row.clearfix.last
+                .w-basketball!=partial('container/sports-block.jade', {title: "Women's Basketball"})
+                .w-soccer!=partial('container/sports-block.jade', {title: "Women's Soccer"})
+                .w-tennis.last!=partial('container/sports-block.jade', {title: "Women's Tennis"})

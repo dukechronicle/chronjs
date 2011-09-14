@@ -72,7 +72,7 @@ site.init = function(app, callback) {
                         "title": "Twitter",
                         "imageUrl": "/images/twitter-dukechronicle.png",
                         "user": "DukeChronicle",
-                        "tweet": "Special Projects Editor @TaylorDoherty is heading to China and the UAE with Duke men's basketball @dukeblueplanet http://t.co/zsreS0t"
+                        "tweet": "Flu study could help increase resistance to the virus: http://chron.it/r986rD"
                     }
                     res.render('site/sports', {filename: 'views/site/sports.jade', model: result});
                 });

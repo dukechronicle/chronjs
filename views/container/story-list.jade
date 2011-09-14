@@ -4,7 +4,8 @@
 
     .rounded
         .content-container
-            - each story in stories
-                h2
-                    a.list-story.hover.highlight-right(href='#{story.url}', class='#{story.cssClass}')
-                        #{story.title}
+            - if (stories)
+                - each story in stories
+                    h2
+                        a.list-story.hover.highlight-right(href='#{story.url}', class='#{story.cssClass}')
+                            #{story.title}

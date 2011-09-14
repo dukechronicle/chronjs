@@ -5,4 +5,4 @@
 .story.over{background-color:#ccc}
 #sidebar{width:200px;float:right;}
 #sidebar .story.exists{opacity:.4}
-.fixed-container{position:fixed}
+.fixed-container{position:fixed;height:700px;overflow:scroll;right:10px}

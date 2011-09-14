@@ -4,6 +4,36 @@ container-padding = 4px
 top-content-width =  642px
 
 container-vertical-spacing = 23px
+
+body section > .nav
+    position relative
+    z-index 2
+    clear both
+    h2
+        float left
+        a
+            letter-spacing 1px
+            text-shadow 0px 1px 0px white
+            //border-bottom 1px solid transparent
+            font-size 0.7em
+            text-transform uppercase
+            color #333
+            display block
+            padding-left 15px
+            padding-right 11px
+            //padding-bottom 1px
+            margin-bottom 16px
+            margin-top -16px
+            transition(color, .25s, linear)
+        a:hover, a.active
+            color #999
+
+    h2.first a
+        padding-left 3px
+
+    a
+        color #333
+
 body section > #news
     rounded-image()
         img
@@ -22,7 +52,6 @@ body section > #news
     .left
         float left
         // align side bar with main content bar
-        margin-top -3px
 
         .container
             width 200px + 3 * 2
@@ -31,7 +60,8 @@ body section > #news
                 margin-bottom -4px
 
                 h2
-                    font-size 0.9em
+                    font-size 1em
+                    margin-bottom 5px
             .rounded
                 width 200px
 
@@ -39,7 +69,6 @@ body section > #news
     .right
         float right
         // align side bar with main content bar
-        margin-top -3px
 
         .container
             width 250px + 3 * 2 + 6
@@ -51,7 +80,6 @@ body section > #news
         width 460px
         float left
         padding-left 20px
-        margin-top -2px
         .content-container
                 h2
                     color black
@@ -65,6 +93,8 @@ body section > #news
                     font-size 1.2em
                 p.teaser
                     color #444
+                img
+                    width 454px
         .headline
             .content-container
                 img
@@ -82,14 +112,16 @@ body section > #news
                     color #444
                     font-size 1em
                     line-height 1.3em
+                    margin-left 148px
         > .row
-            padding-top 15px
             > .block
                 width 150px
                 float left
                 padding-left 5px
                 .container
                     width 150px
+                    .rounded-hover
+                        height 220px
                 float
                     left
                 h2

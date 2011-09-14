@@ -4,6 +4,36 @@ container-padding = 4px
 top-content-width =  642px
 
 container-vertical-spacing = 23px
+
+body section > .nav
+    position relative
+    z-index 2
+    clear both
+    h2
+        float left
+        a
+            letter-spacing 1px
+            text-shadow 0px 1px 0px white
+            //border-bottom 1px solid transparent
+            font-size 0.7em
+            text-transform uppercase
+            color #333
+            display block
+            padding-left 15px
+            padding-right 11px
+            //padding-bottom 1px
+            margin-bottom 16px
+            margin-top -16px
+            transition(color, .25s, linear)
+        a:hover, a.active
+            color #999
+
+    h2.first a
+        padding-left 3px
+
+    a
+        color #333
+
 body section > #sports
     rounded-image()
         img
@@ -109,19 +139,26 @@ body section > #sports
 
     .middle
         margin-bottom 6px
+        .left
+            .container .rounded
+                width 305px
+                height 297px
 
+                h2
+                    font-size 1em
+                    margin-bottom 10px
         .right
             .column.first
                 margin-right 14px
             .column
                 float left
                 .container.row
-                    margin-top -16px
                     width 314px
                     margin-bottom 9px
 
                     .rounded-hover
                         padding 0px
+                        height 95px
                     img
                         border-radius 4px
                         width 89px
@@ -131,6 +168,7 @@ body section > #sports
 
                     h2
                         font-size 1em
+                        color black
                         line-height 1.2em
                         margin-left 89px + 10px
                         margin-bottom 5px
@@ -139,6 +177,7 @@ body section > #sports
                         color #444
                         font-size 0.9em
                         line-height 1.2em
+                        margin-left 99px
 
     .sport-block
         width 311px

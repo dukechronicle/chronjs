@@ -3,26 +3,26 @@
         // feature
         .main!=partial('container/featured-image.jade')
         .right
-            .row.first!=partial('container/row')
-            .row.last!=partial('container/row')
+            .row.first!=partial('container/row', {story: {}})
+            .row.last!=partial('container/row', {story: {}})
             
         // columnist
         .row
-            div!=partial('container/block.jade')
-            div!=partial('container/block.jade')
-            div!=partial('container/block.jade')
-            .last!=partial('container/block.jade')
+            div!=partial('container/block.jade', {title: "Columnist"})
+            div!=partial('container/block.jade', {title: "Columnist"})
+            div!=partial('container/block.jade', {title: "Columnist"})
+            .last!=partial('container/block.jade', {title: "Columnist"})
     .middle.clearfix
         // rss
-        .rss!=partial('container/block.jade')
+        .blog!=partial('container/block.jade', {title: "Blog"})
         // edit board
-        .editBoard!=partial('container/block.jade')
+        .editBoard!=partial('container/block.jade', {title: "Editorial Board"})
         // most popular
-        .mostPopular.last!=partial('container/block.jade')
+        .mostPopular.last!=partial('container/block.jade', {title: "Popular"})
     .bottom
         // more columnists
         .row
-            div!=partial('container/block.jade')
-            div!=partial('container/block.jade')
-            div!=partial('container/block.jade')
-            .last!=partial('container/block.jade')
+            div!=partial('container/block.jade', {title: "Columnist"})
+            div!=partial('container/block.jade', {title: "Columnist"})
+            div!=partial('container/block.jade', {title: "Columnist"})
+            .last!=partial('container/block.jade', {title: "Columnist"})

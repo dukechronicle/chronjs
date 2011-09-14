@@ -1,26 +1,38 @@
+.nav.clearfix
+    h2.first
+        a(href='/section/Arts') Arts
+    h2
+        a(href='/section/Film') Film
+    h2
+        a(href='/sectin/Music') Music
+    h2
+        a(href='/section/Foot') Foot
+    h2.last
+        a(href='/sectin/Literature') Literature
+
 #recess
     .top.clearfix
         // features
         .main!=partial('container/featured-image.jade')
         .right
-            .row.first
-                div!=partial('container/block.jade')
-                div!=partial('container/block.jade')
+            .column.first
+                div!=partial('container/block.jade', {title: ""})
+                div!=partial('container/block.jade', {title: ""})
             // rss feed
-            .row.last
-                .blog!=partial('container/block.jade')
+            .column.last
+                .blog!=partial('container/block.jade', {title: "Blog"})
 
     .middle.clearfix
         // sandbox
-        .sandbox!=partial('container/block-row.jade')
+        .sandbox!=partial('container/block-row.jade', {title: 'Sandbox', stories: {}})
         // interviews
-        .interviews!=partial('container/block-row.jade')
+        .interviews!=partial('container/block-row.jade', {title: 'Interviews', stories: {}})
         // reviews
-        .reviews!=partial('container/block-row.jade')
+        .reviews!=partial('container/block-row.jade', {title: 'Reviews', stories: {}})
     .bottom
         // stories
-        .row
-            div!=partial('container/block.jade')
-            div!=partial('container/block.jade')
-            div!=partial('container/block.jade')
-            .last!=partial('container/block.jade')
+        .row.clearfix
+            div!=partial('container/block.jade', {title: ""})
+            div!=partial('container/block.jade', {title: ""})
+            div!=partial('container/block.jade', {title: ""})
+            .last!=partial('container/block.jade', {title: ""})

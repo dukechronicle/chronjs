@@ -20,6 +20,8 @@ var RECESS_GROUP_NAMESPACE = ['Layouts','Recess'];
 var TOWERVIEW_GROUP_NAMESPACE = ['Layouts','Towerview'];
 
 var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
+var newsModel = JSON.parse(fs.readFileSync("sample-data/news.json"));
+var sportsModel = JSON.parse(fs.readFileSync("sample-data/sports.json"));
 
 function _getImages(obj, callback) {
     nimble.map(obj, function(val, key, acallback) {
@@ -61,19 +63,14 @@ site.init = function(app, callback) {
             app.get('/news', function(req, res) {
                 api.group.docs(NEWS_GROUP_NAMESPACE, null, function(err, result) {
                     console.log(Object.keys(result));
-
+                    _.defaults(result, newsModel);
                     res.render('site/news', {filename: 'views/site/news.jade', model: result});
                 });
             });
 
             app.get('/sports', function(req, res) {
                 api.group.docs(SPORTS_GROUP_NAMESPACE, null, function(err, result) {
-                    result.Twitter = {
-                        "title": "Twitter",
-                        "imageUrl": "/images/twitter-dukechronicle.png",
-                        "user": "DukeChronicle",
-                        "tweet": "Special Projects Editor @TaylorDoherty is heading to China and the UAE with Duke men's basketball @dukeblueplanet http://t.co/zsreS0t"
-                    }
+                    _.defaults(result, sportsModel);
                     res.render('site/sports', {filename: 'views/site/sports.jade', model: result});
                 });
             });
@@ -96,9 +93,38 @@ site.init = function(app, callback) {
                 });
             });
 
-            app.get('/article-list', function(req, http_res) {
+            app.get('/section/:section', function(req, res) {
+                api.taxonomy.docs(req.params.section, 20,
+                    function(err, docs) {
+                        if (err) globalFunctions.showError(res, err);
+                        else {
+                            docs = docs.map(function(doc) {
+                                if (doc.urls) return doc;
+                            });
+                            docs.forEach(function(doc) {
+                                doc.url = '/article/' + doc.urls[doc.urls.length - 1];
+                                // convert timestamp
+                                if (doc.created) {
+                                    var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+                                        "October", "November", "December"];
+                                    var timestamp = doc.created;
+                                    var date = new Date(timestamp*1000);
+                                    doc.date = month[date.getMonth()] + " " + date.getDay() + ", " + date.getFullYear();
+                                }
+                                if (doc.authors && doc.authors.length > 0) {
+                                    doc.authorsHtml = doc.authors[0];
+                                }
+                            });
+                        console.log(docs);
+                        res.render('site/section', {locals:{docs:docs}});
+                        }
+                    }
+               );
+            });
+
+            app.get('/search', function(req, http_res) {
                     if(req.param('search') != null) {
-                        http_res.redirect('/article-list/'+req.param('search').replace(/ /g,'-')); // replace spaces with dashes for readibility
+                        http_res.redirect('/search/'+req.param('search').replace(/ /g,'-')); // replace spaces with dashes for readibility
                     }                    
                     else {                
                         api.docsByDate(null, function(err, docs) {
@@ -131,10 +157,27 @@ site.init = function(app, callback) {
             });
 
             // test the solr search functionality. Currently returns the ids,score of articles containing one of more of search words in title.
-            app.get('/article-list/:query', function(req, http_res) {
+            app.get('/search/:query', function(req, http_res) {
                 api.search.docsBySearchQuery(req.params.query.replace('-',' '),function(err, docs) { // replace dashes with spaces
-                    if (err) globalFunctions.showError(http_res, err);
-                    http_res.render('all', {locals:{docs:docs}, layout: 'layout-admin.jade'} );
+                    if (err) return globalFunctions.showError(http_res, err);
+                    console.log(docs)
+                    docs.forEach(function(doc) {
+                        doc.url = '/article/' + doc.urls[doc.urls.length - 1];
+                        // convert timestamp
+                            if (doc.created) {
+                                var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+                                    "October", "November", "December"];
+                                var timestamp = doc.created;
+                                var date = new Date(timestamp*1000);
+                                doc.date = month[date.getMonth()] + " " + date.getDay() + ", " + date.getFullYear();
+                            }
+                            if (doc.authors && doc.authors.length > 0) {
+                                doc.authorsHtml = doc.authors[0];
+                            }
+                        }
+                    );
+
+                    http_res.render('site/search', {locals:{docs:docs}});
                 });
             });
 

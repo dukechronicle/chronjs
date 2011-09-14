@@ -8,6 +8,7 @@ var configuration = {
 
             "COUCHDB_URL":"https://app578498.heroku:NNbL2x3Bu5vGLgComPjWxxET@app578498.heroku.cloudant.com",
             "COUCHDB_DATABASE":"production",
+
             "S3_BUCKET":"chron_bucket1",
             "REDIS_URL":"redis://redistogo:0235bf0a2db5e6cc087683952f60c59c@icefish.redistogo.com:9249/",
             "SOLR_HOST":"index.websolr.com",

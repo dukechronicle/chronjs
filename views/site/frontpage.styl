@@ -20,8 +20,6 @@ body section > #frontpage
     .sidebar
         float right
         // align side bar with main content bar
-        margin-top -3px
-
         .container
             width 300px + 3 * 2
 
@@ -181,18 +179,19 @@ body section > #frontpage
         block-padding = 15px
         container-padding = 12px
         row-width = 980px
-        block-width = (row-width + (block-padding * 2)) / blocks - (block-padding * 2)
+        //block-width = (row-width + (block-padding * 2)) / blocks - (block-padding * 2)
+        block-width = 138px
         full-block-width = block-width * 2
         .rounded
             width 972px
             padding 0px
             h2, h3
-                font-size 1.2em
-                margin-bottom 0.3em
+                font-size 1em
+                margin-bottom 0.5em
                 //TODO use jquery to auto measure
                 height 47px
                 margin-top -5px
-                line-height 1.3em
+                line-height 1.2em
 
             h2
                 font-size 1.5em

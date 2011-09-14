@@ -1,21 +1,30 @@
+.nav.clearfix
+    h2.first
+        a(href='/section/University') University
+    h2
+        a(href='/section/Local & National') Local & National
+    h2.last
+        a(href='/sectin/Health & Science') Health & Science
+
 #news
     .left
-        .dsg!=partial('container/story-list', {title: "DSG", stories: model.DSG})
+        .blog!=partial('container/story-list', {title: "Blog", stories: model.Blog})
+        .dsg!=partial('container/story-list', {title: "9/11", stories: model.DSG})
         .china!=partial('container/story-list', {title: "China", stories: model.China})
-        .duu!=partial('container/story-list', {title: "DUU", stories: model.DUU})
+        .duu!=partial('container/story-list', {title: "Irene", stories: model.DUU})
 
     .middle
         .featured!=partial('container/featured-image')
-        .headline!=partial('container/row')
-        .headline!=partial('container/row')
+        .headline!=partial('container/row', {story: model.Headlines[0]})
+        .headline!=partial('container/row', {story: model.Headlines[1]})
         .row.clearfix
-            .block.first!=partial('container/block')
-            .block!=partial('container/block')
-            .block!=partial('container/block')
+            .block.first!=partial('container/block', {story: model.Stories[0]})
+            .block!=partial('container/block', {story: model.Stories[1]})
+            .block!=partial('container/block', {story: model.Stories[2]})
         .row.clearfix
-            .block.first!=partial('container/block')
-            .block!=partial('container/block')
-            .block!=partial('container/block')
+            .block.first!=partial('container/block', {story: model.Stories[3]})
+            .block!=partial('container/block', {story: model.Stories[4]})
+            .block!=partial('container/block', {story: model.Stories[5]})
 
     .right
         .videos!=partial('container/custom', {title: "Interview", url: "#", html: '<iframe width="250" height="170" src="http://www.youtube.com/embed/2iQyr_OkUz0?rel=0" frameborder="0" allowfullscreen></iframe>'})

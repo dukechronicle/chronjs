@@ -22,18 +22,8 @@
 
 
 
-            !=doc.renderedBody
+            !=doc.body
 
         .sidebar
             .image-container.medium-rectangle!=partial('container/image', model.adFullRectangle)
-    #disqus_thread.rounded
-script(src='/js/disqus.js', type='text/javascript')
-script
-    loadDisqusForArticle('!{doc.id}');
-script(src="http://platform.twitter.com/widgets.js", type="text/javascript")
-script(type="text/javascript")
-    (function() {
-    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/plusone.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-    })();
+   

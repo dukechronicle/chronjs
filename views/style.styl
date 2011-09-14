@@ -34,6 +34,22 @@ transition()
 .right
     float right
 
+/* fixes extra space under embeds */
+iframe, object
+    display block
+
+article, aside, details, figcaption, figure, footer, header, hgroup, nav, section
+    display block
+audio, canvas, video
+    display inline-block
+    *display inline
+    *zoom 1
+audio:not([controls])
+    display none
+[hidden]
+    display none
+
+
 html, body
     width 100%
     height 100%
@@ -117,13 +133,11 @@ body
                     padding-right 11px
                     //padding-bottom 1px
                     transition(color, .25s, linear)
-                a:hover, .active
+                a:hover, a.active
                     color #999
 
             h2.first a
                 padding-left 3px
-            
-            h2.last
             
             a
                 color #333
@@ -158,10 +172,13 @@ span.timestamp
     right 0px
     input
         background #fff url('/images/search-button.png') no-repeat
+        background-position 2px 1px
         border-radius 10px
-        border 2px inset
-        width 140px
-        font-size 14px
+        border 1px inset
+        width 120px
+        font-size 12px
+        padding-left 20px
+
 
 .leaderboard
     float right

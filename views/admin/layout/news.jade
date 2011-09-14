@@ -28,5 +28,27 @@ h2 News Layout
                     #{story.title}
 
 
+    <h2>Featured</h2>
+    #slideshow.container(data-groupName='Featured')
+        - if (model.Featured)
+            - each story, id in model.Featured
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+
+    <h2>Headlines</h2>
+    #slideshow.container(data-groupName='Headlines')
+        - if (model.Headlines)
+            - each story, id in model.Headlines
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+
+    <h2>Stories</h2>
+    #slideshow.container(data-groupName='Stories')
+        - if (model.Stories)
+            - each story, id in model.Stories
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+
+
 #sidebar!=partial('sidebar.jade')
 

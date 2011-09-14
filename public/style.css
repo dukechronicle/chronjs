@@ -4,6 +4,11 @@ font-face{font-family:"didot";src:url("css/fonts/didot.eot");src:local("☺"),ur
 .clearfix{zoom:1}
 .left{float:left}
 .right{float:right}
+iframe,object{display:block}
+article,aside,details,figcaption,figure,footer,header,hgroup,nav,section{display:block}
+audio,canvas,video{display:inline-block;*display:inline;*zoom:1}
+audio:not([controls]){display:none}
+[hidden]{display:none}
 html,body{width:100%;height:100%;background:#f5f6f7 url("images/bg.jpg") repeat-x}
 body{font-family:skolar,"Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif;}
 body a{text-decoration:none;color:#36c;}
@@ -20,9 +25,9 @@ body #header-top h1 a:hover{color:#999}
 body #header-bottom nav{position:relative;z-index:2;clear:both;width:636px;}
 body #header-bottom nav h2{float:left;}
 body #header-bottom nav h2 a{letter-spacing:1px;text-shadow:0 1px 0 #fff;font-size:.8em;text-transform:uppercase;color:#333;display:block;padding-left:15px;padding-right:11px;-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear}
-body #header-bottom nav h2 a:hover,body #header-bottom nav h2 .active{color:#999}
+body #header-bottom nav h2 a:hover,body #header-bottom nav h2 a.active{color:#999}
 body #header-bottom nav h2.first a{padding-left:3px}
-body #header-bottom nav h2.last,body #header-bottom nav a{color:#333}
+body #header-bottom nav a{color:#333}
 body section{margin-top:16px}
 .container{margin-bottom:20px}
 .clear-both{clear:both}
@@ -31,7 +36,7 @@ body section{margin-top:16px}
 .medium-rectangle .content-container{width:300px;height:250px}
 span.timestamp{color:#036;font-size:.5em;display:block}
 #search-box{position:absolute;top:96px;right:0;}
-#search-box input{background:#fff url("/images/search-button.png") no-repeat;border-radius:10px;border:2px inset;width:140px;font-size:14px}
+#search-box input{background:#fff url("/images/search-button.png") no-repeat;background-position:2px 1px;border-radius:10px;border:1px inset;width:120px;font-size:12px;padding-left:20px}
 .leaderboard{float:right;margin-top:3px;padding-left:3px;margin-bottom:3px;}
 .leaderboard img{border-radius:5px;display:block;-webkit-box-shadow:0 0 3px #ccc;opacity:.8;-webkit-transition:opacity .25s linear;-moz-transition:opacity .25s linear;-o-transition:opacity .25s linear;transition:opacity .25s linear}
 .leaderboard a:hover img{opacity:1}

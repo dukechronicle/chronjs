@@ -148,7 +148,7 @@ exports.init = function(app, callback) {
                     // TODO make requests concurrent
                     var filter = req.param("section", null);
                     if (filter) {
-                        api.taxonomy.docs(filter, 20,
+                        api.taxonomy.docs(filter, 100,
                         function(err, docs) {
                             if (err) globalFunctions.showError(res, err);
                             else {
@@ -159,7 +159,7 @@ exports.init = function(app, callback) {
                             }
                         });
                     } else {
-                        api.docsByDate(20,
+                        api.docsByDate(100,
                         function(err, docs) {
                             if (err) globalFunctions.showError(res, err);
                             renderPage(docs);
@@ -187,7 +187,7 @@ exports.init = function(app, callback) {
                     // sidebar filter by section
                     var filter = req.param("section", null);
                     if (filter) {
-                        api.taxonomy.docs(filter, 20,
+                        api.taxonomy.docs(filter, 100,
                         function(err, docs) {
                             if (err) globalFunctions.showError(res, err);
                             else {
@@ -198,7 +198,7 @@ exports.init = function(app, callback) {
                             }
                         });
                     } else {
-                        api.docsByDate(20,
+                        api.docsByDate(100,
                         function(err, docs) {
                             if (err) globalFunctions.showError(res, err);
                             renderPage(docs);
@@ -226,7 +226,7 @@ exports.init = function(app, callback) {
                     // sidebar filter by section
                     var filter = req.param("section", null);
                     if (filter) {
-                        api.taxonomy.docs(filter, 20,
+                        api.taxonomy.docs(filter, 100,
                         function(err, docs) {
                             if (err) globalFunctions.showError(res, err);
                             else {
@@ -237,7 +237,7 @@ exports.init = function(app, callback) {
                             }
                         });
                     } else {
-                        api.docsByDate(20,
+                        api.docsByDate(100,
                         function(err, docs) {
                             if (err) globalFunctions.showError(res, err);
                             renderPage(docs);
@@ -265,7 +265,7 @@ exports.init = function(app, callback) {
                     // sidebar filter by section
                     var filter = req.param("section", null);
                     if (filter) {
-                        api.taxonomy.docs(filter, 20,
+                        api.taxonomy.docs(filter, 100,
                         function(err, docs) {
                             if (err) globalFunctions.showError(res, err);
                             else {
@@ -276,7 +276,7 @@ exports.init = function(app, callback) {
                             }
                         });
                     } else {
-                        api.docsByDate(20,
+                        api.docsByDate(100,
                         function(err, docs) {
                             if (err) globalFunctions.showError(res, err);
                             renderPage(docs);
@@ -304,7 +304,7 @@ exports.init = function(app, callback) {
                     // sidebar filter by section
                     var filter = req.param("section", null);
                     if (filter) {
-                        api.taxonomy.docs(filter, 20,
+                        api.taxonomy.docs(filter, 100,
                         function(err, docs) {
                             if (err) globalFunctions.showError(res, err);
                             else {
@@ -315,7 +315,7 @@ exports.init = function(app, callback) {
                             }
                         });
                     } else {
-                        api.docsByDate(20,
+                        api.docsByDate(100,
                         function(err, docs) {
                             if (err) globalFunctions.showError(res, err);
                             renderPage(docs);
@@ -343,7 +343,7 @@ exports.init = function(app, callback) {
                     // sidebar filter by section
                     var filter = req.param("section", null);
                     if (filter) {
-                        api.taxonomy.docs(filter, 20,
+                        api.taxonomy.docs(filter, 100,
                         function(err, docs) {
                             if (err) globalFunctions.showError(res, err);
                             else {
@@ -354,7 +354,7 @@ exports.init = function(app, callback) {
                             }
                         });
                     } else {
-                        api.docsByDate(20,
+                        api.docsByDate(100,
                         function(err, docs) {
                             if (err) globalFunctions.showError(res, err);
                             renderPage(docs);
@@ -380,6 +380,7 @@ exports.init = function(app, callback) {
                 api.group.add(nameSpace, groupName, docId, weight,
                 function(err, res) {
                     if (err) {
+                        console.log(err);
                         _res.send("false");
                     } else {
                         _res.send("true");

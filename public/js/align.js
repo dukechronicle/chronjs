@@ -28,7 +28,7 @@ function pageAlign() {
 	// align main and sidebar height
 	(function() {
 		// sidebar is short by 1px for some reason
-		var extraHeight = $('#top > .sidebar').height()-$('#top > .content').height() - 3;
+		var extraHeight = $('#top > .sidebar').height()-$('#top > .content').height();
 
 		var contentContainer = $('#top > .content .top-news .content-container');
 		var currentPadding = contentContainer.css('padding-bottom');

@@ -1,3 +1,9 @@
+body section > .nav{position:relative;z-index:2;clear:both;}
+body section > .nav h2{float:left;}
+body section > .nav h2 a{letter-spacing:1px;text-shadow:0 1px 0 #fff;font-size:.7em;text-transform:uppercase;color:#333;display:block;padding-left:15px;padding-right:11px;margin-bottom:16px;margin-top:-16px;}
+body section > .nav h2 a:hover,body section > .nav h2 a.active{color:#999}
+body section > .nav h2.first a{padding-left:3px}
+body section > .nav a{color:#333}
 body section > #sports .top{margin-bottom:20px;margin-top:-20px;}
 body section > #sports .top .slideshow-wrapper.right-select > .slideshow{width:972px;}
 body section > #sports .top .slideshow-wrapper.right-select > .slideshow .slides img{width:636px;border-radius:4px}

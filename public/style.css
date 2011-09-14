@@ -27,7 +27,7 @@ body #header-bottom nav h2{float:left;}
 body #header-bottom nav h2 a{letter-spacing:1px;text-shadow:0 1px 0 #fff;font-size:.8em;text-transform:uppercase;color:#333;display:block;padding-left:15px;padding-right:11px;-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear}
 body #header-bottom nav h2 a:hover,body #header-bottom nav h2 a.active{color:#999}
 body #header-bottom nav h2.first a{padding-left:3px}
-body #header-bottom nav h2.last,body #header-bottom nav a{color:#333}
+body #header-bottom nav a{color:#333}
 body section{margin-top:16px}
 .container{margin-bottom:20px}
 .clear-both{clear:both}

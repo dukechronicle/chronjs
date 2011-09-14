@@ -96,6 +96,35 @@ site.init = function(app, callback) {
                 });
             });
 
+            app.get('/section/:section', function(req, res) {
+                api.taxonomy.docs(req.params.section, 20,
+                    function(err, docs) {
+                        if (err) globalFunctions.showError(res, err);
+                        else {
+                            docs = docs.map(function(doc) {
+                                if (doc.urls) return doc;
+                            });
+                            docs.forEach(function(doc) {
+                                doc.url = '/article/' + doc.urls[doc.urls.length - 1];
+                                // convert timestamp
+                                if (doc.created) {
+                                    var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+                                        "October", "November", "December"];
+                                    var timestamp = doc.created;
+                                    var date = new Date(timestamp*1000);
+                                    doc.date = month[date.getMonth()] + " " + date.getDay() + ", " + date.getFullYear();
+                                }
+                                if (doc.authors && doc.authors.length > 0) {
+                                    doc.authorsHtml = doc.authors[0];
+                                }
+                            });
+                        console.log(docs);
+                        res.render('site/section', {locals:{docs:docs}});
+                        }
+                    }
+               );
+            });
+
             app.get('/search', function(req, http_res) {
                     if(req.param('search') != null) {
                         http_res.redirect('/search/'+req.param('search').replace(/ /g,'-')); // replace spaces with dashes for readibility
@@ -137,7 +166,7 @@ site.init = function(app, callback) {
                     console.log(docs)
                     docs.forEach(function(doc) {
                         doc.url = '/article/' + doc.urls[doc.urls.length - 1];
-                         // convert timestamp
+                        // convert timestamp
                             if (doc.created) {
                                 var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
                                     "October", "November", "December"];
@@ -148,7 +177,8 @@ site.init = function(app, callback) {
                             if (doc.authors && doc.authors.length > 0) {
                                 doc.authorsHtml = doc.authors[0];
                             }
-                   });
+                        }
+                    );
 
                     http_res.render('site/search', {locals:{docs:docs}});
                 });

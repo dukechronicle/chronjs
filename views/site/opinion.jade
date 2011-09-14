@@ -3,8 +3,8 @@
         // feature
         .main!=partial('container/featured-image.jade')
         .right
-            .row.first!=partial('container/row')
-            .row.last!=partial('container/row')
+            .row.first!=partial('container/row', {story: {}})
+            .row.last!=partial('container/row', {story: {}})
             
         // columnist
         .row

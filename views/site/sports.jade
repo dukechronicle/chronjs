@@ -14,13 +14,13 @@
             .last!=partial('container/story-list', {title: "Blog", stories:model.Blog})
         .right
             .column.first
-                .first!=partial('container/row')
-                div!=partial('container/row')
-                .last!=partial('container/row')
+                .first!=partial('container/row', {story: model.Stories[0]})
+                div!=partial('container/row', {story: model.Stories[2]})
+                .last!=partial('container/row', {story: model.Stories[4]})
             .column
-                .first!=partial('container/row')
-                div!=partial('container/row')
-                .last!=partial('container/row')
+                .first!=partial('container/row', {story: model.Stories[1]})
+                div!=partial('container/row', {story: model.Stories[3]})
+                .last!=partial('container/row', {story: model.Stories[5]})
 
     //
         .bottom

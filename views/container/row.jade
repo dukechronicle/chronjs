@@ -2,9 +2,10 @@
     .vertical-container
         h2.vertical &nbsp;
 
-    a.rounded-hover.clearfix(href='/article/dpac-shines-spotlight-durham')
+    a.rounded-hover.clearfix(href=story.url)
         .content-container.clearfix
-            img(src='/images/slideshow/slideshow-1.jpg')
+            if (story.image && story.image.squareThumb && story.image.squareThumb.url)
+                img(src=story.image.squareThumb.url)
             .text
-                h2 DPAC Shines a Spotlight on Durham
-                p.teaser The Blue Devils sent six of their top athletes to contend with the nation’s best at the USA Outdoor Track and Field Championships in Eugene, Ore.
+                h2 #{story.title}
+                p.teaser #{story.teaser}

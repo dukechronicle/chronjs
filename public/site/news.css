@@ -21,9 +21,10 @@ body section > #news .middle .featured .content-container img{width:454px}
 body section > #news .middle .headline .content-container img{width:138px;float:left;margin-right:10px;margin-bottom:3px}
 body section > #news .middle .headline .content-container .text{margin-top:-4px}
 body section > #news .middle .headline .content-container h2{color:#000;font-size:1.2em;margin-left:148px}
-body section > #news .middle .headline .content-container p.teaser{color:#444;font-size:1em;line-height:1.3em}
+body section > #news .middle .headline .content-container p.teaser{color:#444;font-size:1em;line-height:1.3em;margin-left:148px}
 body section > #news .middle > .row > .block{width:150px;float:left;padding-left:5px;}
-body section > #news .middle > .row > .block .container{width:150px}
+body section > #news .middle > .row > .block .container{width:150px;}
+body section > #news .middle > .row > .block .container .rounded-hover{height:220px}
 body section > #news .middle > .row > .block h2{font-size:1em;margin-bottom:3px;margin-top:-4px}
 body section > #news .middle > .row > .block p.teaser{font-size:.9em;line-height:1.3em}
 body section > #news .middle > .row .block.first{padding-left:0}

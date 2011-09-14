@@ -15,16 +15,16 @@
 
     .middle
         .featured!=partial('container/featured-image')
-        .headline!=partial('container/row')
-        .headline!=partial('container/row')
+        .headline!=partial('container/row', {story: model.Headlines[0]})
+        .headline!=partial('container/row', {story: model.Headlines[1]})
         .row.clearfix
-            .block.first!=partial('container/block', {title: ""})
-            .block!=partial('container/block', {title: ""})
-            .block!=partial('container/block', {title: ""})
+            .block.first!=partial('container/block', {story: model.Stories[0]})
+            .block!=partial('container/block', {story: model.Stories[1]})
+            .block!=partial('container/block', {story: model.Stories[2]})
         .row.clearfix
-            .block.first!=partial('container/block', {title: ""})
-            .block!=partial('container/block', {title: ""})
-            .block!=partial('container/block', {title: ""})
+            .block.first!=partial('container/block', {story: model.Stories[3]})
+            .block!=partial('container/block', {story: model.Stories[4]})
+            .block!=partial('container/block', {story: model.Stories[5]})
 
     .right
         .videos!=partial('container/custom', {title: "Interview", url: "#", html: '<iframe width="250" height="170" src="http://www.youtube.com/embed/2iQyr_OkUz0?rel=0" frameborder="0" allowfullscreen></iframe>'})

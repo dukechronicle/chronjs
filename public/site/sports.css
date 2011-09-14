@@ -24,10 +24,10 @@ body section > #sports .middle .left .container .rounded h2{font-size:1em;margin
 body section > #sports .middle .right .column.first{margin-right:14px}
 body section > #sports .middle .right .column{float:left;}
 body section > #sports .middle .right .column .container.row{width:314px;margin-bottom:9px;}
-body section > #sports .middle .right .column .container.row .rounded-hover{padding:0}
+body section > #sports .middle .right .column .container.row .rounded-hover{padding:0;height:95px}
 body section > #sports .middle .right .column .container.row img{border-radius:4px;width:89px;height:89px;float:left;margin-right:10px}
-body section > #sports .middle .right .column .container.row h2{font-size:1em;line-height:1.2em;margin-left:99px;margin-bottom:5px}
-body section > #sports .middle .right .column .container.row p{color:#444;font-size:.9em;line-height:1.2em}
+body section > #sports .middle .right .column .container.row h2{font-size:1em;color:#000;line-height:1.2em;margin-left:99px;margin-bottom:5px}
+body section > #sports .middle .right .column .container.row p{color:#444;font-size:.9em;line-height:1.2em;margin-left:99px}
 body section > #sports .sport-block{width:311px;float:left;margin-right:19px}
 body section > #sports .sport-block .rounded-hover{width:305px;height:305px}
 body section > #sports .last > .sport-block{margin-right:0}

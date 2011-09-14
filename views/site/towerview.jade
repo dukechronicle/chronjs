@@ -3,8 +3,8 @@
         // towerview features
         .row.first!=partial('container/featured-image.jade', {title: 'Feature'})
         .row.feature.clearfix
-            .first!=partial('container/block.jade', {title: ''})
-            .last!=partial('container/block.jade',{title: ''})
+            .first!=partial('container/sample-block.jade', {title: '', story:{}})
+            .last!=partial('container/sample-block.jade',{title: '', story:{}})
         .row.last
             // savvy
             div!=partial('container/block-row.jade', {title: 'Savvy', stories: {}})
@@ -12,8 +12,8 @@
             div!=partial('container/block-row.jade', {title: 'Wisdom', stories: {}})
             
     .sidebar.clearfix
-        .editorsNote!=partial('container/block.jade', {title: "Editor's Note"})
+        .editorsNote!=partial('container/sample-block.jade', {title: "Editor's Note", story:{}})
         // prefix
-        .prefix!=partial('container/block.jade', {title: 'Prefix'})
-        .prefix!=partial('container/block.jade', {title: ''})
-        .prefix!=partial('container/block.jade', {title: ''})
+        .prefix!=partial('container/sample-block.jade', {title: 'Prefix', story:{}})
+        .prefix!=partial('container/sample-block.jade', {title: '', story:{}})
+        .prefix!=partial('container/sample-block.jade', {title: '', story:{}})

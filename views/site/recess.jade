@@ -16,11 +16,11 @@
         .main!=partial('container/featured-image.jade')
         .right
             .column.first
-                div!=partial('container/block.jade', {title: ""})
-                div!=partial('container/block.jade', {title: ""})
+                div!=partial('container/sample-block.jade', {title: "", story:{}})
+                div!=partial('container/sample-block.jade', {title: "", story:{}})
             // rss feed
             .column.last
-                .blog!=partial('container/block.jade', {title: "Blog"})
+                .blog!=partial('container/sample-block.jade', {title: "Blog", story:{}})
 
     .middle.clearfix
         // sandbox
@@ -32,7 +32,7 @@
     .bottom
         // stories
         .row.clearfix
-            div!=partial('container/block.jade', {title: ""})
-            div!=partial('container/block.jade', {title: ""})
-            div!=partial('container/block.jade', {title: ""})
-            .last!=partial('container/block.jade', {title: ""})
+            div!=partial('container/sample-block.jade', {title: "", story:{}})
+            div!=partial('container/sample-block.jade', {title: "", story:{}})
+            div!=partial('container/sample-block.jade', {title: "", story:{}})
+            .last!=partial('container/sample-block.jade', {title: "", story:{}})

@@ -8,9 +8,10 @@
 
 #news
     .left
-        .dsg!=partial('container/story-list', {title: "DSG", stories: model.DSG})
+        .blog!=partial('container/story-list', {title: "Blog", stories: model.Blog})
+        .dsg!=partial('container/story-list', {title: "9/11", stories: model.DSG})
         .china!=partial('container/story-list', {title: "China", stories: model.China})
-        .duu!=partial('container/story-list', {title: "DUU", stories: model.DUU})
+        .duu!=partial('container/story-list', {title: "Irene", stories: model.DUU})
 
     .middle
         .featured!=partial('container/featured-image')

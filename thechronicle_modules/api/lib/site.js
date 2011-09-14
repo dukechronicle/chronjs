@@ -20,6 +20,8 @@ var RECESS_GROUP_NAMESPACE = ['Layouts','Recess'];
 var TOWERVIEW_GROUP_NAMESPACE = ['Layouts','Towerview'];
 
 var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
+var newsModel = JSON.parse(fs.readFileSync("sample-data/news.json"));
+var sportsModel = JSON.parse(fs.readFileSync("sample-data/sports.json"));
 
 function _getImages(obj, callback) {
     nimble.map(obj, function(val, key, acallback) {
@@ -61,19 +63,14 @@ site.init = function(app, callback) {
             app.get('/news', function(req, res) {
                 api.group.docs(NEWS_GROUP_NAMESPACE, null, function(err, result) {
                     console.log(Object.keys(result));
-
+                    _.defaults(result, newsModel);
                     res.render('site/news', {filename: 'views/site/news.jade', model: result});
                 });
             });
 
             app.get('/sports', function(req, res) {
                 api.group.docs(SPORTS_GROUP_NAMESPACE, null, function(err, result) {
-                    result.Twitter = {
-                        "title": "Twitter",
-                        "imageUrl": "/images/twitter-dukechronicle.png",
-                        "user": "DukeChronicle",
-                        "tweet": "Flu study could help increase resistance to the virus: http://chron.it/r986rD"
-                    }
+                    _.defaults(result, sportsModel);
                     res.render('site/sports', {filename: 'views/site/sports.jade', model: result});
                 });
             });

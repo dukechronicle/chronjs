@@ -11,7 +11,7 @@
         .slideshow-wrapper.right-select!=partial('slideshow/slideshow-right')
     .middle.clearfix
         .left
-            .last!=partial('container/story-list', {title: "Blog", stories:{}})
+            .last!=partial('container/story-list', {title: "Blog", stories:model.Blog})
         .right
             .column.first
                 .first!=partial('container/row')

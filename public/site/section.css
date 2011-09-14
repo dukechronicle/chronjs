@@ -1,0 +1,6 @@
+#section .result{display:block;width:600px;float:left;margin-bottom:10px;padding-left:8px;}
+#section .result h3{font-size:1.2em;color:#000}
+#section .result .date{margin-bottom:5px;margin-top:-3px}
+#section .result .teaser,#section .result .date{color:#444;font-size:.9em}
+#section .result:hover h3{color:#36c}
+#section .sep{font-size:.7em;margin-left:4px;margin-right:4px}

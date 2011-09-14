@@ -4,6 +4,10 @@ var api = require("./api");
 var _ = require("underscore");
 var db = require("../../db-abstract");
 
+// whenever the way an article should be indexed by solr is changed, this number should be incremented
+// so the server knows it has to reindex all articles not using the newest indexing version. Keep the number numeric!
+var INDEX_VERSION = 0.4;
+
 var search = {};
 var exports = module.exports = search;
 
@@ -19,35 +23,33 @@ function createSolrIDFromDBID(db_id) {
     return db_id+"||"+db.getDatabaseName()+"||"+db.getDatabaseHost();
 }
 
-// check for unindexed articles and index them in solr.
+// check for unindexed articles, or articles with index versioning below the current version, and index them in solr.
 search.indexUnindexedArticles = function() {
     console.log('looking for articles to index...');
-    search.docsNotIndexed(function(err, response) {
+    db.search.docsIndexedBelowVersion(INDEX_VERSION, function(err, response) {
         // Attempt to index each file in row.
         response.forEach(function(row) {
             console.log('indexing "' + row.title + '"');
             search.indexArticle(row._id,row.title,row.body, function(error2, response2) {
                 if(error2) console.log(error2);
                 else {
-                    db.merge(row._id, {indexedBySolr: true}, function(error3, response3) {
+                    db.search.setArticleAsIndexed(row._id, INDEX_VERSION, function(error3, response3) {
                         if(error3) console.log(error3);
                         else console.log('indexed "' + row.title + '"');
-                    });
+                    });              
                 }
             });
         });
     });
 }
 
-search.docsNotIndexed = function(callback) {
-    db.view("articles/not_indexed_by_solr", callback);
-}
-
 search.indexArticle = function(id,title,body,callback) {
 	// adds the article to the solr database for searching	
 	var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH'));
-	console.log((title));
-	var solrDoc = {
+	console.log(title);
+	
+    // if you change this object (and in doing so change the index), you MUST increment INDEX_VERSION at the top of this script 
+    var solrDoc = {
 		id: createSolrIDFromDBID(id),
 		type: 'article',
 		title_text: title.toLowerCase(),
@@ -56,7 +58,13 @@ search.indexArticle = function(id,title,body,callback) {
         database_host_text: db.getDatabaseHost()
 	};
 
-    client.add(solrDoc, {commit:true}, callback);
+    // unindex the article before you index it, just incase it was using an old verion of the indexing
+    client.del(createSolrIDFromDBID(id), null, function(err,resp) { 
+        if(!err) console.log('unindexed "' + title + '"');
+        else console.log(err);
+                  
+        client.add(solrDoc, {commit:true}, callback);
+    });
 }
 
 // don't call this.

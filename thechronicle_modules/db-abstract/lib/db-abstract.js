@@ -53,6 +53,7 @@ var db = exports;
 db.group = require('./group.js');
 db.image = require('./image.js');
 db.taxonomy = require('./taxonomy.js');
+db.search = require('./search.js');
 
 db.getDatabaseName = function() {
     return DATABASE;

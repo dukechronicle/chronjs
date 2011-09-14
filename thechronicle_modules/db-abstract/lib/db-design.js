@@ -82,11 +82,13 @@ var views = {
             }
         }
     },
-    // return all articles not indexed by Solr
-    not_indexed_by_solr: {
+
+    // return all articles and the version of their index in Solr
+    indexed_by_solr: {
         map: function(doc) {
-            if(doc.title && doc.body && !doc.indexedBySolr) {
-                emit(null, doc);
+            if(doc.title && doc.body) {
+                if(doc.indexedBySolr == null || typeof(doc.indexedBySolr) != 'number') emit(-1, doc);
+                else emit(doc.indexedBySolr, doc);
             }
         }
     }

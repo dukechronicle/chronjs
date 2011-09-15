@@ -7,8 +7,8 @@ exports.init = function(app, callback) {
         app.get('/:groupname', function(req, http_res) {
             var groupName = req.params.groupname;
             //console.log("server.js/mobile" + groupName);
-            console.log("IN HERE!!!");
             getGroup(groupName,10,function(err,res){
+                if (err) http_res.send(err);
                 if(res == null)
                 {
                      console.log("mobileapi: res is null");
@@ -16,19 +16,13 @@ exports.init = function(app, callback) {
                 }
                 var result = [];
                 result = _.map(res,function(doc){
-                    if(req.body.callback == null)
-                    {
-                        console.log("nulled");
-
-                        return {"title": doc.value.title, "teaser": doc.value.teaser, "urls": doc.value.urls};
-                    }
-                    else
-                    {
-                        console.log("not null");
-                        return req.params.callback + JSON.stringify({"title": doc.value.title, "teaser": doc.value.teaser, "urls": doc.value.urls});
-                    }
+                    return {"title": doc.value.title, "teaser": doc.value.teaser, "urls": doc.value.urls};
                 });
-                http_res.send(result);
+                if(req.query.callback == null) {
+                    http_res.send(result);
+                } else {
+                    http_res.send(req.query.callback + "(" + JSON.stringify(result) + ")");
+                }
             });
         });
 
@@ -36,7 +30,11 @@ exports.init = function(app, callback) {
             var articleURL = req.params.articleURL;
             api.docForUrl(articleURL, function(err,res){
                 //console.log(res);
-                http_res.send(res);
+                if(req.query.callback == null) {
+                    http_res.send(res);
+                } else {
+                    http_res.send(req.query.callback + "(" + JSON.stringify(res) + ")");
+                }
             });
         });
     });
@@ -75,6 +73,6 @@ function getGroup(groupName,n,callback){
         grabArticles([groupName],0,n,callback);
     }
     else{
-        return callback("error", "noob");
+        return callback("Invalid Group", null);
     }
 }

@@ -131,6 +131,8 @@
                    updateArticleContainer(articleCache[articleURL].data);
                   }
                });
+            } else {
+                updateArticleContainer(articleCache[articleURL].data);
             }
             
 
@@ -163,6 +165,8 @@
                 });
                 
                 
+            } else {
+                updateArticleList(articleListCache[category].data, $(this), category);
             }
             
 

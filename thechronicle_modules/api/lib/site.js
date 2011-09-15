@@ -124,7 +124,7 @@ site.init = function(app, callback) {
 
             app.get('/search', function(req, http_res) {
                     if(req.param('search') != null) {
-                        http_res.redirect('/search/'+req.param('search').replace(/ /g,'-')); // replace spaces with dashes for readibility
+                        http_res.redirect('/search/'+req.param('search').replace(/ /g,'-')+'?sort=relevance&order=desc'); // replace spaces with dashes for readibility
                     }                    
                     else {                
                         api.docsByDate(null, function(err, docs) {
@@ -158,11 +158,13 @@ site.init = function(app, callback) {
 
             // test the solr search functionality. Currently returns the ids,score of articles containing one of more of search words in title.
             app.get('/search/:query', function(req, http_res) {
-                api.search.docsBySearchQuery(req.params.query.replace('-',' '),function(err, docs) { // replace dashes with spaces
+                api.search.docsBySearchQuery(req.params.query.replace('-',' '), req.query.sort, req.query.order, function(err, docs) {
                     if (err) return globalFunctions.showError(http_res, err);
-                    console.log(docs)
+                    
                     docs.forEach(function(doc) {
-                        doc.url = '/article/' + doc.urls[doc.urls.length - 1];
+                        if(doc.urls != null) doc.url = '/article/' + doc.urls[doc.urls.length - 1];
+                        else doc.url = '/';
+
                         // convert timestamp
                             if (doc.created) {
                                 var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September",

@@ -8,7 +8,7 @@ var db = require("../../db-abstract");
 
 // whenever the way an article should be indexed by solr is changed, this number should be incremented
 // so the server knows it has to reindex all articles not using the newest indexing version. Keep the number numeric!
-var INDEX_VERSION = 0.49;
+var INDEX_VERSION = 0.5001;
 var client = null;
 
 var search = {};
@@ -53,15 +53,23 @@ search.indexUnindexedArticles = function() {
 search.indexArticle = function(id,title,body,authors,createdDate,callback) {
 	// adds the article to the solr database for searching	
 	
-    var date = new Date();
-    date.setTime(createdDate * 1000);  // turn seconds into milliseconds
+    var date = new Date(createdDate * 1000); // turn seconds into milliseconds
     
     var solrDate;
+    var solrYear;
+    var solrMonth;
+    var solrDay;
     try {
         solrDate = dateFormat(date,"UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"); // turns date into solr's date format: 1995-12-31T23:59:59Z
+        solrYear = dateFormat(date,"yyyy");
+        solrMonth = dateFormat(date,"mm");
+        solrDay = dateFormat(date,"dd");
     }
     catch(err) { // if date is invalid use today's date
         solrDate = dateFormat(new Date(),"UTC:yyyy-mm-dd'T'HH:MM:ss'Z'");
+        solrYear = dateFormat(new Date(),"yyyy");
+        solrMonth = dateFormat(new Date(),"mm");
+        solrDay = dateFormat(new Date(),"dd");
     }	
 
     // if you change this object (and in doing so change the index), you MUST increment INDEX_VERSION at the top of this script 
@@ -73,7 +81,10 @@ search.indexArticle = function(id,title,body,authors,createdDate,callback) {
 		body_text:  body.toLowerCase(),
 		database_text: db.getDatabaseName(),
         database_host_text: db.getDatabaseHost(),
-        created_date_d: solrDate
+        created_date_d: solrDate,
+        created_year_i: solrYear,
+        created_month_i: solrMonth,
+        created_day_i: solrDay,
 	}; 
 
     // unindex the article before you index it, just incase it was using an old verion of the indexing
@@ -103,8 +114,14 @@ search.removeAllDocsFromSearch = function(callback) {
     callback(null);
 }
 
-search.docsBySearchQuery = function(query, callback) {
-	querySolr(query, {facet: true, "facet.field":["author_sm","created_date_d"], rows: 25, fl: "*,score", sort: "score desc"}, callback);
+search.docsBySearchQuery = function(query, sortBy, sortOrder, callback) {
+    if(sortBy == 'relevance') sortBy = 'score';
+    else if(sortBy == 'date') sortBy = 'created_date_d';
+    else sortBy = 'score';
+
+    if(sortOrder != 'asc') sortOrder = 'desc';
+
+    querySolr(query, {facet: true, "facet.field":["author_sm","created_year_i"], rows: 25, fl: "*,score", sort: sortBy + " " + sortOrder}, callback);
 }
 
 function querySolr(queryWords,options,callback) {
@@ -125,14 +142,17 @@ function querySolr(queryWords,options,callback) {
 
         var responseObj = JSON.parse(response);
         console.log(responseObj);
-
+        
+        // put facet into an easily manipulitable form
         var facets = {};
         if(responseObj.facet_counts) {
             for(var fieldName in responseObj.facet_counts.facet_fields) {
                 facets[fieldName] = {};
                 var field = responseObj.facet_counts.facet_fields[fieldName];
                 for(var i = 0; i < field.length; i += 2) {
-                    facets[fieldName][field[i]] = field[i+1];
+                    if(field[i+1] > 0) {
+                        facets[fieldName][field[i]] = field[i+1];
+                    }
                 }
             }            
         }

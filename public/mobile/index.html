@@ -1,0 +1,212 @@
+<!DOCTYPE html> 
+<html> 
+    <head> 
+        <meta charset="utf-8"> 
+        <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1"> 
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.css" /> 
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.2.min.js"></script> 
+        <script type="text/javascript" src="http://code.jquery.com/mobile/1.0a4.1/jquery.mobile-1.0a4.1.min.js"></script> 
+    
+        <script type="text/javascript"> 
+            $(document).bind("mobileinit", function() {
+                $.mobile.page.prototype.options.addBackBtn = true;
+                $.mobile.page.prototype.options.backBtnText = "Prev";
+                $.mobile.page.prototype.options.backBtnTheme = "a";
+    
+            });        
+        </script> 
+    
+        <script type="text/javascript"> 
+        var HOSTNAME = "beta.dukechronicle.com";
+        // Cache the list of articles. Emphemeral.
+        var articleListCache = [];
+        
+        // Cache life = 100 seconds
+        var ARTICLE_LIST_CACHE_TIMEOUT = 100000;
+
+        // Cache the articles. Shouldn't be cleared.
+        var articleCache = [];
+        
+        function updateArticleList(responseText, articleListContainer, category)
+        {
+            var articleListResponse = responseText;
+            if(articleListResponse == null)
+            {
+                console.log("updateArticleList");
+                $.mobile.changePage('#error', 'slide');
+                return;
+            }
+         
+            console.log(articleListResponse);
+            var idString = "#ArticleListContent";
+            $(idString).empty();
+            
+            var titleContainer = '<h2>' + category +'</h2>';
+            $(idString).append(titleContainer);
+            
+            var listContainer = $('<ul />',{"data-role":"listview", "data-theme":"g", class:"ui-listview"});
+    
+            for(var i in articleListResponse)
+            {
+                var article = articleListResponse[i];
+                
+                // Containers
+                var listItem = $('<li />', { "data-theme":"c",class:"ui-btn ui-btn-icon-right ui-li ui-li-has-thumb ui-btn-up-c" });
+                var imgDiv = $('<div />', { class:"ui-btn-inner ui-li" });
+                var buttonDiv = $('<div />', { class:"ui-btn-text" });
+                
+                // Hyperlink
+                var hyperlink = $('<a />',{ "href":"javascript:getArticle('" + article.urls+ "')", class:"ui-link-inherit" });
+                
+                // Thumbnail
+                //hyperlink.append('<img src="' + 'img/test.png"' + ' class="ui-li-thumb" />');
+                
+                // Article Title
+                hyperlink.append('<h3 class="ui-li-heading">' + article.title + '</h3>');
+                
+                // Article Synopsis
+                hyperlink.append('<p class="ui-li-desc">' + article.teaser + '</p>');
+                
+                // Combine all containers.
+                buttonDiv.append(hyperlink);
+                imgDiv.append(buttonDiv);
+                listItem.append(imgDiv);
+                listContainer.append(listItem);
+                $(idString).append(listContainer);
+            }
+            console.log("articlelistdone");
+
+        }
+    
+        function updateArticleContainer(response)
+        {
+            var containerId = "#ArticleContent";
+            var article = response;
+            
+            if(article == null)
+            {
+                console.log("page is null");
+                $.mobile.changePage('#error', 'slide');
+                return;
+            }
+            
+            $(containerId).empty();
+            
+            console.log(article);
+            
+            var titleString = '<h2>' + article.title + '</h2>';
+            $(containerId).append(titleString);
+            
+            for(author in article.authors)
+            {
+                var authorString = '<p><i>By: ' + article.authors[author] + '</i></p>';
+                $(containerId).append(authorString);
+            }
+            
+            var bodyString = '<p>' + article.body + '</p>';
+            $(containerId).append(bodyString);                
+            $.mobile.changePage("#Article","slide");
+        }
+        
+        function getArticle(articleURL)
+        {
+            $.mobile.pageLoading();
+            // Retrieve if cache miss, forced reload, or if cache is too old:
+            if(articleCache[articleURL] == null)
+            {
+               console.log("article cache: cachemiss");
+               $.ajax({
+                   url: "http://" + HOSTNAME + "/mobile-api/article/" + articleURL,
+                   dataType: "jsonp",
+                   cache: false,
+                   success: function(data){
+                   if(!data) {
+                       console.log("get article failed");
+                       $.mobile.changePage('#error', 'slide');
+                       return;
+                   }
+
+                   // Insert into cache
+                   articleCache[articleURL] = {data: data};
+                   updateArticleContainer(articleCache[articleURL].data);
+                  }
+               });
+            }
+            
+
+        }
+        
+        function getArticleList(category, forced)
+        {
+            // Retrieve if cache miss, forced reload, or if cache is too old:
+            if(articleListCache[category] == null || forced || new Date().getTime() - articleListCache[category].timestamp > ARTICLE_LIST_CACHE_TIMEOUT)
+            {
+                console.log("article list : cachemiss");
+                var url = "http://" + HOSTNAME + "/mobile-api/" + category;
+                console.log(url);
+                $.ajax({
+                  url: url,
+                  cache: false,
+                  dataType: "jsonp",
+                  success: function(data){
+                        console.log(category);
+                        if(!data) {
+                            $.mobile.changePage('#error', 'none');
+                            return;
+                        }
+                        // Insert into cache
+                        articleListCache[category] = {timestamp: new Date().getTime(), data: data};
+                        
+                        updateArticleList(articleListCache[category].data, $(this), category);
+                      console.log("done");
+                    }
+                });
+                
+                
+            }
+            
+
+        }
+        
+        </script> 
+    </head> 
+    
+    <body onload="getArticleList('News')"> 
+ 
+        <div id="ArticleList" data-role="page" articleListContainer="true" url="news" data-add-back-btn="false"> 
+            <div data-role="header" data-position="fixed"> 
+                <h1>The Chronicle Mobile | Duke University</h1> 
+            </div> 
+                <div id="ArticleListContent" data-role="content">    
+                </div> 
+            <div data-role="footer" data-position="fixed"> 
+                <div data-role="navbar"> 
+                    <ul> 
+                        <li><a href="javascript:getArticleList('News', false)">News</a></li> 
+                        <li><a href="javascript:getArticleList('Sports', false)">Sports</a></li> 
+                        <li><a href="javascript:getArticleList('Opinion', false)">Opinion</a></li> 
+                        <li><a href="javascript:getArticleList('Recess', false)">Recess</a></li> 
+                        <li><a href="javascript:getArticleList('Towerview', false)">Towerview</a></li> 
+                    </ul> 
+                </div><!-- /navbar --> 
+            </div> 
+        </div> 
+    
+        <div id="Article" data-role="page" articleContainer="true" url="Article" data-add-back-btn="true" data-back-btn-text="Back"> 
+            <div data-role="header"> 
+                <h1>The Chronicle Mobile | Duke University</h1> 
+            </div> 
+            <div id="ArticleContent" data-role="content" data-position="fixed"></div> 
+            <div data-role="footer" data-position="fixed"></div> 
+        </div> 
+            
+        <div id="error" data-role="page"> 
+            <div data-role="header"> 
+                <h1>Error</h1> 
+            </div> 
+            <div data-role="content">    
+                An error has occured, click back to return to the previous page.
+            </div> 
+        </div> 
+    </body> 
+</html> 

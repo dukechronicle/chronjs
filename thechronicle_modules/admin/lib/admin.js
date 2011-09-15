@@ -733,7 +733,7 @@ exports.init = function(app, callback) {
                 var form = req.body.doc;
                 var fields = {
                     body: form.body,
-                    author: form.author,
+                    authors: [form.author],
                     title: form.title,
                     teaser: form.teaser
                 };

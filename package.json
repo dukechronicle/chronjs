@@ -32,6 +32,7 @@
         "jquery":           "1.5.x",
         "sprintf":          "0.1.x",
         "connect-redis":    "1.0.x",
-        "cron":             "0.1.x"
+        "cron":             "0.1.x",
+        "dateformat":       "1.0.x"
 	}
 }

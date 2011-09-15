@@ -32,12 +32,12 @@
             var articleListResponse = responseText;
             if(articleListResponse == null)
             {
-                console.log("updateArticleList");
+                //console.log("updateArticleList");
                 $.mobile.changePage('#error', 'slide');
                 return;
             }
          
-            console.log(articleListResponse);
+            //console.log(articleListResponse);
             var idString = "#ArticleListContent";
             $(idString).empty();
             
@@ -74,7 +74,7 @@
                 listContainer.append(listItem);
                 $(idString).append(listContainer);
             }
-            console.log("articlelistdone");
+            //console.log("articlelistdone");
 
         }
     
@@ -85,14 +85,14 @@
             
             if(article == null)
             {
-                console.log("page is null");
+                //console.log("page is null");
                 $.mobile.changePage('#error', 'slide');
                 return;
             }
             
             $(containerId).empty();
             
-            console.log(article);
+            //console.log(article);
             
             var titleString = '<h2>' + article.title + '</h2>';
             $(containerId).append(titleString);
@@ -114,14 +114,14 @@
             // Retrieve if cache miss, forced reload, or if cache is too old:
             if(articleCache[articleURL] == null)
             {
-               console.log("article cache: cachemiss");
+               //console.log("article cache: cachemiss");
                $.ajax({
                    url: "http://" + HOSTNAME + "/mobile-api/article/" + articleURL,
                    dataType: "jsonp",
                    cache: false,
                    success: function(data){
                    if(!data) {
-                       console.log("get article failed");
+                       //console.log("get article failed");
                        $.mobile.changePage('#error', 'slide');
                        return;
                    }
@@ -143,15 +143,15 @@
             // Retrieve if cache miss, forced reload, or if cache is too old:
             if(articleListCache[category] == null || forced || new Date().getTime() - articleListCache[category].timestamp > ARTICLE_LIST_CACHE_TIMEOUT)
             {
-                console.log("article list : cachemiss");
+                //console.log("article list : cachemiss");
                 var url = "http://" + HOSTNAME + "/mobile-api/" + category;
-                console.log(url);
+                //console.log(url);
                 $.ajax({
                   url: url,
                   cache: false,
                   dataType: "jsonp",
                   success: function(data){
-                        console.log(category);
+                        //console.log(category);
                         if(!data) {
                             $.mobile.changePage('#error', 'none');
                             return;
@@ -160,7 +160,7 @@
                         articleListCache[category] = {timestamp: new Date().getTime(), data: data};
                         
                         updateArticleList(articleListCache[category].data, $(this), category);
-                      console.log("done");
+                      //console.log("done");
                     }
                 });
                 

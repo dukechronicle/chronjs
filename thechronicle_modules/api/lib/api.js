@@ -155,11 +155,11 @@ api.addDoc = function(fields, callback) {
 
             db.save(fields, function(db_err, res) {
             
-            if(db_err) callback(db_err);
-            
-            api.search.indexArticle(res.id,fields.title,fields.body, function(err, response) {
-            callback(err,response,url);
-            });
+                if(db_err) return callback(db_err);
+                
+                api.search.indexArticle(res.id, fields.title, fields.body, fields.authors, fields.created, function(err, response) {
+                    callback(err,response,url);
+                });
             });
         }
     });

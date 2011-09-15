@@ -7,6 +7,7 @@ exports.init = function(app, callback) {
         app.get('/:groupname', function(req, http_res) {
             var groupName = req.params.groupname;
             //console.log("server.js/mobile" + groupName);
+            console.log("IN HERE!!!");
             getGroup(groupName,10,function(err,res){
                 if(res == null)
                 {
@@ -15,7 +16,17 @@ exports.init = function(app, callback) {
                 }
                 var result = [];
                 result = _.map(res,function(doc){
-                    return {"title": doc.value.title, "teaser": doc.value.teaser, "urls": doc.value.urls};
+                    if(req.body.callback == null)
+                    {
+                        console.log("nulled");
+
+                        return {"title": doc.value.title, "teaser": doc.value.teaser, "urls": doc.value.urls};
+                    }
+                    else
+                    {
+                        console.log("not null");
+                        return req.params.callback + JSON.stringify({"title": doc.value.title, "teaser": doc.value.teaser, "urls": doc.value.urls});
+                    }
                 });
                 http_res.send(result);
             });

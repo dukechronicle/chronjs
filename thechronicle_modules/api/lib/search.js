@@ -8,7 +8,8 @@ var db = require("../../db-abstract");
 
 // whenever the way an article should be indexed by solr is changed, this number should be incremented
 // so the server knows it has to reindex all articles not using the newest indexing version. Keep the number numeric!
-var INDEX_VERSION = 0.48;
+var INDEX_VERSION = 0.49;
+var client = null;
 
 var search = {};
 var exports = module.exports = search;
@@ -23,6 +24,10 @@ function createSolrIDFromDBID(db_id) {
     // since we may be using multiple dbs that all use the same db document id, to make each doc unique we append the db name and host
     // to the back. otherwise, one db's indexes will overwrite another db's indexes in solr.
     return db_id+"||"+db.getDatabaseName()+"||"+db.getDatabaseHost();
+}
+
+search.init = function() {
+    client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH'));
 }
 
 // check for unindexed articles, or articles with index versioning below the current version, and index them in solr.
@@ -47,8 +52,7 @@ search.indexUnindexedArticles = function() {
 
 search.indexArticle = function(id,title,body,authors,createdDate,callback) {
 	// adds the article to the solr database for searching	
-	var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH'));
-    
+	
     var date = new Date();
     date.setTime(createdDate * 1000);  // turn seconds into milliseconds
     
@@ -64,7 +68,7 @@ search.indexArticle = function(id,title,body,authors,createdDate,callback) {
     var solrDoc = {
 		id: createSolrIDFromDBID(id),
 		type: 'article',
-        author_text: authors,
+        author_sm: authors,
 		title_text: title.toLowerCase(),
 		body_text:  body.toLowerCase(),
 		database_text: db.getDatabaseName(),
@@ -84,8 +88,6 @@ search.indexArticle = function(id,title,body,authors,createdDate,callback) {
 // don't call this.
 // removes all indexes from solr for the db we are using and sets all documents in the db we are using to not being indexed by solr
 search.removeAllDocsFromSearch = function(callback) {
-    var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH'));         
-    
     api.docsByDate(null, function(err, response) {
         response.forEach(function(row) {
                 console.log('unindexing "' + row.title + '"');
@@ -102,8 +104,12 @@ search.removeAllDocsFromSearch = function(callback) {
 }
 
 search.docsBySearchQuery = function(query, callback) {
-	query = query.toLowerCase();
-    var words = query.split(" ");
+	querySolr(query, {facet: true, "facet.field":["author_sm","created_date_d"], rows: 25, fl: "*,score", sort: "score desc"}, callback);
+}
+
+function querySolr(queryWords,options,callback) {
+    queryWords = queryWords.toLowerCase();
+    var words = queryWords.split(" ");
 			
 	var fullQuery = "database_host_text:"+db.getDatabaseHost()+" AND database_text:"+db.getDatabaseName() +" AND (";
     for(index in words) {
@@ -112,14 +118,25 @@ search.docsBySearchQuery = function(query, callback) {
     }
     fullQuery = fullQuery + ")";
 	
-	var client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH')); 		
-	client.query(fullQuery, {rows: 25, fl: "*,score", sort: "score desc"}, function(err,response) {
+	client.query(fullQuery, options, function(err,response) {
 		if(err) {
 			return callback(err);
 		}
 
         var responseObj = JSON.parse(response);
         console.log(responseObj);
+
+        var facets = {};
+        if(responseObj.facet_counts) {
+            for(var fieldName in responseObj.facet_counts.facet_fields) {
+                facets[fieldName] = {};
+                var field = responseObj.facet_counts.facet_fields[fieldName];
+                for(var i = 0; i < field.length; i += 2) {
+                    facets[fieldName][field[i]] = field[i+1];
+                }
+            }            
+        }
+        console.log(facets);
         
         var ids = [];
         var tempid;
@@ -142,7 +159,7 @@ search.docsBySearchQuery = function(query, callback) {
             // remove any null array elements.
             docs = _.compact(docs);
 
-            callback(null,docs);
+            callback(null, docs, facets);
         });
     });
 }

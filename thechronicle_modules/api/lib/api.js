@@ -62,7 +62,8 @@ api.init = function(callback) {
             console.log("db init failed!");
             return callback(error);
         }
-
+        
+        api.search.init();
         api.search.indexUnindexedArticles();
 
         callback(null);

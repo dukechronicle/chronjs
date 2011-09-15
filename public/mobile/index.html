@@ -15,7 +15,20 @@
     
             });        
         </script> 
-    
+
+        <style>
+            .ui-li-heading  {
+                white-space: normal;
+            }
+            .ui-li-desc {
+                white-space: normal;
+            }
+
+            .ui-li-divider {
+                font-size: 1.2em;
+            }
+        </style>
+
         <script type="text/javascript"> 
         var HOSTNAME = "beta.dukechronicle.com";
         // Cache the list of articles. Emphemeral.
@@ -41,25 +54,27 @@
             var idString = "#ArticleListContent";
             $(idString).empty();
             
-            var titleContainer = '<h2>' + category +'</h2>';
-            $(idString).append(titleContainer);
+            //var titleContainer = '<h2>' + category +'</h2>';
             
-            var listContainer = $('<ul />', {"data-role":"listview", "data-theme":"g", class:"ui-listview"});
-    
+            //$(idString).append(titleContainer);
+            
+            var listContainer = $("<ul />", {"data-role":"listview", "data-theme":"g", "class":"ui-listview"});
+            var titleContainer = $("<li />", {"data-theme":"c", "data-role":"list-divider", "class":"ui-li ui-li-divider ui-btn ui-bar-c ui-btn-hover-undefined ui-btn-up-undefined"}).text(category);
+            $(listContainer).append(titleContainer);
             for(var i in articleListResponse)
             {
                 var article = articleListResponse[i];
                 
                 // Containers
-                var listItem = $('<li />', { "data-theme":"c",class:"ui-btn ui-btn-icon-right ui-li ui-li-has-thumb ui-btn-up-c" });
-                var imgDiv = $('<div />', { class:"ui-btn-inner ui-li" });
-                var buttonDiv = $('<div />', { class:"ui-btn-text" });
+                var listItem = $('<li />', { "data-theme":"c","class":"ui-btn ui-btn-icon-right ui-li ui-btn-up-c" });
+                var imgDiv = $('<div />', { "class":"ui-btn-inner ui-li" });
+                var buttonDiv = $('<div />', { "class":"ui-btn-text" });
                 
                 // Hyperlink
-                var hyperlink = $('<a />',{ "href":"javascript:getArticle('" + article.urls+ "')", class:"ui-link-inherit" });
+                var hyperlink = $('<a />',{ "href":"javascript:getArticle('" + article.urls+ "')", "class":"ui-link-inherit" });
                 
                 // Thumbnail
-                //hyperlink.append('<img src="' + 'img/test.png"' + ' class="ui-li-thumb" />');
+                //hyperlink.append('<img src="' + 'img/test.png"' + ' "class"="ui-li-thumb" />');
                 
                 // Article Title
                 hyperlink.append('<h3 class="ui-li-heading">' + article.title + '</h3>');
@@ -72,8 +87,9 @@
                 imgDiv.append(buttonDiv);
                 listItem.append(imgDiv);
                 listContainer.append(listItem);
-                $(idString).append(listContainer);
+
             }
+            $(idString).append(listContainer);
             //console.log("articlelistdone");
 
         }
@@ -179,7 +195,7 @@
  
         <div id="ArticleList" data-role="page" articleListContainer="true" url="news" data-add-back-btn="false"> 
             <div data-role="header" data-position="fixed"> 
-                <h1>The Chronicle Mobile | Duke University</h1> 
+                <h1>The Chronicle</h1>
             </div> 
                 <div id="ArticleListContent" data-role="content">    
                 </div> 
@@ -198,7 +214,7 @@
     
         <div id="Article" data-role="page" articleContainer="true" url="Article" data-add-back-btn="true" data-back-btn-text="Back"> 
             <div data-role="header"> 
-                <h1>The Chronicle Mobile | Duke University</h1> 
+                <h1>The Chronicle</h1>
             </div> 
             <div id="ArticleContent" data-role="content" data-position="fixed"></div> 
             <div data-role="footer" data-position="fixed"></div> 

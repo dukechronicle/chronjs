@@ -43,11 +43,11 @@ exports.init = function(app, callback) {
 }
 
 function grabArticles(groupName, baseDocNum, n,callback){
-    api.taxonomy.docs(groupName[0],n,function(err,test){
+    api.taxonomy.docs(groupName[0],n,function(err,docs){
         if(err)
             return callback(err,null);
         
-        return callback(err,test);
+        return callback(err,docs);
     });
 }
 

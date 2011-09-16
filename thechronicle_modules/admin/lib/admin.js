@@ -223,14 +223,14 @@ exports.init = function(app, callback) {
                 });
             });
 
-            app.get('/upload', site.checkAdmin,
+            app.get('/image/upload', site.checkAdmin,
             function(req, httpRes) {
                 httpRes.render('upload', {
                     layout: "layout-admin.jade"
                 });
             });
 
-            app.post('/upload', site.checkAdmin,
+            app.post('/image/upload', site.checkAdmin,
             function(req, httpRes) {
                 var imageData = req.body.imageData;
                 var imageName = req.body.imageName;

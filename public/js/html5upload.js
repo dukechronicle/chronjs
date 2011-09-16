@@ -92,7 +92,7 @@ function handleReaderLoadEnd(evt) {
 	// post image data to the server
 	$.ajax({
    		type: "POST",
-  		url: "/admin/upload",
+  		url: "/admin/image/upload",
    		data: {
 			imageData: imageData,
 			imageName: imageNames[imageNames.length - imagesToProcess],

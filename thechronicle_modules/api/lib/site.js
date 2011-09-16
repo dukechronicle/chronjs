@@ -190,7 +190,23 @@ site.init = function(app, callback) {
                         globalFunctions.showError(http_res, err);
                     }
                     else {
-                        
+                        doc.fullUrl = "http://dukechronicle.com/page/" + url;
+                        doc.path = "/page/" + url;
+                        http_res.render('page', {
+                            locals: {
+                                doc: doc,
+                                model: {
+                                    "adFullRectangle": {
+                                        "title": "Advertisement",
+                                        "imageUrl": "/images/ads/monster.png",
+                                        "url": "http://google.com",
+                                        "width": "300px",
+                                        "height": "250px"
+                                    }
+                                }
+                            },
+                            filename: 'views/page.jade'
+                        });
                     }
                 })
             });

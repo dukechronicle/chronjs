@@ -118,7 +118,6 @@ site.init = function(app, callback) {
                                     doc.authorsHtml = doc.authors[0];
                                 }
                             });
-                        console.log(docs);
                         res.render('site/section', {locals:{docs:docs}});
                         }
                     }
@@ -182,6 +181,14 @@ site.init = function(app, callback) {
                     if(currentFacets) currentFacets += ',';
                     else currentFacets = '';
 
+                    var validSections = ["News", "Sports", "Opinion", "Recess", "Towerview"];
+                    // filter out all sections other than main sections
+                    Object.keys(facets.Section).forEach(function(key) {
+                        if (!_.include(validSections, key)) {
+                            delete facets.Section[key];
+                        }
+                    });
+                    
                     http_res.render('site/search', {locals:{docs:docs, currentFacets:currentFacets, facets:facets, query:req.params.query, sort:req.query.sort, order:req.query.order}});
                 });
             });

@@ -161,7 +161,7 @@ site.init = function(app, callback) {
 
             // test the solr search functionality. Currently returns the ids,score of articles containing one of more of search words in title.
             app.get('/search/:query', function(req, http_res) {
-                api.search.docsBySearchQuery(req.params.query.replace('-',' '), req.query.sort, req.query.order, function(err, docs) {
+                api.search.docsBySearchQuery(req.params.query.replace('-',' '), req.query.sort, req.query.order, req.query.facets, function(err, docs, facets) {
                     if (err) return globalFunctions.showError(http_res, err);
                     
                     docs.forEach(function(doc) {
@@ -178,7 +178,11 @@ site.init = function(app, callback) {
                         }
                     );
 
-                    http_res.render('site/search', {locals:{docs:docs}});
+                    var currentFacets = req.query.facets;
+                    if(currentFacets) currentFacets += ',';
+                    else currentFacets = '';
+
+                    http_res.render('site/search', {locals:{docs:docs, currentFacets:currentFacets, facets:facets, query:req.params.query, sort:req.query.sort, order:req.query.order}});
                 });
             });
             

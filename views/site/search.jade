@@ -1,24 +1,27 @@
 #search
-    a(href=query+'?sort=relevance&order='+order) Sort By Relevance
-    br
-    a(href=query+'?sort=date&order='+order) Sort By Date
-    br
-    a(href=query+'?sort='+sort+'&order=asc') Sort Ascending
-    br
-    a(href=query+'?sort='+sort+'&order=desc') Sort Descending
-    br
-    for facet,facetName in facets
-        br
-        #{facetName}
-        br
-        for value,key in facet
-            #{key}
-            a(href=query+'?sort='+sort+'&order='+order+'&facets='+currentFacets+facetName+':'+key) (#{value})
+    .sidebar
+        .sort.rounded
+            a(href=query+'?sort=relevance&order='+order) Sort By Relevance
             br
-    for doc in docs
-        a.result.rounded-hover(href=doc.url)
-            h3 #{doc.title}
-            .date #{doc.date}
-                span.sep &nbsp;|&nbsp
-                = doc.authorsHtml
-            .teaser #{doc.teaser}
+            a(href=query+'?sort=date&order='+order) Sort By Date
+            br
+            a(href=query+'?sort='+sort+'&order=asc') Sort Ascending
+            br
+            a(href=query+'?sort='+sort+'&order=desc') Sort Descending
+            br
+        for facet,facetName in facets
+            div(class=facetName + " rounded")
+                h3 Filter by #{facetName}
+                br
+                for value,key in facet
+                    #{key}
+                    a(href=query+'?sort='+sort+'&order='+order+'&facets='+currentFacets+facetName+':'+key) (#{value})
+                    br
+    .main
+        for doc in docs
+            a.result.rounded-hover(href=doc.url)
+                h3 #{doc.title}
+                .date #{doc.date}
+                    span.sep &nbsp;|&nbsp
+                    = doc.authorsHtml
+                .teaser #{doc.teaser}

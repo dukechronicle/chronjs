@@ -33,6 +33,13 @@ function _getImages(obj, callback) {
     callback);
 }
 
+function _convertTimestamp(timestamp) {
+    var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
+        "October", "November", "December"];
+    var date = new Date(timestamp*1000);
+    return month[date.getMonth()] + " " + date.getDay() + ", " + date.getFullYear();
+}
+
 site.init = function(app, callback) {
     redis.init(function(err) {
         if(err)
@@ -105,11 +112,7 @@ site.init = function(app, callback) {
                                 doc.url = '/article/' + doc.urls[doc.urls.length - 1];
                                 // convert timestamp
                                 if (doc.created) {
-                                    var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
-                                        "October", "November", "December"];
-                                    var timestamp = doc.created;
-                                    var date = new Date(timestamp*1000);
-                                    doc.date = month[date.getMonth()] + " " + date.getDay() + ", " + date.getFullYear();
+                                    doc.date = _convertTimestamp(doc.created);
                                 }
                                 if (doc.authors && doc.authors.length > 0) {
                                     doc.authorsHtml = doc.authors[0];
@@ -167,11 +170,7 @@ site.init = function(app, callback) {
 
                         // convert timestamp
                             if (doc.created) {
-                                var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
-                                    "October", "November", "December"];
-                                var timestamp = doc.created;
-                                var date = new Date(timestamp*1000);
-                                doc.date = month[date.getMonth()] + " " + date.getDay() + ", " + date.getFullYear();
+                                doc.date = _convertTimestamp(doc.created);
                             }
                             if (doc.authors && doc.authors.length > 0) {
                                 doc.authorsHtml = doc.authors[0];
@@ -181,6 +180,19 @@ site.init = function(app, callback) {
 
                     http_res.render('site/search', {locals:{docs:docs}});
                 });
+            });
+            
+            app.get('/page/:url', function(req, http_res) {
+                var url = req.params.url;
+                
+                api.nodeForTitle(url, function(err, doc) {
+                    if(err) {
+                        globalFunctions.showError(http_res, err);
+                    }
+                    else {
+                        
+                    }
+                })
             });
 
             app.get('/article/:url', function(req, http_res) {
@@ -193,11 +205,7 @@ site.init = function(app, callback) {
                     else {
                            // convert timestamp
                            if (doc.created) {
-                            var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
-                                "October", "November", "December"];
-                            var timestamp = doc.created;
-                            var date = new Date(timestamp*1000);
-                            doc.date = month[date.getMonth()] + " " + date.getDay() + ", " + date.getFullYear();
+                               doc.date = _convertTimestamp(doc.created);
                           }
 
                       // format authors
@@ -255,11 +263,7 @@ site.init = function(app, callback) {
                     else {
                            // convert timestamp
                            if (doc.created) {
-                            var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
-                                "October", "November", "December"];
-                            var timestamp = doc.created;
-                            var date = new Date(timestamp*1000);
-                            doc.date = month[date.getMonth()] + " " + date.getDay() + ", " + date.getFullYear();
+                               doc.date = _convertTimestamp(doc.created);
                           }
 
                       // format authors

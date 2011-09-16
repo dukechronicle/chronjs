@@ -138,7 +138,7 @@ search.docsBySearchQuery = function(query, sortBy, sortOrder, facets, callback) 
             else if(parts[0] == 'Month') parts[0] = "created_month_i";
             else if(parts[0] == 'Day') parts[0] = "created_day_i";
                 
-            facetQueries.push(parts[0]+":"+parts[1]);
+            facetQueries.push(parts[0]+':"'+parts[1]+'"');
         } 
     }
 

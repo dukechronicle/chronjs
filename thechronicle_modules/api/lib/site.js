@@ -200,8 +200,7 @@ site.init = function(app, callback) {
                     );
 
                     var currentFacets = req.query.facets;
-                    if(currentFacets) currentFacets += ',';
-                    else currentFacets = '';
+                    if(!currentFacets) currentFacets = '';
 
                     var validSections = ["News", "Sports", "Opinion", "Recess", "Towerview"];
                     // filter out all sections other than main sections

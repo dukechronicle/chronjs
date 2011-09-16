@@ -5,9 +5,11 @@
                 h2.vertical Sort
             .rounded
                 .content-container
-                    a.hover.highlight-right(href=query+'?sort=relevance&order='+order) Relevance
-                    a.hover.highlight-right(href=query+'?sort=date&order=desc') Newest First
-                    a.hover.highlight-right(href=query+'?sort=date&order=asc') Oldest First
+                    a.hover.highlight-right(href=query+'?sort=relevance&order='+order+'&facets='+currentFacets) Relevance
+                    a.hover.highlight-right(href=query+'?sort=date&order=desc'+'&facets='+currentFacets) Newest First
+                    a.hover.highlight-right(href=query+'?sort=date&order=asc'+'&facets='+currentFacets) Oldest First
+        - if(currentFacets.length > 0)
+            - currentFacets += ',';
         for facet,facetName in facets
             .container.clearfix(class=facetName)
                 .vertical-container

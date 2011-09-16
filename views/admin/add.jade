@@ -1,25 +1,16 @@
 h1 Add a Document
 form(action='/admin/add', method='POST')
-  p
-    label(for='title') Title:
-    input#title(type='text', name='doc[title]')
-  p
-    label(for='author') Author:
-    input#author(type='text', name='doc[author]')
-  p
-    label(for='teaser') Teaser:
-    textarea#teaser(rows=2, cols=30, name='doc[teaser]')
-  p
-    label(for='body') Body:
-    textarea#body(rows=20, cols=30, name='doc[body]')
-  p
-    - each group, key in groups
-      label(for=key) #{group}:
-      input.check(type='checkbox', id=key, name='doc[groups]', value=group)
-  p
-    input(type='submit', value='add')
-    
-form(action='/admin/addgroup', method='GET')
-  label(for='addgroup') Add group:
-  input#addgroup(type='text', name='addgroup')
-  input(type='submit', value='add')
+    p
+        label(for='title') Title:
+        input#title(type='text', name='doc[title]')
+    p
+        label(for='author') Author:
+        input#author(type='text', name='doc[author]')
+    p
+        label(for='teaser') Teaser:
+        textarea#teaser(rows=2, cols=30, name='doc[teaser]')
+    p
+        label(for='body') Body:
+        textarea#body(rows=20, cols=30, name='doc[body]')
+    p
+        input(type='submit', value='add')

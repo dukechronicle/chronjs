@@ -23,7 +23,7 @@ var views = {
     nodes: {
     map: function(doc) {
             if(doc.node_title) {
-                emit(doc.node_title, doc);
+                emit(doc.node_title, doc._id);
             }
         }
     },

@@ -190,6 +190,21 @@ api.docForUrl = function(url, callback) {
     });
 }
 
+api.nodeForTitle = function(url, callback) {
+    db.view("articles/nodes", {
+        key: url
+    },
+    function(err, res) {
+        for(var i in res) {
+            if(url === res[i].key) {
+                api.docsById(res[i].id, callback);
+                return;
+            }
+        }
+        callback("Not found", null);
+    });
+}
+
 api.docsByDate = function(limit, callback) {
     var query = {descending: true};
 

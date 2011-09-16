@@ -126,6 +126,7 @@ search.docsBySearchQuery = function(query, sortBy, sortOrder, facets, callback) 
 
     if(sortOrder != 'asc') sortOrder = 'desc';
 
+    var facetFields = ["section_s","author_sm","created_year_i"];
     var facetQueries = [];
     if(facets) {
         var indivFacets = facets.split(",");
@@ -134,15 +135,22 @@ search.docsBySearchQuery = function(query, sortBy, sortOrder, facets, callback) 
             
             if(parts[0] == 'Section') parts[0] = "section_s";
             else if(parts[0] == 'Author') parts[0] = "author_sm";
-            else if(parts[0] == 'Year') parts[0] = "created_year_i";
-            else if(parts[0] == 'Month') parts[0] = "created_month_i";
+            
+            else if(parts[0] == 'Year') {
+                parts[0] = "created_year_i";
+                facetFields.push("created_month_i");
+            }
+            else if(parts[0] == 'Month') {
+                parts[0] = "created_month_i";
+                facetFields.push("created_day_i");
+            }
             else if(parts[0] == 'Day') parts[0] = "created_day_i";
                 
             facetQueries.push(parts[0]+':"'+parts[1]+'"');
         } 
     }
 
-    querySolr(query, {facet: true, "facet.field":["section_s","author_sm","created_year_i"], "fq":facetQueries, rows: 25, fl: "*,score", sort: sortBy + " " + sortOrder}, callback);
+    querySolr(query, {facet: true, "facet.field":facetFields, "fq":facetQueries, rows: 25, fl: "*,score", sort: sortBy + " " + sortOrder}, callback);
 }
 
 function querySolr(queryWords,options,callback) {

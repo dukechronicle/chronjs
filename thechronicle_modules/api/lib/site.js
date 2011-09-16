@@ -227,7 +227,7 @@ site.init = function(app, callback) {
 
                 api.docForUrl(url, function(err, doc) {
                     if(err) {
-                        globalFunctions.showError(http_res, err);
+                        return globalFunctions.showError(http_res, err);
                     }
                     else {
                            // convert timestamp
@@ -278,6 +278,29 @@ site.init = function(app, callback) {
                      }
                     }
                     });
+            });
+
+            app.get('/page/:url', function(req, http_res) {
+                var url = req.params.url;
+
+                api.docForUrl(url, function(err, doc) {
+                    if(err) return globalFunctions.showError(http_res, err);
+                    else {
+                        var latestUrl = doc.urls[doc.urls.length - 1];
+
+                        if(url !== latestUrl) {
+                            http_res.redirect('/page/' + latestUrl);
+                        }
+                        else {
+                            http_res.render('page', {
+                                locals: {
+                                    doc: doc
+                                },
+                                filename: 'views/page.jade'
+                            });
+                        }
+                    }
+                });
             });
 
             app.get('/article/:url/print', function(req, http_res) {
@@ -382,6 +405,24 @@ site.init = function(app, callback) {
                 });
             });
 
+            app.get('/page/:url/edit', site.checkAdmin, site.renderPageEdit = function(req, http_res) {
+                var url = req.params.url;
+
+                api.docForUrl(url, function(err, doc) {
+                    if(err) {
+                        globalFunctions.showError(http_res, err);
+                    }
+                    else {
+                        http_res.render('admin/editPage', {
+                            locals: {
+                                doc: doc
+                            },
+                            layout: "layout-admin.jade"
+                        });
+                    }
+                });
+            });
+
             app.get('/article/:url/image', function(req, httpRes) {
                     api.image.getAllOriginals(function(err, origs) {
                         httpRes.render('admin/articleimage', {
@@ -437,6 +478,9 @@ site.init = function(app, callback) {
                 });
 
             });
+
+
+
 
             callback(null);
         });

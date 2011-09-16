@@ -1,5 +1,5 @@
 var api = require('../../api');
-
+var async = require('async');
 var fs = require('fs');
 var s3 = require('./s3.js');
 var http = require('http');
@@ -290,6 +290,38 @@ exports.init = function(app, callback) {
                     }
                     else {
                         http_res.redirect('article/' + url);
+                    }
+                }
+                );
+            });
+
+
+            app.post('/addPage', site.checkAdmin,
+            function(req, http_res) {
+                var form = req.body.doc;
+                var fields = {
+                    body: form.body,
+                    title: form.title
+                };
+
+                async.waterfall([
+                function(callback) {
+                    _renderBody(form.body, function(err, rendered) {
+                        fields.renderedBody = rendered;
+                        callback(null);
+                    });
+                },
+                function(callback) {
+                    api.addDoc(fields, callback);
+                }
+                ],
+                function(err, url) {
+                    if (err) {
+                        globalFunctions.showError(http_res, err);
+                        console.log(err);
+                    }
+                    else {
+                        http_res.redirect('page/' + url);
                     }
                 }
                 );

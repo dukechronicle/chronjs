@@ -170,7 +170,7 @@ api.addDoc = function(fields, callback) {
             
                 if(db_err) return callback(db_err);
                 
-                api.search.indexArticle(res.id, fields.title, fields.body, fields.authors, fields.created, function(err, response) {
+                api.search.indexArticle(res.id, fields.title, fields.body, undefined, fields.authors, fields.created, function(err, response) {
                     callback(err,response,url);
                 });
             });
@@ -189,6 +189,21 @@ api.addNode = function(parent_path, name, callback) {
 
 api.docForUrl = function(url, callback) {
     db.view("articles/urls", {
+        key: url
+    },
+    function(err, res) {
+        for(var i in res) {
+            if(url === res[i].key) {
+                api.docsById(res[i].id, callback);
+                return;
+            }
+        }
+        callback("Not found", null);
+    });
+}
+
+api.nodeForTitle = function(url, callback) {
+    db.view("articles/nodes", {
         key: url
     },
     function(err, res) {

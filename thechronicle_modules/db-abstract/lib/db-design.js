@@ -19,6 +19,14 @@ var views = {
             }
         }
     },
+    // return all node page documents
+    nodes: {
+    map: function(doc) {
+            if(doc.node_title) {
+                emit(doc.node_title, doc._id);
+            }
+        }
+    },
     // return all doc ids keyed by document author name if one exists
     authors: {
     map: function(doc) {

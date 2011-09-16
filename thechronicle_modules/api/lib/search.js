@@ -8,7 +8,7 @@ var db = require("../../db-abstract");
 
 // whenever the way an article should be indexed by solr is changed, this number should be incremented
 // so the server knows it has to reindex all articles not using the newest indexing version. Keep the number numeric!
-var INDEX_VERSION = 0.5001;
+var INDEX_VERSION = 0.5005;
 var client = null;
 
 var search = {};
@@ -37,7 +37,11 @@ search.indexUnindexedArticles = function() {
         // Attempt to index each file in row.
         response.forEach(function(row) {
             console.log('indexing "' + row.title + '"');
-            search.indexArticle(row._id,row.title,row.body, row.authors, row.created, function(error2, response2) {
+            
+            var section = undefined;
+            if(row.taxonomy && row.taxonomy[0]) section = row.taxonomy[0];
+
+            search.indexArticle(row._id,row.title,row.body, section, row.authors, row.created, function(error2, response2) {
                 if(error2) console.log(error2);
                 else {
                     db.search.setArticleAsIndexed(row._id, INDEX_VERSION, function(error3, response3) {
@@ -50,7 +54,7 @@ search.indexUnindexedArticles = function() {
     });
 }
 
-search.indexArticle = function(id,title,body,authors,createdDate,callback) {
+search.indexArticle = function(id,title,body,section,authors,createdDate,callback) {
 	// adds the article to the solr database for searching	
 	
     var date = new Date(createdDate * 1000); // turn seconds into milliseconds
@@ -79,8 +83,9 @@ search.indexArticle = function(id,title,body,authors,createdDate,callback) {
         author_sm: authors,
 		title_text: title.toLowerCase(),
 		body_text:  body.toLowerCase(),
-		database_text: db.getDatabaseName(),
-        database_host_text: db.getDatabaseHost(),
+        section_s: section,
+		database_s: db.getDatabaseName(),
+        database_host_s: db.getDatabaseHost(),
         created_date_d: solrDate,
         created_year_i: solrYear,
         created_month_i: solrMonth,
@@ -114,21 +119,45 @@ search.removeAllDocsFromSearch = function(callback) {
     callback(null);
 }
 
-search.docsBySearchQuery = function(query, sortBy, sortOrder, callback) {
+search.docsBySearchQuery = function(query, sortBy, sortOrder, facets, callback) {
     if(sortBy == 'relevance') sortBy = 'score';
     else if(sortBy == 'date') sortBy = 'created_date_d';
     else sortBy = 'score';
 
     if(sortOrder != 'asc') sortOrder = 'desc';
 
-    querySolr(query, {facet: true, "facet.field":["author_sm","created_year_i"], rows: 25, fl: "*,score", sort: sortBy + " " + sortOrder}, callback);
+    var facetFields = ["section_s","author_sm","created_year_i"];
+    var facetQueries = [];
+    if(facets) {
+        var indivFacets = facets.split(",");
+        for(i in indivFacets) {
+            var parts = indivFacets[i].split(":");
+            
+            if(parts[0] == 'Section') parts[0] = "section_s";
+            else if(parts[0] == 'Author') parts[0] = "author_sm";
+            
+            else if(parts[0] == 'Year') {
+                parts[0] = "created_year_i";
+                facetFields.push("created_month_i");
+            }
+            else if(parts[0] == 'Month') {
+                parts[0] = "created_month_i";
+                facetFields.push("created_day_i");
+            }
+            else if(parts[0] == 'Day') parts[0] = "created_day_i";
+                
+            facetQueries.push(parts[0]+':"'+parts[1]+'"');
+        } 
+    }
+
+    querySolr(query, {facet: true, "facet.field":facetFields, "fq":facetQueries, rows: 25, fl: "*,score", sort: sortBy + " " + sortOrder}, callback);
 }
 
 function querySolr(queryWords,options,callback) {
     queryWords = queryWords.toLowerCase();
     var words = queryWords.split(" ");
 			
-	var fullQuery = "database_host_text:"+db.getDatabaseHost()+" AND database_text:"+db.getDatabaseName() +" AND (";
+	var fullQuery = "database_host_s:"+db.getDatabaseHost()+" AND database_s:"+db.getDatabaseName() +" AND (";
     for(index in words) {
         if(index != 0) fullQuery = fullQuery + " OR ";
         fullQuery = fullQuery + "title_text:" + words[index] + "* OR body_text:" + words[index] + "*";
@@ -147,11 +176,18 @@ function querySolr(queryWords,options,callback) {
         var facets = {};
         if(responseObj.facet_counts) {
             for(var fieldName in responseObj.facet_counts.facet_fields) {
-                facets[fieldName] = {};
+                var niceName = fieldName;
+                if(fieldName == 'section_s') niceName = "Section";
+                else if(fieldName == 'author_sm') niceName = "Author";
+                else if(fieldName == 'created_year_i') niceName = "Year";    
+                else if(fieldName == 'created_month_i') niceName = "Month";    
+                else if(fieldName == 'created_day_i') niceName = "Day";         
+
+                facets[niceName] = {};
                 var field = responseObj.facet_counts.facet_fields[fieldName];
                 for(var i = 0; i < field.length; i += 2) {
                     if(field[i+1] > 0) {
-                        facets[fieldName][field[i]] = field[i+1];
+                        facets[niceName][field[i]] = field[i+1];
                     }
                 }
             }            

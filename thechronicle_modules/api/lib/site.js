@@ -71,6 +71,10 @@ site.init = function(app, callback) {
                 res.render('pages/advertising', {filename: 'pages/advertising'});
             });
 
+            app.get('/subscribe', function(req, res) {
+                res.render('pages/subscribe', {filename: 'pages/subscribe'});
+            });
+
 
             app.get('/', function(req, res) {
                 api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, result) {

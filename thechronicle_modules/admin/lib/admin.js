@@ -19,13 +19,21 @@ VALID_EXTENSIONS['image/gif'] = 'gif';
 
 var IMAGE_TYPES = ['article', 'frontpage', 'slideshow'];
 var CROP_SIZES = {
-    large: {
+    thumbMedium: {
+        width: 175,
+        height: 115
+    },
+    thumbLarge: {
+        width: 285,
+        height: 184
+    },
+    thumbMediumSquare: {
+        width: 183,
+        height: 183
+    },
+    slideshow: {
         width: 636,
         height: 393
-    },
-    square: {
-        width: 300,
-        height: 300
     }
 };
 
@@ -48,7 +56,7 @@ function _renderBody(body, cbck) {
     
     async.waterfall([
     function(callback) {
-        for(name in VIDEO_PLAYERS) {
+        for(var name in VIDEO_PLAYERS) {
             var pattern = new RegExp(sprintf(REGEX_FORMAT, name), 'g');
             body = body.replace(pattern, function(match) {
                 return sprintf(VIDEO_PLAYERS[name], RegExp.$2);

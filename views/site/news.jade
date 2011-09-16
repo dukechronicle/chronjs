@@ -3,15 +3,19 @@
         a(href='/section/University') University
     h2
         a(href='/section/Local & National') Local & National
-    h2.last
+    h2
         a(href='/section/Health & Science') Health & Science
+    h2
+        a(href='/section/Dining') Dining
+    h2.last
+        a(href='/section/Academics') Academics
 
 #news
     .left
         .blog!=partial('container/story-list', {title: "Blog", stories: model.Blog})
         .dsg!=partial('container/story-list', {title: "9/11", stories: model.DSG})
         .china!=partial('container/story-list', {title: "China", stories: model.China})
-        .duu!=partial('container/story-list', {title: "Irene", stories: model.DUU})
+        .duu!=partial('container/story-list', {title: "Dining", stories: model.DUU})
 
     .middle
         .featured!=partial('container/featured-image')

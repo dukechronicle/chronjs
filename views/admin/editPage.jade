@@ -1,0 +1,14 @@
+h1 Editing a Document
+form(action='/admin/editPage', method='POST')
+    p
+        label(for='title') Title:
+        input#title(type='text', name='doc[title]', value=doc.title)
+    p
+        label(for='body') Html:
+        textarea#body(rows=5, cols=50, name='doc[body]', value)
+            #{doc.body}
+
+    input(type="hidden", name='doc[id]', value=doc._id);
+
+    p
+        input(type='submit', value='Submit')

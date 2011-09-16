@@ -1,5 +1,6 @@
 h1 Add a Document
 form(action='/admin/add', method='POST')
+    input(type='hidden', name='doc[type]', value='article')
     p
         label(for='title') Title:
         input#title(type='text', name='doc[title]')

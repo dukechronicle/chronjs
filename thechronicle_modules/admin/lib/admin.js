@@ -9,6 +9,8 @@ var md = require('node-markdown').Markdown;
 var sprintf = require('sprintf').sprintf;
 var config = require("../../config");
 var site = require('../../api/lib/site.js');
+var globalFunctions = require('../../global-functions');
+
 
 var layoutAdmin = require('./layout.js');
 var imageAdmin = require('./image.js');
@@ -157,7 +159,6 @@ exports.init = function(app, callback) {
             app.get('/add', site.checkAdmin,
             function(req, http_res) {
                 http_res.render('admin/add', {
-                    //locals: {groups: groups},
                     locals: {
                         groups: []
                     },
@@ -246,12 +247,15 @@ exports.init = function(app, callback) {
             app.post('/add', site.checkAdmin,
             function(req, http_res) {
                 var form = req.body.doc;
+                console.log(form);
                 var fields = {
                     body: form.body,
                     authors: [form.author],
                     title: form.title,
-                    teaser: form.teaser
+                    teaser: form.teaser,
+                    type: form.type
                 };
+
 
                 async.waterfall([
                 function(callback) {

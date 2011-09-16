@@ -154,28 +154,32 @@ api.docsByAuthor = function(author, callback) {
 }
 
 api.addDoc = function(fields, callback) {
-    
-    getAvailableUrl(_URLify(fields.title, MAX_URL_LENGTH), 0, function(err, url) {
-        if(err){
-            return callback(err, null, null);
-        }
-        else {
-            var unix_timestamp = Math.round(new Date().getTime() / 1000);
-            fields.created = unix_timestamp;
-            fields.updated = unix_timestamp;
-            fields.urls = [url];
-            fields.indexedBySolr = true;
+    console.log(fields.type);
+    if (fields.type === 'article') {
+        getAvailableUrl(_URLify(fields.title, MAX_URL_LENGTH), 0, function(err, url) {
+            if(err){
+                return callback(err, null, null);
+            }
+            else {
+                var unix_timestamp = Math.round(new Date().getTime() / 1000);
+                fields.created = unix_timestamp;
+                fields.updated = unix_timestamp;
+                fields.urls = [url];
+                fields.indexedBySolr = true;
 
-            db.save(fields, function(db_err, res) {
-            
-                if(db_err) return callback(db_err);
-                
-                api.search.indexArticle(res.id, fields.title, fields.body, undefined, fields.authors, fields.created, function(err, response) {
-                    callback(err,response,url);
+                db.save(fields, function(db_err, res) {
+
+                    if(db_err) return callback(db_err);
+
+                    api.search.indexArticle(res.id, fields.title, fields.body, undefined, fields.authors, fields.created, function(err, response) {
+                        callback(err,response,url);
+                    });
                 });
-            });
-        }
-    });
+            }
+        });
+    } else {
+        return callback("unknown doc type", null);
+    }
 }
 
 api.addNode = function(parent_path, name, callback) {

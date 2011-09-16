@@ -48,8 +48,9 @@ span.timestamp{color:#036;font-size:.5em;display:block}
 .leaderboard img{border-radius:5px;display:block;-webkit-box-shadow:0 0 3px #ccc;opacity:.8;-webkit-transition:opacity .25s linear;-moz-transition:opacity .25s linear;-o-transition:opacity .25s linear;transition:opacity .25s linear}
 .leaderboard a:hover img{opacity:1}
 header .content{width:240px;float:left;position:relative;z-index:2;}
-header .content .announcements{display:none;color:#666;text-shadow:0 1px 0 #fff;}
-header .content .announcements h4{text-align:left;margin-bottom:3px;font-size:.7em;text-transform:uppercase;letter-spacing:1px;padding-top:4px}
+header .content .announcements{color:#666;position:absolute;text-shadow:0 1px 0 #fff;line-height:1em;}
+header .content .announcements a{text-align:left;margin-bottom:3px;font-size:.7em;text-transform:uppercase;letter-spacing:1px;padding-top:4px;color:#333}
+header .content .announcements a:hover{color:#36c}
 header .content .announcements p{font-size:.7em}
 header #header-bottom .social-media{position:absolute;top:99px;right:151px;}
 header #header-bottom .social-media .inner .icons{text-align:left;}

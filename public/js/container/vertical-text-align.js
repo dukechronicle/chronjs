@@ -8,8 +8,10 @@ function verticalAlign() {
 		$(this).css('top', height + "px");
 		$(this).css('visibility', 'visible');
 
-        var rounded = $(this).siblings(".rounded");;
-        if (rounded.css('height').substring(0, rounded.css('height').length - 2) < height) {
+        var rounded = $(this).siblings(".rounded");
+        if (rounded &&
+                rounded.css('height') &&
+                (rounded.css('height').substring(0, rounded.css('height').length - 2) < height)) {
             rounded.css('height', height + "px");
         }
 	});

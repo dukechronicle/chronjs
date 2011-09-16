@@ -156,9 +156,15 @@ search.docsBySearchQuery = function(query, sortBy, sortOrder, facets, callback) 
 function querySolr(queryWords,options,callback) {
     queryWords = queryWords.toLowerCase();
     var words = queryWords.split(" ");
-			
+
+    words = words.map(function(word) {
+        return solr.valueEscape(word.replace(/"/g, ''));
+    });
+
+    console.log(words);
+
 	var fullQuery = "database_host_s:"+db.getDatabaseHost()+" AND database_s:"+db.getDatabaseName() +" AND (";
-    for(index in words) {
+    for(var index in words) {
         if(index != 0) fullQuery = fullQuery + " OR ";
         fullQuery = fullQuery + "title_text:" + words[index] + "* OR body_text:" + words[index] + "*";
     }
@@ -170,8 +176,7 @@ function querySolr(queryWords,options,callback) {
 		}
 
         var responseObj = JSON.parse(response);
-        console.log(responseObj);
-        
+
         // put facet into an easily manipulitable form
         var facets = {};
         if(responseObj.facet_counts) {
@@ -192,12 +197,12 @@ function querySolr(queryWords,options,callback) {
                 }
             }            
         }
-        console.log(facets);
+        //console.log(facets);
         
         var ids = [];
         var tempid;
         var docs = responseObj.response.docs;
-        console.log(docs);
+        //console.log(docs);
         for(var docNum in docs)
         {
             var tempid = getDBIDFromSolrID(docs[docNum].id);
@@ -205,7 +210,7 @@ function querySolr(queryWords,options,callback) {
         }
         
         api.docsById(ids,function(err, docs) {
-            if (err) callback(err);
+            if (err) return callback(err);
 
             // replace each array element with the actual document data for that element            
             docs = _.map(docs, function(doc) {

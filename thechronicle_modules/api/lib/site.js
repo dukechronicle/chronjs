@@ -377,6 +377,36 @@ site.init = function(app, callback) {
                 site.renderSmtpTest(req, http_res, req.body.email, req.body.num);
             });
 
+            app.get('/author/:authorName', function(req,http_res){
+                var authorName = req.params.authorName;
+
+                console.log(encodeURIComponent("Lauren Carroll"));
+                
+                // Passes the encoded author name in.
+                api.docsByAuthor(encodeURIComponent("Lauren Carroll"), function(err, docIds){
+
+                    var docList = [];
+
+                    //console.log(docIds);
+                    async.forEach(docIds, function(docId, callback){
+                            api.docsById(docId, function(err2, doc){
+                                docList.push(doc);
+                                callback();
+                            });
+                        },                                
+                        function(err3){
+                            if(err3)
+                            {
+                                console.log("fail");
+                                return;
+                            }
+                            http_res.render('author', {layout: false, model: {"docList": docList, "author": authorName}});
+                        }
+                    );
+                });
+
+            });
+
             callback(null);
         });
     });

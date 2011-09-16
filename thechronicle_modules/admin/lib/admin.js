@@ -12,6 +12,8 @@ var sprintf = require('sprintf').sprintf;
 var config = require("../../config");
 var site = require('../../api/lib/site.js');
 
+var layoutPath = require('./layout.js');
+
 var VALID_EXTENSIONS = {};
 VALID_EXTENSIONS['image/jpeg'] = 'jpg';
 VALID_EXTENSIONS['image/png'] = 'png';
@@ -39,12 +41,7 @@ var CROP_SIZES = {
 
 var THUMB_DIMENSIONS = '100x100';
 
-var FRONTPAGE_GROUP_NAMESPACE = ['Layouts','Frontpage'];
-var NEWS_GROUP_NAMESPACE = ['Layouts','News'];
-var SPORTS_GROUP_NAMESPACE = ['Layouts','Sports'];
-var OPINION_GROUP_NAMESPACE = ['Layouts','Opinion'];
-var RECESS_GROUP_NAMESPACE = ['Layouts','Recess'];
-var TOWERVIEW_GROUP_NAMESPACE = ['Layouts','Towerview'];
+
 
 var VIDEO_PLAYERS = {
     "youtube": "<iframe width=\"560\" height=\"345\" src=\"http://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>",
@@ -135,246 +132,11 @@ exports.init = function(app, callback) {
             });
         });
         */
-        
+
+
         app.namespace('/admin',
         function() {
-            app.get('/layout/frontpage', site.checkAdmin,
-                function(req, res) {
-                    function renderPage(docs) {
-                        var stories = docs;
-                        api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null,
-                        function(err, model) {
-                            res.render('admin/layout/frontpage', {
-                                layout: "layout-admin.jade",
-                                locals: {
-                                    stories: stories,
-                                    model: model
-                                }
-                            });
-                        });
-                    }
-                    // TODO make requests concurrent
-                    var filter = req.param("section", null);
-                    if (filter) {
-                        api.taxonomy.docs(filter, 100,
-                        function(err, docs) {
-                            if (err) globalFunctions.showError(res, err);
-                            else {
-                                docs = docs.map(function(doc) {
-                                    return doc;
-                                });
-                                renderPage(docs);
-                            }
-                        });
-                    } else {
-                        api.docsByDate(100,
-                        function(err, docs) {
-                            if (err) globalFunctions.showError(res, err);
-                            renderPage(docs);
-                        });
-                    }
-                }
-            );
-
-            app.get('/layout/news', site.checkAdmin,
-                function(req, res) {
-                    function renderPage(docs) {
-                        var stories = docs;
-                        api.group.docs(NEWS_GROUP_NAMESPACE, null,
-                        function(err, model) {
-                            res.render('admin/layout/news', {
-                                layout: "layout-admin.jade",
-                                locals: {
-                                    stories: stories,
-                                    model: model
-                                }
-                            });
-                        });
-                    }
-                    // TODO make requests concurrent
-                    // sidebar filter by section
-                    var filter = req.param("section", null);
-                    if (filter) {
-                        api.taxonomy.docs(filter, 100,
-                        function(err, docs) {
-                            if (err) globalFunctions.showError(res, err);
-                            else {
-                                docs = docs.map(function(doc) {
-                                    return doc;
-                                });
-                                renderPage(docs);
-                            }
-                        });
-                    } else {
-                        api.docsByDate(100,
-                        function(err, docs) {
-                            if (err) globalFunctions.showError(res, err);
-                            renderPage(docs);
-                        });
-                    }
-                }
-            );
-
-            app.get('/layout/sports', site.checkAdmin,
-                function(req, res) {
-                    function renderPage(docs) {
-                        var stories = docs;
-                        api.group.docs(SPORTS_GROUP_NAMESPACE, null,
-                        function(err, model) {
-                            res.render('admin/layout/sports', {
-                                layout: "layout-admin.jade",
-                                locals: {
-                                    stories: stories,
-                                    model: model
-                                }
-                            });
-                        });
-                    }
-                    // TODO make requests concurrent
-                    // sidebar filter by section
-                    var filter = req.param("section", null);
-                    if (filter) {
-                        api.taxonomy.docs(filter, 100,
-                        function(err, docs) {
-                            if (err) globalFunctions.showError(res, err);
-                            else {
-                                docs = docs.map(function(doc) {
-                                    return doc;
-                                });
-                                renderPage(docs);
-                            }
-                        });
-                    } else {
-                        api.docsByDate(100,
-                        function(err, docs) {
-                            if (err) globalFunctions.showError(res, err);
-                            renderPage(docs);
-                        });
-                    }
-                }
-            );
-
-            app.get('/layout/opinion', site.checkAdmin,
-                function(req, res) {
-                    function renderPage(docs) {
-                        var stories = docs;
-                        api.group.docs(OPINION_GROUP_NAMESPACE, null,
-                        function(err, model) {
-                            res.render('admin/layout/opinion', {
-                                layout: "layout-admin.jade",
-                                locals: {
-                                    stories: stories,
-                                    model: model
-                                }
-                            });
-                        });
-                    }
-                    // TODO make requests concurrent
-                    // sidebar filter by section
-                    var filter = req.param("section", null);
-                    if (filter) {
-                        api.taxonomy.docs(filter, 100,
-                        function(err, docs) {
-                            if (err) globalFunctions.showError(res, err);
-                            else {
-                                docs = docs.map(function(doc) {
-                                    return doc;
-                                });
-                                renderPage(docs);
-                            }
-                        });
-                    } else {
-                        api.docsByDate(100,
-                        function(err, docs) {
-                            if (err) globalFunctions.showError(res, err);
-                            renderPage(docs);
-                        });
-                    }
-                }
-            );
-
-            app.get('/layout/recess', site.checkAdmin,
-                function(req, res) {
-                    function renderPage(docs) {
-                        var stories = docs;
-                        api.group.docs(RECESS_GROUP_NAMESPACE, null,
-                        function(err, model) {
-                            res.render('admin/layout/recess', {
-                                layout: "layout-admin.jade",
-                                locals: {
-                                    stories: stories,
-                                    model: model
-                                }
-                            });
-                        });
-                    }
-                    // TODO make requests concurrent
-                    // sidebar filter by section
-                    var filter = req.param("section", null);
-                    if (filter) {
-                        api.taxonomy.docs(filter, 100,
-                        function(err, docs) {
-                            if (err) globalFunctions.showError(res, err);
-                            else {
-                                docs = docs.map(function(doc) {
-                                    return doc;
-                                });
-                                renderPage(docs);
-                            }
-                        });
-                    } else {
-                        api.docsByDate(100,
-                        function(err, docs) {
-                            if (err) globalFunctions.showError(res, err);
-                            renderPage(docs);
-                        });
-                    }
-                }
-            );
-
-            app.get('/layout/towerview', site.checkAdmin,
-                function(req, res) {
-                    function renderPage(docs) {
-                        var stories = docs;
-                        api.group.docs(TOWERVIEW_GROUP_NAMESPACE, null,
-                        function(err, model) {
-                            res.render('admin/layout/towerview', {
-                                layout: "layout-admin.jade",
-                                locals: {
-                                    stories: stories,
-                                    model: model
-                                }
-                            });
-                        });
-                    }
-                    // TODO make requests concurrent
-                    // sidebar filter by section
-                    var filter = req.param("section", null);
-                    if (filter) {
-                        api.taxonomy.docs(filter, 100,
-                        function(err, docs) {
-                            if (err) globalFunctions.showError(res, err);
-                            else {
-                                docs = docs.map(function(doc) {
-                                    return doc;
-                                });
-                                renderPage(docs);
-                            }
-                        });
-                    } else {
-                        api.docsByDate(100,
-                        function(err, docs) {
-                            if (err) globalFunctions.showError(res, err);
-                            renderPage(docs);
-                        });
-                    }
-                }
-            );
-
-            app.post('/layout/frontpage', site.checkAdmin,
-            function(req, res) {
-                res.render('/');
-            });
+            
 
             app.post('/group/add', site.checkAdmin,
             function(req, res) {
@@ -422,11 +184,6 @@ exports.init = function(app, callback) {
 
             app.get('/add', site.checkAdmin,
             function(req, http_res) {
-                /*
-                api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(err, groups) {
-                    if(err) {
-                        globalFunctions.showError(http_res, err);
-                    } else {*/
                 http_res.render('admin/add', {
                     //locals: {groups: groups},
                     locals: {
@@ -434,8 +191,17 @@ exports.init = function(app, callback) {
                     },
                     layout: "layout-admin.jade"
                 });
-                /*}
-                })*/
+            });
+
+            app.get('/addPage', site.checkAdmin,
+            function(req, http_res) {
+                http_res.render('admin/addPage', {
+                    //locals: {groups: groups},
+                    locals: {
+                        groups: []
+                    },
+                    layout: "layout-admin.jade"
+                });
             });
 
             app.get('/manage', site.checkAdmin,
@@ -745,20 +511,6 @@ exports.init = function(app, callback) {
                     title: form.title,
                     teaser: form.teaser
                 };
-                /*
-                var groups = req.body.doc.groups;
-                if(groups) {
-                    // we will get a string if only one box is checked
-                    if(!(groups instanceof Array)) {
-                            groups = [groups];
-                    }
-                    groups.map(function(group) {
-                        fullyQualifiedName = [FRONTPAGE_GROUP_NAMESPACE, group];
-                        return [fullyQualifiedName, null];
-                    });
-
-                    fields.groups = groups;
-                }*/
 
                 async.waterfall([
                 function(callback) {
@@ -803,6 +555,11 @@ exports.init = function(app, callback) {
             });
         });
 
+        app.namespace('/admin/layout', layoutPath.bindPath(app));
+
+
+
         callback(null);
     });
 }
+

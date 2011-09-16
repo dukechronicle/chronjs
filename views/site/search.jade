@@ -1,22 +1,22 @@
 #search
     .sidebar
-        .sort.rounded
-            a(href=query+'?sort=relevance&order='+order) Sort By Relevance
-            br
-            a(href=query+'?sort=date&order='+order) Sort By Date
-            br
-            a(href=query+'?sort='+sort+'&order=asc') Sort Ascending
-            br
-            a(href=query+'?sort='+sort+'&order=desc') Sort Descending
-            br
+        .sort.container.clearfix
+            .vertical-container
+                h2.vertical Sort
+            .rounded
+                .content-container
+                    a.hover.highlight-right(href=query+'?sort=relevance&order='+order) Relevance
+                    a.hover.highlight-right(href=query+'?sort=date&order=desc') Newest First
+                    a.hover.highlight-right(href=query+'?sort=date&order=asc') Oldest First
         for facet,facetName in facets
-            div(class=facetName + " rounded")
-                h3 Filter by #{facetName}
-                br
-                for value,key in facet
-                    #{key}
-                    a(href=query+'?sort='+sort+'&order='+order+'&facets='+currentFacets+facetName+':'+key) (#{value})
-                    br
+            .container.clearfix(class=facetName)
+                .vertical-container
+                    h2.vertical Filter by #{facetName}
+                .rounded
+                    .content-container
+                        for value,key in facet
+                            a.hover.highlight-right(href=query+'?sort='+sort+'&order='+order+'&facets='+currentFacets+facetName+':'+key)
+                                #{key} (#{value})
     .main
         for doc in docs
             a.result.rounded-hover(href=doc.url)

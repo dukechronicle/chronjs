@@ -5,11 +5,11 @@
 #recess
     .top.clearfix
         // features
-        .main!=partial('container/featured-image.jade', {title: "", story: model.Features[0]})
+        .main!=partial('container/featured-image.jade', {title: "", story: model.Featured[0]})
         .right
             .column.first
-                div!=partial('container/block.jade', {title: "", story: model.Features[1]})
-                div!=partial('container/block.jade', {title: "", story: model.Features[2]})
+                div!=partial('container/block.jade', {title: "", story: model.Featured[1]})
+                div!=partial('container/block.jade', {title: "", story: model.Featured[2]})
             // rss feed
             .column.last
                 .blog!=partial('container/sample-block.jade', {title: "Blog", story:{}})

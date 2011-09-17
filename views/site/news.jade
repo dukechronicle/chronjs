@@ -10,7 +10,7 @@
         .duu!=partial('container/story-list', {title: "Dining", stories: model.DUU})
 
     .middle
-        .featured!=partial('container/featured-image')
+        .featured!=partial('container/featured-image', {title: "", story: model.Featured[0]});
         .headline!=partial('container/row', {story: model.Headlines[0]})
         .headline!=partial('container/row', {story: model.Headlines[1]})
         .row.clearfix

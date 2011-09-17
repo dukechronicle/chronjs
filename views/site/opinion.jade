@@ -5,10 +5,10 @@
 #opinion
     .top.clearfix
         // feature
-        .main!=partial('container/featured-image.jade', {title: "", story: model.Feature[0]})
+        .main!=partial('container/featured-image.jade', {title: "", story: model.Featured[0]})
         .right
-            .row.first!=partial('container/row', {title: "", story: model.Feature[1]})
-            .row.last!=partial('container/row', {title: "", story: model.Feature[2]})
+            .row.first!=partial('container/row', {title: "", story: model.Featured[1]})
+            .row.last!=partial('container/row', {title: "", story: model.Featured[2]})
             
         // columnist
         .row

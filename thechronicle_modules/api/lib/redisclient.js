@@ -26,10 +26,12 @@ exports.init = function(callback) {
             console.log("Error " + err);
         });
 
-        _.extend(exports, client);
+        //_.extend(exports, client);
         return callback(null);
     });
 }
+
+exports.client = client;
 
 exports.getHostname  = function() {
     return redisUrl.hostname;

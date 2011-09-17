@@ -3,6 +3,7 @@ var async = require('async');
 var s3 = require('./s3.js');
 var im = require('imagemagick');
 var site = require('../../api/lib/site.js');
+var fs = require('fs');
 
 var VALID_EXTENSIONS = {};
 VALID_EXTENSIONS['image/jpeg'] = 'jpg';

@@ -54,8 +54,10 @@ site.init = function(app, callback) {
             return callback(err);
         }
         
-        console.log(redis);
-
+        redis.client.hgetall(REDIS_ARTICLE_VIEWS_HASH, function(err, res) {
+            console.log(res);
+        });
+        
         api.init(function(err2){
             if(err2)
             {
@@ -266,6 +268,8 @@ site.init = function(app, callback) {
                       
                       // we don't need to wait for this
                       _registerArticleView(doc._id, function(err, res) {
+                          console.log("redisssss");
+                          console.log(res);
                           if(err) {
                               console.log("Failed to register article view: " + doc._id);
                               console.log(err);

@@ -23,6 +23,8 @@ var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
 var newsModel = JSON.parse(fs.readFileSync("sample-data/news.json"));
 var sportsModel = JSON.parse(fs.readFileSync("sample-data/sports.json"));
 
+var REDIS_ARTICLE_VIEWS_HASH = "article_views";
+
 function _getImages(obj, callback) {
     nimble.map(obj, function(val, key, acallback) {
         api.docsById(val, function(err, res) {
@@ -40,6 +42,10 @@ function _convertTimestamp(timestamp) {
     return month[date.getMonth()] + " " + date.getDay() + ", " + date.getFullYear();
 }
 
+function _registerArticleView(docid, callback) {
+    redis.client.hincrby(REDIS_ARTICLE_VIEWS_HASH, docid, 1, callback);
+}
+
 site.init = function(app, callback) {
     redis.init(function(err) {
         if(err)
@@ -47,6 +53,8 @@ site.init = function(app, callback) {
             console.log("redisclient init failed!");
             return callback(err);
         }
+        
+        console.log(redis);
 
         api.init(function(err2){
             if(err2)
@@ -251,10 +259,18 @@ site.init = function(app, callback) {
                         return globalFunctions.showError(http_res, err);
                     }
                     else {
-                           // convert timestamp
-                           if (doc.created) {
-                               doc.date = _convertTimestamp(doc.created);
+                      // convert timestamp
+                      if (doc.created) {
+                          doc.date = _convertTimestamp(doc.created);
+                      }
+                      
+                      // we don't need to wait for this
+                      _registerArticleView(doc._id, function(err, res) {
+                          if(err) {
+                              console.log("Failed to register article view: " + doc._id);
+                              console.log(err);
                           }
+                      });
 
                       // format authors
                       if (doc.authors && doc.authors.length > 0) {

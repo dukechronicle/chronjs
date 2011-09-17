@@ -23,7 +23,7 @@ var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
 var newsModel = JSON.parse(fs.readFileSync("sample-data/news.json"));
 var sportsModel = JSON.parse(fs.readFileSync("sample-data/sports.json"));
 
-var REDIS_ARTICLE_VIEWS_HASH = "article_views";
+var REDIS_ARTICLE_VIEWS_HASH;
 
 function _getImages(obj, callback) {
     nimble.map(obj, function(val, key, acallback) {
@@ -42,8 +42,8 @@ function _convertTimestamp(timestamp) {
     return month[date.getMonth()] + " " + date.getDay() + ", " + date.getFullYear();
 }
 
-function _registerArticleView(docid, callback) {
-    redis.client.hincrby(REDIS_ARTICLE_VIEWS_HASH, docid, 1, callback);
+function _registerArticleView(url, callback) {
+    redis.client.zincrby(REDIS_ARTICLE_VIEWS_HASH, 1, url, callback);
 }
 
 site.init = function(app, callback) {
@@ -54,7 +54,9 @@ site.init = function(app, callback) {
             return callback(err);
         }
         
-        redis.client.hgetall(REDIS_ARTICLE_VIEWS_HASH, function(err, res) {
+        REDIS_ARTICLE_VIEWS_HASH = "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE");
+        
+        redis.client.zrange(REDIS_ARTICLE_VIEWS_HASH, 0, 5, function(err, res) {
             console.log(res);
         });
         
@@ -265,16 +267,6 @@ site.init = function(app, callback) {
                       if (doc.created) {
                           doc.date = _convertTimestamp(doc.created);
                       }
-                      
-                      // we don't need to wait for this
-                      _registerArticleView(doc._id, function(err, res) {
-                          console.log("redisssss");
-                          console.log(res);
-                          if(err) {
-                              console.log("Failed to register article view: " + doc._id);
-                              console.log(err);
-                          }
-                      });
 
                       // format authors
                       if (doc.authors && doc.authors.length > 0) {
@@ -294,6 +286,14 @@ site.init = function(app, callback) {
                       }
 
                       var latestUrl = doc.urls[doc.urls.length - 1];
+                      
+                      // we don't need to wait for this
+                        _registerArticleView(latestUrl, function(err, res) {
+                            if(err) {
+                                console.log("Failed to register article view: " + latestUrl);
+                                console.log(err);
+                            }
+                        });
 
                       if(url !== latestUrl) {
                         http_res.redirect('/article/' + latestUrl);

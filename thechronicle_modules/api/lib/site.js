@@ -6,6 +6,7 @@ var globalFunctions = require('../../global-functions');
 var smtp = require('./smtp');
 var redis = require('./redisclient');
 var config = require('../../config');
+var rss = require('./rss');
 
 var _ = require("underscore");
 var async = require('async');
@@ -115,12 +116,20 @@ site.init = function(app, callback) {
                 });
             });
 
-            app.get('/sports', function(req, res) {
+            app.get('/sports', function(req, http_res) {
                 api.group.docs(SPORTS_GROUP_NAMESPACE, null, function(err, result) {
                     _.defaults(result, sportsModel);
                     
-                    api.taxonomy.getHierarchy(function(err,hierarchy) {
-                        res.render('site/sports', {subsections: hierarchy['Sports'], filename: 'views/site/sports.jade', model: result});
+                    rss.getRSS('sportsblog', function(err, res) {
+                        result.Blog = res.items.map(function(item) {
+                            item.url = item.link;
+                            delete item.link;
+                            return item;
+                        });
+                        console.log(result);
+                        api.taxonomy.getHierarchy(function(err,hierarchy) {
+                            http_res.render('site/sports', {subsections: hierarchy['Sports'], filename: 'views/site/sports.jade', model: result});
+                        });
                     });
                 });
             });

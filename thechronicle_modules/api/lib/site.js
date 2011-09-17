@@ -213,37 +213,15 @@ site.init = function(app, callback) {
                    }
             });
 
-            // test the solr search functionality. Currently returns the ids,score of articles containing one of more of search words in title.
             app.get('/search/:query', function(req, http_res) {
                 api.search.docsBySearchQuery(req.params.query.replace('-',' '), req.query.sort, req.query.order, req.query.facets, function(err, docs, facets) {
-                    if (err) return globalFunctions.showError(http_res, err);
-                    
-                    docs.forEach(function(doc) {
-                        if(doc.urls != null) doc.url = '/article/' + doc.urls[doc.urls.length - 1];
-                        else doc.url = '/';
-
-                        // convert timestamp
-                            if (doc.created) {
-                                doc.date = _convertTimestamp(doc.created);
-                            }
-                            if (doc.authors && doc.authors.length > 0) {
-                                doc.authorsHtml = doc.authors[0];
-                            }
-                        }
-                    );
-
-                    var currentFacets = req.query.facets;
-                    if(!currentFacets) currentFacets = '';
-
-                    var validSections = ["News", "Sports", "Opinion", "Recess", "Towerview"];
-                    // filter out all sections other than main sections
-                    Object.keys(facets.Section).forEach(function(key) {
-                        if (!_.include(validSections, key)) {
-                            delete facets.Section[key];
-                        }
-                    });
-                    
-                    http_res.render('site/search', {locals:{docs:docs, currentFacets:currentFacets, facets:facets, query:req.params.query, sort:req.query.sort, order:req.query.order}});
+                    _showSearchArticles(err,req,http_res,docs,facets);
+                });
+            });
+        
+            app.get('/author/:query', function(req, http_res) {
+                api.search.docsByAuthor(req.params.query.replace('-',' '), req.query.order, req.query.facets, function(err, docs, facets) {
+                    _showSearchArticles(err,req,http_res,docs,facets);
                 });
             });
             
@@ -654,4 +632,39 @@ site.renderSmtpTest = function(req, http_res, email, num) {
             });
         });
     }
+}
+
+function _showSearchArticles(err,req,http_res,docs,facets) {
+    if (err) return globalFunctions.showError(http_res, err);
+                    
+    docs.forEach(function(doc) {
+        if(doc.urls != null) doc.url = '/article/' + doc.urls[doc.urls.length - 1];
+        else doc.url = '/';
+
+        // convert timestamp
+        if (doc.created) {
+            doc.date = _convertTimestamp(doc.created);
+        }
+        if (doc.authors && doc.authors.length > 0) {
+            doc.authorsHtml = "<a href= '/author/"+doc.authors[0].replace(/ /g,'-')+"?sort=date&order=desc'>"+doc.authors[0]+"</a>";
+        }
+    });
+
+    var currentFacets = req.query.facets;
+    if(!currentFacets) currentFacets = '';
+
+    var validSections = ["News", "Sports", "Opinion", "Recess", "Towerview"];
+    // filter out all sections other than main sections
+    Object.keys(facets.Section).forEach(function(key) {
+        if (!_.include(validSections, key)) {
+            delete facets.Section[key];
+         }
+    });
+                    
+    http_res.render(
+        'site/search',
+         {locals:{
+            docs:docs, currentFacets:currentFacets, facets:facets, query:req.params.query, sort:req.query.sort, order:req.query.order
+         }}
+    );
 }

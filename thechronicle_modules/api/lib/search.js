@@ -119,64 +119,61 @@ search.removeAllDocsFromSearch = function(callback) {
     callback(null);
 }
 
-search.docsBySearchQuery = function(query, sortBy, sortOrder, facets, callback) {
+search.docsByAuthor = function(authorName, sortOrder, facets, callback) {
+    if(sortOrder != 'asc') sortOrder = 'desc';
+
+    var facetFields;
+    var facetQueries;
+    _makeFacets(facets, function(facetFieldsTemp,facetQueriesTemp) {
+        facetFields = facetFieldsTemp;
+        facetQueries = facetQueriesTemp;
+    });
+
+    querySolr('author_sm:"' + authorName +'"', {facet: true, "facet.field":facetFields, "fq":facetQueries, rows: 25, fl: "*", sort: 'created_date_d' + " " + sortOrder}, callback);
+}
+
+search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, callback) {
     if(sortBy == 'relevance') sortBy = 'score';
     else if(sortBy == 'date') sortBy = 'created_date_d';
     else sortBy = 'score';
 
     if(sortOrder != 'asc') sortOrder = 'desc';
 
-    var facetFields = ["section_s","author_sm","created_year_i"];
-    var facetQueries = [];
-    if(facets) {
-        var indivFacets = facets.split(",");
-        for(i in indivFacets) {
-            var parts = indivFacets[i].split(":");
-            
-            if(parts[0] == 'Section') parts[0] = "section_s";
-            else if(parts[0] == 'Author') parts[0] = "author_sm";
-            
-            else if(parts[0] == 'Year') {
-                parts[0] = "created_year_i";
-                facetFields.push("created_month_i");
-            }
-            else if(parts[0] == 'Month') {
-                parts[0] = "created_month_i";
-                facetFields.push("created_day_i");
-            }
-            else if(parts[0] == 'Day') parts[0] = "created_day_i";
-                
-            facetQueries.push(parts[0]+':"'+parts[1]+'"');
-        } 
-    }
-
-    querySolr(query, {facet: true, "facet.field":facetFields, "fq":facetQueries, rows: 25, fl: "*,score", sort: sortBy + " " + sortOrder}, callback);
-}
-
-function querySolr(queryWords,options,callback) {
-    queryWords = queryWords.toLowerCase();
-    var words = queryWords.split(" ");
-
-    words = words.map(function(word) {
-        return solr.valueEscape(word.replace(/"/g, ''));
+    var facetFields;
+    var facetQueries;
+    _makeFacets(facets, function(facetFieldsTemp,facetQueriesTemp) {
+        facetFields = facetFieldsTemp;
+        facetQueries = facetQueriesTemp;
     });
 
-    console.log(words);
+    wordsQuery = wordsQuery.toLowerCase();
+    var words = wordsQuery.split(" ");
 
-	var fullQuery = "database_host_s:"+db.getDatabaseHost()+" AND database_s:"+db.getDatabaseName() +" AND (";
+    words = words.map(function(word) {
+        return solr.valueEscape(word.replace(/"/g, '')); // remove "s from the query
+    });
+
+	var fullQuery = "";
     for(var index in words) {
         if(index != 0) fullQuery = fullQuery + " OR ";
         fullQuery = fullQuery + "title_text:" + words[index] + "* OR body_text:" + words[index] + "*";
     }
-    fullQuery = fullQuery + ")";
-	
-	client.query(fullQuery, options, function(err,response) {
+
+    querySolr(fullQuery, {facet: true, "facet.field":facetFields, "fq":facetQueries, rows: 25, fl: "*,score", sort: sortBy + " " + sortOrder}, callback);
+}
+
+function querySolr(query,options,callback) {
+    if(query.length > 0) {
+        query = "database_host_s:"+db.getDatabaseHost()+" AND database_s:"+db.getDatabaseName() +" AND (" + query + ")";	
+    }    
+
+    client.query(query, options, function(err,response) {
 		if(err) {
 			return callback(err);
 		}
 
         var responseObj = JSON.parse(response);
-
+        console.log(responseObj);
         // put facet into an easily manipulitable form
         var facets = {};
         if(responseObj.facet_counts) {
@@ -223,4 +220,34 @@ function querySolr(queryWords,options,callback) {
             callback(null, docs, facets);
         });
     });
+}
+
+// adds extra facet fields if certain facet fields were queried (ex:if you limited the search by year, show month facet), and constructs facet queries
+// by changing nice key names to their solr equivalents (ex: year changes to created_year_i in the facet query)
+function _makeFacets(facets,callback) {
+    var facetFields = ["section_s","author_sm","created_year_i"];
+    var facetQueries = [];
+    if(facets) {
+        var indivFacets = facets.split(",");
+        for(i in indivFacets) {
+            var parts = indivFacets[i].split(":");
+            
+            if(parts[0] == 'Section') parts[0] = "section_s";
+            else if(parts[0] == 'Author') parts[0] = "author_sm";
+            
+            else if(parts[0] == 'Year') {
+                parts[0] = "created_year_i";
+                facetFields.push("created_month_i");
+            }
+            else if(parts[0] == 'Month') {
+                parts[0] = "created_month_i";
+                facetFields.push("created_day_i");
+            }
+            else if(parts[0] == 'Day') parts[0] = "created_day_i";
+                
+            facetQueries.push(parts[0]+':"'+parts[1]+'"');
+        } 
+    }
+
+    callback(facetFields,facetQueries);
 }

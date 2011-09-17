@@ -6,8 +6,8 @@
         .content-container
             .top
                 a.hover.highlight-left.clearfix(href='#{stories[0].url}')
-                    - if (stories[0].images && stories[0].images.thumbMedium)
-                        img(src="#{stories[0].images.thumbMedium.url}")
+                    - if (stories[0].images && stories[0].images.thumbRect)
+                        img(src=stories[0].images.thumbMedium.url)
                     .text
                         h2 #{stories[0].title}
                         p.teaser #{stories[0].teaser}

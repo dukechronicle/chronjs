@@ -5,10 +5,10 @@
 #towerview
     .main.clearfix
         // towerview features
-        .row.first!=partial('container/featured-image.jade', {title: 'Feature', story: model.Feature[0]})
+        .row.first!=partial('container/featured-image.jade', {title: 'Feature', story: model.Featured[0]})
         .row.feature.clearfix
-            .first!=partial('container/block.jade', {title: '', story: model.Feature[1]})
-            .last!=partial('container/block.jade',{title: '', story: model.Feature[2]})
+            .first!=partial('container/block.jade', {title: '', story: model.Featured[1]})
+            .last!=partial('container/block.jade',{title: '', story: model.Featured[2]})
         .row.last
             // savvy
             div!=partial('container/block-row.jade', {title: 'Savvy', stories: model.Savvy})

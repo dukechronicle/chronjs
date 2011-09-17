@@ -4,6 +4,8 @@ var s3 = require('./s3.js');
 var im = require('imagemagick');
 var site = require('../../api/lib/site.js');
 var fs = require('fs');
+var api = require('../../api/lib/api.js');
+var urlModule = require('url');
 
 var VALID_EXTENSIONS = {};
 VALID_EXTENSIONS['image/jpeg'] = 'jpg';
@@ -31,6 +33,46 @@ var CROP_SIZES = {
 };
 
 var THUMB_DIMENSIONS = '100x100';
+
+function _deleteFiles(paths, callback) {
+    async.reduce(paths, [], function(memo, item, callback) {
+        memo.push(function(acallback) {
+            fs.unlink(item, acallback);
+        });
+        callback(null, memo);
+    },
+    function(err, result) {
+        async.series(result, callback);
+    });
+}
+
+function _getMagickString(x1, y1, x2, y2) {
+    var w = x2 - x1;
+    var h = y2 - y1;
+    return w.toString() + 'x' + h.toString() + '+' + x1.toString() + '+' + y1.toString();
+}
+
+function _downloadUrlToPath(url, path, callback) {
+    var urlObj = urlModule.parse(url);
+    console.log('host: ' + urlObj.host);
+    var options = {
+        host: urlObj.host,
+        port: 80,
+        path: urlObj.pathname
+    };
+    http.get(options, function(res) {
+        res.setEncoding('binary');
+        var data = '';
+        res.on('data', function(chunk) {
+            data += chunk;
+        });
+        res.on('end', function() {
+            fs.writeFile(path, data, 'binary', function(err) {
+                callback(err);
+            });
+        });
+    });
+}
 
 exports.bindPath = function(app) {
     return function() {

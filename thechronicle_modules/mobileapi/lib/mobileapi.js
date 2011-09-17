@@ -58,18 +58,9 @@ function capitalizeName(str) {
     }
 }
 
-function contains(obj, array){
-    for(i in array){
-        if(array[i] == obj)
-            return true;
-    }
-    return false;
-}
-
-
 function getGroup(groupName,n,callback){
     console.log(groupName);
-    if(contains(groupName,taxonomyGroups)){
+    if(taxonomyGroups.indexOf(groupName) !== -1){
         grabArticles([groupName],0,n,callback);
     }
     else{

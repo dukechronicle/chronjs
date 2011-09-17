@@ -94,8 +94,8 @@ site.init = function(app, callback) {
                     console.log(Object.keys(result));
                     _.defaults(result, newsModel);
                     
-                    api.taxonomy.getHierarchy(function(err,hierarchy) {
-                        res.render('site/news', {subsections: hierarchy['News'], filename: 'views/site/news.jade', model: result});
+                    api.taxonomy.getHierarchy('News',function(err,hierarchy) {
+                        res.render('site/news', {subsections: hierarchy, filename: 'views/site/news.jade', model: result});
                     });
                 });
             });
@@ -104,8 +104,8 @@ site.init = function(app, callback) {
                 api.group.docs(SPORTS_GROUP_NAMESPACE, null, function(err, result) {
                     _.defaults(result, sportsModel);
                     
-                    api.taxonomy.getHierarchy(function(err,hierarchy) {
-                        res.render('site/sports', {subsections: hierarchy['Sports'], filename: 'views/site/sports.jade', model: result});
+                    api.taxonomy.getHierarchy('Sports',function(err,hierarchy) {
+                        res.render('site/sports', {subsections: hierarchy, filename: 'views/site/sports.jade', model: result});
                     });
                 });
             });
@@ -113,8 +113,8 @@ site.init = function(app, callback) {
             app.get('/opinion', function(req, res) {
                 api.group.docs(OPINION_GROUP_NAMESPACE, null, function(err, result) {
                     
-                    api.taxonomy.getHierarchy(function(err,hierarchy) {
-                        res.render('site/opinion', {subsections: hierarchy['Opinion'], filename: 'views/site/opinion.jade', model: result});
+                    api.taxonomy.getHierarchy('Opinion',function(err,hierarchy) {
+                        res.render('site/opinion', {subsections: hierarchy, filename: 'views/site/opinion.jade', model: result});
                     });
                 });
             });
@@ -122,8 +122,8 @@ site.init = function(app, callback) {
             app.get('/recess', function(req, res) {
                 api.group.docs(RECESS_GROUP_NAMESPACE, null, function(err, result) {
                     
-                    api.taxonomy.getHierarchy(function(err,hierarchy) {
-                        res.render('site/recess', {subsections: hierarchy['Recess'], filename: 'views/site/recess.jade', model: result});
+                    api.taxonomy.getHierarchy('Recess',function(err,hierarchy) {
+                        res.render('site/recess', {subsections: hierarchy, filename: 'views/site/recess.jade', model: result});
                     });
                 });
             });
@@ -131,8 +131,8 @@ site.init = function(app, callback) {
             app.get('/towerview', function(req, res) {
                 api.group.docs(TOWERVIEW_GROUP_NAMESPACE, null, function(err, result) {
                            
-                    api.taxonomy.getHierarchy(function(err,hierarchy) {
-                            res.render('site/towerview', {subsections: hierarchy['Towerview'], filename: 'views/site/towerview.jade', model: result});
+                    api.taxonomy.getHierarchy('Towerview',function(err,hierarchy) {
+                            res.render('site/towerview', {subsections: hierarchy, filename: 'views/site/towerview.jade', model: result});
                     });
                 });
             });
@@ -155,7 +155,10 @@ site.init = function(app, callback) {
                                     doc.authorsHtml = doc.authors[0];
                                 }
                             });
-                        res.render('site/section', {locals:{docs:docs}});
+                            
+                            api.taxonomy.getHierarchy(req.params.section,function(err,hierarchy) {
+                                res.render('site/section', {locals:{docs:docs, subsections: hierarchy}});
+                            })
                         }
                     }
                );

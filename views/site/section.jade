@@ -1,3 +1,7 @@
+.nav.clearfix
+    for subsection,subsectionName in subsections    
+        h2
+            a(href='/section/'+subsectionName) #{subsectionName}
 #section
     for doc in docs
         a.result.rounded-hover(href=doc.url)

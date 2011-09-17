@@ -10,7 +10,7 @@ taxonomy.docs = function(taxonomyPath, limit, callback) {
     db.taxonomy.docs(taxonomyPath, limit, callback);
 }
 
-taxonomy.getHierarchy = function(callback) {
+taxonomy.getHierarchy = function(from,callback) {
     db.taxonomy.getHierarchy(function(err,response)
     {
         var currentLevel = {};
@@ -35,7 +35,27 @@ taxonomy.getHierarchy = function(callback) {
                 }
             }
             currentLevel = hierarchy;
-        }        
+        }
+
+        if(from !== null) {
+           hierarchy = _findSection(from, hierarchy);
+           if(hierarchy == null) hierarchy = {};
+        }
+
         callback(err,hierarchy);
     });
+}
+
+function _findSection(section, hierarchy) {
+    for(key in hierarchy) {
+        if(key == section) return hierarchy[key];
+    }
+
+    for(key in hierarchy) {
+        var temp = _findSection(section,hierarchy[key]);
+        if(temp != null) {
+            return temp;
+        }
+    }
+    return null;
 }

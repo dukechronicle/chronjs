@@ -1,6 +1,7 @@
 headlines-height = 50px
 width = 636px
 height = 393px
+textHeight = 70px
 
 shadow(opacity, height, width, offset)
     -webkit-box-shadow rgba(0, 0, 0, opacity) height width offset
@@ -33,7 +34,6 @@ shadow(opacity, height, width, offset)
         left 0
         top 0
 
-
     .slides
         -webkit-border-top-left-radius  4px
         -webkit-border-top-right-radius  4px
@@ -43,11 +43,17 @@ shadow(opacity, height, width, offset)
         width width
         text-align left
         overflow hidden
-        height height
+        height height + textHeight
         border 3px solid white
         z-index 0
         //border-color #E5E5E5 #DBDBDB #D2D2D2
         box-shadow rgba(0,0,0,0.3) 0 1px 3px
+
+        .text
+            margin-top height + 5px
+            margin-left 10px
+            h1
+                font-size 1.5em
 
     .headlines
         display none

@@ -5,26 +5,26 @@
 #recess
     .top.clearfix
         // features
-        .main!=partial('container/featured-image.jade')
+        .main!=partial('container/featured-image.jade', {title: "", story: model.Features[0]})
         .right
             .column.first
-                div!=partial('container/sample-block.jade', {title: "", story:{}})
-                div!=partial('container/sample-block.jade', {title: "", story:{}})
+                div!=partial('container/block.jade', {title: "", story: model.Features[1]})
+                div!=partial('container/block.jade', {title: "", story: model.Features[2]})
             // rss feed
             .column.last
                 .blog!=partial('container/sample-block.jade', {title: "Blog", story:{}})
 
     .middle.clearfix
         // sandbox
-        .sandbox!=partial('container/block-row.jade', {title: 'Sandbox', stories: {}})
+        .sandbox!=partial('container/block-row.jade', {title: 'Sandbox', stories: model.Sandbox})
         // interviews
-        .interviews!=partial('container/block-row.jade', {title: 'Interviews', stories: {}})
+        .interviews!=partial('container/block-row.jade', {title: 'Interviews', stories: model.Interviews})
         // reviews
-        .reviews!=partial('container/block-row.jade', {title: 'Reviews', stories: {}})
+        .reviews!=partial('container/block-row.jade', {title: 'Reviews', stories: model.Reviews})
     .bottom
         // stories
         .row.clearfix
-            div!=partial('container/sample-block.jade', {title: "", story:{}})
-            div!=partial('container/sample-block.jade', {title: "", story:{}})
-            div!=partial('container/sample-block.jade', {title: "", story:{}})
-            .last!=partial('container/sample-block.jade', {title: "", story:{}})
+            div!=partial('container/block.jade', {title: "", story:model.Stories[0]})
+            div!=partial('container/block.jade', {title: "", story:model.Stories[1]})
+            div!=partial('container/block.jade', {title: "", story:model.Stories[2]})
+            .last!=partial('container/block.jade', {title: "", story:model.Stories[3]})

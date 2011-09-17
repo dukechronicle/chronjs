@@ -1,10 +1,10 @@
 .container.clearfix.featured
 	.vertical-container
-		h2.vertical &nbsp;
+		h2.vertical #{title}
 
-	a.rounded-hover(href='/article/dpac-shines-spotlight-durham')
+	a.rounded-hover(href=story.url)
 		.content-container
 			img(src='/images/slideshow/slideshow-1.jpg', width='448px')
 			.text
-				h2 DPAC Shines a Spotlight on Durham
-				p.teaser Setting: a theater. Rows of plush red seats cascade from three levels to an expansive stage that seems to extend the line of vision into the infinite. The ceiling plays with scale in a similar way;
+				h2 #{story.title}
+				p.teaser #{story.teaser}

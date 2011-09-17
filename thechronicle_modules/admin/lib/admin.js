@@ -179,7 +179,8 @@ exports.init = function(app, callback) {
 
             app.get('/manage', site.checkAdmin,
             function(req, http_res) {
-                var db = config.get('COUCHDB_DATABASE');
+                var db = api.getDatabaseName();
+                var host = api.getDatabaseHost();
                 api.docsByDate(null,
                 function(err, res) {
                     if (err) {
@@ -188,7 +189,8 @@ exports.init = function(app, callback) {
                         http_res.render('admin/manage', {
                             locals: {
                                 docs: res,
-                                db: db
+                                db: db,
+                                host: host
                             },
                             layout: "layout-admin.jade"
                         });

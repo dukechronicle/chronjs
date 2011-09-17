@@ -277,3 +277,11 @@ api.removeFromDocArray = function(id, field, toRemove, callback) {
         callback
     );
 }
+
+api.getDatabaseName = function() {
+    return db.getDatabaseName();
+}
+
+api.getDatabaseHost = function() {
+    return db.getDatabaseHost();
+}

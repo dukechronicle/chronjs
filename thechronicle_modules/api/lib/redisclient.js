@@ -1,6 +1,7 @@
 var redis = require("redis");
 var url = require("url");
 var config = require('../../config');
+var _ = require("underscore");
 
 var client;
 var redisUrl;
@@ -19,14 +20,16 @@ exports.init = function(callback) {
             console.log("Error connecting to redis: " + err);
             return callback(err);
         }
-    });
-    client.on("error", function (err) {
-        console.log("Error " + err);
-    });
-    return callback(null);
-}
 
-exports.client = client;
+        //console.log(client);
+        client.on("error", function (err) {
+            console.log("Error " + err);
+        });
+
+        _.extend(exports, client);
+        return callback(null);
+    });
+}
 
 exports.getHostname  = function() {
     return redisUrl.hostname;

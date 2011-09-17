@@ -93,32 +93,47 @@ site.init = function(app, callback) {
                 api.group.docs(NEWS_GROUP_NAMESPACE, null, function(err, result) {
                     console.log(Object.keys(result));
                     _.defaults(result, newsModel);
-                    res.render('site/news', {filename: 'views/site/news.jade', model: result});
+                    
+                    api.taxonomy.getHierarchy(function(err,hierarchy) {
+                        res.render('site/news', {subsections: hierarchy['News'], filename: 'views/site/news.jade', model: result});
+                    });
                 });
             });
 
             app.get('/sports', function(req, res) {
                 api.group.docs(SPORTS_GROUP_NAMESPACE, null, function(err, result) {
                     _.defaults(result, sportsModel);
-                    res.render('site/sports', {filename: 'views/site/sports.jade', model: result});
+                    
+                    api.taxonomy.getHierarchy(function(err,hierarchy) {
+                        res.render('site/sports', {subsections: hierarchy['Sports'], filename: 'views/site/sports.jade', model: result});
+                    });
                 });
             });
 
             app.get('/opinion', function(req, res) {
                 api.group.docs(OPINION_GROUP_NAMESPACE, null, function(err, result) {
-                    res.render('site/opinion', {filename: 'views/site/opinion.jade', model: result});
+                    
+                    api.taxonomy.getHierarchy(function(err,hierarchy) {
+                        res.render('site/opinion', {subsections: hierarchy['Opinion'], filename: 'views/site/opinion.jade', model: result});
+                    });
                 });
             });
 
             app.get('/recess', function(req, res) {
                 api.group.docs(RECESS_GROUP_NAMESPACE, null, function(err, result) {
-                    res.render('site/recess', {filename: 'views/site/recess.jade', model: result});
+                    
+                    api.taxonomy.getHierarchy(function(err,hierarchy) {
+                        res.render('site/recess', {subsections: hierarchy['Recess'], filename: 'views/site/recess.jade', model: result});
+                    });
                 });
             });
 
             app.get('/towerview', function(req, res) {
                 api.group.docs(TOWERVIEW_GROUP_NAMESPACE, null, function(err, result) {
-                    res.render('site/towerview', {filename: 'views/site/towerview.jade', model: result});
+                           
+                    api.taxonomy.getHierarchy(function(err,hierarchy) {
+                            res.render('site/towerview', {subsections: hierarchy['Towerview'], filename: 'views/site/towerview.jade', model: result});
+                    });
                 });
             });
 

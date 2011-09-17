@@ -99,6 +99,18 @@ var views = {
                 else emit(doc.indexedBySolr, doc);
             }
         }
+    },
+    
+    // builds the taxonomy tree from each's docs taxonomy 
+    taxonomy_tree: {
+        map: function(doc) {
+            if(doc.taxonomy) {
+                emit(doc.taxonomy,null);    
+            }
+        },
+        reduce: function(keys, vals) {
+            return null;
+        }
     }
 }
 

@@ -191,7 +191,7 @@ api.addNode = function(parent_path, name, callback) {
     callback);
 }
 
-api.docForUrl = function(url, callback) {
+api.docForUrl = function(url, callback) {    
     db.view("articles/urls", {
         key: url
     },

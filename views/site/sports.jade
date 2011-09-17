@@ -1,11 +1,7 @@
 .nav.clearfix
-    h2.first
-        a(href='/section/M Basketball') Men's Basketball
-    h2
-        a(href='/section/M Football') Men's Football
-    h2.last
-        a(href='/section/M Soccer') Men's Soccer
-        
+    for subsection,subsectionName in subsections    
+            h2
+                a(href='/section/'+subsectionName) #{subsectionName}        
 #sports
     .top.clearfix
         .slideshow-wrapper.right-select!=partial('slideshow/slideshow-right')

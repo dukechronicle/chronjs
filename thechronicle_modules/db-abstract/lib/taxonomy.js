@@ -21,3 +21,7 @@ taxonomy.docs = function(taxonomyTerm, limit, callback) {
         }
     );
 };
+
+taxonomy.getHierarchy = function(callback) {
+    db.view('articles/taxonomy_tree', {group: true}, callback);
+}

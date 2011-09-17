@@ -27,3 +27,5 @@
                     span.sep &nbsp;|&nbsp
                     = doc.authorsHtml
                 .teaser #{doc.teaser}
+        - if(docs.length == 0)
+            div No articles found

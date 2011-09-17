@@ -19,6 +19,15 @@ $(function(){
 		$('.slideshow .slides img:eq(' + currentSlide + ')').fadeOut('slow');
 	    $('.slideshow .slides img:eq(' + newSlide + ')').fadeIn('slow');
 
+        $('.slideshow .slides .text a:eq(' + currentSlide + ')').fadeOut('active');
+        $('.slideshow .slides .text a:eq(' + newSlide + ')').fadeIn('active');
+    
+        $('.slideshow .slides .text h1:eq(' + currentSlide + ')').fadeOut('slow');
+        $('.slideshow .slides .text h1:eq(' + newSlide + ')').fadeIn('slow');
+
+        $('.slideshow .slides .text h2:eq(' + currentSlide + ')').fadeOut('slow');
+        $('.slideshow .slides .text h2:eq(' + newSlide + ')').fadeIn('slow');
+
 	    $('.slideshow .headlines a:eq(' + currentSlide + ')').removeClass('active');
 	    $('.slideshow .headlines a:eq(' + newSlide + ')').addClass('active');
 

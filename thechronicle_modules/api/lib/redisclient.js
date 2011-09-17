@@ -27,11 +27,9 @@ exports.init = function(callback) {
         });
 
         exports.client = client;
-
         return callback(null);
     });
 }
-
 
 exports.getHostname  = function() {
     return redisUrl.hostname;

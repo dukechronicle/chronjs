@@ -4,8 +4,8 @@
 
     a.rounded-hover.clearfix(href=story.url)
         .content-container.clearfix
-            if (story.image && story.image.squareThumb && story.image.squareThumb.url)
-                img(src=story.image.squareThumb.url)
+            if (story.image && story.image.thumbSquareM && story.image.thumbSquareM.url)
+                img(src=story.image.thumbSquareM.url)
             .text
                 h2 #{story.title}
                 p.teaser #{story.teaser}

@@ -3,7 +3,6 @@ var async = require('async');
 var fs = require('fs');
 var s3 = require('./s3.js');
 var http = require('http');
-var urlModule = require('url');
 var solr = require('solr');
 var md = require('node-markdown').Markdown;
 var sprintf = require('sprintf').sprintf;
@@ -40,46 +39,6 @@ function _renderBody(body, cbck) {
     }
     ],
     cbck);
-}
-
-function _getMagickString(x1, y1, x2, y2) {
-    var w = x2 - x1;
-    var h = y2 - y1;
-    return w.toString() + 'x' + h.toString() + '+' + x1.toString() + '+' + y1.toString();
-}
-
-function _downloadUrlToPath(url, path, callback) {
-    var urlObj = urlModule.parse(url);
-    console.log('host: ' + urlObj.host);
-    var options = {
-        host: urlObj.host,
-        port: 80,
-        path: urlObj.pathname
-    };
-    http.get(options, function(res) {
-        res.setEncoding('binary');
-        var data = '';
-        res.on('data', function(chunk) {
-            data += chunk;
-        });
-        res.on('end', function() {
-            fs.writeFile(path, data, 'binary', function(err) {
-                callback(err);
-            });
-        });
-    });
-}
-
-function _deleteFiles(paths, callback) {
-    async.reduce(paths, [], function(memo, item, callback) {
-        memo.push(function(acallback) {
-            fs.unlink(item, acallback);
-        });
-        callback(null, memo);
-    },
-    function(err, result) {
-        async.series(result, callback);
-    });
 }
 
 exports.init = function(app, callback) {

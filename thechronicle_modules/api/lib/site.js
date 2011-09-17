@@ -23,6 +23,8 @@ var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
 var newsModel = JSON.parse(fs.readFileSync("sample-data/news.json"));
 var sportsModel = JSON.parse(fs.readFileSync("sample-data/sports.json"));
 
+var REDIS_ARTICLE_VIEWS_HASH;
+
 function _getImages(obj, callback) {
     nimble.map(obj, function(val, key, acallback) {
         api.docsById(val, function(err, res) {
@@ -40,6 +42,10 @@ function _convertTimestamp(timestamp) {
     return month[date.getMonth()] + " " + date.getDay() + ", " + date.getFullYear();
 }
 
+function _registerArticleView(url, title, callback) {
+    redis.client.zincrby(REDIS_ARTICLE_VIEWS_HASH, 1, url + "||" + title, callback);
+}
+
 site.init = function(app, callback) {
     redis.init(function(err) {
         if(err)
@@ -47,6 +53,8 @@ site.init = function(app, callback) {
             console.log("redisclient init failed!");
             return callback(err);
         }
+        
+        REDIS_ARTICLE_VIEWS_HASH = "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE");
 
         api.init(function(err2){
             if(err2)
@@ -80,10 +88,17 @@ site.init = function(app, callback) {
                 api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, result) {
                     console.log(Object.keys(result));
                     _.defaults(result, homeModel);
-
-                    api.docsByDate(5, function(err, docs) {
-                        result.popular.stories = docs;
-                        //console.log(result.DSG);
+                    
+                    redis.client.zrange(REDIS_ARTICLE_VIEWS_HASH, 0, 5, function(err, popular) {
+                        result.popular.stories = popular.map(function(str) {
+                            var parts = str.split('||');
+                            return {
+                                url: parts[0],
+                                title: parts[1]
+                            };
+                        });
+                        result.popular.stories.reverse();
+                        
                         res.render('site/index', {filename: 'views/site/index.jade', model: result});
                     });
                 });
@@ -94,8 +109,8 @@ site.init = function(app, callback) {
                     console.log(Object.keys(result));
                     _.defaults(result, newsModel);
                     
-                    api.taxonomy.getHierarchy(function(err,hierarchy) {
-                        res.render('site/news', {subsections: hierarchy['News'], filename: 'views/site/news.jade', model: result});
+                    api.taxonomy.getHierarchy('News',function(err,hierarchy) {
+                        res.render('site/news', {subsections: hierarchy, filename: 'views/site/news.jade', model: result});
                     });
                 });
             });
@@ -104,8 +119,8 @@ site.init = function(app, callback) {
                 api.group.docs(SPORTS_GROUP_NAMESPACE, null, function(err, result) {
                     _.defaults(result, sportsModel);
                     
-                    api.taxonomy.getHierarchy(function(err,hierarchy) {
-                        res.render('site/sports', {subsections: hierarchy['Sports'], filename: 'views/site/sports.jade', model: result});
+                    api.taxonomy.getHierarchy('Sports',function(err,hierarchy) {
+                        res.render('site/sports', {subsections: hierarchy, filename: 'views/site/sports.jade', model: result});
                     });
                 });
             });
@@ -113,8 +128,8 @@ site.init = function(app, callback) {
             app.get('/opinion', function(req, res) {
                 api.group.docs(OPINION_GROUP_NAMESPACE, null, function(err, result) {
                     
-                    api.taxonomy.getHierarchy(function(err,hierarchy) {
-                        res.render('site/opinion', {subsections: hierarchy['Opinion'], filename: 'views/site/opinion.jade', model: result});
+                    api.taxonomy.getHierarchy('Opinion',function(err,hierarchy) {
+                        res.render('site/opinion', {subsections: hierarchy, filename: 'views/site/opinion.jade', model: result});
                     });
                 });
             });
@@ -122,8 +137,8 @@ site.init = function(app, callback) {
             app.get('/recess', function(req, res) {
                 api.group.docs(RECESS_GROUP_NAMESPACE, null, function(err, result) {
                     
-                    api.taxonomy.getHierarchy(function(err,hierarchy) {
-                        res.render('site/recess', {subsections: hierarchy['Recess'], filename: 'views/site/recess.jade', model: result});
+                    api.taxonomy.getHierarchy('Recess',function(err,hierarchy) {
+                        res.render('site/recess', {subsections: hierarchy, filename: 'views/site/recess.jade', model: result});
                     });
                 });
             });
@@ -131,8 +146,8 @@ site.init = function(app, callback) {
             app.get('/towerview', function(req, res) {
                 api.group.docs(TOWERVIEW_GROUP_NAMESPACE, null, function(err, result) {
                            
-                    api.taxonomy.getHierarchy(function(err,hierarchy) {
-                            res.render('site/towerview', {subsections: hierarchy['Towerview'], filename: 'views/site/towerview.jade', model: result});
+                    api.taxonomy.getHierarchy('Towerview',function(err,hierarchy) {
+                            res.render('site/towerview', {subsections: hierarchy, filename: 'views/site/towerview.jade', model: result});
                     });
                 });
             });
@@ -155,7 +170,10 @@ site.init = function(app, callback) {
                                     doc.authorsHtml = doc.authors[0];
                                 }
                             });
-                        res.render('site/section', {locals:{docs:docs}});
+                            
+                            api.taxonomy.getHierarchy(req.params.section,function(err,hierarchy) {
+                                res.render('site/section', {locals:{docs:docs, subsections: hierarchy}});
+                            })
                         }
                     }
                );
@@ -266,10 +284,10 @@ site.init = function(app, callback) {
                         return globalFunctions.showError(http_res, err);
                     }
                     else {
-                           // convert timestamp
-                           if (doc.created) {
-                               doc.date = _convertTimestamp(doc.created);
-                          }
+                      // convert timestamp
+                      if (doc.created) {
+                          doc.date = _convertTimestamp(doc.created);
+                      }
 
                       // format authors
                       if (doc.authors && doc.authors.length > 0) {
@@ -289,6 +307,14 @@ site.init = function(app, callback) {
                       }
 
                       var latestUrl = doc.urls[doc.urls.length - 1];
+                      
+                      // we don't need to wait for this
+                        _registerArticleView(latestUrl, doc.title, function(err, res) {
+                            if(err) {
+                                console.log("Failed to register article view: " + latestUrl);
+                                console.log(err);
+                            }
+                        });
 
                       if(url !== latestUrl) {
                         http_res.redirect('/article/' + latestUrl);

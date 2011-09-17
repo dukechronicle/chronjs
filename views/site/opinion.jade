@@ -1,28 +1,28 @@
 #opinion
     .top.clearfix
         // feature
-        .main!=partial('container/featured-image.jade')
+        .main!=partial('container/featured-image.jade', {title: "", story: model.Feature[0]})
         .right
-            .row.first!=partial('container/row', {story: {}})
-            .row.last!=partial('container/row', {story: {}})
+            .row.first!=partial('container/row', {title: "", story: model.Feature[1]})
+            .row.last!=partial('container/row', {title: "", story: model.Feature[2]})
             
         // columnist
         .row
-            div!=partial('container/sample-block.jade', {title: "Columnist"})
-            div!=partial('container/sample-block.jade', {title: "Columnist"})
-            div!=partial('container/sample-block.jade', {title: "Columnist"})
-            .last!=partial('container/sample-block.jade', {title: "Columnist"})
+            div!=partial('container/block.jade', {title: "Columnist", story:model.Columnists[0]})
+            div!=partial('container/block.jade', {title: "Columnist", story:model.Columnists[1]})
+            div!=partial('container/block.jade', {title: "Columnist", story:model.Columnists[2]})
+            .last!=partial('container/block.jade', {title: "Columnist", story:model.Columnists[3]})
     .middle.clearfix
         // rss
         .blog!=partial('container/sample-block.jade', {title: "Blog"})
         // edit board
-        .editBoard!=partial('container/sample-block.jade', {title: "Editorial Board"})
+        .editBoard!=partial('container/block.jade', {title: "Editorial Board", story:model.EditBoard[0]})
         // most popular
         .mostPopular.last!=partial('container/sample-block.jade', {title: "Popular"})
     .bottom
         // more columnists
         .row
-            div!=partial('container/sample-block.jade', {title: "Columnist"})
-            div!=partial('container/sample-block.jade', {title: "Columnist"})
-            div!=partial('container/sample-block.jade', {title: "Columnist"})
-            .last!=partial('container/sample-block.jade', {title: "Columnist"})
+            div!=partial('container/block.jade', {title: "Columnist", story:model.MoreColumnists[0]})
+            div!=partial('container/block.jade', {title: "Columnist", story:model.MoreColumnists[1]})
+            div!=partial('container/block.jade', {title: "Columnist", story:model.MoreColumnists[2]})
+            .last!=partial('container/block.jade', {title: "Columnist", story:model.MoreColumnists[3]})

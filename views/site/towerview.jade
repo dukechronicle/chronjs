@@ -1,19 +1,19 @@
 #towerview
     .main.clearfix
         // towerview features
-        .row.first!=partial('container/featured-image.jade', {title: 'Feature'})
+        .row.first!=partial('container/featured-image.jade', {title: 'Feature', story: model.Feature[0]})
         .row.feature.clearfix
-            .first!=partial('container/sample-block.jade', {title: '', story:{}})
-            .last!=partial('container/sample-block.jade',{title: '', story:{}})
+            .first!=partial('container/block.jade', {title: '', story: model.Feature[1]})
+            .last!=partial('container/block.jade',{title: '', story: model.Feature[2]})
         .row.last
             // savvy
-            div!=partial('container/block-row.jade', {title: 'Savvy', stories: {}})
+            div!=partial('container/block-row.jade', {title: 'Savvy', stories: model.Savvy})
             // wisdom
-            div!=partial('container/block-row.jade', {title: 'Wisdom', stories: {}})
+            div!=partial('container/block-row.jade', {title: 'Wisdom', stories: model.Wisdom})
             
     .sidebar.clearfix
-        .editorsNote!=partial('container/sample-block.jade', {title: "Editor's Note", story:{}})
+        .editorsNote!=partial('container/sample-block.jade', {title: "Editor's Note", story: model.EditorsNote[0]})
         // prefix
-        .prefix!=partial('container/sample-block.jade', {title: 'Prefix', story:{}})
-        .prefix!=partial('container/sample-block.jade', {title: '', story:{}})
-        .prefix!=partial('container/sample-block.jade', {title: '', story:{}})
+        .prefix!=partial('container/block.jade', {title: 'Prefix', story: model.Prefix[0]})
+        .prefix!=partial('container/block.jade', {title: '', story: model.Prefix[1]})
+        .prefix!=partial('container/block.jade', {title: '', story: model.Prefix[2]})

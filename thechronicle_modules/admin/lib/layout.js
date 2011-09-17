@@ -172,7 +172,7 @@ exports.bindPath = function (app) {
                         var stories = docs;
                         api.group.docs(RECESS_GROUP_NAMESPACE, null,
                         function(err, model) {
-                            res.render('admin/recess', {
+                            res.render('admin/layout/recess', {
                                 layout: "layout-admin.jade",
                                 locals: {
                                     stories: stories,

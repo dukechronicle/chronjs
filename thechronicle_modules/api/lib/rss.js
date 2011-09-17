@@ -1,7 +1,7 @@
 var html = require('htmlparser');
 var url = require('url');
 var http = require('http');
-var sys = require('sys');
+var redis = require('./redisclient');
 
 exports.parseRSS = function(feed, callback) {
     var urlobj = url.parse(feed);
@@ -25,6 +25,26 @@ exports.parseRSS = function(feed, callback) {
             var handler = new html.RssHandler(callback);
             var parser = new html.Parser(handler);
             parser.parseComplete(data);
+        });
+    });
+}
+
+exports.storeRSS = function(dom, title, callback) {
+    redis.init(function(err) {
+        var json = JSON.stringify(dom);
+        redis.client.set(title, json, callback);
+    });
+    
+}
+
+exports.getRSS = function(title, callback) {
+    redis.init(function(err) {
+        redis.client.get(title, function(err, res) {
+            if(err) callback(err, null);
+            else {
+                var obj = eval('(' + res + ')');
+                callback(null, obj);
+            }
         });
     });
 }

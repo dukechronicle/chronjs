@@ -42,8 +42,8 @@ function _convertTimestamp(timestamp) {
     return month[date.getMonth()] + " " + date.getDay() + ", " + date.getFullYear();
 }
 
-function _registerArticleView(url, callback) {
-    redis.client.zincrby(REDIS_ARTICLE_VIEWS_HASH, 1, url, callback);
+function _registerArticleView(url, title, callback) {
+    redis.client.zincrby(REDIS_ARTICLE_VIEWS_HASH, 1, url + "||" + title, callback);
 }
 
 site.init = function(app, callback) {
@@ -55,11 +55,7 @@ site.init = function(app, callback) {
         }
         
         REDIS_ARTICLE_VIEWS_HASH = "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE");
-        
-        redis.client.zrange(REDIS_ARTICLE_VIEWS_HASH, 0, 5, function(err, res) {
-            console.log(res);
-        });
-        
+
         api.init(function(err2){
             if(err2)
             {
@@ -92,10 +88,17 @@ site.init = function(app, callback) {
                 api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, result) {
                     console.log(Object.keys(result));
                     _.defaults(result, homeModel);
-
-                    api.docsByDate(5, function(err, docs) {
-                        result.popular.stories = docs;
-                        //console.log(result.DSG);
+                    
+                    redis.client.zrange(REDIS_ARTICLE_VIEWS_HASH, 0, 5, function(err, popular) {
+                        result.popular.stories = popular.map(function(str) {
+                            var parts = str.split('||');
+                            return {
+                                url: parts[0],
+                                title: parts[1]
+                            };
+                        });
+                        result.popular.stories.reverse();
+                        
                         res.render('site/index', {filename: 'views/site/index.jade', model: result});
                     });
                 });
@@ -288,7 +291,7 @@ site.init = function(app, callback) {
                       var latestUrl = doc.urls[doc.urls.length - 1];
                       
                       // we don't need to wait for this
-                        _registerArticleView(latestUrl, function(err, res) {
+                        _registerArticleView(latestUrl, doc.title, function(err, res) {
                             if(err) {
                                 console.log("Failed to register article view: " + latestUrl);
                                 console.log(err);

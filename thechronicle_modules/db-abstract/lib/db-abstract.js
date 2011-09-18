@@ -117,12 +117,13 @@ function viewsAreUpToDate(callback) {
     fs.stat(DESIGN_DOCUMENT_FILENAME, function(err, stats) {
         db.get(DESIGN_DOCUMENT_VERSION_NAME, function (err, response) {
             // if the design document does not exists, or the modified time of the design doc does not exist, return false
-            if(response == null || response.lastModified == null)
+            var lastModified = response && response.views && response.views.lastModified;
+            if(!lastModified) {
                 return callback(false,stats.mtime);
-
+            }
             // check if the design doc file has been modified since the the last time it was updated in the db
-            if(new Date(response.lastModified) >= new Date(stats.mtime))
-                return callback(true,response.lastModified);
+            if(new Date(lastModified) >= new Date(stats.mtime))
+                return callback(true,lastModified);
 
             return callback(false,stats.mtime);
         });

@@ -25,7 +25,7 @@
                 h3 #{doc.title}
                 .date #{doc.date}
                     span.sep &nbsp;|&nbsp
-                !=doc.authorsHtml
+                    | #{doc.authors}
                 .teaser #{doc.teaser}
         - if(docs.length == 0)
             div No articles found

@@ -166,9 +166,7 @@ site.init = function(app, callback) {
                                 if (doc.created) {
                                     doc.date = _convertTimestamp(doc.created);
                                 }
-                                if (doc.authors && doc.authors.length > 0) {
-                                    doc.authorsHtml = doc.authors[0];
-                                }
+                                doc = _parseAuthor(doc);
                             });
                             
                             api.taxonomy.getHierarchy(req.params.section,function(err,hierarchy) {
@@ -189,27 +187,7 @@ site.init = function(app, callback) {
                         http_res.render('all', {locals:{docs:docs}, layout: 'layout-admin.jade'} );
                        });
 
-                        /*
-                        api.group.list(['section'], function(err, groups) {
-                            if(err) {
-                                globalFunctions.showError(http_res, err);
-                            } else {
-                                api.group.docs(['section'], groups, function(get_err, get_res) {
-                                    get_res.forEach(function(article) {
-                                        console.log(article.urls.length);
-                                    })
-                                    if(get_err) {
-                                        globalFunctions.showError(http_res, get_err);
-                                    } else {
-                                        http_res.render('main', {
-                                            locals: {
-                                                docs: get_res
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });*/
+
                    }
             });
 
@@ -231,9 +209,7 @@ site.init = function(app, callback) {
                         if (doc.created) {
                             doc.date = _convertTimestamp(doc.created);
                         }
-                        if (doc.authors && doc.authors.length > 0) {
-                            doc.authorsHtml = "<a href= '/staff/"+doc.authors[0].replace(/ /g,'-')+"?sort=date&order=desc'>"+doc.authors[0]+"</a>";
-                        }
+                        doc = _parseAuthor(doc);
                     });
 
                     var currentFacets = req.query.facets;
@@ -248,7 +224,7 @@ site.init = function(app, callback) {
                     });
 
                     http_res.render(
-                        'site/search',
+                        'site/people',
                          {locals:{
                             docs:docs, currentFacets:currentFacets, facets:facets, query:req.params.query, sort:req.query.sort, order:req.query.order
                          }}
@@ -298,14 +274,7 @@ site.init = function(app, callback) {
                           doc.date = _convertTimestamp(doc.created);
                       }
 
-                      // format authors
-                      doc.authorsHtml = "";
-                      if (doc.authors && doc.authors.length > 0) {
-                        for(var i in doc.authors) {
-                            doc.authorsHtml += "&nbsp;<a href= '/author/"+doc.authors[i].replace(/ /g,'-')+"?sort=date&order=desc'>"+doc.authors[i]+"</a>";
-                            if(i < (doc.authors.length-1)) doc.authorsHtml += ",";
-                        }
-                     }
+                   doc = _parseAuthor(doc);
 
                       var latestUrl = doc.urls[doc.urls.length - 1];
                       
@@ -379,22 +348,7 @@ site.init = function(app, callback) {
                                doc.date = _convertTimestamp(doc.created);
                           }
 
-                      // format authors
-                      if (doc.authors && doc.authors.length > 0) {
-                        /*
-                        doc.authors.map(function(author) {
-                            return "<a href='/staff/" + author + "'>" + author + "</a>";
-                        })*/
-
-                        doc.authorsHtml = doc.authors[0];
-                        /*
-                        var count = doc.authors.length;
-                        doc.authors.forEach(function(author, index) {
-                            if (index > 0) {
-
-                            }
-                        });*/
-                      }
+                          doc = _parseAuthor(doc);
 
                       var latestUrl = doc.urls[doc.urls.length - 1];
 
@@ -621,6 +575,24 @@ site.renderSmtpTest = function(req, http_res, email, num) {
                 });
             });
         });
+    }
+}
+
+function _parseAuthor(doc) {
+    doc.authorsArray = _.clone(doc.authors);
+    doc.authors = "";
+    doc.authorsHtml = "";
+    
+    if (doc.authorsArray && doc.authorsArray.length > 0) {
+        for(var i in doc.authorsArray) {
+            console.log(doc.authorsArray);
+            doc.authorsHtml += "<a href= '/staff/"+doc.authorsArray[i].replace(/ /g,'-')+"?sort=date&order=desc'>"+doc.authorsArray[i]+"</a>";
+            doc.authors += doc.authorsArray[i];
+            if(i < (doc.authorsArray.length-1)) {
+                doc.authors += ", ";
+                doc.authorsHtml += ", ";
+            }
+        }
     }
 }
 

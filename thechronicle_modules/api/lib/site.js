@@ -172,7 +172,7 @@ site.init = function(app, callback) {
                             });
                             
                             api.taxonomy.getHierarchy(req.params.section,function(err,hierarchy) {
-                                res.render('site/section', {locals:{docs:docs, subsections: hierarchy}});
+                                res.render('site/section', {locals:{docs:docs, subsections: hierarchy, section:req.params.section}});
                             })
                         }
                     }
@@ -299,21 +299,13 @@ site.init = function(app, callback) {
                       }
 
                       // format authors
+                      doc.authorsHtml = "";
                       if (doc.authors && doc.authors.length > 0) {
-                        /*
-                        doc.authors.map(function(author) {
-                            return "<a href='/staff/" + author + "'>" + author + "</a>";
-                        })*/
-
-                        doc.authorsHtml = doc.authors[0];
-                        /*
-                        var count = doc.authors.length;
-                        doc.authors.forEach(function(author, index) {
-                            if (index > 0) {
-
-                            }
-                        });*/
-                      }
+                        for(var i in doc.authors) {
+                            doc.authorsHtml += "&nbsp;<a href= '/author/"+doc.authors[i].replace(/ /g,'-')+"?sort=date&order=desc'>"+doc.authors[i]+"</a>";
+                            if(i < (doc.authors.length-1)) doc.authorsHtml += ",";
+                        }
+                     }
 
                       var latestUrl = doc.urls[doc.urls.length - 1];
                       
@@ -643,8 +635,13 @@ function _showSearchArticles(err,req,http_res,docs,facets) {
         if (doc.created) {
             doc.date = _convertTimestamp(doc.created);
         }
+
+        doc.authorsHtml = "";
         if (doc.authors && doc.authors.length > 0) {
-            doc.authorsHtml = "<a href= '/staff/"+doc.authors[0].replace(/ /g,'-')+"?sort=date&order=desc'>"+doc.authors[0]+"</a>";
+            for(var i in doc.authors) {
+                doc.authorsHtml += "&nbsp;<a href= '/author/"+doc.authors[i].replace(/ /g,'-')+"?sort=date&order=desc'>"+doc.authors[i]+"</a>";
+                if(i < (doc.authors.length-1)) doc.authorsHtml += ",";
+            }
         }
     });
 

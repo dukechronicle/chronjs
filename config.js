@@ -4,11 +4,11 @@ var configuration = {
             "SERVER_PORT":"4000",
             "ADMIN_USERNAME":"dean",
             "ADMIN_PASSWORD":"dean",
-            "COUCHDB_URL":"http://chrondev:pikachu@chrondev.iriscouch.com",
-            "COUCHDB_DATABASE":"production",
-
-            //"COUCHDB_URL":"https://app578498.heroku:NNbL2x3Bu5vGLgComPjWxxET@app578498.heroku.cloudant.com",
+            //"COUCHDB_URL":"http://chrondev:pikachu@chrondev.iriscouch.com",
             //"COUCHDB_DATABASE":"production",
+
+            "COUCHDB_URL":"https://app578498.heroku:NNbL2x3Bu5vGLgComPjWxxET@app578498.heroku.cloudant.com",
+            "COUCHDB_DATABASE":"export-full",
 
             "S3_BUCKET":"chron_bucket1",
             "REDIS_URL":"redis://redistogo:0235bf0a2db5e6cc087683952f60c59c@icefish.redistogo.com:9249/",

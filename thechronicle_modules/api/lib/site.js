@@ -131,7 +131,7 @@ site.init = function(app, callback) {
                         }
                         
                         api.taxonomy.getHierarchy('Sports',function(err,hierarchy) {
-                            res.render('site/sports', {subsections: hierarchy, filename: 'views/site/sports.jade', model: result});
+                            http_res.render('site/sports', {subsections: hierarchy, filename: 'views/site/sports.jade', model: result});
                         });
                     });
                 });

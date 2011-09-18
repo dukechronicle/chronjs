@@ -1,6 +1,7 @@
 var api = {};
 var exports = module.exports = api;
 
+var cron = require("cron");
 var nimble = require("nimble");
 var async = require("async");
 var db = require("../../db-abstract");
@@ -64,7 +65,10 @@ api.init = function(callback) {
         }
         
         api.search.init();
-        api.search.indexUnindexedArticles();
+        /** Chron Jobs! **/
+        new cron.CronJob('0 * * * * *', function() {
+            api.search.indexUnindexedArticles(50);
+        });
 
         callback(null);
     });

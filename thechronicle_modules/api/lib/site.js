@@ -121,12 +121,14 @@ site.init = function(app, callback) {
                     _.defaults(result, sportsModel);
                     
                     rss.getRSS('sportsblog', function(err, res) {
-                        result.Blog = res.items.map(function(item) {
-                            item.url = item.link;
-                            item.title = item.title.replace( /\&#8217;/g, '’' );
-                            delete item.link;
-                            return item;
-                        });
+                        if(res && res.length != 0) {
+                            result.Blog = res.items.map(function(item) {
+                                item.url = item.link;
+                                item.title = item.title.replace( /\&#8217;/g, '’' );
+                                delete item.link;
+                                return item;
+                            });
+                        }
                         
                         api.taxonomy.getHierarchy(function(err,hierarchy) {
                             http_res.render('site/sports', {subsections: hierarchy['Sports'], filename: 'views/site/sports.jade', model: result});

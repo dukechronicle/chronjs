@@ -93,7 +93,7 @@ site.init = function(app, callback) {
                         result.popular.stories = popular.map(function(str) {
                             var parts = str.split('||');
                             return {
-                                url: parts[0],
+                                url: '/article/' + parts[0],
                                 title: parts[1]
                             };
                         });

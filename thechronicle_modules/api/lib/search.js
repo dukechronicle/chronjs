@@ -31,9 +31,9 @@ search.init = function() {
 }
 
 // check for unindexed articles, or articles with index versioning below the current version, and index them in solr.
-search.indexUnindexedArticles = function() {
+search.indexUnindexedArticles = function(count) {
     console.log('looking for articles to index...');
-    db.search.docsIndexedBelowVersion(INDEX_VERSION, function(err, response) {
+    db.search.docsIndexedBelowVersion(INDEX_VERSION, count, function(err, response) {
         // Attempt to index each file in row.
         response.forEach(function(row) {
             console.log('indexing "' + row.title + '"');

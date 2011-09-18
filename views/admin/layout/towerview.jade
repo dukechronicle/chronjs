@@ -6,10 +6,10 @@ script
 h2 Towerview Layout
 
 #layout
-    <h2>Feature</h2>
-    #slideshow.container(data-groupName='Feature')
-        - if (model.Feature)
-            - each story, id in model.Feature
+    <h2>Featured</h2>
+    #slideshow.container(data-groupName='Featured')
+        - if (model.Featured1)
+            - each story, id in model.Featured
                 .story(draggable='true', id='#{story._id}')
                     #{story.title}
 

@@ -4,6 +4,8 @@ require('express-namespace');
 var stylus = require('stylus');
 var cron = require('./thechronicle_modules/api/lib/cron');
 
+
+
 /* require internal modules */
 var globalFunctions = require('./thechronicle_modules/global-functions');
 var config = require('./thechronicle_modules/config');
@@ -13,6 +15,9 @@ var admin = require('./thechronicle_modules/admin/lib/admin');
 var mobileapi = require('./thechronicle_modules/mobileapi/lib/mobileapi');
 var redisClient = require('./thechronicle_modules/api/lib/redisclient');
 var RedisStore = require('connect-redis')(express);
+
+
+
 
 /* express configuration */
 var app = express.createServer();
@@ -103,16 +108,18 @@ function runSite(callback) {
         //api.search.removeAllDocsFromSearch(function(){});
          if(err)
              return console.log("Site.init Failed!");
+
          admin.init(app, function(err2){
              if(err2)
                  return console.log("Admin.init Failed!");
              mobileapi.init(app, function(err3){
                  if(err3)
                     return console.log("mobile.init Failed!");
+
+                 // initialize cron
+
                  return callback();
              });
          });
     });
-
-
 }

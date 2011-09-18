@@ -94,7 +94,7 @@ site.init = function(app, callback) {
                         result.popular.stories = popular.map(function(str) {
                             var parts = str.split('||');
                             return {
-                                url: parts[0],
+                                url: '/article/' + parts[0],
                                 title: parts[1]
                             };
                         });
@@ -110,8 +110,8 @@ site.init = function(app, callback) {
                     console.log(Object.keys(result));
                     _.defaults(result, newsModel);
                     
-                    api.taxonomy.getHierarchy(function(err,hierarchy) {
-                        res.render('site/news', {subsections: hierarchy['News'], filename: 'views/site/news.jade', model: result});
+                    api.taxonomy.getHierarchy('News',function(err,hierarchy) {
+                        res.render('site/news', {subsections: hierarchy, filename: 'views/site/news.jade', model: result});
                     });
                 });
             });
@@ -130,8 +130,8 @@ site.init = function(app, callback) {
                             });
                         }
                         
-                        api.taxonomy.getHierarchy(function(err,hierarchy) {
-                            http_res.render('site/sports', {subsections: hierarchy['Sports'], filename: 'views/site/sports.jade', model: result});
+                        api.taxonomy.getHierarchy('Sports',function(err,hierarchy) {
+                            res.render('site/sports', {subsections: hierarchy, filename: 'views/site/sports.jade', model: result});
                         });
                     });
                 });
@@ -140,8 +140,8 @@ site.init = function(app, callback) {
             app.get('/opinion', function(req, res) {
                 api.group.docs(OPINION_GROUP_NAMESPACE, null, function(err, result) {
                     
-                    api.taxonomy.getHierarchy(function(err,hierarchy) {
-                        res.render('site/opinion', {subsections: hierarchy['Opinion'], filename: 'views/site/opinion.jade', model: result});
+                    api.taxonomy.getHierarchy('Opinion',function(err,hierarchy) {
+                        res.render('site/opinion', {subsections: hierarchy, filename: 'views/site/opinion.jade', model: result});
                     });
                 });
             });
@@ -149,8 +149,8 @@ site.init = function(app, callback) {
             app.get('/recess', function(req, res) {
                 api.group.docs(RECESS_GROUP_NAMESPACE, null, function(err, result) {
                     
-                    api.taxonomy.getHierarchy(function(err,hierarchy) {
-                        res.render('site/recess', {subsections: hierarchy['Recess'], filename: 'views/site/recess.jade', model: result});
+                    api.taxonomy.getHierarchy('Recess',function(err,hierarchy) {
+                        res.render('site/recess', {subsections: hierarchy, filename: 'views/site/recess.jade', model: result});
                     });
                 });
             });
@@ -158,8 +158,8 @@ site.init = function(app, callback) {
             app.get('/towerview', function(req, res) {
                 api.group.docs(TOWERVIEW_GROUP_NAMESPACE, null, function(err, result) {
                            
-                    api.taxonomy.getHierarchy(function(err,hierarchy) {
-                            res.render('site/towerview', {subsections: hierarchy['Towerview'], filename: 'views/site/towerview.jade', model: result});
+                    api.taxonomy.getHierarchy('Towerview',function(err,hierarchy) {
+                            res.render('site/towerview', {subsections: hierarchy, filename: 'views/site/towerview.jade', model: result});
                     });
                 });
             });
@@ -182,7 +182,10 @@ site.init = function(app, callback) {
                                     doc.authorsHtml = doc.authors[0];
                                 }
                             });
-                        res.render('site/section', {locals:{docs:docs}});
+                            
+                            api.taxonomy.getHierarchy(req.params.section,function(err,hierarchy) {
+                                res.render('site/section', {locals:{docs:docs, subsections: hierarchy, section:req.params.section}});
+                            })
                         }
                     }
                );
@@ -222,37 +225,15 @@ site.init = function(app, callback) {
                    }
             });
 
-            // test the solr search functionality. Currently returns the ids,score of articles containing one of more of search words in title.
             app.get('/search/:query', function(req, http_res) {
                 api.search.docsBySearchQuery(req.params.query.replace('-',' '), req.query.sort, req.query.order, req.query.facets, function(err, docs, facets) {
-                    if (err) return globalFunctions.showError(http_res, err);
-                    
-                    docs.forEach(function(doc) {
-                        if(doc.urls != null) doc.url = '/article/' + doc.urls[doc.urls.length - 1];
-                        else doc.url = '/';
-
-                        // convert timestamp
-                            if (doc.created) {
-                                doc.date = _convertTimestamp(doc.created);
-                            }
-                            if (doc.authors && doc.authors.length > 0) {
-                                doc.authorsHtml = doc.authors[0];
-                            }
-                        }
-                    );
-
-                    var currentFacets = req.query.facets;
-                    if(!currentFacets) currentFacets = '';
-
-                    var validSections = ["News", "Sports", "Opinion", "Recess", "Towerview"];
-                    // filter out all sections other than main sections
-                    Object.keys(facets.Section).forEach(function(key) {
-                        if (!_.include(validSections, key)) {
-                            delete facets.Section[key];
-                        }
-                    });
-                    
-                    http_res.render('site/search', {locals:{docs:docs, currentFacets:currentFacets, facets:facets, query:req.params.query, sort:req.query.sort, order:req.query.order}});
+                    _showSearchArticles(err,req,http_res,docs,facets);
+                });
+            });
+        
+            app.get('/author/:query', function(req, http_res) {
+                api.search.docsByAuthor(req.params.query.replace('-',' '), req.query.order, req.query.facets, function(err, docs, facets) {
+                    _showSearchArticles(err,req,http_res,docs,facets);
                 });
             });
             
@@ -299,21 +280,13 @@ site.init = function(app, callback) {
                       }
 
                       // format authors
+                      doc.authorsHtml = "";
                       if (doc.authors && doc.authors.length > 0) {
-                        /*
-                        doc.authors.map(function(author) {
-                            return "<a href='/staff/" + author + "'>" + author + "</a>";
-                        })*/
-
-                        doc.authorsHtml = doc.authors[0];
-                        /*
-                        var count = doc.authors.length;
-                        doc.authors.forEach(function(author, index) {
-                            if (index > 0) {
-
-                            }
-                        });*/
-                      }
+                        for(var i in doc.authors) {
+                            doc.authorsHtml += "&nbsp;<a href= '/author/"+doc.authors[i].replace(/ /g,'-')+"?sort=date&order=desc'>"+doc.authors[i]+"</a>";
+                            if(i < (doc.authors.length-1)) doc.authorsHtml += ",";
+                        }
+                     }
 
                       var latestUrl = doc.urls[doc.urls.length - 1];
                       
@@ -663,4 +636,44 @@ site.renderSmtpTest = function(req, http_res, email, num) {
             });
         });
     }
+}
+
+function _showSearchArticles(err,req,http_res,docs,facets) {
+    if (err) return globalFunctions.showError(http_res, err);
+                    
+    docs.forEach(function(doc) {
+        if(doc.urls != null) doc.url = '/article/' + doc.urls[doc.urls.length - 1];
+        else doc.url = '/';
+
+        // convert timestamp
+        if (doc.created) {
+            doc.date = _convertTimestamp(doc.created);
+        }
+
+        doc.authorsHtml = "";
+        if (doc.authors && doc.authors.length > 0) {
+            for(var i in doc.authors) {
+                doc.authorsHtml += "&nbsp;<a href= '/author/"+doc.authors[i].replace(/ /g,'-')+"?sort=date&order=desc'>"+doc.authors[i]+"</a>";
+                if(i < (doc.authors.length-1)) doc.authorsHtml += ",";
+            }
+        }
+    });
+
+    var currentFacets = req.query.facets;
+    if(!currentFacets) currentFacets = '';
+
+    var validSections = ["News", "Sports", "Opinion", "Recess", "Towerview"];
+    // filter out all sections other than main sections
+    Object.keys(facets.Section).forEach(function(key) {
+        if (!_.include(validSections, key)) {
+            delete facets.Section[key];
+         }
+    });
+                    
+    http_res.render(
+        'site/search',
+         {locals:{
+            docs:docs, currentFacets:currentFacets, facets:facets, query:req.params.query, sort:req.query.sort, order:req.query.order
+         }}
+    );
 }

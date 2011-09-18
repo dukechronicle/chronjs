@@ -6,10 +6,10 @@ script
 h2 Recess Layout
 
 #layout
-    <h2>Features</h2>
-    #slideshow.container(data-groupName='Features')
-        - if (model.Features)
-            - each story, id in model.Features
+    <h2>Featured</h2>
+    #slideshow.container(data-groupName='Featured')
+        - if (model.Featured)
+            - each story, id in model.Featured
                 .story(draggable='true', id='#{story._id}')
                     #{story.title}
 

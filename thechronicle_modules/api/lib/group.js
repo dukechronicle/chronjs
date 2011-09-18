@@ -99,6 +99,8 @@ group.docs = function(namespace, group, callback) {
                     } else if (docType === "image") {
                         // if it
                         var imageType = doc.key[DOC_TYPE_KEY + 1];
+                        // TODO this should NEVER happen
+                        currentArticle.images = {};
                         currentArticle.images[imageType] = doc.doc;
                     }
                 }

@@ -1,10 +1,11 @@
 .container.clearfix.featured
-	.vertical-container
-		h2.vertical #{title}
+    .vertical-container
+        h2.vertical #{title}
 
-	a.rounded-hover(href=story.url)
-		.content-container
-			img(src='/images/slideshow/slideshow-1.jpg', width='448px')
-			.text
-				h2 #{story.title}
-				p.teaser #{story.teaser}
+    a.rounded-hover(href=story.url)
+        .content-container
+            - if (story.images && story.images.largeRect)
+                img(src=story.images.largeRect.url)
+            .text-
+                h2 #{story.title}
+                p.teaser #{story.teaser}

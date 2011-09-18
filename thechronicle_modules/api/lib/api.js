@@ -67,7 +67,7 @@ api.init = function(callback) {
         api.search.init();
         /** Chron Jobs! **/
         new cron.CronJob('0 * * * * *', function() {
-            api.search.indexUnindexedArticles(20);
+            api.search.indexUnindexedArticles(50);
         });
 
         callback(null);

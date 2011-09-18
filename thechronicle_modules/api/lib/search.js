@@ -36,20 +36,22 @@ search.indexUnindexedArticles = function(count) {
     db.search.docsIndexedBelowVersion(INDEX_VERSION, count, function(err, response) {
         // Attempt to index each file in row.
         response.forEach(function(row) {
-            console.log('indexing "' + row.title + '"');
-            
-            var section = undefined;
-            if(row.taxonomy && row.taxonomy[0]) section = row.taxonomy[0];
+            process.nextTick(function() {
+                console.log('indexing "' + row.title + '"');
 
-            search.indexArticle(row._id,row.title,row.body, section, row.authors, row.created, function(error2, response2) {
-                if(error2) console.log(error2);
-                else {
-                    db.search.setArticleAsIndexed(row._id, INDEX_VERSION, function(error3, response3) {
-                        if(error3) console.log(error3);
-                        else console.log('indexed "' + row.title + '"');
-                    });              
-                }
-            });
+                var section = undefined;
+                if(row.taxonomy && row.taxonomy[0]) section = row.taxonomy[0];
+
+                search.indexArticle(row._id,row.title,row.body, section, row.authors, row.created, function(error2, response2) {
+                    if(error2) console.log(error2);
+                    else {
+                        db.search.setArticleAsIndexed(row._id, INDEX_VERSION, function(error3, response3) {
+                            if(error3) console.log(error3);
+                            else console.log('indexed "' + row.title + '"');
+                        });
+                    }
+                });
+            })
         });
     });
 }

@@ -172,7 +172,7 @@ site.init = function(app, callback) {
                             });
                             
                             api.taxonomy.getHierarchy(req.params.section,function(err,hierarchy) {
-                                res.render('site/section', {locals:{docs:docs, subsections: hierarchy}});
+                                res.render('site/section', {locals:{docs:docs, subsections: hierarchy, section:req.params.section}});
                             })
                         }
                     }

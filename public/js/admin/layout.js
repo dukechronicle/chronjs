@@ -34,7 +34,7 @@ $(function() {
         $.post("/admin/group/remove", {
             docId: $(this).attr("id"),
             groupName: $(this).parent().data("groupname"),
-            nameSpace: ["Layouts", "Frontpage"]
+            nameSpace: nameSpace
         });
         $(this).remove();
     });
@@ -88,7 +88,7 @@ $(function() {
             $.post("/admin/group/add", {
                 docId: docId,
                 groupName: $(this).parent().data("groupname"),
-                nameSpace: ["Layouts", "Frontpage"],
+                nameSpace: nameSpace,
                 weight: newElement.index()
             });
         }
@@ -99,7 +99,7 @@ $(function() {
             $.post("/admin/group/add", {
                 docId: nextSibling.attr("id"),
                 groupName: $(this).parent().data("groupname"),
-                nameSpace: ["Layouts", "Frontpage"],
+                nameSpace: nameSpace,
                 weight: nextSibling.index()
             });
         }
@@ -119,12 +119,12 @@ $(function() {
             $.post("/admin/group/remove", {
                 docId: element.attr("id"),
                 groupName: oldElementParent.data("groupname"),
-                nameSpace: ["Layouts", "Frontpage"]
+                nameSpace: nameSpace
             }, function() {
                 $.post("/admin/group/add", {
                 docId: docId,
                 groupName: newGroupName,
-                nameSpace: ["Layouts", "Frontpage"],
+                nameSpace: nameSpace,
                 weight: newElement.index()
             });
             });
@@ -135,7 +135,7 @@ $(function() {
                     $.post("/admin/group/add", {
                         docId: nextSibling.attr("id"),
                         groupName: oldElementParent.data("groupname"),
-                        nameSpace: ["Layouts", "Frontpage"],
+                        nameSpace: nameSpace,
                         weight: nextSibling.index()
                     });
                 } while ((nextSibling = nextSibling.next()) && (nextSibling.length > 0));

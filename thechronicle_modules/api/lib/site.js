@@ -105,12 +105,12 @@ site.init = function(app, callback) {
             });
 
             app.get('/news', function(req, res) {
-                api.group.docs(NEWS_GROUP_NAMESPACE, null, function(err, result) {
-                    console.log(Object.keys(result));
-                    _.defaults(result, newsModel);
+                api.group.docs(NEWS_GROUP_NAMESPACE, null, function(err, model) {
+                    console.log(Object.keys(model));
+                    _.defaults(model, newsModel);
                     
-                    api.taxonomy.getHierarchy('News',function(err,hierarchy) {
-                        res.render('site/news', {subsections: hierarchy, filename: 'views/site/news.jade', model: result});
+                    api.taxonomy.getParentAndChildren(['News'],function(err, parentAndChildren) {
+                        res.render('site/news', {subsections: parentAndChildren.children, filename: 'views/site/news.jade', model: model});
                     });
                 });
             });
@@ -119,8 +119,8 @@ site.init = function(app, callback) {
                 api.group.docs(SPORTS_GROUP_NAMESPACE, null, function(err, result) {
                     _.defaults(result, sportsModel);
                     
-                    api.taxonomy.getHierarchy('Sports',function(err,hierarchy) {
-                        res.render('site/sports', {subsections: hierarchy, filename: 'views/site/sports.jade', model: result});
+                    api.taxonomy.getParentAndChildren(['Sports'],function(err,parentAndChildren) {
+                        res.render('site/sports', {subsections: parentAndChildren.children, filename: 'views/site/sports.jade', model: result});
                     });
                 });
             });
@@ -128,8 +128,8 @@ site.init = function(app, callback) {
             app.get('/opinion', function(req, res) {
                 api.group.docs(OPINION_GROUP_NAMESPACE, null, function(err, result) {
                     
-                    api.taxonomy.getHierarchy('Opinion',function(err,hierarchy) {
-                        res.render('site/opinion', {subsections: hierarchy, filename: 'views/site/opinion.jade', model: result});
+                    api.taxonomy.getParentAndChildren(['Opinion'],function(err,parentAndChildren) {
+                        res.render('site/opinion', {subsections: parentAndChildren.children, filename: 'views/site/opinion.jade', model: result});
                     });
                 });
             });
@@ -137,8 +137,8 @@ site.init = function(app, callback) {
             app.get('/recess', function(req, res) {
                 api.group.docs(RECESS_GROUP_NAMESPACE, null, function(err, result) {
                     
-                    api.taxonomy.getHierarchy('Recess',function(err,hierarchy) {
-                        res.render('site/recess', {subsections: hierarchy, filename: 'views/site/recess.jade', model: result});
+                    api.taxonomy.getParentAndChildren(['Recess'],function(err,parentAndChildren) {
+                        res.render('site/recess', {subsections: parentAndChildren.children, filename: 'views/site/recess.jade', model: result});
                     });
                 });
             });
@@ -146,14 +146,16 @@ site.init = function(app, callback) {
             app.get('/towerview', function(req, res) {
                 api.group.docs(TOWERVIEW_GROUP_NAMESPACE, null, function(err, result) {
                            
-                    api.taxonomy.getHierarchy('Towerview',function(err,hierarchy) {
-                            res.render('site/towerview', {subsections: hierarchy, filename: 'views/site/towerview.jade', model: result});
+                    api.taxonomy.getParentAndChildren(['Towerview'],function(err,parentAndChildren) {
+                            res.render('site/towerview', {subsections: parentAndChildren.children, filename: 'views/site/towerview.jade', model: result});
                     });
                 });
             });
 
-            app.get('/section/:section', function(req, res) {
-                api.taxonomy.docs(req.params.section, 20,
+            app.get('/section/*', function(req, res) {
+                var params = req.params.toString().split('/');
+                var section = params[params.length - 1];
+                api.taxonomy.docs(section, 20,
                     function(err, docs) {
                         if (err) globalFunctions.showError(res, err);
                         else {
@@ -169,9 +171,16 @@ site.init = function(app, callback) {
                                 doc = _parseAuthor(doc);
                             });
                             
-                            api.taxonomy.getHierarchy(req.params.section,function(err,hierarchy) {
-                                res.render('site/section', {locals:{docs:docs, subsections: hierarchy, section:req.params.section}});
-                            })
+                            api.taxonomy.getParentAndChildren(params, function(err,parentAndChildren) {
+                                res.render('site/section', {
+                                    locals:{
+                                        docs:docs,
+                                        subsections: parentAndChildren.children,
+                                        parentPath: parentAndChildren.parentPath,
+                                        section: section
+                                    }
+                                });
+                            });
                         }
                     }
                );
@@ -274,7 +283,8 @@ site.init = function(app, callback) {
                           doc.date = _convertTimestamp(doc.created);
                       }
 
-                   doc = _parseAuthor(doc);
+                      doc = _parseAuthor(doc);
+                        console.log(doc);
 
                       var latestUrl = doc.urls[doc.urls.length - 1];
                       
@@ -377,6 +387,7 @@ site.init = function(app, callback) {
                         globalFunctions.showError(http_res, err);
                     }
                     else {
+                        console.log(doc._id);
                         if(req.query.deleteImage) {
                             var newImages = doc.images;
                             delete newImages[req.query.deleteImage];
@@ -594,6 +605,7 @@ function _parseAuthor(doc) {
             }
         }
     }
+    return doc;
 }
 
 function _showSearchArticles(err,req,http_res,docs,facets) {

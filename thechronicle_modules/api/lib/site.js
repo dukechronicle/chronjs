@@ -86,7 +86,6 @@ site.init = function(app, callback) {
 
             app.get('/', function(req, res) {
                 api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, result) {
-                    console.log(Object.keys(result));
                     _.defaults(result, homeModel);
                     
                     redis.client.zrange(REDIS_ARTICLE_VIEWS_HASH, 0, 5, function(err, popular) {
@@ -106,7 +105,6 @@ site.init = function(app, callback) {
 
             app.get('/news', function(req, res) {
                 api.group.docs(NEWS_GROUP_NAMESPACE, null, function(err, model) {
-                    console.log(Object.keys(model));
                     _.defaults(model, newsModel);
                     
                     api.taxonomy.getParentAndChildren(['News'],function(err, parentAndChildren) {
@@ -284,7 +282,6 @@ site.init = function(app, callback) {
                       }
 
                       doc = _parseAuthor(doc);
-                        console.log(doc);
 
                       var latestUrl = doc.urls[doc.urls.length - 1];
                       
@@ -596,7 +593,6 @@ function _parseAuthor(doc) {
     
     if (doc.authorsArray && doc.authorsArray.length > 0) {
         for(var i in doc.authorsArray) {
-            console.log(doc.authorsArray);
             doc.authorsHtml += "<a href= '/staff/"+doc.authorsArray[i].replace(/ /g,'-')+"?sort=date&order=desc'>"+doc.authorsArray[i]+"</a>";
             doc.authors += doc.authorsArray[i];
             if(i < (doc.authorsArray.length-1)) {

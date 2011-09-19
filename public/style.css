@@ -26,13 +26,14 @@ body header,body section,body footer{width:972px}
 body header{position:relative}
 body #header-overlay{position:absolute;z-index:0;left:50px;top:0}
 body #header-top{height:96px;border-bottom-right-radius:5px;border-bottom-left-radius:5px;}
-body #header-top h1{position:relative;z-index:2;margin-top:55px;font-weight:bold;float:left;}
+body #header-top h1{position:relative;z-index:2;margin-top:10px;font-weight:bold;float:left;font-size:1.2em;line-height:2em;margin-bottom:-3px;}
 body #header-top h1 a{color:#111;font-family:didot;font-size:2.3em;font-weight:normal;letter-spacing:-1px;padding-left:0;text-shadow:0 1px 1px #fff;-webkit-transition:text-shadow .2s linear;-moz-transition:text-shadow .2s linear;-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear}
 body #header-top h1 a:hover{color:#999}
 body #header-bottom nav{position:relative;z-index:2;clear:both;width:636px;}
 body #header-bottom nav h2{float:left;}
 body #header-bottom nav h2 a{letter-spacing:1px;text-shadow:0 1px 0 #fff;font-size:.8em;text-transform:uppercase;color:#333;display:block;padding-left:15px;padding-right:11px;-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear}
 body #header-bottom nav h2 a:hover,body #header-bottom nav h2 a.active{color:#999}
+body #header-bottom nav h2 a.active:hover{color:#333}
 body #header-bottom nav h2.first a{padding-left:3px}
 body #header-bottom nav a{color:#333}
 body section{margin-top:16px}
@@ -48,7 +49,7 @@ span.timestamp{color:#036;font-size:.5em;display:block}
 .leaderboard img{border-radius:5px;display:block;-webkit-box-shadow:0 0 3px #ccc;opacity:.8;-webkit-transition:opacity .25s linear;-moz-transition:opacity .25s linear;-o-transition:opacity .25s linear;transition:opacity .25s linear}
 .leaderboard a:hover img{opacity:1}
 header .content{width:240px;float:left;position:relative;z-index:2;}
-header .content .announcements{color:#666;position:absolute;text-shadow:0 1px 0 #fff;line-height:1em;}
+header .content .announcements{display:none;color:#666;position:absolute;text-shadow:0 1px 0 #fff;line-height:1em;}
 header .content .announcements a{text-align:left;margin-bottom:3px;font-size:.7em;text-transform:uppercase;letter-spacing:1px;padding-top:4px;color:#333}
 header .content .announcements a:hover{color:#36c}
 header .content .announcements p{font-size:.7em}

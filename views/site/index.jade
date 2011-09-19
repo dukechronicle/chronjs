@@ -1,7 +1,7 @@
 #frontpage
     #top.clearfix
         .content
-            #slideshow!=partial('slideshow')
+            #slideshow!=partial('slideshow', model.Slideshow)
             .ads-row.clearfix
                 .image-container.print-edition!=partial('container/image', model.printEdition)
                 .image-container.full-banner!=partial('container/image', model.adFullBanner)

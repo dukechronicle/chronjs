@@ -12,16 +12,15 @@ taxonomy.docs = function(taxonomyPath, limit, callback) {
 }
 
 taxonomy.getParentAndChildren = function(navTree,callback) {
-    var parent = null;
 
-    if (navTree.length > 1) {
-        parent = navTree[navTree.length - 2];
-    }
+
 
     db.taxonomy.getChildren(navTree, function(err, results){
+        console.log(results);
         if (err) return callback(err, null);
         else {
-            var children = _.map(
+            var children = {};
+            _.forEach(
                 _.select(
                     _.pluck(results, 'key'),
                     function(child) {
@@ -29,11 +28,21 @@ taxonomy.getParentAndChildren = function(navTree,callback) {
                     }
                 ),
                 function(child) {
-                    return child[child.length - 1];
+                    var childPath = child.join('/');
+
+                    children[childPath] = child[child.length - 1];
                 }
             );
-            console.log(children);
-            callback(err, {children: children, parent: parent});
+
+            var parentPaths = [];
+
+            while (navTree.length > 1) {
+                var parentName = _.last(navTree);
+                navTree.pop();
+                parentPaths.push({path: '/' + navTree.join('/'), name: parentName});
+            }
+
+            callback(err, {children: children, parentPaths: parentPaths.reverse()});
         }
     });
 }

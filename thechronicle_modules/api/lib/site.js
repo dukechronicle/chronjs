@@ -174,7 +174,7 @@ site.init = function(app, callback) {
                                     locals:{
                                         docs:docs,
                                         subsections: parentAndChildren.children,
-                                        parentPath: parentAndChildren.parentPath,
+                                        parentPaths: parentAndChildren.parentPaths,
                                         section: section
                                     }
                                 });

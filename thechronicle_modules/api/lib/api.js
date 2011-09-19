@@ -233,14 +233,15 @@ api.docsByDate = function(limit, callback) {
     if (limit) {
         query.limit = limit;
     }
-        db.view("articles/all_by_date", query, function(err, results) {
-            if (err) callback(err);
+    
+    db.view("articles/all_by_date", query, function(err, results) {
+        if (err) callback(err);
 
-            // return only the array of the result values
-            callback(null, results.map(function(result) {
-                return result;
-            }));
-        });
+        // return only the array of the result values
+        callback(null, results.map(function(result) {
+            return result;
+        }));
+    });
 }
 
 api.addToDocArray = function(id, field, toAdd, callback) {
@@ -279,7 +280,7 @@ api.removeFromDocArray = function(id, field, toRemove, callback) {
                 db.merge(id, fields, acallback);
             }
         }
-        ], 
+        ],
         callback
     );
 }

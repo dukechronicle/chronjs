@@ -1,7 +1,7 @@
 .nav.clearfix
-    for subsection,subsectionName in subsections    
+    for subsectionName,subsectionPath in subsections
         h2
-            a(href='/section/'+subsectionName) #{subsectionName}
+            a(href='/section/' + subsectionPath) #{subsectionName}
 #news
     .left
         .blog!=partial('container/story-list', {title: "Blog", stories: model.Blog})

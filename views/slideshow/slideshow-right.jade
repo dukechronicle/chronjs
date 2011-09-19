@@ -2,22 +2,13 @@
     .slides
         for story in stories
             a(href=story.url)
-                if (story && story.images && story.LongRect)
+                if (story && story.images && story.images.LongRect)
                     img(src=story.images.LongRect.url)
-                .text
-                    h1 #{story.title}
-                    h2 #{story.teaser}
 
     .headlines
-        a.page.first.active.rounded
-            img(src='images/slideshow/slideshow-1.jpg')
-            h2 DPAC Shines a Spotlight on Durham
-            p.teaser The Blue Devils sent six of their top athletes to contend with the nation’s best at the USA Outdoor Track and Field Championships in Eugene, Ore.
-        a.page.rounded
-            img(src='images/slideshow/slideshow-2.jpg')
-            h2 William Boulding becomes Fuqua Dean
-            p.teaser The Blue Devils sent six of their top athletes to contend with the nation’s best at the USA Outdoor Track and Field Championships in Eugene, Ore.
-        a.page.last.rounded
-            img(src='images/slideshow/slideshow-3.jpg')
-            h2 Beach takes seventh at USA Championships
-            p.teaser The Blue Devils sent six of their top athletes to contend with the nation’s best at the USA Outdoor Track and Field Championships in Eugene, Ore.
+        for story in stories
+            a.page.rounded
+                if (story && story.images && story.images.ThumbSquareM)
+                    img(src=story.images.ThumbSquareM.url)
+                    h2 #{story.title}
+                    p.teaser #{story.teaser}

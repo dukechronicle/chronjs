@@ -1,26 +1,14 @@
 .slideshow
     .slides
-        a(href="/article/dpac-shines-spotlight-durham")
-            img(src='images/slideshow/slideshow-1.jpg')
-            .text
-                h1 DPAC Shines a Spotlight on Durham
-                h2 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut nisi metus, mollis in accumsan a, auctor vel urna. Etiam molestie ornare neque, ac blandit justo fermentum feugiat.
-                
-        a(href="/article/william-boulding-becomes-new-fuqua-dean")
-            img(src='images/slideshow/slideshow-2.jpg')
-            .text
-                h1 William Boulding becomes new Fuqua Dean
-                h2 He is new the new Dean!
-
-        a(href="/article/beach-takes-seventh-usa-championships")
-            img(src='images/slideshow/slideshow-3.jpg')
-            .text
-                h1 Beach takes seventh at USA Championships
-                h2 A winner is him!
+        for story in stories
+            a(href=story.url)
+                if (story && story.images && story.LongRect)
+                    img(src=story.images.LongRect.url)
+                .text
+                    h1 #{story.title}
+                    h2 #{story.teaser}
                
 
     .headlines.roundedbottom
-        b.caret
-        a.page.first.active DPAC Shines a Spotlight on Durham
-        a.page William Boulding becomes new Fuqua Dean
-        a.page Beach takes seventh at USA Championships
+        for story in stories
+            a.page #{story.title}

@@ -1,7 +1,7 @@
 headlines-height = 50px
 width = 636px
 height = 393px
-textHeight = 70px
+textHeight = 85px
 
 shadow(opacity, height, width, offset)
     -webkit-box-shadow rgba(0, 0, 0, opacity) height width offset
@@ -9,7 +9,8 @@ shadow(opacity, height, width, offset)
     box-shadow rgba(0, 0, 0, opacity) height width offset
 
 
-
+.slideshow.right .slides
+    height height
 .slideshow
     width width + 6
     border-radius  4px
@@ -54,6 +55,7 @@ shadow(opacity, height, width, offset)
             margin-left 10px
             h1
                 font-size 1.5em
+                line-height 1.2em
 
     .headlines
         display none
@@ -77,13 +79,15 @@ shadow(opacity, height, width, offset)
         a.page
             cursor pointer
             width 180px
-            display inline-block
+            display block
+            float left
             margin 0 15px
             padding 6px 0 6px
-            padding-top 8px
+            padding-top 3px
             height headlines-height - (6 * 2)
             color #444
-            line-height 1.3em
+            line-height 1.2em
+            font-size 0.9em
             -webkit-transition color linear .2s
             text-shadow 0px 1px 1px white
 

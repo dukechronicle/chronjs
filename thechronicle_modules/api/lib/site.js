@@ -36,10 +36,11 @@ function _getImages(obj, callback) {
 }
 
 function _convertTimestamp(timestamp) {
+    console.log(timestamp);
     var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
         "October", "November", "December"];
     var date = new Date(timestamp*1000);
-    return month[date.getMonth()] + " " + date.getDay() + ", " + date.getFullYear();
+    return month[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
 }
 
 function _registerArticleView(url, title, callback) {
@@ -205,7 +206,7 @@ site.init = function(app, callback) {
             });
         
             app.get('/staff/:query', function(req, http_res) {
-                api.search.docsByAuthor(req.params.query.replace('-',' '), req.query.order, req.query.facets, function(err, docs, facets) {
+                api.search.docsByAuthor(req.params.query.replace('-',' '), 'desc', '', function(err, docs, facets) {
                     if (err) return globalFunctions.showError(http_res, err);
 
                     docs.forEach(function(doc) {
@@ -591,7 +592,7 @@ function _parseAuthor(doc) {
     
     if (doc.authorsArray && doc.authorsArray.length > 0) {
         for(var i in doc.authorsArray) {
-            doc.authorsHtml += "<a href= '/staff/"+doc.authorsArray[i].replace(/ /g,'-')+"?sort=date&order=desc'>"+doc.authorsArray[i]+"</a>";
+            doc.authorsHtml += "<a href= '/staff/"+doc.authorsArray[i].replace(/ /g,'-')+"'>"+doc.authorsArray[i]+"</a>";
             doc.authors += doc.authorsArray[i];
             if(i < (doc.authorsArray.length-1)) {
                 doc.authors += ", ";

@@ -30,7 +30,7 @@ body a.rounded-hover img{opacity:.8;-webkit-transition:opacity .25s linear;-moz-
 body a.rounded-hover h3{-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear}
 body a.rounded-hover :hover img{opacity:1}
 body a.rounded-hover :hover h3{color:#39c}
-body a.list-story{color:#000;display:block;padding:3px 0 3px 2px}
+body a.list-story{color:#000;display:block;padding:4px 0 4px 2px}
 body a.list-story.first{padding-top:2px}
 body a.list-story.last{padding-bottom:2px}
 body a.hover:hover{color:#36c;border-bottom-color:#4d90f0}

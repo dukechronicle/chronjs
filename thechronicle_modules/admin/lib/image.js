@@ -12,23 +12,27 @@ VALID_EXTENSIONS['image/jpeg'] = 'jpg';
 VALID_EXTENSIONS['image/png'] = 'png';
 VALID_EXTENSIONS['image/gif'] = 'gif';
 
-var IMAGE_TYPES = ['article', 'frontpage', 'slideshow'];
+var IMAGE_TYPES = ['LargeRect', 'ThumbRect', 'ThumbRectL', 'ThumbSquareM', 'ThumbWide'];
 var CROP_SIZES = {
-    thumbMedium: {
-        width: 175,
-        height: 115
+    LargeRect: {
+        width: 636,
+        height: 393
     },
-    thumbLarge: {
-        width: 285,
-        height: 184
+    ThumbRect: {
+        width: 186,
+        height: 133
     },
-    thumbMediumSquare: {
+    ThumbRectL: {
+        width: 276,
+        height: 165
+    },
+    ThumbSquareM: {
         width: 183,
         height: 183
     },
-    slideshow: {
-        width: 636,
-        height: 393
+    ThumbWide: {
+        width: 250,
+        height: 100
     }
 };
 

@@ -3,6 +3,7 @@ var db = require('../../db-abstract');
 var image = exports;
 
 image.getOriginal = function(name, callback) {
+    console.log(name);
     db.image.listOriginals({
         key: name
     }, function(err, res) {

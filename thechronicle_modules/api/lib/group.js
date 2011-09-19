@@ -102,6 +102,7 @@ group.docs = function(namespace, group, callback) {
                         // TODO this should NEVER happen
                         currentArticle.images = {};
                         currentArticle.images[imageType] = doc.doc;
+                        console.log(currentArticle.images);
                     }
                 }
 

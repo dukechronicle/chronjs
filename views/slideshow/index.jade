@@ -2,11 +2,11 @@
     .slides
         for story in stories
             a(href=story.url)
-                if (story && story.images && story.LongRect)
-                    img(src=story.images.LongRect.url)
-                .text
+                 .text
                     h1 #{story.title}
                     h2 #{story.teaser}
+                if (story && story.images && story.images.LargeRect)
+                    img(src=story.images.LargeRect.url)
                
 
     .headlines.roundedbottom

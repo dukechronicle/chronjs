@@ -43,13 +43,14 @@ var views = {
         if (doc.groups) {
             doc.groups.forEach(function(group) {
                 emit(group.concat("article"), {title: doc.title});
-                var newgroup;
-                ["article", "frontpage", "slideshow"].forEach(function(type) {
-                    if(doc.images && doc.images[type]) {
+
+                if (doc.images) {
+                    for (var type in doc.images) {
+                        var newgroup;
                         newgroup = group.concat(["image", type]);
                         emit(newgroup, {_id: doc.images[type]});
-                    }
-                });
+                    };
+                }
             });
         }
     },

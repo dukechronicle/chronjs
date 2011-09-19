@@ -1,11 +1,12 @@
 .slideshow.right
     .slides
-        a(href="/article/dpac-shines-spotlight-durham")
-            img(src='images/slideshow/slideshow-1.jpg')
-        a(href="/article/william-boulding-becomes-new-fuqua-dean")
-            img(src='images/slideshow/slideshow-2.jpg')
-        a(href="/article/beach-takes-seventh-usa-championships")
-            img(src='images/slideshow/slideshow-3.jpg')
+        for story in stories
+            a(href=story.url)
+                if (story && story.images && story.LongRect)
+                    img(src=story.images.LongRect.url)
+                .text
+                    h1 #{story.title}
+                    h2 #{story.teaser}
 
     .headlines
         a.page.first.active.rounded

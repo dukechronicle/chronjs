@@ -389,6 +389,7 @@ site.init = function(app, callback) {
                             if(!doc.images) doc.images = {};
 
                             async.waterfall([
+                                    //
                                 function(callback) {
                                 _getImages(doc.images, callback);
                                 }/*,

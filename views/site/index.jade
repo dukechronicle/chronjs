@@ -5,7 +5,7 @@
             .ads-row.clearfix
                 .image-container.print-edition!=partial('container/image', model.printEdition)
                 .image-container.full-banner!=partial('container/image', model.adFullBanner)
-            .top-news!=partial('container/top-news', {title: "Week's Headlines", news: model.NewsHeadlines, sports: model.SportsHeadlines})
+            .top-news!=partial('container/top-news', {title: "Headlines", news: model.NewsHeadlines, sports: model.SportsHeadlines})
 
         .sidebar
             .twitter!=partial('container/twitter', model.twitter)

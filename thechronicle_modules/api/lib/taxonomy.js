@@ -1,4 +1,5 @@
 var db = require('../../db-abstract');
+var _ = require('underscore');
 
 var taxonomy = exports;
 
@@ -10,52 +11,29 @@ taxonomy.docs = function(taxonomyPath, limit, callback) {
     db.taxonomy.docs(taxonomyPath, limit, callback);
 }
 
-taxonomy.getHierarchy = function(from,callback) {
-    db.taxonomy.getHierarchy(function(err,response)
-    {
-        var currentLevel = {};
-        var hierarchy = currentLevel;
+taxonomy.getParentAndChildren = function(navTree,callback) {
+    var parent = null;
 
-        for(i in response) {
-            var sectionArray = response[i]['key']; 
-            for(j in sectionArray) {
-                var section = sectionArray[j];
-                if(BAD_SECTIONS.indexOf(section) != -1) continue;
-                
-                if(j != sectionArray.length-1) {
-                    if(currentLevel[section] == null) {
-                        currentLevel[section] = {};
+    if (navTree.length > 1) {
+        parent = navTree[navTree.length - 2];
+    }
+
+    db.taxonomy.getChildren(navTree, function(err, results){
+        if (err) return callback(err, null);
+        else {
+            var children = _.map(
+                _.select(
+                    _.pluck(results, 'key'),
+                    function(child) {
+                        return child.length === navTree.length + 1;
                     }
-                    currentLevel = currentLevel[section];
+                ),
+                function(child) {
+                    return child[child.length - 1];
                 }
-                else {
-                    if(currentLevel[section] == null) {
-                        currentLevel[section] = null;
-                    }
-                }
-            }
-            currentLevel = hierarchy;
+            );
+            console.log(children);
+            callback(err, {children: children, parent: parent});
         }
-
-        if(from !== null) {
-           hierarchy = _findSection(from, hierarchy);
-           if(hierarchy == null) hierarchy = {};
-        }
-
-        callback(err,hierarchy);
     });
-}
-
-function _findSection(section, hierarchy) {
-    for(key in hierarchy) {
-        if(key == section) return hierarchy[key];
-    }
-
-    for(key in hierarchy) {
-        var temp = _findSection(section,hierarchy[key]);
-        if(temp != null) {
-            return temp;
-        }
-    }
-    return null;
 }

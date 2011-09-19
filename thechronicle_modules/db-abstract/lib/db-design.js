@@ -14,7 +14,12 @@ var views = {
     map: function(doc) {
             if(doc.urls) {
                 for(var i in doc.urls) {
-                    emit(doc.urls[i], doc._id);
+                    emit([doc.urls[i], "article"], doc);
+                    if (doc.images) {
+                        for (var type in doc.images) {
+                            emit([doc.urls[i], "images", type], {_id: doc.images[type]});
+                        };
+                    }
                 }
             }
         }

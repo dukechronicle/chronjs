@@ -26,13 +26,8 @@ var sportsModel = JSON.parse(fs.readFileSync("sample-data/sports.json"));
 var REDIS_ARTICLE_VIEWS_HASH;
 
 function _getImages(obj, callback) {
-    nimble.map(obj, function(val, key, acallback) {
-        api.docsById(val, function(err, res) {
-            res.imageType = key;
-            acallback(err, res)
-        });
-    },
-    callback);
+    console.log("_getImages DEPRECATED!");
+    callback("DEPRECATED!");
 }
 
 function _convertTimestamp(timestamp) {
@@ -82,6 +77,14 @@ site.init = function(app, callback) {
 
             app.get('/subscribe', function(req, res) {
                 res.render('pages/subscribe', {filename: 'pages/subscribe'});
+            });
+
+            app.get('/edit-board', function(req, res) {
+                res.render('pages/edit-board', {filename: 'pages/edit-board'});
+            });
+
+            app.get('/letters-to-the-editor', function(req, res) {
+                res.render('pages/letters', {filename: 'pages/letters'});
             });
 
 
@@ -262,7 +265,7 @@ site.init = function(app, callback) {
 
             app.get('/article/:url', function(req, http_res) {
                 var url = req.params.url;
-
+                console.log(url);
                 api.docForUrl(url, function(err, doc) {
                     if(err) {
                         return globalFunctions.showError(http_res, err);
@@ -372,6 +375,7 @@ site.init = function(app, callback) {
                 var url = req.params.url;
 
                 api.docForUrl(url, function(err, doc) {
+                    console.log(doc);
                     if(err) {
                         globalFunctions.showError(http_res, err);
                     }
@@ -388,36 +392,16 @@ site.init = function(app, callback) {
                         else {
                             if(!doc.images) doc.images = {};
 
-                            async.waterfall([
-                                    //
-                                function(callback) {
-                                _getImages(doc.images, callback);
-                                }/*,
-
-                                function(images, callback) {
-                                    /*
-                                api.group.list(FRONTPAGE_GROUP_NAMESPACE, function(err, groups) {
-                                    callback(err, groups, images);
-                                });*/
-                                //}
-                                ],
-                                function(err, images) {
-                                //function(err, groups, images) {
-                                    if(err) globalFunctions.showError(http_res, err);
-                                    else {
-                                        http_res.render('admin/edit', {
-                                            locals: {
-                                                    doc: doc,
-                                                    //groups: groups,
-                                                        groups: [],
-                                                    images: images,
-                                                    url: url
-                                            },
-                                            layout: "layout-admin.jade"
-                                        });
-                                    }
-                                }
-                            );
+                            http_res.render('admin/edit', {
+                                locals: {
+                                        doc: doc,
+                                        //groups: groups,
+                                        groups: [],
+                                        images: doc.images,
+                                        url: url
+                                },
+                                layout: "layout-admin.jade"
+                            });
                         }
                     }
                 });

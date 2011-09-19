@@ -115,6 +115,17 @@ site.init = function(app, callback) {
                     console.log(Object.keys(result));
                     _.defaults(result, newsModel);
                     
+                    rss.getRSS('newsblog', function(err, rss) {
+                        if(rss && rss.items && rss.items.length > 0) {
+                            result.Blog = rss.items.map(function(item) {
+                                item.url = item.link;
+                                item.title = item.title.replace( /\&#8217;/g, '’' );
+                                delete item.link;
+                                return item;
+                            });
+                        }
+                    });
+                    
                     api.taxonomy.getHierarchy('News',function(err,hierarchy) {
                         res.render('site/news', {subsections: hierarchy, filename: 'views/site/news.jade', model: result});
                     });

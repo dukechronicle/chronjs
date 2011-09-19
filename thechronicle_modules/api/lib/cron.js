@@ -9,6 +9,15 @@ var feeds = [
 {
     title: "twitter",
     url: "http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=dukechronicle"
+}
+,
+{
+    title: "newsblog",
+    url: "http://feeds.feedburner.com/chronicleblogs/news"
+},
+{
+    title: "recessblog",
+    url: "http://feeds.feedburner.com/chronicleblogs/playground"
 }];
 
 exports.init = function() {
@@ -16,6 +25,7 @@ exports.init = function() {
         feeds.forEach(function(feed) {
             rss.parseRSS(feed.url, function(err, dom) {
                 console.log("Parsed RSS for feed: " + feed.title);
+                console.log(dom);
                 if(err) console.log(err);
                 else {
                     rss.storeRSS(dom, feed.title, function(err, res) {

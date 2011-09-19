@@ -219,21 +219,12 @@ site.init = function(app, callback) {
                         doc = _parseAuthor(doc);
                     });
 
-                    var currentFacets = req.query.facets;
-                    if(!currentFacets) currentFacets = '';
 
-                    var validSections = ["News", "Sports", "Opinion", "Recess", "Towerview"];
-                    // filter out all sections other than main sections
-                    Object.keys(facets.Section).forEach(function(key) {
-                        if (!_.include(validSections, key)) {
-                            delete facets.Section[key];
-                         }
-                    });
 
                     http_res.render(
                         'site/people',
                          {locals:{
-                            docs:docs, currentFacets:currentFacets, facets:facets, query:req.params.query, sort:req.query.sort, order:req.query.order
+                            docs:docs, name: req.params.query.replace('-',' ')
                          }}
                     );
                 });

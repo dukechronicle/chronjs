@@ -124,10 +124,9 @@ site.init = function(app, callback) {
                                 return item;
                             });
                         }
-                    });
-                    
-                    api.taxonomy.getHierarchy('News',function(err,hierarchy) {
-                        res.render('site/news', {subsections: hierarchy, filename: 'views/site/news.jade', model: result});
+                        api.taxonomy.getHierarchy('News',function(err,hierarchy) {
+                            res.render('site/news', {subsections: hierarchy, filename: 'views/site/news.jade', model: result});
+                        });
                     });
                 });
             });
@@ -137,7 +136,7 @@ site.init = function(app, callback) {
                     _.defaults(result, sportsModel);
                     
                     rss.getRSS('sportsblog', function(err, res) {
-                        if(res && res.length != 0) {
+                        if(res && res.items && res.items.length > 0) {
                             result.Blog = res.items.map(function(item) {
                                 item.url = item.link;
                                 item.title = item.title.replace( /\&#8217;/g, '’' );
@@ -165,9 +164,20 @@ site.init = function(app, callback) {
             app.get('/recess', function(req, res) {
                 api.group.docs(RECESS_GROUP_NAMESPACE, null, function(err, result) {
                     
-                    api.taxonomy.getHierarchy('Recess',function(err,hierarchy) {
-                        res.render('site/recess', {subsections: hierarchy, filename: 'views/site/recess.jade', model: result});
-                    });
+                    rss.getRSS('recessblog', function(err, rss) {
+                        if(rss && rss.items && rss.items.length > 0) {
+                            result.Blog = rss.items.map(function(item) {
+                                item.url = item.link;
+                                item.title = item.title.replace( /\&#8217;/g, '’' );
+                                delete item.link;
+                                return item;
+                            });
+                        }
+                        
+                        api.taxonomy.getHierarchy('Recess',function(err,hierarchy) {
+                            res.render('site/recess', {subsections: hierarchy, filename: 'views/site/recess.jade', model: result});
+                        });
+                    })
                 });
             });
 

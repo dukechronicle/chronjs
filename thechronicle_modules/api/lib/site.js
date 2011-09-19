@@ -100,7 +100,12 @@ site.init = function(app, callback) {
                         });
                         result.popular.stories.reverse();
                         
-                        res.render('site/index', {filename: 'views/site/index.jade', model: result});
+                        rss.getRSS('twitter', function(err, tweets) {
+                            if(tweets && tweets.items && tweets.items.length > 0) {
+                                result.twitter.tweet = tweets.items[0].title;
+                            }
+                            res.render('site/index', {filename: 'views/site/index.jade', model: result});
+                        });
                     });
                 });
             });

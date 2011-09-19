@@ -1,13 +1,18 @@
 var cron = require('cron');
 var rss = require('./rss');
 
-var feeds = [{
+var feeds = [
+{
     title: "sportsblog",
     url: "http://feeds.feedburner.com/chronicleblogs/sports"
+},
+{
+    title: "twitter",
+    url: "http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=dukechronicle"
 }];
 
 exports.init = function() {
-    new cron.CronJob('0 0 * * * *', function() { //every hour?
+    new cron.CronJob('0 * * * * *', function() { //every hour?
         feeds.forEach(function(feed) {
             rss.parseRSS(feed.url, function(err, dom) {
                 console.log("Parsed RSS for feed: " + feed.title);

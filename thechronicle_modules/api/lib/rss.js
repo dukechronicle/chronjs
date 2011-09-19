@@ -9,8 +9,10 @@ exports.parseRSS = function(feed, callback) {
     var options = {
         host: urlobj.hostname,
         port: urlobj.path,
-        path: urlobj.pathname + urlobj.search
+        path: urlobj.pathname
     };
+    
+    if(urlobj.search) options.path += urlobj.search;
 
     http.get(options, function(res) {
         var data = "";
@@ -22,7 +24,6 @@ exports.parseRSS = function(feed, callback) {
             callback(err, null);
         });
         res.on('end', function() {
-            console.log(data);
             var handler = new html.RssHandler(callback);
             var parser = new html.Parser(handler);
             parser.parseComplete(data);

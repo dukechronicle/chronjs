@@ -12,7 +12,7 @@
                 div!=partial('container/block.jade', {title: "", story: model.Featured[2]})
             // rss feed
             .column.last
-                .blog!=partial('container/sample-block.jade', {title: "Blog", story:{}})
+                .blog!=partial('container/story-list', {title: "Blog", stories:model.Blog})
 
     .middle.clearfix
         // sandbox

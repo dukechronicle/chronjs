@@ -6,6 +6,7 @@ var globalFunctions = require('../../global-functions');
 var smtp = require('./smtp');
 var redis = require('./redisclient');
 var config = require('../../config');
+var rss = require('./rss');
 
 var _ = require("underscore");
 var async = require('async');
@@ -96,13 +97,18 @@ site.init = function(app, callback) {
                         result.popular.stories = popular.map(function(str) {
                             var parts = str.split('||');
                             return {
-                                url: parts[0],
+                                url: '/article/' + parts[0],
                                 title: parts[1]
                             };
                         });
                         result.popular.stories.reverse();
                         
-                        res.render('site/index', {filename: 'views/site/index.jade', model: result});
+                        rss.getRSS('twitter', function(err, tweets) {
+                            if(tweets && tweets.items && tweets.items.length > 0) {
+                                result.twitter.tweet = tweets.items[0].title;
+                            }
+                            res.render('site/index', {filename: 'views/site/index.jade', model: result});
+                        });
                     });
                 });
             });
@@ -110,19 +116,42 @@ site.init = function(app, callback) {
             app.get('/news', function(req, res) {
                 api.group.docs(NEWS_GROUP_NAMESPACE, null, function(err, model) {
                     _.defaults(model, newsModel);
-                    
-                    api.taxonomy.getParentAndChildren(['News'],function(err, parentAndChildren) {
-                        res.render('site/news', {subsections: parentAndChildren.children, filename: 'views/site/news.jade', model: model});
+
+                    rss.getRSS('newsblog', function(err, rss) {
+                        if(rss && rss.items && rss.items.length > 0) {
+                            model.Blog = rss.items.map(function(item) {
+                                item.url = item.link;
+                                item.title = item.title.replace( /\&#8217;/g, '’' );
+                                delete item.link;
+                                return item;
+                            });
+                            model.Blog.splice(5, model.Blog.length - 5);
+                        }
+                        api.taxonomy.getParentAndChildren(['News'],function(err, parentAndChildren) {
+                            res.render('site/news', {subsections: parentAndChildren.children, filename: 'views/site/news.jade', model: model});
+                        });
                     });
                 });
             });
 
-            app.get('/sports', function(req, res) {
+            app.get('/sports', function(req, http_res) {
                 api.group.docs(SPORTS_GROUP_NAMESPACE, null, function(err, result) {
                     _.defaults(result, sportsModel);
-                    
-                    api.taxonomy.getParentAndChildren(['Sports'],function(err,parentAndChildren) {
-                        res.render('site/sports', {subsections: parentAndChildren.children, filename: 'views/site/sports.jade', model: result});
+
+                    rss.getRSS('sportsblog', function(err, res) {
+                        if(res && res.items && res.items.length > 0) {
+                            result.Blog = res.items.map(function(item) {
+                                item.url = item.link;
+                                item.title = item.title.replace( /\&#8217;/g, '’' );
+                                delete item.link;
+                                return item;
+                            });
+                            result.Blog.splice(8, result.Blog.length - 8);
+                        }
+                        
+                       api.taxonomy.getParentAndChildren(['Sports'],function(err,parentAndChildren) {
+                            res.render('site/sports', {subsections: parentAndChildren.children, filename: 'views/site/sports.jade', model: result});
+                        });
                     });
                 });
             });
@@ -138,10 +167,22 @@ site.init = function(app, callback) {
 
             app.get('/recess', function(req, res) {
                 api.group.docs(RECESS_GROUP_NAMESPACE, null, function(err, result) {
-                    
-                    api.taxonomy.getParentAndChildren(['Recess'],function(err,parentAndChildren) {
+
+                    rss.getRSS('recessblog', function(err, rss) {
+                        if(rss && rss.items && rss.items.length > 0) {
+                            result.Blog = rss.items.map(function(item) {
+                                item.url = item.link;
+                                item.title = item.title.replace( /\&#8217;/g, '’' );
+                                delete item.link;
+                                return item;
+                            });
+                            result.Blog.splice(10, result.Blog.length - 10);
+                        }
+                        
+                        api.taxonomy.getParentAndChildren(['Recess'],function(err,parentAndChildren) {
                         res.render('site/recess', {subsections: parentAndChildren.children, filename: 'views/site/recess.jade', model: result});
                     });
+                    })
                 });
             });
 

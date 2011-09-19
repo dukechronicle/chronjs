@@ -2,7 +2,7 @@
 var express = require('express');
 require('express-namespace');
 var stylus = require('stylus');
-var cron = require('cron');
+var cron = require('./thechronicle_modules/api/lib/cron');
 
 
 
@@ -87,7 +87,9 @@ exports.runSite = function(callback)
 }
 
 function runSite(callback) {
-	port = config.get('SERVER_PORT');	
+	port = config.get('SERVER_PORT');
+	
+	cron.init();	
 
     // use redis as our session store
     redisClient.init(function (err0) {

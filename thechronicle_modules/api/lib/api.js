@@ -206,7 +206,6 @@ api.docForUrl = function(url, callback) {
         limit: 20
     };
 
-    console.log(query);
     db.view("articles/urls", query, function(err, docs) {
         console.log(docs);
         if (err) return callback(err);

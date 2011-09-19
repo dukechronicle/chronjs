@@ -5,13 +5,13 @@ body section > .nav h2 a:hover,body section > .nav h2 a.active{color:#999}
 body section > .nav h2.first a{padding-left:3px}
 body section > .nav a{color:#333}
 body section > #news .left{float:left;}
-body section > #news .left .container{width:206px;}
+body section > #news .left .container{width:262px;}
 body section > #news .left .container .content-container{margin-bottom:-4px;}
 body section > #news .left .container .content-container h2{font-size:1em;margin-bottom:5px}
-body section > #news .left .container .rounded{width:200px}
+body section > #news .left .container .rounded{width:250px}
 body section > #news .right{float:right;}
-body section > #news .right .container{width:262px;}
-body section > #news .right .container .rounded{width:250px}
+body section > #news .right .container{width:206px;}
+body section > #news .right .container .rounded{width:200px}
 body section > #news .middle{width:460px;float:left;padding-left:20px;}
 body section > #news .middle .content-container h2{color:#000;font-size:1.2em}
 body section > #news .middle .content-container p.teaser{color:#444}

@@ -4,7 +4,7 @@ var views = {
     map: function(doc) {
             if (doc.taxonomy) {
                 for (var i in doc.taxonomy) {
-                    emit([doc.taxonomy[i], doc.created], doc);
+                    emit([doc.taxonomy[i], parseInt(doc.created,10)], doc);
                 }
             }
         }

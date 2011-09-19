@@ -21,11 +21,10 @@ var feeds = [
 }];
 
 exports.init = function() {
-    new cron.CronJob('0 * * * * *', function() { //every hour?
+    new cron.CronJob('0 */30 * * * *', function() { //every 30 minutes
         feeds.forEach(function(feed) {
             rss.parseRSS(feed.url, function(err, dom) {
                 console.log("Parsed RSS for feed: " + feed.title);
-                console.log(dom);
                 if(err) console.log(err);
                 else {
                     rss.storeRSS(dom, feed.title, function(err, res) {

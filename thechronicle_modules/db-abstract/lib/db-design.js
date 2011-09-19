@@ -65,7 +65,7 @@ var views = {
     all_by_date: {
     map: function(doc) {
             if(doc.urls) {
-                emit(doc.created, doc);
+                emit(parseInt(doc.created, 10), doc);
             }
         }
     },

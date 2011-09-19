@@ -21,7 +21,7 @@ form(action='/admin/edit', method='POST')
     - if(images)
         p
         table(border=1)
-            - each image in images
+            - each image, imageType in images
                 tr
                     td #{image.imageType}
                     td

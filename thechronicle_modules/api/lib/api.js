@@ -197,18 +197,37 @@ api.addNode = function(parent_path, name, callback) {
     callback);
 }
 
-api.docForUrl = function(url, callback) {    
-    db.view("articles/urls", {
-        key: url
-    },
-    function(err, res) {
-        for(var i in res) {
-            if(url === res[i].key) {
-                api.docsById(res[i].id, callback);
-                return;
+api.docForUrl = function(url, callback) {
+    console.log("querying for url " + url);
+    var query = {
+        startkey: [url],
+        endkey: [url, {}],
+        include_docs: true,
+        limit: 20
+    };
+
+    console.log(query);
+    db.view("articles/urls", query, function(err, docs) {
+        console.log(docs);
+        if (err) return callback(err);
+        var docTypeKey = 1;
+        var aggregateDoc = {};
+        for (var i = 0; i < docs.length; i++) {
+            var doc = docs[i];
+            console.log(doc);
+            var docType = doc.key[docTypeKey];
+
+            if (docType === 'article') {
+                aggregateDoc = doc.doc;
+            } else if (docType === 'images') {
+                var imageType = doc.key[docTypeKey+ 1];
+                // TODO this should NEVER happen
+                aggregateDoc.images = {};
+                aggregateDoc.images[imageType] = doc.doc;
             }
         }
-        callback("Not found", null);
+
+        callback(null, aggregateDoc);
     });
 }
 

@@ -41,8 +41,10 @@ group.docs = function(namespace, group, callback) {
         query.startkey = [namespace, group];
         query.endkey = [namespace, group, {}];
     }
+    console.log("start group query");
     db.view('articles/groups', query,
         function(err, res) {
+            console.log("result");
             if (err) return callback(err);
             if (res) {
                 //console.log(res);

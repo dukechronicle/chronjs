@@ -123,6 +123,7 @@ site.init = function(app, callback) {
                                 delete item.link;
                                 return item;
                             });
+                            result.Blog.splice(5, result.Blog.length - 5);
                         }
                         api.taxonomy.getHierarchy('News',function(err,hierarchy) {
                             res.render('site/news', {subsections: hierarchy, filename: 'views/site/news.jade', model: result});
@@ -143,6 +144,7 @@ site.init = function(app, callback) {
                                 delete item.link;
                                 return item;
                             });
+                            result.Blog.splice(8, result.Blog.length - 8);
                         }
                         
                         api.taxonomy.getHierarchy('Sports',function(err,hierarchy) {
@@ -172,6 +174,7 @@ site.init = function(app, callback) {
                                 delete item.link;
                                 return item;
                             });
+                            result.Blog.splice(10, result.Blog.length - 10);
                         }
                         
                         api.taxonomy.getHierarchy('Recess',function(err,hierarchy) {

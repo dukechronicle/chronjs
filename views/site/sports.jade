@@ -1,22 +1,32 @@
 .nav.clearfix
-    for subsection,subsectionName in subsections    
+    if (subsections)
+        for subsectionName,subsectionPath in subsections
             h2
-                a(href='/section/'+subsectionName) #{subsectionName}        
+                a(href='/section/'+subsectionPath) #{subsectionName}
 #sports
     .top.clearfix
-        .slideshow-wrapper.right-select!=partial('slideshow/slideshow-right')
+        if (model.Slideshow)
+            .slideshow-wrapper.right-select!=partial('slideshow/slideshow-right')
     .middle.clearfix
         .left
-            .last!=partial('container/story-list', {title: "Blog", stories:model.Blog})
+            if (model.Blog)
+                .last!=partial('container/story-list', {title: "Blog", stories:model.Blog})
         .right
-            .column.first
-                .first!=partial('container/row', {story: model.Stories[0]})
-                div!=partial('container/row', {story: model.Stories[2]})
-                .last!=partial('container/row', {story: model.Stories[4]})
-            .column
-                .first!=partial('container/row', {story: model.Stories[1]})
-                div!=partial('container/row', {story: model.Stories[3]})
-                .last!=partial('container/row', {story: model.Stories[5]})
+            if (model.Stories)
+                .column.first
+                    if (model.Stories[0])
+                        .first!=partial('container/row', {story: model.Stories[0]})
+                    if (model.Stories[2])
+                        div!=partial('container/row', {story: model.Stories[2]})
+                    if (model.Stories[4])
+                        .last!=partial('container/row', {story: model.Stories[4]})
+                .column
+                    if (model.Stories[1])
+                        .first!=partial('container/row', {story: model.Stories[1]})
+                    if (model.Stories[3])
+                        div!=partial('container/row', {story: model.Stories[3]})
+                    if (model.Stories[5])
+                            .last!=partial('container/row', {story: model.Stories[5]})
 
     //
         .bottom

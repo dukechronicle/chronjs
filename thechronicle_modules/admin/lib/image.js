@@ -1,4 +1,4 @@
-var globalFunctions = require('../../global-functions');
+ var globalFunctions = require('../../global-functions');
 var async = require('async');
 var s3 = require('./s3.js');
 var im = require('imagemagick');

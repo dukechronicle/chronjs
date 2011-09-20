@@ -307,7 +307,7 @@ site.init = function(app, callback) {
             app.get('/article/:url', function(req, http_res) {
                 var url = req.params.url;
                 console.log(url);
-                api.docForUrl(url, function(err, doc) {
+                api.articleForUrl(url, function(err, doc) {
                     if(err) {
                         return globalFunctions.showError(http_res, err);
                     }
@@ -381,7 +381,7 @@ site.init = function(app, callback) {
             app.get('/article/:url/print', function(req, http_res) {
                 var url = req.params.url;
 
-                api.docForUrl(url, function(err, doc) {
+                api.articleForUrl(url, function(err, doc) {
                     if(err) {
                         globalFunctions.showError(http_res, err);
                     }
@@ -416,13 +416,12 @@ site.init = function(app, callback) {
                 var url = req.params.url;
 
 
-                api.docForUrl(url, function(err, doc) {
+                api.articleForUrl(url, function(err, doc) {
                     console.log(doc);
                     if(err) {
                         globalFunctions.showError(http_res, err);
                     }
                     else {
-                        console.log(doc._id);
                         if(req.query.deleteImage) {
                             var newImages = doc.images;
                             delete newImages[req.query.deleteImage];

@@ -197,6 +197,42 @@ api.addNode = function(parent_path, name, callback) {
     callback);
 }
 
+api.articleForUrl = function(url, callback) {
+    console.log("querying for url " + url);
+    var query = {
+        startkey: [url],
+        endkey: [url, {}],
+        include_docs: true,
+        limit: 20
+    };
+
+    db.view("articles/urls", query, function(err, docs) {
+
+        if (err) return callback(err);
+        var docTypeKey = 1;
+        var aggregateDoc = {};
+        aggregateDoc.images = {};
+        for (var i = 0; i < docs.length; i++) {
+            var doc = docs[i];
+            var docType = doc.key[docTypeKey];
+
+            if (docType === 'article') {
+                aggregateDoc = doc.value;
+            } else if (docType === 'images') {
+                var imageType = doc.key[docTypeKey+ 1];
+                // TODO this should NEVER happen
+                
+                console.log("-----");
+                console.log(doc);
+                console.log("-----");
+                aggregateDoc.images[imageType] = doc.doc;
+            }
+        }
+
+        callback(null, aggregateDoc);
+    });
+}
+
 api.docForUrl = function(url, callback) {
     console.log("querying for url " + url);
     var query = {
@@ -210,26 +246,15 @@ api.docForUrl = function(url, callback) {
         
         if (err) return callback(err);
         var docTypeKey = 1;
-        var aggregateDoc = {};
         for (var i = 0; i < docs.length; i++) {
             var doc = docs[i];
-            console.log(doc);
             var docType = doc.key[docTypeKey];
 
             if (docType === 'article') {
-                aggregateDoc = doc.value;
-            } else if (docType === 'images') {
-                var imageType = doc.key[docTypeKey+ 1];
-                // TODO this should NEVER happen
-                aggregateDoc.images = {};
-                console.log("----");
-                console.log(doc);
-                console.log("----");
-                aggregateDoc.images[imageType] = doc.value._id;
+                var doc = doc.value;
+                callback(null, doc);
             }
         }
-
-        callback(null, aggregateDoc);
     });
 }
 

@@ -1,11 +1,12 @@
 #article h1{font-size:1.7em;text-shadow:0 1px 1px #fff;line-height:1.3em}
+#article img.article{width:580px;border-radius:4px;margin-top:15px}
 #article .metadata{color:#777;font-size:.8em;margin:1em 0}
 #article .social-media{font-size:.8em;float:right;margin-left:1.5em;margin-top:0;height:121px;}
 #article .social-media > div{margin-bottom:.3em}
 #article .social-media .comments a{background:url("http://graphics8.nytimes.com/images/article/comments/icons/comment_black.gif");background-repeat:no-repeat;background-position:0 2px;padding:0 0 3px 20px;color:#000}
 #article .social-media .print a{background:url("http://graphics8.nytimes.com/images/article/functions/tools_print.gif");background-repeat:no-repeat;background-position:0 2px;padding:0 0 3px 20px;color:#000}
 #article .social-media .print{padding-bottom:3px}
-#article .content{width:580px;float:left;padding:.9em 1.5em .6em 1.5em;background:#fff;}
+#article .content{width:580px;float:left;padding:.7em 1.5em .6em 1.5em;background:#fff;}
 #article .content p{color:#333;margin-bottom:1em;font-size:.95em;line-height:1.6em}
 #article .sidebar{float:right;}
 #article .sidebar .container{width:306px}

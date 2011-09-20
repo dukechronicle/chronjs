@@ -166,8 +166,7 @@ exports.init = function(app, callback) {
                         var images = doc.images;
                         if (!images) images = {};
                         images[req.body.imageType] = req.body.versionId;
-                        console.log("jsfljwelf");
-                        console.log(doc._id);
+
                         api.editDoc(doc._id, {
                             images: images
                         },

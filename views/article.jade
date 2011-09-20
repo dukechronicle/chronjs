@@ -5,7 +5,7 @@
             h1 #{doc.title}
 
             if (doc.images && doc.images.LargeRect && doc.images.LargeRect.url)
-                img(src=doc.images.LargeRect.url)
+                img.article(src=doc.images.LargeRect.url)
 
             .metadata
                 span.credit

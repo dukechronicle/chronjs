@@ -7,6 +7,9 @@ var configuration = {
             "COUCHDB_URL":"https://chrondev:pikachu@chrondev.iriscouch.com",
             "COUCHDB_DATABASE":"production",
 
+            "COUCHDB_URL":"http://dean:dean@173.203.194.125:5984",
+            "COUCHDB_DATABASE":"production",
+
             //"COUCHDB_URL":"https://app578498.heroku:NNbL2x3Bu5vGLgComPjWxxET@app578498.heroku.cloudant.com",
             //"COUCHDB_DATABASE":"production",
 

@@ -415,6 +415,7 @@ site.init = function(app, callback) {
             app.get('/article/:url/edit', site.checkAdmin, site.renderArticleEdit = function(req, http_res) {
                 var url = req.params.url;
 
+
                 api.docForUrl(url, function(err, doc) {
                     console.log(doc);
                     if(err) {
@@ -432,7 +433,7 @@ site.init = function(app, callback) {
                         }
                         else {
                             if(!doc.images) doc.images = {};
-
+                            console.log(doc.images);
                             http_res.render('admin/edit', {
                                 locals: {
                                         doc: doc,

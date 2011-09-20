@@ -207,7 +207,7 @@ api.docForUrl = function(url, callback) {
     };
 
     db.view("articles/urls", query, function(err, docs) {
-        console.log(docs);
+        
         if (err) return callback(err);
         var docTypeKey = 1;
         var aggregateDoc = {};
@@ -217,12 +217,15 @@ api.docForUrl = function(url, callback) {
             var docType = doc.key[docTypeKey];
 
             if (docType === 'article') {
-                aggregateDoc = doc.doc;
+                aggregateDoc = doc.value;
             } else if (docType === 'images') {
                 var imageType = doc.key[docTypeKey+ 1];
                 // TODO this should NEVER happen
                 aggregateDoc.images = {};
-                aggregateDoc.images[imageType] = doc.doc;
+                console.log("----");
+                console.log(doc);
+                console.log("----");
+                aggregateDoc.images[imageType] = doc.value._id;
             }
         }
 

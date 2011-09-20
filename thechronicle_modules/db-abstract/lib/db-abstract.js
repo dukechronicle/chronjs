@@ -12,7 +12,8 @@ var DB_HOST = null;
 
 // parse environment variable CLOUDANT_URL OR COUCHDB_URL to extract authentication information
 function connect(database) {
-    var couchdbUrl = process.env.CLOUDANT_URL || config.get("COUCHDB_URL");
+    //var couchdbUrl = process.env.CLOUDANT_URL || config.get("COUCHDB_URL");
+    var couchdbUrl = config.get("COUCHDB_URL");
     if(!couchdbUrl) throw "No Cloudant URL specified...";
     console.log("Connecting to " + database + " at " + couchdbUrl);
     couchdbUrl = url.parse(couchdbUrl);
@@ -86,6 +87,7 @@ db.init = function(callback) {
             });
         }
         else {
+             callback(null);
                 //updateViews(callback);
         }
     });

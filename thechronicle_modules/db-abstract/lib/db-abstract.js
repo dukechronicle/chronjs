@@ -86,7 +86,7 @@ db.init = function(callback) {
             });
         }
         else {
-                updateViews(callback);
+                //updateViews(callback);
         }
     });
 }

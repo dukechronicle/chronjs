@@ -58,6 +58,9 @@ header #header-bottom .social-media .inner .icons{text-align:left;}
 header #header-bottom .social-media .inner .icons img{opacity:.5;padding-right:7px;width:19px;height:19px;-webkit-transition:opacity,.25s linear;-moz-transition:opacity,.25s linear;-o-transition:opacity,.25s linear;transition:opacity,.25s linear}
 header #header-bottom .social-media .inner .icons a:hover img{opacity:1}
 header #header-bottom .social-media .inner .icons img.last{padding-right:0}
-footer{clear:both;color:#888;font-variant:small-caps;text-shadow:0 1px 1px #fff;font-size:.85em;padding-bottom:1.5em;}
-footer p.copyright{display:inline;margin-right:20px}
-footer span.links a:hover{text-decoration:underline}
+footer{margin-top:30px;clear:both;color:#888;font-variant:small-caps;text-shadow:0 1px 1px #fff;font-size:.85em;padding-bottom:1.5em;}
+footer p.copyright{display:block;float:left;margin-right:20px;}
+footer p.copyright a{margin-right:20px}
+footer .links{width:505px;float:right;text-align:right;}
+footer .links a{margin-left:20px}
+footer .links a:hover{text-decoration:underline}

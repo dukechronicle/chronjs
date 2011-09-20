@@ -96,11 +96,12 @@ group.docs = function(namespace, group, callback) {
 
                         // retain reference to current article so images that are processed next can easily access it
                         currentArticle = groupedResults[groupName][groupedResults[groupName].length - 1];
+
+                        // TODO this should NEVER happen
+                        currentArticle.images = {};
                     } else if (docType === "image") {
                         // if it
                         var imageType = doc.key[DOC_TYPE_KEY + 1];
-                        // TODO this should NEVER happen
-                        currentArticle.images = {};
                         currentArticle.images[imageType] = doc.doc;
                         console.log(currentArticle.images);
                     }

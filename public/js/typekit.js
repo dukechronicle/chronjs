@@ -1,8 +1,12 @@
 try {
 	Typekit.load({
 		active: function() {
-			pageAlign();
-			verticalAlign();
+            if (pageAlign) {
+			    pageAlign();
+            }
+            if (verticalAlign) {
+			    verticalAlign();
+            }
 		}
 	});
 } catch(e) {

@@ -1,32 +1,45 @@
 .nav.clearfix
-    for subsection,subsectionName in subsections    
+    if (subsections)
+        for subsection,subsectionName in subsections
             h2
                 a(href='/section/'+subsectionName) #{subsectionName}
 #opinion
     .top.clearfix
         // feature
-        .main!=partial('container/featured-image.jade', {title: "", story: model.Featured[0]})
+        if (model.Featured && model.Featured[0])
+            .main!=partial('container/featured-image.jade', {title: "", story: model.Featured[0]})
         .right
-            .row.first!=partial('container/row', {title: "", story: model.Featured[1]})
-            .row.last!=partial('container/row', {title: "", story: model.Featured[2]})
+            if (model.Featured && model.Featured[1])
+                .row.first!=partial('container/row', {title: "", story: model.Featured[1]})
+            if (model.Featured && model.Featured[2])
+                .row.last!=partial('container/row', {title: "", story: model.Featured[2]})
             
         // columnist
         .row
-            div!=partial('container/block.jade', {title: "Columnist", story:model.Columnists[0]})
-            div!=partial('container/block.jade', {title: "Columnist", story:model.Columnists[1]})
-            div!=partial('container/block.jade', {title: "Columnist", story:model.Columnists[2]})
-            .last!=partial('container/block.jade', {title: "Columnist", story:model.Columnists[3]})
+            if (model.Columnists && model.Columnists[0])
+                div!=partial('container/block.jade', {title: "Columnist", story:model.Columnists[0]})
+            if (model.Columnists && model.Columnists[1])
+                div!=partial('container/block.jade', {title: "Columnist", story:model.Columnists[1]})
+            if (model.Columnists && model.Columnists[2])
+                div!=partial('container/block.jade', {title: "Columnist", story:model.Columnists[2]})
+            if (model.Columnists && model.Columnists[3])
+                .last!=partial('container/block.jade', {title: "Columnist", story:model.Columnists[3]})
     .middle.clearfix
         // rss
         .blog!=partial('container/sample-block.jade', {title: "Blog"})
         // edit board
-        .editBoard!=partial('container/block.jade', {title: "Editorial Board", story:model.EditBoard[0]})
+        if (model.EditBoard && model.EditBoard[3])
+            .editBoard!=partial('container/block.jade', {title: "Editorial Board", story:model.EditBoard[0]})
         // most popular
         .mostPopular.last!=partial('container/sample-block.jade', {title: "Popular"})
     .bottom
         // more columnists
         .row
-            div!=partial('container/block.jade', {title: "Columnist", story:model.MoreColumnists[0]})
-            div!=partial('container/block.jade', {title: "Columnist", story:model.MoreColumnists[1]})
-            div!=partial('container/block.jade', {title: "Columnist", story:model.MoreColumnists[2]})
-            .last!=partial('container/block.jade', {title: "Columnist", story:model.MoreColumnists[3]})
+            if (model.MoreColumnists && model.MoreColumnists[0])
+                div!=partial('container/block.jade', {title: "Columnist", story:model.MoreColumnists[0]})
+            if (model.MoreColumnists && model.MoreColumnists[1])
+                div!=partial('container/block.jade', {title: "Columnist", story:model.MoreColumnists[1]})
+            if (model.MoreColumnists && model.MoreColumnists[2])
+                div!=partial('container/block.jade', {title: "Columnist", story:model.MoreColumnists[2]})
+            if (model.MoreColumnists && model.MoreColumnists[3])
+                .last!=partial('container/block.jade', {title: "Columnist", story:model.MoreColumnists[3]})

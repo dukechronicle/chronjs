@@ -211,13 +211,14 @@ api.articleForUrl = function(url, callback) {
         if (err) return callback(err);
         var docTypeKey = 1;
         var aggregateDoc = {};
-        aggregateDoc.images = {};
+
         for (var i = 0; i < docs.length; i++) {
             var doc = docs[i];
             var docType = doc.key[docTypeKey];
 
             if (docType === 'article') {
                 aggregateDoc = doc.value;
+                aggregateDoc.images = {};
             } else if (docType === 'images') {
                 var imageType = doc.key[docTypeKey+ 1];
                 // TODO this should NEVER happen

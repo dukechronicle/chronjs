@@ -24,6 +24,23 @@ var views = {
             }
         }
     },
+    // return all doc ids keyed by doc url if one exists
+    duplicate_urls: {
+    map: function(doc) {
+            if(doc.urls) {
+                for(var i in doc.urls) {
+                    emit(doc.urls[i], null);
+                }
+            }
+        },
+    reduce: function(keys, values, rereduce) {
+            if (rereduce) {
+                return sum(values);
+            } else {
+                return 1;
+            }
+        }
+    },
     // return all node page documents
     nodes: {
     map: function(doc) {

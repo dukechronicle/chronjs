@@ -4,8 +4,8 @@
 
     a.rounded-hover(href=story.url)
         .content-container
-            - if (story.images && story.images.largeRect)
-                img(src=story.images.largeRect.url)
+            - if (story.images && story.images.LargeRect)
+                img(src=story.images.LargeRect.url)
             .text-
                 h2 #{story.title}
                 p.teaser #{story.teaser}

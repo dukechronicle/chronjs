@@ -1,8 +1,8 @@
 .nav.clearfix
     if (subsections)
-        for subsection,subsectionName in subsections
+        for subsectionName,subsectionPath in subsections
             h2
-                a(href='/section/'+subsectionName) #{subsectionName}
+                a(href='/section/' + subsectionPath) #{subsectionName}
 #opinion
     .top.clearfix
         // feature

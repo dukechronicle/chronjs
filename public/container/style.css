@@ -26,10 +26,7 @@ body .twitter .container .text p{font-size:.85em;line-height:1.2em;padding-left:
 body .twitter .container img{padding-left:3px;margin-left:3px;float:right;width:67px;height:67px}
 body .rounded,body .rounded-hover{-webkit-border-radius:4px;-moz-border-radius:4px;-o-border-radius:4px;-khtml-border-radius:4px;border-top-left-radius:4px 4px;border-top-right-radius:4px 4px;border-bottom-right-radius:4px 4px;border-bottom-left-radius:4px 4px;-webkit-box-shadow:rgba(0,0,0,0.40) 0 1px 3px;-moz-box-shadow:rgba(0,0,0,0.40) 0 1px 3px;box-shadow:rgba(0,0,0,0.40) 0 1px 3px;background-color:#fff;background:-webkit-gradient(linear,left bottom,left top,color-stop(0,whiteSmoke),color-stop(.33,#fff));background:-moz-linear-gradient(center bottom,whiteSmoke 0%,#fff 33%);float:right}
 body a.rounded-hover{border-left:1px solid transparent;border-right:1px solid transparent;}
-body a.rounded-hover img{opacity:.8;-webkit-transition:opacity .25s linear;-moz-transition:opacity .25s linear;-o-transition:opacity .25s linear;transition:opacity .25s linear}
 body a.rounded-hover h3{-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear}
-body a.rounded-hover :hover img{opacity:1}
-body a.rounded-hover :hover h3{color:#36c}
 body a.list-story{color:#000;display:block;padding:4px 0 4px 2px}
 body a.list-story.first{padding-top:2px}
 body a.list-story.last{padding-bottom:2px}
@@ -39,3 +36,6 @@ body .vertical-container .vertical{font-size:.9em;color:#444;letter-spacing:1px;
 body .most-popular ol li{list-style:decimal outside}
 body .most-popular ol li h2{margin-left:-9px}
 body .most-popular ol{margin-left:18px;font-family:Georgia,"Century Schoolbook","Times New Roman",Times,serif}
+.lighten img{opacity:.8;-webkit-transition:opacity .25s linear;-moz-transition:opacity .25s linear;-o-transition:opacity .25s linear;transition:opacity .25s linear}
+.lighten a.hover :hover img,.lighten a.rounded-hover :hover img{opacity:1}
+.lighten a.hover :hover h3,.lighten a.rounded-hover :hover h3{color:#36c}

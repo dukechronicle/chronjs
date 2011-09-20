@@ -169,17 +169,8 @@ body
         border-left 1px solid transparent
         border-right 1px solid transparent
 
-        img
-            opacity 0.8
-            transition opacity 0.25s linear
-
         h3
             transition color 0.25s linear
-        :hover
-            img
-                opacity 1
-            h3
-                color #36c
 
 
     a.list-story
@@ -246,3 +237,15 @@ body
     .most-popular ol
         margin-left 18px
         font-family Georgia,"Century Schoolbook","Times New Roman",Times,serif
+
+.lighten
+    img
+        opacity 0.8
+        transition opacity 0.25s linear
+
+.lighten a.hover, .lighten a.rounded-hover
+    :hover
+        img
+            opacity 1
+        h3
+            color #36c

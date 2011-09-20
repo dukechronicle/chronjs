@@ -4,7 +4,16 @@ var _ = require('underscore');
 var taxonomy = exports;
 
 // sections that exists, but that we don't want to show up in the taxonomy
-var BAD_SECTIONS = ['Graduation Issue','Tennis','Basketball','Soccer','Golf','Lacross'];
+var BAD_SECTIONS = ['News/Graduation Issue',
+    'Sports/Tennis','Sports/Basketball',
+    'Sports/Soccer','Sports/Golf',
+    'Sports/Lacross', 'Sports/Sports Briefs',
+    'Sports/Olympics', 'Sports/Sports Features',
+    'Sports/Sports Column', 'Sports/Department of Athletics',
+    'Sports/Durham Bulls', 'Sports/Wrestling',
+    'Sports/Volleyball', 'Sports/Fencing',
+    'Sports/Field Hockey',
+    'Opinion/Cartoons'];
 
 // get all document under given taxonomy path ex. ["News", "University"]
 taxonomy.docs = function(taxonomyPath, limit, callback) {
@@ -16,7 +25,6 @@ taxonomy.getParentAndChildren = function(navTree,callback) {
 
 
     db.taxonomy.getChildren(navTree, function(err, results){
-        console.log(results);
         if (err) return callback(err, null);
         else {
             var children = {};
@@ -33,6 +41,13 @@ taxonomy.getParentAndChildren = function(navTree,callback) {
                     children[childPath] = child[child.length - 1];
                 }
             );
+
+            Object.keys(children).forEach(function(key) {
+                console.log(key)
+                if (BAD_SECTIONS.indexOf(key) !== -1) {
+                    delete children[key];
+                }
+            })
 
             var parentPaths = [];
 

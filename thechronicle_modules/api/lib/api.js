@@ -94,8 +94,6 @@ function _editDocument(docid, fields, callback) {
             return callback(geterr, null, null);
 
         if(fields.title && (_URLify(fields.title, MAX_URL_LENGTH) !== _URLify(res.title, MAX_URL_LENGTH))) {
-            console.log("new url");
-            console.log(fields.title);
             getAvailableUrl(_URLify(fields.title, MAX_URL_LENGTH), 0, function(err, url) {
                 if(err) {
                     callback(err, null, null);
@@ -142,7 +140,6 @@ api.docsById = function(id, callback) {
 
 api.docsByAuthor = function(author, callback) {
     var decodeAuthor = decodeURIComponent(author);
-    console.log("decoded author: " + decodeAuthor);
 
     var query = {descending: true, startkey:decodeAuthor, endkey: decodeAuthor};
 
@@ -161,7 +158,6 @@ api.docsByAuthor = function(author, callback) {
 }
 
 api.addDoc = function(fields, callback) {
-    console.log(fields.type);
     if (fields.type === 'article') {
         getAvailableUrl(_URLify(fields.title, MAX_URL_LENGTH), 0, function(err, url) {
             if(err){
@@ -199,7 +195,6 @@ api.addNode = function(parent_path, name, callback) {
 }
 
 api.articleForUrl = function(url, callback) {
-    console.log("querying for url " + url);
     var query = {
         startkey: [url],
         endkey: [url, {}],
@@ -223,10 +218,7 @@ api.articleForUrl = function(url, callback) {
             } else if (docType === 'images') {
                 var imageType = doc.key[docTypeKey+ 1];
                 // TODO this should NEVER happen
-                
-                console.log("-----");
-                console.log(doc);
-                console.log("-----");
+
                 aggregateDoc.images[imageType] = doc.doc;
             }
         }
@@ -236,7 +228,6 @@ api.articleForUrl = function(url, callback) {
 }
 
 api.docForUrl = function(url, callback) {
-    console.log("querying for url " + url);
     var query = {
         startkey: [url],
         endkey: [url, {}],

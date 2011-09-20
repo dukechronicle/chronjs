@@ -5,10 +5,7 @@ $(function(){
 
 	var positions  = [106, 318, 530];
 	// start by showing only the first sldie
-    $('.slideshow .slides img:gt(0)').hide();
-    $('.slideshow .slides .text a:gt(0)').hide();
-    $('.slideshow .slides .text h1:gt(0)').hide();
-    $('.slideshow .slides .text h2:gt(0)').hide();
+
     $('.slideshow .headlines a:eq(0)').addClass('active');
 
 	/*

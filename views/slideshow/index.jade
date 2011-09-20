@@ -1,12 +1,19 @@
 .slideshow
     .slides
-        for story in stories
+        for story, index in stories
             a(href=story.url)
                  .text
-                    h1 #{story.title}
-                    h2 #{story.teaser}
-                if (story && story.images && story.images.LargeRect)
-                    img(src=story.images.LargeRect.url)
+                    if (index == 0)
+                        h1 #{story.title}
+                        h2 #{story.teaser}
+                    else
+                        h1(style="display:none") #{story.title}
+                        h2(style="display:none") #{story.teaser}
+                 if (story && story.images && story.images.LargeRect)
+                    if (index == 0)
+                        img(src=story.images.LargeRect.url)
+                    else
+                        img(src=story.images.LargeRect.url, style="display: none")
                
 
     .headlines.roundedbottom

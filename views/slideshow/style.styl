@@ -1,7 +1,13 @@
 headlines-height = 50px
 width = 636px
 height = 393px
-textHeight = 70px
+textHeight = 80px
+
+transition()
+    -webkit-transition arguments
+    -moz-transition arguments
+    -o-transition arguments
+    transition arguments
 
 shadow(opacity, height, width, offset)
     -webkit-box-shadow rgba(0, 0, 0, opacity) height width offset
@@ -25,6 +31,8 @@ shadow(opacity, height, width, offset)
 
 
     .slides img
+        border-top 1px solid #ccc
+        
         //-webkit-border-top-left-radius  4px
         //-webkit-border-top-right-radius  4px
         //-moz-border-radius-topleft  4px
@@ -52,13 +60,19 @@ shadow(opacity, height, width, offset)
         //border-color #E5E5E5 #DBDBDB #D2D2D2
         box-shadow rgba(0,0,0,0.3) 0 1px 3px
 
+        a:hover
+            h1
+                color #36c
+
         .text
-            margin-top 2px
+            margin-top 4px
             margin-left 10px
             position absolute
             h1
+                transition(color, .25s, linear)
                 font-size 1.5em
-                line-height 1.2em
+                line-height 1.1em
+                margin-bottom 2px
 
     .headlines
         display none

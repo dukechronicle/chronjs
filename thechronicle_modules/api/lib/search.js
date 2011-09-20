@@ -43,11 +43,19 @@ search.indexUnindexedArticles = function(count) {
                 if(row.taxonomy && row.taxonomy[0]) section = row.taxonomy[0];
 
                 row.body = row.body.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ');
-                console.log(row.body);
+                row.title = row.title.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ');
+                row.authors = row.authors.map(function(author) {
+                    return author.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ');
+                });
+                //row.authors = [];
+                //row.authors = row.authors.replace(/^[\x00-\x08\x0B\x0C\x0E-\x1F\xFFFE\xFFFF]/g, ' ');
+
+               // section
 
                 search.indexArticle(row._id,row.title,row.body, section, row.authors, row.created, function(error2, response2) {
                     if(error2) console.log(error2);
                     else {
+
                         db.search.setArticleAsIndexed(row._id, INDEX_VERSION, function(error3, response3) {
                             if(error3) console.log(error3);
                             else console.log('indexed "' + row.title + '"');

@@ -42,6 +42,9 @@ search.indexUnindexedArticles = function(count) {
                 var section = undefined;
                 if(row.taxonomy && row.taxonomy[0]) section = row.taxonomy[0];
 
+                row.body = row.body.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ');
+                console.log(row.body);
+
                 search.indexArticle(row._id,row.title,row.body, section, row.authors, row.created, function(error2, response2) {
                     if(error2) console.log(error2);
                     else {

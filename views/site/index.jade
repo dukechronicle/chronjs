@@ -1,22 +1,34 @@
 #frontpage
     #top.clearfix
         .content
-            #slideshow!=partial('slideshow', {stories: model.Slideshow})
+            if (model.Slideshow)
+                #slideshow!=partial('slideshow', {stories: model.Slideshow})
             .ads-row.clearfix
-                .image-container.print-edition!=partial('container/image', model.printEdition)
-                .image-container.full-banner!=partial('container/image', model.adFullBanner)
-            .top-news!=partial('container/top-news', {title: "Headlines", news: model.NewsHeadlines, sports: model.SportsHeadlines})
+                if (model.printEdition)
+                    .image-container.print-edition!=partial('container/image', model.printEdition)
+                if (model.adFullBanner)
+                    .image-container.full-banner!=partial('container/image', model.adFullBanner)
+            if (model.NewsHeadlines && model.SportsHeadlines)
+                .top-news!=partial('container/top-news', {title: "Headlines", news: model.NewsHeadlines, sports: model.SportsHeadlines})
 
         .sidebar
-            .twitter!=partial('container/twitter', model.twitter)
-            .most-popular!=partial('container/most-popular', model.popular)
-            .image-container.medium-rectangle!=partial('container/image', model.adFullRectangle)
-            .opinion!=partial('container/opinion', {title: "Opinion", stories: model.Opinion})
+            if (model.twitter)
+                .twitter!=partial('container/twitter', model.twitter)
+            if (model.popular)
+                .most-popular!=partial('container/most-popular', model.popular)
+            if (model.adFullRectangle)
+                .image-container.medium-rectangle!=partial('container/image', model.adFullRectangle)
+            if (model.Opinion)
+                .opinion!=partial('container/opinion', {title: "Opinion", stories: model.Opinion})
     #middle
         #news-sports.clearfix
-            #news!=partial('container/news', {title: "News", stories: model.News})
-            #sports!=partial('container/news', {title: "Sports", stories: model.Sports})
+            if (model.News)
+                #news!=partial('container/news', {title: "News", stories: model.News})
+            if (model.Sports)
+                #sports!=partial('container/news', {title: "Sports", stories: model.Sports})
     #bottom
-        #recess!=partial('container/block-row', {title: "Recess", stories: model.Recess})
-        #towerview!=partial('container/block-row', {title: "Towerview", stories: model.Towerview})
+        if (model.Recess)
+            #recess!=partial('container/block-row', {title: "Recess", stories: model.Recess})
+        if (model.Towerview)
+            #towerview!=partial('container/block-row', {title: "Towerview", stories: model.Towerview})
 

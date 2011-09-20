@@ -107,7 +107,12 @@ site.init = function(app, callback) {
                             if(tweets && tweets.items && tweets.items.length > 0) {
                                 result.twitter.tweet = tweets.items[0].title;
                             }
-                            res.render('site/index', {filename: 'views/site/index.jade', model: result});
+                            res.render('site/index', {
+                                filename: 'views/site/index.jade',
+                                locals: {
+                                    model: result
+                                }
+                            });
                         });
                     });
                 });

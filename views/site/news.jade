@@ -1,7 +1,8 @@
 .nav.clearfix
-    for subsectionName,subsectionPath in subsections
-        h2
-            a(href='/section/' + subsectionPath) #{subsectionName}
+    if (subsections)
+        for subsectionName,subsectionPath in subsections
+            h2
+                a(href='/section/' + subsectionPath) #{subsectionName}
 #news
     .left
         .videos!=partial('container/custom', {title: "Interview", url: "#", html: '<iframe width="250" height="170" src="http://www.youtube.com/embed/2iQyr_OkUz0?rel=0" frameborder="0" allowfullscreen></iframe>'})
@@ -12,21 +13,34 @@
 
 
     .middle
-        .featured!=partial('container/featured-image', {title: "", story: model.Featured[0]});
-        .headline!=partial('container/row', {story: model.Headlines[0]})
-        .headline!=partial('container/row', {story: model.Headlines[1]})
+        if (model.Featured && model.Featured[0])
+            .featured!=partial('container/featured-image', {title: "", story: model.Featured[0]});
+        if (model.Headlines && model.Headlines[0])
+            .headline!=partial('container/row', {story: model.Headlines[0]})
+        if (model.Headlines && model.Headlines[1])
+            .headline!=partial('container/row', {story: model.Headlines[1]})
         .row.clearfix
-            .block.first!=partial('container/block', {story: model.Stories[0]})
-            .block!=partial('container/block', {story: model.Stories[1]})
-            .block!=partial('container/block', {story: model.Stories[2]})
+            if (model.Stories && model.Stories[0])
+                .block.first!=partial('container/block', {story: model.Stories[0]})
+            if (model.Stories && model.Stories[1])
+                .block!=partial('container/block', {story: model.Stories[1]})
+            if (model.Stories && model.Stories[2])
+                .block!=partial('container/block', {story: model.Stories[2]})
         .row.clearfix
-            .block.first!=partial('container/block', {story: model.Stories[3]})
-            .block!=partial('container/block', {story: model.Stories[4]})
-            .block!=partial('container/block', {story: model.Stories[5]})
+            if (model.Stories && model.Stories[3])
+                .block.first!=partial('container/block', {story: model.Stories[3]})
+            if (model.Stories && model.Stories[4])
+                .block!=partial('container/block', {story: model.Stories[4]})
+            if (model.Stories && model.Stories[5])
+                .block!=partial('container/block', {story: model.Stories[5]})
 
     .right
-        .blog!=partial('container/story-list', {title: "Blog", stories: model.Blog})
-        .dsg!=partial('container/story-list', {title: "9/11", stories: model.DSG})
-        .china!=partial('container/story-list', {title: "China", stories: model.China})
-        .duu!=partial('container/story-list', {title: "Dining", stories: model.DUU})
+        if (model.Blog)
+            .blog!=partial('container/story-list', {title: "Blog", stories: model.Blog})
+        if (model.DSG)
+            .dsg!=partial('container/story-list', {title: "9/11", stories: model.DSG})
+        if (model.China)
+            .china!=partial('container/story-list', {title: "China", stories: model.China})
+        if (model.DUU)
+            .duu!=partial('container/story-list', {title: "Dining", stories: model.DUU})
 

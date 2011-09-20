@@ -139,7 +139,7 @@ site.init = function(app, callback) {
                 });
             });
 
-            app.get('/sports', function(req, http_res) {
+            app.get('/sports', function(req, httpRes) {
                 api.group.docs(SPORTS_GROUP_NAMESPACE, null, function(err, result) {
                     _.defaults(result, sportsModel);
 
@@ -155,7 +155,7 @@ site.init = function(app, callback) {
                         }
                         
                        api.taxonomy.getParentAndChildren(['Sports'],function(err,parentAndChildren) {
-                            res.render('site/sports', {subsections: parentAndChildren.children, filename: 'views/site/sports.jade', model: result});
+                            httpRes.render('site/sports', {subsections: parentAndChildren.children, filename: 'views/site/sports.jade', model: result});
                         });
                     });
                 });

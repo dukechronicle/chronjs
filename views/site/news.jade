@@ -37,6 +37,8 @@
     .right
         if (model.Blog)
             .blog!=partial('container/story-list', {title: "Blog", stories: model.Blog})
+        if (model.popular)
+                .most-popular!=partial('container/most-popular', {title: "Popular", stories: model.popular})
         if (model.DSG)
             .dsg!=partial('container/story-list', {title: "9/11", stories: model.DSG})
         if (model.China)

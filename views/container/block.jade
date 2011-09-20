@@ -5,4 +5,6 @@
     a.rounded-hover(href=story.url)
         .content-container
             h2 #{story.title}
+            if (story.images && story.images.ThumbRect)
+                img.thumb(src=story.images.ThumbRect.url)
             p.teaser #{story.teaser}

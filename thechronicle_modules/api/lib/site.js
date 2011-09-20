@@ -94,14 +94,14 @@ site.init = function(app, callback) {
                     _.defaults(result, homeModel);
                     
                     redis.client.zrange(REDIS_ARTICLE_VIEWS_HASH, 0, 5, function(err, popular) {
-                        result.popular.stories = popular.map(function(str) {
+                        result.popular = popular.map(function(str) {
                             var parts = str.split('||');
                             return {
                                 url: '/article/' + parts[0],
                                 title: parts[1]
                             };
                         });
-                        result.popular.stories.reverse();
+                        result.popular.reverse();
                         
                         rss.getRSS('twitter', function(err, tweets) {
                             if(tweets && tweets.items && tweets.items.length > 0) {
@@ -121,19 +121,28 @@ site.init = function(app, callback) {
             app.get('/news', function(req, res) {
                 api.group.docs(NEWS_GROUP_NAMESPACE, null, function(err, model) {
                     _.defaults(model, newsModel);
-
-                    rss.getRSS('newsblog', function(err, rss) {
-                        if(rss && rss.items && rss.items.length > 0) {
-                            model.Blog = rss.items.map(function(item) {
-                                item.url = item.link;
-                                item.title = item.title.replace( /\&#8217;/g, '’' );
-                                delete item.link;
-                                return item;
+                    redis.client.zrange(REDIS_ARTICLE_VIEWS_HASH, 0, 5, function(err, popular) {
+                        model.popular = popular.map(function(str) {
+                            var parts = str.split('||');
+                            return {
+                                url: '/article/' + parts[0],
+                                title: parts[1]
+                            };
+                        });
+                        model.popular.reverse();
+                        rss.getRSS('newsblog', function(err, rss) {
+                            if(rss && rss.items && rss.items.length > 0) {
+                                model.Blog = rss.items.map(function(item) {
+                                    item.url = item.link;
+                                    item.title = item.title.replace( /\&#8217;/g, '’' );
+                                    delete item.link;
+                                    return item;
+                                });
+                                model.Blog.splice(5, model.Blog.length - 5);
+                            }
+                            api.taxonomy.getParentAndChildren(['News'],function(err, parentAndChildren) {
+                                res.render('site/news', {subsections: parentAndChildren.children, filename: 'views/site/news.jade', model: model});
                             });
-                            model.Blog.splice(5, model.Blog.length - 5);
-                        }
-                        api.taxonomy.getParentAndChildren(['News'],function(err, parentAndChildren) {
-                            res.render('site/news', {subsections: parentAndChildren.children, filename: 'views/site/news.jade', model: model});
                         });
                     });
                 });

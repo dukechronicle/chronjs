@@ -3,6 +3,12 @@ link-color = #36c
 container-padding = 4px
 top-content-width =  642px
 
+transition()
+    -webkit-transition arguments
+    -moz-transition arguments
+    -o-transition arguments
+    transition arguments
+
 container-vertical-spacing = 23px
 
 body section > .nav
@@ -72,13 +78,25 @@ body section > #news
         float right
         // align side bar with main content bar
         .container
-            width = 200px
+            width = 206px
             width width + 3 * 2
             
             .rounded
                 width width
 
     .middle
+        a.rounded-hover
+            :hover
+                h1, h2, h3, h4
+                    color #36C
+            h1, h2, h3, h4
+                transition(color, .25s, linear)
+
+        .row
+            .content-container
+                img.thumb
+                    border-radius 4px
+
         width 460px
         float left
         padding-left 20px
@@ -128,10 +146,13 @@ body section > #news
                         height 220px
                 float
                     left
+                img
+                    width 138px
                 h2
                     font-size 1em
                     margin-bottom 3px
                     margin-top -4px
+                    line-height 1.2em
                 p.teaser
                     font-size 0.9em
                     line-height 1.3em

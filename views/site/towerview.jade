@@ -1,23 +1,36 @@
 .nav.clearfix
-    for subsection,subsectionName in subsections    
-            h2
-                a(href='/section/'+subsectionName) #{subsectionName}
+    if (subsections)
+        for subsectionName,subsectionPath in subsections
+                h2
+                    a(href='/section/'+subsectionPath) #{subsectionName}
 #towerview
     .main.clearfix
         // towerview features
-        .row.first!=partial('container/featured-image.jade', {title: 'Feature', story: model.Featured[0]})
-        .row.feature.clearfix
-            .first!=partial('container/block.jade', {title: '', story: model.Featured[1]})
-            .last!=partial('container/block.jade',{title: '', story: model.Featured[2]})
-        .row.last
-            // savvy
-            div!=partial('container/block-row.jade', {title: 'Savvy', stories: model.Savvy})
-            // wisdom
-            div!=partial('container/block-row.jade', {title: 'Wisdom', stories: model.Wisdom})
+        if (model.Featured)
+            if (model.Featured[0])
+                .row.first!=partial('container/featured-image.jade', {title: 'Feature', story: model.Featured[0]})
+            .row.feature.clearfix
+                if (model.Featured[1])
+                    .first!=partial('container/block.jade', {title: '', story: model.Featured[1]})
+                if (model.Featured[2])
+                    .last!=partial('container/block.jade',{title: '', story: model.Featured[2]})
+                
+            .row.last
+                // savvy
+                if (model.Savvy)
+                    .savvy!=partial('container/block-row.jade', {title: 'Savvy', stories: model.Savvy})
+                // wisdom
+                if (model.Wisdom)
+                    .wisdom!=partial('container/block-row.jade', {title: 'Wisdom', stories: model.Wisdom})
             
     .sidebar.clearfix
-        .editorsNote!=partial('container/sample-block.jade', {title: "Editor's Note", story: model.EditorsNote[0]})
+        if (model.EditorsNote)
+            .editorsNote!=partial('container/sample-block.jade', {title: "Editor's Note", story: model.EditorsNote[0]})
         // prefix
-        .prefix!=partial('container/block.jade', {title: 'Prefix', story: model.Prefix[0]})
-        .prefix!=partial('container/block.jade', {title: '', story: model.Prefix[1]})
-        .prefix!=partial('container/block.jade', {title: '', story: model.Prefix[2]})
+        if (model.Prefix)
+            if (model.Prefix[0])
+                .prefix!=partial('container/block.jade', {title: 'Prefix', story: model.Prefix[0]})
+            if (model.Prefix[1])
+                .prefix!=partial('container/block.jade', {title: '', story: model.Prefix[1]})
+            if (model.Prefix[2])
+                .prefix!=partial('container/block.jade', {title: '', story: model.Prefix[2]})

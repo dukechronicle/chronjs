@@ -103,7 +103,6 @@ group.docs = function(namespace, group, callback) {
                         // if it
                         var imageType = doc.key[DOC_TYPE_KEY + 1];
                         currentArticle.images[imageType] = doc.doc;
-                        console.log(currentArticle.images);
                     }
                 }
 

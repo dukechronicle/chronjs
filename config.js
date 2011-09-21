@@ -7,10 +7,10 @@ var configuration = {
             "SOLR_CORE":"/c1af51aeb37",
 
             // staging
-            /*
+            
             "COUCHDB_URL":"https://chrondev:pikachu@chrondev.iriscouch.com",
             "COUCHDB_DATABASE":"production",
-            "SOLR_CORE":"/3f534ff3ff0",*/
+            "SOLR_CORE":"/3f534ff3ff0",
 
             "SERVER_PORT":"4000",
             "ADMIN_USERNAME":"dean",

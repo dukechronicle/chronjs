@@ -9,29 +9,37 @@
         if (model.Featured && model.Featured[0])
             .main!=partial('container/featured-image.jade', {title: "", story: model.Featured[0]})
         .right
-            if (model.Featured && model.Featured[1])
-                .row.first!=partial('container/row', {title: "", story: model.Featured[1]})
+            if (model.Featured)
+                .row.first
+                    if (model.Featured[1])
+                        .first!=partial('container/row', {title: "", story: model.Featured[1]})
+                    if (model.Featured[2])
+                        .last!=partial('container/row', {title: "", story: model.Featured[2]})
             if (model.Featured && model.Featured[2])
-                .row.last!=partial('container/row', {title: "", story: model.Featured[2]})
+                .row.last
+                    if (model.Featured[3])
+                        .first!=partial('container/row', {title: "", story: model.Featured[3]})
+                    if (model.Featured[4])
+                        .last!=partial('container/row', {title: "", story: model.Featured[4]})
+
             
         // columnist
         .row
             if (model.Columnists && model.Columnists[0])
-                div!=partial('container/block.jade', {title: "Columnist", story:model.Columnists[0]})
+                div!=partial('container/block.jade', {title: "Editorial Board", story:model.editBoard})
             if (model.Columnists && model.Columnists[1])
                 div!=partial('container/block.jade', {title: "Columnist", story:model.Columnists[1]})
             if (model.Columnists && model.Columnists[2])
                 div!=partial('container/block.jade', {title: "Columnist", story:model.Columnists[2]})
             if (model.Columnists && model.Columnists[3])
                 .last!=partial('container/block.jade', {title: "Columnist", story:model.Columnists[3]})
-    .middle.clearfix
-        // rss
-        .blog!=partial('container/sample-block.jade', {title: "Blog"})
-        // edit board
-        if (model.EditBoard && model.EditBoard[3])
-            .editBoard!=partial('container/block.jade', {title: "Editorial Board", story:model.EditBoard[0]})
-        // most popular
-        .mostPopular.last!=partial('container/sample-block.jade', {title: "Popular"})
+    //
+        .middle.clearfix
+            if (model.Blog)
+                .blog!=partial('container/story-list.jade', {title: "Blog", stories: model.Blog})
+            if (model.EditBoard && model.EditBoard[3])
+                .editBoard!=partial('container/block.jade', {title: "Editorial Board", story:model.EditBoard[0]})
+            .mostPopular.last!=partial('container/sample-block.jade', {title: "Popular"})
     .bottom
         // more columnists
         .row

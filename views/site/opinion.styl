@@ -3,8 +3,22 @@ link-color = #36c
 container-padding = 4px
 top-content-width =  642px
 
+transition()
+    -webkit-transition arguments
+    -moz-transition arguments
+    -o-transition arguments
+    transition arguments
+
 container-vertical-spacing = 23px
 body section > #opinion
+    .rounded-hover
+        h2
+            transition(color, 0.25s, linear)
+        :hover
+            h2
+                color link-color
+    p.teaser
+        color #444
     rounded-image()
         img
             border-radius 4px
@@ -23,9 +37,18 @@ body section > #opinion
                 width 476px
                 img
                     width 470px
+                h2
+                    font-size 1.2em
+                    margin 0px 3px
+                p.teaser
+                    margin 0px 3px
         > .right
             padding-left 20px
             width 476px
+
+            .row
+                .first
+                    margin-right 20px
 
             .rounded-hover
                 height 163px
@@ -36,7 +59,7 @@ body section > #opinion
                     color #444
                 .text
                     float left
-                    width 300px
+                    width 215px
                 img
                     width 157px
                     height 157px

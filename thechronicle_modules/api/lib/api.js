@@ -13,7 +13,7 @@ api.image = require("./image");
 api.taxonomy = require("./taxonomy");
 api.accounts = require("./accounts");
 api.search = require("./search");
-api.authors = require("./search");
+api.authors = require("./authors");
 
 var MAX_URL_LENGTH = 50;
 

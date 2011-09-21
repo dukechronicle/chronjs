@@ -4,5 +4,5 @@ var authors = exports;
 
 authors.getLatest = function(authorName, count, callback) {
     console.log("called api authors");
-    db.author.getLatest(authorName, count, callback);
+    db.authors.getLatest(authorName, count, callback);
 }

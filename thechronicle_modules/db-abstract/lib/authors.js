@@ -1,4 +1,5 @@
 var db = require('./db-abstract');
+var _ = require('underscore')
 
 var authors = exports;
 
@@ -6,13 +7,15 @@ authors.getLatest = function(authorName, count, callback) {
     var query = {
         startkey: [authorName, {}],
         endkey: [authorName],
-        descending: true
+        descending: true,
+        limit: count,
+        include_docs: true
     };
     
     db.view('articles/authors', query,
         function(err, res) {
-            console.log(res);
-            callback(err, res);
+
+            callback(err, _.pluck(res, 'doc'));
         }
     );
 }

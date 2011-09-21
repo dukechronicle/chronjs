@@ -2,6 +2,10 @@
     .vertical-container
         h2.vertical #{title}
 
+
     a.rounded-hover(href='/article/dpac-shines-spotlight-durham')
         .content-container
+            if (stories)
+                each story, index in stories
+                    h3 story.title
             

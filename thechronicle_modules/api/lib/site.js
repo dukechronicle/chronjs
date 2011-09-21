@@ -162,7 +162,7 @@ site.init = function(app, callback) {
                                         delete item.link;
                                         return item;
                                     });
-                                    Blog.splice(8, result.Blog.length - 8);
+                                    Blog.splice(8, Blog.length - 8);
                                     callback(null, Blog)
                                 }
                                 callback(null, []);
@@ -187,12 +187,15 @@ site.init = function(app, callback) {
                     // optional callback
                     function(err, results){
                         if (err) return console.log(err);
+                        /*
                         model.Blog = results[0];
-                        model.Football = results[2];
-                        model.Mbball = results[3];
-                        model.MSoccer = results[4];
-                        model.WSoccer = results[5];
+                        model.Football = _.pluck(results[2], 'value');
+                        model.Mbball = _.pluck(results[3], 'value');
+                        model.MSoccer = _.pluck(results[4], 'value');
+                        model.WSoccer = _.pluck(results[5], 'value');*/
 
+                        
+                        //console.log(model.WSoccer);
                         httpRes.render('site/sports', {subsections: results[1].children, filename: 'views/site/sports.jade', model: model});
                     });
 

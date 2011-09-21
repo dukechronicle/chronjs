@@ -29,20 +29,25 @@ $(function(){
         $('.slideshow .slides .text h2:eq(' + currentSlide + ')').fadeOut('slow');
         $('.slideshow .slides .text h2:eq(' + newSlide + ')').fadeIn('slow');
 
-	    $('.slideshow .headlines a:eq(' + currentSlide + ')').removeClass('active');
-	    $('.slideshow .headlines a:eq(' + newSlide + ')').addClass('active');
-
+        var previousLink = $('.slideshow .headlines a:eq(' + currentSlide + ')');
+	    previousLink.removeClass('active');
+        var nextLink = $('.slideshow .headlines a:eq(' + newSlide + ')')
+	    nextLink.addClass('active');
+       
 		currentSlide = newSlide;
 	}
 
 	// bind headlines to slideshow switches
 	$('.slideshow .headlines a').each(function(index) {
-		$(this).click(function() {
+		$(this).click(function(event) {
 			if (index != currentSlide) {
+                event.preventDefault();
 				showSlide(index);
 				$('.slideshow b.caret').css('-webkit-transform', 'translate(' +
 						parseInt(positions[index], 10) + 'px, 0px)')
-			}
+			} 
 		})
 	});
+
+
 });

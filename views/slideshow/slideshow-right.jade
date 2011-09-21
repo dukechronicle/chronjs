@@ -11,7 +11,7 @@
     .headlines
         for story in stories
             .container
-                a.page.hover.highlight-right.rounded-hover
+                a.page.hover.highlight-right.rounded-hover(href=story.url)
                     if (story && story.images && story.images.ThumbSquareM)
                         img(src=story.images.ThumbSquareM.url)
                     h2 #{story.title}

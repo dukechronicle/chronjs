@@ -13,6 +13,7 @@ function setSizes(s) {
 function crop(dim) {
     cropOptions.aspectRatio = dim.width / dim.height;
     cropOptions.minSize = [dim.width, dim.height];
+    cropOptions.setSelect = [0, 0, dim.width, dim.height];
     jQuery(function() {
         jQuery('#toCrop').Jcrop(cropOptions);
     });

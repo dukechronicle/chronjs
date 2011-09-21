@@ -172,7 +172,19 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, callb
         fullQuery = fullQuery + "title_text:" + words[index] + "* OR body_text:" + words[index] + "*";
     }
 
-    querySolr(fullQuery, {facet: true, "facet.field":facetFields, "fq":facetQueries, rows: 25, fl: "*,score", sort: sortBy + " " + sortOrder}, callback);
+    querySolr(fullQuery,
+    {
+      facet: true,
+      "facet.field":facetFields,
+      "fq":facetQueries,
+      rows: 25,
+      fl: "*,score",
+      sort: sortBy + " " + sortOrder,
+      "f.created_year_i.facet.sort":"index",
+      "f.created_month_i.facet.sort":"index",
+      "f.created_day_i.facet.sort":"index"
+    },
+    callback);
 }
 
 function querySolr(query,options,callback) {
@@ -238,7 +250,7 @@ function querySolr(query,options,callback) {
 // adds extra facet fields if certain facet fields were queried (ex:if you limited the search by year, show month facet), and constructs facet queries
 // by changing nice key names to their solr equivalents (ex: year changes to created_year_i in the facet query)
 function _makeFacets(facets,callback) {
-    var facetFields = ["section_s","author_sm","created_year_i"];
+    var facetFields = ["created_year_i"];
     var facetQueries = [];
     if(facets) {
         var indivFacets = facets.split(",");
@@ -257,10 +269,13 @@ function _makeFacets(facets,callback) {
                 facetFields.push("created_day_i");
             }
             else if(parts[0] == 'Day') parts[0] = "created_day_i";
-                
+            
             facetQueries.push(parts[0]+':"'+parts[1]+'"');
-        } 
+        }
     }
+
+    facetFields.push("section_s");
+    facetFields.push("author_sm");
 
     callback(facetFields,facetQueries);
 }

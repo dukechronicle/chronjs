@@ -2,20 +2,20 @@ var configuration = {
     "profiles": {
         "production": {
             // production
-            //"COUCHDB_URL":"http://dean:dean@173.203.194.125:5984",
-            //"COUCHDB_DATABASE":"production",
-            //"SOLR_CORE":"/c1af51aeb37",
+            "COUCHDB_URL":"http://dean:dean@173.203.194.125:5984",
+            "COUCHDB_DATABASE":"production",
+            "SOLR_CORE":"/c1af51aeb37",
 
             // staging
-            "COUCHDB_URL":"http://chrondev.iriscouch.com",
+            /*
+            "COUCHDB_URL":"https://chrondev:pikachu@chrondev.iriscouch.com",
             "COUCHDB_DATABASE":"production",
-            "SOLR_CORE":"/3f534ff3ff0",
+            "SOLR_CORE":"/3f534ff3ff0",*/
 
             "SERVER_PORT":"4000",
             "ADMIN_USERNAME":"dean",
             "ADMIN_PASSWORD":"dean",
-            "COUCHDB_URL":"https://chrondev:pikachu@chrondev.iriscouch.com",
-            "COUCHDB_DATABASE":"production",
+
             "S3_BUCKET":"chron_bucket1",
             "REDIS_URL":"redis://redistogo:0235bf0a2db5e6cc087683952f60c59c@icefish.redistogo.com:9249/",
             "SOLR_HOST":"index.websolr.com",

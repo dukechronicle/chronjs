@@ -15,8 +15,13 @@ shadow(opacity, height, width, offset)
     box-shadow rgba(0, 0, 0, opacity) height width offset
 
 
-.slideshow.right .slides
-    height height
+.slideshow.right
+    -webkit-box-shadow none
+    -moz-box-shadow none
+    .slides
+        height height
+        img
+            margin-top 0px
 .slideshow
     width width + 6
     border-radius  4px

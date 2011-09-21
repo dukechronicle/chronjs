@@ -6,7 +6,7 @@
 #sports
     .top.clearfix
         if (model.Slideshow)
-            .slideshow-wrapper.right-select!=partial('slideshow/slideshow-right')
+            .slideshow-wrapper.right-select!=partial('slideshow/slideshow-right', {stories: model.Slideshow})
     .middle.clearfix
         .left
             if (model.Blog)
@@ -26,7 +26,7 @@
                     if (model.Stories[3])
                         div!=partial('container/row', {story: model.Stories[3]})
                     if (model.Stories[5])
-                            .last!=partial('container/row', {story: model.Stories[5]})
+                        .last!=partial('container/row', {story: model.Stories[5]})
 
     //
         .bottom

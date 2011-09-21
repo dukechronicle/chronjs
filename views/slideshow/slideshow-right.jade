@@ -2,13 +2,16 @@
     .slides
         for story in stories
             a(href=story.url)
-                if (story && story.images && story.images.LongRect)
-                    img(src=story.images.LongRect.url)
+                if (story && story.images && story.images.LargeRect)
+                    if (index == 0)
+                        img(src=story.images.LargeRect.url)
+                    else
+                        img(src=story.images.LargeRect.url, style="display: none")
 
     .headlines
         for story in stories
             a.page.rounded
                 if (story && story.images && story.images.ThumbSquareM)
                     img(src=story.images.ThumbSquareM.url)
-                    h2 #{story.title}
-                    p.teaser #{story.teaser}
+                h2 #{story.title}
+                p.teaser #{story.teaser}

@@ -4,7 +4,7 @@ body section > .nav h2 a{letter-spacing:1px;text-shadow:0 1px 0 #fff;font-size:.
 body section > .nav h2 a:hover,body section > .nav h2 a.active{color:#999}
 body section > .nav h2.first a{padding-left:3px}
 body section > .nav a{color:#333}
-body section > #sports .top{margin-bottom:20px;margin-top:-20px;}
+body section > #sports .top{margin-bottom:20px;}
 body section > #sports .top .slideshow-wrapper.right-select > .slideshow{width:972px;}
 body section > #sports .top .slideshow-wrapper.right-select > .slideshow .slides img{width:636px;border-radius:4px}
 body section > #sports .top .slideshow-wrapper.right-select > .slideshow .slides{border-radius:4px;width:636px;float:right}
@@ -17,7 +17,7 @@ body section > #sports .top .slideshow-wrapper.right-select > .slideshow .headli
 body section > #sports .top .slideshow-wrapper.right-select > .slideshow .headlines a.page.last{margin-bottom:0}
 body section > #sports .top .slideshow-wrapper.right-select > .slideshow .headlines a.page:hover{color:#000;text-decoration:none}
 body section > #sports .top .slideshow-wrapper.right-select > .slideshow .headlines a.page.active{color:#000;text-shadow:0 1px 0 #fff}
-body section > #sports .top .slideshow-wrapper.right-select > .slideshow .headlines a.page.rounded{box-shadow:rgba(0,0,0,0.30) 0 1px 3px;background:-webkit-gradient(linear,left bottom,left top,from(#ededed),to(#ededed))}
+body section > #sports .top .slideshow-wrapper.right-select > .slideshow .headlines a.page.rounded{box-shadow:rgba(0,0,0,0.30) 0 1px 3px;background:-webkit-gradient(linear,left bottom,left top,from(#ededed),to(#fff))}
 body section > #sports .middle{margin-bottom:6px;}
 body section > #sports .middle .left .container .rounded{width:305px;height:297px;}
 body section > #sports .middle .left .container .rounded h2{font-size:1em;margin-bottom:10px}

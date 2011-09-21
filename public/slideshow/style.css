@@ -1,4 +1,6 @@
-.slideshow.right .slides{height:393px}
+.slideshow.right{-webkit-box-shadow:none;-moz-box-shadow:none;}
+.slideshow.right .slides{height:393px;}
+.slideshow.right .slides img{margin-top:0}
 .slideshow{width:642px;border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;-webkit-box-shadow:rgba(0,0,0,0.40) 0 1px 3px;-moz-box-shadow:rgba(0,0,0,0.40) 0 1px 3px;box-shadow:rgba(0,0,0,0.40) 0 1px 3px;font-size:.9em;font-family:Georgia,"Century Schoolbook","Times New Roman",Times,serif;padding:0;margin-bottom:20px;}
 .slideshow .slides img{border-top:1px solid #ccc;width:636px;height:393px;position:absolute;left:0;top:0;margin-top:80px}
 .slideshow .slides{background:-webkit-gradient(linear,left bottom,left top,color-stop(0,whiteSmoke),color-stop(.33,#fff));-webkit-border-top-left-radius:4px;-webkit-border-top-right-radius:4px;-moz-border-radius-topleft:4px;-moz-border-radius-topright:4px;position:relative;width:636px;text-align:left;overflow:hidden;height:473px;border:3px solid #fff;z-index:0;box-shadow:rgba(0,0,0,0.30) 0 1px 3px;}

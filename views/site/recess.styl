@@ -3,8 +3,15 @@ link-color = #36c
 container-padding = 4px
 top-content-width =  642px
 
+transition()
+    -webkit-transition arguments
+    -moz-transition arguments
+    -o-transition arguments
+    transition arguments
+
 container-vertical-spacing = 23px
 body section > .nav
+
     position relative
     z-index 2
     clear both
@@ -34,6 +41,12 @@ body section > .nav
         color #333
         
 body section > #recess
+    .rounded-hover
+        h2
+            transition(color, 0.25s, linear)
+        :hover
+            h2
+                color link-color
     rounded-image()
         img
             border-radius 4px
@@ -56,34 +69,40 @@ body section > #recess
             .rounded-hover
                 h2
                     font-size 1.3em
-                height 400px
+                height 370px
                 img
                     width 470px
         > .right
             float right
-
+            .container
+                margin-bottom 19px
             .column
                 float left
-                width 234px
-
+                width 266px
             .column.first
                 margin-right 20px
-
+                width 200px
                 .block .rounded-hover
-                    height 187px
+                    height 176px
+                    width 192px
+                    padding 0px
+
 
                     h2
                         font-size 1.2em
-                        margin-top -4px
+                        margin-top 135px
                         line-height 1.3em
                         height 44px
+                        position absolute
                     img
-                        width 222px
+                        width 186px
+                        display block
+                        border-radius 4px
                     p.teaser
                         display none
 
-            .blog .rounded-hover
-                height 400px
+            .blog .rounded
+                height 364px
 
     .middle
         .rounded
@@ -98,17 +117,75 @@ body section > #recess
 
                 .rounded-hover
                     width 222px
-                    height 222px
+                    height 182px
 
                     h2
                         font-size 1.2em
+                        margin-bottom 5px
                     p.teaser
                         color #444
                         line-height 1.3em
-                        font-size 0.9em
+                        font-size 1em
                     img
                         width 70px
                         height 70px
                         float right
         > .last > .container.block
                 margin-right 0px
+    .block-row
+        rounded-image()
+        blocks = 6
+        block-padding = 15px
+        container-padding = 12px
+        row-width = 980px
+        //block-width = (row-width + (block-padding * 2)) / blocks - (block-padding * 2)
+        block-width = 138px
+        full-block-width = block-width * 2
+        .rounded
+            width 972px
+            padding 0px
+            h2, h3
+                font-size 1em
+                margin-bottom 0.5em
+                //TODO use jquery to auto measure
+                height 47px
+                margin-top -5px
+                line-height 1.2em
+
+            h2
+                font-size 1.5em
+                line-height 1.3em
+
+            .content-container
+                padding container-padding
+        a.hover
+            border none
+            border-right 0px
+            border-left 0px
+            padding 0px block-padding
+            width block-width
+            height 241px - container-padding
+            float left
+
+            img
+                display block
+                width block-width
+
+            p.teaser
+                height 65px
+                margin-top -4px
+                font-size .9em
+                line-height 1.3em
+        .list-story.first
+            p.teaser
+                font-size 1em
+        a.hover.first
+            width full-block-width
+            img
+                width full-block-width
+
+        a.hover.first
+            padding-left 0px
+
+        a.hover.last
+            padding-right 0px

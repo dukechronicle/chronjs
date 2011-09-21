@@ -16,6 +16,8 @@
                         h2 #{story.title}
                         - if (story.images && story.images.ThumbRectL)
                             img(src=story.images.ThumbRectL.url)
+                        else
+                            p.teaser #{story.teaser}
 
 
 

@@ -16,29 +16,31 @@
                     if (model.Featured[2])
                         div!=partial('container/block.jade', {title: "", story: model.Featured[2]})
                 // rss feed
-            .column.last
-                if (model.Blog)
-                    .blog!=partial('container/story-list', {title: "Blog", stories:model.Blog})
+                .column.last
+                    if (model.Blog)
+                        .blog!=partial('container/story-list', {title: "Blog", stories:model.Blog})
 
     .middle.clearfix
-        // sandbox
-        if (model.Sandbox)
-            .sandbox!=partial('container/block-row.jade', {title: 'Sandbox', stories: model.Sandbox})
-        // interviews
-        if (model.Interviews)
-            .interviews!=partial('container/block-row.jade', {title: 'Interviews', stories: model.Interviews})
         // reviews
         if (model.Reviews)
          .reviews!=partial('container/block-row.jade', {title: 'Reviews', stories: model.Reviews})
-    if (model.Stories)
-        .bottom
-            // stories
-            .row.clearfix
-                if (model.Stories[0])
-                    div!=partial('container/block.jade', {title: "", story:model.Stories[0]})
-                if (model.Stories[1])
-                    div!=partial('container/block.jade', {title: "", story:model.Stories[1]})
-                if (model.Stories[2])
-                    div!=partial('container/block.jade', {title: "", story:model.Stories[2]})
-                if (model.Stories[3])
-                    .last!=partial('container/block.jade', {title: "", story:model.Stories[3]})
+        if (model.Stories)
+            .bottom
+                // stories
+                .row.clearfix
+                    if (model.Stories[0])
+                        div!=partial('container/block.jade', {title: "", story:model.Stories[0]})
+                    if (model.Stories[1])
+                        div!=partial('container/block.jade', {title: "", story:model.Stories[1]})
+                    if (model.Stories[2])
+                        div!=partial('container/block.jade', {title: "", story:model.Stories[2]})
+                    if (model.Stories[3])
+                        .last!=partial('container/block.jade', {title: "", story:model.Stories[3]})
+
+        // interviews
+        if (model.Interviews)
+            .interviews!=partial('container/block-row.jade', {title: 'Interviews', stories: model.Interviews})
+        // sandbox
+        if (model.Sandbox)
+            .sandbox!=partial('container/block-row.jade', {title: 'Sandbox', stories: model.Sandbox})
+

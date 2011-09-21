@@ -149,24 +149,53 @@ site.init = function(app, callback) {
             });
 
             app.get('/sports', function(req, httpRes) {
-                api.group.docs(SPORTS_GROUP_NAMESPACE, null, function(err, result) {
-                    _.defaults(result, sportsModel);
+                api.group.docs(SPORTS_GROUP_NAMESPACE, null, function(err, model) {
+                    _.defaults(model, sportsModel);
 
-                    rss.getRSS('sportsblog', function(err, res) {
-                        if(res && res.items && res.items.length > 0) {
-                            result.Blog = res.items.map(function(item) {
-                                item.url = item.link;
-                                item.title = item.title.replace( /\&#8217;/g, '’' );
-                                delete item.link;
-                                return item;
+                    async.parallel([
+                        function(callback){ //0
+                            rss.getRSS('sportsblog', function(err, res) {
+                                if(res && res.items && res.items.length > 0) {
+                                    var Blog = res.items.map(function(item) {
+                                        item.url = item.link;
+                                        item.title = item.title.replace( /\&#8217;/g, '’' );
+                                        delete item.link;
+                                        return item;
+                                    });
+                                    Blog.splice(8, result.Blog.length - 8);
+                                    callback(null, Blog)
+                                }
+                                callback(null, []);
                             });
-                            result.Blog.splice(8, result.Blog.length - 8);
+                        },
+                        function(callback) { //1
+                            api.taxonomy.getParentAndChildren(['Sports'],callback);
+                        },
+                        function(callback) { //2
+                            api.taxonomy.docs("Football", 4, callback);
+                        },
+                        function(callback) { //3
+                            api.taxonomy.docs("M Basketball", 4, callback);
+                        },
+                        function(callback) { //4
+                            api.taxonomy.docs("M Soccer", 4, callback);
+                        },
+                        function(callback) { //5
+                            api.taxonomy.docs("W Soccer", 4, callback);
                         }
-                        
-                       api.taxonomy.getParentAndChildren(['Sports'],function(err,parentAndChildren) {
-                            httpRes.render('site/sports', {subsections: parentAndChildren.children, filename: 'views/site/sports.jade', model: result});
-                        });
+                    ],
+                    // optional callback
+                    function(err, results){
+                        if (err) return console.log(err);
+                        model.Blog = results[0];
+                        model.Football = results[2];
+                        model.Mbball = results[3];
+                        model.MSoccer = results[4];
+                        model.WSoccer = results[5];
+
+                        httpRes.render('site/sports', {subsections: results[1].children, filename: 'views/site/sports.jade', model: model});
                     });
+
                 });
             });
 

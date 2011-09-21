@@ -172,7 +172,10 @@ site.init = function(app, callback) {
 
             app.get('/opinion', function(req, res) {
                 api.group.docs(OPINION_GROUP_NAMESPACE, null, function(err, result) {
-                    
+                    console.log("opinon");
+                    api.authors.getLatest("Sanette Tanaka", 1, function(err, authors) {
+                        console.log(authors);
+                    })
                     api.taxonomy.getParentAndChildren(['Opinion'],function(err,parentAndChildren) {
                         res.render('site/opinion', {subsections: parentAndChildren.children, filename: 'views/site/opinion.jade', model: result});
                     });

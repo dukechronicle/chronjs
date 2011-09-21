@@ -55,6 +55,7 @@ db.group = require('./group.js');
 db.image = require('./image.js');
 db.taxonomy = require('./taxonomy.js');
 db.search = require('./search.js');
+db.search = require('./authors.js');
 
 db.getDatabaseName = function() {
     return DATABASE;
@@ -88,7 +89,7 @@ db.init = function(callback) {
         }
         else {
              callback(null);
-                //updateViews(callback);
+             //updateViews(callback);
         }
     });
 }

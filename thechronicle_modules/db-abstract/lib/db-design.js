@@ -54,7 +54,7 @@ var views = {
     map: function(doc) {
             if(doc.authors) {
                 for(var i in doc.authors) {
-                    emit(doc.authors[i], doc._id);
+                    emit([doc.authors[i], doc.created] , doc._id);
                 }
             }
         }

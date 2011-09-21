@@ -14,7 +14,6 @@ authors.getLatest = function(authorName, count, callback) {
     
     db.view('articles/authors', query,
         function(err, res) {
-
             callback(err, _.pluck(res, 'doc'));
         }
     );

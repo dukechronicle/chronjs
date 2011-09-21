@@ -32,7 +32,6 @@ function _getImages(obj, callback) {
 }
 
 function _convertTimestamp(timestamp) {
-    console.log(timestamp);
     var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
         "October", "November", "December"];
     var date = new Date(timestamp*1000);
@@ -377,7 +376,6 @@ site.init = function(app, callback) {
 
             app.get('/article/:url', function(req, http_res) {
                 var url = req.params.url;
-                console.log(url);
                 api.articleForUrl(url, function(err, doc) {
                     if(err) {
                         return globalFunctions.showError(http_res, err);
@@ -488,7 +486,6 @@ site.init = function(app, callback) {
 
 
                 api.articleForUrl(url, function(err, doc) {
-                    console.log(doc);
                     if(err) {
                         globalFunctions.showError(http_res, err);
                     }
@@ -503,7 +500,6 @@ site.init = function(app, callback) {
                         }
                         else {
                             if(!doc.images) doc.images = {};
-                            console.log(doc.images);
                             http_res.render('admin/edit', {
                                 locals: {
                                         doc: doc,

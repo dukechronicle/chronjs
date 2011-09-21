@@ -203,15 +203,37 @@ site.init = function(app, callback) {
             });
 
             app.get('/opinion', function(req, res) {
-                api.group.docs(OPINION_GROUP_NAMESPACE, null, function(err, result) {
-                    console.log("opinon");
-                    api.authors.getLatest("Sanette Tanaka", 1, function(err, authors) {
-                        console.log(authors);
-                    })
-                    api.taxonomy.getParentAndChildren(['Opinion'],function(err,parentAndChildren) {
-                        res.render('site/opinion', {subsections: parentAndChildren.children, filename: 'views/site/opinion.jade', model: result});
-                    });
+                
+                async.parallel([
+                    function(callback){ //0
+                        api.group.docs(OPINION_GROUP_NAMESPACE, null, callback);
+                    },
+                    function(callback){ //1
+                        api.taxonomy.getParentAndChildren(['Opinion'], callback);
+                    },
+                    function(callback){ //2
+                        api.authors.getLatest("Editorial Board", 5, callback);
+                    },
+                    function(callback){ //3
+                        api.authors.getLatest("Shining Li", 6, callback);
+                    },
+                    function(callback){ //4
+                        api.authors.getLatest("Rui Dai", 6, callback);
+                    },
+                    function(callback){ //5
+                        api.authors.getLatest("Jason Wagner", 6, callback);
+                    }
+                ],
+                function(err, results) {
+                    var model = results[0];
+                    model.EditBoard = results[2];
+                    model.Columnists = [];
+                    model.Columnists.push({title: "Shining Li", stories: results[3]});
+                    model.Columnists.push({title: "Rui Dai", stories: results[4]});
+                    model.Columnists.push({title: "Jason Wagner", stories: results[5]});
+                    res.render('site/opinion', {subsections: results[1].children, filename: 'views/site/opinion.jade', model: model});
                 });
+                
             });
 
             app.get('/recess', function(req, res) {

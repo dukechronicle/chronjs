@@ -14,6 +14,9 @@ body section > #opinion .top > .right .rounded-hover .text{float:left;width:215p
 body section > #opinion .top > .right .rounded-hover img{width:157px;height:157px;float:right;border-radius:4px}
 body section > #opinion .middle > div .container.block .rounded-hover{width:304px;height:300px}
 body section > #opinion .middle > .last > .container.block .rounded-hover{width:306px}
+body section > #opinion .row.columnists > div{margin-right:20px;}
+body section > #opinion .row.columnists > div .rounded{width:222px;height:180px}
+body section > #opinion .row.columnists > .last{margin-right:0}
 body section > #opinion div > div{float:left;}
 body section > #opinion div > div .container.block{float:left;margin-right:20px;}
 body section > #opinion div > div .container.block .rounded-hover{width:222px;height:222px;}

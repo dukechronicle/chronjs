@@ -24,15 +24,15 @@
 
             
         // columnist
-        .row
+        .row.columnists
+            if (model.EditBoard)
+                div!=partial('container/story-list', {title: "Editorial Board", stories:model.EditBoard})
             if (model.Columnists && model.Columnists[0])
-                div!=partial('container/block.jade', {title: "Editorial Board", story:model.editBoard})
+                div!=partial('container/story-list', model.Columnists[0])
             if (model.Columnists && model.Columnists[1])
-                div!=partial('container/block.jade', {title: "Columnist", story:model.Columnists[1]})
+                div!=partial('container/story-list', model.Columnists[1])
             if (model.Columnists && model.Columnists[2])
-                div!=partial('container/block.jade', {title: "Columnist", story:model.Columnists[2]})
-            if (model.Columnists && model.Columnists[3])
-                .last!=partial('container/block.jade', {title: "Columnist", story:model.Columnists[3]})
+                .last!=partial('container/story-list', model.Columnists[2])
     //
         .middle.clearfix
             if (model.Blog)

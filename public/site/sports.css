@@ -10,13 +10,15 @@ body section > #sports .top .slideshow-wrapper.right-select > .slideshow .slides
 body section > #sports .top .slideshow-wrapper.right-select > .slideshow .slides{border-radius:4px;width:636px;float:right}
 body section > #sports .top .slideshow-wrapper.right-select > .slideshow .headlines{float:left;width:330px;height:399px;display:block;background:transparent;}
 body section > #sports .top .slideshow-wrapper.right-select > .slideshow .headlines div{width:630px margin 0 auto}
-body section > #sports .top .slideshow-wrapper.right-select > .slideshow .headlines a.page{text-align:left;cursor:pointer;width:300px;display:inline-block;margin:0;margin-bottom:13px;padding-right:8px;padding-top:3px;padding-left:3px;height:115px;color:#444;line-height:1.3em;-webkit-transition:color linear .2s;text-shadow:0 1px 1px #fff;float:left;}
+body section > #sports .top .slideshow-wrapper.right-select > .slideshow .headlines a.page{text-align:left;cursor:pointer;width:300px;display:inline-block;margin:0;margin-bottom:13px;padding-right:8px;padding-top:3px;font-size:1.2em;padding-left:3px;height:115px;color:#444;line-height:1.3em;-webkit-transition:color linear .2s;text-shadow:0 1px 1px #fff;float:left;}
 body section > #sports .top .slideshow-wrapper.right-select > .slideshow .headlines a.page h2{font-size:1.2em;line-height:1.2em;margin-bottom:8px}
 body section > #sports .top .slideshow-wrapper.right-select > .slideshow .headlines a.page p.teaser{font-size:.85em;line-height:1.2em;color:#444}
 body section > #sports .top .slideshow-wrapper.right-select > .slideshow .headlines a.page img{border-radius:4px;height:118px;width:118px;float:left;margin-right:10px}
 body section > #sports .top .slideshow-wrapper.right-select > .slideshow .headlines a.page.last{margin-bottom:0}
 body section > #sports .top .slideshow-wrapper.right-select > .slideshow .headlines a.page:hover{color:#000;text-decoration:none}
-body section > #sports .top .slideshow-wrapper.right-select > .slideshow .headlines a.page.active{color:#000;text-shadow:0 1px 0 #fff}
+body section > #sports .top .slideshow-wrapper.right-select > .slideshow .headlines a.page.active{border-right-color:#4d90f0;}
+body section > #sports .top .slideshow-wrapper.right-select > .slideshow .headlines a.page.active h2{color:#36c}
+body section > #sports .top .slideshow-wrapper.right-select > .slideshow .headlines a.page.active:hover h2{text-decoration:underline}
 body section > #sports .top .slideshow-wrapper.right-select > .slideshow .headlines a.page.rounded{box-shadow:rgba(0,0,0,0.30) 0 1px 3px;background:-webkit-gradient(linear,left bottom,left top,from(#ededed),to(#fff))}
 body section > #sports .middle{margin-bottom:6px;}
 body section > #sports .middle .left .container .rounded{width:305px;height:297px;}

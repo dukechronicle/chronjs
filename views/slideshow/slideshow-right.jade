@@ -10,8 +10,9 @@
 
     .headlines
         for story in stories
-            a.page.rounded
-                if (story && story.images && story.images.ThumbSquareM)
-                    img(src=story.images.ThumbSquareM.url)
-                h2 #{story.title}
-                p.teaser #{story.teaser}
+            .container
+                a.page.hover.highlight-right.rounded-hover
+                    if (story && story.images && story.images.ThumbSquareM)
+                        img(src=story.images.ThumbSquareM.url)
+                    h2 #{story.title}
+                    p.teaser #{story.teaser}

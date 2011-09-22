@@ -21,10 +21,11 @@ body section > #news .middle .content-container p.teaser{color:#444}
 body section > #news .middle .featured .content-container h2{color:#000;font-size:1.2em;margin:0 3px}
 body section > #news .middle .featured .content-container p.teaser{color:#444;margin:0 3px}
 body section > #news .middle .featured .content-container img{width:454px}
-body section > #news .middle .headline .content-container img{width:138px;float:left;margin-right:10px;margin-bottom:3px}
-body section > #news .middle .headline .content-container .text{margin-top:-4px}
-body section > #news .middle .headline .content-container h2{color:#000;font-size:1.2em;margin-left:148px}
-body section > #news .middle .headline .content-container p.teaser{color:#444;font-size:1em;line-height:1.3em;margin-left:148px}
+body section > #news .middle .headline .rounded-hover{padding:0;}
+body section > #news .middle .headline .rounded-hover .content-container img{width:138px;float:left;margin-right:10px;margin-left:-1px}
+body section > #news .middle .headline .rounded-hover .content-container .text{margin-top:-4px}
+body section > #news .middle .headline .rounded-hover .content-container h2{margin-top:3px;color:#000;font-size:1.2em;margin-left:148px}
+body section > #news .middle .headline .rounded-hover .content-container p.teaser{color:#444;font-size:1em;line-height:1.3em;margin-left:148px}
 body section > #news .middle > .row > .block{width:150px;float:left;padding-left:5px;}
 body section > #news .middle > .row > .block .container{width:150px;}
 body section > #news .middle > .row > .block .container .rounded-hover{height:220px}

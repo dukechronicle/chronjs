@@ -2,7 +2,7 @@
     .vertical-container
         h2.vertical #{title}
 
-    a.rounded-hover(href=story.url)
+    a.rounded-hover.hover(href=story.url)
         .content-container
             - if (story.images && story.images.LargeRect)
                 img(src=story.images.LargeRect.url)

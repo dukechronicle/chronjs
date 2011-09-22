@@ -31,8 +31,8 @@ var CROP_SIZES = {
         height: 183
     },
     ThumbWide: {
-        width: 250,
-        height: 100
+        width: 300,
+        height: 120
     }
 };
 

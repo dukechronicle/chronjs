@@ -1,14 +1,17 @@
 body section > #towerview p.teaser{color:#444}
 body section > #towerview > .main{float:left;width:644px;}
-body section > #towerview > .main > .row.first .container{margin-bottom:10px;width:642px;}
-body section > #towerview > .main > .row.first .container h2{font-size:1.3em;color:#000}
-body section > #towerview > .main > .row.first .container img{width:636px;border-radius:4px}
+body section > #towerview > .main > .row.first .container .content-container{margin-bottom:5px;width:642px;}
+body section > #towerview > .main > .row.first .container .content-container h2{font-size:1.5em}
+body section > #towerview > .main > .row.first .container .content-container p.teaser{font-size:1.2em}
+body section > #towerview > .main > .row.first .container .content-container img{width:636px;border-radius:4px}
 body section > #towerview > .main > .row.feature .first .container{margin-right:12px}
 body section > #towerview > .main > .row.feature .container{width:315px;float:left;}
-body section > #towerview > .main > .row.feature .container .rounded-hover{width:309px}
-body section > #towerview > .main > .row.feature .container h2{color:#000}
-body section > #towerview > .main > .row.feature .container h2,body section > #towerview > .main > .row.feature .container p.teaser{width:140px;float:right}
-body section > #towerview > .main > .row.feature .container img{float:left;width:150px;height:150px}
+body section > #towerview > .main > .row.feature .container .content-container{padding:0;}
+body section > #towerview > .main > .row.feature .container .content-container .rounded-hover{width:309px}
+body section > #towerview > .main > .row.feature .container .content-container h2{margin-bottom:8px}
+body section > #towerview > .main > .row.feature .container .content-container h2,body section > #towerview > .main > .row.feature .container .content-container p.teaser{width:145px;float:right;padding-right:5px}
+body section > #towerview > .main > .row.feature .container .content-container p.teaser{font-size:.9em;height:1.4em}
+body section > #towerview > .main > .row.feature .container .content-container img{border-radius:4px;float:left;width:150px;height:150px}
 body section > #towerview > .main > .row .block-row .rounded{float:left;width:636px;height:241px}
 body section > #towerview > .sidebar{width:308px;float:right;}
 body section > #towerview > .sidebar .prefix .container{margin-bottom:10px}

@@ -8,12 +8,12 @@
         // towerview features
         if (model.Featured)
             if (model.Featured[0])
-                .row.first!=partial('container/featured-image.jade', {title: 'Feature', story: model.Featured[0]})
+                .row.first!=partial('container/featured-image.jade', {title: '', story: model.Featured[0]})
             .row.feature.clearfix
                 if (model.Featured[1])
-                    .first!=partial('container/block.jade', {title: '', story: model.Featured[1]})
+                    .first!=partial('container/block-square-image', {title: '', story: model.Featured[1]})
                 if (model.Featured[2])
-                    .last!=partial('container/block.jade',{title: '', story: model.Featured[2]})
+                    .last!=partial('container/block-square-image',{title: '', story: model.Featured[2]})
                 
             .row.last
                 // savvy

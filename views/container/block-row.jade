@@ -8,10 +8,11 @@
                 a.list-story.hover.highlight-bottom(href='#{story.url}', class='#{story.cssClass}')
                     - if (story.cssClass !== "first")
                         h3 #{story.title}
+
+                        - if (story.images && story.images.ThumbRect)
+                            img(src="#{story.images.ThumbRect.url}")
                         p.teaser
                             #{story.teaser}
-                        - if (story.images && story.images.ThumbSquareM)
-                            img(src="#{story.images.ThumbSquareM.url}")
                     - else
                         h2 #{story.title}
                         - if (story.images && story.images.ThumbRectL)

@@ -28,17 +28,3 @@ body section > #recess .bottom > .row > div .container.block .rounded-hover h2{f
 body section > #recess .bottom > .row > div .container.block .rounded-hover p.teaser{color:#444;line-height:1.3em;font-size:1em}
 body section > #recess .bottom > .row > div .container.block .rounded-hover img{width:70px;height:70px;float:right}
 body section > #recess .bottom > .row > .last > .container.block{margin-right:0}
-body section > #recess .block-row img{border-radius:4px;-webkit-box-shadow:0 0 4px #999;-webkit-transition:box-shadow .25s linear}
-body section > #recess .block-row a.hover:hover img{-webkit-box-shadow:0 0 4px #000}
-body section > #recess .block-row .rounded{width:972px;padding:0;}
-body section > #recess .block-row .rounded h2,body section > #recess .block-row .rounded h3{font-size:1em;margin-bottom:.5em;height:47px;margin-top:-5px;line-height:1.2em}
-body section > #recess .block-row .rounded h2{font-size:1.5em;line-height:1.3em}
-body section > #recess .block-row .rounded .content-container{padding:12px}
-body section > #recess .block-row a.hover{border:none;border-right:0;border-left:0;padding:0 15px;width:138px;height:229px;float:left;}
-body section > #recess .block-row a.hover img{display:block;width:138px}
-body section > #recess .block-row a.hover p.teaser{height:65px;margin-top:-4px;font-size:.9em;line-height:1.3em}
-body section > #recess .block-row .list-story.first p.teaser{font-size:1.2em}
-body section > #recess .block-row a.hover.first{width:276px;}
-body section > #recess .block-row a.hover.first img{width:276px}
-body section > #recess .block-row a.hover.first{padding-left:0}
-body section > #recess .block-row a.hover.last{padding-right:0}

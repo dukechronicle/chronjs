@@ -9,9 +9,9 @@ body section > #towerview > .main > .row.feature .first .container{margin-right:
 body section > #towerview > .main > .row.feature .container{width:315px;float:left;}
 body section > #towerview > .main > .row.feature .container .content-container{padding:0;}
 body section > #towerview > .main > .row.feature .container .content-container .rounded-hover{width:309px}
-body section > #towerview > .main > .row.feature .container .content-container h2{margin-bottom:8px}
+body section > #towerview > .main > .row.feature .container .content-container h2{margin-bottom:8px;font-size:1.2em}
 body section > #towerview > .main > .row.feature .container .content-container h2,body section > #towerview > .main > .row.feature .container .content-container p.teaser{width:145px;float:right;padding-right:5px}
-body section > #towerview > .main > .row.feature .container .content-container p.teaser{font-size:.9em;height:1.4em}
+body section > #towerview > .main > .row.feature .container .content-container p.teaser{font-size:1em;height:1.4em}
 body section > #towerview > .main > .row.feature .container .content-container img{border-radius:4px;float:left;width:150px;height:150px}
 body section > #towerview > .main > .row .block-row .rounded{float:left;width:642px;height:241px}
 body section > #towerview > .sidebar{width:308px;float:right;}

@@ -1,6 +1,9 @@
 .container.clearfix.block
     .vertical-container
-        h2.vertical &nbsp
+        if (title)
+            h2.vertical #{title}
+        else
+            h2.vertical &nbsp;
 
     a.rounded-hover.hover.highlight-right(href=story.url)
         .content-container

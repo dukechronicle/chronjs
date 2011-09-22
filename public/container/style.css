@@ -6,7 +6,7 @@ body .container a.hover p{color:#444;line-height:1.5em}
 body .container a.hover:hover h1,body .container a.hover:hover h2,body .container a.hover:hover h3,body .container a.hover:hover h4{color:#36c}
 body .container a.hover.highlight-left:hover{border-left-color:#4d90f0}
 body .container a.hover.highlight-right:hover{border-right-color:#4d90f0}
-body .container a.hover.highlight-bottom{border-bottom:1px solid transparent;margin-bottom:-12px}
+body .container a.hover.highlight-bottom{border-bottom:1px solid transparent}
 body .container a.hover.highlight-bottom:hover{border-bottom-color:#4d90f0}
 body .container a.hover.highlight-top{border-top:1px solid transparent;margin-top:-5px;padding-top:5px}
 body .container a.hover.highlight-top:hover{border-top-color:#4d90f0}

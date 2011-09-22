@@ -25,7 +25,7 @@
             
     .sidebar.clearfix
         if (model.EditorsNote)
-            .editorsNote!=partial('container/sample-block.jade', {title: "Editor's Note", story: model.EditorsNote[0]})
+            .editorsNote!=partial('container/block.jade', {title: "Editor's Note", story: model.EditorsNote[0]})
         // prefix
         if (model.Prefix)
             if (model.Prefix[0])

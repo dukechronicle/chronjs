@@ -16,23 +16,23 @@
         if (model.Featured && model.Featured[0])
             .featured!=partial('container/featured-image', {title: "", story: model.Featured[0]});
         if (model.Headlines && model.Headlines[0])
-            .headline!=partial('container/row', {story: model.Headlines[0]})
+            .headline!=partial('container/row', {title: "", story: model.Headlines[0]})
         if (model.Headlines && model.Headlines[1])
-            .headline!=partial('container/row', {story: model.Headlines[1]})
+            .headline!=partial('container/row', {title: "", story: model.Headlines[1]})
         .row.clearfix
             if (model.Stories && model.Stories[0])
-                .block.first!=partial('container/block', {story: model.Stories[0]})
+                .block.first!=partial('container/block', {title: "", story: model.Stories[0]})
             if (model.Stories && model.Stories[1])
-                .block!=partial('container/block', {story: model.Stories[1]})
+                .block!=partial('container/block', {title: "", story: model.Stories[1]})
             if (model.Stories && model.Stories[2])
-                .block!=partial('container/block', {story: model.Stories[2]})
+                .block!=partial('container/block', {title: "", story: model.Stories[2]})
         .row.clearfix
             if (model.Stories && model.Stories[3])
-                .block.first!=partial('container/block', {story: model.Stories[3]})
+                .block.first!=partial('container/block', {title: "", story: model.Stories[3]})
             if (model.Stories && model.Stories[4])
-                .block!=partial('container/block', {story: model.Stories[4]})
+                .block!=partial('container/block', {title: "", story: model.Stories[4]})
             if (model.Stories && model.Stories[5])
-                .block!=partial('container/block', {story: model.Stories[5]})
+                .block!=partial('container/block', {title: "", story: model.Stories[5]})
 
     .right
         if (model.Blog)

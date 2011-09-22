@@ -3,8 +3,9 @@ body section > #towerview > .main{float:left;width:644px;}
 body section > #towerview > .main > .row.first .container{margin-bottom:10px;width:642px;}
 body section > #towerview > .main > .row.first .container h2{font-size:1.3em;color:#000}
 body section > #towerview > .main > .row.first .container img{width:636px;border-radius:4px}
-body section > #towerview > .main > .row.feature .first > .container{margin-right:10px}
-body section > #towerview > .main > .row.feature .container{width:317px;float:left;}
+body section > #towerview > .main > .row.feature .first .container{margin-right:12px}
+body section > #towerview > .main > .row.feature .container{width:315px;float:left;}
+body section > #towerview > .main > .row.feature .container .rounded-hover{width:309px}
 body section > #towerview > .main > .row.feature .container h2{color:#000}
 body section > #towerview > .main > .row.feature .container h2,body section > #towerview > .main > .row.feature .container p.teaser{width:140px;float:right}
 body section > #towerview > .main > .row.feature .container img{float:left;width:150px;height:150px}

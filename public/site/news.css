@@ -29,6 +29,6 @@ body section > #news .middle > .row > .block{width:150px;float:left;padding-left
 body section > #news .middle > .row > .block .container{width:150px;}
 body section > #news .middle > .row > .block .container .rounded-hover{height:220px}
 body section > #news .middle > .row > .block img{width:138px}
-body section > #news .middle > .row > .block h2{font-size:1em;margin-bottom:3px;margin-top:-4px;line-height:1.2em}
+body section > #news .middle > .row > .block h2{height:45px;font-size:1em;margin-bottom:3px;margin-top:-4px;line-height:1.2em}
 body section > #news .middle > .row > .block p.teaser{font-size:.9em;line-height:1.3em}
 body section > #news .middle > .row .block.first{padding-left:0}

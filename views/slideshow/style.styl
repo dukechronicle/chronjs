@@ -22,6 +22,16 @@ shadow(opacity, height, width, offset)
         height height
         img
             margin-top 0px
+.slideshow.vertical
+    .headlines
+        a.page
+            border-bottom 1px solid transparent
+            height 41px
+            transition(border-color,0.25s,linear)
+        a.page:hover, a.page.active
+            border-bottom-color #4D90F0
+
+
 .slideshow
     width width + 6
     border-radius  4px
@@ -103,8 +113,7 @@ shadow(opacity, height, width, offset)
             width 180px
             display block
             float left
-            margin 0 15px
-            padding 6px 0 6px
+            padding 6px 15px
             padding-top 3px
             height headlines-height - (6 * 2)
             color #444

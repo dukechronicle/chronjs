@@ -13,7 +13,13 @@ var BAD_SECTIONS = ['News/Graduation Issue',
     'Sports/Durham Bulls', 'Sports/Wrestling',
     'Sports/Volleyball', 'Sports/Fencing',
     'Sports/Field Hockey',
-    'Opinion/Cartoons'];
+    'Opinion/Cartoons', 'Towerview/Blue Devil Crossing',
+    'Towerview/Bus Stop',
+    'Towerview/Blue Devil Crossing',
+    'Towerview/Driving Distance',
+    'Towerview/Rearview Mirror',
+    'Towerview/The Devil\'s Details',
+    'Towerview/The Green Light'];
 
 // get all document under given taxonomy path ex. ["News", "University"]
 taxonomy.docs = function(taxonomyPath, limit, callback) {

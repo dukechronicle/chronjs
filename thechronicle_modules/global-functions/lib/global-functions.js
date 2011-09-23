@@ -21,6 +21,10 @@ exports.randomString = function (length) {
     return randomstring;
 };
 
+exports.trim = function(string) {
+    return string.replace(/^\s*|\s*$/g, '')
+}
+
 exports.sendJSONResponse = function(res,jsonObject) {
     var jsonString = JSON.stringify(jsonObject);
     

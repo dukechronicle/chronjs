@@ -2,6 +2,7 @@ var solr = require('solr');
 var dateFormat = require('dateformat');
 
 var config = require('../../config');
+var globalFunctions = require('../../global-functions');
 var api = require("./api");
 var _ = require("underscore");
 var db = require("../../db-abstract");
@@ -146,6 +147,9 @@ search.docsByAuthor = function(authorName, sortOrder, facets, callback) {
 }
 
 search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, callback) {
+    wordsQuery = globalFunctions.trim(wordsQuery);    
+    if(wordsQuery.length == 0) wordsQuery = "--";
+
     if(sortBy == 'relevance') sortBy = 'score';
     else if(sortBy == 'date') sortBy = 'created_date_d';
     else sortBy = 'score';

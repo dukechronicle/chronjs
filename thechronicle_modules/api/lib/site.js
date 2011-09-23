@@ -12,6 +12,7 @@ var _ = require("underscore");
 var async = require('async');
 var nimble = require('nimble');
 var fs = require('fs');
+var dateFormat = require('dateformat');
 
 var FRONTPAGE_GROUP_NAMESPACE = ['Layouts','Frontpage'];
 var NEWS_GROUP_NAMESPACE = ['Layouts','News'];
@@ -32,10 +33,8 @@ function _getImages(obj, callback) {
 }
 
 function _convertTimestamp(timestamp) {
-    var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
-        "October", "November", "December"];
     var date = new Date(timestamp*1000);
-    return month[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
+    return dateFormat(date,"mmmm dS, yyyy");
 }
 
 function _registerArticleView(url, title, callback) {

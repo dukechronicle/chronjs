@@ -25,8 +25,6 @@ var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
 var newsModel = JSON.parse(fs.readFileSync("sample-data/news.json"));
 var sportsModel = JSON.parse(fs.readFileSync("sample-data/sports.json"));
 
-var REDIS_ARTICLE_VIEWS_HASH;
-
 function _getImages(obj, callback) {
     console.log("_getImages DEPRECATED!");
     callback("DEPRECATED!");
@@ -37,8 +35,12 @@ function _convertTimestamp(timestamp) {
     return dateFormat(date,"mmmm dS, yyyy");
 }
 
-function _registerArticleView(url, title, callback) {
-    redis.client.zincrby(REDIS_ARTICLE_VIEWS_HASH, 1, url + "||" + title, callback);
+function _articleViewsKey(taxonomy) {
+    return "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE") + ":" + JSON.stringify(taxonomy);
+}
+
+function _registerArticleView(url, title, taxonomy, callback) {
+    redis.client.zincrby(_articleViewsKey(taxonomy), 1, url + "||" + title, callback);
 }
 
 site.init = function(app, callback) {
@@ -48,8 +50,6 @@ site.init = function(app, callback) {
             console.log("redisclient init failed!");
             return callback(err);
         }
-        
-        REDIS_ARTICLE_VIEWS_HASH = "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE");
 
         api.init(function(err2){
             if(err2)
@@ -95,7 +95,7 @@ site.init = function(app, callback) {
                 api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, result) {
                     _.defaults(result, homeModel);
                     
-                    redis.client.zrange(REDIS_ARTICLE_VIEWS_HASH, 0, 5, function(err, popular) {
+                    redis.client.zrange(_articleViewsKey([]), 0, 5, function(err, popular) {
                         result.popular = popular.map(function(str) {
                             var parts = str.split('||');
                             return {
@@ -123,7 +123,7 @@ site.init = function(app, callback) {
             app.get('/news', function(req, res) {
                 api.group.docs(NEWS_GROUP_NAMESPACE, null, function(err, model) {
                     _.defaults(model, newsModel);
-                    redis.client.zrange(REDIS_ARTICLE_VIEWS_HASH, 0, 5, function(err, popular) {
+                    redis.client.zrange(_articleViewsKey(['News']), 0, 5, function(err, popular) {
                         model.popular = popular.map(function(str) {
                             var parts = str.split('||');
                             return {
@@ -392,14 +392,6 @@ site.init = function(app, callback) {
                       doc = _parseAuthor(doc);
 
                       var latestUrl = doc.urls[doc.urls.length - 1];
-                      
-                      // we don't need to wait for this
-                        _registerArticleView(latestUrl, doc.title, function(err, res) {
-                            if(err) {
-                                console.log("Failed to register article view: " + latestUrl);
-                                console.log(err);
-                            }
-                        });
 
                       if(url !== latestUrl) {
                         http_res.redirect('/article/' + latestUrl);
@@ -423,6 +415,19 @@ site.init = function(app, callback) {
                             filename: 'views/article.jade'
                         });
                      }
+                     
+                    
+                     var length = doc.taxonomy.length;
+                     var taxToSend = doc.taxonomy;
+                     for(var i = length; i >= 0; i--) {
+                         taxToSend.splice(i, 1);
+                         _registerArticleView(latestUrl, doc.title, taxToSend, function(err, res) {
+                             if(err) {
+                                 console.log("Failed to register article view: " + latestUrl);
+                                 console.log(err);
+                             }
+                         });
+                       }
                     }
                     });
             });

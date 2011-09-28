@@ -95,7 +95,7 @@ site.init = function(app, callback) {
                 api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, result) {
                     _.defaults(result, homeModel);
                     
-                    redis.client.zrange(_articleViewsKey([]), 0, 5, function(err, popular) {
+                    redis.client.zrevrange(_articleViewsKey([]), 0, 5, function(err, popular) {
                         result.popular = popular.map(function(str) {
                             var parts = str.split('||');
                             return {
@@ -103,7 +103,6 @@ site.init = function(app, callback) {
                                 title: parts[1]
                             };
                         });
-                        result.popular.reverse();
                         
                         rss.getRSS('twitter', function(err, tweets) {
                             if(tweets && tweets.items && tweets.items.length > 0) {
@@ -123,7 +122,7 @@ site.init = function(app, callback) {
             app.get('/news', function(req, res) {
                 api.group.docs(NEWS_GROUP_NAMESPACE, null, function(err, model) {
                     _.defaults(model, newsModel);
-                    redis.client.zrange(_articleViewsKey(['News']), 0, 5, function(err, popular) {
+                    redis.client.zrevrange(_articleViewsKey(['News']), 0, 5, function(err, popular) {
                         model.popular = popular.map(function(str) {
                             var parts = str.split('||');
                             return {
@@ -131,7 +130,6 @@ site.init = function(app, callback) {
                                 title: parts[1]
                             };
                         });
-                        model.popular.reverse();
                         rss.getRSS('newsblog', function(err, rss) {
                             if(rss && rss.items && rss.items.length > 0) {
                                 model.Blog = rss.items.map(function(item) {

@@ -2,6 +2,7 @@ var solr = require('solr');
 var dateFormat = require('dateformat');
 
 var config = require('../../config');
+var globalFunctions = require('../../global-functions');
 var api = require("./api");
 var _ = require("underscore");
 var db = require("../../db-abstract");
@@ -9,6 +10,8 @@ var db = require("../../db-abstract");
 // whenever the way an article should be indexed by solr is changed, this number should be incremented
 // so the server knows it has to reindex all articles not using the newest indexing version. Keep the number numeric!
 var INDEX_VERSION = 0.5006;
+var RESULTS_PER_PAGE = 25;
+
 var client = null;
 
 var search = {};
@@ -132,8 +135,9 @@ search.removeAllDocsFromSearch = function(callback) {
     callback(null);
 }
 
-search.docsByAuthor = function(authorName, sortOrder, facets, callback) {
+search.docsByAuthor = function(authorName, sortOrder, facets, page, callback) {
     if(sortOrder != 'asc') sortOrder = 'desc';
+    if(page < 1) page = 1;
 
     var facetFields;
     var facetQueries;
@@ -142,15 +146,29 @@ search.docsByAuthor = function(authorName, sortOrder, facets, callback) {
         facetQueries = facetQueriesTemp;
     });
 
-    querySolr('author_sm:"' + authorName +'"', {facet: true, "facet.field":facetFields, "fq":facetQueries, rows: 25, fl: "*", sort: 'created_date_d' + " " + sortOrder}, callback);
+    querySolr('author_sm:"' + authorName +'"',
+    {
+        facet: true,
+        "facet.field":facetFields,
+        fq:facetQueries,
+        rows: RESULTS_PER_PAGE,
+        start: RESULTS_PER_PAGE*(page-1),
+        fl: "*",
+        sort: 'created_date_d' + " " + sortOrder
+    },
+    callback);
 }
 
-search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, callback) {
+search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page, callback) {
+    wordsQuery = globalFunctions.trim(wordsQuery);    
+    if(wordsQuery.length == 0) wordsQuery = "--";
+
     if(sortBy == 'relevance') sortBy = 'score';
     else if(sortBy == 'date') sortBy = 'created_date_d';
     else sortBy = 'score';
 
     if(sortOrder != 'asc') sortOrder = 'desc';
+    if(page < 1) page = 1;
 
     var facetFields;
     var facetQueries;
@@ -176,8 +194,9 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, callb
     {
       facet: true,
       "facet.field":facetFields,
-      "fq":facetQueries,
-      rows: 25,
+      fq:facetQueries,
+      rows: RESULTS_PER_PAGE,
+      start: RESULTS_PER_PAGE*(page-1),
       fl: "*,score",
       sort: sortBy + " " + sortOrder,
       "f.created_year_i.facet.sort":"index",

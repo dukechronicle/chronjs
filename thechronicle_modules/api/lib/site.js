@@ -12,6 +12,7 @@ var _ = require("underscore");
 var async = require('async');
 var nimble = require('nimble');
 var fs = require('fs');
+var dateFormat = require('dateformat');
 
 var FRONTPAGE_GROUP_NAMESPACE = ['Layouts','Frontpage'];
 var NEWS_GROUP_NAMESPACE = ['Layouts','News'];
@@ -24,22 +25,22 @@ var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
 var newsModel = JSON.parse(fs.readFileSync("sample-data/news.json"));
 var sportsModel = JSON.parse(fs.readFileSync("sample-data/sports.json"));
 
-var REDIS_ARTICLE_VIEWS_HASH;
-
 function _getImages(obj, callback) {
     console.log("_getImages DEPRECATED!");
     callback("DEPRECATED!");
 }
 
 function _convertTimestamp(timestamp) {
-    var month = ["January", "February", "March", "April", "May", "June", "July", "August", "September",
-        "October", "November", "December"];
     var date = new Date(timestamp*1000);
-    return month[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
+    return dateFormat(date,"mmmm dS, yyyy");
 }
 
-function _registerArticleView(url, title, callback) {
-    redis.client.zincrby(REDIS_ARTICLE_VIEWS_HASH, 1, url + "||" + title, callback);
+function _articleViewsKey(taxonomy) {
+    return "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE") + ":" + JSON.stringify(taxonomy);
+}
+
+function _registerArticleView(url, title, taxonomy, callback) {
+    redis.client.zincrby(_articleViewsKey(taxonomy), 1, url + "||" + title, callback);
 }
 
 site.init = function(app, callback) {
@@ -49,8 +50,6 @@ site.init = function(app, callback) {
             console.log("redisclient init failed!");
             return callback(err);
         }
-        
-        REDIS_ARTICLE_VIEWS_HASH = "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE");
 
         api.init(function(err2){
             if(err2)
@@ -96,7 +95,7 @@ site.init = function(app, callback) {
                 api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, result) {
                     _.defaults(result, homeModel);
                     
-                    redis.client.zrange(REDIS_ARTICLE_VIEWS_HASH, 0, 5, function(err, popular) {
+                    redis.client.zrevrange(_articleViewsKey([]), 0, 5, function(err, popular) {
                         result.popular = popular.map(function(str) {
                             var parts = str.split('||');
                             return {
@@ -104,7 +103,6 @@ site.init = function(app, callback) {
                                 title: parts[1]
                             };
                         });
-                        result.popular.reverse();
                         
                         rss.getRSS('twitter', function(err, tweets) {
                             if(tweets && tweets.items && tweets.items.length > 0) {
@@ -124,7 +122,7 @@ site.init = function(app, callback) {
             app.get('/news', function(req, res) {
                 api.group.docs(NEWS_GROUP_NAMESPACE, null, function(err, model) {
                     _.defaults(model, newsModel);
-                    redis.client.zrange(REDIS_ARTICLE_VIEWS_HASH, 0, 5, function(err, popular) {
+                    redis.client.zrevrange(_articleViewsKey(['News']), 0, 5, function(err, popular) {
                         model.popular = popular.map(function(str) {
                             var parts = str.split('||');
                             return {
@@ -132,7 +130,6 @@ site.init = function(app, callback) {
                                 title: parts[1]
                             };
                         });
-                        model.popular.reverse();
                         rss.getRSS('newsblog', function(err, rss) {
                             if(rss && rss.items && rss.items.length > 0) {
                                 model.Blog = rss.items.map(function(item) {
@@ -318,13 +315,13 @@ site.init = function(app, callback) {
             });
 
             app.get('/search/:query', function(req, http_res) {
-                api.search.docsBySearchQuery(req.params.query.replace('-',' '), req.query.sort, req.query.order, req.query.facets, function(err, docs, facets) {
+                api.search.docsBySearchQuery(req.params.query.replace('-',' '), req.query.sort, req.query.order, req.query.facets, 1, function(err, docs, facets) {
                     _showSearchArticles(err,req,http_res,docs,facets);
                 });
             });
         
             app.get('/staff/:query', function(req, http_res) {
-                api.search.docsByAuthor(req.params.query.replace('-',' '), 'desc', '', function(err, docs, facets) {
+                api.search.docsByAuthor(req.params.query.replace('-',' '), 'desc', '', 1, function(err, docs, facets) {
                     if (err) return globalFunctions.showError(http_res, err);
 
                     docs.forEach(function(doc) {
@@ -393,14 +390,6 @@ site.init = function(app, callback) {
                       doc = _parseAuthor(doc);
 
                       var latestUrl = doc.urls[doc.urls.length - 1];
-                      
-                      // we don't need to wait for this
-                        _registerArticleView(latestUrl, doc.title, function(err, res) {
-                            if(err) {
-                                console.log("Failed to register article view: " + latestUrl);
-                                console.log(err);
-                            }
-                        });
 
                       if(url !== latestUrl) {
                         http_res.redirect('/article/' + latestUrl);
@@ -424,6 +413,19 @@ site.init = function(app, callback) {
                             filename: 'views/article.jade'
                         });
                      }
+                     
+                    
+                     var length = doc.taxonomy.length;
+                     var taxToSend = doc.taxonomy;
+                     for(var i = length; i >= 0; i--) {
+                         taxToSend.splice(i, 1);
+                         _registerArticleView(latestUrl, doc.title, taxToSend, function(err, res) {
+                             if(err) {
+                                 console.log("Failed to register article view: " + latestUrl);
+                                 console.log(err);
+                             }
+                         });
+                       }
                     }
                     });
             });

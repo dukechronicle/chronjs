@@ -37,6 +37,20 @@ exports.init = function(app, callback) {
                 }
             });
         });
+
+        app.get('/search/:query', function(req, http_res) {
+            api.search.docsBySearchQuery(req.params.query.replace('-',' '), req.query.sort, req.query.order, req.query.facets, req.query.page, function(err, docs, facets) {
+                if(req.query.callback == null) http_res.send({docs:docs, facets:facets});
+                else http_res.send(req.query.callback + "(" + JSON.stringify({docs:docs, facets:facets}) + ")");
+            });
+        });
+
+        app.get('/staff/:query', function(req, http_res) {
+            api.search.docsByAuthor(req.params.query.replace('-',' '), 'desc', '', req.query.page, function(err, docs, facets) {
+                if(req.query.callback == null) http_res.send({docs:docs, facets:facets});
+                else http_res.send(req.query.callback + "(" + JSON.stringify({docs:docs, facets:facets}) + ")");
+            });
+        });
     });
 
     callback(null);

@@ -570,6 +570,10 @@ site.init = function(app, callback) {
                 //http_res(req, http_res, req.body.email, req.body.num);
             });
 
+            app.get('/mu-7843c2b9-3b9490d6-8f535259-e645b756', function(req, http_res) {
+              http_res.send('42');
+            });
+            
             callback(null);
         });
     });

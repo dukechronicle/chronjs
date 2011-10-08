@@ -39,10 +39,6 @@ function _articleViewsKey(taxonomy) {
     return "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE") + ":" + JSON.stringify(taxonomy);
 }
 
-function _registerArticleView(url, title, taxonomy, callback) {
-    redis.client.zincrby(_articleViewsKey(taxonomy), 1, url + "||" + title, callback);
-}
-
 site.init = function(app, callback) {
     redis.init(function(err) {
         if(err)
@@ -417,15 +413,17 @@ site.init = function(app, callback) {
                     
                      var length = doc.taxonomy.length;
                      var taxToSend = doc.taxonomy;
+                     var multi = redis.client.multi();
                      for(var i = length; i >= 0; i--) {
                          taxToSend.splice(i, 1);
-                         _registerArticleView(latestUrl, doc.title, taxToSend, function(err, res) {
-                             if(err) {
-                                 console.log("Failed to register article view: " + latestUrl);
-                                 console.log(err);
-                             }
-                         });
-                       }
+                         multi.zincrby(_articleViewsKey(doc.taxonomy), 1, latestUrl + "||" + doc.title);
+                     }
+                     multi.exec(function(err, res) {
+                            if(err) {
+                                console.log("Failed to register article view: " + latestUrl);
+                                console.log(err);
+                            }
+                     });
                     }
                     });
             });

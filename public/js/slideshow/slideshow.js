@@ -3,7 +3,7 @@ $(function(){
 	var nextSlide = 0;
 	var totalSlides = $('.slideshow .slides img').size();
 
-	var positions  = [106, 318, 530];
+	var positions  = [0, 135, 270];
 	// start by showing only the first sldie
 
     $('.slideshow .headlines a:eq(0)').addClass('active');
@@ -36,15 +36,17 @@ $(function(){
        
 		currentSlide = newSlide;
 	}
-
+    // TODO cross browser compatibility
 	// bind headlines to slideshow switches
 	$('.slideshow .headlines a').each(function(index) {
 		$(this).click(function(event) {
 			if (index != currentSlide) {
                 event.preventDefault();
 				showSlide(index);
-				$('.slideshow b.caret').css('-webkit-transform', 'translate(' +
-						parseInt(positions[index], 10) + 'px, 0px)')
+				$('.slideshow b.caret').css('-webkit-transform', 'translate(0px, ' +
+						parseInt(positions[index], 10) + 'px) rotate(45deg)')
+                $('.slideshow b.caret-white').css('-webkit-transform', 'translate(0px, ' +
+                		parseInt(positions[index], 10) + 'px) rotate(45deg)')
 			} 
 		})
 	});

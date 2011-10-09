@@ -132,6 +132,7 @@ shadow(opacity, height, width, offset)
         a.page.active:hover
             text-decoration underline
 
+    // TODO cross browser compatibility
     b.caret
         display block
         position absolute
@@ -153,6 +154,7 @@ shadow(opacity, height, width, offset)
         position: absolute;
         margin-top 55px
     b.caret-white
+        -webkit-transition -webkit-transform linear 0.4s
         display block
         position absolute
         width 10px

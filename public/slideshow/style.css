@@ -4,8 +4,8 @@
 .slideshow.vertical .headlines a.page{border-bottom:1px solid transparent;height:41px;-webkit-transition:border-color .25s linear;-moz-transition:border-color .25s linear;-o-transition:border-color .25s linear;transition:border-color .25s linear}
 .slideshow.vertical .headlines a.page:hover,.slideshow.vertical .headlines a.page.active{border-bottom-color:#4d90f0}
 .slideshow{width:642px;border-radius:4px;-webkit-border-radius:4px;-moz-border-radius:4px;-webkit-box-shadow:rgba(0,0,0,0.40) 0 1px 3px;-moz-box-shadow:rgba(0,0,0,0.40) 0 1px 3px;box-shadow:rgba(0,0,0,0.40) 0 1px 3px;font-size:.9em;font-family:Georgia,"Century Schoolbook","Times New Roman",Times,serif;padding:0;margin-bottom:20px;}
-.slideshow .slides img{border-bottom:1px solid #ccc;width:636px;height:393px;position:absolute;left:0;top:0;margin-bottom:80px}
-.slideshow .slides{background:-webkit-gradient(linear,left bottom,left top,color-stop(0,whiteSmoke),color-stop(.33,#fff));-webkit-border-top-left-radius:4px;-webkit-border-top-right-radius:4px;-moz-border-radius-topleft:4px;-moz-border-radius-topright:4px;position:relative;width:636px;text-align:left;overflow:hidden;height:473px;border:3px solid #fff;z-index:0;box-shadow:rgba(0,0,0,0.30) 0 1px 3px;}
+.slideshow .slides img{border-bottom:1px solid #ccc;width:636px;height:393px;position:absolute;left:0;top:0;margin-bottom:80px;z-index:5}
+.slideshow .slides{background:-webkit-gradient(linear,left bottom,left top,color-stop(0,whiteSmoke),color-stop(.33,#fff));-webkit-border-top-left-radius:4px;-webkit-border-top-right-radius:4px;-moz-border-radius-topleft:4px;-moz-border-radius-topright:4px;position:relative;width:636px;text-align:left;overflow:hidden;height:473px;border:3px solid #fff;box-shadow:rgba(0,0,0,0.30) 0 1px 3px;}
 .slideshow .slides a:hover h1{color:#36c}
 .slideshow .slides .text{margin-top:400px;margin-left:10px;position:absolute;}
 .slideshow .slides .text h1{-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear;font-size:1.5em;line-height:1.1em;margin-bottom:2px}
@@ -15,4 +15,5 @@
 .slideshow .headlines a.page:hover{color:#36c;text-decoration:none}
 .slideshow .headlines a.page.active{color:#36c;text-shadow:0 1px 0 #fff}
 .slideshow .headlines a.page.active:hover{text-decoration:underline}
-.slideshow b.caret{display:block;position:absolute;width:13px;height:8px;margin:0 0 -8px -7px;background-image:url("/images/caret-active.png");-webkit-transition:-webkit-transform linear .4s;-webkit-transform:translate(110px,0)}
+.slideshow b.caret{display:block;position:absolute;width:10px;background:#fff;height:10px;box-shadow:rgba(0,0,0,0.30) 0 1px 3px;margin:0 0 0 0;-webkit-transition:-webkit-transform linear .4s;-webkit-transform:rotate(90deg);z-index:0;left:432px;-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);transform:rotate(45deg);position:absolute;margin-top:55px}
+.slideshow b.caret-white{display:block;position:absolute;width:10px;background:#fff;height:10px;z-index:1;left:432px;margin-top:55px;-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);transform:rotate(45deg)}

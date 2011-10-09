@@ -1,12 +1,15 @@
 .slideshow.right
+    b.caret
+    b.caret-white
     .slides
-        for story in stories
-            a(href=story.url)
-                if (story && story.images && story.images.LargeRect)
-                    if (index == 0)
-                        img(src=story.images.LargeRect.url)
-                    else
-                        img(src=story.images.LargeRect.url, style="display: none")
+        .slides-inner
+            for story in stories
+                a(href=story.url)
+                    if (story && story.images && story.images.LargeRect)
+                        if (index == 0)
+                            img(src=story.images.LargeRect.url)
+                        else
+                            img(src=story.images.LargeRect.url, style="display: none")
 
     .headlines
         for story in stories

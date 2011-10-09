@@ -58,6 +58,7 @@ shadow(opacity, height, width, offset)
         left 0
         top 0
         margin-bottom textHeight
+        z-index 5
 
     .slides
         background -webkit-gradient(linear,left bottom,left top,color-stop(0,whiteSmoke),color-stop(.33,white))
@@ -71,7 +72,6 @@ shadow(opacity, height, width, offset)
         overflow hidden
         height height + textHeight
         border 3px solid white
-        z-index 0
         //border-color #E5E5E5 #DBDBDB #D2D2D2
         box-shadow rgba(0,0,0,0.3) 0 1px 3px
 
@@ -135,9 +135,34 @@ shadow(opacity, height, width, offset)
     b.caret
         display block
         position absolute
-        width 13px
-        height 8px
-        margin 0 0 -8px -7px
-        background-image url('/images/caret-active.png')
+        width 10px
+        background white
+        height 10px
+        box-shadow rgba(0,0,0,0.3) 0 1px 3px
+        margin 0 0 0 0px
+        //background-image url('/images/caret-active.png')
         -webkit-transition -webkit-transform linear 0.4s
-        -webkit-transform translate(110px, 0px)
+        //-webkit-transform translate(110px, 0px)
+        -webkit-transform rotate(90deg)
+        z-index 0
+        left 432px
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        transform: rotate(45deg);
+        position: absolute;
+        margin-top 55px
+    b.caret-white
+        display block
+        position absolute
+        width 10px
+        background white
+        height 10px
+        z-index 1
+        left 432px
+        margin-top 55px
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        transform: rotate(45deg);
+

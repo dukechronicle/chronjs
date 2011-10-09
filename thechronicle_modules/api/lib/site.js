@@ -99,11 +99,15 @@ site.init = function(app, callback) {
                                 title: parts[1]
                             };
                         });
-                        
-                        rss.getRSS('twitter-chronicle', function(err, tweets) {
+
+                        var twitterFeeds = ["chronicle", "recess", "towerview", "basketball", "photo", "sports"];
+                        var selectedFeed = twitterFeeds[Math.floor(Math.random() * twitterFeeds.length)];
+                        console.log(selectedFeed);
+                        rss.getRSS('twitter-' + selectedFeed, function(err, tweets) {
                             if(tweets && tweets.items && tweets.items.length > 0) {
                                 result.twitter.tweet = tweets.items[0].title;
                             }
+                            console.log(result.twitter.tweet);
                             res.render('site/index', {
                                 filename: 'views/site/index.jade',
                                 locals: {

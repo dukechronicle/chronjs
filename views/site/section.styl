@@ -1,4 +1,28 @@
+section > .nav
+    position relative
+    z-index 2
+    clear both
+    h2
+        float left
+        a
+            letter-spacing 1px
+            text-shadow 0px 1px 0px white
+            //border-bottom 1px solid transparent
+            font-size 0.7em
+            text-transform uppercase
+            color #333
+            display block
+            padding-left 15px
+            padding-right 11px
+            //padding-bottom 1px
+            margin-bottom 16px
+            margin-top -16px
+            transition(color, .25s, linear)
+        a:hover, a.selected
+            color #36c
+
 #section
+
     .result
         display block
         width 600px
@@ -27,10 +51,18 @@
         margin-left 4px
         margin-right 4px
 
+
+
+        h2.first a
+            padding-left 3px
+
+        a
+            color #333
+
 .nav h2.selected a
-    color #999
+    color #36c
     margin-right 0px
     padding-right 0px
 
 .nav h2.selected a:hover
-    color #333
+    text-decoration line-through

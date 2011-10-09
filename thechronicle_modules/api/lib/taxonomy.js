@@ -27,9 +27,6 @@ taxonomy.docs = function(taxonomyPath, limit, callback) {
 }
 
 taxonomy.getParentAndChildren = function(navTree,callback) {
-
-
-
     db.taxonomy.getChildren(navTree, function(err, results){
         if (err) return callback(err, null);
         else {
@@ -49,7 +46,6 @@ taxonomy.getParentAndChildren = function(navTree,callback) {
             );
 
             Object.keys(children).forEach(function(key) {
-                console.log(key)
                 if (BAD_SECTIONS.indexOf(key) !== -1) {
                     delete children[key];
                 }
@@ -60,7 +56,9 @@ taxonomy.getParentAndChildren = function(navTree,callback) {
             while (navTree.length > 1) {
                 var parentName = _.last(navTree);
                 navTree.pop();
-                parentPaths.push({path: '/' + navTree.join('/'), name: parentName});
+                var prefix = "/section/";
+                if (navTree.length < 2) prefix = "/"
+                parentPaths.push({path: prefix + navTree.join('/'), name: parentName});
             }
 
             callback(err, {children: children, parentPaths: parentPaths.reverse()});

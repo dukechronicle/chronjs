@@ -46,7 +46,7 @@ shadow(opacity, height, width, offset)
 
 
     .slides img
-        border-top 1px solid #ccc
+        border-bottom 1px solid #ccc
         
         //-webkit-border-top-left-radius  4px
         //-webkit-border-top-right-radius  4px
@@ -57,7 +57,7 @@ shadow(opacity, height, width, offset)
         position absolute
         left 0
         top 0
-        margin-top textHeight
+        margin-bottom textHeight
 
     .slides
         background -webkit-gradient(linear,left bottom,left top,color-stop(0,whiteSmoke),color-stop(.33,white))
@@ -80,7 +80,7 @@ shadow(opacity, height, width, offset)
                 color #36c
 
         .text
-            margin-top 4px
+            margin-top 400px
             margin-left 10px
             position absolute
             h1
@@ -116,18 +116,21 @@ shadow(opacity, height, width, offset)
             padding 6px 15px
             padding-top 3px
             height headlines-height - (6 * 2)
-            color #444
+            color black
             line-height 1.2em
-            font-size 0.9em
+            font-size 1em
             -webkit-transition color linear .2s
             text-shadow 0px 1px 1px white
 
         a.page:hover
-            color black
+            color #36C
             text-decoration none
         a.page.active
-            color black
+            color #36C
             text-shadow 0px 1px 0px white
+
+        a.page.active:hover
+            text-decoration underline
 
     b.caret
         display block

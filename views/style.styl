@@ -1,6 +1,7 @@
 link-color = #36c
 text-color = #333
 bg-color = #F5F6F7
+header-height = 70px
 
 #page
     .rounded
@@ -115,10 +116,10 @@ body
         position absolute
         z-index 0
         left 50px
-        top 0px
+        top -28px
 
     #header-top
-        height 96px
+        height header-height
         //background-color #003564
         //box-shadow 0 1px 3px rgba(0,0,0,.4);
         //border-bottom 2px solid white
@@ -127,7 +128,7 @@ body
         h1
             position relative
             z-index 2
-            margin-top 10px
+            margin-top 20px
             font-weight bold
             float left
             font-size 1.2em
@@ -136,7 +137,7 @@ body
             a
                 color #111
                 font-family didot
-                font-size 2.3em
+                font-size 3em
                 font-weight normal
                 letter-spacing -1px
                 padding-left 0px
@@ -177,7 +178,7 @@ body
             a
                 color #333
     section
-        margin-top 16px
+        margin-top 20px
 
 .container
     margin-bottom 20px
@@ -203,7 +204,7 @@ span.timestamp
 
 #search-box
     position absolute
-    top 96px
+    top header-height
     right 0px
     input
         background #fff url('/images/search-button.png') no-repeat
@@ -234,7 +235,7 @@ span.timestamp
         opacity 1
 header
     .content
-        width 240px
+        width 500px
         float left
         position relative
         z-index 2
@@ -260,7 +261,7 @@ header
     #header-bottom
         .social-media
             position absolute
-            top 99px
+            top header-height + 2px
             right 151px
             .inner
                 .icons

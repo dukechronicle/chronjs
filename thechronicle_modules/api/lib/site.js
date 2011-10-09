@@ -161,10 +161,11 @@ site.init = function(app, callback) {
                                         delete item.link;
                                         return item;
                                     });
-                                    Blog.splice(8, Blog.length - 8);
+                                    Blog.splice(5, Blog.length - 5);
                                     callback(null, Blog)
+                                } else {
+                                    callback(null, []);
                                 }
-                                callback(null, []);
                             });
                         },
                         function(callback) { //1
@@ -186,8 +187,10 @@ site.init = function(app, callback) {
                     // optional callback
                     function(err, results){
                         if (err) return console.log(err);
-                        /*
+                        console.log(results);
                         model.Blog = results[0];
+                        console.log(model.Blog);
+                        /*
                         model.Football = _.pluck(results[2], 'value');
                         model.Mbball = _.pluck(results[3], 'value');
                         model.MSoccer = _.pluck(results[4], 'value');

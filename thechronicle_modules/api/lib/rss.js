@@ -32,6 +32,8 @@ exports.parseRSS = function(feed, callback) {
 }
 
 exports.storeRSS = function(dom, title, callback) {
+    console.log(title);
+    console.log(dom);
     redis.init(function(err) {
         var json = JSON.stringify(dom);
         redis.client.set(title, json, callback);

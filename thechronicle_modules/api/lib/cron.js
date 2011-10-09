@@ -7,27 +7,27 @@ var feeds = [
         url: "http://feeds.feedburner.com/chronicleblogs/sports"
     },
     {
-        title: "twitter-chronicle",
-        url: "http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=dukechronicle"
+        title: "twitter-DukeChronicle",
+        url: "http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=DukeChronicle"
     },
     {
-        title: "twitter-recess",
-        url: "http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=chronicleRecess"
+        title: "twitter-ChronicleRecess",
+        url: "http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=ChronicleRecess"
     },
     {
-        title: "twitter-towerview",
+        title: "twitter-TowerviewMag",
         url: "http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=TowerviewMag"
     },
     {
-        title: "twitter-basketball",
+        title: "twitter-DukeBasketball",
         url: "http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=dukebasketball"
     },
     {
-        title: "twitter-photo",
+        title: "twitter-ChronPhoto",
         url: "http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=ChronPhoto"
     },
     {
-        title: "twitter-sports",
+        title: "twitter-ChronicleSports",
         url: "http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=chroniclesports"
     },
     {

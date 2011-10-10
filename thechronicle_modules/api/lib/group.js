@@ -128,7 +128,7 @@ group.docs = function(namespace, group, callback) {
                                 groupedResults[prevGroupName][groupedResults[prevGroupName].length - 1].cssClass = "last";
                             }
                             redis.client.set(key, JSON.stringify(groupedResults));
-                            redis.client.expire(key, 60);
+                            redis.client.expire(key, 120);
                             callback(null, groupedResults);
                         } else {
                             // TODO modify this

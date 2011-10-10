@@ -15,6 +15,11 @@ exports.init = function(callback) {
     
     // create redis client and authenticate
     client = redis.createClient(redisUrl.port, redisUrl.hostname);
+
+    client.on("error", function (err) {
+        console.log("Error " + err);
+    });
+
     client.auth(redisUrl.auth[1], function(err, reply) {
         if (err) {
             console.log("Error connecting to redis: " + err);
@@ -22,9 +27,6 @@ exports.init = function(callback) {
         }
 
         //console.log(client);
-        client.on("error", function (err) {
-            console.log("Error " + err);
-        });
 
         exports.client = client;
         return callback(null);

@@ -43,21 +43,36 @@ app.use(stylus.middleware({
 }));
 
 app.configure(function(){
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'jade');
+    app.use(express.bodyParser());
+    app.use(express.methodOverride());
+    // set up session
+    app.use(express.cookieParser());
+    app.use(express.session({ secret: SECRET }));
+    /* set http cache to one minute by default for each response */
+    app.use(function(req,res,next){
+        res.header('Cache-Control', 'public, max-age=60');
+        next();
+    });
+    app.use(app.router);
+
 });
 
 // the middleware itself does not serve the static
 // css files, so we need to expose them with staticProvider
 
+app.configure('development', function(){
+    app.use(express.static(__dirname + '/public'));
+    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+});
 
-// set up session
-app.use(express.cookieParser());
-app.use(express.session({ secret: SECRET }));
+app.configure('production', function(){
+    var oneYear = 31557600000;
+    app.use(express.static(__dirname + '/public', {maxAge: oneYear}));
+    app.use(express.errorHandler());
+});
+
 
 app.error(function(err, req, res, next){
 	try {
@@ -79,24 +94,14 @@ if(!config.isSetUp())
 else runSite(function() {});
 
 
-app.configure('development', function(){
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-});
 
-app.configure('production', function(){
-  app.use(express.errorHandler());
-});
 
 site.assignPreInitFunctionality(app,this);
 
 app.listen(process.env.PORT || port);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 
-/* set http cache to one minute by default for each response */
-app.use(function(req,res,next){
-    res.header('Cache-Control', 'public, max-age=60');
-    next();
-});
+
 
 
 exports.runSite = function(callback)

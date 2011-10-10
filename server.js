@@ -103,6 +103,9 @@ function runSite(callback) {
             })
         }));
     });
+    redisClient.on("error", function (err) {
+        console.log("Error " + err);
+    });
 
     site.init(app, function(err){
         //api.search.removeAllDocsFromSearch(function(){});

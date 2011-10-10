@@ -7,30 +7,36 @@ var client;
 var redisUrl;
 
 exports.init = function(callback) {
-    // Grab redis URL from config settings.
-    redisUrl = config.get("REDIS_URL");
+    // only initialize and authenticate on first run
+    if (!client) {
+        // Grab redis URL from config settings.
+        redisUrl = config.get("REDIS_URL");
 
-    redisUrl = url.parse(redisUrl);
-    redisUrl.auth = redisUrl.auth.split(":");
-    
-    // create redis client and authenticate
-    client = redis.createClient(redisUrl.port, redisUrl.hostname);
+        redisUrl = url.parse(redisUrl);
+        redisUrl.auth = redisUrl.auth.split(":");
 
-    client.on("error", function (err) {
-        console.log("Error " + err);
-    });
+        // create redis client and authenticate
+        client = redis.createClient(redisUrl.port, redisUrl.hostname);
 
-    client.auth(redisUrl.auth[1], function(err, reply) {
-        if (err) {
-            console.log("Error connecting to redis: " + err);
-            return callback(err);
-        }
+        client.on("error", function (err) {
+            console.log("Error " + err);
+        });
 
-        //console.log(client);
+        client.auth(redisUrl.auth[1], function(err, reply) {
+            console.log("authenticating");
+            if (err) {
+                console.log("Error connecting to redis: " + err);
+                return callback(err);
+            }
 
-        exports.client = client;
+            //console.log(client);
+
+            exports.client = client;
+            return callback(null);
+        });
+    } else {
         return callback(null);
-    });
+    }
 }
 
 exports.getHostname  = function() {

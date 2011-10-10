@@ -25,6 +25,9 @@ var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
 var newsModel = JSON.parse(fs.readFileSync("sample-data/news.json"));
 var sportsModel = JSON.parse(fs.readFileSync("sample-data/sports.json"));
 
+
+var BENCHMARK = false;
+
 function _getImages(obj, callback) {
     console.log("_getImages DEPRECATED!");
     callback("DEPRECATED!");
@@ -40,6 +43,7 @@ function _articleViewsKey(taxonomy) {
 }
 
 site.init = function(app, callback) {
+    var twitterFeeds = ["DukeChronicle", "ChronicleRecess", "TowerviewMag", "DukeBasketball", "ChronPhoto", "ChronicleSports"];
     redis.init(function(err) {
         if(err)
         {
@@ -88,33 +92,58 @@ site.init = function(app, callback) {
 
 
             app.get('/', function(req, res) {
-                api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, result) {
-                    _.defaults(result, homeModel);
-                    
-                    redis.client.zrevrange(_articleViewsKey([]), 0, 5, function(err, popular) {
-                        result.popular = popular.map(function(str) {
-                            var parts = str.split('||');
-                            return {
-                                url: '/article/' + parts[0],
-                                title: parts[1]
-                            };
+                var start = Date.now();
+                async.parallel([
+                    function(callback){ //0
+                        api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, result) {
+                            if (err) return callback(err);
+                            if (BENCHMARK) console.log("API TIME %d", Date.now() - start);
+                            return callback(null, result);
                         });
-
-                        var twitterFeeds = ["DukeChronicle", "ChronicleRecess", "TowerviewMag", "DukeBasketball", "ChronPhoto", "ChronicleSports"];
+                    },
+                    function(callback) { //1
+                        redis.client.zrevrange(_articleViewsKey([]), 0, 5, function(err, popular) {
+                            if (err) return callback(err);
+                            var popular = popular.map(function(str) {
+                                var parts = str.split('||');
+                                return {
+                                    url: '/article/' + parts[0],
+                                    title: parts[1]
+                                };
+                            });
+                            if (BENCHMARK) console.log("REDIS TIME %d", Date.now() - start);
+                            callback(null, popular);
+                        });
+                    },
+                    function(callback) { //2
+                        var twitter = {};
                         var selectedFeed = twitterFeeds[Math.floor(Math.random() * twitterFeeds.length)];
+                        twitter.user = selectedFeed;
+                        twitter.title = 'Twitter';
+                        twitter.imageUrl = "/images/twitter-dukechronicle.png";
                         rss.getRSS('twitter-' + selectedFeed, function(err, tweets) {
                             if(tweets && tweets.items && tweets.items.length > 0) {
-                                result.twitter.tweet = tweets.items[0].title;
+                                twitter.tweet = tweets.items[0].title;
                             }
-                            result.twitter.user = selectedFeed;
-                            res.render('site/index', {
+                            if (BENCHMARK) console.log("RSS TIME %d", Date.now() - start);
+                            return callback(err, twitter);
+                        });
+                    }
+                ],
+                function(err, results) {
+                    if (BENCHMARK) console.log("TOTAL TIME %d", Date.now() - start);
+                    var model = results[0];
+                    _.defaults(model, homeModel);
+
+                    model.popular = results[1];
+                    model.twitter = results[2]
+                    res.render('site/index', {
                                 filename: 'views/site/index.jade',
                                 locals: {
-                                    model: result
+                                    model: model
                                 }
-                            });
-                        });
                     });
+
                 });
             });
 

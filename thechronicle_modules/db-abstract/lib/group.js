@@ -3,7 +3,7 @@ var nimble = require('nimble');
 var _ = require("underscore");
 var util = require('util');
 
-
+var BENCHMARK = false;
 var group = exports;
 
 // create a new entry for group
@@ -27,6 +27,7 @@ group.list = function(options, callback) {
 
 // fetch documents from namespace or groups
 group.docs = function(namespace, group, callback) {
+    if (BENCHMARK) var start = Date.now();
     var query = {};
 
     query.reduce = false;
@@ -43,6 +44,7 @@ group.docs = function(namespace, group, callback) {
     }
     db.view('articles/groups', query,
         function(err, res) {
+            if (BENCHMARK) console.log("QUERY RECEIVED %d", Date.now() - start);
             if (err) return callback(err);
             if (res) {
                 //console.log(res);

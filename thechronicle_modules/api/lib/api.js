@@ -15,6 +15,8 @@ api.accounts = require("./accounts");
 api.search = require("./search");
 api.authors = require("./authors");
 
+var redis = require('./redisclient');
+
 var MAX_URL_LENGTH = 50;
 
 function getAvailableUrl(url, n, callback) {

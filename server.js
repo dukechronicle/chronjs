@@ -92,6 +92,12 @@ site.assignPreInitFunctionality(app,this);
 app.listen(process.env.PORT || port);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 
+/* set http cache to one minute by default for each response */
+app.use(function(req,res,next){
+    res.header('Cache-Control', 'public, max-age=60');
+    next();
+});
+
 
 exports.runSite = function(callback)
 {	

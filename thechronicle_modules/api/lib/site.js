@@ -57,7 +57,7 @@ site.init = function(app, callback) {
                 console.log("api init failed!");
                 return callback(err2);
             }
-
+            
             app.get('/about-us', function(req, res) {
                 res.render('pages/about-us', {filename: 'pages/about-us'});
             });

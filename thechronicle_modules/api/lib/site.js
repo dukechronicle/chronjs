@@ -14,6 +14,8 @@ var nimble = require('nimble');
 var fs = require('fs');
 var dateFormat = require('dateformat');
 
+var asereje = require('asereje');
+
 var FRONTPAGE_GROUP_NAMESPACE = ['Layouts','Frontpage'];
 var NEWS_GROUP_NAMESPACE = ['Layouts','News'];
 var SPORTS_GROUP_NAMESPACE = ['Layouts','Sports'];
@@ -136,12 +138,14 @@ site.init = function(app, callback) {
                     _.defaults(model, homeModel);
 
                     model.popular = results[1];
-                    model.twitter = results[2]
+                    model.twitter = results[2];
                     res.render('site/index', {
-                                filename: 'views/site/index.jade',
-                                locals: {
-                                    model: model
-                                }
+                        css: asereje.css(['slideshow/style', 'container/style', 'site/frontpage']),
+                        layout: 'layout-optimized',
+                        filename: 'views/site/index.jade',
+                        locals: {
+                            model: model
+                        }
                     });
 
                 });

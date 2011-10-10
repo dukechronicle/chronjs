@@ -22,8 +22,6 @@ var RedisStore = require('connect-redis')(express);
 /* express configuration */
 var app = express.createServer();
 
-var publicDir = '/public';
-var viewsDir = '/views';
 var port = 4000;
 var SECRET = "i'll make you my dirty little secret";
 
@@ -38,24 +36,28 @@ function compile(str, path) {
 // TO dest. dest is optional, defaulting to src
 
 app.use(stylus.middleware({
-	src: __dirname + viewsDir
-  , dest: __dirname + publicDir
+	src: __dirname + '/views'
+  , dest: __dirname + '/public'
   , compile: compile
   , firebug: true
 }));
-app.set('view engine', 'jade');
+
+app.configure(function(){
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'jade');
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(app.router);
+  app.use(express.static(__dirname + '/public'));
+});
 
 // the middleware itself does not serve the static
 // css files, so we need to expose them with staticProvider
-app.use(express.static(__dirname + publicDir));
-app.use(express.bodyParser());
 
 
 // set up session
 app.use(express.cookieParser());
 app.use(express.session({ secret: SECRET }));
-
-app.set('views', __dirname + viewsDir);
 
 app.error(function(err, req, res, next){
 	try {
@@ -76,10 +78,20 @@ if(!config.isSetUp())
 }
 else runSite(function() {});
 
+
+app.configure('development', function(){
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+});
+
+app.configure('production', function(){
+  app.use(express.errorHandler());
+});
+
 site.assignPreInitFunctionality(app,this);
 
-console.log('Listening on port ' + port);
 app.listen(process.env.PORT || port);
+console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+
 
 exports.runSite = function(callback)
 {	

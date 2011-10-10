@@ -187,9 +187,7 @@ site.init = function(app, callback) {
                     // optional callback
                     function(err, results){
                         if (err) return console.log(err);
-                        console.log(results);
                         model.Blog = results[0];
-                        console.log(model.Blog);
                         /*
                         model.Football = _.pluck(results[2], 'value');
                         model.Mbball = _.pluck(results[3], 'value');

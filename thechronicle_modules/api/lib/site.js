@@ -126,6 +126,8 @@ site.init = function(app, callback) {
                         rss.getRSS('twitter-' + selectedFeed, function(err, tweets) {
                             if(tweets && tweets.items && tweets.items.length > 0) {
                                 twitter.tweet = tweets.items[0].title;
+                            } else {
+                                twitter.tweet = 'No tweets available.';
                             }
                             if (BENCHMARK) console.log("RSS TIME %d", Date.now() - start);
                             return callback(err, twitter);

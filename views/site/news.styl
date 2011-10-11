@@ -25,35 +25,45 @@ body section > #news
         .rounded
             width (top-content-width - (container-padding * 2))
 
-
-    .left
+    .sidebar
         float right
-        // align side bar with main content bar
+        width 490px
+        .top
+            .medium-rectangle
+                float right
+            .blog
+                float left
+                .rounded
+                    width 155px
+                    height 250px
+        .left
+            float right
+            // align side bar with main content bar
 
-        .container
-            width = 250px
-            width width + 3 * 2
+            .container
+                width = 250px
+                width width + 3 * 2
 
+                .content-container
+                    h2
+                        font-size 1em
+                        margin-bottom 5px
+                .rounded
+                    width width
+
+        .videos
             .content-container
-                h2
-                    font-size 1em
-                    margin-bottom 5px
-            .rounded
-                width width
+                padding 0px
 
-    .videos
-        .content-container
-            padding 0px
+        .right
+            float left
+            // align side bar with main content bar
+            .container
+                width = 206px
+                width width + 3 * 2
 
-    .right
-        float left
-        // align side bar with main content bar
-        .container
-            width = 206px
-            width width + 3 * 2
-            
-            .rounded
-                width width
+                .rounded
+                    width width
 
     .main
         a.rounded-hover
@@ -70,7 +80,6 @@ body section > #news
 
         width 460px
         float left
-        padding-right 23px
         .content-container
                 h2
                     color black

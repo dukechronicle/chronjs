@@ -1,12 +1,16 @@
-body section > #news .left{float:right;}
-body section > #news .left .container{width:256px;}
-body section > #news .left .container .content-container h2{font-size:1em;margin-bottom:5px}
-body section > #news .left .container .rounded{width:250px}
-body section > #news .videos .content-container{padding:0}
-body section > #news .right{float:left;}
-body section > #news .right .container{width:212px;}
-body section > #news .right .container .rounded{width:206px}
-body section > #news .main{width:460px;float:left;padding-right:23px;}
+body section > #news .sidebar{float:right;width:490px;}
+body section > #news .sidebar .top .medium-rectangle{float:right}
+body section > #news .sidebar .top .blog{float:left;}
+body section > #news .sidebar .top .blog .rounded{width:155px;height:250px}
+body section > #news .sidebar .left{float:right;}
+body section > #news .sidebar .left .container{width:256px;}
+body section > #news .sidebar .left .container .content-container h2{font-size:1em;margin-bottom:5px}
+body section > #news .sidebar .left .container .rounded{width:250px}
+body section > #news .sidebar .videos .content-container{padding:0}
+body section > #news .sidebar .right{float:left;}
+body section > #news .sidebar .right .container{width:212px;}
+body section > #news .sidebar .right .container .rounded{width:206px}
+body section > #news .main{width:460px;float:left;}
 body section > #news .main a.rounded-hover :hover h1,body section > #news .main a.rounded-hover :hover h2,body section > #news .main a.rounded-hover :hover h3,body section > #news .main a.rounded-hover :hover h4{color:#36c}
 body section > #news .main a.rounded-hover h1,body section > #news .main a.rounded-hover h2,body section > #news .main a.rounded-hover h3,body section > #news .main a.rounded-hover h4{-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear}
 body section > #news .main .row .content-container img.thumb{border-radius:4px}

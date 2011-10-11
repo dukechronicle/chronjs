@@ -174,6 +174,15 @@ site.init = function(app, callback) {
                                 });
                                 model.Blog.splice(5, model.Blog.length - 5);
                             }
+
+                            model.adFullRectangle = {
+                                    "title": "Advertisement",
+                                    "imageUrl": "/images/ads/monster.png",
+                                    "url": "http://google.com",
+                                    "width": "300px",
+                                    "height": "250px"
+                            };
+                            
                             api.taxonomy.getParentAndChildren(['News'],function(err, parentAndChildren) {
                                 res.render('site/news', {subsections: parentAndChildren.children, filename: 'views/site/news.jade', model: model});
                             });

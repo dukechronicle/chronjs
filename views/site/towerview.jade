@@ -26,6 +26,8 @@
     .sidebar.clearfix
         if (model.EditorsNote)
             .editorsNote!=partial('container/block.jade', {title: "Editor's Note", story: model.EditorsNote[0]})
+        if (model.adFullRectangle)
+            .image-container.medium-rectangle.lighten!=partial('container/image', model.adFullRectangle)
         // prefix
         if (model.Prefix)
             if (model.Prefix[0])

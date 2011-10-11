@@ -172,7 +172,7 @@ site.init = function(app, callback) {
                                     delete item.link;
                                     return item;
                                 });
-                                model.Blog.splice(5, model.Blog.length - 5);
+                                model.Blog.splice(6, model.Blog.length - 6);
                             }
 
                             model.adFullRectangle = {
@@ -303,7 +303,15 @@ site.init = function(app, callback) {
 
             app.get('/towerview', function(req, res) {
                 api.group.docs(TOWERVIEW_GROUP_NAMESPACE, null, function(err, result) {
-                           
+
+                    result.adFullRectangle = {
+                            "title": "Advertisement",
+                            "imageUrl": "/images/ads/monster.png",
+                            "url": "http://google.com",
+                            "width": "300px",
+                            "height": "250px"
+                    };
+
                     api.taxonomy.getParentAndChildren(['Towerview'],function(err,parentAndChildren) {
                             res.render('site/towerview', {subsections: parentAndChildren.children, filename: 'views/site/towerview.jade', model: result});
                     });

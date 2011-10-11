@@ -1,6 +1,5 @@
 #article
     article
-
         .content.rounded
             h1 #{doc.title}
 
@@ -41,11 +40,10 @@
                 }(document, 'script', 'facebook-jssdk'));
             .image-container.medium-rectangle!=partial('container/image', model.adFullRectangle)
 
-
     #disqus_thread.rounded
 script(src='/js/disqus.js', type='text/javascript')
 script
-    loadDisqusForArticle('!{doc.id}');
+    loadDisqusForArticle('!{doc.nid}');
 script(src="http://platform.twitter.com/widgets.js", type="text/javascript")
 script(type="text/javascript")
     (function() {

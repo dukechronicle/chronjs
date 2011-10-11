@@ -15,5 +15,6 @@
 .slideshow .headlines a.page:hover{color:#36c;text-decoration:none}
 .slideshow .headlines a.page.active{color:#36c;text-shadow:0 1px 0 #fff}
 .slideshow .headlines a.page.active:hover{text-decoration:underline}
-.slideshow b.caret{display:block;position:absolute;width:10px;background:#fff;height:10px;box-shadow:rgba(0,0,0,0.30) 0 1px 3px;margin:0 0 0 0;-webkit-transition:-webkit-transform linear .4s;-webkit-transform:rotate(90deg);z-index:0;left:432px;-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);transform:rotate(45deg);position:absolute;margin-top:55px}
-.slideshow b.caret-white{-webkit-transition:-webkit-transform linear .4s;display:block;position:absolute;width:10px;background:#fff;height:10px;z-index:1;left:432px;margin-top:55px;-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);transform:rotate(45deg)}
+.slideshow .caret{-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);transform:rotate(45deg);position:absolute;margin-top:55px;left:562px;z-index:5;-webkit-transition:-webkit-transform linear .4s;}
+.slideshow .caret b.caret-shadow{position:absolute;width:10px;background:#fff;height:10px;box-shadow:rgba(0,0,0,0.30) 0 1px 3px;margin:0 0 0 0;z-index:0}
+.slideshow .caret b.caret-white{position:absolute;width:10px;background:#fff;height:10px;z-index:1}

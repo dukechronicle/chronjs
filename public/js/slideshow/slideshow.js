@@ -43,10 +43,8 @@ $(function(){
 			if (index != currentSlide) {
                 event.preventDefault();
 				showSlide(index);
-				$('.slideshow b.caret').css('-webkit-transform', 'translate(0px, ' +
-						parseInt(positions[index], 10) + 'px) rotate(45deg)')
-                $('.slideshow b.caret-white').css('-webkit-transform', 'translate(0px, ' +
-                		parseInt(positions[index], 10) + 'px) rotate(45deg)')
+				$('.slideshow div.caret').css('-webkit-transform', 'translate(0px, ' +
+						parseInt(positions[index], 10) + 'px) rotate(45deg)');
 			} 
 		})
 	});

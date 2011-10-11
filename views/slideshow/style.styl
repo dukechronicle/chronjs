@@ -129,40 +129,30 @@ shadow(opacity, height, width, offset)
 
         a.page.active:hover
             text-decoration underline
-
-    // TODO cross browser compatibility
-    b.caret
-        display block
-        position absolute
-        width 10px
-        background white
-        height 10px
-        box-shadow rgba(0,0,0,0.3) 0 1px 3px
-        margin 0 0 0 0px
-        //background-image url('/images/caret-active.png')
-        -webkit-transition -webkit-transform linear 0.4s
-        //-webkit-transform translate(110px, 0px)
-        -webkit-transform rotate(90deg)
-        z-index 0
-        left 432px
+    .caret
         -webkit-transform: rotate(45deg);
         -moz-transform: rotate(45deg);
         -o-transform: rotate(45deg);
         transform: rotate(45deg);
         position: absolute;
         margin-top 55px
-    b.caret-white
+        left 562px
+        z-index 5
         -webkit-transition -webkit-transform linear 0.4s
-        display block
-        position absolute
-        width 10px
-        background white
-        height 10px
-        z-index 1
-        left 432px
-        margin-top 55px
-        -webkit-transform: rotate(45deg);
-        -moz-transform: rotate(45deg);
-        -o-transform: rotate(45deg);
-        transform: rotate(45deg);
+        // TODO cross browser compatibility
+        b.caret-shadow
+            position absolute
+            width 10px
+            background white
+            height 10px
+            box-shadow rgba(0,0,0,0.3) 0 1px 3px
+            margin 0 0 0 0px
+            z-index 0
+        b.caret-white
+            position absolute
+            width 10px
+            background white
+            height 10px
+            z-index 1
+
 

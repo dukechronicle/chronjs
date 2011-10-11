@@ -41,18 +41,20 @@ var feeds = [
 ];
 
 exports.init = function() {
-    new cron.CronJob('0 */30 * * * *', function() { //every 30 minutes
-        feeds.forEach(function(feed) {
-            rss.parseRSS(feed.url, function(err, dom) {
-                console.log("Parsed RSS for feed: " + feed.title);
-                if(err) console.log(err);
-                else {
-                    rss.storeRSS(dom, feed.title, function(err, res) {
-                        if(err) console.log(err);
-                        else console.log("Stored RSS for feed: " + feed.title);
-                    });
-                }
+    if (process.env.NODE_ENV === 'production') {
+        new cron.CronJob('0 */30 * * * *', function() { //every 30 minutes
+            feeds.forEach(function(feed) {
+                rss.parseRSS(feed.url, function(err, dom) {
+                    console.log("Parsed RSS for feed: " + feed.title);
+                    if(err) console.log(err);
+                    else {
+                        rss.storeRSS(dom, feed.title, function(err, res) {
+                            if(err) console.log(err);
+                            else console.log("Stored RSS for feed: " + feed.title);
+                        });
+                    }
+                });
             });
         });
-    });
+    }
 }

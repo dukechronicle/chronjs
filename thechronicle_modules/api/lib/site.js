@@ -299,9 +299,18 @@ site.init = function(app, callback) {
                                 delete item.link;
                                 return item;
                             });
-                            result.Blog.splice(10, result.Blog.length - 10);
+                            result.Blog.splice(3, result.Blog.length - 3);
                         }
-                        
+
+                        result.adMedRectangle = {
+                                "title": "Advertisement",
+                                "imageUrl": "https://www.google.com/help/hc/images/adsense_185665_adformat-text_250x250.png",
+                                "url": "http://google.com",
+                                "width": "250px",
+                                "height": "250px"
+                        };
+
+
                         api.taxonomy.getParentAndChildren(['Recess'],function(err,parentAndChildren) {
                         res.render('site/recess', {subsections: parentAndChildren.children, filename: 'views/site/recess.jade', model: result});
                     });

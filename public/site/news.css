@@ -20,10 +20,9 @@ body section > #news .main .featured .content-container h2{color:#000;font-size:
 body section > #news .main .featured .content-container p.teaser{color:#444;margin:0 3px}
 body section > #news .main .featured .content-container img{width:454px}
 body section > #news .main .headline .rounded-hover{padding:0;}
-body section > #news .main .headline .rounded-hover .content-container img{width:138px;float:left;margin-right:10px;margin-left:-1px}
-body section > #news .main .headline .rounded-hover .content-container .text{margin-top:-4px}
-body section > #news .main .headline .rounded-hover .content-container h2{margin-top:3px;color:#000;font-size:1.2em;margin-left:148px}
-body section > #news .main .headline .rounded-hover .content-container p.teaser{color:#444;font-size:1em;line-height:1.3em;margin-left:148px}
+body section > #news .main .headline .rounded-hover .content-container img{display:block;width:138px;float:left;margin-right:10px;margin-left:-1px}
+body section > #news .main .headline .rounded-hover .content-container h2{margin-top:-1px;color:#000;font-size:1.2em;width:304px;float:right}
+body section > #news .main .headline .rounded-hover .content-container p.teaser{color:#444;font-size:1em;line-height:1.3em;width:304px;float:right}
 body section > #news .main > .row > .block{width:150px;float:left;padding-left:5px;}
 body section > #news .main > .row > .block .container{width:150px;}
 body section > #news .main > .row > .block .container .rounded-hover{height:220px}

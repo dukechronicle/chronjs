@@ -256,7 +256,6 @@ site.init = function(app, callback) {
             });
 
             app.get('/opinion', function(req, res) {
-                
                 async.parallel([
                     function(callback){ //0
                         api.group.docs(OPINION_GROUP_NAMESPACE, null, callback);
@@ -279,6 +278,7 @@ site.init = function(app, callback) {
                 ],
                 function(err, results) {
                     var model = results[0];
+                    console.log(model.Featured[0].authors[0]);
                     model.EditBoard = results[2];
                     model.Columnists = [];
                     model.Columnists.push({title: "Shining Li", stories: results[3]});

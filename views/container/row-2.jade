@@ -7,7 +7,9 @@
 
     a.rounded-hover.hover.highlight-right.clearfix(href=story.url)
         .content-container.clearfix
+
+            h2 #{story.title}
+            img.thumb(src='http://graphics8.nytimes.com/images/2010/09/16/opinion/Friedman_New/Friedman_New-thumbStandard.jpg')
             if (story.images && story.images.ThumbRect)
                 img.thumb(src=story.images.ThumbRect.url)
-            h2 #{story.title}
             p.teaser #{story.teaser}

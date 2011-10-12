@@ -6,13 +6,12 @@ body section > #opinion .top > .main .rounded-hover .content-container{padding-l
 body section > #opinion .top > .main .rounded-hover img{width:470px}
 body section > #opinion .top > .main .rounded-hover h2{font-size:1.2em;margin:0 3px}
 body section > #opinion .top > .main .rounded-hover p.teaser{margin:0 3px}
-body section > #opinion .top > .right{padding-left:20px;width:476px;}
-body section > #opinion .top > .right .row .first{margin-right:20px}
-body section > #opinion .top > .right .rounded-hover{height:163px;}
-body section > #opinion .top > .right .rounded-hover h2{font-size:1.3em;margin-bottom:5px}
-body section > #opinion .top > .right .rounded-hover p.teaser{color:#444}
-body section > #opinion .top > .right .rounded-hover .text{float:left;width:215px}
-body section > #opinion .top > .right .rounded-hover img{width:157px;height:157px;float:right;border-radius:4px}
+body section > #opinion .top > .left{width:476px;}
+body section > #opinion .top > .left .row .first{margin-right:20px}
+body section > #opinion .top > .left .rounded-hover{height:163px;}
+body section > #opinion .top > .left .rounded-hover h2{font-size:1.3em;margin-bottom:5px}
+body section > #opinion .top > .left .rounded-hover img{border-radius:4px;width:70px;height:70px;float:right;margin-left:10px}
+body section > #opinion .top > .left .rounded-hover p.teaser{color:#444}
 body section > #opinion .middle > div .container.block .rounded-hover{width:304px;height:300px}
 body section > #opinion .middle > .last > .container.block .rounded-hover{width:306px}
 body section > #opinion .row.columnists > div{margin-right:20px;}

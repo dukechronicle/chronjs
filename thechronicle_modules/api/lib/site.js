@@ -238,6 +238,14 @@ site.init = function(app, callback) {
                         model.MSoccer = _.pluck(results[4], 'value');
                         model.WSoccer = _.pluck(results[5], 'value');*/
 
+                        model.adFullRectangle = {
+                                "title": "Advertisement",
+                                "imageUrl": "/images/ads/monster.png",
+                                "url": "http://google.com",
+                                "width": "300px",
+                                "height": "250px"
+                        };
+
                         
                         //console.log(model.WSoccer);
                         httpRes.render('site/sports', {subsections: results[1].children, filename: 'views/site/sports.jade', model: model});

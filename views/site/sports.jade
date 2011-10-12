@@ -9,24 +9,29 @@
             .slideshow-wrapper.right-select!=partial('slideshow/slideshow-right', {stories: model.Slideshow})
     .middle.clearfix
         .left
-            if (model.Blog)
-                .last!=partial('container/story-list-image', {locals: {title: "The Blue Zone", image: "/images/blogs/sportsblog-banner.jpg", imageHref:'http://sports.chronicleblogs.com', stories:model.Blog}})
+            if (model.adFullRectangle)
+                .image-container.medium-rectangle.lighten!=partial('container/image', model.adFullRectangle)
+            //
+                if (model.Blog)
+                    .last!=partial('container/story-list-image', {locals: {title: "The Blue Zone", image: "/images/blogs/sportsblog-banner.jpg", imageHref:'http://sports.chronicleblogs.com', stories:model.Blog}})
         .right
             if (model.Stories)
                 .column.first
                     if (model.Stories[0])
                         .first!=partial('container/row', {story: model.Stories[0]})
                     if (model.Stories[2])
-                        div!=partial('container/row', {story: model.Stories[2]})
-                    if (model.Stories[4])
-                        .last!=partial('container/row', {story: model.Stories[4]})
+                        .last!=partial('container/row', {story: model.Stories[2]})
+                    //
+                        if (model.Stories[4])
+                            .last!=partial('container/row', {story: model.Stories[4]})
                 .column
                     if (model.Stories[1])
                         .first!=partial('container/row', {story: model.Stories[1]})
                     if (model.Stories[3])
-                        div!=partial('container/row', {story: model.Stories[3]})
-                    if (model.Stories[5])
-                        .last!=partial('container/row', {story: model.Stories[5]})
+                        .last!=partial('container/row', {story: model.Stories[3]})
+                    //
+                        if (model.Stories[5])
+                            .last!=partial('container/row', {story: model.Stories[5]})
 
 
     .bottom

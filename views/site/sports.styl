@@ -39,7 +39,7 @@ body section > #sports
         box-shadow rgba(0, 0, 0, opacity) height width offset
 
     .top
-        margin-bottom 20px
+        margin-bottom 5px
 
         .slideshow-wrapper.right-select > .slideshow
             width width + 6 + right-width
@@ -67,8 +67,8 @@ body section > #sports
                  a.page
                      padding-left = 3px
                      padding-right = 8px
-                     margin = 19px + padding-left + padding-right
-
+                     margin = 20px + padding-left + padding-right
+                     
                      text-align left
                      cursor pointer
                      width right-width - margin
@@ -125,6 +125,15 @@ body section > #sports
                      background -webkit-gradient(linear, left bottom, left top, from(#EDEDED), to(white))
 
 
+    .medium-rectangle
+        .rounded-hover
+            width 306px
+            height 256px
+            img
+
+                padding-left 3px
+                padding-top 3px
+
     .middle
         margin-bottom 6px
         .left
@@ -139,38 +148,42 @@ body section > #sports
             .column.first
                 margin-right 14px
             .column
+                thumb-dim = 75px
                 float left
                 .container.row
                     width 314px
-                    margin-bottom 9px
+                    margin-bottom 14px
 
                     .rounded-hover
                         padding 0px
-                        height 95px
+                        height 124px
 
                         :hover
                             h2
                                 color link-color
                     img
                         border-radius 4px
-                        width 89px
-                        height 89px
+                        width thumb-dim
+                        height thumb-dim
                         float left
-                        margin-right 10px
+                        margin-left 10px
 
                     h2
                         transition(color, .25s, linear)
-                        font-size 1em
+                        font-size 1.2em
                         color black
                         line-height 1.2em
-                        margin-left 89px + 10px
                         margin-bottom 5px
+                        height 36px
+                        padding-left 5px
+                        padding-top 2px
 
                     p
                         color #444
                         font-size 0.9em
-                        line-height 1.2em
-                        margin-left 99px
+                        line-height 1.4em
+                        margin-right thumb-dim + 10px
+                        padding-left 5px
 
     .sport-block
         width 311px

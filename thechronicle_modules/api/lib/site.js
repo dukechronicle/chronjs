@@ -172,6 +172,7 @@ site.init = function(app, callback) {
                                     delete item.link;
                                     return item;
                                 });
+                                console.log(model.Blog);
                                 model.Blog.splice(6, model.Blog.length - 6);
                             }
 

@@ -274,6 +274,22 @@ site.init = function(app, callback) {
                     },
                     function(callback){ //5
                         api.authors.getLatest("Jason Wagner", 6, callback);
+                    },
+                    function(callback){ //6
+                        rss.getRSS('blog-opinion', function(err, res) {
+                            if(res && res.items && res.items.length > 0) {
+                                var Blog = res.items.map(function(item) {
+                                    item.url = item.link;
+                                    item.title = item.title.replace( /\&#8217;/g, '’' );
+                                    delete item.link;
+                                    return item;
+                                });
+                                Blog.splice(5, Blog.length - 5);
+                                callback(null, Blog)
+                            } else {
+                                callback(null, []);
+                            }
+                        });
                     }
                 ],
                 function(err, results) {
@@ -284,6 +300,24 @@ site.init = function(app, callback) {
                     model.Columnists.push({title: "Shining Li", stories: results[3]});
                     model.Columnists.push({title: "Rui Dai", stories: results[4]});
                     model.Columnists.push({title: "Jason Wagner", stories: results[5]});
+                    model.Blog = results[6];
+                    
+                    model.adFullRectangle = {
+                            "title": "Advertisement",
+                            "imageUrl": "/images/ads/monster.png",
+                            "url": "http://google.com",
+                            "width": "300px",
+                            "height": "250px"
+                    };
+
+                    model.adFullBanner = {
+                            "title": "Ad",
+                            "imageUrl": "/images/ads/full-banner.jpg",
+                            "url": "http://google.com",
+                            "width": "468px",
+                            "height": "60px"
+                    };
+
                     res.render('site/opinion', {subsections: results[1].children, filename: 'views/site/opinion.jade', model: model});
                 });
                 

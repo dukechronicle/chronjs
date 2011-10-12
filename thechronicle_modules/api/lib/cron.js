@@ -37,6 +37,10 @@ var feeds = [
     {
         title: "recessblog",
         url: "http://feeds.feedburner.com/chronicleblogs/playground"
+    },
+    {
+        title: "blog-opinion",
+        url: "http://feeds.feedburner.com/chronicleblogs/backpages"
     }
 ];
 

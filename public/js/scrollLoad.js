@@ -3,10 +3,6 @@ var isLoadingPage = false; // stops multiple pages loading at once
 var noPagesLeftToLoad = false; // stops ajax requests from being issued once all articles for this search have been loaded
 var loadImage = null;
 
-// the format for any documents we have to add. REPLACE areas will be replaced
-var searchboxHTML = 
-'<a href="/article/URL_REPLACE" class="result rounded-hover"><h3>HEADER_REPLACE</h3><div class="date">DATE_REPLACE<span class="sep">&nbsp;|&nbsp;</span>AUTHOR_REPLACE</div><div class="teaser">TEASER_REPLACE</div></a>';
-
 $(document).ready(function() {
     loadImage = $("#loadImage");
     loadImage.hide();
@@ -15,28 +11,29 @@ $(document).ready(function() {
 $(window).scroll(function(){ 
    // if they scrolled to the bottom of the page, load the next 'page' of articles
    if(!isLoadingPage && !noPagesLeftToLoad && $(window).scrollTop() === ($(document).height() - $(window).height())) {
-        loadImage.fadeIn();        
+        loadImage.fadeIn('slow');        
         isLoadingPage = true;        
         
         // use our mobile api to load the next search page for this set of params
         $.get("/mobile-api/"+scrollLoadUrl+"&page="+nextPageToLoad, function(returnedData) {
-            loadImage.fadeOut();            
-            nextPageToLoad ++;
-            isLoadingPage = false;
-            
-            if(returnedData.docs.length === 0) noPagesLeftToLoad = true;
-            else {
-                // add the docs to the search page, correctly formatted
-                for(i in returnedData.docs) {
-                    var addHTML = searchboxHTML;
-                    addHTML = addHTML.replace("URL_REPLACE",returnedData.docs[i].urls[0]);
-                    addHTML = addHTML.replace("HEADER_REPLACE",returnedData.docs[i].title);
-                    addHTML = addHTML.replace("DATE_REPLACE", dateFormat(new Date(returnedData.docs[i].created*1000),"mmmm dS, yyyy"));
-                    addHTML = addHTML.replace("AUTHOR_REPLACE",returnedData.docs[i].authors.join(", "));
-                    addHTML = addHTML.replace("TEASER_REPLACE",returnedData.docs[i].teaser);
-                    $(".result:last").after(addHTML);       
+            loadImage.fadeOut(function () {            
+                nextPageToLoad ++;
+                isLoadingPage = false;
+                
+                if(returnedData.docs.length === 0) noPagesLeftToLoad = true;
+                else {
+                    // add the docs to the search page, correctly formatted
+                    for(i in returnedData.docs) {
+                        var addHTML = searchboxHTML;
+                        addHTML = addHTML.replace("URL_REPLACE",returnedData.docs[i].urls[0]);
+                        addHTML = addHTML.replace("HEADER_REPLACE",returnedData.docs[i].title);
+                        addHTML = addHTML.replace("DATE_REPLACE", dateFormat(new Date(returnedData.docs[i].created*1000),"mmmm dS, yyyy"));
+                        addHTML = addHTML.replace("AUTHOR_REPLACE",returnedData.docs[i].authors.join(", "));
+                        addHTML = addHTML.replace("TEASER_REPLACE",returnedData.docs[i].teaser);
+                        loadImage.before(addHTML);       
+                    }
                 }
-            }
+            });
         })
     }
 });

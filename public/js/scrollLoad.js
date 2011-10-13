@@ -16,27 +16,47 @@ $(window).scroll(function(){
         
         // use our mobile api to load the next search page for this set of params
         $.get("/mobile-api/"+scrollLoadUrl+"&page="+nextPageToLoad, function(returnedData) {
-            loadImage.fadeOut(function () {            
-                nextPageToLoad ++;
-                isLoadingPage = false;
-                
-                if(returnedData.docs.length === 0) noPagesLeftToLoad = true;
-                else {
-                    // add the docs to the search page, correctly formatted
-                    for(i in returnedData.docs) {
-                        var addHTML = searchboxHTML;
-                        addHTML = addHTML.replace("URL_REPLACE",returnedData.docs[i].urls[0]);
-                        addHTML = addHTML.replace("HEADER_REPLACE",returnedData.docs[i].title);
-                        addHTML = addHTML.replace("DATE_REPLACE", dateFormat(new Date(returnedData.docs[i].created*1000),"mmmm dS, yyyy"));
-                        addHTML = addHTML.replace("AUTHOR_REPLACE",returnedData.docs[i].authors.join(", "));
-                        addHTML = addHTML.replace("TEASER_REPLACE",returnedData.docs[i].teaser);
-                        loadImage.before(addHTML);       
-                    }
-                }
-            });
-        })
+            if(returnedData.docs.length === 0) {
+                noPagesLeftToLoad = true;
+                loadImage.fadeOut();
+            }
+            else {
+                // add the docs to the search page, correctly formatted
+                addArticle(returnedData.docs,0);
+            }
+        });
     }
 });
+
+function addArticle(articles,i) {
+    if(i < articles.length) {
+        // add and fade in the article, then when fade in done add next article
+        var HTMLToAdd = formatArticle(articles[i]);
+        loadImage.before(HTMLToAdd)
+        $(".addedArticle:last").hide();
+        $(".addedArticle:last").fadeIn(function () {
+            addArticle(articles,i+1);
+        });
+    }
+    else {
+        // no more articles to add
+        nextPageToLoad ++;
+        loadImage.fadeOut(function () {            
+            isLoadingPage = false;                    
+        });
+    }
+}
+
+function formatArticle(article) {
+    var addHTML = searchboxHTML;
+    addHTML = addHTML.replace("URL_REPLACE",article.urls[0]);
+    addHTML = addHTML.replace("HEADER_REPLACE",article.title);
+    addHTML = addHTML.replace("DATE_REPLACE", dateFormat(new Date(article.created*1000),"mmmm dS, yyyy"));
+    addHTML = addHTML.replace("AUTHOR_REPLACE",article.authors.join(", "));
+    addHTML = addHTML.replace("TEASER_REPLACE",article.teaser);
+
+    return addHTML;
+}
 
 /*
  * Date Format 1.2.3

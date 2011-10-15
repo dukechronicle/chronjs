@@ -159,9 +159,9 @@ exports.init = function(app, callback) {
                 });
             });
 
-	    app.get('/upload', site.checkAdmin,
+	    app.get('/k4export', site.checkAdmin,
 		    function(req, http_res) {
-			http_res.render('admin/zip_upload', {
+			http_res.render('admin/k4export', {
 			    locals: {
 				groups: []
 			    },
@@ -169,7 +169,7 @@ exports.init = function(app, callback) {
 			});
 		    });
 
-	    app.post('/upload', site.checkAdmin,
+	    app.post('/k4export', site.checkAdmin,
             function(req, http_res) {
 		var form = new formidable.IncomingForm();
 		form.uploadDir = '/var/tmp';

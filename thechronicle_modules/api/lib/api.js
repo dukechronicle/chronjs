@@ -275,6 +275,8 @@ api.docsByDate = function(limit, callback) {
 
     if (limit) {
         query.limit = limit;
+    } else {
+        query.limit = 20;
     }
     
     db.view("articles/all_by_date", query, function(err, results) {

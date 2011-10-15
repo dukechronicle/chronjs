@@ -3,6 +3,8 @@ var async = require('async');
 var fs = require('fs');
 var s3 = require('./s3.js');
 var http = require('http');
+var formidable = require('formidable');
+var k4export = require('./k4export')
 var solr = require('solr');
 var md = require('node-markdown').Markdown;
 var sprintf = require('sprintf').sprintf;
@@ -156,6 +158,31 @@ exports.init = function(app, callback) {
                     }
                 });
             });
+
+	    app.get('/upload', site.checkAdmin,
+		    function(req, http_res) {
+			http_res.render('admin/zip_upload', {
+			    locals: {
+				groups: []
+			    },
+			    layout: "layout-admin.jade"
+			});
+		    });
+
+	    app.post('/upload', site.checkAdmin,
+            function(req, http_res) {
+		var form = new formidable.IncomingForm();
+		form.uploadDir = '/var/tmp';
+		form.parse(req, function(err, fields, files) {
+		    if (err)
+			http_res.end(err);
+		    else {
+			k4export.runExporter(files.zip.path, function(res) {
+			    http_res.end(res);
+			});
+		    }
+		});
+	    });
 
             app.post('/edit', site.checkAdmin,
             function(req, http_res) {

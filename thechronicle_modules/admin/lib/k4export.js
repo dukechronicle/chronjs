@@ -22,27 +22,29 @@ function ArticleParser(defaultDate, articleCallback) {
     var thisParser = this;
     this.articles = [];
 
+    this.parse = function(filepath, callback) {
+	var filename = path.basename(filepath);
+	if (filename[0] != "." && filename[0] != "_") {
+	    fs.stat(filepath, function(err, stat) {
+		if (err)
+		    console.log(err);
+		else if (stat.isDirectory())
+		    thisParser.parseDirectory(filepath, callback);
+		else
+		    thisParser.parseFile(filepath, callback);
+	    });
+	}
+    }
+
     this.parseDirectory = function(directory, callback) {
 	var filesOutstanding = 0;
 	fs.readdir(directory, function(err, contents) {
 	    contents.forEach(function (filename) {
 		if (filename[0] != "." && filename[0] != "_") {
 		    var filepath = path.join(directory, filename);
-		    fs.stat(filepath, function(err, stat) {
-			if (err)
-			    console.log(err);
-			else if (stat.isDirectory()) {
-			    filesOutstanding++;
-			    thisParser.parseDirectory(filepath, function(paramPath) {
-				if (--filesOutstanding == 0) callback();
-			    });
-			}
-			else {
-			    filesOutstanding++;
-			    thisParser.parseFile(filepath, function() {
-				if (--filesOutstanding == 0) callback();
-			    });
-			}
+		    filesOutstanding++;
+		    thisParser.parse(filepath, function() {
+			if (--filesOutstanding == 0) callback();
 		    });
 		}
 	    });
@@ -151,11 +153,8 @@ function clearDatabase(db) {
 function runExporter(zipPath, exportCallback) {
     process.chdir('/var/tmp');
     child_process.exec("unzip -o "+ zipPath, function (error, stdout, stderr) {
-	if (error) {
+	if (error)
 	    console.log(error);
-	    console.log(stdout);
-	    console.log(stderr);
-	}
 	else {
 	    fs.unlink(zipPath);
 	    var zipPattern = /creating: (.*)\/\n/;

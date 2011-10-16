@@ -242,6 +242,7 @@ exports.init = function(app, callback) {
             app.post('/add', site.checkAdmin,
             function(req, http_res) {
                 var form = req.body.doc;
+                console.log(form);
                 var fields = {
                     body: form.body,
                     authors: form.authors.split(" ,"),
@@ -252,7 +253,7 @@ exports.init = function(app, callback) {
 
 
 
-
+                return;
                 async.waterfall([
                     function(callback) {
                         _renderBody(form.body, function(err, rendered) {

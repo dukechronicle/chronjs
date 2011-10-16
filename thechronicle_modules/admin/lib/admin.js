@@ -1,4 +1,5 @@
 var api = require('../../api');
+var db = require('../../db-abstract');
 var async = require('async');
 var fs = require('fs');
 var s3 = require('./s3.js');
@@ -161,6 +162,16 @@ exports.init = function(app, callback) {
 
 	    app.get('/k4export', site.checkAdmin,
             function(req, http_res) {
+		db.taxonomy.getHierarchy(function (err, res) {
+		    taxonomyTree = {}
+		    async.forEach(res,
+				  function (tax, callback) {
+				      addToTree(taxonomyTree, tax.key, callback);
+				  },
+				  function (err) {
+				      console.log(taxonomyTree);
+				  });
+		});
 		k4export.db.view('articles/all', function(err, res) {
 		    http_res.render('admin/k4export', {
 			locals: {
@@ -329,3 +340,15 @@ exports.init = function(app, callback) {
     });
 }
 
+function addToTree(root, path, callback) {
+    async.forEachSeries(path,
+			function (node, cb) {
+			    if (! (node in root))
+				root[node] = {};
+			    root = root[node];
+			    cb();
+			},
+			function (err) {
+			    callback();
+			});
+}

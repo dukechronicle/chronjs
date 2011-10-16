@@ -5,6 +5,12 @@ form(action='/admin/add', method='POST')
         label(for='title') Title&nbsp;
         input#title(type='text', name='doc[title]', style='width:600px')
     p(style="margin-bottom: 2em")
+        label(for='section') Section&nbsp;
+        select(name='taxonomy', style='width: 600px')
+            if (typeof taxonomy != 'undefined')
+                - each taxonomy, value in taxonomies
+                    option(value=value) taxonomy
+    p(style="margin-bottom: 2em")
         label(for='author') Authors&nbsp;
         input#author(type='text', name='doc[authors]', style='width:600px')
     p(style="margin-bottom: 2em")

@@ -159,6 +159,7 @@ exports.init = function(app, callback) {
 
             app.post('/edit', site.checkAdmin,
             function(req, http_res) {
+
                 if (req.body.versionId) {
                     //adding image to article
                     api.docForUrl(req.body.article,
@@ -186,8 +187,8 @@ exports.init = function(app, callback) {
                     var fields = {
                         title: req.body.doc.title,
                         body: req.body.doc.body,
-                        teaser: req.body.doc.teaser
-                        //author: req.body.doc.author
+                        teaser: req.body.doc.teaser,
+                        authors: req.body.doc.authors.split(", ")
                         //groups: new_groups
                     };
                     _renderBody(req.body.doc.body, function(err, rendered) {

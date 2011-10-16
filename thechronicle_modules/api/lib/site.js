@@ -620,6 +620,9 @@ site.init = function(app, callback) {
                         }
                         else {
                             if(!doc.images) doc.images = {};
+
+                            doc.authors = doc.authors.join(", ");
+
                             http_res.render('admin/edit', {
                                 locals: {
                                         doc: doc,

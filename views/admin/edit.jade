@@ -1,18 +1,18 @@
 h1 Editing a Document
 form(action='/admin/edit', method='POST')
-    p
-        label(for='title') Title:
-        input#title(type='text', name='doc[title]', value=doc.title)
-    p
-        label(for='author') Author:
-        input#author(type='text', name='doc[author]', value=doc.author)
-    p
-        label(for='teaser') Teaser:
-        textarea#teaser(rows=3, cols=50, name='doc[teaser]', value)
+    p(style="margin-bottom: 2em")
+        label(for='title') Title&nbsp;
+        input#title(type='text', name='doc[title]', value=doc.title, style='width:600px')
+    p(style="margin-bottom: 2em")
+        label(for='author') Authors&nbsp;
+        input#author(type='text', name='doc[authors]', value=doc.authors, style='width:600px')
+    p(style="margin-bottom: 2em")
+        label(for='teaser') Teaser&nbsp;
+        textarea#teaser(rows=3, cols=50, name='doc[teaser]', value, style='width:600px; height: 2.5em')
             #{doc.teaser}
-    p
-        label(for='body') Body:
-        textarea#body(rows=5, cols=50, name='doc[body]', value)
+    p(style="margin-bottom: 2em")
+        label(for='body') Article&nbsp;
+        textarea#body(rows=5, cols=50, name='doc[body]', value, style='width:600px; height: 40em')
             #{doc.body}
 
     input(type="hidden", name='doc[id]', value=doc._id);

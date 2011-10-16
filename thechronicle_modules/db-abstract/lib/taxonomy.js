@@ -1,4 +1,6 @@
 var db = require('./db-abstract');
+var async = require('async');
+
 
 var taxonomy = exports;
 taxonomy.docs = function(taxonomyTerm, limit, callback) {
@@ -24,6 +26,29 @@ taxonomy.docs = function(taxonomyTerm, limit, callback) {
 
 taxonomy.getHierarchy = function(callback) {
     db.view('articles/taxonomy_tree', {group: true}, callback);
+}
+
+taxonomy.getHierarchyTree = function(callback) {
+    taxonomy.getHierarchy(function (error, res) {
+	root = {};
+	async.forEach(res,
+          function (tax, callback1) {
+	      top = root;
+	      async.forEachSeries(tax.key,
+	        function (node, callback2) {
+		    if (! (node in top))
+			top[node] = {};
+		    top = top[node];
+		    callback2();
+		},
+		function (err) {
+		    callback1();
+		});
+	  },
+          function (err) {
+	      callback(err, root);
+	  });
+    });
 }
 
 taxonomy.getChildren = function(path, callback) {

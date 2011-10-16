@@ -162,15 +162,8 @@ exports.init = function(app, callback) {
 
 	    app.get('/k4export', site.checkAdmin,
             function(req, http_res) {
-		db.taxonomy.getHierarchy(function (err, res) {
-		    taxonomyTree = {}
-		    async.forEach(res,
-				  function (tax, callback) {
-				      addToTree(taxonomyTree, tax.key, callback);
-				  },
-				  function (err) {
-				      console.log(taxonomyTree);
-				  });
+		db.taxonomy.getHierarchyTree(function (err, taxonomy) {
+		    console.log(taxonomy);
 		});
 		k4export.db.view('articles/all', function(err, res) {
 		    http_res.render('admin/k4export', {
@@ -338,17 +331,4 @@ exports.init = function(app, callback) {
 
         callback(null);
     });
-}
-
-function addToTree(root, path, callback) {
-    async.forEachSeries(path,
-			function (node, cb) {
-			    if (! (node in root))
-				root[node] = {};
-			    root = root[node];
-			    cb();
-			},
-			function (err) {
-			    callback();
-			});
 }

@@ -69,7 +69,11 @@ exports.init = function(app, callback) {
 
         app.namespace('/admin',
         function() {
-            
+            app.get('/', site.checkAdmin, function(req, res) {
+                res.render('admin/index', {
+                    layout: "layout-admin.jade"
+                });
+            });
 
             app.post('/group/add', site.checkAdmin,
             function(req, res) {
@@ -208,10 +212,9 @@ exports.init = function(app, callback) {
             app.post('/add', site.checkAdmin,
             function(req, http_res) {
                 var form = req.body.doc;
-                console.log(form);
                 var fields = {
                     body: form.body,
-                    authors: [form.author],
+                    authors: form.authors.split(" ,"),
                     title: form.title,
                     teaser: form.teaser,
                     type: form.type

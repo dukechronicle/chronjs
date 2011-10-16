@@ -14,7 +14,7 @@ var globalFunctions = require('../../global-functions');
 var layoutAdmin = require('./layout.js');
 var imageAdmin = require('./image.js');
 
-
+var db = require('../../db-abstract')
 
 var VIDEO_PLAYERS = {
     "youtube": "<iframe width=\"560\" height=\"345\" src=\"http://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>",
@@ -121,12 +121,42 @@ exports.init = function(app, callback) {
 
             app.get('/add', site.checkAdmin,
             function(req, http_res) {
-                http_res.render('admin/add', {
-                    locals: {
-                        groups: []
-                    },
-                    layout: "layout-admin.jade"
+                var rootSections = ["News", "Sports", "Opinion", "Recess", "Towerview"];
+
+                db.taxonomy.getHierarchy(function (err, res) {
+                    var taxonomy = {};
+                    res.forEach(function(value) {
+                        value = value.key;
+                        //var current = taxonomy;
+
+                        if (value && value.length > 0 && rootSections.indexOf(value[0]) != -1) {
+                            var key = "";
+                            for(var i = 0; i < value.length - 1; i++) {
+                                key += "-";
+                            }
+                            key += " " + value[value.length - 1]
+
+                            taxonomy[key] = JSON.stringify(value);
+                            /*
+                            value.forEach(function(x) {
+                                if (!current[x]) {
+                                    current[x] = {};
+                                }
+                                current = current[x];
+                            })*/
+                        }
+                    })
+
+                    http_res.render('admin/add', {
+                        locals: {
+                            groups: [],
+                            taxonomy: taxonomy
+                        },
+                        layout: "layout-admin.jade"
+                    });
                 });
+
+
             });
 
             app.get('/addPage', site.checkAdmin,
@@ -221,35 +251,37 @@ exports.init = function(app, callback) {
                 };
 
 
+
+
                 async.waterfall([
-                function(callback) {
-                    _renderBody(form.body, function(err, rendered) {
-                        fields.renderedBody = rendered;
-                        callback(null);
-                    });
-                },
-                function(callback) {
-                    api.addDoc(fields, callback);
-                },
-                function(res, url, callback) {
-                    var groups = req.body.doc.groups;
-                    if (groups) {
-                        var fcns = [];
-                        if (! (groups instanceof Array)) {
-                            //we will get a string if only one box is checked
-                            groups = [groups];
-                        }
-                        groups.forEach(function(group) {
-                            api.group.add(res.id, FRONTPAGE_GROUP_NAMESPACE, group,
-                            function(add_err, add_res) {
-                                if (add_err) {
-                                    callback(add_err);
-                                }
-                            });
+                    function(callback) {
+                        _renderBody(form.body, function(err, rendered) {
+                            fields.renderedBody = rendered;
+                            callback(null);
                         });
+                    },
+                    function(callback) {
+                        api.addDoc(fields, callback);
+                    },
+                    function(res, url, callback) {
+                        var groups = req.body.doc.groups;
+                        if (groups) {
+                            var fcns = [];
+                            if (! (groups instanceof Array)) {
+                                //we will get a string if only one box is checked
+                                groups = [groups];
+                            }
+                            groups.forEach(function(group) {
+                                api.group.add(res.id, FRONTPAGE_GROUP_NAMESPACE, group,
+                                function(add_err, add_res) {
+                                    if (add_err) {
+                                        callback(add_err);
+                                    }
+                                });
+                            });
+                        }
+                        callback(null, url);
                     }
-                    callback(null, url);
-                }
                 ],
                 function(err, url) {
                     if (err) {

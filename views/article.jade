@@ -1,6 +1,8 @@
 #article
     article
         .content.rounded
+            if (typeof isAdmin != 'undefined' && isAdmin)
+                a.edit(href=doc.url + "/edit") Edit
             h1 #{doc.title}
 
             if (doc.images && doc.images.LargeRect && doc.images.LargeRect.url)

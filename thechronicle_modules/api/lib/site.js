@@ -479,6 +479,7 @@ site.init = function(app, callback) {
             });
 
             app.get('/article/:url', function(req, http_res) {
+                console.log(req.isAdmin);
                 var url = req.params.url;
                 api.articleForUrl(url, function(err, doc) {
                     if(err) {
@@ -499,10 +500,18 @@ site.init = function(app, callback) {
                       }
                       else {
                         doc.fullUrl = "http://dukechronicle.com/article/" + latestUrl;
+                        doc.url = latestUrl;
+
                         doc.path = "/article/" + latestUrl;
+
+                        var isAdmin = api.accounts.isAdmin(req);
+                        console.log(req.session);
+                        console.log(isAdmin);
+
                         http_res.render('article', {
                             locals: {
                                 doc: doc,
+                                isAdmin: isAdmin,
                                 model: {
                                     "adFullRectangle": {
                                         "title": "Advertisement",
@@ -687,7 +696,7 @@ site.init = function(app, callback) {
 }
 
 site.checkAdmin = function(req,res,next) {
-    if(!api.accounts.isAdmin(req)) {    
+    if(!api.accounts.isAdmin(req)) {
         site.askForLogin(res,req.url);
     }
     else {

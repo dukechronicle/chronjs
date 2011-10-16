@@ -1,8 +1,11 @@
 var api = require('../../api');
+var db = require('../../db-abstract');
 var async = require('async');
 var fs = require('fs');
 var s3 = require('./s3.js');
 var http = require('http');
+var formidable = require('formidable');
+var k4export = require('./k4export')
 var solr = require('solr');
 var md = require('node-markdown').Markdown;
 var sprintf = require('sprintf').sprintf;
@@ -191,6 +194,44 @@ exports.init = function(app, callback) {
                 });
             });
 
+	    app.get('/k4export', site.checkAdmin,
+            function(req, http_res) {
+		db.taxonomy.getHierarchy(function (err, res) {
+		    taxonomyTree = {}
+		    async.forEach(res,
+				  function (tax, callback) {
+				      addToTree(taxonomyTree, tax.key, callback);
+				  },
+				  function (err) {
+				      console.log(taxonomyTree);
+				  });
+		});
+		k4export.db.view('articles/all', function(err, res) {
+		    http_res.render('admin/k4export', {
+			locals: {
+			    groups: [],
+			    docs: res,
+			},
+			layout: "layout-admin.jade"
+		    });
+		});
+	    });
+
+	    app.post('/k4export', site.checkAdmin,
+            function(req, http_res) {
+		var form = new formidable.IncomingForm();
+		form.uploadDir = '/var/tmp';
+		form.parse(req, function(err, fields, files) {
+		    if (err)
+			http_res.end(err);
+		    else {
+			k4export.runExporter(files.zip.path, function(res) {
+			    http_res.redirect("/admin/k4export");
+			});
+		    }
+		});
+	    });
+
             app.post('/edit', site.checkAdmin,
             function(req, http_res) {
 
@@ -336,3 +377,15 @@ exports.init = function(app, callback) {
     });
 }
 
+function addToTree(root, path, callback) {
+    async.forEachSeries(path,
+			function (node, cb) {
+			    if (! (node in root))
+				root[node] = {};
+			    root = root[node];
+			    cb();
+			},
+			function (err) {
+			    callback();
+			});
+}

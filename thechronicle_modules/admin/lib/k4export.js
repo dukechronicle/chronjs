@@ -15,7 +15,12 @@ var titlePattern = new RegExp("\[^\]*<tag>Root</tag><text><inlineTag name=\"Root
 var authorPattern = new RegExp("\[^\]*<metadata><name>Author</name><value><string>(.+?)</string></value></metadata>\[^\]*", "g");
 
 
+db = new cradle.Connection('http://chrondev.iriscouch.com', 80, {
+		    auth: { username: 'dean', password: 'dspc' }
+		}).database('k4export')
+
 exports.runExporter = runExporter;
+exports.db = db;
 
 
 function ArticleParser(defaultDate, articleCallback) {
@@ -162,9 +167,6 @@ function runExporter(zipPath, exportCallback) {
 	    if (dirmatch == undefined)
 		console.log("Error unzipping file: " + zipPath);
 	    else {
-		var db = new cradle.Connection('http://chrondev.iriscouch.com', 80, {
-		    auth: { username: 'dean', password: 'dspc' }
-		}).database('k4export')
 		var db_responses = [];
 
 		var dir = dirmatch[1];

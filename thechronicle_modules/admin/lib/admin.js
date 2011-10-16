@@ -160,14 +160,17 @@ exports.init = function(app, callback) {
             });
 
 	    app.get('/k4export', site.checkAdmin,
-		    function(req, http_res) {
-			http_res.render('admin/k4export', {
-			    locals: {
-				groups: []
-			    },
-			    layout: "layout-admin.jade"
-			});
+            function(req, http_res) {
+		k4export.db.view('articles/all', function(err, res) {
+		    http_res.render('admin/k4export', {
+			locals: {
+			    groups: [],
+			    docs: res,
+			},
+			layout: "layout-admin.jade"
 		    });
+		});
+	    });
 
 	    app.post('/k4export', site.checkAdmin,
             function(req, http_res) {
@@ -178,7 +181,7 @@ exports.init = function(app, callback) {
 			http_res.end(err);
 		    else {
 			k4export.runExporter(files.zip.path, function(res) {
-			    http_res.end(res);
+			    http_res.redirect("/admin/k4export");
 			});
 		    }
 		});

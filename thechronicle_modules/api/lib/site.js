@@ -295,7 +295,6 @@ site.init = function(app, callback) {
                 ],
                 function(err, results) {
                     var model = results[0];
-                    console.log(model.Featured[0].authors[0]);
                     model.EditBoard = results[2];
                     model.Columnists = [];
                     model.Columnists.push({title: "Shining Li", stories: results[3]});
@@ -481,7 +480,6 @@ site.init = function(app, callback) {
             });
 
             app.get('/article/:url', function(req, http_res) {
-                console.log(req.isAdmin);
                 var url = req.params.url;
                 api.articleForUrl(url, function(err, doc) {
                     if(err) {
@@ -507,8 +505,6 @@ site.init = function(app, callback) {
                         doc.path = "/article/" + latestUrl;
 
                         var isAdmin = api.accounts.isAdmin(req);
-                        console.log(req.session);
-                        console.log(isAdmin);
 
                         http_res.render('article', {
                             locals: {
@@ -605,6 +601,7 @@ site.init = function(app, callback) {
             });
 
             app.get('/article/:url/edit', site.checkAdmin, site.renderArticleEdit = function(req, http_res) {
+
                 var url = req.params.url;
 
                 api.articleForUrl(url, function(err, doc) {
@@ -627,6 +624,7 @@ site.init = function(app, callback) {
                             db.taxonomy.getHierarchy(function (err, res) {
                                 var taxonomy = {};
                                 res.forEach(function(value) {
+                                    if (typeof value === undefined || typeof value.key === undefined) return;
                                     value = value.key;
                                     //var current = taxonomy;
 
@@ -638,7 +636,8 @@ site.init = function(app, callback) {
                                         key += " " + value[value.length - 1]
 
                                         var selected = false;
-                                        if (_.isEqual(value, JSON.parse(doc.taxonomy))) {
+
+                                        if (_.isEqual(value, doc.taxonomy)) {
                                             selected = true;
                                         }
 
@@ -648,8 +647,11 @@ site.init = function(app, callback) {
                                 })
 
                                 if(!doc.images) doc.images = {};
+                                if (doc.authors) {
+                                    doc.authors = doc.authors.join(", ");
+                                }
 
-                                doc.authors = doc.authors.join(", ");
+
 
                                 http_res.render('admin/edit', {
                                     locals: {
@@ -661,6 +663,7 @@ site.init = function(app, callback) {
                                     },
                                     layout: "layout-admin.jade"
                                 });
+
                             });
                         }
                     }

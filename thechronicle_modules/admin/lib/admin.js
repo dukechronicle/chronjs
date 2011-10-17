@@ -264,7 +264,7 @@ exports.init = function(app, callback) {
                         body: req.body.doc.body,
                         teaser: req.body.doc.teaser,
                         authors: req.body.doc.authors.split(", "),
-                        taxonomy: req.body.doc.taxonomy
+                        taxonomy: JSON.parse(req.body.doc.taxonomy)
                         //groups: new_groups
                     };
                     _renderBody(req.body.doc.body, function(err, rendered) {

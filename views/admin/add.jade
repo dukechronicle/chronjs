@@ -6,7 +6,7 @@ form(action='/admin/add', method='POST')
         input#title(type='text', name='doc[title]', style='width:600px')
     p(style="margin-bottom: 2em")
         label(for='section') Section&nbsp;
-        select(name='taxonomy', style='width: 600px')
+        select(name='doc[taxonomy]', style='width: 600px')
             if (typeof taxonomy != 'undefined')
                 - each value, key in taxonomy
                     option(value=value) #{key}

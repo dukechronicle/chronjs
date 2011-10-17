@@ -283,18 +283,16 @@ exports.init = function(app, callback) {
             app.post('/add', site.checkAdmin,
             function(req, http_res) {
                 var form = req.body.doc;
-                console.log(form);
+
                 var fields = {
                     body: form.body,
                     authors: form.authors.split(" ,"),
                     title: form.title,
                     teaser: form.teaser,
-                    type: form.type
+                    type: form.type,
+                    taxonomy: JSON.parse(form.taxonomy)
                 };
 
-
-
-                return;
                 async.waterfall([
                     function(callback) {
                         _renderBody(form.body, function(err, rendered) {
@@ -304,34 +302,15 @@ exports.init = function(app, callback) {
                     },
                     function(callback) {
                         api.addDoc(fields, callback);
-                    },
-                    function(res, url, callback) {
-                        var groups = req.body.doc.groups;
-                        if (groups) {
-                            var fcns = [];
-                            if (! (groups instanceof Array)) {
-                                //we will get a string if only one box is checked
-                                groups = [groups];
-                            }
-                            groups.forEach(function(group) {
-                                api.group.add(res.id, FRONTPAGE_GROUP_NAMESPACE, group,
-                                function(add_err, add_res) {
-                                    if (add_err) {
-                                        callback(add_err);
-                                    }
-                                });
-                            });
-                        }
-                        callback(null, url);
                     }
                 ],
                 function(err, url) {
                     if (err) {
                         globalFunctions.showError(http_res, err);
-                        console.log(err);
                     }
                     else {
-                        http_res.redirect('article/' + url);
+
+                        http_res.redirect('/article/' + url);
                     }
                 }
                 );

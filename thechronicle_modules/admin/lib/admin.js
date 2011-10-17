@@ -17,7 +17,7 @@ var globalFunctions = require('../../global-functions');
 var layoutAdmin = require('./layout.js');
 var imageAdmin = require('./image.js');
 
-
+var db = require('../../db-abstract')
 
 var VIDEO_PLAYERS = {
     "youtube": "<iframe width=\"560\" height=\"345\" src=\"http://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>",
@@ -72,7 +72,11 @@ exports.init = function(app, callback) {
 
         app.namespace('/admin',
         function() {
-            
+            app.get('/', site.checkAdmin, function(req, res) {
+                res.render('admin/index', {
+                    layout: "layout-admin.jade"
+                });
+            });
 
             app.post('/group/add', site.checkAdmin,
             function(req, res) {
@@ -120,12 +124,42 @@ exports.init = function(app, callback) {
 
             app.get('/add', site.checkAdmin,
             function(req, http_res) {
-                http_res.render('admin/add', {
-                    locals: {
-                        groups: []
-                    },
-                    layout: "layout-admin.jade"
+                var rootSections = ["News", "Sports", "Opinion", "Recess", "Towerview"];
+
+                db.taxonomy.getHierarchy(function (err, res) {
+                    var taxonomy = {};
+                    res.forEach(function(value) {
+                        value = value.key;
+                        //var current = taxonomy;
+
+                        if (value && value.length > 0 && rootSections.indexOf(value[0]) != -1) {
+                            var key = "";
+                            for(var i = 0; i < value.length - 1; i++) {
+                                key += "-";
+                            }
+                            key += " " + value[value.length - 1]
+
+                            taxonomy[key] = JSON.stringify(value);
+                            /*
+                            value.forEach(function(x) {
+                                if (!current[x]) {
+                                    current[x] = {};
+                                }
+                                current = current[x];
+                            })*/
+                        }
+                    })
+
+                    http_res.render('admin/add', {
+                        locals: {
+                            groups: [],
+                            taxonomy: taxonomy
+                        },
+                        layout: "layout-admin.jade"
+                    });
                 });
+
+
             });
 
             app.get('/addPage', site.checkAdmin,
@@ -190,6 +224,7 @@ exports.init = function(app, callback) {
 
             app.post('/edit', site.checkAdmin,
             function(req, http_res) {
+
                 if (req.body.versionId) {
                     //adding image to article
                     api.docForUrl(req.body.article,
@@ -217,8 +252,8 @@ exports.init = function(app, callback) {
                     var fields = {
                         title: req.body.doc.title,
                         body: req.body.doc.body,
-                        teaser: req.body.doc.teaser
-                        //author: req.body.doc.author
+                        teaser: req.body.doc.teaser,
+                        authors: req.body.doc.authors.split(", ")
                         //groups: new_groups
                     };
                     _renderBody(req.body.doc.body, function(err, rendered) {
@@ -238,53 +273,34 @@ exports.init = function(app, callback) {
             app.post('/add', site.checkAdmin,
             function(req, http_res) {
                 var form = req.body.doc;
-                console.log(form);
+
                 var fields = {
                     body: form.body,
-                    authors: [form.author],
+                    authors: form.authors.split(" ,"),
                     title: form.title,
                     teaser: form.teaser,
-                    type: form.type
+                    type: form.type,
+                    taxonomy: JSON.parse(form.taxonomy)
                 };
 
-
                 async.waterfall([
-                function(callback) {
-                    _renderBody(form.body, function(err, rendered) {
-                        fields.renderedBody = rendered;
-                        callback(null);
-                    });
-                },
-                function(callback) {
-                    api.addDoc(fields, callback);
-                },
-                function(res, url, callback) {
-                    var groups = req.body.doc.groups;
-                    if (groups) {
-                        var fcns = [];
-                        if (! (groups instanceof Array)) {
-                            //we will get a string if only one box is checked
-                            groups = [groups];
-                        }
-                        groups.forEach(function(group) {
-                            api.group.add(res.id, FRONTPAGE_GROUP_NAMESPACE, group,
-                            function(add_err, add_res) {
-                                if (add_err) {
-                                    callback(add_err);
-                                }
-                            });
+                    function(callback) {
+                        _renderBody(form.body, function(err, rendered) {
+                            fields.renderedBody = rendered;
+                            callback(null);
                         });
+                    },
+                    function(callback) {
+                        api.addDoc(fields, callback);
                     }
-                    callback(null, url);
-                }
                 ],
                 function(err, url) {
                     if (err) {
                         globalFunctions.showError(http_res, err);
-                        console.log(err);
                     }
                     else {
-                        http_res.redirect('article/' + url);
+
+                        http_res.redirect('/article/' + url);
                     }
                 }
                 );

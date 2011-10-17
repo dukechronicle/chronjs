@@ -105,15 +105,13 @@ search.indexArticle = function(id,title,body,section,authors,createdDate,callbac
         created_date_d: solrDate,
         created_year_i: solrYear,
         created_month_i: solrMonth,
-        created_day_i: solrDay,
+        created_day_i: solrDay
 	}; 
 
     // unindex the article before you index it, just incase it was using an old verion of the indexing
     client.del(createSolrIDFromDBID(id), null, function(err,resp) { 
-        if(!err) console.log('unindexed "' + title + '"');
-        else console.log(err);
-                  
-        client.add(solrDoc, {commit:true}, callback);
+        if(err) console.log(err);
+        else client.add(solrDoc, {commit:true}, callback);
     }); 
 }
 

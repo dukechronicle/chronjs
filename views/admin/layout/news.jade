@@ -6,43 +6,29 @@ script
 h2 News Layout
 
 #layout
-    <h2>DSG</h2>
-    #slideshow.container(data-groupName='DSG')
-        - if (model.DSG)
-            - each story, id in model.DSG
-                .story(draggable='true', id='#{story._id}')
-                    #{story.title}
 
-    <h2>DUU</h2>
-    #slideshow.container(data-groupName='DUU')
-        - if (model.DUU)
-            - each story, id in model.DUU
-                .story(draggable='true', id='#{story._id}')
-                    #{story.title}
-
-    <h2>China</h2>
-    #slideshow.container(data-groupName='China')
-        - if (model.China)
-            - each story, id in model.China
-                .story(draggable='true', id='#{story._id}')
-                    #{story.title}
-
-
-    <h2>Featured</h2>
+    h2 Featured
     #slideshow.container(data-groupName='Featured')
         - if (model.Featured)
             - each story, id in model.Featured
                 .story(draggable='true', id='#{story._id}')
                     #{story.title}
 
-    <h2>Headlines</h2>
+    h2 Right Headlines
+    #slideshow.container(data-groupName='RightHeadlines')
+        - if (model.RightHeadlines)
+            - each story, id in model.RightHeadlines
+                .story(draggable='true', id='#{story._id}')
+                    #{story.title}
+
+    h2 Headlines
     #slideshow.container(data-groupName='Headlines')
         - if (model.Headlines)
             - each story, id in model.Headlines
                 .story(draggable='true', id='#{story._id}')
                     #{story.title}
 
-    <h2>Stories</h2>
+    h2 Stories
     #slideshow.container(data-groupName='Stories')
         - if (model.Stories)
             - each story, id in model.Stories

@@ -4,6 +4,16 @@ form(action='/admin/edit', method='POST')
         label(for='title') Title&nbsp;
         input#title(type='text', name='doc[title]', value=doc.title, style='width:600px')
     p(style="margin-bottom: 2em")
+        label(for='section') Section&nbsp;
+        select(name='doc[taxonomy]', style='width: 600px')
+            if (typeof taxonomy != 'undefined')
+                option Select a Section
+                - each value, key in taxonomy
+                    if (value[1])
+                        option(value=value[0], selected='selected') #{key}
+                    else
+                        option(value=value[0]) #{key}
+    p(style="margin-bottom: 2em")
         label(for='author') Authors&nbsp;
         input#author(type='text', name='doc[authors]', value=doc.authors, style='width:600px')
     p(style="margin-bottom: 2em")

@@ -253,7 +253,8 @@ exports.init = function(app, callback) {
                         title: req.body.doc.title,
                         body: req.body.doc.body,
                         teaser: req.body.doc.teaser,
-                        authors: req.body.doc.authors.split(", ")
+                        authors: req.body.doc.authors.split(", "),
+                        taxonomy: req.body.doc.taxonomy
                         //groups: new_groups
                     };
                     _renderBody(req.body.doc.body, function(err, rendered) {

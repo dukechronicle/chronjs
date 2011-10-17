@@ -162,9 +162,6 @@ exports.init = function(app, callback) {
 
 	    app.get('/k4export', site.checkAdmin,
             function(req, http_res) {
-		db.taxonomy.getHierarchyTree(function (err, taxonomy) {
-		    console.log(taxonomy);
-		});
 		k4export.db.view('articles/all', function(err, res) {
 		    http_res.render('admin/k4export', {
 			locals: {
@@ -184,8 +181,8 @@ exports.init = function(app, callback) {
 		    if (err)
 			http_res.end(err);
 		    else {
-			k4export.runExporter(files.zip.path, function(res) {
-			    http_res.redirect("/admin/k4export");
+			k4export.runExporter(files.zip.path, function() {
+			    http_res.redirect("/admin/manage");
 			});
 		    }
 		});

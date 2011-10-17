@@ -2,6 +2,7 @@ var child_process = require('child_process')
 var cradle = require('cradle');
 var fs  = require('fs');
 var path = require('path');
+var api = require('../../api')
 
 
 var bodyPattern = new RegExp('\[^\]*</drawOrder></frame></page><text>(.+?)</text>\[^\]*', "g");
@@ -121,9 +122,32 @@ function addArticleToCouchDB(db, article, callback) {
 	    if (err)
 		callback("Error uploading article: " + article.title)
 	    else
-		callback("Successfully uploaded article: " + article.title)
+		callback(null)
 	});
     }
+}
+
+function exportToProduction(id, callback) {
+    db.get(id, function (err, doc) {
+	if (err)
+	    console.log("Error getting article " + id);
+	else {
+	    fields = {};
+	    fields.title = doc.title;
+	    fields.body = doc.body;
+	    fields.author = doc.author;
+	    fields.import_id = doc.id;
+	    fields.taxonomy = [ doc.section ];
+	    fields.type = 'article';
+	    fields.publish = false;
+	    fields.teaser = "";
+	    api.addDoc(fields, function (err) {
+		if (err)
+		    console.log("Error adding article " + doc.title + ": " + err);
+		callback();
+	    });
+	}
+    });
 }
 
 function exportCouchDBToDrupal(callback) {
@@ -173,15 +197,20 @@ function runExporter(zipPath, exportCallback) {
 		console.log("XML Directory: " + dir);
 		var date = path.basename(dir).match(/\d{6}/)[0];
 		var parser = new ArticleParser(date, function(article, callback) {
-		    addArticleToCouchDB(db, article, function(db_response) {
-			db_responses.push(db_response);
-			callback();
+		    addArticleToCouchDB(db, article, function(err) {
+			if (err) {
+			    console.log(err);
+			    callback();
+			}
+			else {
+			    exportToProduction(article.id, callback);
+			}   
 		    });
 		});
 		parser.parseDirectory(dir, function(filepath) {
 		    // System call because recursive directory deletion must be
 		    // synchronous
-		    exportCallback(db_responses.join("\n"));
+		    exportCallback();
 		    console.log("Deleting " + dir);
 		    child_process.exec("rm -r '" + dir + "'");
 //		    exportCouchDBToDrupal(function() {

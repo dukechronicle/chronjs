@@ -24,7 +24,7 @@ exports.runExporter = runExporter;
 exports.db = db;
 
 
-function ArticleParser(defaultDate, articleCallback) {
+function ArticleParser(articleCallback) {
     var thisParser = this;
     this.articles = [];
 
@@ -64,7 +64,7 @@ function ArticleParser(defaultDate, articleCallback) {
 		if (err)
 		    console.log(err);
 		else {
-		    var article = thisParser.parseXML(data.toString(), filepath, defaultDate);
+		    var article = thisParser.parseXML(data.toString(), filepath);
 		    thisParser.articles.push(article);
 		    articleCallback(article, callback);
 		}
@@ -89,11 +89,13 @@ n		break;
 	    }
 	    */
 	}
-	else
-	    throw "Unknown file type: " + filepath;
+	else {
+	    console.log("Unknown file type: " + filepath);
+	    callback();
+	}
     };
     
-    this.parseXML = function(xml, filename, defaultDate) {
+    this.parseXML = function(xml, filename) {
 	var articleObject = {};
 
 	var body = xml.replace(bodyPattern, "$1");
@@ -195,8 +197,7 @@ function runExporter(zipPath, exportCallback) {
 
 		var dir = dirmatch[1];
 		console.log("XML Directory: " + dir);
-		var date = path.basename(dir).match(/\d{6}/)[0];
-		var parser = new ArticleParser(date, function(article, callback) {
+		var parser = new ArticleParser(function(article, callback) {
 		    addArticleToCouchDB(db, article, function(err) {
 			if (err) {
 			    console.log(err);

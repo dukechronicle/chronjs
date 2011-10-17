@@ -135,7 +135,7 @@ function exportToProduction(id, callback) {
 	    fields = {};
 	    fields.title = doc.title;
 	    fields.body = doc.body;
-	    fields.author = doc.author;
+	    fields.author = [ doc.author ];
 	    fields.import_id = doc.id;
 	    fields.taxonomy = [ doc.section ];
 	    fields.type = 'article';

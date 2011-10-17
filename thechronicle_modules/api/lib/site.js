@@ -27,6 +27,8 @@ var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
 var newsModel = JSON.parse(fs.readFileSync("sample-data/news.json"));
 var sportsModel = JSON.parse(fs.readFileSync("sample-data/sports.json"));
 
+// TODO remove and put in to api
+var db = require('../../db-abstract');
 
 var BENCHMARK = false;
 
@@ -526,7 +528,7 @@ site.init = function(app, callback) {
                         });
                      }
                      
-                    
+                    if (doc.taxonomy) {
                      var length = doc.taxonomy.length;
                      var taxToSend = doc.taxonomy;
                      var multi = redis.client.multi();
@@ -540,6 +542,7 @@ site.init = function(app, callback) {
                                 console.log(err);
                             }
                      });
+                    }
                     }
                     });
             });
@@ -604,7 +607,6 @@ site.init = function(app, callback) {
             app.get('/article/:url/edit', site.checkAdmin, site.renderArticleEdit = function(req, http_res) {
                 var url = req.params.url;
 
-
                 api.articleForUrl(url, function(err, doc) {
                     if(err) {
                         globalFunctions.showError(http_res, err);
@@ -619,19 +621,46 @@ site.init = function(app, callback) {
                             });
                         }
                         else {
-                            if(!doc.images) doc.images = {};
 
-                            doc.authors = doc.authors.join(", ");
+                            var rootSections = ["News", "Sports", "Opinion", "Recess", "Towerview"];
 
-                            http_res.render('admin/edit', {
-                                locals: {
-                                        doc: doc,
-                                        //groups: groups,
-                                        groups: [],
-                                        images: doc.images,
-                                        url: url
-                                },
-                                layout: "layout-admin.jade"
+                            db.taxonomy.getHierarchy(function (err, res) {
+                                var taxonomy = {};
+                                res.forEach(function(value) {
+                                    value = value.key;
+                                    //var current = taxonomy;
+
+                                    if (value && value.length > 0 && rootSections.indexOf(value[0]) != -1) {
+                                        var key = "";
+                                        for(var i = 0; i < value.length - 1; i++) {
+                                            key += "-";
+                                        }
+                                        key += " " + value[value.length - 1]
+
+                                        var selected = false;
+                                        if (_.isEqual(value, JSON.parse(doc.taxonomy))) {
+                                            selected = true;
+                                        }
+
+                                        taxonomy[key] = [JSON.stringify(value), selected];
+
+                                    }
+                                })
+
+                                if(!doc.images) doc.images = {};
+
+                                doc.authors = doc.authors.join(", ");
+
+                                http_res.render('admin/edit', {
+                                    locals: {
+                                            doc: doc,
+                                            groups: [],
+                                            images: doc.images,
+                                            url: url,
+                                            taxonomy: taxonomy
+                                    },
+                                    layout: "layout-admin.jade"
+                                });
                             });
                         }
                     }

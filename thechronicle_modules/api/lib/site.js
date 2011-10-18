@@ -617,11 +617,7 @@ site.init = function(app, callback) {
                             delete newImages[req.query.deleteImage];
                             api.editDoc(doc._id, newImages, function(editErr, res) {
                                 if(editErr) globalFunctions.showError(http_res, editErr);
-                                else {
-                                    // reindex the article now that it has changed					                
-                                    api.search.indexArticle(doc._id, doc.title, doc.body, doc.taxonomy, doc.authors, doc.created, function(err,response){});
-					                http_res.redirect('/article/' + url + '/edit');
-				                }
+                                else http_res.redirect('/article/' + url + '/edit');
                             });
                         }
                         else {

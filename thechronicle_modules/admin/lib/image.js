@@ -80,7 +80,20 @@ function _downloadUrlToPath(url, path, callback) {
 
 exports.bindPath = function(app) {
     return function() {
-    app.get('/upload', site.checkAdmin,
+
+        app.get('/manage', site.checkAdmin, function(req, httpRes) {
+            api.image.getAllOriginals(function(err, origs) {
+                httpRes.render('admin/articleimage', {
+                    filename: 'views/admin/articleimage.jade',
+                        locals: {
+                            origs: origs
+                        },
+                    layout: 'layout-admin.jade'
+                });
+            });
+        });
+
+        app.get('/upload', site.checkAdmin,
         function(req, httpRes) {
             httpRes.render('upload', {
                 layout: "layout-admin.jade"

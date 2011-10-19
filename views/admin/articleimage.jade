@@ -1,2 +1,5 @@
 table(border=1)
-  != partial('original', {collection: origs, locals: {url: url}})
+    if (typeof url != 'undefined')
+        != partial('original', {collection: origs, locals: {url: url}})
+    else
+        != partial('original', {collection: origs})

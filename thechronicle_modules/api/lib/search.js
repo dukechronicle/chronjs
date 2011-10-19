@@ -42,20 +42,7 @@ search.indexUnindexedArticles = function(count) {
             process.nextTick(function() {
                 console.log('indexing "' + row.title + '"');
 
-                var section = undefined;
-                if(row.taxonomy && row.taxonomy[0]) section = row.taxonomy[0];
-
-                row.body = row.body.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ');
-                row.title = row.title.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ');
-                row.authors = row.authors.map(function(author) {
-                    return author.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ');
-                });
-                //row.authors = [];
-                //row.authors = row.authors.replace(/^[\x00-\x08\x0B\x0C\x0E-\x1F\xFFFE\xFFFF]/g, ' ');
-
-               // section
-
-                search.indexArticle(row._id,row.title,row.body, section, row.authors, row.created, function(error2, response2) {
+                search.indexArticle(row._id, row.title, row.body, row.taxonomy, row.authors, row.created, function(error2, response2) {
                     if(error2) console.log(error2);
                     else {
 
@@ -70,9 +57,18 @@ search.indexUnindexedArticles = function(count) {
     });
 }
 
-search.indexArticle = function(id,title,body,section,authors,createdDate,callback) {
+search.indexArticle = function(id,title,body,taxonomy,authors,createdDate,callback) {
 	// adds the article to the solr database for searching	
 	
+    body = body.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ');
+    title = title.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ');
+    authors = authors.map(function(author) {
+        return author.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ');
+    });
+
+    var section = undefined;
+    if(taxonomy && taxonomy[0]) section = taxonomy[0];
+    
     var date = new Date(createdDate * 1000); // turn seconds into milliseconds
     
     var solrDate;

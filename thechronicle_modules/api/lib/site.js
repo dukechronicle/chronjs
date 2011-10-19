@@ -613,8 +613,8 @@ site.init = function(app, callback) {
                             var newImages = doc.images;
                             delete newImages[req.query.deleteImage];
                             api.editDoc(doc._id, newImages, function(editErr, res) {
-                                    if(editErr) globalFunctions.showError(http_res, editErr);
-                                    else http_res.redirect('/article/' + url + '/edit');
+                                if(editErr) globalFunctions.showError(http_res, editErr);
+                                else http_res.redirect('/article/' + url + '/edit');
                             });
                         }
                         else {

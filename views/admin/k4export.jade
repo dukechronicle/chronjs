@@ -1,9 +1,6 @@
+h1 K4 Exporter
 form(action='/admin/k4export', method='post', enctype='multipart/form-data')
   label(for='zip') XML Zip:
   input(type='file', name='zip')
+  br
   input(type='submit')
-
-table(border=1)
-    - each doc in docs
-        tr
-            td #{doc.value.title}

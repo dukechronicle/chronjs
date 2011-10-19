@@ -9,6 +9,7 @@ var DESIGN_DOCUMENT_FILENAME = __dirname+'/db-design.js';
 var DESIGN_DOCUMENT_VERSION_NAME = DESIGN_DOCUMENT_NAME+'-versioning';
 var DATABASE = null;
 var DB_HOST = null;
+var DB_PORT = null;
 
 // parse environment variable CLOUDANT_URL OR COUCHDB_URL to extract authentication information
 function connect(database) {
@@ -61,6 +62,10 @@ db.getDatabaseName = function() {
     return DATABASE;
 }
 
+db.getDatabasePort = function() {
+    return DB_PORT;
+}
+
 db.getDatabaseHost = function() {
     return DB_HOST;
 }
@@ -68,6 +73,7 @@ db.getDatabaseHost = function() {
 db.init = function(callback) {
 	DATABASE = config.get("COUCHDB_DATABASE");
     DB_HOST = url.parse(config.get("COUCHDB_URL")).hostname;
+    DB_PORT = url.parse(config.get("COUCHDB_URL")).port;
 
     // assign all methods of the cradle object to db
     var database = connect(DATABASE);

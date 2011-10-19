@@ -344,3 +344,7 @@ api.getDatabaseName = function() {
 api.getDatabaseHost = function() {
     return db.getDatabaseHost();
 }
+
+api.getDatabasePort = function() {
+    return db.getDatabasePort();
+}

@@ -177,6 +177,7 @@ exports.init = function(app, callback) {
             function(req, http_res) {
                 var db = api.getDatabaseName();
                 var host = api.getDatabaseHost();
+                var port = api.getDatabasePort() || "80";
                 api.docsByDate(null,
                 function(err, res) {
                     if (err) {
@@ -186,7 +187,8 @@ exports.init = function(app, callback) {
                             locals: {
                                 docs: res,
                                 db: db,
-                                host: host
+                                host: host,
+                                port: port
                             },
                             layout: "layout-admin.jade"
                         });

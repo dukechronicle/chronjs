@@ -182,7 +182,7 @@ function clearDatabase(db) {
 }
 
 function runExporter(zipPath, exportCallback) {
-    process.chdir('/var/tmp');
+    //process.chdir('/var/tmp');
     child_process.exec("unzip -o "+ zipPath, function (error, stdout, stderr) {
 	if (error)
 	    console.log(error);

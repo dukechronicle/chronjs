@@ -197,26 +197,28 @@ exports.init = function(app, callback) {
 	    app.get('/k4export', site.checkAdmin,
             function(req, http_res) {
 
-		k4export.db.view('articles/all', function(err, res) {
-		    http_res.render('admin/k4export', {
-			locals: {
-			    groups: [],
-			    docs: res
-			},
-			layout: "layout-admin.jade"
-		    });
-		});
+            k4export.db.view('articles/all', function(err, res) {
+                http_res.render('admin/k4export', {
+                locals: {
+                    groups: [],
+                    docs: res
+                },
+                layout: "layout-admin.jade"
+                });
+            });
 	    });
 
 	    app.post('/k4export', site.checkAdmin,
             function(req, http_res) {
 		var form = new formidable.IncomingForm();
-		form.uploadDir = '/var/tmp';
+		form.uploadDir = './';
 		form.parse(req, function(err, fields, files) {
 		    if (err)
 			http_res.end(err);
 		    else {
+                console.log("uploaded");
 			k4export.runExporter(files.zip.path, function() {
+                console.log(files.zip.path);
 			    http_res.redirect("/admin/manage");
 			});
 		    }

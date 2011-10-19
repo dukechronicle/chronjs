@@ -24,6 +24,7 @@ script
             $('<div id="dialog-confirm">Delete <strong>' + title + '?</strong></div>').appendTo('body');
 
             $("#dialog-confirm").dialog({
+                dialogClass: 'delete-confirmation-dialog',
                 title: 'Delete Article',
                 resizable: false,
                 autoOpen: true,
@@ -31,7 +32,15 @@ script
                 modal: true,
                 buttons: {
                     "Delete": function() {
-                        $(this).remove();
+                        $.ajax({
+                            type: 'DELETE',
+                            url: '/admin/article/docId',
+                            data: 'docId=' + docId,
+                            success: function() {
+                                $(this.remove());
+                                location.reload();
+                            }
+                        });
                     },
                     Cancel: function() {
                         $(this).remove();

@@ -6,7 +6,7 @@ table(border=1)
             td
                 a(href='/article/' + doc.urls[doc.urls.length - 1] + '/edit') Edit
             td
-                a.delete(href='#', data-docId=doc._id, data-title=doc.title) Delete
+                a.delete(href='#', data-docId=doc._id, data-title=doc.title, data-docRev=doc._rev) Delete
             td
                 a(href='http://'+ host +'/_utils/document.html?' + db + '/' + doc._id) #{doc._id}
 
@@ -20,6 +20,7 @@ script
             var anchor = $(event.target);
             var title = anchor.attr('data-title');
             var docId = anchor.attr('data-docId');
+            var docRev = anchor.attr('data-docRev');
 
             $('<div id="dialog-confirm">Delete <strong>' + title + '?</strong></div>').appendTo('body');
 
@@ -32,12 +33,13 @@ script
                 modal: true,
                 buttons: {
                     "Delete": function() {
+
                         $.ajax({
                             type: 'DELETE',
-                            url: '/admin/article/docId',
-                            data: 'docId=' + docId,
+                            url: '/admin/article/' + docId,
+                            data: 'rev=' + docRev,
                             success: function() {
-                                $(this.remove());
+                                $(this).remove();
                                 location.reload();
                             }
                         });

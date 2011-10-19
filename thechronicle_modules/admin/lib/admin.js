@@ -197,7 +197,7 @@ exports.init = function(app, callback) {
 	    app.get('/k4export', site.checkAdmin,
             function(req, http_res) {
 		db.taxonomy.getHierarchy(function (err, res) {
-		    taxonomyTree = {}
+		    var taxonomyTree = {}
 		    async.forEach(res,
 				  function (tax, callback) {
 				      addToTree(taxonomyTree, tax.key, callback);
@@ -348,6 +348,14 @@ exports.init = function(app, callback) {
                 }
                 );
             });
+
+            app.delete('/article/:docId', site.checkAdmin, function(req, http_res) {
+                db.remove(req.params.docId, req.body.rev, function() {
+                    http_res.send({status:true});
+                });
+
+            });
+
         });
 
         app.namespace('/admin/layout', layoutAdmin.bindPath(app));

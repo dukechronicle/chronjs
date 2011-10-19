@@ -62,7 +62,7 @@ db.getDatabaseName = function() {
 }
 
 db.getDatabaseHost = function() {
-    return DB_HOST;
+    return DB_HOST + ":5984";
 }
 
 db.init = function(callback) {

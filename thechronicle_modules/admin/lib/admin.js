@@ -218,7 +218,8 @@ exports.init = function(app, callback) {
 		    if (err)
 			http_res.end(err);
 		    else {
-			k4export.runExporter(files.zip.path, function() {
+			k4export.runExporter(files.zip.path,
+					     function(failed, success) {
 			    http_res.redirect("/admin/manage");
 			});
 		    }

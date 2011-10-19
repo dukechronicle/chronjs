@@ -3,7 +3,7 @@ var cradle = require('cradle');
 var fs  = require('fs');
 var path = require('path');
 var api = require('../../api')
-
+var async = require('async')
 
 var bodyPattern = new RegExp('\[^\]*</drawOrder></frame></page><text>(.+?)</text>\[^\]*', "g");
 var inlineStoryTagPattern =  new RegExp('<inlineTag name="Story">', "g");
@@ -26,14 +26,15 @@ exports.db = db;
 
 function ArticleParser(articleCallback) {
     var thisParser = this;
-    this.articles = [];
 
     this.parse = function(filepath, callback) {
 	var filename = path.basename(filepath);
-	if (filename[0] != "." && filename[0] != "_") {
+	if (filename[0] == "." || filename[0] == "_")
+	    callback([filename], []);
+	else {
 	    fs.stat(filepath, function(err, stat) {
 		if (err)
-		    console.log(err);
+		    console.error("Can't stat" + err);
 		else if (stat.isDirectory())
 		    thisParser.parseDirectory(filepath, callback);
 		else
@@ -43,17 +44,28 @@ function ArticleParser(articleCallback) {
     }
 
     this.parseDirectory = function(directory, callback) {
-	var filesOutstanding = 0;
+	success = [];
+	failed = [];
 	fs.readdir(directory, function(err, contents) {
-	    contents.forEach(function (filename) {
-		if (filename[0] != "." && filename[0] != "_") {
-		    var filepath = path.join(directory, filename);
-		    filesOutstanding++;
-		    thisParser.parse(filepath, function() {
-			if (--filesOutstanding == 0) callback();
-		    });
-		}
-	    });
+	    if (err) {
+		console.error("Can't open directory", err);
+		failed.push(directory);
+		callback(failed, success);
+	    }
+	    else {
+		async.forEach(contents,
+			      function (filename, cb) {
+				  var filepath = path.join(directory, filename);
+				  thisParser.parse(filepath, function(fail, succeed) {
+				      failed = failed.concat(fail);
+				      success = success.concat(succeed);
+				      cb();
+				  });
+			      },
+			      function (err) {
+				  callback(failed, success);
+			      });
+	    }
 	});
     };
 
@@ -61,37 +73,21 @@ function ArticleParser(articleCallback) {
     	var extension = path.extname(filepath);
 	if (extension == '.xml') {
 	    fs.readFile(filepath, function(err, data) {
-		if (err)
-		    console.log(err);
+		if (err) {
+		    console.error("Can't open file" + err);
+		    callback([filepath], []);
+		}
 		else {
 		    var article = thisParser.parseXML(data.toString(), filepath);
-		    thisParser.articles.push(article);
+		    if (article == undefined)
+			callback([filepath], []);
 		    articleCallback(article, callback);
 		}
 	    });
 	}
-	else if (extension == '.jpg') {
-	    /*
-	    if (typeof articleObject.image == 'undefined') {
-		articleObject.image = {};
-	    }
-	    var imageType = filename.split('_')[0];
-	    switch (imageType) {
-	    case 'article':
-		articleObject.image.article = path + '/' + filename;
-		break;
-	    case 'nsthumb':
-		articleObject.image.nsthumb = path + '/' + filename;
-		break;
-	    case 'thumb':
-		articleObject.image.thumb = path + '/' + filename;
-n		break;
-	    }
-	    */
-	}
 	else {
-	    console.log("Unknown file type: " + filepath);
-	    callback();
+	    console.error("Unknown file type: " + filepath);
+	    callback([filepath], []);
 	}
     };
     
@@ -118,13 +114,13 @@ n		break;
     };
 }
 
-function addArticleToCouchDB(db, article, callback) {
+function addArticleToCouchDB(article, callback) {
     if (Object.keys(article).length > 0) {
 	db.save(article.id, article, function (err, res) {
 	    if (err)
-		callback("Error uploading article: " + article.title)
+		callback(err);
 	    else
-		callback(null)
+		callback();
 	});
     }
 }
@@ -132,7 +128,7 @@ function addArticleToCouchDB(db, article, callback) {
 function exportToProduction(id, callback) {
     db.get(id, function (err, doc) {
 	if (err)
-	    console.log("Error getting article " + id);
+	    console.error("Error getting article " + id);
 	else {
 	    fields = {};
 	    fields.title = doc.title;
@@ -164,17 +160,15 @@ function exportCouchDBToDrupal(callback) {
     });
 }
 
-function clearDatabase(db) {
+function clearDatabase() {
     db.all(function (err, docs) {
 	if (err)
-	    console.log(err);
+	    console.error(err);
 	if (docs) {
 	    for (var i in docs) {
 		db.remove(docs[i].id, docs[i].value.rev, function(err, res) {
 		    if (err)
-			console.log(err);
-		    if (res)
-			console.log(res);
+			console.log("Error removing article" + err);
 		});
 	    }
 	}
@@ -185,13 +179,12 @@ function runExporter(zipPath, exportCallback) {
     process.chdir('/var/tmp');
     child_process.exec("unzip -o "+ zipPath, function (error, stdout, stderr) {
 	if (error)
-	    console.log(error);
+	    console.error(error);
 	else {
 	    fs.unlink(zipPath);
-	    var zipPattern = /Archive: (.*)\/\n/;
+	    var zipPattern = /creating: (.*)\/\n/;
 
 	    var dirmatch = stdout.match(zipPattern);
-        console.log(dirmatch);
 	    if (dirmatch == undefined)
 		console.log("Error unzipping file: " + zipPath);
 	    else {
@@ -200,25 +193,26 @@ function runExporter(zipPath, exportCallback) {
 		var dir = dirmatch[1];
 		console.log("XML Directory: " + dir);
 		var parser = new ArticleParser(function(article, callback) {
-		    addArticleToCouchDB(db, article, function(err) {
+		    addArticleToCouchDB(article, function(err) {
 			if (err) {
-			    console.log(err);
-			    callback();
+			    console.error(err);
+			    callback([article.title], []);
 			}
-			else {
-			    exportToProduction(article.id, callback);
-			}   
+			else
+			    callback([], [article.title]);
+//			    exportToProduction(article.id, callback);
 		    });
 		});
-		parser.parseDirectory(dir, function(filepath) {
+		parser.parse(dir, function(failed, successes) {
 		    // System call because recursive directory deletion must be
 		    // synchronous
-		    exportCallback();
+		    console.log("Failed: " + failed);
+		    console.log("Successes: " + successes);
+
 		    console.log("Deleting " + dir);
 		    child_process.exec("rm -r '" + dir + "'");
-//		    exportCouchDBToDrupal(function() {
-//			clearDatabase(db);
-//		    });
+
+		    exportCallback(failed, successes);
 		});
 	    }
 	}

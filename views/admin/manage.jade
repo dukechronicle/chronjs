@@ -6,4 +6,38 @@ table(border=1)
             td
                 a(href='/article/' + doc.urls[doc.urls.length - 1] + '/edit') Edit
             td
+                a.delete(href='#', data-docId=doc._id, data-title=doc.title) Delete
+            td
                 a(href='http://'+ host +'/_utils/document.html?' + db + '/' + doc._id) #{doc._id}
+
+
+script
+    $(document).ready(function(){
+
+        $(".delete").click(function(event) {
+            event.preventDefault();
+
+            var anchor = $(event.target);
+            var title = anchor.attr('data-title');
+            var docId = anchor.attr('data-docId');
+
+            $('<div id="dialog-confirm">Delete <strong>' + title + '?</strong></div>').appendTo('body');
+
+            $("#dialog-confirm").dialog({
+                title: 'Delete Article',
+                resizable: false,
+                autoOpen: true,
+                height:140,
+                modal: true,
+                buttons: {
+                    "Delete": function() {
+                        $(this).remove();
+                    },
+                    Cancel: function() {
+                        $(this).remove();
+                    }
+                }
+            });
+
+        });
+    });

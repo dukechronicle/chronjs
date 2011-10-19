@@ -188,8 +188,10 @@ function runExporter(zipPath, exportCallback) {
 	    console.log(error);
 	else {
 	    fs.unlink(zipPath);
-	    var zipPattern = /creating: (.*)\/\n/;
+	    var zipPattern = /Archive: (.*)\/\n/;
+
 	    var dirmatch = stdout.match(zipPattern);
+        console.log(dirmatch);
 	    if (dirmatch == undefined)
 		console.log("Error unzipping file: " + zipPath);
 	    else {

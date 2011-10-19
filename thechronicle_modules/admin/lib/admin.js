@@ -211,7 +211,7 @@ exports.init = function(app, callback) {
 	    app.post('/k4export', site.checkAdmin,
             function(req, http_res) {
 		var form = new formidable.IncomingForm();
-		form.uploadDir = './';
+		form.uploadDir = '/var/tmp';
 		form.parse(req, function(err, fields, files) {
 		    if (err)
 			http_res.end(err);

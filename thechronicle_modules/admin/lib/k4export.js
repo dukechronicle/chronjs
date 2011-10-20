@@ -22,6 +22,7 @@ db = new cradle.Connection('http://chrondev.iriscouch.com', 80, {
 		}).database('k4export')
 
 exports.runExporter = runExporter;
+exports.clearDatabase = clearDatabase;
 exports.db = db;
 
 
@@ -143,17 +144,22 @@ function exportCouchDBToDrupal(callback) {
     });
 }
 
-function clearDatabase() {
+function clearDatabase(callback) {
     db.all(function (err, docs) {
-	if (err)
+	if (err) {
 	    console.error(err);
-	if (docs) {
-	    for (var i in docs) {
-		db.remove(docs[i].id, docs[i].value.rev, function(err, res) {
-		    if (err)
-			console.log("Error removing article" + err);
-		});
-	    }
+	    callback(err);
+	}
+	else {
+	    async.forEachSeries(docs,  // forEach returns doc.value not doc
+	         function (doc, cb) {
+		     db.remove(doc.id, doc.value.rev,
+			       function(err, res) {
+				   if (err) cb(err);
+				   else     cb();
+			       });
+		 },
+		 callback);
 	}
     });
 }

@@ -2,7 +2,7 @@ var configuration = {
     "profiles": {
         "production": {
             // production
-            "COUCHDB_URL":"http://dean:dean@173.203.194.125:5984",
+            "COUCHDB_URL":"https://app578498.heroku:NNbL2x3Bu5vGLgComPjWxxET@app578498.heroku.cloudant.com",
             "COUCHDB_DATABASE":"production",
             "SOLR_CORE":"/c1af51aeb37",
 

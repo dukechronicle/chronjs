@@ -4,6 +4,7 @@ var fs  = require('fs');
 var path = require('path');
 var api = require('../../api')
 var async = require('async')
+var zipfile = require('zipfile')
 
 var bodyPattern = new RegExp('\[^\]*</drawOrder></frame></page><text>(.+?)</text>\[^\]*', "g");
 var inlineStoryTagPattern =  new RegExp('<inlineTag name="Story">', "g");
@@ -27,67 +28,49 @@ exports.db = db;
 function ArticleParser(articleCallback) {
     var thisParser = this;
 
-    this.parse = function(filepath, callback) {
-	var filename = path.basename(filepath);
-	if (filename[0] == "." || filename[0] == "_")
-	    callback([filename], []);
-	else {
-	    fs.stat(filepath, function(err, stat) {
-		if (err)
-		    console.error("Can't stat" + err);
-		else if (stat.isDirectory())
-		    thisParser.parseDirectory(filepath, callback);
+    this.parse = function(zipPath, callback) {
+	var succeed = [];
+	var failed  = [];
+	zipFile = new zipfile.ZipFile(zipPath);
+	async.forEach(zipFile.names,
+            function(name, cb) {
+		if (path.basename(name)[0] == "." ||
+		    name[name.length - 1] == "/")
+		    cb();
 		else
-		    thisParser.parseFile(filepath, callback);
+		    thisParser.parseFile(zipFile, name, function(err, title) {
+			if (err)
+			    failed.push(err);
+			else
+			    succeed.push(title);
+			cb();
+		    });
+	    },
+            function (err) {
+		callback(failed, succeed);
 	    });
-	}
     }
 
-    this.parseDirectory = function(directory, callback) {
-	success = [];
-	failed = [];
-	fs.readdir(directory, function(err, contents) {
-	    if (err) {
-		console.error("Can't open directory", err);
-		failed.push(directory);
-		callback(failed, success);
-	    }
-	    else {
-		async.forEach(contents,
-			      function (filename, cb) {
-				  var filepath = path.join(directory, filename);
-				  thisParser.parse(filepath, function(fail, succeed) {
-				      failed = failed.concat(fail);
-				      success = success.concat(succeed);
-				      cb();
-				  });
-			      },
-			      function (err) {
-				  callback(failed, success);
-			      });
-	    }
-	});
-    };
-
-    this.parseFile = function(filepath, callback) {
-    	var extension = path.extname(filepath);
+    this.parseFile = function(zipFile, name, callback) {
+    	var extension = path.extname(name);
 	if (extension == '.xml') {
-	    fs.readFile(filepath, function(err, data) {
+	    zipFile.readFile(name, function(err, data) {
 		if (err) {
-		    console.error("Can't open file" + err);
-		    callback([filepath], []);
+		    console.error("Can't open file: " + err);
+		    callback(name);
 		}
 		else {
-		    var article = thisParser.parseXML(data.toString(), filepath);
+		    var article = thisParser.parseXML(data.toString(), name);
 		    if (article == undefined)
-			callback([filepath], []);
-		    articleCallback(article, callback);
+			callback(name);
+		    else
+			articleCallback(article, callback);
 		}
 	    });
 	}
 	else {
-	    console.error("Unknown file type: " + filepath);
-	    callback([filepath], []);
+	    console.error("Unknown file type: " + name);
+	    callback(name);
 	}
     };
     
@@ -128,7 +111,7 @@ function addArticleToCouchDB(article, callback) {
 function exportToProduction(id, callback) {
     db.get(id, function (err, doc) {
 	if (err)
-	    console.error("Error getting article " + id);
+	    console.error("Error getting article: " + id);
 	else {
 	    fields = {};
 	    fields.title = doc.title;
@@ -176,45 +159,24 @@ function clearDatabase() {
 }
 
 function runExporter(zipPath, exportCallback) {
-    process.chdir('/var/tmp');
-    child_process.exec("unzip -o "+ zipPath, function (error, stdout, stderr) {
-	if (error)
-	    console.error(error);
-	else {
-	    fs.unlink(zipPath);
-	    var zipPattern = /creating: (.*)\/\n/;
-
-	    var dirmatch = stdout.match(zipPattern);
-	    if (dirmatch == undefined)
-		console.log("Error unzipping file: " + zipPath);
-	    else {
-		var db_responses = [];
-
-		var dir = dirmatch[1];
-		console.log("XML Directory: " + dir);
-		var parser = new ArticleParser(function(article, callback) {
-		    addArticleToCouchDB(article, function(err) {
-			if (err) {
-			    console.error(err);
-			    callback([article.title], []);
-			}
-			else
-			    callback([], [article.title]);
-//			    exportToProduction(article.id, callback);
-		    });
-		});
-		parser.parse(dir, function(failed, successes) {
-		    // System call because recursive directory deletion must be
-		    // synchronous
-		    console.log("Failed: " + failed);
-		    console.log("Successes: " + successes);
-
-		    console.log("Deleting " + dir);
-		    child_process.exec("rm -r '" + dir + "'");
-
-		    exportCallback(failed, successes);
-		});
+    var parser = new ArticleParser(function(article, callback) {
+	addArticleToCouchDB(article, function(err) {
+	    if (err) {
+		console.error(err);
+		callback(article.title);
 	    }
-	}
+	    else
+		callback(null, article.title);
+//		exportToProduction(article.id, callback);
+	});
+    });
+
+    parser.parse(zipPath, function(failed, successes) {
+	// System call because recursive directory deletion must be
+	// synchronous
+	console.log("Failed: " + failed);
+	console.log("Successes: " + successes);
+	fs.unlink(zipPath);
+	exportCallback(failed, successes);
     });
 }

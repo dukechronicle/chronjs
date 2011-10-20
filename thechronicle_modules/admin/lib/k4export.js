@@ -3,7 +3,8 @@ var cradle = require('cradle');
 var fs  = require('fs');
 var path = require('path');
 var api = require('../../api')
-
+var async = require('async')
+var zipfile = require('zipfile')
 
 var bodyPattern = new RegExp('\[^\]*</drawOrder></frame></page><text>(.+?)</text>\[^\]*', "g");
 var inlineStoryTagPattern =  new RegExp('<inlineTag name="Story">', "g");
@@ -21,82 +22,65 @@ db = new cradle.Connection('http://chrondev.iriscouch.com', 80, {
 		}).database('k4export')
 
 exports.runExporter = runExporter;
+exports.clearDatabase = clearDatabase;
 exports.db = db;
 
 
 function ArticleParser(articleCallback) {
     var thisParser = this;
-    this.articles = [];
 
-    this.parse = function(filepath, callback) {
-	var filename = path.basename(filepath);
-	if (filename[0] != "." && filename[0] != "_") {
-	    fs.stat(filepath, function(err, stat) {
-		if (err)
-		    console.log(err);
-		else if (stat.isDirectory())
-		    thisParser.parseDirectory(filepath, callback);
+    this.parse = function(zipPath, callback) {
+	var succeed = [];
+	var failed  = [];
+	zipFile = new zipfile.ZipFile(zipPath);
+	async.forEach(zipFile.names,
+            function(name, cb) {
+		if (path.basename(name)[0] == "." ||
+		    name[name.length - 1] == "/")
+		    cb();
 		else
-		    thisParser.parseFile(filepath, callback);
+		    thisParser.parseFile(zipFile, name, function(err, title) {
+			if (err)
+			    failed.push(err);
+			else
+			    succeed.push(title);
+			cb();
+		    });
+	    },
+            function (err) {
+		callback(failed, succeed);
 	    });
-	}
     }
 
-    this.parseDirectory = function(directory, callback) {
-	var filesOutstanding = 0;
-	fs.readdir(directory, function(err, contents) {
-	    contents.forEach(function (filename) {
-		if (filename[0] != "." && filename[0] != "_") {
-		    var filepath = path.join(directory, filename);
-		    filesOutstanding++;
-		    thisParser.parse(filepath, function() {
-			if (--filesOutstanding == 0) callback();
-		    });
-		}
-	    });
-	});
-    };
-
-    this.parseFile = function(filepath, callback) {
-    	var extension = path.extname(filepath);
+    this.parseFile = function(zipFile, name, callback) {
+    	var extension = path.extname(name);
 	if (extension == '.xml') {
-	    fs.readFile(filepath, function(err, data) {
-		if (err)
-		    console.log(err);
+	    zipFile.readFile(name, function(err, data) {
+		if (err) {
+		    console.error("Can't open file: " + err);
+		    callback(name);
+		}
 		else {
-		    var article = thisParser.parseXML(data.toString(), filepath);
-		    thisParser.articles.push(article);
-		    articleCallback(article, callback);
+		    var article = thisParser.parseXML(data.toString(), name);
+		    if (article == undefined)
+			callback(name);
+		    else
+			articleCallback(article, callback);
 		}
 	    });
-	}
-	else if (extension == '.jpg') {
-	    /*
-	    if (typeof articleObject.image == 'undefined') {
-		articleObject.image = {};
-	    }
-	    var imageType = filename.split('_')[0];
-	    switch (imageType) {
-	    case 'article':
-		articleObject.image.article = path + '/' + filename;
-		break;
-	    case 'nsthumb':
-		articleObject.image.nsthumb = path + '/' + filename;
-		break;
-	    case 'thumb':
-		articleObject.image.thumb = path + '/' + filename;
-n		break;
-	    }
-	    */
 	}
 	else {
-	    console.log("Unknown file type: " + filepath);
-	    callback();
+	    console.error("Unknown file type: " + name);
+	    callback(name);
 	}
     };
     
     this.parseXML = function(xml, filename) {
 	var articleObject = {};
+
+	if (xml.search(bodyPattern) == -1 ||
+	    xml.search(titlePattern) == -1)
+	    return undefined;
 
 	var body = xml.replace(bodyPattern, "$1");
 	body = body.replace(inlineStoryTagPattern, '');
@@ -118,13 +102,13 @@ n		break;
     };
 }
 
-function addArticleToCouchDB(db, article, callback) {
+function addArticleToCouchDB(article, callback) {
     if (Object.keys(article).length > 0) {
 	db.save(article.id, article, function (err, res) {
 	    if (err)
-		callback("Error uploading article: " + article.title)
+		callback(err);
 	    else
-		callback(null)
+		callback();
 	});
     }
 }
@@ -132,7 +116,7 @@ function addArticleToCouchDB(db, article, callback) {
 function exportToProduction(id, callback) {
     db.get(id, function (err, doc) {
 	if (err)
-	    console.log("Error getting article " + id);
+	    callback(id);
 	else {
 	    fields = {};
 	    fields.title = doc.title;
@@ -145,8 +129,9 @@ function exportToProduction(id, callback) {
 	    fields.teaser = "";
 	    api.addDoc(fields, function (err) {
 		if (err)
-		    console.log("Error adding article " + doc.title + ": " + err);
-		callback();
+		    callback(doc.title);
+		else
+		    callback(null, doc.title);
 	    });
 	}
     });
@@ -164,63 +149,44 @@ function exportCouchDBToDrupal(callback) {
     });
 }
 
-function clearDatabase(db) {
+function clearDatabase(callback) {
     db.all(function (err, docs) {
-	if (err)
-	    console.log(err);
-	if (docs) {
-	    for (var i in docs) {
-		db.remove(docs[i].id, docs[i].value.rev, function(err, res) {
-		    if (err)
-			console.log(err);
-		    if (res)
-			console.log(res);
-		});
-	    }
+	if (err) {
+	    console.error(err);
+	    callback(err);
+	}
+	else {
+	    async.forEachSeries(docs,  // forEach returns doc.value not doc
+	         function (doc, cb) {
+		     db.remove(doc.id, doc.value.rev,
+			       function(err, res) {
+				   if (err) cb(err);
+				   else     cb();
+			       });
+		 },
+		 callback);
 	}
     });
 }
 
 function runExporter(zipPath, exportCallback) {
-    process.chdir('/var/tmp');
-    child_process.exec("unzip -o "+ zipPath, function (error, stdout, stderr) {
-	if (error)
-	    console.log(error);
-	else {
-	    fs.unlink(zipPath);
-	    var zipPattern = /Archive: (.*)\/\n/;
-
-	    var dirmatch = stdout.match(zipPattern);
-        console.log(dirmatch);
-	    if (dirmatch == undefined)
-		console.log("Error unzipping file: " + zipPath);
-	    else {
-		var db_responses = [];
-
-		var dir = dirmatch[1];
-		console.log("XML Directory: " + dir);
-		var parser = new ArticleParser(function(article, callback) {
-		    addArticleToCouchDB(db, article, function(err) {
-			if (err) {
-			    console.log(err);
-			    callback();
-			}
-			else {
-			    exportToProduction(article.id, callback);
-			}   
-		    });
-		});
-		parser.parseDirectory(dir, function(filepath) {
-		    // System call because recursive directory deletion must be
-		    // synchronous
-		    exportCallback();
-		    console.log("Deleting " + dir);
-		    child_process.exec("rm -r '" + dir + "'");
-//		    exportCouchDBToDrupal(function() {
-//			clearDatabase(db);
-//		    });
-		});
+    var parser = new ArticleParser(function(article, callback) {
+	addArticleToCouchDB(article, function(err) {
+	    if (err) {
+		console.error(err);
+		callback(article.title);
 	    }
-	}
+	    else
+	        exportToProduction(article.id, callback);
+	});
+    });
+
+    parser.parse(zipPath, function(failed, successes) {
+	// System call because recursive directory deletion must be
+	// synchronous
+	console.log("Failed: " + failed);
+	console.log("Successes: " + successes);
+	fs.unlink(zipPath);
+	exportCallback(failed, successes);
     });
 }

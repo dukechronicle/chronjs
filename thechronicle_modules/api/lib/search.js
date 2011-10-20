@@ -105,10 +105,14 @@ search.indexArticle = function(id,title,body,taxonomy,authors,createdDate,callba
 	}; 
 
     // unindex the article before you index it, just incase it was using an old verion of the indexing
-    client.del(createSolrIDFromDBID(id), null, function(err,resp) { 
+    search.unindexArticle(id, function(err,resp) { 
         if(err) console.log(err);
         else client.add(solrDoc, {commit:true}, callback);
     }); 
+}
+
+search.unindexArticle = function(id, callback) {
+    client.del(createSolrIDFromDBID(id), null, callback); 
 }
 
 // don't call this.

@@ -37,6 +37,7 @@
         "htmlparser":       "1.7.x",
 
         "asereje":          "0.0.x",
-	"formidable":       ""
+	"formidable":       "",
+	"zipfile":          "",
 	}
 }

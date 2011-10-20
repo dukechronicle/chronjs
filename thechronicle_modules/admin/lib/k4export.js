@@ -78,6 +78,10 @@ function ArticleParser(articleCallback) {
     this.parseXML = function(xml, filename) {
 	var articleObject = {};
 
+	if (xml.search(bodyPattern) == -1 ||
+	    xml.search(titlePattern) == -1)
+	    return undefined;
+
 	var body = xml.replace(bodyPattern, "$1");
 	body = body.replace(inlineStoryTagPattern, '');
 	body = body.replace(authorArticlePattern, '');

@@ -116,7 +116,7 @@ function addArticleToCouchDB(article, callback) {
 function exportToProduction(id, callback) {
     db.get(id, function (err, doc) {
 	if (err)
-	    console.error("Error getting article: " + id);
+	    callback(id);
 	else {
 	    fields = {};
 	    fields.title = doc.title;
@@ -129,8 +129,9 @@ function exportToProduction(id, callback) {
 	    fields.teaser = "";
 	    api.addDoc(fields, function (err) {
 		if (err)
-		    console.log("Error adding article " + doc.title + ": " + err);
-		callback();
+		    callback(doc.title);
+		else
+		    callback(null, doc.title);
 	    });
 	}
     });
@@ -176,8 +177,7 @@ function runExporter(zipPath, exportCallback) {
 		callback(article.title);
 	    }
 	    else
-		callback(null, article.title);
-//		exportToProduction(article.id, callback);
+	        exportToProduction(article.id, callback);
 	});
     });
 

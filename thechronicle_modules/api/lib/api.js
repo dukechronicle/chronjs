@@ -71,7 +71,7 @@ api.init = function(callback) {
         //api.search.indexUnindexedArticles(1);
         /** Chron Jobs! **/
         /*
-        new cron.CronJob('0 0 * * * *', function() {
+        new cron.CronJob('0 * * * * *', function() {
             process.nextTick(function() {
                 api.search.indexUnindexedArticles(300);
             });
@@ -134,14 +134,7 @@ api.editDoc = function(docid, fields, callback) {
         delete fields.groups; //we will edit this field in group.edit
     }*/
 
-        _editDocument(docid, fields, function(err, res, url) {
-            if(err) callback(err, res, url);
-            else {
-                api.search.indexArticle(docid, fields.title, fields.body, fields.taxonomy, fields.authors, fields.created, function(err2, res2) {
-                    callback(err2, res, url);
-                });
-            }
-        });
+        _editDocument(docid, fields, callback);
 }
 
 // can take one id, or an array of ids
@@ -185,10 +178,10 @@ api.addDoc = function(fields, callback) {
 
                     if(db_err) return callback(db_err);
 
-                    api.search.indexArticle(res.id, fields.title, fields.body, fields.taxonomy, fields.authors, fields.created, function(err, response) {
+                    api.search.indexArticle(res.id, fields.title, fields.body, undefined, fields.authors, fields.created, function(err, response) {
                         callback(err,url);
                     });
-                });                
+                });
             }
         });
     } else {

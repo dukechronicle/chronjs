@@ -59,12 +59,17 @@ search.indexUnindexedArticles = function(count) {
 
 search.indexArticle = function(id,title,body,taxonomy,authors,createdDate,callback) {
 	// adds the article to the solr database for searching	
-	
-    body = body.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ');
-    title = title.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ');
-    authors = authors.map(function(author) {
-        return author.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ');
-    });
+	if (body) body = body.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ');
+    else body = "";
+    if (title) title = title.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ');
+    else title = "";
+
+    if (authors) {
+        authors = _.compact(authors);
+        authors = authors.map(function(author) {
+            return author.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ');
+        });
+    }
 
     var section = undefined;
     if(taxonomy && taxonomy[0]) section = taxonomy[0];
@@ -81,7 +86,7 @@ search.indexArticle = function(id,title,body,taxonomy,authors,createdDate,callba
         solrMonth = dateFormat(date,"mm");
         solrDay = dateFormat(date,"dd");
     }
-    catch(err) { // if date is invalid use today's date
+    catch(err) {  // if date is invalid use today's date
         solrDate = dateFormat(new Date(),"UTC:yyyy-mm-dd'T'HH:MM:ss'Z'");
         solrYear = dateFormat(new Date(),"yyyy");
         solrMonth = dateFormat(new Date(),"mm");

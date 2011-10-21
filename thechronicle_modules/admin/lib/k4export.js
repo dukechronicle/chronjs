@@ -6,14 +6,14 @@ var api = require('../../api')
 var async = require('async')
 var zipfile = require('zipfile')
 
-var bodyPattern = new RegExp('\[^\]*</drawOrder></frame></page><text>(.+?)</text>\[^\]*', "g");
-var inlineStoryTagPattern =  new RegExp('<inlineTag name="Story">', "g");
+var bodyPattern = new RegExp('\[^\]*<text><inlineTag name=\"Story\">(.+?)</inlineTag></text>\[^\]*', "g");
+
 var authorArticlePattern = new RegExp('^by (.+?)<break type="paragraph" />', "g");
 var reportArticlePattern = new RegExp('^from (.+?)<break type="paragraph" />', "g");
 var chroniclePattern = new RegExp('THE CHRONICLE<break type="paragraph" />', "g");
 var articleIdPattern = new RegExp("\[^\]*<article><id>(\\d+)</id>\[^\]*", "g");
 var sectionPattern = new RegExp("\[^\]*<section><id>[0-9]+</id><name>(.+?)</name></section>\[^\]*", "g");
-var titlePattern = new RegExp("\[^\]*<tag>Root</tag><text><inlineTag name=\"Root\">(.+?)</inlineTag></text>\[^\]*", "g");
+var titlePattern = new RegExp("\[^\]*<text><inlineTag name=\"Root\">(.+?)</inlineTag></text>\[^\]*", "g");
 var authorPattern = new RegExp("\[^\]*<metadata><name>Author</name><value><string>(.+?)</string></value></metadata>\[^\]*", "g");
 
 
@@ -30,43 +30,42 @@ function ArticleParser(articleCallback) {
     var thisParser = this;
 
     this.parse = function(zipPath, callback) {
-	var succeed = [];
-	var failed  = [];
-	zipFile = new zipfile.ZipFile(zipPath);
-	async.forEach(zipFile.names,
+        var succeed = [];
+        var failed  = [];
+        var zipFile = new zipfile.ZipFile(zipPath);
+        async.forEach(zipFile.names,
             function(name, cb) {
-		if (path.basename(name)[0] == "." ||
-		    name[name.length - 1] == "/")
-		    cb();
-		else
-		    thisParser.parseFile(zipFile, name, function(err, title) {
-			if (err)
-			    failed.push(err);
-			else
-			    succeed.push(title);
-			cb();
-		    });
-	    },
+                if (path.basename(name)[0] == "." ||
+                    name[name.length - 1] == "/") {
+                    cb();
+                } else {
+                    thisParser.parseFile(zipFile, name, function(err, title) {
+                    if (err)
+                        failed.push(err);
+                    else
+                        succeed.push(title);
+                    cb();
+                    });
+                }
+            },
             function (err) {
-		callback(failed, succeed);
-	    });
+                callback(failed, succeed);
+            }
+        );
     }
 
     this.parseFile = function(zipFile, name, callback) {
     	var extension = path.extname(name);
-	if (extension == '.xml') {
-	    zipFile.readFile(name, function(err, data) {
-		if (err) {
-		    console.error("Can't open file: " + err);
-		    callback(name);
-		}
-		else {
-		    var article = thisParser.parseXML(data.toString(), name);
-		    if (article == undefined)
-			callback(name);
-		    else
-			articleCallback(article, callback);
-		}
+	    if (extension == '.xml') {
+            zipFile.readFile(name, function(err, data) {
+                if (err) {
+                    console.error("Can't open file: " + err);
+                    callback(name);
+                } else {
+                    var article = thisParser.parseXML(data.toString(), name);
+                    if (article == undefined) callback(name);
+                    else articleCallback(article, callback);
+                }
 	    });
 	}
 	else {
@@ -76,29 +75,33 @@ function ArticleParser(articleCallback) {
     };
     
     this.parseXML = function(xml, filename) {
-	var articleObject = {};
+        var articleObject = {};
 
-	if (xml.search(bodyPattern) == -1 ||
-	    xml.search(titlePattern) == -1)
-	    return undefined;
+        if (xml.search(bodyPattern) == -1 ||
+            xml.search(titlePattern) == -1) {
+            console.log(filename + " failed");
+            console.log("body " + xml.search(bodyPattern))
+            console.log("title " + xml.search(titlePattern))
+            return undefined;
+        }
 
-	var body = xml.replace(bodyPattern, "$1");
-	body = body.replace(inlineStoryTagPattern, '');
-	body = body.replace(authorArticlePattern, '');
-	body = body.replace(chroniclePattern, '');
-	body = body.replace(reportArticlePattern, '');
-	body = "<p>" + body.replace(/\s*<break type="paragraph" \/>\s*/g, '</p><p>') + "</p>";
-    
-	articleObject.body = body;
-	articleObject.section = xml.replace(sectionPattern, "$1");
-	articleObject.author = xml.replace(authorPattern, "$1");
-	articleObject.id = xml.replace(articleIdPattern, "$1");
-	articleObject.title = xml.replace(titlePattern, "$1");
 
-	var date = path.basename(filename).match(/\d{6}/);
-	if (date) articleObject.date = date[0];
+        var body = xml.replace(bodyPattern, "$1");
+        body = body.replace(authorArticlePattern, '');
+        body = body.replace(chroniclePattern, '');
+        body = body.replace(reportArticlePattern, '');
+        body = "<p>" + body.replace(/\s*<break type="paragraph" \/>\s*/g, '</p><p>') + "</p>";
 
-	return articleObject;
+        articleObject.body = body;
+        articleObject.section = xml.replace(sectionPattern, "$1");
+        articleObject.author = xml.replace(authorPattern, "$1");
+        articleObject.id = xml.replace(articleIdPattern, "$1");
+        articleObject.title = xml.replace(titlePattern, "$1");
+
+        var date = path.basename(filename).match(/\d{6}/);
+        if (date) articleObject.date = date[0];
+
+        return articleObject;
     };
 }
 
@@ -171,7 +174,7 @@ function clearDatabase(callback) {
 
 function runExporter(zipPath, exportCallback) {
     var parser = new ArticleParser(function(article, callback) {
-	addArticleToCouchDB(article, function(err) {
+	    addArticleToCouchDB(article, function(err) {
 	    if (err) {
 		console.error(err);
 		callback(article.title);

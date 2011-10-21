@@ -209,8 +209,11 @@ exports.init = function(app, callback) {
 
 	    app.post('/k4export', site.checkAdmin,
             function(req, http_res) {
+		try { fs.mkdirSync("./tmp", "0755") }
+		catch (err) {} // directory already exists
+
 		var form = new formidable.IncomingForm();
-		form.uploadDir = './';
+		form.uploadDir = './tmp';
 		form.parse(req, function(err, fields, files) {
 		    if (err)
 			http_res.end(err);
@@ -220,7 +223,7 @@ exports.init = function(app, callback) {
                             http_res.render('admin/k4export', {
 				locals: {
 				    groups: [],
-				    docs: failed
+				    docs: []
 				},
 				layout: "layout-admin.jade"
 			    });

@@ -13,14 +13,14 @@ h2 Frontpage Layout
                 .story(draggable='true', id='#{story._id}')
                     #{story.title}
     
-    <h2>News Headlines</h2>
+    <h2>Left Headlines</h2>
     #headlines.container(data-groupname='NewsHeadlines')
         - if (model.NewsHeadlines)
             - each story, id in model.NewsHeadlines
                 .story(draggable='true', id='#{story._id}')
                     #{story.title}
 
-    <h2>Sports Headlines</h2>
+    <h2>Right Headlines</h2>
     #headlines.container(data-groupname='SportsHeadlines')
         - if (model.SportsHeadlines)
             - each story, id in model.SportsHeadlines

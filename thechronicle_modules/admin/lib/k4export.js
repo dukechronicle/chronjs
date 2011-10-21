@@ -30,43 +30,42 @@ function ArticleParser(articleCallback) {
     var thisParser = this;
 
     this.parse = function(zipPath, callback) {
-	var succeed = [];
-	var failed  = [];
-	zipFile = new zipfile.ZipFile(zipPath);
-	async.forEach(zipFile.names,
+        var succeed = [];
+        var failed  = [];
+        var zipFile = new zipfile.ZipFile(zipPath);
+        async.forEach(zipFile.names,
             function(name, cb) {
-		if (path.basename(name)[0] == "." ||
-		    name[name.length - 1] == "/")
-		    cb();
-		else
-		    thisParser.parseFile(zipFile, name, function(err, title) {
-			if (err)
-			    failed.push(err);
-			else
-			    succeed.push(title);
-			cb();
-		    });
-	    },
+                if (path.basename(name)[0] == "." ||
+                    name[name.length - 1] == "/") {
+                    cb();
+                } else {
+                    thisParser.parseFile(zipFile, name, function(err, title) {
+                    if (err)
+                        failed.push(err);
+                    else
+                        succeed.push(title);
+                    cb();
+                    });
+                }
+            },
             function (err) {
-		callback(failed, succeed);
-	    });
+                callback(failed, succeed);
+            }
+        );
     }
 
     this.parseFile = function(zipFile, name, callback) {
     	var extension = path.extname(name);
 	if (extension == '.xml') {
 	    zipFile.readFile(name, function(err, data) {
-		if (err) {
-		    console.error("Can't open file: " + err);
-		    callback(name);
-		}
-		else {
-		    var article = thisParser.parseXML(data.toString(), name);
-		    if (article == undefined)
-			callback(name);
-		    else
-			articleCallback(article, callback);
-		}
+            if (err) {
+                console.error("Can't open file: " + err);
+                callback(name);
+            } else {
+                var article = thisParser.parseXML(data.toString(), name);
+                if (article == undefined) callback(name);
+                else articleCallback(article, callback);
+            }
 	    });
 	}
 	else {

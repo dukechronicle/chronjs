@@ -6,14 +6,14 @@ var api = require('../../api')
 var async = require('async')
 var zipfile = require('zipfile')
 
-var bodyPattern = new RegExp('\[^\]*<tag>Story</tag><text><inlineTag name=\"Story\">(.+?)</inlineTag></text>\[^\]*', "g");
+var bodyPattern = new RegExp('\[^\]*<text><inlineTag name=\"Story\">(.+?)</inlineTag></text>\[^\]*', "g");
 
 var authorArticlePattern = new RegExp('^by (.+?)<break type="paragraph" />', "g");
 var reportArticlePattern = new RegExp('^from (.+?)<break type="paragraph" />', "g");
 var chroniclePattern = new RegExp('THE CHRONICLE<break type="paragraph" />', "g");
 var articleIdPattern = new RegExp("\[^\]*<article><id>(\\d+)</id>\[^\]*", "g");
 var sectionPattern = new RegExp("\[^\]*<section><id>[0-9]+</id><name>(.+?)</name></section>\[^\]*", "g");
-var titlePattern = new RegExp("\[^\]*<tag>Root</tag><text><inlineTag name=\"Root\">(.+?)</inlineTag></text>\[^\]*", "g");
+var titlePattern = new RegExp("\[^\]*<text><inlineTag name=\"Root\">(.+?)</inlineTag></text>\[^\]*", "g");
 var authorPattern = new RegExp("\[^\]*<metadata><name>Author</name><value><string>(.+?)</string></value></metadata>\[^\]*", "g");
 
 
@@ -78,8 +78,13 @@ function ArticleParser(articleCallback) {
         var articleObject = {};
 
         if (xml.search(bodyPattern) == -1 ||
-            xml.search(titlePattern) == -1)
+            xml.search(titlePattern) == -1) {
+            console.log(filename + " failed");
+            console.log("body " + xml.search(bodyPattern))
+            console.log("title " + xml.search(titlePattern))
             return undefined;
+        }
+
 
         var body = xml.replace(bodyPattern, "$1");
         body = body.replace(authorArticlePattern, '');

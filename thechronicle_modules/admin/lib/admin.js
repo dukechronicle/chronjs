@@ -351,6 +351,7 @@ exports.init = function(app, callback) {
 
             app.delete('/article/:docId', site.checkAdmin, function(req, http_res) {
                 db.remove(req.params.docId, req.body.rev, function() {
+                    api.search.unindexArticle(req.params.docId, function(err,resp){ });
                     http_res.send({status:true});
                 });
 

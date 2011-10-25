@@ -408,14 +408,6 @@ site.init = function(app, callback) {
                     if(req.param('search') != null) {
                         http_res.redirect('/search/'+req.param('search').replace(/ /g,'-')+'?sort=relevance&order=desc'); // replace spaces with dashes for readibility
                     }                    
-                    else {                
-                        api.docsByDate(null, function(err, docs) {
-                        if (err) globalFunctions.showError(http_res, err);
-                        http_res.render('all', {locals:{docs:docs}, layout: 'layout-admin.jade'} );
-                       });
-
-
-                   }
             });
 
             app.get('/search/:query', function(req, http_res) {

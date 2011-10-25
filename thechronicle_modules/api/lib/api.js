@@ -134,7 +134,20 @@ api.editDoc = function(docid, fields, callback) {
         delete fields.groups; //we will edit this field in group.edit
     }*/
 
-        _editDocument(docid, fields, callback);
+    _editDocument(docid, fields, function(err, res, url) {
+ 	    if(err) callback(err, res, url);	
+        else {
+            // only reindex the article if they edited the search fields            
+            if(fields.title && fields.body) {
+                api.search.indexArticle(docid, fields.title, fields.body, fields.taxonomy, fields.authors, fields.created, function(err2, res2) {
+                    callback(err2, res, url);
+                });
+            }
+            else {
+                callback(err, res, url);
+            }	
+        }
+    });
 }
 
 // can take one id, or an array of ids

@@ -178,7 +178,7 @@ api.addDoc = function(fields, callback) {
 
                     if(db_err) return callback(db_err);
 
-                    api.search.indexArticle(res.id, fields.title, fields.body, undefined, fields.authors, fields.created, function(err, response) {
+                    api.search.indexArticle(res.id, fields.title, fields.body, fields.taxonomy, fields.authors, fields.created, function(err, response) {
                         callback(err,url);
                     });
                 });

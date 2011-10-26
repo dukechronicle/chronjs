@@ -112,10 +112,8 @@ function ArticleParser(articleCallback) {
     };
     
     this.parseXML = function(xml, callback) {
-	var article = { "body": [] };
-
 	var parser = new sax.parser();
-	parser.article = article;
+	parser.article = { "body": [] };
 	parser.ontext = function(text) {
 	    async.reduceRight(parser.tags, parser.tag.name,
 			      function(memo, item, cb) {
@@ -127,18 +125,33 @@ function ArticleParser(articleCallback) {
 				      action(parser);
 			      });
 	};
-	parser.onend = function() {
-	    try {
-		if (article.body[0].match(/^by .*[^\.]$/i)) article.body.shift();
-		if (article.body[0].match(/^from .*[^\.]/i)) article.body.shift();
-		if (article.body[0].match(/^THE CHRONICLE$/)) article.body.shift();
-	    } catch (err) {
-		callback(err);
-	    }
-	    console.log(article);
-	    callback("success");
-	};
+	parser.onend = function () {
+	    fixArticle(parser.article, callback);
+	}
 	parser.write(xml).close();
+    }
+
+    function fixArticle(article, callback) {
+	try {
+	    if (article.body[0].match(/^by .*[^\.]$/i)) article.body.shift();
+	    if (article.body[0].match(/^from .*[^\.]/i)) article.body.shift();
+	    if (article.body[0].match(/^THE CHRONICLE$/)) article.body.shift();
+	} catch (err) {
+	    callback(err);
+	}
+	async.reduce(article.body, "",
+		     function(memo, item, cb) {
+			 cb(undefined, memo + "<p>" + item + "</p>");
+		     },
+		     function(err, result) {
+			 if (err)
+			     callback(err);
+			 else {
+			     article.body = result;
+			     console.log(article);
+			     callback("success");
+			 }
+		     });
     }
 }
 

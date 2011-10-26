@@ -97,9 +97,11 @@ function ArticleParser(articleCallback) {
                     console.error("Can't open file: " + err);
                     callback(name);
                 } else {
-                    var article = thisParser.parseXML(data.toString(), name);
-                    if (article == undefined) callback(name);
-                    else articleCallback(article, callback);
+                    thisParser.parseXML(data.toString(),
+			function (err, article) {
+			    if (err) callback(name);
+			    else articleCallback(article, callback);
+			});
                 }
 	    });
 	}
@@ -109,10 +111,12 @@ function ArticleParser(articleCallback) {
 	}
     };
     
-    this.parseXML = function(xml) {
+    this.parseXML = function(xml, callback) {
+	var article = { "body": [] };
+
 	var parser = new sax.parser();
-	parser.article = { "body": [] };
-	parser.ontext = parser.ontext = function(text) {
+	parser.article = article;
+	parser.ontext = function(text) {
 	    async.reduceRight(parser.tags, parser.tag.name,
 			      function(memo, item, cb) {
 				  cb(undefined, item.name + ":" + memo);
@@ -123,9 +127,18 @@ function ArticleParser(articleCallback) {
 				      action(parser);
 			      });
 	};
+	parser.onend = function() {
+	    try {
+		if (article.body[0].match(/^by .*[^\.]$/i)) article.body.shift();
+		if (article.body[0].match(/^from .*[^\.]/i)) article.body.shift();
+		if (article.body[0].match(/^THE CHRONICLE$/)) article.body.shift();
+	    } catch (err) {
+		callback(err);
+	    }
+	    console.log(article);
+	    callback("success");
+	};
 	parser.write(xml).close();
-	console.log(parser.article);
-	return undefined;
     }
 }
 

@@ -7,16 +7,6 @@ var async = require('async')
 var sax = require('sax')
 var zipfile = require('zipfile')
 
-var bodyPattern = new RegExp('\[^\]*<text><inlineTag name=\"Story\">(.+?)</inlineTag></text>\[^\]*', "g");
-
-var authorArticlePattern = new RegExp('^by (.+?)<break type="paragraph" />', "g");
-var reportArticlePattern = new RegExp('^from (.+?)<break type="paragraph" />', "g");
-var chroniclePattern = new RegExp('THE CHRONICLE<break type="paragraph" />', "g");
-var articleIdPattern = new RegExp("\[^\]*<article><id>(\\d+)</id>\[^\]*", "g");
-var sectionPattern = new RegExp("\[^\]*<section><id>[0-9]+</id><name>(.+?)</name></section>\[^\]*", "g");
-var titlePattern = new RegExp("\[^\]*<text><inlineTag name=\"Root\">(.+?)</inlineTag></text>\[^\]*", "g");
-var authorPattern = new RegExp("\[^\]*<metadata><name>Author</name><value><string>(.+?)</string></value></metadata>\[^\]*", "g");
-
 
 db = new cradle.Connection('http://chrondev.iriscouch.com', 80, {
 		    auth: { username: 'dean', password: 'dspc' }
@@ -28,41 +18,16 @@ exports.db = db;
 
 
 function ArticleParser(articleCallback) {
-    function onId(parser) {
-	parser.article.id = parser.textNode;
-    };
-    function onSection(parser) {
-	parser.article.section = parser.textNode;
-    };
-    function onMetadataType(parser) {
-	parser.metadataType = parser.textNode;
-    };
-    function onMetadata(parser) {
-	if (parser.metadataType == "Author")
-	    parser.article.author = parser.textNode;
-    };
-    function onInlineTag(parser) {
-	var tag = parser.tag;
-	if (tag.attributes.name == "Root")
-	    parser.article.title = parser.textNode;
-	if (tag.attributes.name == "Story")
-	    parser.article.body.push(parser.textNode);
-    };
-    function onTextBreak(parser) {
-	var tag = parser.tags[parser.tags.length - 1];
-	if (tag.attributes.name == "Story")
-	    parser.article.body.push(parser.textNode);
-    };
-
+    var thisParser = this;
     var actions = {
 	"K4EXPORT:PUBLICATION:ISSUE:ARTICLE:ID": onId,
+	"K4EXPORT:PUBLICATION:ISSUE:PUBLICATIONDATE": onDate,
 	"K4EXPORT:PUBLICATION:ISSUE:ARTICLE:SECTION:NAME": onSection,
 	"K4EXPORT:PUBLICATION:ISSUE:ARTICLE:METADATA:NAME": onMetadataType,
 	"K4EXPORT:PUBLICATION:ISSUE:ARTICLE:METADATA:VALUE:STRING": onMetadata,
 	"K4EXPORT:PUBLICATION:ISSUE:ARTICLE:TEXTOBJECTS:TEXTOBJECT:TEXT:INLINETAG": onInlineTag,
 	"K4EXPORT:PUBLICATION:ISSUE:ARTICLE:TEXTOBJECTS:TEXTOBJECT:TEXT:INLINETAG:BREAK": onTextBreak,
     };
-    var thisParser = this;
 
     this.parse = function(zipPath, callback) {
         var succeed = [];
@@ -153,6 +118,36 @@ function ArticleParser(articleCallback) {
 			 }
 		     });
     }
+
+    function onId(parser) {
+	parser.article.id = parser.textNode;
+    };
+    function onSection(parser) {
+	parser.article.section = parser.textNode;
+    };
+    function onDate(parser) {
+	var match = parser.textNode.match(/(\d{2})-(\d+)-(\d\d?)/);
+	if (match) parser.article.date = match[1] + match[2] + match[3];	
+    };
+    function onMetadataType(parser) {
+	parser.metadataType = parser.textNode;
+    };
+    function onMetadata(parser) {
+	if (parser.metadataType == "Author")
+	    parser.article.author = parser.textNode;
+    };
+    function onInlineTag(parser) {
+	var tag = parser.tag;
+	if (tag.attributes.name == "Root")
+	    parser.article.title = parser.textNode;
+	if (tag.attributes.name == "Story")
+	    parser.article.body.push(parser.textNode);
+    };
+    function onTextBreak(parser) {
+	var tag = parser.tags[parser.tags.length - 1];
+	if (tag.attributes.name == "Story")
+	    parser.article.body.push(parser.textNode);
+    };
 }
 
 function addArticleToCouchDB(article, callback) {

@@ -4,6 +4,7 @@ var fs  = require('fs');
 var path = require('path');
 var api = require('../../api')
 var async = require('async')
+var sax = require('sax')
 var zipfile = require('zipfile')
 
 var bodyPattern = new RegExp('\[^\]*<text><inlineTag name=\"Story\">(.+?)</inlineTag></text>\[^\]*', "g");
@@ -27,6 +28,40 @@ exports.db = db;
 
 
 function ArticleParser(articleCallback) {
+    function onId(parser) {
+	parser.article.id = parser.textNode;
+    };
+    function onSection(parser) {
+	parser.article.section = parser.textNode;
+    };
+    function onMetadataType(parser) {
+	parser.metadataType = parser.textNode;
+    };
+    function onMetadata(parser) {
+	if (parser.metadataType == "Author")
+	    parser.article.author = parser.textNode;
+    };
+    function onInlineTag(parser) {
+	var tag = parser.tag;
+	if (tag.attributes.name == "Root")
+	    parser.article.title = parser.textNode;
+	if (tag.attributes.name == "Story")
+	    parser.article.body.push(parser.textNode);
+    };
+    function onTextBreak(parser) {
+	var tag = parser.tags[parser.tags.length - 1];
+	if (tag.attributes.name == "Story")
+	    parser.article.body.push(parser.textNode);
+    };
+
+    var actions = {
+	"K4EXPORT:PUBLICATION:ISSUE:ARTICLE:ID": onId,
+	"K4EXPORT:PUBLICATION:ISSUE:ARTICLE:SECTION:NAME": onSection,
+	"K4EXPORT:PUBLICATION:ISSUE:ARTICLE:METADATA:NAME": onMetadataType,
+	"K4EXPORT:PUBLICATION:ISSUE:ARTICLE:METADATA:VALUE:STRING": onMetadata,
+	"K4EXPORT:PUBLICATION:ISSUE:ARTICLE:TEXTOBJECTS:TEXTOBJECT:TEXT:INLINETAG": onInlineTag,
+	"K4EXPORT:PUBLICATION:ISSUE:ARTICLE:TEXTOBJECTS:TEXTOBJECT:TEXT:INLINETAG:BREAK": onTextBreak,
+    };
     var thisParser = this;
 
     this.parse = function(zipPath, callback) {
@@ -74,35 +109,24 @@ function ArticleParser(articleCallback) {
 	}
     };
     
-    this.parseXML = function(xml, filename) {
-        var articleObject = {};
-
-        if (xml.search(bodyPattern) == -1 ||
-            xml.search(titlePattern) == -1) {
-            console.log(filename + " failed");
-            console.log("body " + xml.search(bodyPattern))
-            console.log("title " + xml.search(titlePattern))
-            return undefined;
-        }
-
-
-        var body = xml.replace(bodyPattern, "$1");
-        body = body.replace(authorArticlePattern, '');
-        body = body.replace(chroniclePattern, '');
-        body = body.replace(reportArticlePattern, '');
-        body = "<p>" + body.replace(/\s*<break type="paragraph" \/>\s*/g, '</p><p>') + "</p>";
-
-        articleObject.body = body;
-        articleObject.section = xml.replace(sectionPattern, "$1");
-        articleObject.author = xml.replace(authorPattern, "$1");
-        articleObject.id = xml.replace(articleIdPattern, "$1");
-        articleObject.title = xml.replace(titlePattern, "$1");
-
-        var date = path.basename(filename).match(/\d{6}/);
-        if (date) articleObject.date = date[0];
-
-        return articleObject;
-    };
+    this.parseXML = function(xml) {
+	var parser = new sax.parser();
+	parser.article = { "body": [] };
+	parser.ontext = parser.ontext = function(text) {
+	    async.reduceRight(parser.tags, parser.tag.name,
+			      function(memo, item, cb) {
+				  cb(undefined, item.name + ":" + memo);
+			      },
+			      function (err, result) {
+				  var action = actions[result];
+				  if (action != undefined)
+				      action(parser);
+			      });
+	};
+	parser.write(xml).close();
+	console.log(parser.article);
+	return undefined;
+    }
 }
 
 function addArticleToCouchDB(article, callback) {

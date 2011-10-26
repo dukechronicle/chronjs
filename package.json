@@ -37,7 +37,8 @@
         "htmlparser":"1.7.x",
 
         "asereje":"0.0.x",
-        "formidable":"",
-        "zipfile":""
+        "formidable": "1.0.x",
+        "zipfile": "0.2.x",
+	"sax": "0.3.x",
     }
 }

@@ -113,8 +113,7 @@ function ArticleParser(articleCallback) {
 			     callback(err);
 			 else {
 			     article.body = result;
-			     console.log(article);
-			     callback("success");
+			     callback(undefined, article);
 			 }
 		     });
     }
@@ -225,7 +224,7 @@ function runExporter(zipPath, exportCallback) {
 		callback(article.title);
 	    }
 	    else
-	        exportToProduction(article.id, callback);
+		exportToProduction(article.id, callback);
 	});
     });
 

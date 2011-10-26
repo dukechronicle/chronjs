@@ -40,11 +40,9 @@ function ArticleParser(articleCallback) {
                     cb();
                 } else {
                     thisParser.parseFile(zipFile, name, function(err, title) {
-                    if (err)
-                        failed.push(err);
-                    else
-                        succeed.push(title);
-                    cb();
+			if (err) failed.push(err);
+			else     succeed.push(title);
+			cb();
                     });
                 }
             },
@@ -125,8 +123,8 @@ function ArticleParser(articleCallback) {
 	parser.article.section = parser.textNode;
     };
     function onDate(parser) {
-	var match = parser.textNode.match(/(\d{2})-(\d+)-(\d\d?)/);
-	if (match) parser.article.date = match[1] + match[2] + match[3];	
+	var date = new Date(parser.textNode);
+	parser.article.date = date.getTime() / 1000;
     };
     function onMetadataType(parser) {
 	parser.metadataType = parser.textNode;

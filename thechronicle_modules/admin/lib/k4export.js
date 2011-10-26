@@ -19,6 +19,7 @@ exports.db = db;
 
 function ArticleParser(articleCallback) {
     var thisParser = this;
+    var endWhitespace = /^\s+|\s+$/g;
     var actions = {
 	"K4EXPORT:PUBLICATION:ISSUE:ARTICLE:ID": onId,
 	"K4EXPORT:PUBLICATION:ISSUE:PUBLICATIONDATE": onDate,
@@ -78,6 +79,7 @@ function ArticleParser(articleCallback) {
 	var parser = new sax.parser();
 	parser.article = { "body": [] };
 	parser.ontext = function(text) {
+	    parser.textNode = text.replace(endWhitespace, '');
 	    async.reduceRight(parser.tags, parser.tag.name,
 			      function(memo, item, cb) {
 				  cb(undefined, item.name + ":" + memo);
@@ -101,6 +103,7 @@ function ArticleParser(articleCallback) {
 	    if (article.body[0].match(/^THE CHRONICLE$/)) article.body.shift();
 	} catch (err) {
 	    callback(err);
+	    return;
 	}
 	async.reduce(article.body, "",
 		     function(memo, item, cb) {

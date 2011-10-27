@@ -8,9 +8,10 @@ var sax = require('sax')
 var zipfile = require('zipfile')
 
 
-db = new cradle.Connection('http://chrondev.iriscouch.com', 80, {
-		    auth: { username: 'dean', password: 'dspc' }
-		}).database('k4export')
+db = new cradle.Connection('http://app578498.heroku.cloudant.com', 80, {
+		    auth: { username: 'app578498.heroku',
+			    password: 'NNbL2x3Bu5vGLgComPjWxxET' }
+		}).database('chronicle_dev')
 
 exports.runExporter = runExporter;
 exports.clearDatabase = clearDatabase;
@@ -221,12 +222,13 @@ function runExporter(zipPath, exportCallback) {
     var parser = new ArticleParser(function(article, callback) {
 	    addArticleToCouchDB(article, function(err) {
 	    if (err) {
-		console.error(err);
+		console.error("Error adding article: " + JSON.stringify(err));
 		callback(article.title);
 	    }
 	    else
-		exportToProduction(article.id, callback);
-	});
+		callback(undefined, article.title);
+//		exportToProduction(article.id, callback);
+	    });
     });
 
     parser.parse(zipPath, function(failed, successes) {

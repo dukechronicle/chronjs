@@ -201,7 +201,7 @@ exports.init = function(app, callback) {
                 http_res.render('admin/k4export', {
                     locals: {
 			groups: [],
-			docs: []
+			docs: null
                     },
                     layout: "layout-admin.jade"
                 });

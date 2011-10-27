@@ -7,7 +7,9 @@ form(action='/admin/k4export', method='post', enctype='multipart/form-data')
 
 a(href='/admin/manage') Manage and edit uploaded articles
 
-- if (docs.length)
+- if (docs && docs.length)
   h2 The following articles could not be uploaded:
   - each article in docs
     p #{article}
+- else if (docs)
+  h2 All articles were uploaded successfully

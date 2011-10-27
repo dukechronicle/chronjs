@@ -226,8 +226,7 @@ function runExporter(zipPath, exportCallback) {
 		callback(article.title);
 	    }
 	    else
-		callback(undefined, article.title);
-//		exportToProduction(article.id, callback);
+		exportToProduction(article.id, callback);
 	    });
     });
 

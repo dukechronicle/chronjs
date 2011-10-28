@@ -99,8 +99,8 @@ function ArticleParser(articleCallback) {
 
     function fixArticle(article, callback) {
 	try {
-	    if (article.body[0].match(/^by .*[^\.]$/i)) article.body.shift();
-	    if (article.body[0].match(/^from .*[^\.]/i)) article.body.shift();
+	    if (article.body[0].match(/^by [^\.]*$/i)) article.body.shift();
+	    if (article.body[0].match(/^from [^\.]*$/i)) article.body.shift();
 	    if (article.body[0].match(/^THE CHRONICLE$/)) article.body.shift();
 	} catch (err) {
 	    callback(err);

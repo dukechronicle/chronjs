@@ -11,11 +11,10 @@ var zipfile = require('zipfile')
 db = new cradle.Connection('http://app578498.heroku.cloudant.com', 80, {
 		    auth: { username: 'app578498.heroku',
 			    password: 'NNbL2x3Bu5vGLgComPjWxxET' }
-		}).database('chronicle_dev')
+                    }).database('chronicle_dev');
 
 exports.runExporter = runExporter;
 exports.clearDatabase = clearDatabase;
-exports.db = db;
 
 
 function ArticleParser(articleCallback) {
@@ -78,7 +77,10 @@ function ArticleParser(articleCallback) {
     
     this.parseXML = function(xml, callback) {
 	var parser = new sax.parser();
-	parser.article = { "body": [] };
+	parser.article = { body: [],
+			   type: 'article',
+			   publish: false
+			 };
 	parser.ontext = function(text) {
 	    parser.textNode = text.replace(endWhitespace, '');
 	    async.reduceRight(parser.tags, parser.tag.name,
@@ -102,6 +104,7 @@ function ArticleParser(articleCallback) {
 	    if (article.body[0].match(/^by [^\.]*$/i)) article.body.shift();
 	    if (article.body[0].match(/^from [^\.]*$/i)) article.body.shift();
 	    if (article.body[0].match(/^THE CHRONICLE$/)) article.body.shift();
+	    article.teaser = article.body[0];
 	} catch (err) {
 	    callback(err);
 	    return;
@@ -121,21 +124,28 @@ function ArticleParser(articleCallback) {
     }
 
     function onId(parser) {
-	parser.article.id = parser.textNode;
+	parser.article.import_id = parser.textNode;
     };
     function onSection(parser) {
-	parser.article.section = parser.textNode;
+	parser.article.taxonomy = [ parser.textNode ];
     };
     function onDate(parser) {
 	var date = new Date(parser.textNode);
-	parser.article.date = date.getTime() / 1000;
+	parser.article.publish_time = date.getTime() / 1000;
     };
     function onMetadataType(parser) {
 	parser.metadataType = parser.textNode;
     };
     function onMetadata(parser) {
-	if (parser.metadataType == "Author")
-	    parser.article.author = parser.textNode;
+	if (parser.metadataType == "Author") {
+	    async.map(parser.textNode.split(/\,\s*and\s|\sand\s|\,/),
+		      function (name, cb) {
+			  cb(undefined, name.replace(endWhitespace));
+		      },
+		      function (err, results) {
+			  parser.article.authors = results;
+		      });
+	}
     };
     function onInlineTag(parser) {
 	var tag = parser.tag;
@@ -151,51 +161,12 @@ function ArticleParser(articleCallback) {
     };
 }
 
-function addArticleToCouchDB(article, callback) {
-    if (Object.keys(article).length > 0) {
-	db.save(article.id, article, function (err, res) {
-	    if (err)
-		callback(err);
-	    else
-		callback();
-	});
-    }
+function exportToDevelopment(article, callback) {
+    db.save(article, callback);
 }
 
-function exportToProduction(id, callback) {
-    db.get(id, function (err, doc) {
-	if (err)
-	    callback(id);
-	else {
-	    fields = {};
-	    fields.title = doc.title;
-	    fields.body = doc.body;
-	    fields.authors = [ doc.author ];
-	    fields.import_id = doc.id;
-	    fields.taxonomy = [ doc.section ];
-	    fields.type = 'article';
-	    fields.publish = false;
-	    fields.teaser = "";
-	    api.addDoc(fields, function (err) {
-		if (err)
-		    callback(doc.title);
-		else
-		    callback(null, doc.title);
-	    });
-	}
-    });
-}
-
-function exportCouchDBToDrupal(callback) {
-    var drupalScript = {
-	host: '173.203.221.240',
-	port: 80,
-	path: '/fetchAll.php?key=9048',
-    }
-    http.get(drupalScript, function(response) {
-	console.log("Production server:\n" + response);
-	callback();
-    });
+function exportToProduction(article, callback) {
+    api.addDoc(article, callback);
 }
 
 function clearDatabase(callback) {
@@ -220,14 +191,16 @@ function clearDatabase(callback) {
 
 function runExporter(zipPath, exportCallback) {
     var parser = new ArticleParser(function(article, callback) {
-	    addArticleToCouchDB(article, function(err) {
+	exportToProduction(article, function(err, url) {
 	    if (err) {
-		console.error("Error adding article: " + JSON.stringify(err));
+		console.error("Error adding article: " + err);
 		callback(article.title);
 	    }
-	    else
-		exportToProduction(article.id, callback);
-	    });
+	    else {
+		article.url = url;
+		callback(undefined, article);
+	    }
+	});
     });
 
     parser.parse(zipPath, function(failed, successes) {

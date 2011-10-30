@@ -206,8 +206,6 @@ function runExporter(zipPath, exportCallback) {
     parser.parse(zipPath, function(failed, successes) {
 	// System call because recursive directory deletion must be
 	// synchronous
-	console.log("Failed: " + failed);
-	console.log("Successes: " + successes);
 	fs.unlink(zipPath);
 	exportCallback(failed, successes);
     });

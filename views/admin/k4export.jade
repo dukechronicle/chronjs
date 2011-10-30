@@ -13,5 +13,17 @@ a(href='/admin/manage') Manage and edit uploaded articles
     p #{article}
 - if (succeeded && succeeded.length)
   h2 The followed articles were uploaded successfully
-  - each article in succeeded
-    p #{article.title}
+  table
+    - each article in succeeded
+      tr
+        td #{article.title}
+        td
+          select(style='width: 600px')
+            - if (article.taxonomy[0] in taxonomy)
+              - each key, value in taxonomy[article.taxonomy[0]]
+                  option(value=value) #{key}
+            - else
+              option Select a section
+              - each section in ['News', 'Sports', 'Opinion', 'Recess', 'Towerview']
+                - each key, value in taxonomy[section]
+                    option(value=value) #{key}

@@ -202,7 +202,8 @@ exports.init = function(app, callback) {
                     locals: {
 			groups: [],
 			failed: null,
-			succeeded: null
+			succeeded: null,
+			taxonomy: null
                     },
                     layout: "layout-admin.jade"
                 });
@@ -219,16 +220,19 @@ exports.init = function(app, callback) {
 		    if (err)
 			http_res.end(err);
 		    else {
-			k4export.runExporter(files.zip.path,
-					     function(failed, success) {
-                            http_res.render('admin/k4export', {
-				locals: {
-				    groups: [],
-				    failed: failed,
-				    succeeded: success
-				},
-				layout: "layout-admin.jade"
-			    });
+			db.taxonomy.getTaxonomyList(function (err, taxonomy) {
+			    k4export.runExporter(files.zip.path,
+                                function(failed, success) {
+				    http_res.render('admin/k4export', {
+					locals: {
+					    groups: [],
+					    failed: failed,
+					    succeeded: success,
+					    taxonomy: taxonomy
+					},
+					layout: "layout-admin.jade"
+				    });
+				});
 			});
 		    }
 		});

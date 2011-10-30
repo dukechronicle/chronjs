@@ -1,5 +1,6 @@
 var db = require('./db-abstract');
 var async = require('async');
+var _ = require('underscore');
 
 
 var taxonomy = exports;
@@ -49,6 +50,24 @@ taxonomy.getHierarchyTree = function(callback) {
 	      callback(err, root);
 	  });
     });
+}
+
+taxonomy.getTaxonomyList = function(callback) {
+    taxonomy.getHierarchy(function (err, res) {
+	if (err) callback(err);
+	else {
+	    async.reduce(res, {},
+		function (memo, item, cb) {
+		    var fields = item.key;
+		    var dashes = "";
+		    for (var i = 0; i < fields.length - 1; i++) dashes += "-";
+		    if (memo[fields[0]] == undefined) memo[fields[0]] = {};
+		    memo[fields[0]][fields.toString()] =
+			dashes + " " + fields[fields.length - 1];
+		    cb(undefined, memo);
+		}, callback);
+	}
+    });	
 }
 
 taxonomy.getChildren = function(path, callback) {

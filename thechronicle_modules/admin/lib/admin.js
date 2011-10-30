@@ -201,7 +201,8 @@ exports.init = function(app, callback) {
                 http_res.render('admin/k4export', {
                     locals: {
 			groups: [],
-			docs: null
+			failed: null,
+			succeeded: null
                     },
                     layout: "layout-admin.jade"
                 });
@@ -223,7 +224,8 @@ exports.init = function(app, callback) {
                             http_res.render('admin/k4export', {
 				locals: {
 				    groups: [],
-				    docs: failed
+				    failed: failed,
+				    succeeded: success
 				},
 				layout: "layout-admin.jade"
 			    });

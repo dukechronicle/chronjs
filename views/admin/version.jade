@@ -14,7 +14,10 @@ table(border=1)
         form(action='/admin/edit', method='POST')
           select(name='imageType')
             - each type in imageTypes
-              option(value=type) #{type}
+              - if (cropSizes[type].width == version.doc.width && cropSizes[type].height == version.doc.height)
+                option(value=type, selected='yes') #{type}
+              - else
+                option(value=type) #{type}
           input(type='hidden', name='versionId', value=version.doc._id)
           input(type='hidden', name='article', value=article)
           input(type='submit', value='add')

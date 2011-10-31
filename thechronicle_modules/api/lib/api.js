@@ -19,10 +19,6 @@ var redis = require('./redisclient');
 
 var MAX_URL_LENGTH = 50;
 
-var queryDefaults = {
-    stale: "ok"
-}
-
 function getAvailableUrl(url, n, callback) {
     var new_url = url;
     if(n != 0) {
@@ -164,7 +160,7 @@ api.docsByAuthor = function(author, callback) {
 
     var query = {descending: true, startkey:decodeAuthor, endkey: decodeAuthor};
 
-    db.view("articles/authors", _.defaults(query, queryDefaults), function(err, results) {
+    db.view("articles/authors", query, function(err, results) {
         if (err)
         {
             callback(err);
@@ -223,7 +219,7 @@ api.articleForUrl = function(url, callback) {
         limit: 20
     };
 
-    db.view("articles/urls", _.defaults(query, queryDefaults), function(err, docs) {
+    db.view("articles/urls", query, function(err, docs) {
 
         if (err) return callback(err);
         var docTypeKey = 1;
@@ -256,7 +252,7 @@ api.docForUrl = function(url, callback) {
         limit: 20
     };
 
-    db.view("articles/urls", _.defaults(query, queryDefaults), function(err, docs) {
+    db.view("articles/urls", query, function(err, docs) {
         
         if (err) return callback(err);
         var docTypeKey = 1;
@@ -296,7 +292,7 @@ api.docsByDate = function(limit, callback) {
         query.limit = 20;
     }
     
-    db.view("articles/all_by_date", _.defaults(query, queryDefaults), function(err, results) {
+    db.view("articles/all_by_date", query, function(err, results) {
         if (err) callback(err);
 
         // return only the array of the result values

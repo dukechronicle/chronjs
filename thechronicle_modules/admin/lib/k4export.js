@@ -191,13 +191,14 @@ function clearDatabase(callback) {
 
 function runExporter(zipPath, exportCallback) {
     var parser = new ArticleParser(function(article, callback) {
-	exportToProduction(article, function(err, url) {
+	exportToProduction(article, function(err, url, id) {
 	    if (err) {
 		console.error("Error adding article: " + err);
 		callback(article.title);
 	    }
 	    else {
 		article.url = url;
+		article.id = id;
 		callback(undefined, article);
 	    }
 	});

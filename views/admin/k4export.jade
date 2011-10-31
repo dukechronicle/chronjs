@@ -1,3 +1,4 @@
+script(src='/js/admin/k4export.js')
 h1 K4 Exporter
 form(action='/admin/k4export', method='post', enctype='multipart/form-data')
   label(for='zip') XML Zip:
@@ -16,9 +17,10 @@ a(href='/admin/manage') Manage and edit uploaded articles
   table
     - each article in succeeded
       tr
-        td #{article.title}
         td
-          select(style='width: 600px')
+          a(href='/article/' + article.url) #{article.title}
+        td
+          select(id='tax'+article.id, style='width: 600px')
             - if (article.taxonomy[0] in taxonomy)
               - each key, value in taxonomy[article.taxonomy[0]]
                   option(value=value) #{key}
@@ -27,3 +29,5 @@ a(href='/admin/manage') Manage and edit uploaded articles
               - each section in ['News', 'Sports', 'Opinion', 'Recess', 'Towerview']
                 - each key, value in taxonomy[section]
                     option(value=value) #{key}
+        td
+          button(id='sub'+article.id, style='width: 200px', onclick="editDocument("+JSON.stringify(article)+")") Submit

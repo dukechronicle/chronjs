@@ -7,7 +7,7 @@ image.listOriginalsByDate = function(options, callback) {
 }
 
 image.originalsIndex = function(options, callback) {
-    db.view('articles/image_originals_index', _.defaults(options, queryDefaults), callback);
+    db.view('articles/image_originals_index', options, callback);
 }
 
 image.createOriginal = function(name, options, callback) {

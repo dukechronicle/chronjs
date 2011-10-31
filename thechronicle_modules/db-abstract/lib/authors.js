@@ -9,8 +9,7 @@ authors.getLatest = function(authorName, count, callback) {
         endkey: [authorName],
         descending: true,
         limit: count,
-        include_docs: true,
-        stale: "ok"
+        include_docs: true
     };
     
     db.view('articles/authors', query,

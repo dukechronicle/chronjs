@@ -1,12 +1,9 @@
 var db = require('./db-abstract');
-var _ = require('underscore');
-
 var image = exports;
-var queryDefaults = {
-    stale: "ok"
-}
+
+
 image.listOriginalsByDate = function(options, callback) {
-    db.view('articles/image_originals', _.defaults(options, queryDefaults), callback);
+    db.view('articles/image_originals', options, callback);
 }
 
 image.originalsIndex = function(options, callback) {
@@ -14,7 +11,7 @@ image.originalsIndex = function(options, callback) {
 }
 
 image.createOriginal = function(name, options, callback) {
-    image.listOriginals({
+    image.originalsIndex({
         key: name
     }, function(err, res) {
         if(err) callback(err, null);
@@ -58,7 +55,7 @@ image.edit = function(imageID, data, callback) {
 }
 
 image.originalsForPhotographer = function(photog, callback) {
-    db.view('articles/photographers',
-        _.defaults({key: photog}, queryDefaults)
-    , callback);
+    db.view('articles/photographers', {
+        key: photog
+    }, callback);
 }

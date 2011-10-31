@@ -95,7 +95,7 @@ var views = {
     image_originals: {
     map: function(doc) {
             if(doc.imageVersions) {
-                emit(doc.name, doc);
+                emit([doc.uploadDate, doc.name], doc);
             }
         }
     },

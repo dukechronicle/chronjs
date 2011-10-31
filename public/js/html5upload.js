@@ -2,7 +2,6 @@ var IMAGE_HTML = "<img id='tempPreview' />";
 
 var imagesToProcess = 0;
 var dropLabelStartText = "";
-var imageNames = [];
 var isUploading = false;
 var totalImages = 0;
 
@@ -54,9 +53,8 @@ $(function() {
 
 				// init the reader event handlers
 				reader.onprogress = handleReaderProgress;
-				reader.onloadend = handleReaderLoadEnd;
-				
-				imageNames[index] = file.name;
+				reader.onloadend = handleReaderLoadEnd(file);
+
 				reader.readAsDataURL(file);
 			});
 		}
@@ -74,66 +72,68 @@ function handleReaderProgress(evt) {
 	}
 }
 
-function handleReaderLoadEnd(evt) {
-	//$("#progressbar").progressbar({ value: 100 });
+// Closure around event handler to capture the file information	
+function handleReaderLoadEnd(theFile) {
+    return function(evt) {
+	    //$("#progressbar").progressbar({ value: 100 });
 	
-	/*
-	 * Per the Data URI spec, the only comma that appears is right after
-	 * 'base64' and before the encoded content.
-	 */
-	var imageData = evt.target.result.substring(evt.target.result.indexOf(',') + 1);
+	    /*
+	     * Per the Data URI spec, the only comma that appears is right after
+	     * 'base64' and before the encoded content.
+	     */
+	    var imageData = evt.target.result.substring(evt.target.result.indexOf(',') + 1);
 	
-	// set image type to MIME type in data uri string	
-	var imageType = evt.target.result.split(';',1);
-	imageType = imageType[0].substring(5);
+	    // set image type to MIME type in data uri string	
+	    var imageType = evt.target.result.split(';',1);
+	    imageType = imageType[0].substring(5);
 
-	var imageID = "picture"+(totalImages - imagesToProcess);
+	    var imageID = "picture"+(totalImages - imagesToProcess);
 
-	// post image data to the server
-	$.ajax({
-   		type: "POST",
-  		url: "/admin/image/upload",
-   		data: {
-			imageData: imageData,
-			imageName: imageNames[imageNames.length - imagesToProcess],
-			imageType: imageType,
-			imageID: imageID		
-		},
-		error: function(msg) {
-			alert('Error');
-		},
+	    // post image data to the server
+	    $.ajax({
+       		type: "POST",
+      		url: "/admin/image/upload",
+       		data: {
+			    imageData: imageData,
+			    imageName: theFile.name,
+			    imageType: imageType,
+			    imageID: imageID		
+		    },
+		    error: function(msg) {
+			    alert('Error');
+		    },
 
-   		success: function(msg) {
-			json = jQuery.parseJSON(msg);
+       		success: function(msg) {
+			    json = jQuery.parseJSON(msg);
 
-			if(json.error) {
-				alert(json.error);
-				$("#"+json.imageID).fadeOut('slow'); // if error, remove image from the page
-			}
-			else {
-				$("#"+json.imageID).addClass('done'); // if sucess, set the image's styling as 'done' uploading	
-				$("#"+json.imageID).attr('onclick','location.href="/admin/image/' + json.imageName + '"');
-			}
-   		}
- 	});
+			    if(json.error) {
+				    alert(json.error);
+				    $("#"+json.imageID).fadeOut('slow'); // if error, remove image from the page
+			    }
+			    else {
+				    $("#"+json.imageID).addClass('done'); // if sucess, set the image's styling as 'done' uploading	
+				    $("#"+json.imageID).attr('onclick','location.href="/admin/image/' + json.imageName + '"');
+			    }
+       		}
+     	});
 
-	imagesToProcess --;
+	    imagesToProcess --;
 
-	// add the image to the page
-	$("#pictureholder").append(IMAGE_HTML);
+	    // add the image to the page
+	    $("#pictureholder").append(IMAGE_HTML);
 
-	var img = $("#tempPreview");
-	img.hide();
-	img.attr("id",imageID);
-	img.attr("src",evt.target.result);
+	    var img = $("#tempPreview");
+	    img.hide();
+	    img.attr("id",imageID);
+	    img.attr("src",evt.target.result);
 
-	img.addClass('inprogress'); // set the images styling as 'inprogress' uploading
-	img.fadeIn('slow');
+	    img.addClass('inprogress'); // set the images styling as 'inprogress' uploading
+	    img.fadeIn('slow');
 
-	if(imagesToProcess == 0)	
-	{
-		$("#droplabel").text(dropLabelStartText);
-		isUploading = false;
-		imageNames = [];
-	}	
+	    if(imagesToProcess == 0)	
+	    {
+		    $("#droplabel").text(dropLabelStartText);
+		    isUploading = false;
+	    }
+    }	
 }

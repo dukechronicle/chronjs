@@ -6,6 +6,10 @@ var util = require('util');
 var BENCHMARK = false;
 var group = exports;
 
+var queryDefaults = {
+    stale: "ok"
+}
+
 // create a new entry for group
 group.create = function(namespace, name, callback) {
     db.save({
@@ -42,7 +46,7 @@ group.docs = function(namespace, group, callback) {
         query.startkey = [namespace, group];
         query.endkey = [namespace, group, {}];
     }
-    db.view('articles/groups', query,
+    db.view('articles/groups', _.defaults(query, queryDefaults),
         function(err, res) {
             if (BENCHMARK) console.log("QUERY RECEIVED %d", Date.now() - start);
             if (err) return callback(err);
@@ -57,9 +61,11 @@ group.docs = function(namespace, group, callback) {
 }
 
 group.docsN = function(namespace, groupName, baseDocNum, numDocs, callback) {
-    db.view('articles/group_docs', {
+    var query = {
         key: [namespace, groupName]
-    }, 
+    }
+    db.view('articles/group_docs',
+        _.defaults(query, queryDefaults),
     function(err, res) {
         if (res) {
             // fetch each child document after getting their id

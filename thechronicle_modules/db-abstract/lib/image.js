@@ -5,8 +5,12 @@ var image = exports;
 var queryDefaults = {
     stale: "ok"
 }
-image.listOriginals = function(options, callback) {
+image.listOriginalsByDate = function(options, callback) {
     db.view('articles/image_originals', _.defaults(options, queryDefaults), callback);
+}
+
+image.originalsIndex = function(options, callback) {
+    db.view('articles/image_originals_index', _.defaults(options, queryDefaults), callback);
 }
 
 image.createOriginal = function(name, options, callback) {

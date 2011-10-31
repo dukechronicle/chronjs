@@ -99,6 +99,13 @@ var views = {
             }
         }
     },
+    image_originals_index: {
+        map: function(doc) {
+                if(doc.imageVersions) {
+                    emit(doc.name, doc);
+                }
+            }
+        },
     photographers: {
     map: function(doc) {
             if(doc.photographer) {

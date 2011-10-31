@@ -104,15 +104,16 @@ function handleReaderLoadEnd(theFile) {
 		    },
 
        		success: function(msg) {
-			    json = jQuery.parseJSON(msg);
+			    var json = jQuery.parseJSON(msg);
 
 			    if(json.error) {
 				    alert(json.error);
 				    $("#"+json.imageID).fadeOut('slow'); // if error, remove image from the page
 			    }
 			    else {
+                    console.log("success");
 				    $("#"+json.imageID).addClass('done'); // if sucess, set the image's styling as 'done' uploading	
-				    $("#"+json.imageID).attr('onclick','location.href="/admin/image/' + json.imageName + '"');
+				    $("#"+json.imageID).wrap('<a href="/admin/image/' + json.imageName + '" />');
 			    }
        		}
      	});

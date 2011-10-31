@@ -83,12 +83,7 @@ exports.bindPath = function(app) {
 
         app.get('/manage', site.checkAdmin, function(req, httpRes) {
             api.image.getAllOriginals(function(err, origs) {
-                origs = origs.map(function(doc) {
-                    doc.displayName = doc.name;
-                    var nameSplit = doc.name.split("-", 2);
-                    if (nameSplit.length > 1) doc.displayName = nameSplit[1];
-                    return doc;
-                });
+
                 httpRes.render('admin/articleimage', {
                     filename: 'views/admin/articleimage.jade',
                         locals: {

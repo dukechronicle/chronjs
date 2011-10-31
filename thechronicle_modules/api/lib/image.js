@@ -38,5 +38,15 @@ image.originalsForPhotographer = function(photog, callback) {
 }
 
 image.getAllOriginals = function(callback) {
-    db.image.listOriginalsByDate({}, callback);
+
+    db.image.listOriginalsByDate({}, function(err, res) {
+        res = res.map(function(doc) {
+            doc.displayName = doc.name;
+            var nameSplit = doc.name.split("-", 2);
+            if (nameSplit.length > 1) doc.displayName = nameSplit[1];
+            return doc;
+        });
+
+        callback(err, res);
+    });
 }

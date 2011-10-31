@@ -726,6 +726,9 @@ site.checkAdmin = function(req,res,next) {
     if(!api.accounts.isAdmin(req)) {
         site.askForLogin(res,req.url);
     }
+    else if(req.headers['user-agent'].indexOf("Chrome") === -1) {
+        site.askForLogin(res,req.url,'','Please use Google Chrome to use the admin interface');
+    }
     else {
         next();
     }

@@ -95,7 +95,7 @@ db.init = function(callback) {
         }
         else {
              callback(null);
-             //updateViews(callback);
+             if (process.env.NODE_ENV !== 'production') updateViews(callback);
         }
     });
 }

@@ -163,7 +163,7 @@ exports.bindPath = function(app) {
                     thumbUrl: thumbUrl,
                     photographer: 'None',
                     caption: 'None',
-                    date: 'None',
+                    date: new Date().getTime(),
                     location: 'None'
                 },
                 function(err, res) {

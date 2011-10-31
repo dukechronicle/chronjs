@@ -20,6 +20,7 @@ image.createOriginal = function(name, options, callback) {
                 options.type = 'image';
                 options.name = name;
                 options.imageVersions = [];
+                options.uploadDate = new Date().getTime();
                 db.save(options, callback);
             }
         }

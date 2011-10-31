@@ -8,9 +8,7 @@ function pageAlign() {
 		$(this).find('> .align-element').each(function(i) {
 			groups.push($(this).find('div.rounded'))
 		});
-        console.log($(groups[0].context));
-        console.log($(groups[0].context).height())
-		console.log(_.zip.apply(this, groups))
+
 		_.each(_.zip.apply(this, groups), function(row) {
             console.log(row);
 			// get max height of current row

@@ -100,6 +100,10 @@ function ArticleParser(articleCallback) {
     }
 
     function fixArticle(article, callback) {
+	if (!article.body || !article.title) {
+	    callback("XML couldn't be parsed");
+	    return;
+	}
 	try {
 	    if (article.body[0].match(/^by [^\.]*$/i)) article.body.shift();
 	    if (article.body[0].match(/^from [^\.]*$/i)) article.body.shift();

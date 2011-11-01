@@ -17,7 +17,6 @@ var redisClient = require('./thechronicle_modules/api/lib/redisclient');
 var RedisStore = require('connect-redis')(express);
 
 var asereje = require('asereje');
-console.log(process.env.NODE_ENV === 'production');
 asereje.config({
   active: process.env.NODE_ENV === 'production'        // enable it just for production
 , js_globals: ['typekit', 'underscore-min', 'jquery']   // js files that will be present always

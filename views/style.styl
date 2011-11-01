@@ -113,7 +113,11 @@ body
         position relative
         background-color #006599
         color white
-        padding-bottom 5px
+        padding-bottom 2px
+        border-bottom-right-radius 4px
+        border-bottom-left-radius 4px
+        box-shadow rgba(0,0,0,0.40) 0 1px 3px
+
         
     #header-overlay
         position absolute
@@ -148,21 +152,26 @@ body
                 -webkit-transition text-shadow .2s linear
                 -moz-transition text-shadow .2s linear
                 transition(color, .25s, linear)
-            a:hover
-                color #999
+                text-shadow 0 1px 3px rgba(0,0,0,.4);
+
+
     #header-bottom
         nav
             position relative
             z-index 2
             clear both
             width 636px
+            padding-left 7px
+            padding-top 3px
+
             h2
                 float left
 
                 a
+                    font-weight bold
+                    text-shadow 0 1px 2px rgba(0,0,0,.4);
                     letter-spacing 1px
-                    //text-shadow 0px 1px 0px white
-                    //border-bottom 1px solid transparent
+                    border-bottom 1px solid transparent
                     font-size 0.8em
                     text-transform uppercase
                     //color #333
@@ -170,12 +179,11 @@ body
                     display block
                     padding-left 15px
                     padding-right 11px
-                    //padding-bottom 1px
-                    transition(color, .25s, linear)
+                    padding-bottom 2px
+                    margin-bottom -2px
+                    transition(border-bottom-color, .25s, linear)
                 a:hover, a.active
-                    color #999
-                a.active:hover
-                    color #333
+                    border-bottom-color white
             h2.first a
                 padding-left 3px
             
@@ -210,6 +218,7 @@ span.timestamp
 
 #search-box
     position absolute
+    padding-right 7px
     top header-height
     right 0px
     input
@@ -225,8 +234,8 @@ span.timestamp
 .leaderboard
     float right
     margin-top 3px
-    padding-left 3px
     margin-bottom 3px
+    padding-right 7px
     //border-left 1px solid #ddd
 
 
@@ -241,10 +250,11 @@ span.timestamp
         opacity 1
 header
     .content
-        width 500px
+        width 400px
         float left
         position relative
         z-index 2
+        padding-left 7px
         
         .announcements
             display none
@@ -266,17 +276,18 @@ header
                 font-size 0.7em
     #header-bottom
         .social-media
+
             position absolute
-            top header-height + 2px
-            right 151px
+            top header-height + 2px + 2px
+            right 158px
             .inner
                 .icons
                     text-align left
                     img
                         opacity .8
                         padding-right 7px
-                        width 19px
-                        height 19px
+                        width 17px
+                        height 17px
                         transition opacity, .25s linear
                     a:hover img
                         opacity 1

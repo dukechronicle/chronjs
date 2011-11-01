@@ -83,6 +83,7 @@ exports.bindPath = function(app) {
 
         app.get('/manage', site.checkAdmin, function(req, httpRes) {
             api.image.getAllOriginals(function(err, origs) {
+
                 httpRes.render('admin/articleimage', {
                     filename: 'views/admin/articleimage.jade',
                         locals: {
@@ -163,7 +164,7 @@ exports.bindPath = function(app) {
                     thumbUrl: thumbUrl,
                     photographer: 'None',
                     caption: 'None',
-                    date: 'None',
+                    date: new Date().getTime(),
                     location: 'None'
                 },
                 function(err, res) {

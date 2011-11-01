@@ -1,15 +1,13 @@
-h1 Login Screen
+h1 Login
 form(action='/login', method='POST')
   #error=error
-  label='User Name:'
-  br
+  label='User Name&nbsp;&nbsp;'
   input(type='text', name='username', value=username)
   br
   br
-  label='Password:'
-  br
+  label='Password&nbsp;&nbsp;'
   input(type='password', name='password')
   br
   br
   input(type='hidden', name='afterLogin', value=afterLogin)
-  input(type='submit')
+  input(style='margin-left: 307px', type='submit', value='Login')

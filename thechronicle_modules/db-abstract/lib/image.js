@@ -1,12 +1,17 @@
 var db = require('./db-abstract');
 var image = exports;
 
-image.listOriginals = function(options, callback) {
+
+image.listOriginalsByDate = function(options, callback) {
     db.view('articles/image_originals', options, callback);
 }
 
+image.originalsIndex = function(options, callback) {
+    db.view('articles/image_originals_index', options, callback);
+}
+
 image.createOriginal = function(name, options, callback) {
-    image.listOriginals({
+    image.originalsIndex({
         key: name
     }, function(err, res) {
         if(err) callback(err, null);
@@ -16,6 +21,7 @@ image.createOriginal = function(name, options, callback) {
                 options.type = 'image';
                 options.name = name;
                 options.imageVersions = [];
+                options.uploadDate = new Date().getTime();
                 db.save(options, callback);
             }
         }

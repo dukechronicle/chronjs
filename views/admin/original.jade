@@ -1,11 +1,11 @@
 tr
-  td #{original.value.name}
+  td #{original.displayName}
   td
       if (typeof url != 'undefined')
-          a(href='/admin/image/' + original.value.name + '?article=' + url)
-              img(src=original.value.thumbUrl)
+          a(href='/admin/image/' + original.name + '?article=' + url)
+              img(src=original.thumbUrl)
       else
-          a(href='/admin/image/' + original.value.name)
-              img(src=original.value.thumbUrl)
+          a(href='/admin/image/' + original.name)
+              img(src=original.thumbUrl)
    td
       a.delete(href='#') Delete

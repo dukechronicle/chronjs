@@ -3,7 +3,7 @@ var db = require('../../db-abstract');
 var image = exports;
 
 image.getOriginal = function(name, callback) {
-    db.image.listOriginals({
+    db.image.originalsIndex({
         key: name
     }, function(err, res) {
         if(err) callback(err, null);
@@ -38,5 +38,15 @@ image.originalsForPhotographer = function(photog, callback) {
 }
 
 image.getAllOriginals = function(callback) {
-    db.image.listOriginals({}, callback);
+
+    db.image.listOriginalsByDate({}, function(err, res) {
+        res = res.map(function(doc) {
+            doc.displayName = doc.name;
+            var nameSplit = doc.name.split("-", 2);
+            if (nameSplit.length > 1) doc.displayName = nameSplit[1];
+            return doc;
+        });
+
+        callback(err, res);
+    });
 }

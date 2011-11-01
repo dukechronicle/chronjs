@@ -21,11 +21,11 @@
             if (model.Opinion)
                 .opinion!=partial('container/opinion', {title: "Opinion", stories: model.Opinion})
     #middle
-        #news-sports.clearfix
+        #news-sports.clearfix.align-group
             if (model.News)
-                #news!=partial('container/news', {title: "News", stories: model.News})
+                #news.align-element(data-alignTarget='div.rounded')!=partial('container/news', {title: "News", stories: model.News})
             if (model.Sports)
-                #sports!=partial('container/news', {title: "Sports", stories: model.Sports})
+                #sports.align-element(data-alignTarget='div.rounded')!=partial('container/news', {title: "Sports", stories: model.Sports})
     #bottom
         if (model.Recess)
             #recess!=partial('container/block-row', {title: "Recess", stories: model.Recess})

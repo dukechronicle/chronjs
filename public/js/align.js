@@ -6,17 +6,18 @@ function pageAlign() {
 
 		// find all elements of align group and add it to group array
 		$(this).find('> .align-element').each(function(i) {
-			groups.push($(this).find('> a'))
+			groups.push($(this).find('div.rounded'))
 		});
-		//console.log(_.zip.apply(this, groups))
+
 		_.each(_.zip.apply(this, groups), function(row) {
+            console.log(row);
 			// get max height of current row
 			var maxHeight = 0;
 			_.each(row, function(element) {
 				var height = $(element).height();
 				if (height > maxHeight) {
 					maxHeight = height;
-					//console.log(maxHeight)
+					console.log(maxHeight)
 				}
 			});
 			_.each(row, function(element) {

@@ -3,6 +3,7 @@ var _ = require('underscore');
 var config = require('../../config');
 var url = require("url");
 var fs = require('fs');
+var crypto = require('crypto');
 
 var DESIGN_DOCUMENT_NAME = '_design/articles';
 var DESIGN_DOCUMENT_FILENAME = __dirname+'/db-design.js';
@@ -36,10 +37,10 @@ function connect(database) {
 function updateViews(callback)
 {
     // Check if views are up to date
-    viewsAreUpToDate(function(isUpToDate,newestModifiedTime) {
+    viewsAreUpToDate(function(isUpToDate,newestModifiedTime,newestHash) {
         if(!isUpToDate) {
-            console.log('updating views to newest version: ' + newestModifiedTime);
-            createViews(newestModifiedTime, function(err){
+            console.log('updating views to newest version - modified time: ' + newestModifiedTime + ' and hash: ' + newestHash);
+            createViews(newestModifiedTime, newestHash, function(err){
                 return callback(err);
             });
         }
@@ -95,7 +96,7 @@ db.init = function(callback) {
         }
         else {
              callback(null);
-             if (process.env.NODE_ENV !== 'production') updateViews(callback);
+             updateViews(callback);
         }
     });
 }
@@ -108,12 +109,12 @@ function whenDBExists(callback) {
      });
 }
 
-function createViews(modifiedTime, callback) {
+function createViews(modifiedTime, hash, callback) {
     var design_doc = require(DESIGN_DOCUMENT_FILENAME);
 
     db.save(DESIGN_DOCUMENT_NAME, design_doc.getViews(), function(err, response) {
         // update the versioning info for the design document
-        db.save(DESIGN_DOCUMENT_VERSION_NAME, {lastModified: modifiedTime}, function(err2,res2){
+        db.save(DESIGN_DOCUMENT_VERSION_NAME, {lastModified: modifiedTime, hash: hash}, function(err2,res2){
 
             // More error messages here needed.
 
@@ -123,18 +124,42 @@ function createViews(modifiedTime, callback) {
 }
 
 function viewsAreUpToDate(callback) {
-    fs.stat(DESIGN_DOCUMENT_FILENAME, function(err, stats) {
-        db.get(DESIGN_DOCUMENT_VERSION_NAME, function (err, response) {
-            // if the design document does not exists, or the modified time of the design doc does not exist, return false
-            var lastModified = response && response.views && response.views.lastModified;
-            if(!lastModified) {
-                return callback(false,stats.mtime);
-            }
-            // check if the design doc file has been modified since the the last time it was updated in the db
-            if(new Date(lastModified) >= new Date(stats.mtime))
-                return callback(true,lastModified);
+    var design_doc = require(DESIGN_DOCUMENT_FILENAME);    
+    
+    // calculate the hash of the local design doc    
+    var md5sum = crypto.createHash('md5');
+    var views = design_doc.getViews();
+    
+    // since functions can't be stringified to json, convert them to strings manually
+    for(view in views) {
+        var stringIt = 'map:'+views[view].map.toString();
+        
+        if(views[view].reduce) {
+            stringIt += 'reduce:'+views[view].reduce.toString();       
+        }
+        views[view] = stringIt;
+    }
+    // compute the hash of the json object representing the design document
+    md5sum.update(JSON.stringify(views));
+    var localHash = md5sum.digest('base64');
 
-            return callback(false,stats.mtime);
+
+    fs.stat(DESIGN_DOCUMENT_FILENAME, function(err, stats) {
+        var localModifiedTime = stats.mtime;
+
+        db.get(DESIGN_DOCUMENT_VERSION_NAME, function (err, response) {
+            var currentHash = (response && response.views && response.views.hash) || '';
+            
+            // if the design document does not exists, or the modified time of the design doc does not exist, return false
+            var currentModifiedTime = response && response.views && response.views.lastModified;
+            if(!currentModifiedTime) {
+                return callback(false,localModifiedTime,localHash);
+            }
+            // check if the design doc file has been modified since the the last time it was updated in the db, and if so, if the hash of each is different
+            if(new Date(currentModifiedTime) < new Date(localModifiedTime) && currentHash != localHash)
+                return callback(false,localModifiedTime,localHash);    
+            else
+                return callback(true,currentModifiedTime,currentHash);
         });
     });
 }

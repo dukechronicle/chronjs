@@ -95,7 +95,6 @@ db.init = function(callback) {
             });
         }
         else {
-             callback(null);
              updateViews(callback);
         }
     });
@@ -114,10 +113,9 @@ function createViews(modifiedTime, hash, callback) {
 
     db.save(DESIGN_DOCUMENT_NAME, design_doc.getViews(), function(err, response) {
         // update the versioning info for the design document
-        db.save(DESIGN_DOCUMENT_VERSION_NAME, {lastModified: modifiedTime, hash: hash}, function(err2,res2){
+        if(err) return callback(err);
 
-            // More error messages here needed.
-
+        db.save(DESIGN_DOCUMENT_VERSION_NAME, {lastModified: modifiedTime, hash: hash}, function(err2,res2) {
             return callback(err2);
         });
     });

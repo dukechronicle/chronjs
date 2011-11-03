@@ -185,7 +185,7 @@ api.addDoc = function(fields, callback) {
                 fields.created = unix_timestamp;
                 fields.updated = unix_timestamp;
                 fields.urls = [url];
-                fields.indexedBySolr = true;
+                fields.indexedBySolr = api.search.getIndexVersion();
 
                 db.save(fields, function(db_err, res) {
 

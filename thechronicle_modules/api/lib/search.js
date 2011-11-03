@@ -29,6 +29,10 @@ function createSolrIDFromDBID(db_id) {
     return db_id+"||"+db.getDatabaseName()+"||"+db.getDatabaseHost();
 }
 
+search.getIndexVersion = function() {
+    return INDEX_VERSION;
+}
+
 search.init = function() {
     client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH'));
 }

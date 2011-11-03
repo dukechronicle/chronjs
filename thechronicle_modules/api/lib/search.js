@@ -194,7 +194,7 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 	var fullQuery = "";
     for(var index in words) {
         if(index != 0) fullQuery = fullQuery + " OR ";
-        fullQuery = fullQuery + "title_text:" + words[index] + "* OR body_text:" + words[index] + "*";
+        fullQuery = fullQuery + "title_text:" + words[index] + " OR body_text:" + words[index];
     }
 
     querySolr(fullQuery,

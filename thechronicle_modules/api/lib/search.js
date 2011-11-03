@@ -9,7 +9,7 @@ var db = require("../../db-abstract");
 
 // whenever the way an article should be indexed by solr is changed, this number should be incremented
 // so the server knows it has to reindex all articles not using the newest indexing version. Keep the number numeric!
-var INDEX_VERSION = 0.5006;
+var INDEX_VERSION = 0.5007;
 var RESULTS_PER_PAGE = 25;
 
 var client = null;
@@ -91,7 +91,11 @@ search.indexArticle = function(id,title,body,taxonomy,authors,createdDate,callba
         solrYear = dateFormat(new Date(),"yyyy");
         solrMonth = dateFormat(new Date(),"mm");
         solrDay = dateFormat(new Date(),"dd");
-    }	
+    }
+
+    authors = authors.map(function(author) {
+        return author.toLowerCase();
+    });	
 
     // if you change this object (and in doing so change the index), you MUST increment INDEX_VERSION at the top of this script 
     var solrDoc = {
@@ -149,7 +153,7 @@ search.docsByAuthor = function(authorName, sortOrder, facets, page, callback) {
         facetQueries = facetQueriesTemp;
     });
 
-    querySolr('author_sm:"' + authorName +'"',
+    querySolr('author_sm:"' + authorName.toLowerCase() +'"',
     {
         facet: true,
         "facet.field":facetFields,

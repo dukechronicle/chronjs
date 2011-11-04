@@ -129,7 +129,7 @@ function viewsAreUpToDate(callback) {
     var views = design_doc.getViews();
     
     // since functions can't be stringified to json, convert them to strings manually
-    for(view in views) {
+    for(var view in views) {
         var stringIt = 'map:'+views[view].map.toString();
         
         if(views[view].reduce) {

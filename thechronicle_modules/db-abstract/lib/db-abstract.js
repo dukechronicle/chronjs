@@ -110,7 +110,6 @@ function whenDBExists(callback) {
 
 function createViews(modifiedTime, hash, callback) {
     var design_doc = require(DESIGN_DOCUMENT_FILENAME);
-    console.log(design_doc.getViews());
     db.save(DESIGN_DOCUMENT_NAME, design_doc.getViews(), function(err, response) {
         // update the versioning info for the design document
         if(err) return callback(err);

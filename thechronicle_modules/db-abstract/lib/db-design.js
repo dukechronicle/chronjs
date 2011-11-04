@@ -1,3 +1,5 @@
+var _ = require('underscore');
+
 var views = {
 
     taxonomy: {
@@ -145,5 +147,5 @@ var views = {
 }
 
 exports.getViews = function() {
-    return views;
+    return _.extend({}, views);
 }

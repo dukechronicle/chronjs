@@ -103,15 +103,8 @@ var views = {
     },
     image_originals_index: {
         map: function(doc) {
-                if(doc.imageVersions) {
-                    emit(doc.name, doc);
-                }
-            }
-        },
-    photographers: {
-    map: function(doc) {
-            if(doc.photographer) {
-                emit(doc.photographer, doc);
+            if(doc.imageVersions) {
+                emit(doc.name, doc);
             }
         }
     },
@@ -122,6 +115,23 @@ var views = {
             }
         }
     },
+    article_images: {
+        map: function(doc) {
+            if (doc.images) {
+                for (var type in doc.images) {
+                    emit(doc.images[type], doc);
+                }
+            }
+        }
+    },
+    photographers: {
+    map: function(doc) {
+            if(doc.photographer) {
+                emit(doc.photographer, doc);
+            }
+        }
+    },
+
 
     // return all articles and the version of their index in Solr
     indexed_by_solr: {

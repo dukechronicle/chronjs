@@ -9,7 +9,7 @@ var db = require("../../db-abstract");
 
 // whenever the way an article should be indexed by solr is changed, this number should be incremented
 // so the server knows it has to reindex all articles not using the newest indexing version. Keep the number numeric!
-var INDEX_VERSION = 0.5007;
+var INDEX_VERSION = 0.5008;
 var RESULTS_PER_PAGE = 25;
 
 var client = null;

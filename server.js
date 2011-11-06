@@ -16,6 +16,8 @@ var mobileapi = require('./thechronicle_modules/mobileapi/lib/mobileapi');
 var redisClient = require('./thechronicle_modules/api/lib/redisclient');
 var RedisStore = require('connect-redis')(express);
 
+var async = require('async');
+
 var asereje = require('asereje');
 asereje.config({
   active: process.env.NODE_ENV === 'production'        // enable it just for production
@@ -49,7 +51,7 @@ app.use(stylus.middleware({
   , firebug: true
 }));
 
-app.configure(function(){
+app.configure(function() {
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
     app.use(express.bodyParser());
@@ -69,7 +71,7 @@ app.configure(function(){
 // the middleware itself does not serve the static
 // css files, so we need to expose them with staticProvider
 
-app.configure('development', function(){
+app.configure('development', function() {
     app.use(express.static(__dirname + '/public'));
     app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
@@ -81,7 +83,7 @@ app.configure('production', function(){
 });
 
 
-app.error(function(err, req, res, next){
+app.error(function(err, req, res, next) {
 	try {
 		res.send(500);
 	}
@@ -89,16 +91,16 @@ app.error(function(err, req, res, next){
 	globalFunctions.log('ERROR: ' + err.stack);
 });
 
-if(!config.isSetUp())
-{
+if(!config.isSetUp()) {
 	app.get('/', function(req, res, next) {
 		if(!config.isSetUp()) {
 			res.redirect('/config');
 		}		
 		else next();
 	});
+} else {
+    runSite(function() {});
 }
-else runSite(function() {});
 
 
 
@@ -107,8 +109,6 @@ site.assignPreInitFunctionality(app,this);
 
 app.listen(process.env.PORT || port);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
-
-
 
 
 exports.runSite = function(callback)
@@ -132,25 +132,27 @@ function runSite(callback) {
                 pass:redisClient.getPassword()
             })
         }));
-    });
 
-
-    site.init(app, function(err){
-        //api.search.removeAllDocsFromSearch(function(){});
-         if(err)
-             return console.log("Site.init Failed!");
-
-         admin.init(app, function(err2){
-             if(err2)
-                 return console.log("Admin.init Failed!");
-             mobileapi.init(app, function(err3){
-                 if(err3)
-                    return console.log("mobile.init Failed!");
-
-                 // initialize cron
-
-                 return callback();
-             });
-         });
+        // initialize all routes
+        async.parallel([
+            function(callback) {
+                site.init(app, function(err) {
+                    //api.search.removeAllDocsFromSearch(function(){});
+                    if (err) return console.log(err);
+                });
+            },
+            function(callback) {
+                admin.init(app, function(err) {
+                     if (err) return console.log(err);
+                });
+            },
+            function(callback) {
+                mobileapi.init(app, function(err) {
+                    if (err) return console.log(err);
+                });
+            }
+        ], function(err, res) {
+            return callback();
+        })
     });
 }

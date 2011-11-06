@@ -31,7 +31,7 @@ body .block-row a.hover:hover img{-webkit-box-shadow:0 0 4px #000;-moz-box-shado
 body .block-row .rounded{width:972px;padding:0;}
 body .block-row .rounded h2,body .block-row .rounded h3{font-size:1em;margin-bottom:.5em;height:47px;margin-top:-5px;line-height:1.2em}
 body .block-row .rounded h2{font-size:1.5em;line-height:1.3em}
-body .block-row .rounded .content-container{padding:12px;padding-bottom:0;margin-bottom:-1px}
+body .block-row .rounded .content-container{padding:12px 12px 0 12px;margin-bottom:-1px}
 body .block-row a.hover{border:none;border-right:0;border-left:0;padding:0 15px;width:138px;height:229px;float:left;}
 body .block-row a.hover img{display:block;width:138px;margin-bottom:14px}
 body .block-row a.hover p.teaser{height:65px;margin-top:-4px;font-size:.9em;line-height:1.4em}

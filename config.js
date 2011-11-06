@@ -4,7 +4,7 @@ var configuration = {
             // production
             "COUCHDB_URL":"https://app578498.heroku:NNbL2x3Bu5vGLgComPjWxxET@app578498.heroku.cloudant.com",
             "COUCHDB_DATABASE":"production",
-            "SOLR_CORE":"/c1af51aeb37",
+            "SOLR_CORE":"/43ff5b432fb",
 
             // staging
             //"COUCHDB_URL":"https://chrondev:pikachu@chrondev.iriscouch.com",

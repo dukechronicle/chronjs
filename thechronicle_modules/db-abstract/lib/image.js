@@ -2,8 +2,11 @@ var db = require('./db-abstract');
 var image = exports;
 
 
-image.listOriginalsByDate = function(options, callback) {
-    db.view('articles/image_originals', options, callback);
+image.listOriginalsByDate = function(callback) {
+    var query = {
+        descending: true
+    };
+    db.view('articles/image_originals', query, callback);
 }
 
 image.originalsIndex = function(options, callback) {

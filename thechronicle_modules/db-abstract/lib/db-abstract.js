@@ -110,7 +110,6 @@ function whenDBExists(callback) {
 
 function createViews(modifiedTime, hash, callback) {
     var design_doc = require(DESIGN_DOCUMENT_FILENAME);
-
     db.save(DESIGN_DOCUMENT_NAME, design_doc.getViews(), function(err, response) {
         // update the versioning info for the design document
         if(err) return callback(err);
@@ -129,7 +128,7 @@ function viewsAreUpToDate(callback) {
     var views = design_doc.getViews();
     
     // since functions can't be stringified to json, convert them to strings manually
-    for(view in views) {
+    for(var view in views) {
         var stringIt = 'map:'+views[view].map.toString();
         
         if(views[view].reduce) {

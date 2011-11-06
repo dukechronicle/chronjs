@@ -2,10 +2,17 @@ var db = require('./db-abstract');
 var image = exports;
 
 
-image.listOriginalsByDate = function(callback) {
+image.listOriginalsByDate = function(start, callback) {
     var query = {
-        descending: true
+        descending: true,
+        limit: 20
     };
+
+    if (start) {
+        query.endkey_docid = start;
+        query.inclusive_end = false;
+    }
+
     db.view('articles/image_originals', query, callback);
 }
 

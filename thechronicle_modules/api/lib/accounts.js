@@ -18,6 +18,7 @@ function login(req,accountType,callback) {
 }
 
 accounts.isAdmin = function(req) {
+    req.session = req.session || {};
     req.session.account = req.session.account || {};    
     return (req.session.account.isLoggedIn == true && req.session.account.accountType == ADMIN_ACCOUNT_TYPE);
 }

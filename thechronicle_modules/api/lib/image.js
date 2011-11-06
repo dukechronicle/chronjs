@@ -39,7 +39,7 @@ image.originalsForPhotographer = function(photog, callback) {
 
 image.getAllOriginals = function(callback) {
 
-    db.image.listOriginalsByDate({}, function(err, res) {
+    db.image.listOriginalsByDate(function(err, res) {
         res = res.map(function(doc) {
             doc.displayName = doc.name;
             var nameSplit = doc.name.split("-", 2);

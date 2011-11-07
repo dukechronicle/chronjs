@@ -4,6 +4,8 @@ table(border=1)
     else
         != partial('original', {collection: origs})
 
+a(href='/admin/image/manage/' + origs[origs.length - 1].name) Next
+
 
 script
     $(document).ready(function(){

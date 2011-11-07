@@ -84,7 +84,9 @@ exports.bindPath = function(app) {
         app.get('/manage/:start?', site.checkAdmin, function(req, httpRes) {
             var start = req.params.start;
             api.image.getAllOriginals(start, function(err, origs) {
-
+                origs.forEach(function(orig) {
+                    //console.log(orig);
+                })
                 httpRes.render('admin/articleimage', {
                     filename: 'views/admin/articleimage.jade',
                         locals: {

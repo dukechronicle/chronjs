@@ -3,16 +3,17 @@ var image = exports;
 
 
 image.listOriginalsByDate = function(start, callback) {
+
     var query = {
-        descending: true,
-        limit: 20
+        descending: true
+        //limit: 5
     };
 
     if (start) {
-        query.endkey_docid = start;
+        console.log(start);
+        query.endkey = start;
         query.inclusive_end = false;
     }
-
     db.view('articles/image_originals', query, callback);
 }
 

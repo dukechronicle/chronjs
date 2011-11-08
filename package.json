@@ -11,18 +11,23 @@
         "express-resource":"0.2.x",
         "jade":"0.15.x",
         "stylus":"0.15.x",
+        "asereje":"0.0.x",
 
+        "async":"0.1.x",
         "nimble":"0.0.x",
         "underscore":"1.2.x",
-        "async":"0.1.x",
 
         "cradle":"0.5.x",
+
         "knox":"0.0.x",
         "imagemagick":"0.1.x",
 
         "redis":"0.6.x",
         "hiredis":"0.1.x",
+        "connect-redis":"1.0.x",
+
         "node-markdown":"0.1.x",
+
         "solr":"0.1.x",
 
         "expresso":"0.8.x",
@@ -31,14 +36,13 @@
         "jsdom":"0.2.x",
         "jquery":"1.5.x",
         "sprintf":"0.1.x",
-        "connect-redis":"1.0.x",
+
         "cron":"0.1.x",
         "dateformat":"1.0.x",
         "htmlparser":"1.7.x",
 
-        "asereje":"0.0.x",
         "formidable": "1.0.x",
         "zipfile": "0.2.x",
-	"sax": "0.3.x"
+	    "sax": "0.3.x"
     }
 }

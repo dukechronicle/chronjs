@@ -3,8 +3,9 @@ $(function() {
 	$("#taxonomy").change(function() {
 		var section = $(this).attr('value');
 		var plainUrl = $(location).attr('href').split("?")[0];
-		$("#stories-container").load(plainUrl + "?section=" + section + " #stories");
 
+		if(section != 'All') $("#stories-container").load(plainUrl + "?section=" + section + " #stories");
+        else $("#stories-container").load(plainUrl + " #stories");
 	});
 
 	/*

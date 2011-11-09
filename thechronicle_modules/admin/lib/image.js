@@ -1,4 +1,4 @@
- var globalFunctions = require('../../global-functions');
+var globalFunctions = require('../../global-functions');
 var async = require('async');
 var s3 = require('./s3.js');
 var im = require('imagemagick');
@@ -81,9 +81,12 @@ function _downloadUrlToPath(url, path, callback) {
 exports.bindPath = function(app) {
     return function() {
 
-        app.get('/manage', site.checkAdmin, function(req, httpRes) {
-            api.image.getAllOriginals(function(err, origs) {
-
+        app.get('/manage/:start?', site.checkAdmin, function(req, httpRes) {
+            var start = req.params.start;
+            api.image.getAllOriginals(start, function(err, origs) {
+                origs.forEach(function(orig) {
+                    //console.log(orig);
+                })
                 httpRes.render('admin/articleimage', {
                     filename: 'views/admin/articleimage.jade',
                         locals: {

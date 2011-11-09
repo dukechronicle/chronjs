@@ -53,7 +53,7 @@ exports.bindPath = function (app) {
             app.get('/news', site.checkAdmin,
                 function(req, res) {
                     function renderPage(docs) {
-                        var stories = docs;
+                        var stories = _.sortBy(docs, function(doc) { return doc.title; }); // sort docs alphabetically
                         api.group.docs(NEWS_GROUP_NAMESPACE, null,
                         function(err, model) {
                             res.render('admin/layout/news', {
@@ -92,7 +92,7 @@ exports.bindPath = function (app) {
             app.get('/sports', site.checkAdmin,
                 function(req, res) {
                     function renderPage(docs) {
-                        var stories = docs;
+                        var stories = _.sortBy(docs, function(doc) { return doc.title; }); // sort docs alphabetically
                         api.group.docs(SPORTS_GROUP_NAMESPACE, null,
                         function(err, model) {
                             res.render('admin/layout/sports', {
@@ -131,7 +131,7 @@ exports.bindPath = function (app) {
             app.get('/opinion', site.checkAdmin,
                 function(req, res) {
                     function renderPage(docs) {
-                        var stories = docs;
+                        var stories = _.sortBy(docs, function(doc) { return doc.title; }); // sort docs alphabetically
                         api.group.docs(OPINION_GROUP_NAMESPACE, null,
                         function(err, model) {
                             res.render('admin/layout/opinion', {
@@ -170,7 +170,7 @@ exports.bindPath = function (app) {
             app.get('/recess', site.checkAdmin,
                 function(req, res) {
                     function renderPage(docs) {
-                        var stories = docs;
+                        var stories = _.sortBy(docs, function(doc) { return doc.title; }); // sort docs alphabetically
                         api.group.docs(RECESS_GROUP_NAMESPACE, null,
                         function(err, model) {
                             res.render('admin/layout/recess', {
@@ -209,7 +209,7 @@ exports.bindPath = function (app) {
             app.get('/towerview', site.checkAdmin,
                 function(req, res) {
                     function renderPage(docs) {
-                        var stories = docs;
+                        var stories = _.sortBy(docs, function(doc) { return doc.title; }); // sort docs alphabetically
                         api.group.docs(TOWERVIEW_GROUP_NAMESPACE, null,
                         function(err, model) {
                             res.render('admin/layout/towerview', {

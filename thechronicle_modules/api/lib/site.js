@@ -4,6 +4,7 @@ var exports = module.exports = site;
 var api = require('./api');
 var globalFunctions = require('../../global-functions');
 var smtp = require('./smtp');
+var newsletter = require('./newsletter');
 var redis = require('./redisclient');
 var config = require('../../config');
 var rss = require('./rss');
@@ -693,6 +694,13 @@ site.init = function(app, callback) {
         app.get('/smtp', function(req, http_res) {
             http_res.render('smtp', {layout: false, model: [""] } );
         });
+
+        app.get('/testmail', function(req,http_res) { 
+            newsletter.createNewsletter(function(err){
+                console.log("Created news letter");
+            });
+        });
+                
 
         app.get('/newsletter', function(req, http_res) {
             http_res.render('site/newsletter', {model: [""] } );

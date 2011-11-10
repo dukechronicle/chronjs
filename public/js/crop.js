@@ -42,3 +42,11 @@ function showCoords(c) {
 function clearCoords() {
     $('#coords input').val('');
 };
+
+function showDescriptions() {
+    var desc = "What different image types are for:\n";
+    for(var i in sizes) {
+        desc += "\n" + i + " - " + sizes[i].description + "\n";
+    }
+    alert(desc);
+}

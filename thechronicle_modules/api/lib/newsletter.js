@@ -1,11 +1,24 @@
+var newsletter = {};
+var exports = module.exports = newsletter;
+
 var MailChimpAPI = require('mailchimp').MailChimpAPI;
 var api = require('./api');
 var _ = require('underscore');
+var async = require('async');
 
 var apiKey = '740856b1876fd04723d34bd00aa381d3-us2';
 var taxonomyGroups = ["News","Sports","Opinion","Recess","Towerview"];
 
 var numDocs = 1;
+
+//Obtain from MailChimp Site.
+var listID = "bc302eeb8d";
+var templateID = 233513;
+
+// Strings
+var date = getDate();
+var newsletterSubject = "Duke Chronicle Daily Newsletter " + date;
+var newsletterFromEmail = "chronicle@duke.edu";
 
 try { 
     var mcAPI = new MailChimpAPI(apiKey, { version : '1.3', secure : false });
@@ -24,48 +37,99 @@ function getDate()
     }   
     if(mm<10){
         mm='0'+mm;
-    }    
+    }  
     return mm+'/'+dd+'/'+yyyy;
 }
 
-exports.sendNewsletter = function(callback){
-    api.campaigns({ start: 0, limit: 25 }, function (data) {
-        if (data.error)
-            console.log('Error: '+data.error+' ('+data.code+')');
-        else
-            console.log(JSON.stringify(data)); // Do something with your data!
+newsletter.addSubscriber = function(subscriberEmail, callback){
+    var params = {"id": listID, "email_address":subscriberEmail, "send_welcome": true};
+    mcAPI.listSubscribe(params, function(res){
+        if(res === false)
+        {
+            console.log("Adding subscriber to list failed!")
+            callback("Adding subscriber to list failed!");
+        }
+        callback(null);
     });
 }
 
-exports.createNewsletter = function(callback){
-    var date = getDate();
-    var optArray = {"list_id": "bc302eeb8d", "subject": "Duke Chronicle Daily Newsletter!", "from_email":"chronicle@duke.edu", "from_name":"The Chronicle", "title": "Newsletter " + date, "template_id":233513};
-
-    api.taxonomy.docs("News",numDocs,function(err,res){
-        if(err)
-            return callback(err,null);
-        
-        var newsText = "";
-        var newsHTML = "";
-        console.log("AAAAAAAAAAAAAAAAAAAAAAAAAA");
-
-        for(x=0; x < numDocs; x++)
+newsletter.removeSubscriber = function(subscriberEmail, callback){
+    var params = {"id": listID, "email_address":subscriberEmail, "delete_member":true, "send_welcome": true, "send_goodbye":false};
+    mcAPI.listUnsubscribe(params, function(res){
+        if(res === false)
         {
-            newsText += res[x].value.body;
-            newsHTML += res[x].value.renderedBody;
+            console.log("Removing subscriber to list failed!")
+            callback("Removing subscriber to list failed!");
+        }
+        callback(null);
+    });
+}
+
+newsletter.sendNewsletter = function(callback){
+    var name = "Newsletter " + date;
+    console.log(name);
+    mcAPI.campaigns({ start: 0, limit: 1, filters:{"title":name}}, function (res) {
+        if (res.error)
+        {
+            console.log('Error: '+res.error+' ('+res.code+')');
+            return callback('Error: '+res.error+' ('+res.code+')');
         }
 
-        var contentArr = {"html_MAIN":newsText, "html_HEADER":"The Duke Daily Chronicle", "html_SIDECOLUMN":"SIDEEEEE", "html_FOOTER":"MY FOOT!", "html_ISSUEDATE":date, "html_EVENTS": "Cool Events Bro", "html_LOCATION": "Duke University", "html_DATE":"whenever", "text":newsText};
-        console.log(contentArr);
+        console.log(JSON.stringify(res)); // Do something with your data!
 
-        var params = {"type": "regular", "options": optArray, "content": contentArr};
-        mcAPI.campaignCreate(params, function(res) {
-            if(res.error){
-                console.log('Error: '+res.error+' ('+res.code+')');
-                return callback();
+        var campaignID = res.data[0].id;
+        console.log(campaignID);
+
+        mcAPI.campaignSendNow({cid: campaignID}, function(res2) {
+            console.log(res2);
+            if(res2 === false)
+            {
+                console.log("Sending Campaign failed!")
+                return callback("Sending Campaign failed!");
             }
-            console.log("Campaign ID: " + res);
+            return callback(null);
         });
+    });
+}
+
+newsletter.createNewsletter = function(callback){
+    var optArray = {"list_id": listID, "subject": newsletterSubject, "from_email":newsletterFromEmail, "from_name":"The Chronicle", "title": "Newsletter " + date, "template_id":templateID};
+
+    async.map(taxonomyGroups, function(item, callback){
+            console.log(item);
+            api.taxonomy.docs(item,numDocs,function(err,docs){
+                if(err)
+                    return callback(err,null);             
+                return callback(err,docs);
+            });
+        },
+        function(err, res){
+
+            var newsText = "";
+            var newsHTML = "";
+
+            for(x=0; x < taxonomyGroups.length; x++)
+            {
+                newsHTML += "<h2>" + taxonomyGroups[x] + "</h2>";
+                newsHTML += "<p>" + res[x][0].value.teaser + "</p>";
+                newsText += res[x][0].value.teaser;
+            }
+
+            var sideBarText = "SideBar Text";
+            var footerText = "Footer Text";
+            var eventsText = "Some events";
+            var contentArr = {"html_MAIN":newsHTML, "html_SIDECOLUMN":sideBarText, "html_FOOTER":footerText, "html_ISSUEDATE":date, "html_EVENTS": eventsText, "text":newsText};
+            console.log(contentArr);
+
+            var params = {"type": "regular", "options": optArray, "content": contentArr};
+            mcAPI.campaignCreate(params, function(res) {
+                if(res.error){
+                    console.log('Error: '+res.error+' ('+res.code+')');
+                    return callback('Error: '+res.error+' ('+res.code+')');
+                }
+                console.log("Campaign ID: " + res);
+                callback(null);
+            });
     });
 }
 

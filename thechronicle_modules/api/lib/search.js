@@ -192,7 +192,7 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
     });
 
 	var fullQuery = "";
-    for(var index in words) {
+    for(var index = 0; index < words.length; index ++) {
         if(index != 0) fullQuery = fullQuery + " OR ";
         fullQuery = fullQuery + "title_text:" + words[index] + " OR body_text:" + words[index];
     }
@@ -251,7 +251,7 @@ function querySolr(query,options,callback) {
         var tempid;
         var docs = responseObj.response.docs;
         //console.log(docs);
-        for(var docNum in docs)
+        for(var docNum = 0; docNum < docs.length; docNum ++)
         {
             var tempid = getDBIDFromSolrID(docs[docNum].id);
             ids.push(tempid);

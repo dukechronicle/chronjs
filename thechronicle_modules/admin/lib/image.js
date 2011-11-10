@@ -6,7 +6,6 @@ var site = require('../../api/lib/site.js');
 var fs = require('fs');
 var api = require('../../api/lib/api.js');
 var urlModule = require('url');
-var _ = require("underscore");
 
 var VALID_EXTENSIONS = {};
 VALID_EXTENSIONS['image/jpeg'] = 'jpg';
@@ -231,7 +230,7 @@ exports.bindPath = function(app) {
                                     photographer: orig.value.photographer,
                                     date: orig.value.date,
                                     versions: versions,
-                                    imageTypes: _.keys(IMAGE_TYPES),
+                                    imageTypes: Object.keys(IMAGE_TYPES),
                                     article: req.query.article,
                                     imageDetails: IMAGE_TYPES
                                 },

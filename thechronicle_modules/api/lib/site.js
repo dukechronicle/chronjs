@@ -863,7 +863,7 @@ function _showSearchArticles(err,req,http_res,docs,facets) {
 
         doc.authorsHtml = "";
         if (doc.authors && doc.authors.length > 0) {
-            for(var i in doc.authors) {
+            for(var i = 0; i < doc.authors.length; i ++) {
                 doc.authorsHtml += "&nbsp;<a href= '/author/"+doc.authors[i].replace(/ /g,'-')+"?sort=date&order=desc'>"+doc.authors[i]+"</a>";
                 if(i < (doc.authors.length-1)) doc.authorsHtml += ",";
             }

@@ -696,9 +696,15 @@ site.init = function(app, callback) {
         });
 
         app.get('/testmail', function(req,http_res) { 
-            newsletter.createNewsletter(function(err){
-                console.log("Created news letter");
+	        newsletter.createNewsletter(function(err){
+                console.log("Added Subscriber");
             });
+            /*newsletter.addSubscriber("yhgoh88@gmail.com", function(err){
+                console.log("Added Subscriber");
+            });*/
+            /*newsletter.removeSubscriber("yhgoh88@gmail.com", function(err){
+                console.log("removed Subscriber");
+            });*/
         });
                 
 

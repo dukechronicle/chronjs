@@ -124,7 +124,6 @@ function ArticleParser(articleCallback) {
 			     callback(err);
 			 else {
 			     article.body = result;
-			     console.log(article);
 			     callback(undefined, article);
 			 }
 		     });
@@ -134,7 +133,10 @@ function ArticleParser(articleCallback) {
 	parser.article.import_id = parser.textNode;
     };
     function onSection(parser) {
-	parser.article.taxonomy = [ parser.textNode ];
+	if (parser.textNode == "Editorial")
+	    parser.article.taxonomy = [ "Opinion", "Editorial" ]
+	else
+	    parser.article.taxonomy = [ parser.textNode ];
     };
     function onDate(parser) {
 	var date = new Date(parser.textNode);

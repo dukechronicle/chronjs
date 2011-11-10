@@ -110,7 +110,7 @@ function ArticleParser(articleCallback) {
 	    if (article.body[0].match(/^by [^\.]*$/i)) article.body.shift();
 	    if (article.body[0].match(/^from [^\.]*$/i)) article.body.shift();
 	    if (article.body[0].match(/^THE CHRONICLE$/)) article.body.shift();
-	    article.teaser = article.body[0];
+	    article.teaser = article.body[0].match(/^[^\.]+\./)[0];
 	} catch (err) {
 	    callback(err);
 	    return;
@@ -133,7 +133,10 @@ function ArticleParser(articleCallback) {
 	parser.article.import_id = parser.textNode;
     };
     function onSection(parser) {
-	parser.article.taxonomy = [ parser.textNode ];
+	if (parser.textNode == "Editorial")
+	    parser.article.taxonomy = [ "Opinion", "Editorial" ]
+	else
+	    parser.article.taxonomy = [ parser.textNode ];
     };
     function onDate(parser) {
 	var date = new Date(parser.textNode);

@@ -55,7 +55,7 @@ exports.createNewsletter = function(callback){
             newsHTML += res[x].value.renderedBody;
         }
 
-        var contentArr = {"html_MAIN":newsText, "html_HEADER":"Chroniaelwfkajf", "html_SIDECOLUMN":"SIDEEEEE", "html_FOOTER":"MY FOOT!", "html_HEADER_IMAGE":"http://lokeshdhakar.com/projects/lightbox2/images/image-2.jpg", "html_ISSUEDATE":date, "text":newsText};
+        var contentArr = {"html_MAIN":newsText, "html_HEADER":"The Duke Daily Chronicle", "html_SIDECOLUMN":"SIDEEEEE", "html_FOOTER":"MY FOOT!", "html_ISSUEDATE":date, "html_EVENTS": "Cool Events Bro", "html_LOCATION": "Duke University", "html_DATE":"whenever", "text":newsText};
         console.log(contentArr);
 
         var params = {"type": "regular", "options": optArray, "content": contentArr};

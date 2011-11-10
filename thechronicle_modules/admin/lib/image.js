@@ -6,33 +6,38 @@ var site = require('../../api/lib/site.js');
 var fs = require('fs');
 var api = require('../../api/lib/api.js');
 var urlModule = require('url');
+var _ = require("underscore");
 
 var VALID_EXTENSIONS = {};
 VALID_EXTENSIONS['image/jpeg'] = 'jpg';
 VALID_EXTENSIONS['image/png'] = 'png';
 VALID_EXTENSIONS['image/gif'] = 'gif';
 
-var IMAGE_TYPES = ['LargeRect', 'ThumbRect', 'ThumbRectL', 'ThumbSquareM', 'ThumbWide'];
-var CROP_SIZES = {
+var IMAGE_TYPES = {
     LargeRect: {
         width: 636,
-        height: 393
+        height: 393,
+        description: "Used for the main image on the article page, as well as for the slideshow"
     },
     ThumbRect: {
         width: 186,
-        height: 133
+        height: 133,
+         description: "Dean, add a description here"
     },
     ThumbRectL: {
         width: 276,
-        height: 165
+        height: 165,
+        description: "Dean, add a description here"
     },
     ThumbSquareM: {
         width: 183,
-        height: 183
+        height: 183,
+        description: "Dean, add a description here"
     },
     ThumbWide: {
         width: 300,
-        height: 120
+        height: 120,
+        description: "Dean, add a description here"
     }
 };
 
@@ -226,9 +231,9 @@ exports.bindPath = function(app) {
                                     photographer: orig.value.photographer,
                                     date: orig.value.date,
                                     versions: versions,
-                                    imageTypes: IMAGE_TYPES,
+                                    imageTypes: _.keys(IMAGE_TYPES),
                                     article: req.query.article,
-                                    cropSizes: CROP_SIZES
+                                    imageDetails: IMAGE_TYPES
                                 },
                                 layout: "layout-admin.jade"
                             });

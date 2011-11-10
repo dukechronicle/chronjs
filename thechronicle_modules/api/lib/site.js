@@ -674,8 +674,8 @@ site.init = function(app, callback) {
             });
         });
 
-        app.get('/article/:url/image', function(req, httpRes) {
-                api.image.getAllOriginals(function(err, origs) {
+        app.get('/article/:url/image', site.checkAdmin, function(req, httpRes) {
+                api.image.getAllOriginals(null, function(err, origs) {
                     httpRes.render('admin/articleimage', {
                         filename: 'views/admin/articleimage.jade',
                             locals: {
@@ -836,9 +836,8 @@ function _parseAuthor(doc) {
     doc.authorsArray = _.clone(doc.authors);
     doc.authors = "";
     doc.authorsHtml = "";
-    
     if (doc.authorsArray && doc.authorsArray.length > 0) {
-        for(var i in doc.authorsArray) {
+        for(var i = 0; i < doc.authorsArray.length; i ++) {
             doc.authorsHtml += "<a href= '/staff/"+doc.authorsArray[i].replace(/ /g,'-')+"'>"+doc.authorsArray[i]+"</a>";
             doc.authors += doc.authorsArray[i];
             if(i < (doc.authorsArray.length-1)) {

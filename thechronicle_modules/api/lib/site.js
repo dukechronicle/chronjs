@@ -607,37 +607,11 @@ site.init = function(app, callback) {
 
                         var rootSections = ["News", "Sports", "Opinion", "Recess", "Towerview"];
 
-                        db.taxonomy.getHierarchy(function (err, res) {
-                            var taxonomy = {};
-                            res.forEach(function(value) {
-                                if (typeof value === undefined || typeof value.key === undefined) return;
-                                value = value.key;
-                                //var current = taxonomy;
-
-                                if (value && value.length > 0 && rootSections.indexOf(value[0]) != -1) {
-                                    var key = "";
-                                    for(var i = 0; i < value.length - 1; i++) {
-                                        key += "-";
-                                    }
-                                    key += " " + value[value.length - 1]
-
-                                    var selected = false;
-
-                                    if (_.isEqual(value, doc.taxonomy)) {
-                                        selected = true;
-                                    }
-
-                                    taxonomy[key] = [JSON.stringify(value), selected];
-
-                                }
-                            })
-
+                        db.taxonomy.getTaxonomyListing(function (err, taxonomy) {
                             if(!doc.images) doc.images = {};
                             if (doc.authors) {
                                 doc.authors = doc.authors.join(", ");
                             }
-
-
 
                             http_res.render('admin/edit', {
                                 locals: {

@@ -26,8 +26,8 @@ a(href='/admin/manage') Manage and edit uploaded articles
                   option(value=value) #{key}
             - else
               option Select a section
-              - each section in taxonomy
-                - each key, value in taxonomy[section]
+              - each subsections, section in taxonomy
+                - each key, value in subsections
                     option(value=value) #{key}
         td
           button(id='sub'+article.id, style='width: 200px', onclick="editDocument("+JSON.stringify(article)+")") Submit

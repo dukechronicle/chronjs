@@ -220,7 +220,8 @@ exports.init = function(app, callback) {
 		    if (err)
 			http_res.end(err);
 		    else {
-			db.taxonomy.getTaxonomyList(function (err, taxonomy) {
+			db.taxonomy.getTaxonomyListing(function (err, taxonomy) {
+			    console.log(taxonomy);
 			    k4export.runExporter(files.zip.path,
                                 function(failed, success) {
 				    http_res.render('admin/k4export', {

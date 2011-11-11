@@ -10,6 +10,7 @@ var cron = require('./thechronicle_modules/api/lib/cron');
 var globalFunctions = require('./thechronicle_modules/global-functions');
 var config = require('./thechronicle_modules/config');
 var api = require('./thechronicle_modules/api/lib/api');
+var log = require('./thechronicle_modules/log');
 var site = require('./thechronicle_modules/api/lib/site');
 var admin = require('./thechronicle_modules/admin/lib/admin');
 var mobileapi = require('./thechronicle_modules/mobileapi/lib/mobileapi');
@@ -43,6 +44,7 @@ function compile(str, path) {
 // add the stylus middleware, which re-compiles when
 // a stylesheet has changed, compiling FROM src,
 // TO dest. dest is optional, defaulting to src
+
 
 app.use(stylus.middleware({
 	src: __dirname + '/views'

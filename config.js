@@ -11,6 +11,9 @@ var configuration = {
             //"COUCHDB_DATABASE":"production",
             //"SOLR_CORE":"/3f534ff3ff0",
 
+	    "LOGGLY_INPUT_KEY": "4d40e1e2-ef31-491f-b844-8b83aa38b30c",
+	    "LOGGLY_SUBDOMAIN": "thechronicle",
+
             "SERVER_PORT":"4000",
             "ADMIN_USERNAME":"dean",
             "ADMIN_PASSWORD":"dean",

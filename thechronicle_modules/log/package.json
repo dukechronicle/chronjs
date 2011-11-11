@@ -1,0 +1,5 @@
+{
+    "name": "thechronicle-log",
+    "version" : "0.0.1",
+    "main" : "./lib/log.js"
+}

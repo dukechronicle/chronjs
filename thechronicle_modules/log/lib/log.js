@@ -9,13 +9,14 @@ _.extend(exports, logger);
 
 logger.setLevels(winston.config.syslog.levels);
 logger.add(winston.transports.Console, { level: 'debug' });
-logger.add(winston.transports.Loggly, {
-    subdomain: config.get('LOGGLY_SUBDOMAIN'),
-    inputToken: config.get('LOGGLY_INPUT_KEY'),
-    level: 'warning',
-    json: true
-});
-//logger.handleExceptions();
+if (process.env.NODE_ENV === 'production')
+    logger.add(winston.transports.Loggly, {
+	subdomain: config.get('LOGGLY_SUBDOMAIN'),
+	inputToken: config.get('LOGGLY_INPUT_KEY'),
+	level: 'warning',
+	json: true
+    });
+logger.handleExceptions();
 logger.warning('Logger is up');
 
 // TODO: Handle logging errors with email alert

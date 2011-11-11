@@ -52,18 +52,24 @@ taxonomy.getHierarchyTree = function(callback) {
     });
 }
 
-taxonomy.getTaxonomyList = function(callback) {
+taxonomy.getTaxonomyListing = function(callback) {
     taxonomy.getHierarchy(function (err, res) {
 	if (err) callback(err);
 	else {
-	    async.reduce(res, {},
+	    var listing = { News: {},
+			    Sports: {},
+			    Opinion: {},
+			    Recess: {},
+			    Towerview: {}
+			  };
+	    async.reduce(res, listing,
 		function (memo, item, cb) {
 		    var fields = item.key;
 		    var dashes = "";
 		    for (var i = 0; i < fields.length - 1; i++) dashes += "-";
-		    if (memo[fields[0]] == undefined) memo[fields[0]] = {};
-		    memo[fields[0]][fields.toString()] =
-			dashes + " " + fields[fields.length - 1];
+		    if (fields[0] in memo)
+			memo[fields[0]][fields.toString()] =
+			  dashes + " " + fields[fields.length - 1];
 		    cb(undefined, memo);
 		}, callback);
 	}

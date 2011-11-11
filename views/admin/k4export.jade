@@ -26,7 +26,7 @@ a(href='/admin/manage') Manage and edit uploaded articles
                   option(value=value) #{key}
             - else
               option Select a section
-              - each section in ['News', 'Sports', 'Opinion', 'Recess', 'Towerview']
+              - each section in taxonomy
                 - each key, value in taxonomy[section]
                     option(value=value) #{key}
         td

@@ -222,6 +222,9 @@ api.articleForUrl = function(url, callback) {
     db.view("articles/urls", query, function(err, docs) {
 
         if (err) return callback(err);
+        if (docs.length === 0) {
+            return callback("Article does not exist");
+        }
         var docTypeKey = 1;
         var aggregateDoc = {};
 

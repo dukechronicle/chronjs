@@ -47,7 +47,7 @@ newsletter.addSubscriber = function(subscriberEmail, callback){
         if(res === false)
         {
             console.log("Adding subscriber to list failed!")
-            callback("Adding subscriber to list failed!");
+            return callback("Adding subscriber to list failed!");
         }
         callback(null);
     });
@@ -59,7 +59,7 @@ newsletter.removeSubscriber = function(subscriberEmail, callback){
         if(res === false)
         {
             console.log("Removing subscriber to list failed!")
-            callback("Removing subscriber to list failed!");
+            return callback("Removing subscriber to list failed!");
         }
         callback(null);
     });

@@ -124,7 +124,8 @@ function runSite(callback) {
 	port = config.get('SERVER_PORT');
 	
 	cron.init();	
-
+	log.init();
+	
     // use redis as our session store
     redisClient.init(function (err0) {
         if(err0) return console.log(err0);
@@ -141,7 +142,6 @@ function runSite(callback) {
         async.parallel([
             function(callback) {
                 site.init(app, function(err) {
-                    //api.search.removeAllDocsFromSearch(function(){});
                     if (err) return console.log(err);
                 });
             },

@@ -89,18 +89,6 @@ exports.bindPath = function(app) {
         app.get('/manage/:start?', site.checkAdmin, function(req, httpRes) {
             var start = req.params.start;
             api.image.getAllOriginals(start, function(err, origs) {
-                
-                // sort by date, accounting for badly formatted dates
-                origs = _.sortBy(origs, function(image) {
-                    var d = new Date(image.date);
-                    
-                    // if date not valid, set it to a really old date
-                    if(!_isValidDate(d)) d = new Date(0);
-
-                    return d.getTime();
-                });
-                origs.reverse(); // newest images first
-
                 httpRes.render('admin/articleimage', {
                     filename: 'views/admin/articleimage.jade',
                         locals: {
@@ -342,10 +330,4 @@ exports.bindPath = function(app) {
             );
         });
     }
-}
-
-function _isValidDate(d) {
-  if ( Object.prototype.toString.call(d) !== "[object Date]" )
-    return false;
-  return !isNaN(d.getTime());
 }

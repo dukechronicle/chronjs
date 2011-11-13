@@ -265,7 +265,7 @@ api.docForUrl = function(url, callback) {
 
             if (docType === 'article') {
                 var doc = doc.value;
-                callback(null, doc);
+                return callback(null, doc);
             }
         }
     });

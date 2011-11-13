@@ -1,4 +1,5 @@
 var db = require('../../db-abstract');
+var _ = require("underscore");
 
 var image = exports;
 
@@ -45,7 +46,25 @@ image.getAllOriginals = function(start, callback) {
             if (nameSplit.length > 1) doc.displayName = nameSplit[1];
             return doc;
         });
-
+        
+        // sort by date, accounting for badly formatted dates
+        res = _.sortBy(res, function(image) {
+        	var d = new Date(image.date);
+                    
+        	// if date not valid, set it to a really old date
+        	if(!_isValidDate(d)) d = new Date(0);
+    
+    		return d.getTime();
+        });
+        
+        res.reverse(); // newest images first
+        
         callback(err, res);
     });
+}
+
+function _isValidDate(d) {
+  if ( Object.prototype.toString.call(d) !== "[object Date]" )
+    return false;
+  return !isNaN(d.getTime());
 }

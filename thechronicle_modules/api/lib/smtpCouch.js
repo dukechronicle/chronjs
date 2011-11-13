@@ -6,10 +6,10 @@ var nodemailer = require('nodemailer');
 
 var DB_LIST_NAME = "subscriberList";
 
-/*
-@param {array} array List of all subscriber emails
-@param {object} obj object representing a specific subscriber, including the email of that subscriber
-@return true if obj email is contained in array of subscriber emails, false if not.
+/**
+* @param {array} array List of all subscriber emails
+* @param {object} obj object representing a specific subscriber, including the email of that subscriber
+* @return true if obj email is contained in array of subscriber emails, false if not.
 */
 
 function containsEmail(obj, array){
@@ -22,9 +22,9 @@ function containsEmail(obj, array){
     }
     return false;
 }
-/*
-@param {String} subscriberEmail email of subscriber that you would like to add to list of subscriber emails.
-@return add a subscriber's email to emailList and save db
+/**
+* @param {String} subscriberEmail email of subscriber that you would like to add to list of subscriber emails.
+* @return add a subscriber's email to emailList and save db
 */
 
 smtp.addSubscriber = function(subscriberEmail, callback){
@@ -57,10 +57,10 @@ smtp.addSubscriber = function(subscriberEmail, callback){
         db.save(DB_LIST_NAME,{list: emailList}, callback);
     });
 }
-/*
-@param {String} email email to delete from list of subscriber emails
-@param {emailList} list of all subscriber emails
-@return if email of subscriber is in emailList then delete it from emailList.
+/** 
+* @param {String} email email to delete from list of subscriber emails
+* @param {emailList} list of all subscriber emails
+* @return if email of subscriber is in emailList then delete it from emailList.
 */
 
 function deleteEmailIfExists(email, emailList)
@@ -74,9 +74,9 @@ function deleteEmailIfExists(email, emailList)
         }
     }
 }
-/*
-@param subscriberEmail {String} email of subscriber to remove from emailList.
-@return delete email if it exists from emailList and update db.
+/**
+* @param subscriberEmail {String} email of subscriber to remove from emailList.
+* @return delete email if it exists from emailList and update db.
 */
 smtp.removeSubscriber = function(subscriberEmail, callback){
     db.get(DB_LIST_NAME,function(err, res){
@@ -115,9 +115,9 @@ nodemailer.SMTP = {
     pass : sgpassword
 }
 
-/*
-@param {String} msgBody message to send to subscribers
-@return sends message to all subscribers
+/**
+* @param {String} msgBody message to send to subscribers
+* @return sends message to all subscribers
 */
 
 smtp.sendNewsletter = function(msgBody,callback)

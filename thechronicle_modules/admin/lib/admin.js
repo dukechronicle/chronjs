@@ -249,6 +249,7 @@ exports.init = function(app, callback) {
                         var images = doc.images;
                         if (!images) images = {};
                         images[req.body.imageType] = req.body.versionId;
+                        images["Original"] = req.body.original;                        
 
                         api.editDoc(doc._id, {
                             images: images

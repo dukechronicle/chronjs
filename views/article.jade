@@ -8,6 +8,11 @@
             if (doc.images && doc.images.LargeRect && doc.images.LargeRect.url)
                 img.article(src=doc.images.LargeRect.url)
 
+            if (doc.images && doc.images.Original)
+                #{doc.images.Original.photographer}
+                br
+                #{doc.images.Original.caption}
+
             .metadata
                 span.credit
                     | By !{doc.authorsHtml} &nbsp; | &nbsp; #{doc.date}

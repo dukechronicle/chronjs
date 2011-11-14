@@ -15,9 +15,16 @@ image.getOriginal = function(name, callback) {
     });
 }
 
-image.createOriginal = function(name, url, contentType, metadata, callback) {
-    metadata.url = url;
-    metadata.contentType = contentType;
+image.createOriginal = function(name, url, contentType, thumbUrl, photographer, caption, location, callback) {
+    var metadata = {
+        url: url,
+        contentType: contentType,
+        thumbUrl: thumbUrl,
+        photographer: photographer,
+        caption: caption,
+        location: location,
+        date: new Date().getTime()
+    };
     db.image.createOriginal(name, metadata, callback);
 }
 

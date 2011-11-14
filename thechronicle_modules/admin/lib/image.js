@@ -166,13 +166,7 @@ exports.bindPath = function(app) {
                 });
             },
             function(url, thumbUrl, callback) {
-                api.image.createOriginal(imageName, url, imageType, {
-                    thumbUrl: thumbUrl,
-                    photographer: 'None',
-                    caption: 'None',
-                    date: new Date().getTime(),
-                    location: 'None'
-                },
+                api.image.createOriginal(imageName, url, imageType, thumbUrl, null, null, null,
                 function(err, res) {
                     callback(err, res, url);
                 });

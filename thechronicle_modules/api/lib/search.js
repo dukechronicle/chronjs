@@ -285,7 +285,7 @@ function _makeFacets(facets,callback) {
     var facetQueries = [];
     if(facets) {
         var indivFacets = facets.split(",");
-        for(i in indivFacets) {
+        for(var i = 0; i < indivFacets.length; i ++) {
             var parts = indivFacets[i].split(":");
             
             if(parts[0] == 'Section') parts[0] = "section_s";

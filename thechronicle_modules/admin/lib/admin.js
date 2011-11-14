@@ -1,5 +1,6 @@
 var api = require('../../api');
 var db = require('../../db-abstract');
+var log = require('../../log');
 var async = require('async');
 var fs = require('fs');
 var s3 = require('./s3.js');
@@ -48,21 +49,21 @@ exports.init = function(app, callback) {
     s3.init(function(err) {
         if (err)
         {
-            console.log("S3 init failed!");
+            log.error("S3 init failed!");
             return callback(err);
         }
         
         //Run this to render bodies for all articles
         /*
         api.docsByDate(null, function(err, docs) {
-            console.log("Got docs");
+            log.debug("Got docs");
             docs.forEach(function(doc, index) {
                 _renderBody(doc.body, function(err, rendered) {
                     api.editDoc(doc._id, {
                         renderedBody: rendered
                     }, 
                     function(err) {
-                        console.log("Updating " + index + " of " + docs.length);
+                        log.info("Updating " + index + " of " + docs.length);
                     });
                 });
             });
@@ -90,7 +91,7 @@ exports.init = function(app, callback) {
                 api.group.add(nameSpace, groupName, docId, weight,
                 function(err, res) {
                     if (err) {
-                        console.log(err);
+                        log.warning(err);
                         _res.send("false");
                     } else {
                         _res.send("true");
@@ -221,7 +222,6 @@ exports.init = function(app, callback) {
 			http_res.end(err);
 		    else {
 			db.taxonomy.getTaxonomyListing(function (err, taxonomy) {
-			    console.log(taxonomy);
 			    k4export.runExporter(files.zip.path,
                                 function(failed, success) {
 				    http_res.render('admin/k4export', {
@@ -347,7 +347,7 @@ exports.init = function(app, callback) {
                 function(err, url) {
                     if (err) {
                         globalFunctions.showError(http_res, err);
-                        console.log(err);
+                        log.warning(err);
                     }
                     else {
                         http_res.redirect('page/' + url);

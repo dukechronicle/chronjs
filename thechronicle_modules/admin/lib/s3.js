@@ -4,6 +4,7 @@ var exports = module.exports = s3;
 var knox = require('knox');
 var fs = require('fs');
 var config = require("../../config");
+var log = require('../../log');
 
 var BUCKET_NAME = null;
 var KEY = null;
@@ -60,7 +61,7 @@ function _getClientStatic(callback) {
 /*
 fs.readFile('README.md', function(err, buf) {
     s3.put(buf, 'README.md', 'text/plain', function(err, res) {
-        console.log(res);
+        log.debug(res);
     });
 });
 */

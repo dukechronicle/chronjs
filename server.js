@@ -2,13 +2,13 @@
 var express = require('express');
 require('express-namespace');
 var stylus = require('stylus');
-var cron = require('./thechronicle_modules/api/lib/cron');
-
+var sprintf = require('sprintf').sprintf;
 
 
 /* require internal modules */
 var globalFunctions = require('./thechronicle_modules/global-functions');
 var config = require('./thechronicle_modules/config');
+var cron = require('./thechronicle_modules/api/lib/cron');
 var api = require('./thechronicle_modules/api/lib/api');
 var log = require('./thechronicle_modules/log');
 var site = require('./thechronicle_modules/api/lib/site');
@@ -112,7 +112,7 @@ if(!config.isSetUp()) {
 site.assignPreInitFunctionality(app,this);
 
 app.listen(process.env.PORT || port);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+log.notice(sprintf("Express server listening on port %d in %s mode", app.address().port, app.settings.env));
 
 
 exports.runSite = function(callback)
@@ -128,7 +128,7 @@ function runSite(callback) {
 	
     // use redis as our session store
     redisClient.init(function (err0) {
-        if(err0) return console.log(err0);
+        if(err0) return log.error(err0);
         app.use(express.session({
             secret: SECRET,
             store: new RedisStore({
@@ -142,17 +142,17 @@ function runSite(callback) {
         async.parallel([
             function(callback) {
                 site.init(app, function(err) {
-                    if (err) return console.log(err);
+                    if (err) return log.crit(err);
                 });
             },
             function(callback) {
                 admin.init(app, function(err) {
-                     if (err) return console.log(err);
+                     if (err) return log.crit(err);
                 });
             },
             function(callback) {
                 mobileapi.init(app, function(err) {
-                    if (err) return console.log(err);
+                    if (err) return log.crit(err);
                 });
             }
         ], function(err, res) {

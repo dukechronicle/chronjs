@@ -1,4 +1,5 @@
 var globalFunctions = require('../../global-functions');
+var log = require('../../log');
 var async = require('async');
 var s3 = require('./s3.js');
 var im = require('imagemagick');
@@ -63,7 +64,7 @@ function _getMagickString(x1, y1, x2, y2) {
 
 function _downloadUrlToPath(url, path, callback) {
     var urlObj = urlModule.parse(url);
-    console.log('host: ' + urlObj.host);
+    log.info('host: ' + urlObj.host);
     var options = {
         host: urlObj.host,
         port: 80,
@@ -276,7 +277,7 @@ exports.bindPath = function(app) {
             },
             function(orig, callback) {
                 croppedName = 'crop_' + orig.value.name;
-                console.log(orig.value.url);
+                log.info(orig.value.url);
                 _downloadUrlToPath(orig.value.url, orig.value.name,
                 function(err) {
                     callback(err, orig);

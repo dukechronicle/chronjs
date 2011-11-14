@@ -31,6 +31,9 @@ var fakeArticles = [
 if(!config.isSetUp()) {
 	console.log('You must set up config.js in the main directory before you can generate an environment');
 }
+else if(config.get('COUCHDB_URL').indexOf("heroku") != -1 || config.get('COUCHDB_URL').indexOf("cloudant") != -1) {
+    console.log("You can't create an environment using the production config options. Recommend use of db server chrondev.iriscouch.com");
+}
 else {
     api.init(function(err1) {
         if (err1) console.log(err1);
@@ -50,7 +53,7 @@ else {
 
 function addFakeArticles(callback) {
     async.forEach(fakeArticles, function(article, cb) {
-        console.log("adding article with title: '" + article.title + "...'");
+        console.log("adding article with title: '" + article.title + "'...");
         
         api.addDoc(article, function(err, url, articleID) {
             if(err) console.log("article could not be added - " + err);

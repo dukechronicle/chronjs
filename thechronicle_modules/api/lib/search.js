@@ -1,5 +1,6 @@
 var solr = require('solr');
 var dateFormat = require('dateformat');
+var async = require('async');
 
 var config = require('../../config');
 var globalFunctions = require('../../global-functions');
@@ -124,22 +125,26 @@ search.unindexArticle = function(id, callback) {
     client.del(createSolrIDFromDBID(id), null, callback); 
 }
 
-// don't call this.
+// don't call this. only used by environment maker
 // removes all indexes from solr for the db we are using and sets all documents in the db we are using to not being indexed by solr
 search.removeAllDocsFromSearch = function(callback) {
     api.docsByDate(null, function(err, response) {
-        response.forEach(function(row) {
+        async.forEach(response, function(row, cb) {
                 console.log('unindexing "' + row.title + '"');
                 client.del(createSolrIDFromDBID(row._id), null, function(err,resp) { 
                     console.log(resp);
                     db.merge(row._id, {indexedBySolr: false}, function(error3, response3) {
                         if(error3) console.log(error3);
                         else console.log('unindexed "' + row.title + '"');
+                        cb(null);
                     });
                 });
+        },
+        function(err) {
+            // just incase the search index and the db were out of sync, delete everything in the search index for this db that may not have been covered above
+            client.del(null,"database_host_s:"+db.getDatabaseHost()+" AND database_s:"+db.getDatabaseName(),callback);
         });
-    });     
-    callback(null);
+    });
 }
 
 search.docsByAuthor = function(authorName, sortOrder, facets, page, callback) {

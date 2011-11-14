@@ -346,6 +346,15 @@ api.removeFromDocArray = function(id, field, toRemove, callback) {
     );
 }
 
+/**
+    Destroys then recreates the database the server is using. Only should be used by the environment maker!
+*/
+api.recreateDatabase = function(callback) {
+    db.destroy(function(err) {
+        db.init(callback);
+    });
+}
+
 api.getDatabaseName = function() {
     return db.getDatabaseName();
 }

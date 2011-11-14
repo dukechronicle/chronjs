@@ -4,6 +4,7 @@ var async = require('async');
 
 var config = require('../../config');
 var globalFunctions = require('../../global-functions');
+var log = require('../../log');
 var api = require("./api");
 var _ = require("underscore");
 var db = require("../../db-abstract");
@@ -40,20 +41,20 @@ search.init = function() {
 
 // check for unindexed articles, or articles with index versioning below the current version, and index them in solr.
 search.indexUnindexedArticles = function(count) {
-    console.log('looking for articles to index...');
+    log.notice('looking for articles to index...');
     db.search.docsIndexedBelowVersion(INDEX_VERSION, count, function(err, response) {
         // Attempt to index each file in row.
         response.forEach(function(row) {
             process.nextTick(function() {
-                console.log('indexing "' + row.title + '"');
+                log.debug('indexing "' + row.title + '"');
 
                 search.indexArticle(row._id, row.title, row.body, row.taxonomy, row.authors, row.created, function(error2, response2) {
-                    if(error2) console.log(error2);
+                    if(error2) log.warning(error2);
                     else {
 
                         db.search.setArticleAsIndexed(row._id, INDEX_VERSION, function(error3, response3) {
-                            if(error3) console.log(error3);
-                            else console.log('indexed "' + row.title + '"');
+                            if(error3) log.warning(error3);
+                            else log.debug('indexed "' + row.title + '"');
                         });
                     }
                 });
@@ -116,7 +117,7 @@ search.indexArticle = function(id,title,body,taxonomy,authors,createdDate,callba
 
     // unindex the article before you index it, just incase it was using an old verion of the indexing
     search.unindexArticle(id, function(err,resp) { 
-        if(err) console.log(err);
+        if(err) log.warning(err);
         else client.add(solrDoc, {commit:true}, callback);
     }); 
 }
@@ -130,12 +131,12 @@ search.unindexArticle = function(id, callback) {
 search.removeAllDocsFromSearch = function(callback) {
     api.docsByDate(null, function(err, response) {
         async.forEach(response, function(row, cb) {
-                console.log('unindexing "' + row.title + '"');
+                log.debug('unindexing "' + row.title + '"');
                 client.del(createSolrIDFromDBID(row._id), null, function(err,resp) { 
-                    console.log(resp);
+                    log.debug(resp);
                     db.merge(row._id, {indexedBySolr: false}, function(error3, response3) {
-                        if(error3) console.log(error3);
-                        else console.log('unindexed "' + row.title + '"');
+                        if(error3) log.warning(error3);
+                        else log.debug('unindexed "' + row.title + '"');
                         cb(null);
                     });
                 });
@@ -229,7 +230,7 @@ function querySolr(query,options,callback) {
 		}
 
         var responseObj = JSON.parse(response);
-        console.log(responseObj);
+        log.debug(responseObj);
         // put facet into an easily manipulitable form
         var facets = {};
         if(responseObj.facet_counts) {
@@ -250,12 +251,12 @@ function querySolr(query,options,callback) {
                 }
             }            
         }
-        //console.log(facets);
+        //log.debug(facets);
         
         var ids = [];
         var tempid;
         var docs = responseObj.response.docs;
-        //console.log(docs);
+        //log.debug(docs);
         for(var docNum = 0; docNum < docs.length; docNum ++)
         {
             var tempid = getDBIDFromSolrID(docs[docNum].id);

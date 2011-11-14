@@ -1,6 +1,7 @@
 var nimble = require('nimble');
 var _ = require('underscore');
 var db = require('../../db-abstract');
+var log = require('../../log');
 var redis = require('./redisclient');
 
 var group = exports;
@@ -70,7 +71,7 @@ group.docs = function(namespace, group, callback) {
             //redis.client.get()
                 var DOC_TYPE_KEY = 3;
                 db.group.docs(namespace, group, function(err, res) {
-                    if (BENCHMARK) console.log("RECEIVED %d", Date.now() - start);
+                    if (BENCHMARK) log.info("RECEIVED %d", Date.now() - start);
                     // if querying name space, map each group to it's own object
                     if (err) return callback(err);
                     else {
@@ -137,7 +138,7 @@ group.docs = function(namespace, group, callback) {
                     }
                 });
         } else {
-            //console.log(res);
+            //log.debug(res);
             callback(null, JSON.parse(res));
         }
     })

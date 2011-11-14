@@ -5,6 +5,7 @@ var cron = require("cron");
 var nimble = require("nimble");
 var async = require("async");
 var db = require("../../db-abstract");
+var log = require('../../log');
 var config = require("../../config");
 var _ = require("underscore");
 
@@ -63,7 +64,7 @@ api.init = function(callback) {
     db.init(function(error) {
         if(error)
         {
-            console.log("db init failed!");
+            log.error("db init failed!");
             return callback(error);
         }
         

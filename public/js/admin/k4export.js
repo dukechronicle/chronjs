@@ -1,6 +1,6 @@
 function editDocument(article) {
     $("#sub"+article.id).attr('disabled', 'disabled');
-    article.taxonomy = JSON.stringify($("#tax"+article.id).val().split(","));
+    article.taxonomy = $("#tax"+article.id).val();
     article.authors = article.authors.toString();
     $.post('/admin/edit', { doc: article }, function(data, status) {
 	if (status != 'success')

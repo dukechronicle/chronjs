@@ -1,7 +1,6 @@
 var api = require('../../api');
 var log = require('../../log');
 
-var cradle = require('cradle');
 var fs  = require('fs');
 var path = require('path');
 var async = require('async');
@@ -9,13 +8,7 @@ var sax = require('sax');
 var zipfile = require('zipfile');
 
 
-db = new cradle.Connection('http://app578498.heroku.cloudant.com', 80, {
-		    auth: { username: 'app578498.heroku',
-			    password: 'NNbL2x3Bu5vGLgComPjWxxET' }
-                    }).database('chronicle_dev');
-
 exports.runExporter = runExporter;
-exports.clearDatabase = clearDatabase;
 
 
 function ArticleParser(articleCallback) {
@@ -171,32 +164,8 @@ function ArticleParser(articleCallback) {
     };
 }
 
-function exportToDevelopment(article, callback) {
-    db.save(article, callback);
-}
-
 function exportToProduction(article, callback) {
     api.addDoc(article, callback);
-}
-
-function clearDatabase(callback) {
-    db.all(function (err, docs) {
-	if (err) {
-	    log.warning(err);
-	    callback(err);
-	}
-	else {
-	    async.forEachSeries(docs,  // forEach returns doc.value not doc
-	         function (doc, cb) {
-		     db.remove(doc.id, doc.value.rev,
-			       function(err, res) {
-				   if (err) cb(err);
-				   else     cb();
-			       });
-		 },
-		 callback);
-	}
-    });
 }
 
 function runExporter(zipPath, exportCallback) {

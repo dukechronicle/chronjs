@@ -22,7 +22,7 @@ var configParams = [
     {
         name: 'COUCHDB_DATABASE',
         description: 'CouchDB Database Name',
-        default: 'chronicle_dev'
+        default: 'dev'
     },
     {
         name: 'S3_BUCKET',
@@ -42,7 +42,7 @@ var configParams = [
     {
         name: 'REDIS_URL',
         description: 'Redis Server URL',
-        default: 'redis://redistogo:0235bf0a2db5e6cc087683952f60c59c@icefish.redistogo.com:9249/'
+        default: ''
     },
     {
         name: 'SOLR_HOST',
@@ -57,13 +57,23 @@ var configParams = [
     {
         name: 'SOLR_CORE',
         description: 'WebSolr Core',
-        default: '/c1af51aeb37'
+        default: ''
     },
     {
         name: 'SOLR_PATH',
         description: 'WebSolr Server Path',
         default: '/solr'
     },
+    {
+        name: "LOGGLY_INPUT_KEY",
+        description: 'Loggly Input Key',
+        default: ''
+    },
+    {
+        name: "LOGGLY_SUBDOMAIN",
+        description: 'Loggly Subdomain',
+        default: 'thechronicle'
+    }
 ];
 
 exports.getParameters = function()

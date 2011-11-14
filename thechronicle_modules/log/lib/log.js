@@ -1,12 +1,10 @@
 var winston = require('winston');
 var config = require('../../config');
-var _ = require('underscore');
 
 
-var logger = new (winston.Logger)();
-_.extend(exports, logger);
+exports.init = function(callback) {
+    var logger = new (winston.Logger)();
 
-exports.init = function() {
     logger.setLevels(winston.config.syslog.levels);
     logger.add(winston.transports.Console, {
 	level: 'debug',
@@ -28,5 +26,8 @@ exports.init = function() {
     // TODO: Handle logging errors with email alert
     logger.on('error', function(err) {
     	console.error("Logging error: " + JSON.stringify(err));
-    });	
+    });
+
+    logger.extend(exports);
+    if (callback) callback();
 };

@@ -713,8 +713,9 @@ site.init = function(app, callback) {
         callback(null);
     });
 }
-
+// Checks if you are an admin
 site.checkAdmin = function(req,res,next) {
+//if not admin, require login
     if(!api.accounts.isAdmin(req)) {
         site.askForLogin(res,req.url);
     }

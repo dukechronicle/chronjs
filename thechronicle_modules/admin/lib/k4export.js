@@ -1,11 +1,12 @@
-var child_process = require('child_process')
+var api = require('../../api');
+var log = require('../../log');
+
 var cradle = require('cradle');
 var fs  = require('fs');
 var path = require('path');
-var api = require('../../api')
-var async = require('async')
-var sax = require('sax')
-var zipfile = require('zipfile')
+var async = require('async');
+var sax = require('sax');
+var zipfile = require('zipfile');
 
 
 db = new cradle.Connection('http://app578498.heroku.cloudant.com', 80, {
@@ -60,7 +61,7 @@ function ArticleParser(articleCallback) {
 	    if (extension == '.xml') {
             zipFile.readFile(name, function(err, data) {
                 if (err) {
-                    console.error("Can't open file: " + err);
+                    log.warning("Can't open file: " + err);
                     callback(name);
                 } else {
                     thisParser.parseXML(data.toString(),
@@ -72,7 +73,7 @@ function ArticleParser(articleCallback) {
 	    });
 	}
 	else {
-	    console.error("Unknown file type: " + name);
+	    log.warning("Unknown file type: " + name);
 	    callback(name);
 	}
     };
@@ -181,7 +182,7 @@ function exportToProduction(article, callback) {
 function clearDatabase(callback) {
     db.all(function (err, docs) {
 	if (err) {
-	    console.error(err);
+	    log.warning(err);
 	    callback(err);
 	}
 	else {
@@ -202,7 +203,7 @@ function runExporter(zipPath, exportCallback) {
     var parser = new ArticleParser(function(article, callback) {
 	exportToProduction(article, function(err, url, id) {
 	    if (err) {
-		console.error("Error adding article: " + err);
+		log.warning("Error adding article: " + err);
 		callback(article.title);
 	    }
 	    else {

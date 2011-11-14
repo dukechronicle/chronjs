@@ -1,6 +1,7 @@
 var smtp = {};
 var exports = module.exports = smtp;
 
+var log = require('../../log');
 var db = require("../../db-abstract");
 var nodemailer = require('nodemailer');
 
@@ -16,7 +17,7 @@ function containsEmail(obj, array){
     for(i in array){
         if(array[i] != null && array[i].email == obj.email)
         {
-            console.log(array[i].email);
+            log.debug(array[i].email);
             return true;
         }
     }
@@ -122,13 +123,13 @@ nodemailer.SMTP = {
 
 smtp.sendNewsletter = function(msgBody,callback)
 {
-    console.log(msgBody);
+    log.debug(msgBody);
     smtp.getSubscribers(function(err,res){
-        console.log(res);
+        log.debug(res);
         for(i in res)
         {
              var emailDest = res[i].email; 
-             console.log(emailDest);
+             log.debug(emailDest);
 
              nodemailer.send_mail({
                     sender : "chronicle@duke.edu",
@@ -139,7 +140,7 @@ smtp.sendNewsletter = function(msgBody,callback)
                 },
                 function(err2, result){
                     if(err2){
-                        console.log(err2);
+                        log.debug(err2);
                     }
                 }
              );

@@ -3,6 +3,7 @@ var exports = module.exports = site;
 
 var api = require('./api');
 var globalFunctions = require('../../global-functions');
+var log = require('../../log');
 var smtp = require('./smtp');
 var newsletter = require('./newsletter');
 var redis = require('./redisclient');
@@ -34,7 +35,7 @@ var db = require('../../db-abstract');
 var BENCHMARK = false;
 
 function _getImages(obj, callback) {
-    console.log("_getImages DEPRECATED!");
+    log.warn("_getImages DEPRECATED!");
     callback("DEPRECATED!");
 }
 
@@ -52,7 +53,7 @@ site.init = function(app, callback) {
 
     api.init(function(err2) {
         if(err2) {
-            console.log("api init failed!");
+            log.crit("api init failed!");
             return callback(err2);
         }
 
@@ -95,7 +96,7 @@ site.init = function(app, callback) {
                 function(callback){ //0
                     api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function(err, result) {
                         if (err) return callback(err);
-                        if (BENCHMARK) console.log("API TIME %d", Date.now() - start);
+                        if (BENCHMARK) log.info("API TIME %d", Date.now() - start);
                         return callback(null, result);
                     });
                 },
@@ -109,7 +110,7 @@ site.init = function(app, callback) {
                                 title: parts[1]
                             };
                         });
-                        if (BENCHMARK) console.log("REDIS TIME %d", Date.now() - start);
+                        if (BENCHMARK) log.info("REDIS TIME %d", Date.now() - start);
                         callback(null, popular);
                     });
                 },
@@ -125,13 +126,13 @@ site.init = function(app, callback) {
                         } else {
                             twitter.tweet = 'No tweets available.';
                         }
-                        if (BENCHMARK) console.log("RSS TIME %d", Date.now() - start);
+                        if (BENCHMARK) log.info("RSS TIME %d", Date.now() - start);
                         return callback(err, twitter);
                     });
                 }
             ],
             function(err, results) {
-                if (BENCHMARK) console.log("TOTAL TIME %d", Date.now() - start);
+                if (BENCHMARK) log.info("TOTAL TIME %d", Date.now() - start);
                 var model = results[0];
                 _.defaults(model, homeModel);
 
@@ -226,7 +227,7 @@ site.init = function(app, callback) {
                 ],
                 // optional callback
                 function(err, results){
-                    if (err) return console.log(err);
+                    if (err) return log.warning(err);
                     model.Blog = results[0];
                     /*
                     model.Football = _.pluck(results[2], 'value');
@@ -243,7 +244,7 @@ site.init = function(app, callback) {
                     };
 
 
-                    //console.log(model.WSoccer);
+                    //log.debug(model.WSoccer);
                     httpRes.render('site/sports', {subsections: results[1].children, filename: 'views/site/sports.jade', model: model});
                 });
 
@@ -520,8 +521,8 @@ site.init = function(app, callback) {
                  }
                  multi.exec(function(err, res) {
                         if(err) {
-                            console.log("Failed to register article view: " + latestUrl);
-                            console.log(err);
+                            log.warning("Failed to register article view: " + latestUrl);
+                            log.warning(err);
                         }
                  });
                 }
@@ -671,13 +672,13 @@ site.init = function(app, callback) {
 
         app.get('/testmail', function(req,http_res) { 
 	        newsletter.createNewsletter(function(err){
-                console.log("Added Subscriber");
+                log.debug("Added Subscriber");
             });
             /*newsletter.addSubscriber("yhgoh88@gmail.com", function(err){
-                console.log("Added Subscriber");
+                log.debug("Added Subscriber");
             });*/
             /*newsletter.removeSubscriber("yhgoh88@gmail.com", function(err){
-                console.log("removed Subscriber");
+                log.debug("removed Subscriber");
             });*/
         });
                 
@@ -740,7 +741,7 @@ site.assignPreInitFunctionality = function(app,server) {
 
     app.get('/logout', function(req, res) {
         api.accounts.logOut(req, function(err) {
-              if(err) console.log(err);
+              if(err) log.warning(err);
               res.redirect('/');
         });
     });
@@ -782,20 +783,20 @@ site.assignPreInitFunctionality = function(app,server) {
 
 
 site.renderSmtpTest = function(req, http_res, email, num) {
-    console.log("rendersmtptest");
+    log.debug("rendersmtptest");
     if(num == 1)
         smtp.addSubscriber(email, function(err, docs) {
             if (err) 
                 globalFunctions.showError(http_res, err);
             http_res.render('mobile', {layout: false, model: [""] } );
-            console.log("added");
+            log.debug("added");
         });
     else if (num == 2)
         smtp.removeSubscriber(email, function(err, docs) {
             if (err)
                 globalFunctions.showError(http_res, err);
             http_res.render('mobile', {layout: false, model: [""] } );
-            console.log("removed");
+            log.debug("removed");
         });
     else if (num == 3)
     {
@@ -805,7 +806,7 @@ site.renderSmtpTest = function(req, http_res, email, num) {
             api.docsByDate(5, function(err, docs) {
                 smtp.sendNewsletter(docs, function(err2,res2) {
                     http_res.send(res2);
-                    console.log("sent email");
+                    log.debug("sent email");
                 });
             });
         });

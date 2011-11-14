@@ -1,6 +1,7 @@
 var smtp = {};
 var exports = module.exports = smtp;
 
+var log = require('../../log');
 var nodemailer = require('nodemailer');
 var redisclient = require('./redisclient');
 var jsdom = require("jsdom");
@@ -9,18 +10,18 @@ var $ = require("jquery");
 
 smtp.addSubscriber = function(subscriberEmail, callback){
     redisclient.client.sadd(DB_LIST_NAME, subscriberEmail, function(err, res){
-        console.log(subscriberEmail);
+	log.info(subscriberEmail);
         if(err)
-            console.log(err);
+            log.warning(err);
         callback(err,res);
     });
 }
 
 smtp.removeSubscriber = function(subscriberEmail, callback){
     redisclient.client.srem(DB_LIST_NAME, subscriberEmail, function(err, res){
-        console.log(subscriberEmail);
+        log.info(subscriberEmail);
         if(err)
-            console.log(err);
+            log.warning(err);
         callback(err,res);
     });
 }
@@ -29,7 +30,7 @@ smtp.getSubscribers = function(callback)
 {
     redisclient.client.smembers(DB_LIST_NAME, function(err, res){
         if(err)
-            console.log(err);
+            log.warning(err);
         callback(err,res);
     });
 }
@@ -90,10 +91,10 @@ function generatePlainText(msgBody)
 
 smtp.sendNewsletter = function(msgBody,callback)
 {
-    //console.log(msgBody);
+    //log.debug(msgBody);
     generateHTML(msgBody, function(err2, htmlres){
-        console.log("htmlmsg");
-        console.log(htmlres);
+        log.debug("htmlmsg");
+        log.debug(htmlres);
         var bodyMsg = generatePlainText(msgBody);
         
         smtp.getSubscribers(function(err,res){
@@ -109,17 +110,17 @@ smtp.sendNewsletter = function(msgBody,callback)
                         html: htmlres
                      }
 
-            console.log(mailContent);
+            log.info(mailContent);
             for(i in res)
             {
                  var emailDest = res[i];
-                 console.log(emailDest);
+                 log.info(emailDest);
 
                  /*nodemailer.send_mail(
                      mailContent,
                      function(err3){
                         if(err3){
-                            console.log(err3);
+                            log.warning(err3);
                         }
                      }
                  );*/

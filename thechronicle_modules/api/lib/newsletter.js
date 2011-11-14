@@ -5,6 +5,7 @@ var MailChimpAPI = require('mailchimp').MailChimpAPI;
 var api = require('./api');
 var _ = require('underscore');
 var async = require('async');
+var log = require('../../log');
 
 var apiKey = '740856b1876fd04723d34bd00aa381d3-us2';
 var taxonomyGroups = ["News","Sports","Opinion","Recess","Towerview"];
@@ -23,7 +24,7 @@ var newsletterFromEmail = "chronicle@duke.edu";
 try { 
     var mcAPI = new MailChimpAPI(apiKey, { version : '1.3', secure : false });
 } catch (error) {
-    console.log('Error: ' + error);
+    log.warning(error);
 }
 
 function getDate()
@@ -46,7 +47,7 @@ newsletter.addSubscriber = function(subscriberEmail, callback){
     mcAPI.listSubscribe(params, function(res){
         if(res === false)
         {
-            console.log("Adding subscriber to list failed!")
+            log.warning("Adding subscriber to list failed!")
             return callback("Adding subscriber to list failed!");
         }
         callback(null);
@@ -58,7 +59,7 @@ newsletter.removeSubscriber = function(subscriberEmail, callback){
     mcAPI.listUnsubscribe(params, function(res){
         if(res === false)
         {
-            console.log("Removing subscriber to list failed!")
+            log.warning("Removing subscriber to list failed!")
             return callback("Removing subscriber to list failed!");
         }
         callback(null);
@@ -67,24 +68,24 @@ newsletter.removeSubscriber = function(subscriberEmail, callback){
 
 newsletter.sendNewsletter = function(callback){
     var name = "Newsletter " + date;
-    console.log(name);
+    log.info(name);
     mcAPI.campaigns({ start: 0, limit: 1, filters:{"title":name}}, function (res) {
         if (res.error)
         {
-            console.log('Error: '+res.error+' ('+res.code+')');
+            log.warning(res.error+' ('+res.code+')');
             return callback('Error: '+res.error+' ('+res.code+')');
         }
 
-        console.log(JSON.stringify(res)); // Do something with your data!
+        log.debug(JSON.stringify(res)); // Do something with your data!
 
         var campaignID = res.data[0].id;
-        console.log(campaignID);
+        log.info(campaignID);
 
         mcAPI.campaignSendNow({cid: campaignID}, function(res2) {
-            console.log(res2);
+            log.debug(res2);
             if(res2 === false)
             {
-                console.log("Sending Campaign failed!")
+                log.warning("Sending Campaign failed!")
                 return callback("Sending Campaign failed!");
             }
             return callback(null);
@@ -96,7 +97,7 @@ newsletter.createNewsletter = function(callback){
     var optArray = {"list_id": listID, "subject": newsletterSubject, "from_email":newsletterFromEmail, "from_name":"The Chronicle", "title": "Newsletter " + date, "template_id":templateID};
 
     async.map(taxonomyGroups, function(item, callback){
-            console.log(item);
+            log.debug(item);
             api.taxonomy.docs(item,numDocs,function(err,docs){
                 if(err)
                     return callback(err,null);             
@@ -119,15 +120,15 @@ newsletter.createNewsletter = function(callback){
             var footerText = "Footer Text";
             var eventsText = "Some events";
             var contentArr = {"html_MAIN":newsHTML, "html_SIDECOLUMN":sideBarText, "html_FOOTER":footerText, "html_ISSUEDATE":date, "html_EVENTS": eventsText, "text":newsText};
-            console.log(contentArr);
+            log.info(contentArr);
 
             var params = {"type": "regular", "options": optArray, "content": contentArr};
             mcAPI.campaignCreate(params, function(res) {
                 if(res.error){
-                    console.log('Error: '+res.error+' ('+res.code+')');
+                    log.warning('Error: '+res.error+' ('+res.code+')');
                     return callback('Error: '+res.error+' ('+res.code+')');
                 }
-                console.log("Campaign ID: " + res);
+                log.info("Campaign ID: " + res);
                 callback(null);
             });
     });

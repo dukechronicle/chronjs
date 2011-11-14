@@ -1,6 +1,7 @@
 var redis = require("redis");
 var url = require("url");
 var config = require('../../config');
+var log = require('../../log');
 var _ = require("underscore");
 
 var client;
@@ -19,17 +20,17 @@ exports.init = function(callback) {
         client = redis.createClient(redisUrl.port, redisUrl.hostname);
 
         client.on("error", function (err) {
-            console.log("Error " + err);
+            log.error(err);
         });
 
         client.auth(redisUrl.auth[1], function(err, reply) {
-            console.log("authenticating");
+            log.notice("authenticating to redis");
             if (err) {
-                console.log("Error connecting to redis: " + err);
+                log.error("Error connecting to redis: " + err);
                 return callback(err);
             }
 
-            //console.log(client);
+            //log.debug(client);
 
             exports.client = client;
             return callback(null);

@@ -208,18 +208,18 @@ exports.bindPath = function(app) {
         });
 
         app.get('/:imageName', site.checkAdmin,
-        function(req, httpRes) {  //this function either renders image or calls showError if there is an error
-            var imageName = req.params.imageName; //get image name from req
+        function(req, httpRes) {  
+            var imageName = req.params.imageName;
             api.image.getOriginal(imageName,
-            function(err, orig) { //anonymous function checks for an error
-                if (err) globalFunctions.showError(httpRes, err); //show this message if there is an error
+            function(err, orig) { 
+                if (err) globalFunctions.showError(httpRes, err); 
                 else {
-                    api.docsById(orig.value.imageVersions, //
+                    api.docsById(orig.value.imageVersions, 
                     function(err2, versions) {
-                        if (err2) globalFunctions.showError(httpRes, err2); // if an error is found, 
+                        if (err2) globalFunctions.showError(httpRes, err2);
                         else {
-                            httpRes.render('admin/image', { //no errors have been found, render image
-                                locals: { //specifies/assigns variables to pass into function
+                            httpRes.render('admin/image', { 
+                                locals: {
                                     url: orig.value.url,
                                     name: imageName,
                                     id: orig.value._id,
@@ -232,7 +232,7 @@ exports.bindPath = function(app) {
                                     article: req.query.article,
                                     imageDetails: IMAGE_TYPES
                                 },
-                                layout: "layout-admin.jade" // use this layout
+                                layout: "layout-admin.jade"
                             });
                         }
                     })
@@ -243,39 +243,39 @@ exports.bindPath = function(app) {
         app.post('/info', site.checkAdmin, 
         function(req, httpRes) {
             var data = {};
-            var id = req.body.id; //assign id from req
-            data.name = req.body.name; //fills entries of data from req
+            var id = req.body.id; 
+            data.name = req.body.name; 
             data.date = req.body.date;
             data.caption = req.body.caption;
             data.photographer = req.body.photographer;
             data.location = req.body.location;
 
-            api.image.edit(id, data, //passes the recently create "id" and "data" and an anonymous function to image.edit, which calls another function from db
+            api.image.edit(id, data, 
             function() {
-                httpRes.redirect('/admin/image/' + data.name); //redirects image to domain name /admin/image/data.name
+                httpRes.redirect('/admin/image/' + data.name); 
             });
 
         });
 
         app.post('/crop', site.checkAdmin,
         function(req, httpRes) {
-            var imageName = req.body.name; // assign "name" and "article" from parameter "req"
+            var imageName = req.body.name; 
             var article = req.body.article;
-            var geom = _getMagickString( //MagickString takes coordinates and puts that info into a string
+            var geom = _getMagickString( 
             parseInt(req.body.x1),
             parseInt(req.body.y1),
             parseInt(req.body.x2),
             parseInt(req.body.y2));
-            var width = req.body.finalWidth; // assign "width" and "height" from req
+            var width = req.body.finalWidth; 
             var height = req.body.finalHeight;
-            var croppedName = ''; //initialize croppedName
+            var croppedName = ''; 
 
             async.waterfall([
             function(callback) {
-                api.image.getOriginal(imageName, callback); //getOriginal gets image from the database
+                api.image.getOriginal(imageName, callback); 
             },
             function(orig, callback) {
-                croppedName = 'crop_' + orig.value.name; // modify the croppedName
+                croppedName = 'crop_' + orig.value.name; 
                 console.log(orig.value.url);
                 _downloadUrlToPath(orig.value.url, orig.value.name,
                 function(err) {
@@ -284,7 +284,7 @@ exports.bindPath = function(app) {
             },
             function(orig, callback) {
                 im.convert([orig.value.name, '-crop', geom,
-                '-resize', width.toString() + 'x' + height.toString(), croppedName], //crop image with given specifications
+                '-resize', width.toString() + 'x' + height.toString(), croppedName], 
                 function(imErr, stdout, stderr) { 
                     callback(imErr, orig);
                 });
@@ -296,22 +296,22 @@ exports.bindPath = function(app) {
                 });
             },
             function(orig, buf, callback) {
-                var versionNum = orig.value.imageVersions.length + 1; //increments the version number by 1
-                var type = orig.value.contentType; // takes the type from orig
+                var versionNum = orig.value.imageVersions.length + 1; 
+                var type = orig.value.contentType; 
                 var s3Name = versionNum + orig.value.name;
-                s3.put(buf, s3Name, type, //put command from s3 
+                s3.put(buf, s3Name, type, 
                 function(s3Err, url) {
                     callback(s3Err, orig, url);
                 });
             },
             function(orig, url, callback) {
-                api.image.createVersion(orig.id, url, width, height, //createVersion calls a function from the database that creates an image
+                api.image.createVersion(orig.id, url, width, height, 
                 function(err, res) {
                     callback(err, orig);
                 });
             },
             function(orig, callback) {
-                _deleteFiles([orig.value.name, croppedName], //calls a function defined earlier, which passes arguments to async.reduce()
+                _deleteFiles([orig.value.name, croppedName], 
                 function(err) {
                     callback(err, orig);
                 }
@@ -320,11 +320,11 @@ exports.bindPath = function(app) {
             ],
             function(err, orig) {
                 if (err) {
-                    globalFunctions.showError(httpRes, err); //check for an error
+                    globalFunctions.showError(httpRes, err); 
                 } else {
-                    if (err) globalFunctions.showError(httpRes, err); //check for an error again
-                    else if (article) httpRes.redirect('/admin/image/' + imageName + '?article=' + article); //if there is an article, redirect to this domain
-                    else httpRes.redirect('/admin/image/' + imageName);  // otherwise, redirect to this domain
+                    if (err) globalFunctions.showError(httpRes, err); 
+                    else if (article) httpRes.redirect('/admin/image/' + imageName + '?article=' + article); 
+                    else httpRes.redirect('/admin/image/' + imageName);
                 }
             }
             );

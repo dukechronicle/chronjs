@@ -68,7 +68,7 @@ taxonomy.getTaxonomyListing = function(callback) {
 		    var dashes = "";
 		    for (var i = 0; i < fields.length - 1; i++) dashes += "-";
 		    if (fields[0] in memo)
-			memo[fields[0]][fields.toString()] =
+			memo[fields[0]][JSON.stringify(fields)] =
 			  dashes + " " + fields[fields.length - 1];
 		    cb(undefined, memo);
 		}, callback);

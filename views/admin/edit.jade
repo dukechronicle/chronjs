@@ -9,7 +9,7 @@ form(action='/admin/edit', method='POST')
           option Select a section
            - each subsections, section in taxonomy
               - each key, value in subsections
-                - if (doc.taxonomy == value)
+                - if (JSON.stringify(doc.taxonomy) == value)
                     option(value=value, selected='selected') #{key}
                 - else
                     option(value=value) #{key}

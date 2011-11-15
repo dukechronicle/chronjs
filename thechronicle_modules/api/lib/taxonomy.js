@@ -22,34 +22,34 @@ var BAD_SECTIONS = ['News/Graduation Issue',
     'Towerview/The Green Light'];
 
 // get all document under given taxonomy path ex. ["News", "University"]
-taxonomy.docs = function(taxonomyPath, limit, callback) {
+taxonomy.docs = function (taxonomyPath, limit, callback) {
     db.taxonomy.docs(taxonomyPath, limit, callback);
-}
+};
 
-taxonomy.getParentAndChildren = function(navTree,callback) {
-    db.taxonomy.getChildren(navTree, function(err, results){
+taxonomy.getParentAndChildren = function (navTree, callback) {
+    db.taxonomy.getChildren(navTree, function (err, results) {
         if (err) return callback(err, null);
         else {
             var children = {};
             _.forEach(
-                _.select(
-                    _.pluck(results, 'key'),
-                    function(child) {
-                        return child.length === navTree.length + 1;
-                    }
-                ),
-                function(child) {
-                    var childPath = child.join('/');
+                    _.select(
+                            _.pluck(results, 'key'),
+                            function (child) {
+                                return child.length === navTree.length + 1;
+                            }
+                    ),
+                    function (child) {
+                        var childPath = child.join('/');
 
-                    children[childPath] = child[child.length - 1];
-                }
+                        children[childPath] = child[child.length - 1];
+                    }
             );
 
-            Object.keys(children).forEach(function(key) {
+            Object.keys(children).forEach(function (key) {
                 if (BAD_SECTIONS.indexOf(key) !== -1) {
                     delete children[key];
                 }
-            })
+            });
 
             var parentPaths = [];
 
@@ -57,11 +57,11 @@ taxonomy.getParentAndChildren = function(navTree,callback) {
                 var parentName = _.last(navTree);
                 navTree.pop();
                 var prefix = "/section/";
-                if (navTree.length < 2) prefix = "/"
-                parentPaths.push({path: prefix + navTree.join('/'), name: parentName});
+                if (navTree.length < 2) prefix = "/";
+                parentPaths.push({path:prefix + navTree.join('/'), name:parentName});
             }
 
-            callback(err, {children: children, parentPaths: parentPaths.reverse()});
+            callback(err, {children:children, parentPaths:parentPaths.reverse()});
         }
     });
-}
+};

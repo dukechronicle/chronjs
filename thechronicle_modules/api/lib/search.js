@@ -31,29 +31,29 @@ function createSolrIDFromDBID(db_id) {
     return db_id+"||"+db.getDatabaseName()+"||"+db.getDatabaseHost();
 }
 
-search.getIndexVersion = function() {
+search.getIndexVersion = function () {
     return INDEX_VERSION;
-}
+};
 
-search.init = function() {
-    client = solr.createClient(config.get('SOLR_HOST'),config.get('SOLR_PORT'),config.get('SOLR_CORE'),config.get('SOLR_PATH'));
-}
+search.init = function () {
+    client = solr.createClient(config.get('SOLR_HOST'), config.get('SOLR_PORT'), config.get('SOLR_CORE'), config.get('SOLR_PATH'));
+};
 
 // check for unindexed articles, or articles with index versioning below the current version, and index them in solr.
-search.indexUnindexedArticles = function(count) {
+search.indexUnindexedArticles = function (count) {
     log.notice('looking for articles to index...');
-    db.search.docsIndexedBelowVersion(INDEX_VERSION, count, function(err, response) {
+    db.search.docsIndexedBelowVersion(INDEX_VERSION, count, function (err, response) {
         // Attempt to index each file in row.
-        response.forEach(function(row) {
-            process.nextTick(function() {
+        response.forEach(function (row) {
+            process.nextTick(function () {
                 log.debug('indexing "' + row.title + '"');
 
-                search.indexArticle(row._id, row.title, row.body, row.taxonomy, row.authors, row.created, function(error2, response2) {
-                    if(error2) log.warning(error2);
+                search.indexArticle(row._id, row.title, row.body, row.taxonomy, row.authors, row.created, function (error2, response2) {
+                    if (error2) log.warning(error2);
                     else {
 
-                        db.search.setArticleAsIndexed(row._id, INDEX_VERSION, function(error3, response3) {
-                            if(error3) log.warning(error3);
+                        db.search.setArticleAsIndexed(row._id, INDEX_VERSION, function (error3, response3) {
+                            if (error3) log.warning(error3);
                             else log.debug('indexed "' + row.title + '"');
                         });
                     }
@@ -61,132 +61,132 @@ search.indexUnindexedArticles = function(count) {
             })
         });
     });
-}
+};
 
-search.indexArticle = function(id,title,body,taxonomy,authors,createdDate,callback) {
-	// adds the article to the solr database for searching	
-	if (body) body = body.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ');
+search.indexArticle = function (id, title, body, taxonomy, authors, createdDate, callback) {
+    // adds the article to the solr database for searching
+    if (body) body = body.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ');
     else body = "";
     if (title) title = title.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ');
     else title = "";
 
     if (authors) {
         authors = _.compact(authors);
-        authors = authors.map(function(author) {
+        authors = authors.map(function (author) {
             return author.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, ' ').toLowerCase();
         });
     }
 
     var section = undefined;
-    if(taxonomy && taxonomy[0]) section = taxonomy[0];
-    
+    if (taxonomy && taxonomy[0]) section = taxonomy[0];
+
     var date = new Date(createdDate * 1000); // turn seconds into milliseconds
-    
+
     var solrDate;
     var solrYear;
     var solrMonth;
     var solrDay;
     try {
-        solrDate = dateFormat(date,"UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"); // turns date into solr's date format: 1995-12-31T23:59:59Z
-        solrYear = dateFormat(date,"yyyy");
-        solrMonth = dateFormat(date,"mm");
-        solrDay = dateFormat(date,"dd");
+        solrDate = dateFormat(date, "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"); // turns date into solr's date format: 1995-12-31T23:59:59Z
+        solrYear = dateFormat(date, "yyyy");
+        solrMonth = dateFormat(date, "mm");
+        solrDay = dateFormat(date, "dd");
     }
-    catch(err) {  // if date is invalid use today's date
-        solrDate = dateFormat(new Date(),"UTC:yyyy-mm-dd'T'HH:MM:ss'Z'");
-        solrYear = dateFormat(new Date(),"yyyy");
-        solrMonth = dateFormat(new Date(),"mm");
-        solrDay = dateFormat(new Date(),"dd");
+    catch (err) {  // if date is invalid use today's date
+        solrDate = dateFormat(new Date(), "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'");
+        solrYear = dateFormat(new Date(), "yyyy");
+        solrMonth = dateFormat(new Date(), "mm");
+        solrDay = dateFormat(new Date(), "dd");
     }
 
-    // if you change this object (and in doing so change the index), you MUST increment INDEX_VERSION at the top of this script 
+    // if you change this object (and in doing so change the index), you MUST increment INDEX_VERSION at the top of this script
     var solrDoc = {
-		id: createSolrIDFromDBID(id),
-		type: 'article',
-        author_sm: authors,
-		title_text: title.toLowerCase(),
-		body_text:  body.toLowerCase(),
-        section_s: section,
-		database_s: db.getDatabaseName(),
-        database_host_s: db.getDatabaseHost(),
-        created_date_d: solrDate,
-        created_year_i: solrYear,
-        created_month_i: solrMonth,
-        created_day_i: solrDay
-	}; 
+        id:createSolrIDFromDBID(id),
+        type:'article',
+        author_sm:authors,
+        title_text:title.toLowerCase(),
+        body_text:body.toLowerCase(),
+        section_s:section,
+        database_s:db.getDatabaseName(),
+        database_host_s:db.getDatabaseHost(),
+        created_date_d:solrDate,
+        created_year_i:solrYear,
+        created_month_i:solrMonth,
+        created_day_i:solrDay
+    };
 
     // unindex the article before you index it, just incase it was using an old verion of the indexing
-    search.unindexArticle(id, function(err,resp) { 
-        if(err) log.warning(err);
+    search.unindexArticle(id, function (err, resp) {
+        if (err) log.warning(err);
         else client.add(solrDoc, {commit:true}, callback);
-    }); 
-}
+    });
+};
 
-search.unindexArticle = function(id, callback) {
-    client.del(createSolrIDFromDBID(id), null, callback); 
-}
+search.unindexArticle = function (id, callback) {
+    client.del(createSolrIDFromDBID(id), null, callback);
+};
 
 // don't call this. only used by environment maker
 // removes all indexes from solr for the db we are using and sets all documents in the db we are using to not being indexed by solr
-search.removeAllDocsFromSearch = function(callback) {
-    api.docsByDate(null, function(err, response) {
+search.removeAllDocsFromSearch = function (callback) {
+    api.docsByDate(null, function (err, response) {
         response = response || {};
-        async.forEach(response, function(row, cb) {
-            log.debug('unindexing "' + row.title + '"');
-            client.del(createSolrIDFromDBID(row._id), null, function(err,resp) { 
-                log.debug(resp);
-                db.merge(row._id, {indexedBySolr: false}, function(error3, response3) {
-                    if(error3) log.warning(error3);
-                    else log.debug('unindexed "' + row.title + '"');
-                    cb(null);
+        async.forEach(response, function (row, cb) {
+                    log.debug('unindexing "' + row.title + '"');
+                    client.del(createSolrIDFromDBID(row._id), null, function (err, resp) {
+                        log.debug(resp);
+                        db.merge(row._id, {indexedBySolr:false}, function (error3, response3) {
+                            if (error3) log.warning(error3);
+                            else log.debug('unindexed "' + row.title + '"');
+                            cb(null);
+                        });
+                    });
+                },
+                function (err) {
+                    // just incase the search index and the db were out of sync, delete everything in the search index for this db that may not have been covered above
+                    client.del(null, "database_host_s:" + db.getDatabaseHost() + " AND database_s:" + db.getDatabaseName(), callback);
                 });
-            });
-        },
-        function(err) {
-            // just incase the search index and the db were out of sync, delete everything in the search index for this db that may not have been covered above
-            client.del(null,"database_host_s:"+db.getDatabaseHost()+" AND database_s:"+db.getDatabaseName(),callback);
-        });
     });
-}
+};
 
-search.docsByAuthor = function(authorName, sortOrder, facets, page, callback) {
-    if(sortOrder != 'asc') sortOrder = 'desc';
-    if(page < 1) page = 1;
+search.docsByAuthor = function (authorName, sortOrder, facets, page, callback) {
+    if (sortOrder != 'asc') sortOrder = 'desc';
+    if (page < 1) page = 1;
 
     var facetFields;
     var facetQueries;
-    _makeFacets(facets, function(facetFieldsTemp,facetQueriesTemp) {
+    _makeFacets(facets, function (facetFieldsTemp, facetQueriesTemp) {
         facetFields = facetFieldsTemp;
         facetQueries = facetQueriesTemp;
     });
 
-    querySolr('author_sm:"' + authorName.toLowerCase() +'"',
-    {
-        facet: true,
-        "facet.field":facetFields,
-        fq:facetQueries,
-        rows: RESULTS_PER_PAGE,
-        start: RESULTS_PER_PAGE*(page-1),
-        fl: "*",
-        sort: 'created_date_d' + " " + sortOrder
-    },
-    callback);
-}
+    querySolr('author_sm:"' + authorName.toLowerCase() + '"',
+            {
+                facet:true,
+                "facet.field":facetFields,
+                fq:facetQueries,
+                rows:RESULTS_PER_PAGE,
+                start:RESULTS_PER_PAGE * (page - 1),
+                fl:"*",
+                sort:'created_date_d' + " " + sortOrder
+            },
+            callback);
+};
 
-search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page, callback) {
-    wordsQuery = globalFunctions.trim(wordsQuery);    
-    if(wordsQuery.length == 0) wordsQuery = "--";
+search.docsBySearchQuery = function (wordsQuery, sortBy, sortOrder, facets, page, callback) {
+    wordsQuery = globalFunctions.trim(wordsQuery);
+    if (wordsQuery.length == 0) wordsQuery = "--";
 
-    if(sortBy == 'relevance') sortBy = 'score';
-    else if(sortBy == 'date') sortBy = 'created_date_d';
+    if (sortBy == 'relevance') sortBy = 'score';
+    else if (sortBy == 'date') sortBy = 'created_date_d';
     else sortBy = 'score';
 
-    if(sortOrder != 'asc') sortOrder = 'desc';
-    if(page < 1) page = 1;
+    if (sortOrder != 'asc') sortOrder = 'desc';
+    if (page < 1) page = 1;
 
     var facetFields;
     var facetQueries;
-    _makeFacets(facets, function(facetFieldsTemp,facetQueriesTemp) {
+    _makeFacets(facets, function (facetFieldsTemp, facetQueriesTemp) {
         facetFields = facetFieldsTemp;
         facetQueries = facetQueriesTemp;
     });
@@ -194,31 +194,31 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
     wordsQuery = wordsQuery.toLowerCase();
     var words = wordsQuery.split(" ");
 
-    words = words.map(function(word) {
+    words = words.map(function (word) {
         return solr.valueEscape(word.replace(/"/g, '')); // remove "s from the query
     });
 
-	var fullQuery = "";
-    for(var index = 0; index < words.length; index ++) {
-        if(index != 0) fullQuery = fullQuery + " OR ";
+    var fullQuery = "";
+    for (var index = 0; index < words.length; index++) {
+        if (index != 0) fullQuery = fullQuery + " OR ";
         fullQuery = fullQuery + "title_text:" + words[index] + " OR body_text:" + words[index];
     }
 
     querySolr(fullQuery,
-    {
-      facet: true,
-      "facet.field":facetFields,
-      fq:facetQueries,
-      rows: RESULTS_PER_PAGE,
-      start: RESULTS_PER_PAGE*(page-1),
-      fl: "*,score",
-      sort: sortBy + " " + sortOrder,
-      "f.created_year_i.facet.sort":"index",
-      "f.created_month_i.facet.sort":"index",
-      "f.created_day_i.facet.sort":"index"
-    },
-    callback);
-}
+            {
+                facet:true,
+                "facet.field":facetFields,
+                fq:facetQueries,
+                rows:RESULTS_PER_PAGE,
+                start:RESULTS_PER_PAGE * (page - 1),
+                fl:"*,score",
+                sort:sortBy + " " + sortOrder,
+                "f.created_year_i.facet.sort":"index",
+                "f.created_month_i.facet.sort":"index",
+                "f.created_day_i.facet.sort":"index"
+            },
+            callback);
+};
 
 function querySolr(query,options,callback) {
     if(query.length > 0) {

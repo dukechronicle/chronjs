@@ -56,7 +56,10 @@ image.getAllOriginals = function (start, callback) {
 
         // sort by date, accounting for badly formatted dates
         res = _.sortBy(res, function (image) {
-            var d = new Date(image.date);
+            
+            var numericDate = parseInt(image.date);
+            if(isNaN(numericDate)) var d = new Date(image.date);
+            else var d = new Date(numericDate);
 
             // if date not valid, set it to a really old date
             if (!_isValidDate(d)) d = new Date(0);

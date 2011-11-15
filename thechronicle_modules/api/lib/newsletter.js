@@ -105,7 +105,7 @@ newsletter.createNewsletter = function (callback) {
                 var newsText = "";
                 var newsHTML = "";
 
-                for (x = 0; x < taxonomyGroups.length; x++) {
+                for (var x = 0; x < taxonomyGroups.length; x++) {
                     newsHTML += "<h2>" + taxonomyGroups[x] + "</h2>";
                     newsHTML += "<p>" + res[x][0].value.teaser + "</p>";
                     newsText += res[x][0].value.teaser;

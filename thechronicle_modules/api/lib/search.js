@@ -21,7 +21,7 @@ var exports = module.exports = search;
 
 function getDBIDFromSolrID(solr_id) {
     // since our solr document ids are stored as db_id||DBNAME||DBHOST we need to parse out the db_id to use
-    tempid = solr_id.split("||",1); 
+    var tempid = solr_id.split("||",1);
     return tempid[0];
 }
 

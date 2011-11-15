@@ -240,15 +240,17 @@ exports.bindPath = function (app) {
                     var data = {};
                     var id = req.body.id;
                     data.name = req.body.name;
-                    data.date = req.body.date;
                     data.caption = req.body.caption;
                     data.photographer = req.body.photographer;
                     data.location = req.body.location;
 
-                    api.image.edit(id, data,
-                            function () {
-                                httpRes.redirect('/admin/image/' + data.name);
-                            });
+                    // make sure date stays numeric so it can be sorted correctly
+                    data.date = parseInt(req.body.date);
+                    if(isNaN(data.date)) data.date = req.body.date;
+
+                    api.image.edit(id, data, function () {
+                        httpRes.redirect('/admin/image/' + data.name);
+                    });
 
                 });
 

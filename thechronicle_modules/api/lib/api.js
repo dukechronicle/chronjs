@@ -41,7 +41,7 @@ function getAvailableUrl(url, n, callback) {
 function _URLify(s, maxChars) {
 
     if(maxChars === undefined) {
-        max_chars = 100;
+        maxChars = 100;
     }
 
     var removelist = ["a", "an", "as", "at", "before", "but", "by", "for", "from",

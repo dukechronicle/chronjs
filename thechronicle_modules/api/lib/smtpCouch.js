@@ -14,13 +14,12 @@ var DB_LIST_NAME = "subscriberList";
 */
 
 function containsEmail(obj, array){
-    for(i in array){
-        if(array[i] != null && array[i].email == obj.email)
-        {
-            log.debug(array[i].email);
+    Object.keys(array).forEach(function(key) {
+        if(array[key] != null && array[key].email == obj.email) {
+            log.debug(array[key].email);
             return true;
         }
-    }
+    });
     return false;
 }
 /**
@@ -28,10 +27,9 @@ function containsEmail(obj, array){
  * @return add a subscriber's email to emailList and save db
  */
 
-smtp.addSubscriber = function (subscriberEmail, callback) {
+smtp.addSubscriber = function(subscriberEmail, callback) {
     db.get(DB_LIST_NAME, function (err, res) {
-        if (err && err.error != 'not_found')
-            callback(err);
+        if (err) return callback(err);
 
         var emailEntry = {email:subscriberEmail};
         var emailList = [];
@@ -41,18 +39,17 @@ smtp.addSubscriber = function (subscriberEmail, callback) {
             // Check if email exists
             if (!containsEmail(emailEntry, emailList)) {
                 emailList.push(emailEntry);
-            }
-            else {
-                callback(err, res);
-                return;
+            } else {
+                return callback(err, res);
             }
         }
         else {
             // First email of the list, initialize the list.
             emailList = [emailEntry];
         }
-        db.save(DB_LIST_NAME, {list:emailList}, callback);
+        return db.save(DB_LIST_NAME, {list:emailList}, callback);
     });
+    return null;
 };
 /** 
 * @param {String} email email to delete from list of subscriber emails
@@ -62,30 +59,29 @@ smtp.addSubscriber = function (subscriberEmail, callback) {
 
 function deleteEmailIfExists(email, emailList)
 {
-    for(i in emailList)
-    {
-        if(emailList[i].email == email)
-        {
-            emailList.splice(i,1);
-            return;
+    Object.keys(emailList).forEach(function(key) {
+        if(emailList[key].email == email) {
+            emailList.splice(key,1);
         }
-    }
+    });
+
+    return null;
 }
 /**
  * @param subscriberEmail {String} email of subscriber to remove from emailList.
  * @return delete email if it exists from emailList and update db.
  */
-smtp.removeSubscriber = function (subscriberEmail, callback) {
+smtp.removeSubscriber = function(subscriberEmail, callback) {
     db.get(DB_LIST_NAME, function (err, res) {
-        if (err && err.error != 'not_found')
-            callback(err);
+        if (err) return callback(err);
 
         // Get the list, delete entry, update.
         var emailList = res.list;
         deleteEmailIfExists(subscriberEmail, emailList);
 
-        db.save(DB_LIST_NAME, {list:emailList}, callback);
+        return db.save(DB_LIST_NAME, {list:emailList}, callback);
     });
+    return null;
 };
 
 smtp.getSubscribers = function (callback) {
@@ -115,12 +111,12 @@ nodemailer.SMTP = {
  * @return sends message to all subscribers
  */
 
-smtp.sendNewsletter = function (msgBody, callback) {
+smtp.sendNewsletter = function(msgBody, callback) {
     log.debug(msgBody);
     smtp.getSubscribers(function (err, res) {
         log.debug(res);
-        for (i in res) {
-            var emailDest = res[i].email;
+        Object.keys(res).forEach(function(key) {
+            var emailDest = res[key].email;
             log.debug(emailDest);
 
             nodemailer.send_mail({
@@ -128,15 +124,16 @@ smtp.sendNewsletter = function (msgBody, callback) {
                         to:emailDest,
                         subject:"This is a subject",
                         body:"Hello, this is a test body",
-                        html:"<b> test</b>alskdfj",
-                    },
-                    function (err2, result) {
-                        if (err2) {
-                            log.debug(err2);
-                        }
+                        html:"<strong> test</strong>alskdfj"
+                },
+                function (err2) {
+                    if (err2) {
+                        log.debug(err2);
                     }
+                }
             );
-        }
-        callback(err, res);
+        });
+        return callback(err, res);
     });
+    return null;
 };

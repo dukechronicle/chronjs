@@ -5,9 +5,6 @@ var configuration = {
             "COUCHDB_URL":"https://chrondev:pikachu@chrondev.iriscouch.com",
             "COUCHDB_DATABASE":"dev",
 
-	    	"LOGGLY_INPUT_KEY": "4d40e1e2-ef31-491f-b844-8b83aa38b30c",
-	    	"LOGGLY_SUBDOMAIN": "thechronicle",
-
             "SERVER_PORT":"4000",
 
             "ADMIN_USERNAME":"dean",

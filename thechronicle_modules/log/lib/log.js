@@ -12,13 +12,15 @@ exports.init = function(callback) {
     });
 
     if (process.env.NODE_ENV === 'production')
-    	logger.add(winston.transports.Loggly, {
-	    subdomain: config.get('LOGGLY_SUBDOMAIN'),
-	    inputToken: config.get('LOGGLY_INPUT_KEY'),
-	    level: 'warning',
-	    json: true,
-	    handleExceptions: true
-    	});
+    	logger.add(winston.transports.Loggly,
+            {
+                subdomain: "thechronicle",
+                inputToken: "4d40e1e2-ef31-491f-b844-8b83aa38b30c",
+                level: 'warning',
+                json: true,
+                handleExceptions: true
+    	    }
+        );
     
     logger.handleExceptions();
     logger.warning('Logger is up');

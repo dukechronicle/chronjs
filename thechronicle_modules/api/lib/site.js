@@ -407,7 +407,7 @@ site.init = function (app, callback) {
         });
 
         app.get('/staff/:query', function (req, http_res) {
-            api.search.docsByAuthor(req.params.query.replace('-', ' '), 'desc', '', 1, function (err, docs, facets) {
+            api.search.docsByAuthor(req.params.query.replace('-', ' '), 'desc', '', 1, function (err, docs) {
                 if (err) return globalFunctions.showError(http_res, err);
 
                 docs.forEach(function (doc) {
@@ -593,7 +593,7 @@ site.init = function (app, callback) {
                     if (req.query.deleteImage) {
                         var newImages = doc.images;
                         delete newImages[req.query.deleteImage];
-                        api.editDoc(doc._id, newImages, function (editErr, res) {
+                        api.editDoc(doc._id, newImages, function (editErr) {
                             if (editErr) globalFunctions.showError(http_res, editErr);
                             else http_res.redirect('/article/' + url + '/edit');
                         });
@@ -666,6 +666,7 @@ site.init = function (app, callback) {
 
         app.get('/testmail', function (req, http_res) {
             newsletter.createNewsletter(function (err) {
+                if (err) return log.error(err);
                 log.debug("Added Subscriber");
             });
             /*newsletter.addSubscriber("yhgoh88@gmail.com", function(err){
@@ -812,7 +813,7 @@ function _parseAuthor(doc) {
     doc.authorsHtml = "";
     if (doc.authorsArray && doc.authorsArray.length > 0) {
         for(var i = 0; i < doc.authorsArray.length; i ++) {
-            doc.authorsHtml += "<a href= '/staff/"+doc.authorsArray[i].replace(/ /g,'-')+"'>"+doc.authorsArray[i]+"</a>";
+            doc.authorsHtml += "<a href='/staff/"+doc.authorsArray[i].replace(/ /g,'-')+"'>"+doc.authorsArray[i]+"</a>";
             doc.authors += doc.authorsArray[i];
             if(i < (doc.authorsArray.length-1)) {
                 doc.authors += ", ";
@@ -861,5 +862,7 @@ function _showSearchArticles(err,req,http_res,docs,facets) {
             docs:docs, currentFacets:currentFacets, facets:facets, query:req.params.query, sort:req.query.sort, order:req.query.order
          }}
     );
+
+    return null;
 }
 

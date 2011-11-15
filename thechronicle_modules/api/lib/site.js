@@ -34,11 +34,6 @@ var db = require('../../db-abstract');
 
 var BENCHMARK = false;
 
-function _getImages(obj, callback) {
-    log.warn("_getImages DEPRECATED!");
-    callback("DEPRECATED!");
-}
-
 function _convertTimestamp(timestamp) {
     var date = new Date(timestamp*1000);
     return dateFormat(date,"mmmm dS, yyyy");

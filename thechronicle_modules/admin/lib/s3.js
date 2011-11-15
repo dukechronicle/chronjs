@@ -36,20 +36,6 @@ function _getUrl(key) {
     return 'http://s3.amazonaws.com/' + BUCKET_NAME + '/' + key;
 }
 
-//reading access keys from file for now...
-function _getClient(callback) {
-    fs.readFile('ak.txt',
-    function(err, data) {
-        var parts = data.toString('utf8').split(',');
-        var client = knox.createClient({
-            key: parts[0],
-            secret: parts[1],
-            bucket: BUCKET_NAME
-        });
-        callback(null, client);
-    });
-}
-
 function _getClientStatic(callback) {
     var client = knox.createClient({
            key: KEY,

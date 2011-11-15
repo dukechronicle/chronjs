@@ -118,7 +118,7 @@ exports.getParameters = function () {
         var newobj = {};
         newobj.name = key;
         newobj.description = getConfigParamObjectWithName(key).description;
-        newobj["default"] = activeProfile[key];
+        newobj.defaultValue = activeProfile[key];
         returnParams.push(newobj);
     }
 

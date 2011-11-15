@@ -24,24 +24,18 @@ var VIDEO_PLAYERS = {
 };
 var REGEX_FORMAT = "(\{%s:)([^}]+)(\})";
 
-function _renderBody(body, cbck) {
-    
-    async.waterfall([
-    function(callback) {
-        for(var name in VIDEO_PLAYERS) {
-            var pattern = new RegExp(sprintf(REGEX_FORMAT, name), 'g');
-            body = body.replace(pattern, function(match) {
-                return sprintf(VIDEO_PLAYERS[name], RegExp.$2);
-            });
-        }
-        callback(null, body);
-    },
-    function(replaced, callback) {
-        callback(null, md(replaced));
+function _renderBody(body, callback) {
+
+    for(var name in VIDEO_PLAYERS) {
+        var pattern = new RegExp(sprintf(REGEX_FORMAT, name), 'g');
+        body = body.replace(pattern, function(match) {
+            return sprintf(VIDEO_PLAYERS[name], RegExp.$2);
+        });
     }
-    ],
-    cbck);
-}
+
+    callback(null, md(body));
+
+};
 
 exports.init = function (app, callback) {
     s3.init(function (err) {

@@ -1,4 +1,4 @@
-var configParams = [    
+var configParams = [
     {
         name: 'SERVER_PORT',
         description: 'Port to run the chronicle site on',
@@ -66,7 +66,6 @@ var configParams = [
     }
 ];
 
-exports.getParameters = function()
-{
+exports.getParameters = function() {
     return configParams;
-}
+};

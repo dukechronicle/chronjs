@@ -42,38 +42,35 @@ function getDate()
     return mm+'/'+dd+'/'+yyyy;
 }
 
-newsletter.addSubscriber = function(subscriberEmail, callback){
-    var params = {"id": listID, "email_address":subscriberEmail, "send_welcome": true};
-    mcAPI.listSubscribe(params, function(res){
-        if(res === false)
-        {
-            log.warning("Adding subscriber to list failed!")
+newsletter.addSubscriber = function (subscriberEmail, callback) {
+    var params = {"id":listID, "email_address":subscriberEmail, "send_welcome":true};
+    mcAPI.listSubscribe(params, function (res) {
+        if (res === false) {
+            log.warning("Adding subscriber to list failed!");
             return callback("Adding subscriber to list failed!");
         }
         callback(null);
     });
-}
+};
 
-newsletter.removeSubscriber = function(subscriberEmail, callback){
-    var params = {"id": listID, "email_address":subscriberEmail, "delete_member":true, "send_welcome": true, "send_goodbye":false};
-    mcAPI.listUnsubscribe(params, function(res){
-        if(res === false)
-        {
-            log.warning("Removing subscriber to list failed!")
+newsletter.removeSubscriber = function (subscriberEmail, callback) {
+    var params = {"id":listID, "email_address":subscriberEmail, "delete_member":true, "send_welcome":true, "send_goodbye":false};
+    mcAPI.listUnsubscribe(params, function (res) {
+        if (res === false) {
+            log.warning("Removing subscriber to list failed!");
             return callback("Removing subscriber to list failed!");
         }
         callback(null);
     });
-}
+};
 
-newsletter.sendNewsletter = function(callback){
+newsletter.sendNewsletter = function (callback) {
     var name = "Newsletter " + date;
     log.info(name);
-    mcAPI.campaigns({ start: 0, limit: 1, filters:{"title":name}}, function (res) {
-        if (res.error)
-        {
-            log.warning(res.error+' ('+res.code+')');
-            return callback('Error: '+res.error+' ('+res.code+')');
+    mcAPI.campaigns({ start:0, limit:1, filters:{"title":name}}, function (res) {
+        if (res.error) {
+            log.warning(res.error + ' (' + res.code + ')');
+            return callback('Error: ' + res.error + ' (' + res.code + ')');
         }
 
         log.debug(JSON.stringify(res)); // Do something with your data!
@@ -81,56 +78,54 @@ newsletter.sendNewsletter = function(callback){
         var campaignID = res.data[0].id;
         log.info(campaignID);
 
-        mcAPI.campaignSendNow({cid: campaignID}, function(res2) {
+        mcAPI.campaignSendNow({cid:campaignID}, function (res2) {
             log.debug(res2);
-            if(res2 === false)
-            {
-                log.warning("Sending Campaign failed!")
+            if (res2 === false) {
+                log.warning("Sending Campaign failed!");
                 return callback("Sending Campaign failed!");
             }
             return callback(null);
         });
     });
-}
+};
 
-newsletter.createNewsletter = function(callback){
-    var optArray = {"list_id": listID, "subject": newsletterSubject, "from_email":newsletterFromEmail, "from_name":"The Chronicle", "title": "Newsletter " + date, "template_id":templateID};
+newsletter.createNewsletter = function (callback) {
+    var optArray = {"list_id":listID, "subject":newsletterSubject, "from_email":newsletterFromEmail, "from_name":"The Chronicle", "title":"Newsletter " + date, "template_id":templateID};
 
-    async.map(taxonomyGroups, function(item, callback){
-            log.debug(item);
-            api.taxonomy.docs(item,numDocs,function(err,docs){
-                if(err)
-                    return callback(err,null);             
-                return callback(err,docs);
-            });
-        },
-        function(err, res){
+    async.map(taxonomyGroups, function (item, callback) {
+                log.debug(item);
+                api.taxonomy.docs(item, numDocs, function (err, docs) {
+                    if (err)
+                        return callback(err, null);
+                    return callback(err, docs);
+                });
+            },
+            function (err, res) {
 
-            var newsText = "";
-            var newsHTML = "";
+                var newsText = "";
+                var newsHTML = "";
 
-            for(x=0; x < taxonomyGroups.length; x++)
-            {
-                newsHTML += "<h2>" + taxonomyGroups[x] + "</h2>";
-                newsHTML += "<p>" + res[x][0].value.teaser + "</p>";
-                newsText += res[x][0].value.teaser;
-            }
-
-            var sideBarText = "SideBar Text";
-            var footerText = "Footer Text";
-            var eventsText = "Some events";
-            var contentArr = {"html_MAIN":newsHTML, "html_SIDECOLUMN":sideBarText, "html_FOOTER":footerText, "html_ISSUEDATE":date, "html_EVENTS": eventsText, "text":newsText};
-            log.info(contentArr);
-
-            var params = {"type": "regular", "options": optArray, "content": contentArr};
-            mcAPI.campaignCreate(params, function(res) {
-                if(res.error){
-                    log.warning('Error: '+res.error+' ('+res.code+')');
-                    return callback('Error: '+res.error+' ('+res.code+')');
+                for (x = 0; x < taxonomyGroups.length; x++) {
+                    newsHTML += "<h2>" + taxonomyGroups[x] + "</h2>";
+                    newsHTML += "<p>" + res[x][0].value.teaser + "</p>";
+                    newsText += res[x][0].value.teaser;
                 }
-                log.info("Campaign ID: " + res);
-                callback(null);
+
+                var sideBarText = "SideBar Text";
+                var footerText = "Footer Text";
+                var eventsText = "Some events";
+                var contentArr = {"html_MAIN":newsHTML, "html_SIDECOLUMN":sideBarText, "html_FOOTER":footerText, "html_ISSUEDATE":date, "html_EVENTS":eventsText, "text":newsText};
+                log.info(contentArr);
+
+                var params = {"type":"regular", "options":optArray, "content":contentArr};
+                mcAPI.campaignCreate(params, function (res) {
+                    if (res.error) {
+                        log.warning('Error: ' + res.error + ' (' + res.code + ')');
+                        return callback('Error: ' + res.error + ' (' + res.code + ')');
+                    }
+                    log.info("Campaign ID: " + res);
+                    callback(null);
+                });
             });
-    });
-}
+};
 

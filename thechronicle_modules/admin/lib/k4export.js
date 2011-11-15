@@ -26,28 +26,28 @@ function ArticleParser(articleCallback) {
 	"K4EXPORT:PUBLICATION:ISSUE:ARTICLE:TEXTOBJECTS:TEXTOBJECT:TEXT:INLINETAG:INLINETAG:BREAK": onTextBreak
     };
 
-    this.parse = function(zipPath, callback) {
+    this.parse = function (zipPath, callback) {
         var succeed = [];
-        var failed  = [];
+        var failed = [];
         var zipFile = new zipfile.ZipFile(zipPath);
         async.forEach(zipFile.names,
-            function(name, cb) {
-                if (path.basename(name)[0] == "." ||
-                    name[name.length - 1] == "/") {
-                    cb();
-                } else {
-                    thisParser.parseFile(zipFile, name, function(err, title) {
-			if (err) failed.push(err);
-			else     succeed.push(title);
-			cb();
-                    });
+                function (name, cb) {
+                    if (path.basename(name)[0] == "." ||
+                            name[name.length - 1] == "/") {
+                        cb();
+                    } else {
+                        thisParser.parseFile(zipFile, name, function (err, title) {
+                            if (err) failed.push(err);
+                            else     succeed.push(title);
+                            cb();
+                        });
+                    }
+                },
+                function (err) {
+                    callback(failed, succeed);
                 }
-            },
-            function (err) {
-                callback(failed, succeed);
-            }
         );
-    }
+    };
 
     this.parseFile = function(zipFile, name, callback) {
     	var extension = path.extname(name);
@@ -71,29 +71,29 @@ function ArticleParser(articleCallback) {
 	}
     };
     
-    this.parseXML = function(xml, callback) {
-	var parser = new sax.parser();
-	parser.article = { body: [],
-			   type: 'article',
-			   publish: false
-			 };
-	parser.ontext = function(text) {
-	    parser.textNode = text.replace(endWhitespace, '');
-	    async.reduceRight(parser.tags, parser.tag.name,
-			      function(memo, item, cb) {
-				  cb(undefined, item.name + ":" + memo);
-			      },
-			      function (err, result) {
-				  var action = actions[result];
-				  if (action != undefined)
-				      action(parser);
-			      });
-	};
-	parser.onend = function () {
-	    fixArticle(parser.article, callback);
-	}
-	parser.write(xml).close();
-    }
+    this.parseXML = function (xml, callback) {
+        var parser = new sax.parser();
+        parser.article = { body:[],
+            type:'article',
+            publish:false
+        };
+        parser.ontext = function (text) {
+            parser.textNode = text.replace(endWhitespace, '');
+            async.reduceRight(parser.tags, parser.tag.name,
+                    function (memo, item, cb) {
+                        cb(undefined, item.name + ":" + memo);
+                    },
+                    function (err, result) {
+                        var action = actions[result];
+                        if (action != undefined)
+                            action(parser);
+                    });
+        };
+        parser.onend = function () {
+            fixArticle(parser.article, callback);
+        };
+        parser.write(xml).close();
+    };
 
     function fixArticle(article, callback) {
 	if (!article.body || !article.title) {
@@ -128,7 +128,7 @@ function ArticleParser(articleCallback) {
     };
     function onSection(parser) {
 	if (parser.textNode == "Editorial")
-	    parser.article.taxonomy = [ "Opinion", "Editorial" ]
+	    parser.article.taxonomy = [ "Opinion", "Editorial" ];
 	else
 	    parser.article.taxonomy = [ parser.textNode ];
     };

@@ -2,40 +2,41 @@ var _ = require('underscore');
 
 var views = {
 
-    taxonomy: {
-    map: function(doc) {
+    taxonomy:{
+        map:function (doc) {
             if (doc.taxonomy) {
                 for (var i in doc.taxonomy) {
-                    emit([doc.taxonomy[i], parseInt(doc.created,10)], doc);
+                    emit([doc.taxonomy[i], parseInt(doc.created, 10)], doc);
                 }
             }
         }
     },
     // return all doc ids keyed by doc url if one exists
-    urls: {
-    map: function(doc) {
-            if(doc.urls) {
-                for(var i in doc.urls) {
+    urls:{
+        map:function (doc) {
+            if (doc.urls) {
+                for (var i in doc.urls) {
                     emit([doc.urls[i], "article"], doc);
                     if (doc.images) {
                         for (var type in doc.images) {
-                            emit([doc.urls[i], "images", type], {_id: doc.images[type]});
-                        };
+                            emit([doc.urls[i], "images", type], {_id:doc.images[type]});
+                        }
+                        ;
                     }
                 }
             }
         }
     },
     // return all doc ids keyed by doc url if one exists
-    duplicate_urls: {
-    map: function(doc) {
-            if(doc.urls) {
-                for(var i in doc.urls) {
+    duplicate_urls:{
+        map:function (doc) {
+            if (doc.urls) {
+                for (var i in doc.urls) {
                     emit(doc.urls[i], null);
                 }
             }
         },
-    reduce: function(keys, values, rereduce) {
+        reduce:function (keys, values, rereduce) {
             if (rereduce) {
                 return sum(values);
             } else {
@@ -44,41 +45,42 @@ var views = {
         }
     },
     // return all node page documents
-    nodes: {
-    map: function(doc) {
-            if(doc.node_title) {
+    nodes:{
+        map:function (doc) {
+            if (doc.node_title) {
                 emit(doc.node_title, doc._id);
             }
         }
     },
     // return all doc ids keyed by document author name if one exists
-    authors: {
-    map: function(doc) {
-            if(doc.authors) {
-                for(var i in doc.authors) {
-                    emit([doc.authors[i], doc.created] , doc._id);
+    authors:{
+        map:function (doc) {
+            if (doc.authors) {
+                for (var i in doc.authors) {
+                    emit([doc.authors[i], doc.created], doc._id);
                 }
             }
         }
     },
     // get the uuid of all children keyed by fully qualified group name
-    groups: {
-    map: function(doc) {
-        if (doc.groups) {
-            doc.groups.forEach(function(group) {
-                emit(group.concat("article"), {title: doc.title});
+    groups:{
+        map:function (doc) {
+            if (doc.groups) {
+                doc.groups.forEach(function (group) {
+                    emit(group.concat("article"), {title:doc.title});
 
-                if (doc.images) {
-                    for (var type in doc.images) {
-                        var newgroup;
-                        newgroup = group.concat(["image", type]);
-                        emit(newgroup, {_id: doc.images[type]});
-                    };
-                }
-            });
-        }
-    },
-    reduce: function(keys, values, rereduce) {
+                    if (doc.images) {
+                        for (var type in doc.images) {
+                            var newgroup;
+                            newgroup = group.concat(["image", type]);
+                            emit(newgroup, {_id:doc.images[type]});
+                        }
+                        ;
+                    }
+                });
+            }
+        },
+        reduce:function (keys, values, rereduce) {
             if (rereduce) {
                 return sum(values);
             } else {
@@ -87,36 +89,36 @@ var views = {
         }
     },
     // return articles keyed by date
-    all_by_date: {
-    map: function(doc) {
-            if(doc.urls) {
+    all_by_date:{
+        map:function (doc) {
+            if (doc.urls) {
                 emit(parseInt(doc.created, 10), doc);
             }
         }
     },
-    image_originals: {
-    map: function(doc) {
-            if(doc.imageVersions) {
+    image_originals:{
+        map:function (doc) {
+            if (doc.imageVersions) {
                 emit([doc.date, doc.name], doc);
             }
         }
     },
-    image_originals_index: {
-        map: function(doc) {
-            if(doc.imageVersions) {
+    image_originals_index:{
+        map:function (doc) {
+            if (doc.imageVersions) {
                 emit(doc.name, doc);
             }
         }
     },
-    image_versions: {
-        map: function(doc) {
-            if(doc.original) {
+    image_versions:{
+        map:function (doc) {
+            if (doc.original) {
                 emit(doc.original, doc);
             }
         }
     },
-    article_images: {
-        map: function(doc) {
+    article_images:{
+        map:function (doc) {
             if (doc.images) {
                 for (var type in doc.images) {
                     emit(doc.images[type], doc);
@@ -124,9 +126,9 @@ var views = {
             }
         }
     },
-    photographers: {
-    map: function(doc) {
-            if(doc.photographer) {
+    photographers:{
+        map:function (doc) {
+            if (doc.photographer) {
                 emit(doc.photographer, doc);
             }
         }
@@ -134,28 +136,28 @@ var views = {
 
 
     // return all articles and the version of their index in Solr
-    indexed_by_solr: {
-        map: function(doc) {
-            if(doc.title && doc.body) {
-                if(doc.indexedBySolr == null || typeof(doc.indexedBySolr) != 'number') emit(-1, doc);
+    indexed_by_solr:{
+        map:function (doc) {
+            if (doc.title && doc.body) {
+                if (doc.indexedBySolr == null || typeof(doc.indexedBySolr) != 'number') emit(-1, doc);
                 else emit(doc.indexedBySolr, doc);
             }
         }
     },
-    
-    // builds the taxonomy tree from each's docs taxonomy 
-    taxonomy_tree: {
-        map: function(doc) {
-            if(doc.taxonomy) {
-                emit(doc.taxonomy,null);    
+
+    // builds the taxonomy tree from each's docs taxonomy
+    taxonomy_tree:{
+        map:function (doc) {
+            if (doc.taxonomy) {
+                emit(doc.taxonomy, null);
             }
         },
-        reduce: function(keys, vals) {
+        reduce:function (keys, vals) {
             return null;
         }
     }
-}
+};
 
-exports.getViews = function() {
+exports.getViews = function () {
     return _.extend({}, views);
-}
+};

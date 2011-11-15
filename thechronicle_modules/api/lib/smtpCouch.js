@@ -24,40 +24,36 @@ function containsEmail(obj, array){
     return false;
 }
 /**
-* @param {String} subscriberEmail email of subscriber that you would like to add to list of subscriber emails.
-* @return add a subscriber's email to emailList and save db
-*/
+ * @param {String} subscriberEmail email of subscriber that you would like to add to list of subscriber emails.
+ * @return add a subscriber's email to emailList and save db
+ */
 
-smtp.addSubscriber = function(subscriberEmail, callback){
-    db.get(DB_LIST_NAME,function(err, res){
-        if(err && err.error != 'not_found') 
+smtp.addSubscriber = function (subscriberEmail, callback) {
+    db.get(DB_LIST_NAME, function (err, res) {
+        if (err && err.error != 'not_found')
             callback(err);
 
-        var emailEntry = {email: subscriberEmail};  
+        var emailEntry = {email:subscriberEmail};
         var emailList = [];
-        if(res != null && res.list != null)
-        {
-            emailList = res.list;  
+        if (res != null && res.list != null) {
+            emailList = res.list;
 
             // Check if email exists
-            if(!containsEmail(emailEntry,emailList))
-            {
+            if (!containsEmail(emailEntry, emailList)) {
                 emailList.push(emailEntry);
             }
-            else
-            {
-                callback(err,res);
+            else {
+                callback(err, res);
                 return;
             }
         }
-        else
-        {
+        else {
             // First email of the list, initialize the list.
             emailList = [emailEntry];
         }
-        db.save(DB_LIST_NAME,{list: emailList}, callback);
+        db.save(DB_LIST_NAME, {list:emailList}, callback);
     });
-}
+};
 /** 
 * @param {String} email email to delete from list of subscriber emails
 * @param {emailList} list of all subscriber emails
@@ -76,75 +72,71 @@ function deleteEmailIfExists(email, emailList)
     }
 }
 /**
-* @param subscriberEmail {String} email of subscriber to remove from emailList.
-* @return delete email if it exists from emailList and update db.
-*/
-smtp.removeSubscriber = function(subscriberEmail, callback){
-    db.get(DB_LIST_NAME,function(err, res){
-        if(err && err.error != 'not_found') 
+ * @param subscriberEmail {String} email of subscriber to remove from emailList.
+ * @return delete email if it exists from emailList and update db.
+ */
+smtp.removeSubscriber = function (subscriberEmail, callback) {
+    db.get(DB_LIST_NAME, function (err, res) {
+        if (err && err.error != 'not_found')
             callback(err);
 
         // Get the list, delete entry, update.
         var emailList = res.list;
         deleteEmailIfExists(subscriberEmail, emailList);
 
-        db.save(DB_LIST_NAME, {list: emailList}, callback);
+        db.save(DB_LIST_NAME, {list:emailList}, callback);
     });
-}
+};
 
-smtp.getSubscribers = function(callback)
-{
-    db.get(DB_LIST_NAME,function(err, res){
-        if(err) 
+smtp.getSubscribers = function (callback) {
+    db.get(DB_LIST_NAME, function (err, res) {
+        if (err)
             callback(err);
-        if(res == null)
-        {
+        if (res == null) {
             callback(err, {});
         }
         callback(err, res.list);
     });
-}
+};
 
 var sgusername = "app578498@heroku.com";
 var sgpassword = "0acabbaccfeafbb35a";
 
 nodemailer.SMTP = {
-    host: 'smtp.sendgrid.net', // required
-    port: 587, // optional, defaults to 25 or 465
-    use_authentication: true, // optional, false by default
-    user : sgusername,
-    pass : sgpassword
-}
+    host:'smtp.sendgrid.net', // required
+    port:587, // optional, defaults to 25 or 465
+    use_authentication:true, // optional, false by default
+    user:sgusername,
+    pass:sgpassword
+};
 
 /**
-* @param {String} msgBody message to send to subscribers
-* @return sends message to all subscribers
-*/
+ * @param {String} msgBody message to send to subscribers
+ * @return sends message to all subscribers
+ */
 
-smtp.sendNewsletter = function(msgBody,callback)
-{
+smtp.sendNewsletter = function (msgBody, callback) {
     log.debug(msgBody);
-    smtp.getSubscribers(function(err,res){
+    smtp.getSubscribers(function (err, res) {
         log.debug(res);
-        for(i in res)
-        {
-             var emailDest = res[i].email; 
-             log.debug(emailDest);
+        for (i in res) {
+            var emailDest = res[i].email;
+            log.debug(emailDest);
 
-             nodemailer.send_mail({
-                    sender : "chronicle@duke.edu",
-                    to : emailDest,
-                    subject : "This is a subject",
-                    body: "Hello, this is a test body",
-                    html: "<b> test</b>alskdfj",
-                },
-                function(err2, result){
-                    if(err2){
-                        log.debug(err2);
+            nodemailer.send_mail({
+                        sender:"chronicle@duke.edu",
+                        to:emailDest,
+                        subject:"This is a subject",
+                        body:"Hello, this is a test body",
+                        html:"<b> test</b>alskdfj",
+                    },
+                    function (err2, result) {
+                        if (err2) {
+                            log.debug(err2);
+                        }
                     }
-                }
-             );
+            );
         }
-        callback(err,res);
+        callback(err, res);
     });
-}
+};

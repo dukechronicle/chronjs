@@ -21,11 +21,11 @@ var async = require('async');
 
 var asereje = require('asereje');
 asereje.config({
-  active: process.env.NODE_ENV === 'production'        // enable it just for production
-, js_globals: ['typekit', 'underscore-min', 'jquery']   // js files that will be present always
-, css_globals: ['css/reset', 'css/search-webkit', 'style']                     // css files that will be present always
-, js_path: __dirname + '/public/js'           // javascript folder path
-, css_path: __dirname + '/public'                  // css folder path
+      active: process.env.NODE_ENV === 'production'        // enable it just for production
+    , js_globals: ['typekit', 'underscore-min', 'jquery']   // js files that will be present always
+    , css_globals: ['css/reset', 'css/search-webkit', 'style']                     // css files that will be present always
+    , js_path: __dirname + '/public/js'           // javascript folder path
+    , css_path: __dirname + '/public'                  // css folder path
 });
 
 
@@ -109,16 +109,15 @@ if(!config.isSetUp()) {
 
 
 
-site.assignPreInitFunctionality(app,this);
+site.assignPreInitFunctionality(app, this);
 
 app.listen(process.env.PORT || port);
 log.notice(sprintf("Express server listening on port %d in %s mode", app.address().port, app.settings.env));
 
 
-exports.runSite = function(callback)
-{	
+exports.runSite = function(callback) {
 	runSite(callback);
-}
+};
 
 function runSite(callback) {
 	port = config.get('SERVER_PORT');
@@ -141,22 +140,16 @@ function runSite(callback) {
         // initialize all routes
         async.parallel([
             function(callback) {
-                site.init(app, function(err) {
-                    if (err) return log.crit(err);
-                });
+                site.init(app, callback);
             },
             function(callback) {
-                admin.init(app, function(err) {
-                     if (err) return log.crit(err);
-                });
+                admin.init(app, callback);
             },
             function(callback) {
-                mobileapi.init(app, function(err) {
-                    if (err) return log.crit(err);
-                });
+                mobileapi.init(app, callback);
             }
-        ], function(err, res) {
-            return callback();
+        ], function(err, results) {
+            if (err) return log.crit(err);
         })
     });
 }

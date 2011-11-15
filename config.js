@@ -31,4 +31,4 @@ exports.getConfiguration = function() {
     } catch(err) {
         return null;
     }
-}
+};

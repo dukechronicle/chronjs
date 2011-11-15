@@ -35,7 +35,7 @@ function _renderBody(body, callback) {
 
     callback(null, md(body));
 
-};
+}
 
 exports.init = function (app, callback) {
     s3.init(function (err) {

@@ -62,15 +62,15 @@ db.authors = require('./authors.js');
 
 db.getDatabaseName = function() {
     return DATABASE;
-}
+};
 
 db.getDatabasePort = function() {
     return DB_PORT;
-}
+};
 
 db.getDatabaseHost = function() {
     return DB_HOST;
-}
+};
 
 db.init = function(callback) {
 	DATABASE = config.get("COUCHDB_DATABASE");
@@ -99,7 +99,7 @@ db.init = function(callback) {
              updateViews(callback);
         }
     });
-}
+};
 
 // only calls the callback when the DB exists, loops until then. Should not be used anywhere other than db init due to its blocking nature
 function whenDBExists(callback) {
@@ -111,11 +111,11 @@ function whenDBExists(callback) {
 
 function createViews(modifiedTime, hash, callback) {
     var design_doc = require(DESIGN_DOCUMENT_FILENAME);
-    db.save(DESIGN_DOCUMENT_NAME, design_doc.getViews(), function(err, response) {
+    db.save(DESIGN_DOCUMENT_NAME, design_doc.getViews(), function(err) {
         // update the versioning info for the design document
         if(err) return callback(err);
 
-        db.save(DESIGN_DOCUMENT_VERSION_NAME, {lastModified: modifiedTime, hash: hash}, function(err2,res2) {
+        db.save(DESIGN_DOCUMENT_VERSION_NAME, {lastModified: modifiedTime, hash: hash}, function(err2) {
             return callback(err2);
         });
     });
@@ -129,14 +129,15 @@ function viewsAreUpToDate(callback) {
     var views = design_doc.getViews();
     
     // since functions can't be stringified to json, convert them to strings manually
-    for(var view in views) {
-        var stringIt = 'map:'+views[view].map.toString();
-        
-        if(views[view].reduce) {
-            stringIt += 'reduce:'+views[view].reduce.toString();       
+    Object.keys(views).forEach(function(key) {
+        var stringIt = 'map:'+views[key].map.toString();
+
+        if(views[key].reduce) {
+            stringIt += 'reduce:'+views[key].reduce.toString();
         }
-        views[view] = stringIt;
-    }
+        views[key] = stringIt;
+    });
+
     // compute the hash of the json object representing the design document
     md5sum.update(JSON.stringify(views));
     var localHash = md5sum.digest('base64');

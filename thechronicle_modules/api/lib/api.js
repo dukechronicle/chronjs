@@ -1,7 +1,6 @@
 var api = {};
 var exports = module.exports = api;
 
-var cron = require("cron");
 var nimble = require("nimble");
 var async = require("async");
 var db = require("../../db-abstract");
@@ -80,7 +79,7 @@ api.init = function(callback) {
 
         callback(null);
     });
-}
+};
 
 api.getArticles= function(parent_node, count, callback) {
     var start = [parent_node];
@@ -104,8 +103,7 @@ function _editDocument(docid, fields, callback) {
                     callback(err, null, null);
                 }
                 else {
-                    var unix_timestamp = Math.round(new Date().getTime() / 1000);
-                    fields.updated = unix_timestamp;
+                    fields.updated = Math.round(new Date().getTime() / 1000);
                         fields.urls = res.urls;
                         fields.urls.push(url);
                     db.merge(docid, fields, function(db_err, db_res) {
@@ -115,9 +113,9 @@ function _editDocument(docid, fields, callback) {
             });
         } else {
             db.merge(docid, fields, function(db_err, db_res) {
-                if (db_err) callback(db_err)
+                if (db_err) return callback(db_err);
                 else {
-                    callback(db_err, db_res, res.urls[res.urls.length - 1]);
+                    return callback(db_err, db_res, res.urls[res.urls.length - 1]);
                 }
             });
         }
@@ -140,7 +138,7 @@ api.editDoc = function(docid, fields, callback) {
         else {
             // only reindex the article if they edited the search fields            
             if(fields.title && fields.body) {
-                api.search.indexArticle(docid, fields.title, fields.body, fields.taxonomy, fields.authors, fields.created, function(err2, res2) {
+                api.search.indexArticle(docid, fields.title, fields.body, fields.taxonomy, fields.authors, fields.created, function(err2) {
                     callback(err2, res, url);
                 });
             }
@@ -149,7 +147,7 @@ api.editDoc = function(docid, fields, callback) {
             }	
         }
     });
-}
+};
 
 // can take one id, or an array of ids
 api.docsById = function(id, callback) {
@@ -173,7 +171,7 @@ api.docsByAuthor = function(author, callback) {
         }));
     });
 
-}
+};
 
 api.addDoc = function(fields, callback) {
     if (fields.type === 'article') {
@@ -192,7 +190,7 @@ api.addDoc = function(fields, callback) {
 
                     if(db_err) return callback(db_err);
 
-                    api.search.indexArticle(res.id, fields.title, fields.body, fields.taxonomy, fields.authors, fields.created, function(err, response) {
+                    api.search.indexArticle(res.id, fields.title, fields.body, fields.taxonomy, fields.authors, fields.created, function(err) {
                         callback(err,url,res.id);
                     });
                 });
@@ -201,7 +199,7 @@ api.addDoc = function(fields, callback) {
     } else {
         return callback("unknown doc type", null);
     }
-}
+};
 
 api.addNode = function(parent_path, name, callback) {
     parent_path.push(name);
@@ -210,7 +208,7 @@ api.addNode = function(parent_path, name, callback) {
         path: parent_path
     }, 
     callback);
-}
+};
 
 api.articleForUrl = function(url, callback) {
     var query = {
@@ -246,7 +244,7 @@ api.articleForUrl = function(url, callback) {
 
         callback(null, aggregateDoc);
     });
-}
+};
 
 api.docForUrl = function(url, callback) {
     var query = {
@@ -257,35 +255,34 @@ api.docForUrl = function(url, callback) {
     };
 
     db.view("articles/urls", query, function(err, docs) {
-        
         if (err) return callback(err);
+
         var docTypeKey = 1;
-        for (var i = 0; i < docs.length; i++) {
-            var doc = docs[i];
+        docs.forEach(function(doc) {
             var docType = doc.key[docTypeKey];
 
             if (docType === 'article') {
-                var doc = doc.value;
+                doc = doc.value;
                 return callback(null, doc);
             }
-        }
+        });
     });
-}
+};
 
 api.nodeForTitle = function(url, callback) {
     db.view("articles/nodes", {
         key: url
     },
     function(err, res) {
-        for(var i in res) {
-            if(url === res[i].key) {
-                api.docsById(res[i].id, callback);
-                return;
-            }
+        // look for
+        if (res.length > 0) {
+            return api.docsById(res[0].id, callback);
+        } else {
+            return callback("Not found", null);
         }
-        callback("Not found", null);
+
     });
-}
+};
 
 api.docsByDate = function(limit, callback) {
     var query = {descending: true};
@@ -304,7 +301,7 @@ api.docsByDate = function(limit, callback) {
             return result;
         }));
     });
-}
+};
 
 api.addToDocArray = function(id, field, toAdd, callback) {
     async.waterfall([
@@ -322,7 +319,7 @@ api.addToDocArray = function(id, field, toAdd, callback) {
         ], 
         callback
     );
-}
+};
 
 api.removeFromDocArray = function(id, field, toRemove, callback) {
     async.waterfall([
@@ -345,25 +342,26 @@ api.removeFromDocArray = function(id, field, toRemove, callback) {
         ],
         callback
     );
-}
+};
 
 /**
     Destroys then recreates the database the server is using. Only should be used by the environment maker!
 */
 api.recreateDatabase = function(callback) {
     db.destroy(function(err) {
+        if (err) return callback(err);
         db.init(callback);
     });
-}
+};
 
 api.getDatabaseName = function() {
     return db.getDatabaseName();
-}
+};
 
 api.getDatabaseHost = function() {
     return db.getDatabaseHost();
-}
+};
 
 api.getDatabasePort = function() {
     return db.getDatabasePort();
-}
+};

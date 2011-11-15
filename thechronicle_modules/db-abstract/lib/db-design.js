@@ -21,7 +21,6 @@ var views = {
                         for (var type in doc.images) {
                             emit([doc.urls[i], "images", type], {_id:doc.images[type]});
                         }
-                        ;
                     }
                 }
             }
@@ -75,7 +74,6 @@ var views = {
                             newgroup = group.concat(["image", type]);
                             emit(newgroup, {_id:doc.images[type]});
                         }
-                        ;
                     }
                 });
             }

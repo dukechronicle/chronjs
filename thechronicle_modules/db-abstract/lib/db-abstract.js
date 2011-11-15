@@ -4,6 +4,7 @@ var config = require('../../config');
 var url = require("url");
 var fs = require('fs');
 var crypto = require('crypto');
+var log = require('../../log');
 
 var DESIGN_DOCUMENT_NAME = '_design/articles';
 var DESIGN_DOCUMENT_FILENAME = __dirname+'/db-design.js';
@@ -17,7 +18,7 @@ function connect(database) {
     //var couchdbUrl = process.env.CLOUDANT_URL || config.get("COUCHDB_URL");
     var couchdbUrl = config.get("COUCHDB_URL");
     if(!couchdbUrl) throw "No Cloudant URL specified...";
-    console.log("Connecting to " + database + " at " + couchdbUrl);
+    log.info("Connecting to " + database + " at " + couchdbUrl);
     couchdbUrl = url.parse(couchdbUrl);
     if (couchdbUrl.auth) {
         couchdbUrl.auth = couchdbUrl.auth.split(":");
@@ -39,7 +40,7 @@ function updateViews(callback)
     // Check if views are up to date
     viewsAreUpToDate(function(isUpToDate,newestModifiedTime,newestHash) {
         if(!isUpToDate) {
-            console.log('updating views to newest version - modified time: ' + newestModifiedTime + ' and hash: ' + newestHash);
+            console.warn('updating views to newest version - modified time: ' + newestModifiedTime + ' and hash: ' + newestHash);
             createViews(newestModifiedTime, newestHash, function(err){
                 return callback(err);
             });
@@ -83,7 +84,7 @@ db.init = function(callback) {
     db.exists(function (error,exists) {
           if(error)
         {
-            console.log("ERROR db-abstract" + error);
+            log.error("ERROR db-abstract" + error);
             return callback(error);
         }
 

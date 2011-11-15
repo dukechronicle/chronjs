@@ -87,13 +87,20 @@ app.configure('production', function(){
 });
 
 
-app.error(function(err, req, res, next) {
+app.error(function(err, req, res) {
 	try {
 		res.send(500);
 	}
 	catch(err) {}
 	globalFunctions.log('ERROR: ' + err.stack);
 });
+
+
+site.assignPreInitFunctionality(app, this);
+
+app.listen(process.env.PORT || port);
+console.log("Server listening on port %d in %s mode", app.address().port, app.settings.env); 
+
 
 if(!config.isSetUp()) {
 	app.get('/', function(req, res, next) {
@@ -107,22 +114,15 @@ if(!config.isSetUp()) {
 }
 
 
-
-
-site.assignPreInitFunctionality(app, this);
-
-app.listen(process.env.PORT || port);
-log.notice(sprintf("Express server listening on port %d in %s mode", app.address().port, app.settings.env));
-
-
 exports.runSite = function(callback) {
 	runSite(callback);
 };
 
 function runSite(callback) {
 	port = config.get('SERVER_PORT');
-	
+
 	cron.init();
+	log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));
 
 	
     // use redis as our session store
@@ -148,7 +148,7 @@ function runSite(callback) {
             function(callback) {
                 mobileapi.init(app, callback);
             }
-        ], function(err, results) {
+        ], function(err) {
             if (err) return log.crit(err);
         })
     });

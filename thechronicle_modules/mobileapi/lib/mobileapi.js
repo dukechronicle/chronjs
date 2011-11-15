@@ -79,9 +79,8 @@ function capitalizeName(str) {
 function getGroup(groupName,n,callback){
     console.log(groupName);
     if(taxonomyGroups.indexOf(groupName) !== -1){
-        grabArticles([groupName],0,n,callback);
-    }
-    else{
+        return grabArticles([groupName],0,n,callback);
+    } else {
         return callback("Invalid Group", null);
     }
 }

@@ -123,8 +123,8 @@ exports.runSite = function(callback)
 function runSite(callback) {
 	port = config.get('SERVER_PORT');
 	
-	cron.init();	
-	log.init();
+	cron.init();
+
 	
     // use redis as our session store
     redisClient.init(function (err0) {

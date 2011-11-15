@@ -44,12 +44,12 @@ function _URLify(s, maxChars) {
         max_chars = 100;
     }
 
-    removelist = ["a", "an", "as", "at", "before", "but", "by", "for", "from",
+    var removelist = ["a", "an", "as", "at", "before", "but", "by", "for", "from",
                   "is", "in", "into", "like", "of", "off", "on", "onto", "per",
                   "since", "than", "the", "this", "that", "to", "up", "via",
                   "with"];
     
-    r = new RegExp("\\b(" + removelist.join("|") + ")\\b", "gi");
+    var r = new RegExp("\\b(" + removelist.join("|") + ")\\b", "gi");
     s = s.replace(r, "");
     
     s = s.replace(/[^-\w\s]/g, "");  // remove unneeded chars

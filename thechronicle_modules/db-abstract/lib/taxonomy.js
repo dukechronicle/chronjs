@@ -31,10 +31,10 @@ taxonomy.getHierarchy = function (callback) {
 
 taxonomy.getHierarchyTree = function (callback) {
     taxonomy.getHierarchy(function (error, res) {
-        root = {};
+        var root = {};
         async.forEach(res,
                 function (tax, callback1) {
-                    top = root;
+                    var top = root;
                     async.forEachSeries(tax.key,
                             function (node, callback2) {
                                 if (!(node in top))

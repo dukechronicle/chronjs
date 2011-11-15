@@ -1,6 +1,8 @@
 var configParams = require('./config-params.js');
 
 var fs = require('fs');
+var _ = require('underscore');
+var log = require('../../log');
 
 var CONFIG_FILE_PATH = "./config.js";
 var DEFAULT_PROFILE_NAME = "production";
@@ -38,14 +40,10 @@ function initConfig()
 
 function getConfigParamObjectWithName(name) {
     var params = configParams.getParameters();
-    
-    for(index in params) {
-        if(params[index].name == name) {
-            return params[index];
-        }
-    }
 
-    return null;
+    return _.find(params, function(index) {
+        params[index].name === name;
+    });
 }
 
 exports.get = function(variable) {
@@ -116,7 +114,7 @@ exports.getParameters = function () {
     var returnParams = exports.getUndefinedParameters();
     
 
-    for(key in activeProfile) {
+    for(var key in activeProfile) {
         var newobj = {};
         newobj.name = key;
         newobj.description = getConfigParamObjectWithName(key).description;

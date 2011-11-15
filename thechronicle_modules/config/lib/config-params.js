@@ -2,77 +2,67 @@ var configParams = [
     {
         name: 'SERVER_PORT',
         description: 'Port to run the chronicle site on',
-        default: '4000'
+        defaultValue: '4000'
     },
     {
         name: 'ADMIN_USERNAME',
         description: 'New administrator username to login with from now on',
-        default: ''
+        defaultValue: ''
     },
     {
         name: 'ADMIN_PASSWORD',
         description: 'New administrator password to login with from now on',
-        default: ''
+        defaultValue: ''
     },
     {
         name: 'COUCHDB_URL',
         description: 'CouchDB Server URL',
-        default: 'http://chrondev:pikachu@chrondev.iriscouch.com'
+        defaultValue: 'http://chrondev:pikachu@chrondev.iriscouch.com'
     },
     {
         name: 'COUCHDB_DATABASE',
         description: 'CouchDB Database Name',
-        default: 'dev'
+        defaultValue: 'dev'
     },
     {
         name: 'S3_BUCKET',
         description: 'Amazon S3 Bucket Name',
-        default: 'chron_bucket1'
+        defaultValue: 'chron_bucket1'
     },
     {
         name: 'S3_KEY',
         description: 'Amazon S3 Key',
-        default: ''
+        defaultValue: ''
     },
     {
         name: 'S3_SECRET',
         description: 'Amazon S3 Secret Key',
-        default: ''
+        defaultValue: ''
     },
     {
         name: 'REDIS_URL',
         description: 'Redis Server URL',
-        default: ''
+        defaultValue: ''
     },
     {
         name: 'SOLR_HOST',
         description: 'WebSolr Server URL',
-        default: 'index.websolr.com'
+        defaultValue: 'index.websolr.com'
     },
     {
         name: 'SOLR_PORT',
         description: 'WebSolr Server Port',
-        default: '80'
+        defaultValue: '80'
     },
     {
         name: 'SOLR_CORE',
         description: 'WebSolr Core',
-        default: ''
+        defaultValue: ''
     },
     {
         name: 'SOLR_PATH',
         description: 'WebSolr Server Path',
-        default: '/solr'
-    },
-    {
-        name: "LOGGLY_INPUT_KEY",
-        description: 'Loggly Input Key',
-        default: ''
-    },
-    {
-        name: "LOGGLY_SUBDOMAIN",
-        description: 'Loggly Subdomain',
-        default: 'thechronicle'
+        defaultValue: '/solr'
     }
 ];
 

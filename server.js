@@ -9,12 +9,12 @@ var sprintf = require('sprintf').sprintf;
 var globalFunctions = require('./thechronicle_modules/global-functions');
 var config = require('./thechronicle_modules/config');
 var cron = require('./thechronicle_modules/api/lib/cron');
-var api = require('./thechronicle_modules/api/lib/api');
+var api = require('./thechronicle_modules/api');
 var log = require('./thechronicle_modules/log');
 var site = require('./thechronicle_modules/api/lib/site');
 var admin = require('./thechronicle_modules/admin/lib/admin');
 var mobileapi = require('./thechronicle_modules/mobileapi/lib/mobileapi');
-var redisClient = require('./thechronicle_modules/api/lib/redisclient');
+var redisClient = require('./thechronicle_modules/redisclient');
 var RedisStore = require('connect-redis')(express);
 
 var async = require('async');

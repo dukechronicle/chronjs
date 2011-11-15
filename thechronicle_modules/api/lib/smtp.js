@@ -3,7 +3,7 @@ var exports = module.exports = smtp;
 
 var log = require('../../log');
 var nodemailer = require('nodemailer');
-var redisclient = require('./redisclient');
+var redisclient = require('../../redisclient');
 var jsdom = require("jsdom");
 var DB_LIST_NAME = "subscriberList";
 var $ = require("jquery");

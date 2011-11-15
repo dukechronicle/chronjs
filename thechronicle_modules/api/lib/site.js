@@ -6,7 +6,7 @@ var globalFunctions = require('../../global-functions');
 var log = require('../../log');
 var smtp = require('./smtp');
 var newsletter = require('./newsletter');
-var redis = require('./redisclient');
+var redis = require('../../redisclient');
 var config = require('../../config');
 var rss = require('./rss');
 

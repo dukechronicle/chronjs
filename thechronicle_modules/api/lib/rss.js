@@ -1,7 +1,7 @@
 var html = require('htmlparser');
 var url = require('url');
 var http = require('http');
-var redis = require('./redisclient');
+var redis = require('../../redisclient');
 
 exports.parseRSS = function(feed, callback) {
     var urlobj = url.parse(feed);

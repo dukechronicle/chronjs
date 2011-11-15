@@ -2,7 +2,7 @@ var nimble = require('nimble');
 var _ = require('underscore');
 var db = require('../../db-abstract');
 var log = require('../../log');
-var redis = require('./redisclient');
+var redis = require('../../redisclient');
 
 var group = exports;
 var BENCHMARK = false;

@@ -95,6 +95,13 @@ app.error(function(err, req, res, next) {
 	globalFunctions.log('ERROR: ' + err.stack);
 });
 
+
+site.assignPreInitFunctionality(app,this);
+
+app.listen(process.env.PORT || port);
+console.log("Server listening on port %d in %s mode", app.address().port, app.settings.env); 
+
+
 if(!config.isSetUp()) {
 	app.get('/', function(req, res, next) {
 		if(!config.isSetUp()) {
@@ -106,15 +113,6 @@ if(!config.isSetUp()) {
     runSite(function() {});
 }
 
-
-
-
-site.assignPreInitFunctionality(app,this);
-
-app.listen(process.env.PORT || port);
-log.notice(sprintf("Express server listening on port %d in %s mode", app.address().port, app.settings.env));
-
-
 exports.runSite = function(callback)
 {	
 	runSite(callback);
@@ -125,6 +123,8 @@ function runSite(callback) {
 	
 	cron.init();	
 	log.init();
+
+    log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));      
 	
     // use redis as our session store
     redisClient.init(function (err0) {
@@ -155,7 +155,7 @@ function runSite(callback) {
                     if (err) return log.crit(err);
                 });
             }
-        ], function(err, res) {
+        ], function(err, res) {      
             return callback();
         })
     });

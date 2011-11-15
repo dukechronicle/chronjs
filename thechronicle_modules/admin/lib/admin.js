@@ -18,8 +18,6 @@ var globalFunctions = require('../../global-functions');
 var layoutAdmin = require('./layout.js');
 var imageAdmin = require('./image.js');
 
-var db = require('../../db-abstract');
-
 var VIDEO_PLAYERS = {
     "youtube": "<iframe width=\"560\" height=\"345\" src=\"http://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>",
     "vimeo": "<iframe src=\"http://player.vimeo.com/video/%s?title=0&amp;byline=0&amp;portrait=0\" width=\"400\" height=\"225\" frameborder=\"0\"></iframe>"

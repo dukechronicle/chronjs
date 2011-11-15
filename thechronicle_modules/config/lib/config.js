@@ -1,5 +1,4 @@
 var configParams = require('./config-params.js');
-var globalFunctions = require('../../global-functions');
 
 var fs = require('fs');
 
@@ -29,8 +28,11 @@ function initConfig()
     activeProfile = configuration.profiles[activeProfileName];
 
     if(activeProfile == null) {
-        if(configuration.activeConfigurationProfile == null) globalFunctions.log('Active configuration profile is not defined!');
-        else globalFunctions.log('Configuration profile: "' + configuration.activeConfigurationProfile + '" does not exist!');
+        if(configuration.activeConfigurationProfile == null) {
+            log.alert('Active configuration profile is not defined!');
+        } else {
+            log.alert('Configuration profile: "' + configuration.activeConfigurationProfile + '" does not exist!');
+        }
     }
 }
 
@@ -48,11 +50,13 @@ function getConfigParamObjectWithName(name) {
 
 exports.get = function(variable) {
     if(activeProfile == null) {
-        globalFunctions.log('Configuration is not defined!');
+        log.alert('Configuration is not defined!');
         return null;
     }
 
-    if(activeProfile[variable] == null) globalFunctions.log('Configuration property: "' + variable + '" not defined!');
+    if(activeProfile[variable] == null) {
+        log.alert('Configuration property: "' + variable + '" not defined!');
+    }
     return activeProfile[variable];
 };
 
@@ -102,7 +106,7 @@ exports.getUndefinedParameters = function() {
         // if a parameter is undefined, add it to return array
         if(activeProfile[parameters[i].name] == null) returnParameters.push(parameters[i]); 
     }
-    console.log(returnParameters);
+    log.warning("Undefined parameters: " + JSON.stringify(returnParameters));
     return returnParameters;
 }
 
@@ -116,7 +120,7 @@ exports.getParameters = function () {
         var newobj = {};
         newobj.name = key;
         newobj.description = getConfigParamObjectWithName(key).description;
-        newobj.default = activeProfile[key];
+        newobj["default"] = activeProfile[key];
         returnParams.push(newobj);
     }
 

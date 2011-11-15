@@ -15,7 +15,7 @@ smtp.addSubscriber = function(subscriberEmail, callback){
             log.warning(err);
         callback(err,res);
     });
-}
+};
 
 smtp.removeSubscriber = function(subscriberEmail, callback){
     redisclient.client.srem(DB_LIST_NAME, subscriberEmail, function(err, res){
@@ -24,7 +24,7 @@ smtp.removeSubscriber = function(subscriberEmail, callback){
             log.warning(err);
         callback(err,res);
     });
-}
+};
 
 smtp.getSubscribers = function(callback)
 {
@@ -33,7 +33,7 @@ smtp.getSubscribers = function(callback)
             log.warning(err);
         callback(err,res);
     });
-}
+};
 
 var sgusername = "app578498@heroku.com";
 var sgpassword = "0acabbaccfeafbb35a";
@@ -44,7 +44,7 @@ nodemailer.SMTP = {
     use_authentication: true, // optional, false by default
     user : sgusername,
     pass : sgpassword
-}
+};
 
 function generateHTML(msgBody, callback)
 {
@@ -53,21 +53,20 @@ function generateHTML(msgBody, callback)
         scripts: [
             'http://code.jquery.com/jquery-1.5.min.js'
         ]
-    }, function (err, res) {
+    }, function (err) {
 
         // Clean out previous items first.
         $('body').empty();
 
         // Iterate and add each article to generated html.
-        for(i in msgBody)
-        {
-            var article = msgBody[i];
+        Object.keys(msgBody).forEach(function(key) {
+            var article = msgBody[key];
             var articleContainer = $('<div />');
             articleContainer.append("<h3>"+ article.title + "</h3>");
             articleContainer.append("<p>" + article.teaser + "</p>");
 
             $('body').append(articleContainer);
-        }
+        });
 
         var ret = "<html>" + $('html').html() + "</html>";
         
@@ -79,13 +78,13 @@ function generatePlainText(msgBody)
 {
     var plainText = "";
 
-    for(i in msgBody)
-    {
-        var article = msgBody[i];
+    Object.keys(msgBody).forEach(function(key) {
+        var article = msgBody[key];
         plainText += article.title + "\n";
         plainText += article.teaser + "\n";
         plainText += "\n\n";
-    }
+    });
+
     return plainText;
 }
 
@@ -100,33 +99,32 @@ smtp.sendNewsletter = function(msgBody,callback)
         smtp.getSubscribers(function(err,res){
             var now = new Date();
             var dateStr = now.toDateString();
-            var subjectStr = "[Chronicle Newsletter] " + dateStr + ": Joe wants braces!!!"
+            var subjectStr = "[Chronicle Newsletter] " + dateStr + ": Joe wants braces!!!";
 
             var mailContent = {
-                        sender : "chronicle@duke.edu",
-                        to : emailDest,
-                        subject : subjectStr,
-                        body: bodyMsg,
-                        html: htmlres
-                     }
+                sender : "chronicle@duke.edu",
+                to : emailDest,
+                subject : subjectStr,
+                body: bodyMsg,
+                html: htmlres
+            };
 
             log.info(mailContent);
-            for(i in res)
-            {
-                 var emailDest = res[i];
-                 log.info(emailDest);
+            Object.keys(res).forEach(function(key) {
+                var emailDest = res[key];
+                log.info(emailDest);
 
-                 /*nodemailer.send_mail(
-                     mailContent,
-                     function(err3){
-                        if(err3){
-                            log.warning(err3);
-                        }
-                     }
-                 );*/
-            }
+                /*nodemailer.send_mail(
+                 mailContent,
+                 function(err3){
+                    if(err3){
+                        log.warning(err3);
+                    }
+                 }
+                );*/
+            });
+
             callback(err,htmlres);
         });
     });
-
-}
+};

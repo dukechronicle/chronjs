@@ -291,8 +291,12 @@ function _makeFacets(facets,callback) {
             var parts = indivFacets[i].split(":");
             
             if(parts[0] == 'Section') parts[0] = "section_s";
-            else if(parts[0] == 'Author') parts[0] = "author_sm";
             
+            else if(parts[0] == 'Author') {
+                parts[0] = "author_sm";
+                parts[1] = parts[1].toLowerCase(); // do a case-insensitive author search
+            }
+      
             else if(parts[0] == 'Year') {
                 parts[0] = "created_year_i";
                 facetFields.push("created_month_i");

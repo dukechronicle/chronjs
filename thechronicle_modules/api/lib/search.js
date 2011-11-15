@@ -130,16 +130,17 @@ search.unindexArticle = function(id, callback) {
 // removes all indexes from solr for the db we are using and sets all documents in the db we are using to not being indexed by solr
 search.removeAllDocsFromSearch = function(callback) {
     api.docsByDate(null, function(err, response) {
+        response = response || {};
         async.forEach(response, function(row, cb) {
-                log.debug('unindexing "' + row.title + '"');
-                client.del(createSolrIDFromDBID(row._id), null, function(err,resp) { 
-                    log.debug(resp);
-                    db.merge(row._id, {indexedBySolr: false}, function(error3, response3) {
-                        if(error3) log.warning(error3);
-                        else log.debug('unindexed "' + row.title + '"');
-                        cb(null);
-                    });
+            log.debug('unindexing "' + row.title + '"');
+            client.del(createSolrIDFromDBID(row._id), null, function(err,resp) { 
+                log.debug(resp);
+                db.merge(row._id, {indexedBySolr: false}, function(error3, response3) {
+                    if(error3) log.warning(error3);
+                    else log.debug('unindexed "' + row.title + '"');
+                    cb(null);
                 });
+            });
         },
         function(err) {
             // just incase the search index and the db were out of sync, delete everything in the search index for this db that may not have been covered above

@@ -35,23 +35,41 @@ else if(config.get('COUCHDB_URL').indexOf("heroku") != -1 || config.get('COUCHDB
     console.log("You can't create an environment using the production config options. Recommend use of db server chrondev.iriscouch.com");
 }
 else {
-    api.init(function(err1) {
-        if (err1) console.log(err1);
-        else {
+    // TODO: add group/layout and image code    
+    async.waterfall([
+        function(callback) {
+            api.init(callback);
+        },
+        function(callback) {
             console.log("creating database...");
-            api.recreateDatabase(function(err2) {
-                api.search.removeAllDocsFromSearch(function(err3) {
-                    addFakeArticles(function(err4) {
-                        if (err4) console.log(err4);
-                        else console.log('environment created!');
-                    });
-                });
+
+            // delete old version of db and then create it again to start the db fresh            
+            api.recreateDatabase(callback);
+        },
+        function(callback) {
+            console.log("creating search index...");
+           
+            // delete all articles for this db in the search index to start the index fresh
+            api.search.removeAllDocsFromSearch(function(err) {
+                callback(err);
             });
+        },
+        function(callback) {
+            console.log("populating site with fake articles...");
+            addFakeArticles(callback);
+        },
+        function(callback) {
+            console.log('environment created!');
+            callback(null);
+        }],
+        function(err) {
+              if (err) console.log(err);
         }
-    });
+    );
 }
 
 function addFakeArticles(callback) {
+    console.log(callback.toString());
     async.forEach(fakeArticles, function(article, cb) {
         console.log("adding article with title: '" + article.title + "'...");
         

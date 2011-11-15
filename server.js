@@ -150,6 +150,7 @@ function runSite(callback) {
             }
         ], function(err) {
             if (err) return log.crit(err);
+            return callback();
         })
     });
 }

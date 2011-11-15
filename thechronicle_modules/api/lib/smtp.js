@@ -101,6 +101,9 @@ smtp.sendNewsletter = function(msgBody,callback)
             var dateStr = now.toDateString();
             var subjectStr = "[Chronicle Newsletter] " + dateStr + ": Joe wants braces!!!";
 
+            //TODO set emailDest
+            var emailDest;
+
             var mailContent = {
                 sender : "chronicle@duke.edu",
                 to : emailDest,

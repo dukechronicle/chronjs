@@ -53,7 +53,7 @@ smtp.addSubscriber = function(subscriberEmail, callback) {
 };
 /** 
 * @param {String} email email to delete from list of subscriber emails
-* @param {emailList} list of all subscriber emails
+* @param {Array} emailList of all subscriber emails
 * @return if email of subscriber is in emailList then delete it from emailList.
 */
 

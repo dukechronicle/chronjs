@@ -6,7 +6,11 @@
             h1 #{doc.title}
 
             if (doc.images && doc.images.LargeRect && doc.images.LargeRect.url)
-                img.article(src=doc.images.LargeRect.url)
+                if (typeof isAdmin != 'undefined' && isAdmin && doc.images.Original)
+                    a(href="/admin/image/"+doc.images.Original.name)
+                        img.article(src=doc.images.LargeRect.url)
+                else
+                    img.article(src=doc.images.LargeRect.url)
 
             if (doc.images && doc.images.Original)
                 #{doc.images.Original.photographer}

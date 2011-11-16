@@ -3,8 +3,10 @@ table(border=1)
         != partial('original', {collection: origs, locals: {url: url}})
     else
         != partial('original', {collection: origs})
-
-a(href='/admin/image/manage/' + origs[origs.length - 1].name) Next
+-if (origs.length > 0)
+    a(href='/admin/image/manage/' + origs[origs.length - 1].name) Next
+-else
+    h1 No Images Available
 
 
 script

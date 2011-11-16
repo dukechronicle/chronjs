@@ -25,7 +25,6 @@ function pageAlign() {
 				var height = $(element).height();
 				if (height > maxHeight) {
 					maxHeight = height;
-					console.log(maxHeight)
 				}
 			});
 			_.each(row, function(element) {
@@ -36,11 +35,16 @@ function pageAlign() {
 
 	// align main and sidebar height
 	(function() {
-		// sidebar is short by 1px for some reason
 		var extraHeight = $('#top > .sidebar').height()-$('#top > .content').height();
-
 		var contentContainer = $('#top > .content .top-news .content-container');
-        contentContainer.css('padding-bottom', extraHeight);
+        var opinionContainer = $('#top > .sidebar .opinion .content-container');
+
+        if (extraHeight > 0) {
+            contentContainer.css('padding-bottom', extraHeight);
+        } else {
+            // not sure why the -3 is needed, but it is for sidebar to align correctly
+            opinionContainer.css('padding-bottom', (extraHeight - 3) * -1);
+        }
 	}) ();
 }
 //});

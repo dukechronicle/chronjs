@@ -227,20 +227,19 @@ api.articleForUrl = function(url, callback) {
         var docTypeKey = 1;
         var aggregateDoc = {};
 
-        for (var i = 0; i < docs.length; i++) {
-            var doc = docs[i];
-            var docType = doc.key[docTypeKey];
+        docs.forEach(function(key, doc) {
+            var docType = key[docTypeKey];
 
             if (docType === 'article') {
-                aggregateDoc = doc.value;
+                aggregateDoc = doc;
                 aggregateDoc.images = {};
             } else if (docType === 'images') {
-                var imageType = doc.key[docTypeKey+ 1];
+                var imageType = key[docTypeKey+ 1];
                 // TODO this should NEVER happen
 
-                aggregateDoc.images[imageType] = doc.doc;
+                aggregateDoc.images[imageType] = doc;
             }
-        }
+        });
 
         callback(null, aggregateDoc);
     });

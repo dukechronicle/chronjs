@@ -256,15 +256,11 @@ api.docForUrl = function(url, callback) {
 
     db.view("articles/urls", query, function(err, docs) {
         if (err) return callback(err);
-
         var docTypeKey = 1;
-        docs.forEach(function(doc) {
-            var docType = doc.key[docTypeKey];
 
-            if (docType === 'article') {
-                doc = doc.value;
-                return callback(null, doc);
-            }
+        docs.forEach(function(key, doc) {
+            var docType = key[docTypeKey];
+            if (docType === 'article') return callback(null, doc);
         });
     });
 };

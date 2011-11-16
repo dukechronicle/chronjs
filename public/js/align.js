@@ -1,16 +1,24 @@
 //$(function() {	// align rows
 function pageAlign() {
 	// find all align groups
-	$(".align-group").each(function(i) {
+	$(".align-group").each(function() {
 		var groups = [];
-
 		// find all elements of align group and add it to group array
-		$(this).find('> .align-element').each(function(i) {
-			groups.push($(this).find('div.rounded'))
+
+		$(this).find('> .align-element').each(function() {
+            var alignTarget = $(this).attr('data-alignTarget');
+
+            if (!alignTarget) {
+                console.log("Aligntarget missing for ");
+                console.log($(this));
+                return;
+            }
+            groups.push($(this).find(alignTarget));
 		});
 
+        if (groups.length === 0) return;
+
 		_.each(_.zip.apply(this, groups), function(row) {
-            console.log(row);
 			// get max height of current row
 			var maxHeight = 0;
 			_.each(row, function(element) {
@@ -32,8 +40,7 @@ function pageAlign() {
 		var extraHeight = $('#top > .sidebar').height()-$('#top > .content').height();
 
 		var contentContainer = $('#top > .content .top-news .content-container');
-		var currentPadding = contentContainer.css('padding-bottom');
-		contentContainer.css('padding-bottom', extraHeight);
+        contentContainer.css('padding-bottom', extraHeight);
 	}) ();
 }
 //});

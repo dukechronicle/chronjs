@@ -1,3 +1,18 @@
+script
+    $(function() {
+        $('#nicedate').datepicker({
+            onSelect: function(dateText, inst){
+                var date = new Date(dateText);
+                $("#date").val(date.getTime());
+            }
+        });
+        
+        var dateInt = parseInt($("#date").val());
+        var date = new Date(dateInt);
+        if(date.toDateString() != 'Invalid Date') {
+            $("#nicedate").val((1+date.getMonth()) + '/' + date.getDate() + '/' + date.getFullYear());       
+        }
+    });
 h1 Crop
 - if(url)
   img#toCrop(src=url)
@@ -27,20 +42,21 @@ p
 p
   br
   form(action='/admin/image/info', method='POST')
-    !Name: 
+    span Name: 
     input(type='text', name='name', value=name)
     br
-    !Caption: 
+    span Caption: 
     input(type='text', name='caption', value=caption)
     br
-    !Location: 
+    span Location: 
     input(type='text', name='location', value=location)
     br
-    !Photographer: 
+    span Photographer: 
     input(type='text', name='photographer', value=photographer)
     br
-    !Date: 
-    input(type='text', name='date', value=date)
+    span Date: 
+    input(id='nicedate', type='text', name='nicedate', value=date)
+    input(id='date', type='hidden', name='date', value=date)
     input(type='hidden', name='id', value=id)
     br
     input(type='submit')

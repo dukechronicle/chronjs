@@ -1,19 +1,16 @@
 var db = require('./db-abstract');
 var image = exports;
 
+var RESULTS_PER_PAGE = 25;
 
-image.listOriginalsByDate = function (start, callback) {
-
+image.listOriginalsByDate = function (beforeKey, callback) {
     var query = {
-        descending:true
-        //limit: 5
+        descending:true,
+        limit: RESULTS_PER_PAGE,
     };
 
-    if (start) {
-        console.log(start);
-        query.endkey = start;
-        query.inclusive_end = false;
-    }
+    if(beforeKey) query.startkey = parseInt(beforeKey);
+
     db.view('articles/image_originals', query, callback);
 };
 

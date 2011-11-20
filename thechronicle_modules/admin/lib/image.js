@@ -87,9 +87,9 @@ function _downloadUrlToPath(url, path, callback) {
 exports.bindPath = function (app) {
     return function () {
 
-        app.get('/manage/:start?', site.checkAdmin, function (req, httpRes) {
-            var start = req.params.start;
-            api.image.getAllOriginals(start, function (err, origs) {
+        app.get('/manage/:beforeKey?', site.checkAdmin, function (req, httpRes) {
+            var beforeKey = req.params.beforeKey;
+            api.image.getAllOriginals(beforeKey, function (err, origs) {
                 httpRes.render('admin/articleimage', {
                     filename:'views/admin/articleimage.jade',
                     locals:{

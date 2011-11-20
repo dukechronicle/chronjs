@@ -4,7 +4,7 @@ table(border=1)
     else
         != partial('original', {collection: origs})
 -if (origs.length > 0)
-    a(href='/admin/image/manage/' + origs[origs.length - 1].name) Next
+    a(href='/admin/image/manage/' + origs[origs.length - 1].date) Next
 -else
     h1 No Images Available
 

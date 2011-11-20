@@ -45,27 +45,14 @@ image.originalsForPhotographer = function (photog, callback) {
     db.image.originalsForPhotographer(photog, callback);
 };
 
-image.getAllOriginals = function (start, callback) {
-    db.image.listOriginalsByDate(start, function (err, res) {
+image.getAllOriginals = function (beforeKey, callback) {
+    db.image.listOriginalsByDate(beforeKey, function (err, res) {
         res = res.map(function (doc) {
             doc.displayName = doc.name;
             var nameSplit = doc.name.split("-", 2);
             if (nameSplit.length > 1) doc.displayName = nameSplit[1];
             return doc;
         });
-
-        // sort by date, accounting for badly formatted dates
-        res = _.sortBy(res, function (image) {
-            
-            var d = new Date(image.date);
-
-            // if date not valid, set it to a really old date
-            if (!_isValidDate(d)) d = new Date(0);
-
-            return d.getTime();
-        });
-
-        res.reverse(); // newest images first
 
         callback(err, res);
     });

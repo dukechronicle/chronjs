@@ -7,8 +7,8 @@ var configuration = {
 
             "SERVER_PORT":"4000",
 
-            "ADMIN_USERNAME":"dean",
-            "ADMIN_PASSWORD":"dean",
+            "ADMIN_USERNAME":"admin",
+            "ADMIN_PASSWORD":"password",
 
             "REDIS_URL":"redis://redistogo:0235bf0a2db5e6cc087683952f60c59c@icefish.redistogo.com:9249/",
 

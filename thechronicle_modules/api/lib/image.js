@@ -45,8 +45,8 @@ image.originalsForPhotographer = function (photog, callback) {
     db.image.originalsForPhotographer(photog, callback);
 };
 
-image.getAllOriginals = function (beforeKey, callback) {
-    db.image.listOriginalsByDate(beforeKey, function (err, res) {
+image.getAllOriginals = function (beforeKey, beforeID, callback) {
+    db.image.listOriginalsByDate(beforeKey, beforeID, function (err, res) {
         res = res.map(function (doc) {
             doc.displayName = doc.name;
             var nameSplit = doc.name.split("-", 2);
@@ -57,9 +57,3 @@ image.getAllOriginals = function (beforeKey, callback) {
         callback(err, res);
     });
 };
-
-function _isValidDate(d) {
-  if ( Object.prototype.toString.call(d) !== "[object Date]" )
-    return false;
-  return !isNaN(d.getTime());
-}

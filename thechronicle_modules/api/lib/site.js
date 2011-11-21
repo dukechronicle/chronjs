@@ -643,19 +643,6 @@ site.init = function (app, callback) {
             });
         });
 
-        app.get('/article/:url/image', site.checkAdmin, function (req, httpRes) {
-            api.image.getAllOriginals(null, function (err, origs) {
-                httpRes.render('admin/articleimage', {
-                    filename:'views/admin/articleimage.jade',
-                    locals:{
-                        origs:origs,
-                        url:req.params.url
-                    },
-                    layout:'layout-admin.jade'
-                });
-            });
-        });
-
         app.get('/login', function (req, res) {
             site.askForLogin(res, '/');
         });
@@ -797,7 +784,7 @@ site.renderSmtpTest = function (req, http_res, email, num) {
         api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function (err, result) {
             _.defaults(result, homeModel);
 
-            api.docsByDate(5, function (err, docs) {
+            api.docsByDate(null, null, function (err, docs) {
                 smtp.sendNewsletter(docs, function (err2, res2) {
                     http_res.send(res2);
                     log.debug("sent email");

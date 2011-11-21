@@ -46,7 +46,7 @@ exports.init = function (app, callback) {
 
         //Run this to render bodies for all articles
         /*
-         api.docsByDate(null, function(err, docs) {
+         api.docsByDate(null, null, function(err, docs) {
          log.debug("Got docs");
          docs.forEach(function(doc, index) {
          _renderBody(doc.body, function(err, rendered) {
@@ -170,14 +170,20 @@ exports.init = function (app, callback) {
                                 var db = api.getDatabaseName();
                                 var host = api.getDatabaseHost();
                                 var port = api.getDatabasePort() || "80";
-                                api.docsByDate(null,
+
+                                var beforeKey = req.query.beforeKey;
+                                var beforeID = req.query.beforeID;
+
+                                api.docsByDate(beforeKey, beforeID,
                                         function (err, res) {
                                             if (err) {
+                                                log.error(err);
                                                 globalFunctions.showError(http_res, err);
                                             } else {
                                                 http_res.render('admin/manage', {
                                                     locals:{
                                                         docs:res,
+                                                        hasPrevious:(beforeID != null),
                                                         db:db,
                                                         host:host,
                                                         port:port

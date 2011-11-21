@@ -18,13 +18,14 @@ api.authors = require("./authors");
 var redis = require('../../redisclient');
 
 var MAX_URL_LENGTH = 50;
+var RESULTS_PER_PAGE = 25;
 
 function getAvailableUrl(url, n, callback) {
     var new_url = url;
     if(n != 0) {
         new_url = new_url + "-" + n;
     }
-    db.view("articles/urls", {key: new_url}, function(err, res) {
+    db.view("articles/urls", {key: [new_url, "article"]}, function(err, res) {
         if(err) {
             callback(err, null);
         }
@@ -279,15 +280,15 @@ api.nodeForTitle = function(url, callback) {
     });
 };
 
-api.docsByDate = function(limit, callback) {
-    var query = {descending: true};
+api.docsByDate = function(beforeKey, beforeID, callback) {
+    var query = {
+        descending:true,
+        limit: RESULTS_PER_PAGE,
+    };
 
-    if (limit) {
-        query.limit = limit;
-    } else {
-        query.limit = 20;
-    }
-    
+    if(beforeKey) query.startkey = parseInt(beforeKey);
+    if(beforeID) query.startkey_docid = beforeID;
+
     db.view("articles/all_by_date", query, function(err, results) {
         if (err) callback(err);
 

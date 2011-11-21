@@ -172,7 +172,7 @@ search.docsByAuthor = function (authorName, sortOrder, facets, page, callback) {
             },
             callback);
 };
-
+// Function for searching by query
 search.docsBySearchQuery = function (wordsQuery, sortBy, sortOrder, facets, page, callback) {
     wordsQuery = globalFunctions.trim(wordsQuery);
     if (wordsQuery.length == 0) wordsQuery = "--";
@@ -213,6 +213,7 @@ search.docsBySearchQuery = function (wordsQuery, sortBy, sortOrder, facets, page
                 start:RESULTS_PER_PAGE * (page - 1),
                 fl:"*,score",
                 sort:sortBy + " " + sortOrder,
+                "f.author_sm.facet.sort":"index",
                 "f.created_year_i.facet.sort":"index",
                 "f.created_month_i.facet.sort":"index",
                 "f.created_day_i.facet.sort":"index"

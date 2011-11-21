@@ -90,12 +90,14 @@ exports.bindPath = function (app) {
         app.get('/manage', site.checkAdmin, function (req, httpRes) {
             var beforeKey = req.query.beforeKey;
             var beforeID = req.query.beforeID;
+            var forArticle = req.query.forArticle;
 
             api.image.getAllOriginals(beforeKey, beforeID, function (err, origs) {
                 httpRes.render('admin/articleimage', {
                     filename:'views/admin/articleimage.jade',
                     locals:{
                         origs:origs,
+                        url:forArticle,
                         hasPrevious:(beforeID != null)
                     },
                     layout:'layout-admin.jade'

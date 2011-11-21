@@ -12,7 +12,10 @@ if (hasPrevious)
     br
 
 if (origs.length != 0)
-    a(href='/admin/image/manage?beforeKey=' + origs[origs.length - 1].date + '&beforeID=' + origs[origs.length - 1]._id) Next
+    if (typeof url != 'undefined')
+        a(href='/admin/image/manage?beforeKey=' + origs[origs.length - 1].date + '&beforeID=' + origs[origs.length - 1]._id + '&forArticle=' + url) Next
+    else
+        a(href='/admin/image/manage?beforeKey=' + origs[origs.length - 1].date + '&beforeID=' + origs[origs.length - 1]._id) Next
 
 script
     $(document).ready(function(){

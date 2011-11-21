@@ -10,6 +10,7 @@ image.listOriginalsByDate = function (beforeKey, beforeID, callback) {
     };
 
     if(beforeKey) query.startkey = parseInt(beforeKey);
+    if(beforeID) query.startkey_docid = beforeID;
 
     db.view('articles/image_originals', query, callback);
 };

@@ -43,7 +43,7 @@ exports.bindPath = function (app) {
                                     }
                                 });
                     } else {
-                        api.docsByDate(30,
+                        api.docsByDate(null, null,
                                 function (err, docs) {
                                     if (err) globalFunctions.showError(res, err);
                                     renderPage(docs);
@@ -86,7 +86,7 @@ exports.bindPath = function (app) {
                                     }
                                 });
                     } else {
-                        api.docsByDate(30,
+                        api.docsByDate(null, null,
                                 function (err, docs) {
                                     if (err) globalFunctions.showError(res, err);
                                     renderPage(docs);
@@ -128,7 +128,7 @@ exports.bindPath = function (app) {
                                     }
                                 });
                     } else {
-                        api.docsByDate(30,
+                        api.docsByDate(null, null,
                                 function (err, docs) {
                                     if (err) globalFunctions.showError(res, err);
                                     renderPage(docs);
@@ -170,7 +170,7 @@ exports.bindPath = function (app) {
                                     }
                                 });
                     } else {
-                        api.docsByDate(30,
+                        api.docsByDate(null, null,
                                 function (err, docs) {
                                     if (err) globalFunctions.showError(res, err);
                                     renderPage(docs);
@@ -212,7 +212,7 @@ exports.bindPath = function (app) {
                                     }
                                 });
                     } else {
-                        api.docsByDate(30,
+                        api.docsByDate(null, null,
                                 function (err, docs) {
                                     if (err) globalFunctions.showError(res, err);
                                     renderPage(docs);
@@ -254,7 +254,7 @@ exports.bindPath = function (app) {
                                     }
                                 });
                     } else {
-                        api.docsByDate(30,
+                        api.docsByDate(null, null,
                                 function (err, docs) {
                                     if (err) globalFunctions.showError(res, err);
                                     renderPage(docs);

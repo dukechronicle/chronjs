@@ -24,7 +24,7 @@ function getAvailableUrl(url, n, callback) {
     if(n != 0) {
         new_url = new_url + "-" + n;
     }
-    db.view("articles/urls", {key: new_url}, function(err, res) {
+    db.view("articles/urls", {key: [new_url, "article"]}, function(err, res) {
         if(err) {
             callback(err, null);
         }

@@ -644,12 +644,16 @@ site.init = function (app, callback) {
         });
 
         app.get('/article/:url/image', site.checkAdmin, function (req, httpRes) {
-            api.image.getAllOriginals(null, null, function (err, origs) {
+            var beforeKey = req.query.beforeKey;
+            var beforeID = req.query.beforeID;
+
+            api.image.getAllOriginals(beforeKey, beforeID, function (err, origs) {
                 httpRes.render('admin/articleimage', {
                     filename:'views/admin/articleimage.jade',
                     locals:{
                         origs:origs,
-                        url:req.params.url
+                        url:req.params.url,
+                        hasPrevious:(beforeID != null)
                     },
                     layout:'layout-admin.jade'
                 });

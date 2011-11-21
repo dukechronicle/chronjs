@@ -87,13 +87,16 @@ function _downloadUrlToPath(url, path, callback) {
 exports.bindPath = function (app) {
     return function () {
 
-        app.get('/manage/:beforeKey?', site.checkAdmin, function (req, httpRes) {
-            var beforeKey = req.params.beforeKey;
-            api.image.getAllOriginals(beforeKey, function (err, origs) {
+        app.get('/manage', site.checkAdmin, function (req, httpRes) {
+            var beforeKey = req.query.beforeKey;
+            var beforeID = req.query.beforeID;
+
+            api.image.getAllOriginals(beforeKey, beforeID, function (err, origs) {
                 httpRes.render('admin/articleimage', {
                     filename:'views/admin/articleimage.jade',
                     locals:{
-                        origs:origs
+                        origs:origs,
+                        hasPrevious:(beforeID != null)
                     },
                     layout:'layout-admin.jade'
                 });

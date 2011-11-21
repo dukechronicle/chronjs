@@ -644,7 +644,7 @@ site.init = function (app, callback) {
         });
 
         app.get('/article/:url/image', site.checkAdmin, function (req, httpRes) {
-            api.image.getAllOriginals(null, function (err, origs) {
+            api.image.getAllOriginals(null, null, function (err, origs) {
                 httpRes.render('admin/articleimage', {
                     filename:'views/admin/articleimage.jade',
                     locals:{

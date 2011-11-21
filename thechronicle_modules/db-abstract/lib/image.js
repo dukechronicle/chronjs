@@ -3,13 +3,14 @@ var image = exports;
 
 var RESULTS_PER_PAGE = 25;
 
-image.listOriginalsByDate = function (beforeKey, callback) {
+image.listOriginalsByDate = function (beforeKey, beforeID, callback) {
     var query = {
         descending:true,
         limit: RESULTS_PER_PAGE,
     };
 
     if(beforeKey) query.startkey = parseInt(beforeKey);
+    if(beforeID) query.startkey_docid = beforeID;
 
     db.view('articles/image_originals', query, callback);
 };

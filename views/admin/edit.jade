@@ -27,7 +27,7 @@ form(action='/admin/edit', method='POST')
 
     input(type="hidden", name='doc[id]', value=doc._id);
     p
-        a(href='/article/' + url + '/image') Add images
+        a(href='/admin/image/manage?forArticle=' + url) Add images
     - if(images)
         p
         table(border=1)

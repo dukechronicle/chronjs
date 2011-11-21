@@ -19,7 +19,7 @@ var configuration = {
 
             "S3_KEY":"AKIAJIH3MOVTAMXCFKXA",
             "S3_SECRET":"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",
-            "S3_BUCKET":"chron_bucket1"
+            "S3_BUCKET":"chron_dev"
         }
     },
     "activeConfigurationProfile":"dev"

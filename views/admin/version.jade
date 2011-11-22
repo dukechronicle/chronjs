@@ -19,5 +19,8 @@ table(border=1)
               - else
                 option(value=type) #{type}
           input(type='hidden', name='versionId', value=version.doc._id)
+          input(type='hidden', name='original', value=version.doc.original)
           input(type='hidden', name='article', value=article)
           input(type='submit', value='add')
+          &nbsp;
+          a(onClick="showDescriptions()") What's This?

@@ -1,7 +1,8 @@
 var nimble = require('nimble');
 var _ = require('underscore');
 var db = require('../../db-abstract');
-var redis = require('./redisclient');
+var log = require('../../log');
+var redis = require('../../redisclient');
 
 var group = exports;
 var BENCHMARK = false;
@@ -67,77 +68,73 @@ group.docs = function(namespace, group, callback) {
 
     redis.client.get(key, function(err, res) {
         if (res === null) {
-            //redis.client.get()
-                var DOC_TYPE_KEY = 3;
-                db.group.docs(namespace, group, function(err, res) {
-                    if (BENCHMARK) console.log("RECEIVED %d", Date.now() - start);
-                    // if querying name space, map each group to it's own object
-                    if (err) return callback(err);
-                    else {
-                        if (!group) {
-                            var groupedResults = {};
-                            var groupName;
-                            var prevGroupName;
-                            var currentArticle;
+            var DOC_TYPE_KEY = 3;
+            db.group.docs(namespace, group, function(err, res) {
+                if (BENCHMARK) log.info("RECEIVED %d", Date.now() - start);
+                // if querying name space, map each group to it's own object
+                if (err) return callback(err);
+                else {
+                    if (!group) {
+                        var groupedResults = {};
+                        var groupName;
+                        var prevGroupName;
+                        var currentArticle;
 
-                            // loop through each document in result
-                            for (var i = 0; i < res.length; i++) {
-                                var doc = res[i];
+                        res.forEach(function(key, doc) {
+                            var docType = key[DOC_TYPE_KEY];
 
-                                var docType = doc.key[DOC_TYPE_KEY];
+                            if (docType === "article") {
+                                prevGroupName = groupName;
+                                groupName = key[1];
 
-                                if (docType === "article") {
-                                    prevGroupName = groupName;
-                                    groupName = doc.key[1];
+                                // start of a new group
+                                if (!groupedResults[groupName]) {
+                                    groupedResults[groupName] = [];
+                                    doc.cssClass = "first";
 
-                                    // start of a new group
-                                    if (!groupedResults[groupName]) {
-                                        groupedResults[groupName] = [];
-                                        doc.doc.cssClass = "first";
-
-                                        // assign css class to last article of previous group
-                                        if (prevGroupName && groupedResults[prevGroupName]) {
-                                            groupedResults[prevGroupName][groupedResults[prevGroupName].length - 1].cssClass = "last";
-                                        }
+                                    // assign css class to last article of previous group
+                                    if (prevGroupName && groupedResults[prevGroupName]) {
+                                        groupedResults[prevGroupName][groupedResults[prevGroupName].length - 1].cssClass = "last";
                                     }
-
-                                    if (doc.doc.urls) {
-                                        doc.doc.url = "/article/" + doc.doc.urls[doc.doc.urls.length - 1];
-                                    }
-
-                                    // remove body to save space
-                                    doc.doc.body = '';
-                                    doc.doc.renderedBody = '';
-                                    
-                                    groupedResults[groupName].push(doc.doc);
-
-                                    // retain reference to current article so images that are processed next can easily access it
-                                    currentArticle = groupedResults[groupName][groupedResults[groupName].length - 1];
-
-                                    // TODO this should NEVER happen
-                                    currentArticle.images = {};
-                                } else if (docType === "image") {
-                                    // if it
-                                    var imageType = doc.key[DOC_TYPE_KEY + 1];
-                                    currentArticle.images[imageType] = doc.doc;
                                 }
-                            }
 
-                            // assign last css class since previous loop may have not hit it
-                            if (prevGroupName && groupedResults[prevGroupName]) {
-                                groupedResults[prevGroupName][groupedResults[prevGroupName].length - 1].cssClass = "last";
+                                if (doc.urls) {
+                                    doc.url = "/article/" + doc.urls[doc.urls.length - 1];
+                                }
+
+                                // remove body to save space
+                                doc.body = '';
+                                doc.renderedBody = '';
+
+                                groupedResults[groupName].push(doc);
+
+                                // retain reference to current article so images that are processed next can easily access it
+                                currentArticle = groupedResults[groupName][groupedResults[groupName].length - 1];
+
+                                // TODO this should NEVER happen
+                                currentArticle.images = {};
+                            } else if (docType === "image") {
+                                // if it
+                                var imageType = key[DOC_TYPE_KEY + 1];
+                                currentArticle.images[imageType] = doc;
                             }
-                            redis.client.set(key, JSON.stringify(groupedResults));
-                            redis.client.expire(key, 2);
-                            callback(null, groupedResults);
-                        } else {
-                            // TODO modify this
-                            return callback(null, {});
+                        });
+
+                        // assign last css class since previous loop may have not hit it
+                        if (prevGroupName && groupedResults[prevGroupName]) {
+                            groupedResults[prevGroupName][groupedResults[prevGroupName].length - 1].cssClass = "last";
                         }
+                        redis.client.set(key, JSON.stringify(groupedResults));
+                        redis.client.expire(key, 2);
+                        callback(null, groupedResults);
+                    } else {
+                        // TODO modify this
+                        return callback(null, {});
                     }
-                });
+                }
+            });
         } else {
-            //console.log(res);
+            //log.debug(res);
             callback(null, JSON.parse(res));
         }
     })

@@ -12,18 +12,17 @@ exports.log = function (message){
 
 exports.randomString = function (length) {
     var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
-    var string_length = length;
     var randomstring = '';
-    for (var i=0; i<string_length; i++) {
+    for (var i=0; i< length; i++) {
         var rnum = Math.floor(Math.random() * chars.length);
         randomstring += chars.substring(rnum,rnum+1);
     }
     return randomstring;
 };
 
-exports.trim = function(string) {
+exports.trim = function (string) {
     return string.replace(/^\s*|\s*$/g, '')
-}
+};
 
 exports.sendJSONResponse = function(res,jsonObject) {
     var jsonString = JSON.stringify(jsonObject);

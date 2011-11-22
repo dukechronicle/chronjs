@@ -1,6 +1,8 @@
 /* require internal modules */
 var config = require('../thechronicle_modules/config');
 var api = require('../thechronicle_modules/api/lib/api');
+var image = require('../thechronicle_modules/api/lib/image');
+var s3 = require('../thechronicle_modules/api/lib/s3');
 
 var async = require('async');
 
@@ -57,6 +59,15 @@ else {
         function(callback) {
             console.log("populating site with fake articles...");
             addFakeArticles(callback);
+        },
+        function(callback) {
+            s3.init(callback);
+        },
+        function(callback) {
+            image.createOriginalFromFile('lucky.jpg', 'image/jpg', false, function(err, res, url) {
+                console.log(url);
+                callback(err);
+            });
         },
         function(callback) {
             console.log('environment created!');

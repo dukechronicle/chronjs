@@ -1,12 +1,12 @@
 var db = require('./db-abstract');
 var image = exports;
 
-var RESULTS_PER_PAGE = null;
+var RESULTS_PER_PAGE = 25;
 
 image.listOriginalsByDate = function (beforeKey, beforeID, callback) {
     var query = {
-        descending:true
-        //limit: RESULTS_PER_PAGE
+        descending:true,
+        limit: RESULTS_PER_PAGE
     };
 
     if(beforeKey) query.startkey = parseInt(beforeKey);

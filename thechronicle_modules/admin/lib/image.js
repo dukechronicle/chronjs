@@ -323,7 +323,7 @@ exports.bindPath = function (app) {
                                 if (err) {
                                     globalFunctions.showError(httpRes, err); //check for an error
                                 } else {
-                                    else if (article) httpRes.redirect('/admin/image/' + imageName + '?article=' + article); //if there is an article, redirect to this domain
+                                    if (article) httpRes.redirect('/admin/image/' + imageName + '?article=' + article); //if there is an article, redirect to this domain
                                     else httpRes.redirect('/admin/image/' + imageName); // otherwise, redirect to this domain
                                 }
                             }

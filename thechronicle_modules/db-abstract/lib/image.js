@@ -5,7 +5,7 @@ var RESULTS_PER_PAGE = null;
 
 image.listOriginalsByDate = function (beforeKey, beforeID, callback) {
     var query = {
-        descending:true,
+        descending:true
         //limit: RESULTS_PER_PAGE
     };
 

@@ -1,12 +1,13 @@
 var redis = require("redis");
 var url = require("url");
 var config = require('../../config');
+var log = require('../../log');
 var _ = require("underscore");
 
 var client;
 var redisUrl;
 
-exports.init = function(callback) {
+exports.init = function (callback) {
     // only initialize and authenticate on first run
     if (!client) {
         // Grab redis URL from config settings.
@@ -19,17 +20,17 @@ exports.init = function(callback) {
         client = redis.createClient(redisUrl.port, redisUrl.hostname);
 
         client.on("error", function (err) {
-            console.log("Error " + err);
+            log.error(err);
         });
 
-        client.auth(redisUrl.auth[1], function(err, reply) {
-            console.log("authenticating");
+        client.auth(redisUrl.auth[1], function (err, reply) {
+            log.notice("authenticating to redis");
             if (err) {
-                console.log("Error connecting to redis: " + err);
+                log.error("Error connecting to redis: " + err);
                 return callback(err);
             }
 
-            //console.log(client);
+            //log.debug(client);
 
             exports.client = client;
             return callback(null);
@@ -37,16 +38,16 @@ exports.init = function(callback) {
     } else {
         return callback(null);
     }
-}
+};
 
-exports.getHostname  = function() {
+exports.getHostname = function () {
     return redisUrl.hostname;
-}
+};
 
-exports.getPort = function() {
+exports.getPort = function () {
     return redisUrl.port;
-}
+};
 
-exports.getPassword = function() {
+exports.getPassword = function () {
     return redisUrl.auth[1];
-}
+};

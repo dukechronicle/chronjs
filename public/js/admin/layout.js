@@ -3,8 +3,9 @@ $(function() {
 	$("#taxonomy").change(function() {
 		var section = $(this).attr('value');
 		var plainUrl = $(location).attr('href').split("?")[0];
-		$("#stories-container").load(plainUrl + "?section=" + section + " #stories");
 
+		if(section != 'All') $("#stories-container").load(plainUrl + "?section=" + section + " #stories");
+        else $("#stories-container").load(plainUrl + " #stories");
 	});
 
 	/*
@@ -21,16 +22,16 @@ $(function() {
         return false;
     });
 
-    $("#layout").delegate(".container, .story", "dragenter", function(e) {
+    $("#layout").delegate(".container, .story", "dragenter", function () {
         $(this).addClass("over");
     });
 
-    $("#layout").delegate(".container, .story", "dragleave", function(e) {
+    $("#layout").delegate(".container, .story", "dragleave", function() {
         $(this).removeClass("over");
     });
 
     // remove on double click
-    $("#layout").delegate(".story", "dblclick", function(e) {
+    $("#layout").delegate(".story", "dblclick", function() {
         $.post("/admin/group/remove", {
             docId: $(this).attr("id"),
             groupName: $(this).parent().data("groupname"),
@@ -84,7 +85,7 @@ $(function() {
         if (element.parent().data("groupname") && (element.parent().data("groupname") !== $(this).parent().data("groupname"))) {
             removeFromPrevious(docId, element, $(_this).parent().data("groupname"), newElement);
         } else {
-
+            element.remove();
             $.post("/admin/group/add", {
                 docId: docId,
                 groupName: $(this).parent().data("groupname"),
@@ -109,7 +110,6 @@ $(function() {
 
     $("body").delegate(".story", "dragstart", function(e) {
         e.dataTransfer.setData("Text", this.id);
-        console.log("dragstart"); 
     });
 
     function removeFromPrevious(docId, element, newGroupName, newElement) {

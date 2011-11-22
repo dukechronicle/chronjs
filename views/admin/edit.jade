@@ -6,13 +6,13 @@ form(action='/admin/edit', method='POST')
     p(style="margin-bottom: 2em")
         label(for='section') Section&nbsp;
         select(name='doc[taxonomy]', style='width: 600px')
-            if (typeof taxonomy != 'undefined')
-                option Select a Section
-                - each value, key in taxonomy
-                    if (value[1])
-                        option(value=value[0], selected='selected') #{key}
-                    else
-                        option(value=value[0]) #{key}
+          option Select a section
+           - each subsections, section in taxonomy
+              - each key, value in subsections
+                - if (JSON.stringify(doc.taxonomy) == value)
+                    option(value=value, selected='selected') #{key}
+                - else
+                    option(value=value) #{key}
     p(style="margin-bottom: 2em")
         label(for='author') Authors&nbsp;
         input#author(type='text', name='doc[authors]', value=doc.authors, style='width:600px')
@@ -27,7 +27,7 @@ form(action='/admin/edit', method='POST')
 
     input(type="hidden", name='doc[id]', value=doc._id);
     p
-        a(href='/article/' + url + '/image') Add images
+        a(href='/admin/image/manage?forArticle=' + url) Add images
     - if(images)
         p
         table(border=1)

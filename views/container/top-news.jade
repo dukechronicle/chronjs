@@ -5,7 +5,7 @@
     .rounded
         .content-container.align-group.clearfix
         
-            .left.align-element
+            .left.align-element(data-alignTarget='a.first')
                 a.hover.highlight-left.first.teaser(href='#{news[0].url}')
                     h2 #{news[0].title}
                     p #{news[0].teaser}
@@ -15,7 +15,7 @@
                         a.hover.highlight-left(href='#{story.url}')
                             h3 #{story.title}
 
-            .right.align-element
+            .right.align-element(data-alignTarget='a.first')
                 a.hover.highlight-right.first.teaser(href='#{sports[0].url}')
                     h2 #{sports[0].title}
                     p #{sports[0].teaser}

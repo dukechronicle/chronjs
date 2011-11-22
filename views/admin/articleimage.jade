@@ -4,6 +4,18 @@ table(border=1)
     else
         != partial('original', {collection: origs})
 
+if (origs.length == 0)
+    h1 No Images Available
+
+if (hasPrevious)
+    a(onClick="history.go(-1);") Previous
+    br
+
+if (origs.length != 0)
+    if (typeof url != 'undefined')
+        a(href='/admin/image/manage?beforeKey=' + origs[origs.length - 1].date + '&beforeID=' + origs[origs.length - 1]._id + '&forArticle=' + url) Next
+    else
+        a(href='/admin/image/manage?beforeKey=' + origs[origs.length - 1].date + '&beforeID=' + origs[origs.length - 1]._id) Next
 
 script
     $(document).ready(function(){

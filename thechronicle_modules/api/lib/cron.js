@@ -1,5 +1,6 @@
 var cron = require('cron');
 var rss = require('./rss');
+var log = require('../../log');
 
 var feeds = [
     {
@@ -44,21 +45,21 @@ var feeds = [
     }
 ];
 
-exports.init = function() {
+exports.init = function () {
     if (process.env.NODE_ENV === 'production') {
-        new cron.CronJob('0 */30 * * * *', function() { //every 30 minutes
-            feeds.forEach(function(feed) {
-                rss.parseRSS(feed.url, function(err, dom) {
-                    console.log("Parsed RSS for feed: " + feed.title);
-                    if(err) console.log(err);
+        new cron.CronJob('0 */30 * * * *', function () { //every 30 minutes
+            feeds.forEach(function (feed) {
+                rss.parseRSS(feed.url, function (err, dom) {
+                    log.notice("Parsed RSS for feed: " + feed.title);
+                    if (err) log.warning(err);
                     else {
-                        rss.storeRSS(dom, feed.title, function(err, res) {
-                            if(err) console.log(err);
-                            else console.log("Stored RSS for feed: " + feed.title);
+                        rss.storeRSS(dom, feed.title, function (err, res) {
+                            if (err) log.warning(err);
+                            else log.notice("Stored RSS for feed: " + feed.title);
                         });
                     }
                 });
             });
         });
     }
-}
+};

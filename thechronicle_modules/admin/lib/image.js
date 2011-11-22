@@ -1,6 +1,6 @@
 var globalFunctions = require('../../global-functions');
 var async = require('async');
-var s3 = require('./s3.js');
+var s3 = require('../../api/lib/s3.js');
 var im = require('imagemagick');
 var site = require('../../api/lib/site.js');
 var fs = require('fs');
@@ -139,48 +139,7 @@ exports.bindPath = function (app) {
                                     });
                         },
                         function (callback) {
-                            fs.readFile(imageName,
-                                    function (err, data) {
-                                        callback(err, data);
-                                    });
-                        },
-                        function (data, callback) {
-                            //put image in AWS S3 storage
-                            s3.put(data, imageName, imageType,
-                                    function (err, url) {
-                                        callback(err, url);
-                                    });
-                        },
-                        function (url, callback) {
-                            im.convert([imageName, '-thumbnail', THUMB_DIMENSIONS, thumbName],
-                                    function (imErr, stdout, stderr) {
-                                        callback(imErr, url);
-                                    });
-                        },
-                        function (url, callback) {
-                            fs.readFile(thumbName,
-                                    function (err, data) {
-                                        callback(err, url, data);
-                                    });
-                        },
-                        function (url, data, callback) {
-                            s3.put(data, thumbName, imageType,
-                                    function (err, thumbUrl) {
-                                        callback(err, url, thumbUrl);
-                                    });
-                        },
-                        function (url, thumbUrl, callback) {
-                            api.image.createOriginal(imageName, url, imageType, thumbUrl, null, null, null,
-                                    function (err, res) {
-                                        callback(err, res, url);
-                                    });
-                        },
-                        //clean up files
-                        function (res, url, callback) {
-                            _deleteFiles([imageName, thumbName],
-                                    function (err) {
-                                        callback(err, res, url);
-                                    });
+                            api.image.createOriginalFromFile(imageName, imageType, true, callback);
                         }
                     ],
                             function (err, result, url) {

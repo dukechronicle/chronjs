@@ -2,270 +2,77 @@ var site = require('../../api/lib/site.js');
 var api = require('../../api');
 var _ = require("underscore");
 
-var FRONTPAGE_GROUP_NAMESPACE = ['Layouts','Frontpage'];
-var NEWS_GROUP_NAMESPACE = ['Layouts','News'];
-var SPORTS_GROUP_NAMESPACE = ['Layouts','Sports'];
-var OPINION_GROUP_NAMESPACE = ['Layouts','Opinion'];
-var RECESS_GROUP_NAMESPACE = ['Layouts','Recess'];
-var TOWERVIEW_GROUP_NAMESPACE = ['Layouts','Towerview'];
+var LAYOUT_CONFIG = {
+    "frontpage": {
+        "namespace": ['Layouts','Frontpage'],
+        "layout": "admin/layout/frontpage"
+    },
+    "news": {
+        "namespace": ['Layouts','News'],
+        "layout": "admin/layout/news"
+    },
+    "sports": {
+        "namespace": ['Layouts','Sports'],
+        "layout": "admin/layout/sports"
+    },
+    "opinion": {
+        "namespace": ['Layouts','Opinion'],
+        "layout": "admin/layout/opinion"
+    },
+    "recess": {
+        "namespace": ['Layouts','Recess'],
+        "layout": "admin/layout/recess"
+    },
+    "towerview": {
+        "namespace": ['Layouts','Towerview'],
+        "layout": "admin/layout/towerview"
+    }
+}
 
 exports.bindPath = function (app) {
-    return function () {
-        app.get('/frontpage', site.checkAdmin,
-                function (req, res) {
-                    function renderPage(docs) {
-                        var stories = _.sortBy(docs, function (doc) {
-                            return doc.title;
-                        }); // sort docs alphabetically
-                        api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null,
-                                function (err, model) {
-                                    res.render('admin/layout/frontpage', {
-                                        layout:"layout-admin.jade",
-                                        locals:{
-                                            stories:stories,
-                                            model:model
-                                        }
-                                    });
-                                });
-                    }
-
-                    // TODO make requests concurrent
-                    var filter = req.param("section", null);
-                    if (filter) {
-                        api.taxonomy.docs(filter, 30,
-                                function (err, docs) {
-                                    if (err) globalFunctions.showError(res, err);
-                                    else {
-                                        docs = docs.map(function (doc) {
-                                            return doc;
-                                        });
-                                        renderPage(docs);
-                                    }
-                                });
-                    } else {
-                        api.docsByDate(null, null,
-                                function (err, docs) {
-                                    if (err) globalFunctions.showError(res, err);
-                                    renderPage(docs);
-                                });
-                    }
-                }
-        );
-
-
-        app.get('/news', site.checkAdmin,
-                function (req, res) {
-                    function renderPage(docs) {
-                        var stories = _.sortBy(docs, function (doc) {
-                            return doc.title;
-                        }); // sort docs alphabetically
-                        api.group.docs(NEWS_GROUP_NAMESPACE, null,
-                                function (err, model) {
-                                    res.render('admin/layout/news', {
-                                        layout:"layout-admin.jade",
-                                        locals:{
-                                            stories:stories,
-                                            model:model
-                                        }
-                                    });
-                                });
-                    }
-
-                    // TODO make requests concurrent
-                    // sidebar filter by section
-                    var filter = req.param("section", null);
-                    if (filter) {
-                        api.taxonomy.docs(filter, 30,
-                                function (err, docs) {
-                                    if (err) globalFunctions.showError(res, err);
-                                    else {
-                                        docs = docs.map(function (doc) {
-                                            return doc;
-                                        });
-                                        renderPage(docs);
-                                    }
-                                });
-                    } else {
-                        api.docsByDate(null, null,
-                                function (err, docs) {
-                                    if (err) globalFunctions.showError(res, err);
-                                    renderPage(docs);
-                                });
-                    }
-                }
-        );
-
-        app.get('/sports', site.checkAdmin,
-                function (req, res) {
-                    function renderPage(docs) {
-                        var stories = _.sortBy(docs, function (doc) {
-                            return doc.title;
-                        }); // sort docs alphabetically
-                        api.group.docs(SPORTS_GROUP_NAMESPACE, null,
-                                function (err, model) {
-                                    res.render('admin/layout/sports', {
-                                        layout:"layout-admin.jade",
-                                        locals:{
-                                            stories:stories,
-                                            model:model
-                                        }
-                                    });
-                                });
-                    }
-
-                    // TODO make requests concurrent
-                    // sidebar filter by section
-                    var filter = req.param("section", null);
-                    if (filter) {
-                        api.taxonomy.docs(filter, 30,
-                                function (err, docs) {
-                                    if (err) globalFunctions.showError(res, err);
-                                    else {
-                                        docs = docs.map(function (doc) {
-                                            return doc;
-                                        });
-                                        renderPage(docs);
-                                    }
-                                });
-                    } else {
-                        api.docsByDate(null, null,
-                                function (err, docs) {
-                                    if (err) globalFunctions.showError(res, err);
-                                    renderPage(docs);
-                                });
-                    }
-                }
-        );
-
-        app.get('/opinion', site.checkAdmin,
-                function (req, res) {
-                    function renderPage(docs) {
-                        var stories = _.sortBy(docs, function (doc) {
-                            return doc.title;
-                        }); // sort docs alphabetically
-                        api.group.docs(OPINION_GROUP_NAMESPACE, null,
-                                function (err, model) {
-                                    res.render('admin/layout/opinion', {
-                                        layout:"layout-admin.jade",
-                                        locals:{
-                                            stories:stories,
-                                            model:model
-                                        }
-                                    });
-                                });
-                    }
-
-                    // TODO make requests concurrent
-                    // sidebar filter by section
-                    var filter = req.param("section", null);
-                    if (filter) {
-                        api.taxonomy.docs(filter, 30,
-                                function (err, docs) {
-                                    if (err) globalFunctions.showError(res, err);
-                                    else {
-                                        docs = docs.map(function (doc) {
-                                            return doc;
-                                        });
-                                        renderPage(docs);
-                                    }
-                                });
-                    } else {
-                        api.docsByDate(null, null,
-                                function (err, docs) {
-                                    if (err) globalFunctions.showError(res, err);
-                                    renderPage(docs);
-                                });
-                    }
-                }
-        );
-
-        app.get('/recess', site.checkAdmin,
-                function (req, res) {
-                    function renderPage(docs) {
-                        var stories = _.sortBy(docs, function (doc) {
-                            return doc.title;
-                        }); // sort docs alphabetically
-                        api.group.docs(RECESS_GROUP_NAMESPACE, null,
-                                function (err, model) {
-                                    res.render('admin/layout/recess', {
-                                        layout:"layout-admin.jade",
-                                        locals:{
-                                            stories:stories,
-                                            model:model
-                                        }
-                                    });
-                                });
-                    }
-
-                    // TODO make requests concurrent
-                    // sidebar filter by section
-                    var filter = req.param("section", null);
-                    if (filter) {
-                        api.taxonomy.docs(filter, 30,
-                                function (err, docs) {
-                                    if (err) globalFunctions.showError(res, err);
-                                    else {
-                                        docs = docs.map(function (doc) {
-                                            return doc;
-                                        });
-                                        renderPage(docs);
-                                    }
-                                });
-                    } else {
-                        api.docsByDate(null, null,
-                                function (err, docs) {
-                                    if (err) globalFunctions.showError(res, err);
-                                    renderPage(docs);
-                                });
-                    }
-                }
-        );
-
-        app.get('/towerview', site.checkAdmin,
-                function (req, res) {
-                    function renderPage(docs) {
-                        var stories = _.sortBy(docs, function (doc) {
-                            return doc.title;
-                        }); // sort docs alphabetically
-                        api.group.docs(TOWERVIEW_GROUP_NAMESPACE, null,
-                                function (err, model) {
-                                    res.render('admin/layout/towerview', {
-                                        layout:"layout-admin.jade",
-                                        locals:{
-                                            stories:stories,
-                                            model:model
-                                        }
-                                    });
-                                });
-                    }
-
-                    // TODO make requests concurrent
-                    // sidebar filter by section
-                    var filter = req.param("section", null);
-                    if (filter) {
-                        api.taxonomy.docs(filter, 30,
-                                function (err, docs) {
-                                    if (err) globalFunctions.showError(res, err);
-                                    else {
-                                        docs = docs.map(function (doc) {
-                                            return doc;
-                                        });
-                                        renderPage(docs);
-                                    }
-                                });
-                    } else {
-                        api.docsByDate(null, null,
-                                function (err, docs) {
-                                    if (err) globalFunctions.showError(res, err);
-                                    renderPage(docs);
-                                });
-                    }
-                }
-        );
-
-        app.post('/frontpage', site.checkAdmin,
-                function (req, res) {
-                    res.render('/');
-                });
+    return function() {
+        app.get('/group/:group', site.checkAdmin, _getDocsInSection);
     }
 };
+
+function _getDocsInSection(req,res) {
+    var section = req.query.section;
+    
+    if (section) {
+        api.taxonomy.docs(section, 30,
+        function (err, docs) {
+            if (err) globalFunctions.showError(res, err);
+            else {
+                docs = docs.map(function (doc) {
+                    return doc;
+                });
+                renderPage(req,res,docs);
+            }
+        });
+    }
+    else {
+        api.docsByDate(null, null,
+        function (err, docs) {
+            if (err) globalFunctions.showError(res, err);
+            renderPage(req,res,docs);
+        });
+    }
+};
+
+function renderPage(req,res,section_docs) {
+    var stories = _.sortBy(section_docs, function (doc) {
+        return doc.title;
+    }); // sort section docs alphabetically
+    
+    // get and show the current groupings
+    api.group.docs(LAYOUT_CONFIG[req.params.group].namespace, null, function (err, model) {
+        res.render(LAYOUT_CONFIG[req.params.group].layout,
+        {
+            layout:"layout-admin.jade",
+            locals:{
+                stories:stories,
+                model:model
+            }
+        });
+    });
+}

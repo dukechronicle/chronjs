@@ -28,8 +28,8 @@ script(type='text/javascript')
                             a.hover.highlight-right(href=query+'?sort='+sort+'&order='+order+'&facets='+currentFacets+facetName+':'+key)
                             - if(facetName.toLowerCase() == 'month')
                                 #{monthArray[key-1] (#{value})
-                                    - else
-                                        #{key} (#{value})
+                            - else
+                                #{key} (#{value})
 
     .main
         for doc in docs

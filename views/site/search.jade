@@ -26,10 +26,10 @@ script(type='text/javascript')
                     .content-container
                         for value,key in facet
                             a.hover.highlight-right(href=query+'?sort='+sort+'&order='+order+'&facets='+currentFacets+facetName+':'+key)
-                            - if(facetName.toLowerCase() == 'month')
-                                #{monthArray[key-1] (#{value})
-                            - else
-                                #{key} (#{value})
+                                - if(facetName == 'Month')
+                                    #{monthArray[key-1]} (#{value})
+                                - else
+                                    #{key} (#{value})
 
     .main
         for doc in docs

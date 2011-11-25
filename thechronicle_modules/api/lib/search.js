@@ -129,7 +129,7 @@ search.unindexArticle = function (id, callback) {
 // don't call this. only used by environment maker
 // removes all indexes from solr for the db we are using and sets all documents in the db we are using to not being indexed by solr
 search.removeAllDocsFromSearch = function (callback) {
-    api.docsByDate(null, function (err, response) {
+    api.docsByDate(null, null, function (err, response) {
         response = response || {};
         async.forEach(response, function (row, cb) {
                     log.debug('unindexing "' + row.title + '"');

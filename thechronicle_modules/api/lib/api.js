@@ -18,13 +18,14 @@ api.authors = require("./authors");
 var redis = require('../../redisclient');
 
 var MAX_URL_LENGTH = 50;
+var RESULTS_PER_PAGE = 25;
 
 function getAvailableUrl(url, n, callback) {
     var new_url = url;
     if(n != 0) {
         new_url = new_url + "-" + n;
     }
-    db.view("articles/urls", {key: new_url}, function(err, res) {
+    db.view("articles/urls", {key: [new_url, "article"]}, function(err, res) {
         if(err) {
             callback(err, null);
         }
@@ -227,20 +228,19 @@ api.articleForUrl = function(url, callback) {
         var docTypeKey = 1;
         var aggregateDoc = {};
 
-        for (var i = 0; i < docs.length; i++) {
-            var doc = docs[i];
-            var docType = doc.key[docTypeKey];
+        docs.forEach(function(key, doc) {
+            var docType = key[docTypeKey];
 
             if (docType === 'article') {
-                aggregateDoc = doc.value;
+                aggregateDoc = doc;
                 aggregateDoc.images = {};
             } else if (docType === 'images') {
-                var imageType = doc.key[docTypeKey+ 1];
+                var imageType = key[docTypeKey+ 1];
                 // TODO this should NEVER happen
 
-                aggregateDoc.images[imageType] = doc.doc;
+                aggregateDoc.images[imageType] = doc;
             }
-        }
+        });
 
         callback(null, aggregateDoc);
     });
@@ -256,15 +256,11 @@ api.docForUrl = function(url, callback) {
 
     db.view("articles/urls", query, function(err, docs) {
         if (err) return callback(err);
-
         var docTypeKey = 1;
-        docs.forEach(function(doc) {
-            var docType = doc.key[docTypeKey];
 
-            if (docType === 'article') {
-                doc = doc.value;
-                return callback(null, doc);
-            }
+        docs.forEach(function(key, doc) {
+            var docType = key[docTypeKey];
+            if (docType === 'article') return callback(null, doc);
         });
     });
 };
@@ -284,15 +280,15 @@ api.nodeForTitle = function(url, callback) {
     });
 };
 
-api.docsByDate = function(limit, callback) {
-    var query = {descending: true};
+api.docsByDate = function(beforeKey, beforeID, callback) {
+    var query = {
+        descending:true,
+        limit: RESULTS_PER_PAGE,
+    };
 
-    if (limit) {
-        query.limit = limit;
-    } else {
-        query.limit = 20;
-    }
-    
+    if(beforeKey) query.startkey = parseInt(beforeKey);
+    if(beforeID) query.startkey_docid = beforeID;
+
     db.view("articles/all_by_date", query, function(err, results) {
         if (err) callback(err);
 

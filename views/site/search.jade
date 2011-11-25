@@ -1,10 +1,10 @@
+- var monthArray = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
 script(src='/js/scrollLoad.js', type='text/javascript')
 script(type='text/javascript')
     var scrollLoadUrl = "search/#{query}?sort=#{sort}&order=#{order}&facets=#{currentFacets}";
     var searchboxHTML = 
     '<a href="/article/URL_REPLACE" class="addedArticle result rounded-hover"><h3>HEADER_REPLACE</h3><div class="date">DATE_REPLACE<span class="sep">&nbsp;|&nbsp;</span>AUTHOR_REPLACE</div><div class="teaser">TEASER_REPLACE</div></a>';
-
-var monthArray = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 #search
     .sidebar
@@ -26,10 +26,10 @@ var monthArray = ['January', 'February', 'March', 'April', 'May', 'June', 'July'
                     .content-container
                         for value,key in facet
                             a.hover.highlight-right(href=query+'?sort='+sort+'&order='+order+'&facets='+currentFacets+facetName+':'+key)
-				- if(facetName.toLowerCase() == 'month')
-					#{monthArray[key-1] (#{value})
-             			- else 
-				  	#{key} (#{value})
+                                - if(facetName == 'Month')
+                                    #{monthArray[key-1]} (#{value})
+                                - else 
+                                    #{key} (#{value})
     .main
         for doc in docs
             a.result.rounded-hover(href=doc.url)

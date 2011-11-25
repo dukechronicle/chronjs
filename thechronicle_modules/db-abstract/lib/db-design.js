@@ -97,7 +97,9 @@ var views = {
     image_originals:{
         map:function (doc) {
             if (doc.imageVersions) {
-                emit([doc.date, doc.name], doc);
+                var date = parseInt(doc.date);
+                if(isNaN(date)) date = 0;                
+                emit(date, doc);
             }
         }
     },

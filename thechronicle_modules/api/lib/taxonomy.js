@@ -32,7 +32,7 @@ taxonomy.getParentAndChildren = function (navTree, callback) {
         else {
             var children = {};
             _.forEach(
-                    _.select(
+                    _.filter(
                             _.pluck(results, 'key'),
                             function (child) {
                                 return child.length === navTree.length + 1;

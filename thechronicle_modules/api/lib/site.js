@@ -393,17 +393,29 @@ site.init = function (app, callback) {
                     }
             );
         });
-
+        
+        //
+        // Site Search
+        //
+        // Pretties up URL
         app.get('/search', function (req, http_res) {
             if (req.param('search') != null) {
                 http_res.redirect('/search/' + req.param('search').replace(/ /g, '-') + '?sort=relevance&order=desc'); // replace spaces with dashes for readibility
             }
+            // FIX: Search on empty string results in redirect loop
+            // Since no search query results in recalling this function, and not going on to the next function, this workaround calls the search here on an empty string
+            else {
+                api.search.docsBySearchQuery("", req.query.sort, req.query.order, req.query.facets, 1, function (err, docs, facets) {
+                        _showSearchArticles(err, req, http_res, docs, facets);
+                });
+            }
         });
-
+        // Calls Search Function
+        // This function is only called if there is a string query, not a GET query, i.e. '/search/?sort...' will not activate this.
         app.get('/search/:query', function (req, http_res) {
-            api.search.docsBySearchQuery(req.params.query.replace('-', ' '), req.query.sort, req.query.order, req.query.facets, 1, function (err, docs, facets) {
-                _showSearchArticles(err, req, http_res, docs, facets);
-            });
+                api.search.docsBySearchQuery(req.params.query.replace('-', ' '), req.query.sort, req.query.order, req.query.facets, 1, function (err, docs, facets) {
+                        _showSearchArticles(err, req, http_res, docs, facets);
+                });
         });
 
         app.get('/staff/:query', function (req, http_res) {

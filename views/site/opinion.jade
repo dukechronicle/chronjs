@@ -35,8 +35,8 @@
             
         // columnist
         .row.columnists
-            if (model.EditBoard)
-                div!=partial('container/story-list', {title: "Editorial Board", stories:model.EditBoard})
+            if (model["Edit Board"])
+                div!=partial('container/story-list', {title: "Editorial Board", stories:model["Edit Board"]})
             if (model.Columnists && model.Columnists[0])
                 div!=partial('container/story-list', model.Columnists[0])
             if (model.Columnists && model.Columnists[1])
@@ -47,17 +47,17 @@
         .middle.clearfix
             if (model.Blog)
                 .blog!=partial('container/story-list.jade', {title: "Blog", stories: model.Blog})
-            if (model.EditBoard && model.EditBoard[3])
-                .editBoard!=partial('container/block.jade', {title: "Editorial Board", story:model.EditBoard[0]})
+            if (model["Edit Board"] && model["Edit Board"][3])
+                .editBoard!=partial('container/block.jade', {title: "Editorial Board", story:model["Edit Board"][0]})
             .mostPopular.last!=partial('container/sample-block.jade', {title: "Popular"})
     .bottom
         // more columnists
         .row
-            if (model.MoreColumnists && model.MoreColumnists[0])
-                div!=partial('container/block.jade', {title: "Columnist", story:model.MoreColumnists[0]})
-            if (model.MoreColumnists && model.MoreColumnists[1])
-                div!=partial('container/block.jade', {title: "Columnist", story:model.MoreColumnists[1]})
-            if (model.MoreColumnists && model.MoreColumnists[2])
-                div!=partial('container/block.jade', {title: "Columnist", story:model.MoreColumnists[2]})
-            if (model.MoreColumnists && model.MoreColumnists[3])
-                .last!=partial('container/block.jade', {title: "Columnist", story:model.MoreColumnists[3]})
+            if (model["More Columnists"] && model["More Columnists"][0])
+                div!=partial('container/block.jade', {title: "Columnist", story:model["More Columnists"][0]})
+            if (model["More Columnists"] && model["More Columnists"][1])
+                div!=partial('container/block.jade', {title: "Columnist", story:model["More Columnists"][1]})
+            if (model["More Columnists"] && model["More Columnists"][2])
+                div!=partial('container/block.jade', {title: "Columnist", story:model["More Columnists"][2]})
+            if (model["More Columnists"] && model["More Columnists"][3])
+                .last!=partial('container/block.jade', {title: "Columnist", story:model["More Columnists"][3]})

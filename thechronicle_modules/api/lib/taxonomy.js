@@ -3,6 +3,8 @@ var _ = require('underscore');
 
 var taxonomy = exports;
 
+var MAIN_SECTIONS = ["News","Sports", "Opinion", "Recess", "Towerview"];
+
 // sections that exists, but that we don't want to show up in the taxonomy
 var BAD_SECTIONS = ['News/Graduation Issue',
     'Sports/Tennis','Sports/Basketball',
@@ -20,6 +22,10 @@ var BAD_SECTIONS = ['News/Graduation Issue',
     'Towerview/Rearview Mirror',
     'Towerview/The Devil\'s Details',
     'Towerview/The Green Light'];
+
+taxonomy.getMainSections = function() {
+    return _.extend({}, MAIN_SECTIONS);
+};
 
 // get all document under given taxonomy path ex. ["News", "University"]
 taxonomy.docs = function (taxonomyPath, limit, callback) {

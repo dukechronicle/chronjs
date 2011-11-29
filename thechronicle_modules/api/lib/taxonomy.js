@@ -24,7 +24,7 @@ var BAD_SECTIONS = ['News/Graduation Issue',
     'Towerview/The Green Light'];
 
 taxonomy.getMainSections = function() {
-    return _.extend({}, MAIN_SECTIONS);
+    return MAIN_SECTIONS;
 };
 
 // get all document under given taxonomy path ex. ["News", "University"]

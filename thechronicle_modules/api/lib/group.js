@@ -5,32 +5,6 @@ var log = require('../../log');
 var redis = require('../../redisclient');
 
 
-var GROUP_CONFIG = {
-    "Frontpage": {
-        "namespace": ['Layouts','Frontpage'],
-        "groups": ["Slideshow","Left Headlines","Right Headlines","Opinion","News","Sports","Recess","Towerview"]
-    },
-    "News": {
-        "namespace": ['Layouts','News'],
-        "groups": ["Featured", "Right Headlines", "Headlines", "Stories"]
-    },
-    "Sports": {
-        "namespace": ['Layouts','Sports'],
-        "groups": ["Slideshow", "Stories"]
-    },
-    "Opinion": {
-        "namespace": ['Layouts','Opinion'],
-        "groups": ["Featured","Columnists","Edit Board","More Columnists"]
-    },
-    "Recess": {
-        "namespace": ['Layouts','Recess'],
-        "groups": ["Featured","Sandbox","Interviews","Reviews","Stories"]
-    },
-    "Towerview": {
-        "namespace": ['Layouts','Towerview'],
-        "groups": ["Featured","Savvy","Wisdom","Editors Note","Prefix"]
-    }
-};
 
 var group = exports;
 var BENCHMARK = false;

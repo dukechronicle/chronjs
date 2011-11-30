@@ -220,6 +220,17 @@ search.docsBySearchQuery = function (wordsQuery, sortBy, sortOrder, facets, page
             },
             callback);
 };
+function capWords(str){ 
+   var words = str.split(" "); 
+   for (var i=0 ; i < words.length ; i++){ 
+      var testwd = words[i]; 
+      var firLet = testwd.substr(0,1); 
+      var rest = testwd.substr(1, testwd.length -1) 
+      words[i] = firLet.toUpperCase() + rest 
+   } 
+   document.write( words.join(" ")); 
+} 
+
 
 function querySolr(query,options,callback) {
     if(query.length > 0) {
@@ -248,7 +259,9 @@ function querySolr(query,options,callback) {
                 var field = responseObj.facet_counts.facet_fields[fieldName];
                 for(var i = 0; i < field.length; i += 2) {
                     if(field[i+1] > 0) {
+			capWords(facets[niceName][field[i]]);
                         facets[niceName][field[i]] = field[i+1];
+			
                     }
                 }
             }            
@@ -281,6 +294,7 @@ function querySolr(query,options,callback) {
     });
 }
 
+
 // adds extra facet fields if certain facet fields were queried (ex:if you limited the search by year, show month facet), and constructs facet queries
 // by changing nice key names to their solr equivalents (ex: year changes to created_year_i in the facet query)
 function _makeFacets(facets,callback) {
@@ -307,7 +321,8 @@ function _makeFacets(facets,callback) {
                 facetFields.push("created_day_i");
             }
             else if(parts[0] == 'Day') parts[0] = "created_day_i";
-            
+		
+		
             facetQueries.push(parts[0]+':"'+parts[1]+'"');
         }
     }

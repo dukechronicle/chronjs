@@ -267,6 +267,7 @@ function querySolr(query, options, callback) {
 			return callback(err);
 		}
 
+<<<<<<< HEAD
 		var responseObj = JSON.parse(response);
 		log.debug(responseObj);
 		// put facet into an easily manipulitable form

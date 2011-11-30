@@ -185,6 +185,7 @@ search.docsByAuthor = function(authorName, sortOrder, facets, page, callback) {
 		sort : 'created_date_d' + " " + sortOrder
 	}, callback);
 };
+
 // Function for searching by query
 search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page, callback) {
 	wordsQuery = globalFunctions.trim(wordsQuery);
@@ -209,19 +210,19 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 		facetFields = facetFieldsTemp;
 		facetQueries = facetQueriesTemp;
 	});
+
 	wordsQuery = wordsQuery.toLowerCase();
 	var words = wordsQuery.split(" ");
-	words = words.map(function(word) {
 
-		var newString = solr.valueEscape(word.replace(/"/g, ''));
-		//remove "s from the query
-		if(newString.length == 0)
+	words = words.map(function(word) {
+		var newString = solr.valueEscape(word.replace(/"/g, '')); //remove "s from the query
+		
+        if(newString.length == 0)
 			return '""';
 		else
 			return newString;
-
-		//return solr.valueEscape(word.replace(/"/g, '')); // remove "s from the query
 	});
+
 	var fullQuery = "";
 	for(var index = 0; index < words.length; index++) {
 		if(index != 0)
@@ -242,19 +243,6 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 		"f.created_day_i.facet.sort" : "index"
 	}, callback);
 };
-function capWords(str) {
-	if(str != null) {
-		var words = str.split(" ");
-		for(var i = 0; i < words.length; i++) {
-			var testwd = words[i];
-			var firLet = testwd.substr(0, 1);
-			var rest = testwd.substr(1, testwd.length - 1)
-			words[i] = firLet.toUpperCase() + rest
-		}
-		return words.join(" ");
-	} else
-		return str;
-}
 
 function querySolr(query, options, callback) {
 	if(query.length > 0) {
@@ -289,23 +277,23 @@ function querySolr(query, options, callback) {
 				for(var i = 0; i < field.length; i += 2) {
 					if(field[i + 1] > 0) {
 						if(niceName == "Author") {
-							field[i] = capWords(field[i]);
+							field[i] = _capitalizeWords(field[i]);
 						}
 						facets[niceName][field[i]] = field[i + 1];
-
-					}
+                    }
 				}
+
+                // sort authors alphabetically
 				if(niceName == "Author") {
-					facets[niceName] = sortObjByKeys(facets[niceName]);
+					facets[niceName] = _sortObjByKeys(facets[niceName]);
 				}
 			}
 		}
-		//log.debug(facets);
 
 		var ids = [];
 		var tempid;
 		var docs = responseObj.response.docs;
-		//log.debug(docs);
+
 		for(var docNum = 0; docNum < docs.length; docNum++) {
 			var tempid = getDBIDFromSolrID(docs[docNum].id);
 			ids.push(tempid);
@@ -340,10 +328,9 @@ function _makeFacets(facets, callback) {
 			if(parts[0] == 'Section')
 				parts[0] = "section_s";
 			
-else if(parts[0] == 'Author') {
+            else if(parts[0] == 'Author') {
 				parts[0] = "author_sm";
-				parts[1] = parts[1].toLowerCase();
-				// do a case-insensitive author search
+				parts[1] = parts[1].toLowerCase(); // do a case-insensitive author search
 			} else if(parts[0] == 'Year') {
 				parts[0] = "created_year_i";
 				facetFields.push("created_month_i");
@@ -363,9 +350,14 @@ else if(parts[0] == 'Author') {
 	callback(facetFields, facetQueries);
 }
 
-function sortObjByKeys(arr){
+
+function _capitalizeWords(str) {
+	return str.replace( /(^|\s)([a-z])/g , function(m,p1,p2){ return p1+p2.toUpperCase(); } );
+}
+
+function _sortObjByKeys(arr){
 	// Setup Arrays
-	var sortedKeys = new Array();
+	var sortedKeys = [];
 	var sortedObj = {};
 
 	// Separate keys and sort them

@@ -6,15 +6,15 @@ var api = require('./api');
 var _ = require('underscore');
 var async = require('async');
 var log = require('../../log');
+var config = require('../../config');
 
-var apiKey = '740856b1876fd04723d34bd00aa381d3-us2';
-var taxonomyGroups = ["News","Sports","Opinion","Recess","Towerview"];
+var apiKey = config.get("MAILCHIMP_API_KEY");
+var taxonomyGroups = config.get("TAXONOMY_MAIN_SECTIONS");
 
 var numDocs = 1;
 
-//Obtain from MailChimp Site.
-var listID = "bc302eeb8d";
-var templateID = 233513;
+var listID = config.get("MAILCHIMP_LIST_ID");
+var templateID = config.get("MAILCHIMP_TEMPLATE_ID");
 
 // Strings
 var date = getDate();

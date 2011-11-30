@@ -426,7 +426,7 @@ site.init = function (app, callback) {
                         doc.date = _convertTimestamp(doc.created);
                     }
                     doc = _parseAuthor(doc);
-                });
+            ch    });
 
 
                 http_res.render(

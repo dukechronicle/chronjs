@@ -38,7 +38,7 @@ taxonomy.getParentAndChildren = function (navTree, callback) {
             );
 
             Object.keys(children).forEach(function (key) {
-                if (BAD_SECTIONS.indexOf(key) !== -1) {
+                if (_.include(BAD_SECTIONS, key)) {
                     delete children[key];
                 }
             });

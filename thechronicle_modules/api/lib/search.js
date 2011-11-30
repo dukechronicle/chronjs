@@ -195,7 +195,12 @@ search.docsBySearchQuery = function (wordsQuery, sortBy, sortOrder, facets, page
     var words = wordsQuery.split(" ");
 
     words = words.map(function (word) {
-        return solr.valueEscape(word.replace(/"/g, '')); // remove "s from the query
+
+	var newString = solr.valueEscape(word.replace(/"/g, ''));  //remove "s from the query
+	if (newString.length == 0) return '""';
+	else return newString; 
+
+        //return solr.valueEscape(word.replace(/"/g, '')); // remove "s from the query
     });
 
     var fullQuery = "";
@@ -220,6 +225,7 @@ search.docsBySearchQuery = function (wordsQuery, sortBy, sortOrder, facets, page
             },
             callback);
 };
+
 function capWords(str){ 
    var words = str.split(" "); 
    for (var i=0 ; i < words.length ; i++){ 
@@ -259,7 +265,7 @@ function querySolr(query,options,callback) {
                 var field = responseObj.facet_counts.facet_fields[fieldName];
                 for(var i = 0; i < field.length; i += 2) {
                     if(field[i+1] > 0) {
-			capWords(facets[niceName][field[i]]);
+			//capWords(facets[niceName][field[i]]);
                         facets[niceName][field[i]] = field[i+1];
 			
                     }

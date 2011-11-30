@@ -10,7 +10,7 @@ var configuration = {
             "ADMIN_USERNAME":"dean",
             "ADMIN_PASSWORD":"dean",
 
-            "REDIS_URL":"redis://redistogo:0235bf0a2db5e6cc087683952f60c59c@icefish.redistogo.com:9249/",
+            "REDIS_URL":"redis://jodoglevy:2b258cbdcbbce003452a0ff4279d8701@barreleye.redistogo.com:9148/",
 
             "SOLR_HOST":"index.websolr.com",
             "SOLR_PORT":"80",

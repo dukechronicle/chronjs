@@ -220,6 +220,8 @@ search.docsBySearchQuery = function (wordsQuery, sortBy, sortOrder, facets, page
             },
             callback);
 };
+
+
 function capWords(str){ 
    var words = str.split(" "); 
    for (var i=0 ; i < words.length ; i++){ 
@@ -228,7 +230,8 @@ function capWords(str){
       var rest = testwd.substr(1, testwd.length -1) 
       words[i] = firLet.toUpperCase() + rest 
    } 
-   document.write( words.join(" ")); 
+   var Cap =  document.write( words.join(" ")); 
+   ret Cap;
 } 
 
 
@@ -259,7 +262,7 @@ function querySolr(query,options,callback) {
                 var field = responseObj.facet_counts.facet_fields[fieldName];
                 for(var i = 0; i < field.length; i += 2) {
                     if(field[i+1] > 0) {
-			capWords(facets[niceName][field[i]]);
+			
                         facets[niceName][field[i]] = field[i+1];
 			
                     }

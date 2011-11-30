@@ -393,13 +393,20 @@ site.init = function (app, callback) {
                     }
             );
         });
-
+        
+        /**
+            Site Search. Pretties up URL
+        */
         app.get('/search', function (req, http_res) {
-            if (req.param('search') != null) {
-                http_res.redirect('/search/' + req.param('search').replace(/ /g, '-') + '?sort=relevance&order=desc'); // replace spaces with dashes for readibility
-            }
+            var query = "--";            
+            if (req.param('search') != null) query = req.param('search').replace(/ /g, '-'); // replace spaces with dashes for readibility
+
+            http_res.redirect('/search/' + query + '?sort=relevance&order=desc'); 
         });
 
+        /**
+            Calls Search Functionality
+        */
         app.get('/search/:query', function (req, http_res) {
             api.search.docsBySearchQuery(req.params.query.replace('-', ' '), req.query.sort, req.query.order, req.query.facets, 1, function (err, docs, facets) {
                 _showSearchArticles(err, req, http_res, docs, facets);
@@ -419,7 +426,7 @@ site.init = function (app, callback) {
                         doc.date = _convertTimestamp(doc.created);
                     }
                     doc = _parseAuthor(doc);
-                });
+            ch    });
 
 
                 http_res.render(

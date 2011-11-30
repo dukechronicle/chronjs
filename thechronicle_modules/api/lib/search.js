@@ -237,7 +237,7 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 		start : RESULTS_PER_PAGE * (page - 1),
 		fl : "*,score",
 		sort : sortBy + " " + sortOrder,
-		"f.author_sm.facet.sort" : "index",
+		//"f.author_sm.facet.sort" : "index",
 		"f.created_year_i.facet.sort" : "index",
 		"f.created_month_i.facet.sort" : "index",
 		"f.created_day_i.facet.sort" : "index"
@@ -297,7 +297,9 @@ function querySolr(query, options, callback) {
 					}
 				}
 				if(niceName == "Author") {
-					//_.invoke(facets[niceName], 'sort');
+					facets[niceName] = _.sortBy(facets[niceName], function(numResults,name) {
+						return name;
+					});
 				}
 			}
 		}

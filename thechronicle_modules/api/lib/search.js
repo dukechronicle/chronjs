@@ -357,17 +357,11 @@ function _capitalizeWords(str) {
 
 function _sortObjByKeys(arr){
 	// Setup Arrays
-	var sortedKeys = [];
+	var sortedKeys = Object.keys(arr).sort();
 	var sortedObj = {};
 
-	// Separate keys and sort them
-	for (var i in arr){
-		sortedKeys.push(i);
-	}
-	sortedKeys.sort();
-
 	// Reconstruct sorted obj based on keys
-	for (var i in sortedKeys){
+	for (var i = 0; i < sortedKeys.length; i ++){
 		sortedObj[sortedKeys[i]] = arr[sortedKeys[i]];
 	}
 	return sortedObj;

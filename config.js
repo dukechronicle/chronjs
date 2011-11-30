@@ -19,7 +19,27 @@ var configuration = {
 
             "S3_KEY":"AKIAJIH3MOVTAMXCFKXA",
             "S3_SECRET":"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",
-            "S3_BUCKET":"chron_dev"
+            "S3_BUCKET":"chron_dev",
+
+            "TAXONOMY_MAIN_SECTIONS":["News","Sports", "Opinion", "Recess", "Towerview"],
+            "TAXONOMY_BAD_SECTIONS":[
+                'News/Graduation Issue',
+                'Sports/Tennis','Sports/Basketball',
+                'Sports/Soccer','Sports/Golf',
+                'Sports/Lacross', 'Sports/Sports Briefs',
+                'Sports/Olympics', 'Sports/Sports Features',
+                'Sports/Sports Column', 'Sports/Department of Athletics',
+                'Sports/Durham Bulls', 'Sports/Wrestling',
+                'Sports/Volleyball', 'Sports/Fencing',
+                'Sports/Field Hockey',
+                'Opinion/Cartoons', 'Towerview/Blue Devil Crossing',
+                'Towerview/Bus Stop',
+                'Towerview/Blue Devil Crossing',
+                'Towerview/Driving Distance',
+                'Towerview/Rearview Mirror',
+                'Towerview/The Devil\'s Details',
+                'Towerview/The Green Light'
+            ]
         }
     },
     "activeConfigurationProfile":"dev"

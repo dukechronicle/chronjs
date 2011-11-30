@@ -6,9 +6,13 @@ form(action='/config', method='POST')
   br
   br
   - each param in configParams    
-    label=param.description+':'
-    br
-    input(type='text', name=param.name, value=param.default)
-    br
-    br
+    div
+        label=param.description+':'
+        br
+        input(type='text', name=param.name, value=param.defaultValue)
+        br
+        br
+        br
+        br
+        br
   input(type='submit')

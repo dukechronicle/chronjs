@@ -27,7 +27,7 @@ var configParams = [
     {
         name: 'S3_BUCKET',
         description: 'Amazon S3 Bucket Name',
-        defaultValue: 'chron_bucket1'
+        defaultValue: 'chron_dev'
     },
     {
         name: 'S3_KEY',
@@ -63,6 +63,16 @@ var configParams = [
         name: 'SOLR_PATH',
         description: 'WebSolr Server Path',
         defaultValue: '/solr'
+    },
+    {
+        name: 'TAXONOMY_MAIN_SECTIONS',
+        description: 'Main sections of the taxonomy',
+        defaultValue: '{}'
+    },
+    {
+        name: 'TAXONOMY_BAD_SECTIONS',
+        description: 'Sections that exists, but that we don\'t want to show up in the taxonomy',
+        defaultValue: '{}'
     }
 ];
 

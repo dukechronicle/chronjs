@@ -1,27 +1,13 @@
 var db = require('../../db-abstract');
 var _ = require('underscore');
+var config = require('../../config');
 
 var taxonomy = exports;
 
-var MAIN_SECTIONS = ["News","Sports", "Opinion", "Recess", "Towerview"];
+var MAIN_SECTIONS = config.get("TAXONOMY_MAIN_SECTIONS");
 
 // sections that exists, but that we don't want to show up in the taxonomy
-var BAD_SECTIONS = ['News/Graduation Issue',
-    'Sports/Tennis','Sports/Basketball',
-    'Sports/Soccer','Sports/Golf',
-    'Sports/Lacross', 'Sports/Sports Briefs',
-    'Sports/Olympics', 'Sports/Sports Features',
-    'Sports/Sports Column', 'Sports/Department of Athletics',
-    'Sports/Durham Bulls', 'Sports/Wrestling',
-    'Sports/Volleyball', 'Sports/Fencing',
-    'Sports/Field Hockey',
-    'Opinion/Cartoons', 'Towerview/Blue Devil Crossing',
-    'Towerview/Bus Stop',
-    'Towerview/Blue Devil Crossing',
-    'Towerview/Driving Distance',
-    'Towerview/Rearview Mirror',
-    'Towerview/The Devil\'s Details',
-    'Towerview/The Green Light'];
+var BAD_SECTIONS = config.get("TAXONOMY_BAD_SECTIONS");
 
 taxonomy.getMainSections = function() {
     return _.extend({}, MAIN_SECTIONS);

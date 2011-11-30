@@ -18,12 +18,7 @@ var dateFormat = require('dateformat');
 
 var asereje = require('asereje');
 
-var FRONTPAGE_GROUP_NAMESPACE = ['Layouts','Frontpage'];
-var NEWS_GROUP_NAMESPACE = ['Layouts','News'];
-var SPORTS_GROUP_NAMESPACE = ['Layouts','Sports'];
-var OPINION_GROUP_NAMESPACE = ['Layouts','Opinion'];
-var RECESS_GROUP_NAMESPACE = ['Layouts','Recess'];
-var TOWERVIEW_GROUP_NAMESPACE = ['Layouts','Towerview'];
+var LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
 
 var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
 var newsModel = JSON.parse(fs.readFileSync("sample-data/news.json"));
@@ -89,7 +84,7 @@ site.init = function (app, callback) {
             var start = Date.now();
             async.parallel([
                 function (callback) { //0
-                    api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function (err, result) {
+                    api.group.docs(LAYOUT_GROUPS.Frontpage.namespace, null, function (err, result) {
                         if (err) return callback(err);
                         if (BENCHMARK) log.info("API TIME %d", Date.now() - start);
                         return callback(null, result);
@@ -146,7 +141,7 @@ site.init = function (app, callback) {
         });
 
         app.get('/news', function (req, res) {
-            api.group.docs(NEWS_GROUP_NAMESPACE, null, function (err, model) {
+            api.group.docs(LAYOUT_GROUPS.News.namespace, null, function (err, model) {
                 _.defaults(model, newsModel);
                 redis.client.zrevrange(_articleViewsKey(['News']), 0, 5, function (err, popular) {
                     model.popular = popular.map(function (str) {
@@ -184,7 +179,7 @@ site.init = function (app, callback) {
         });
 
         app.get('/sports', function (req, httpRes) {
-            api.group.docs(SPORTS_GROUP_NAMESPACE, null, function (err, model) {
+            api.group.docs(LAYOUT_GROUPS.Sports.namespace, null, function (err, model) {
                 _.defaults(model, sportsModel);
 
                 async.parallel([
@@ -249,7 +244,7 @@ site.init = function (app, callback) {
         app.get('/opinion', function (req, res) {
             async.parallel([
                 function (callback) { //0
-                    api.group.docs(OPINION_GROUP_NAMESPACE, null, callback);
+                    api.group.docs(LAYOUT_GROUPS.Opinion.namespace, null, callback);
                 },
                 function (callback) { //1
                     api.taxonomy.getParentAndChildren(['Opinion'], callback);
@@ -314,7 +309,7 @@ site.init = function (app, callback) {
         });
 
         app.get('/recess', function (req, res) {
-            api.group.docs(RECESS_GROUP_NAMESPACE, null, function (err, result) {
+            api.group.docs(LAYOUT_GROUPS.Recess.namespace, null, function (err, result) {
 
                 rss.getRSS('recessblog', function (err, rss) {
                     if (rss && rss.items && rss.items.length > 0) {
@@ -344,7 +339,7 @@ site.init = function (app, callback) {
         });
 
         app.get('/towerview', function (req, res) {
-            api.group.docs(TOWERVIEW_GROUP_NAMESPACE, null, function (err, result) {
+            api.group.docs(LAYOUT_GROUPS.Towerview.namespace, null, function (err, result) {
 
                 result.adFullRectangle = {
                     "title":"Advertisement",
@@ -607,7 +602,7 @@ site.init = function (app, callback) {
                     }
                     else {
 
-                        var rootSections = ["News", "Sports", "Opinion", "Recess", "Towerview"];
+                        var rootSections = config.get("TAXONOMY_MAIN_SECTIONS");
 
                         db.taxonomy.getTaxonomyListing(function (err, taxonomy) {
                             if (!doc.images) doc.images = {};
@@ -790,7 +785,7 @@ site.renderSmtpTest = function (req, http_res, email, num) {
             log.debug("removed");
         });
     else if (num == 3) {
-        api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function (err, result) {
+        api.group.docs(LAYOUT_GROUPS.Frontpage.namespace, null, function (err, result) {
             _.defaults(result, homeModel);
 
             api.docsByDate(null, null, function (err, docs) {
@@ -844,7 +839,7 @@ function _showSearchArticles(err,req,http_res,docs,facets) {
     var currentFacets = req.query.facets;
     if(!currentFacets) currentFacets = '';
 
-    var validSections = ["News", "Sports", "Opinion", "Recess", "Towerview"];
+    var validSections = config.get("TAXONOMY_MAIN_SECTIONS");
     // filter out all sections other than main sections
     Object.keys(facets.Section).forEach(function(key) {
         if (!_.include(validSections, key)) {

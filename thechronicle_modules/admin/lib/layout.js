@@ -36,7 +36,7 @@ function _getDocsInSection(req,res) {
 
 function renderPage(req,res,section_docs) {
     var group = _capitalize(req.params.group);
-    var config = groups.getConfiguration();
+    var config = groups.getLayoutGroups();
 
     var section_docs = _.sortBy(section_docs, function (doc) {
         return doc.title;

@@ -21,6 +21,10 @@ var configuration = {
             "S3_SECRET":"7ZNos+pv+9pSqd1wQ4T4/oHchzfa8EBOR89/i/wN",
             "S3_BUCKET":"chron_dev",
 
+            "MAILCHIMP_API_KEY":"740856b1876fd04723d34bd00aa381d3-us2",
+            "MAILCHIMP_LIST_ID":"bc302eeb8d",
+            "MAILCHIMP_TEMPLATE_ID":"233513",
+
             "TAXONOMY_MAIN_SECTIONS":["News","Sports", "Opinion", "Recess", "Towerview"],
             "TAXONOMY_BAD_SECTIONS":[
                 'News/Graduation Issue',
@@ -39,6 +43,76 @@ var configuration = {
                 'Towerview/Rearview Mirror',
                 'Towerview/The Devil\'s Details',
                 'Towerview/The Green Light'
+            ],
+
+            "LAYOUT_GROUPS":{
+                "Frontpage": {
+                    "namespace": ['Layouts','Frontpage'],
+                    "groups": ["Slideshow","Left Headlines","Right Headlines","Opinion","News","Sports","Recess","Towerview"]
+                },
+                "News": {
+                    "namespace": ['Layouts','News'],
+                    "groups": ["Featured", "Right Headlines", "Headlines", "Stories"]
+                },
+                "Sports": {
+                    "namespace": ['Layouts','Sports'],
+                    "groups": ["Slideshow", "Stories"]
+                },
+                "Opinion": {
+                    "namespace": ['Layouts','Opinion'],
+                    "groups": ["Featured","Columnists","Edit Board","More Columnists"]
+                },
+                "Recess": {
+                    "namespace": ['Layouts','Recess'],
+                    "groups": ["Featured","Sandbox","Interviews","Reviews","Stories"]
+                },
+                "Towerview": {
+                    "namespace": ['Layouts','Towerview'],
+                    "groups": ["Featured","Savvy","Wisdom","Editors Note","Prefix"]
+                }
+            },
+
+            "RSS_FEEDS":[
+                {
+                    title: "sportsblog",
+                    url: "http://feeds.feedburner.com/chronicleblogs/sports"
+                },
+                {
+                    title: "twitter-DukeChronicle",
+                    url: "http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=DukeChronicle"
+                },
+                {
+                    title: "twitter-ChronicleRecess",
+                    url: "http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=ChronicleRecess"
+                },
+                {
+                    title: "twitter-TowerviewMag",
+                    url: "http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=TowerviewMag"
+                },
+                {
+                    title: "twitter-DukeBasketball",
+                    url: "http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=dukebasketball"
+                },
+                {
+                    title: "twitter-ChronPhoto",
+                    url: "http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=ChronPhoto"
+                },
+                {
+                    title: "twitter-ChronicleSports",
+                    url: "http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=chroniclesports"
+                },
+                {
+                    title: "newsblog",
+                    url: "http://feeds.feedburner.com/chronicleblogs/news"
+                },
+                {
+                    title: "recessblog",
+                    url: "http://feeds.feedburner.com/chronicleblogs/playground"
+                },
+                {
+                    title: "blog-opinion",
+                    url: "http://feeds.feedburner.com/chronicleblogs/backpages"
+                }
             ]
         }
     },

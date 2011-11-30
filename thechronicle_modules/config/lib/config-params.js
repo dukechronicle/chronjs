@@ -73,6 +73,31 @@ var configParams = [
         name: 'TAXONOMY_BAD_SECTIONS',
         description: 'Sections that exists, but that we don\'t want to show up in the taxonomy',
         defaultValue: '{}'
+    },
+    {
+        name: 'LAYOUT_GROUPS',
+        description: 'Groups used for layouts',
+        defaultValue: '{}'
+    },
+    {
+        name: 'RSS_FEEDS',
+        description: 'RSS feeds to check and store',
+        defaultValue: '{}'
+    },
+    {
+        name: 'MAILCHIMP_API_KEY',
+        description: 'MailChimp API key',
+        defaultValue: ''
+    },
+    {
+        name: 'MAILCHIMP_LIST_ID',
+        description: 'MailChimp List ID',
+        defaultValue: ''
+    },
+    {
+        name: 'MAILCHIMP_TEMPLATE_ID',
+        description: 'MailChimp Template ID',
+        defaultValue: ''
     }
 ];
 

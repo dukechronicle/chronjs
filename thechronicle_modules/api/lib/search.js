@@ -227,14 +227,17 @@ search.docsBySearchQuery = function (wordsQuery, sortBy, sortOrder, facets, page
 };
 
 function capWords(str){ 
-   var words = str.split(" "); 
-   for (var i=0 ; i < words.length ; i++){ 
-      var testwd = words[i]; 
-      var firLet = testwd.substr(0,1); 
-      var rest = testwd.substr(1, testwd.length -1) 
-      words[i] = firLet.toUpperCase() + rest 
-   } 
-   document.write( words.join(" ")); 
+	if (str != null){
+	   var words = str.split(" "); 
+	   for (var i=0 ; i < words.length ; i++){ 
+	      var testwd = words[i]; 
+	      var firLet = testwd.substr(0,1); 
+	      var rest = testwd.substr(1, testwd.length -1) 
+	      words[i] = firLet.toUpperCase() + rest 
+	   } 
+   	return words.join(" "); 
+	}
+   	else return str;
 } 
 
 
@@ -265,7 +268,7 @@ function querySolr(query,options,callback) {
                 var field = responseObj.facet_counts.facet_fields[fieldName];
                 for(var i = 0; i < field.length; i += 2) {
                     if(field[i+1] > 0) {
-			//capWords(facets[niceName][field[i]]);
+			field[i] = capWords(field[i]);
                         facets[niceName][field[i]] = field[i+1];
 			
                     }

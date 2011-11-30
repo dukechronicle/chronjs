@@ -237,6 +237,7 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 		start : RESULTS_PER_PAGE * (page - 1),
 		fl : "*,score",
 		sort : sortBy + " " + sortOrder,
+		"f.author_sm.facet.sort" : "index",
 		"f.created_year_i.facet.sort" : "index",
 		"f.created_month_i.facet.sort" : "index",
 		"f.created_day_i.facet.sort" : "index"

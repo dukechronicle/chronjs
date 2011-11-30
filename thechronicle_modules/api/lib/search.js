@@ -264,7 +264,9 @@ function querySolr(query,options,callback) {
                 var field = responseObj.facet_counts.facet_fields[fieldName];
                 for(var i = 0; i < field.length; i += 2) {
                     if(field[i+1] > 0) {
+			if (niceName == "Author"){
 			field[i] = capWords(field[i]);
+			}
                         facets[niceName][field[i]] = field[i+1];
 			
                     }

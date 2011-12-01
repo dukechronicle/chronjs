@@ -116,9 +116,9 @@ function ArticleParser(articleCallback) {
     };
 
 	/**
-	 * Checks if article body starts with correct characters. 
-	 * Then executes async.reduce
-	 * Makes a shortened preview of the article.
+	 * Eliminates unnecessary beginning parts of the article. 
+	 * Creates the article preview, which is the first sentence.
+	 * Takes article object and combines it into a single string. 
 	 * 
 	 * @this {fixArticle}
 	 * @param {article}, the article to be fixed

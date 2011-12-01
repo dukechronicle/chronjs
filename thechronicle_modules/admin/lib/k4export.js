@@ -59,12 +59,15 @@ function ArticleParser(articleCallback) {
         );
     };
 	/**
-	 * Makes sure file is .xml type.
-	 * Then reads the file, calls an anonymous function.
-	 * This function checks for errors, and then calls .parseXML.
-	 * @this {parseFile}
-	 * @param {File, name, callback} zipFile is the file, name is the name of the file, and callback is called for any errors .
+	 * Checks to see if a file is in xml format, and then parses it into JSON to return a JSON article
+	 * returns an error if not .xml file type
+	 * 
+	 * @this parseFile are a 
+	 * @param {zipFile} a zipFile, 
+	 * @param {name} the name of the zipFile 
+	 * @param {callback}, the callback function, takes the name of the article as an argument
 	 */
+
     this.parseFile = function(zipFile, name, callback) {
     	var extension = path.extname(name);
 	    if (extension == '.xml') {
@@ -111,14 +114,16 @@ function ArticleParser(articleCallback) {
         parser.write(xml).close();
     };
 
-
 	/**
-	 * Checks article body and title.
-	 * Checks if article body starts with correct characters.
+	 * Checks if article body starts with correct characters. 
 	 * Then executes async.reduce
+	 * Makes a shortened preview of the article.
+	 * 
 	 * @this {fixArticle}
-	 * @param {article, callback function} article is the article being checked, while callback is called when the function ends. .
+	 * @param {article}, the article to be fixed
+	 * @param {callback} the callback function, takes the shortened preview as an argument.
 	 */
+
     function fixArticle(article, callback) {
         if (!article.body || !article.title) {
             callback("XML couldn't be parsed");

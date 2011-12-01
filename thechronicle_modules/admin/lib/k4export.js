@@ -58,17 +58,19 @@ function ArticleParser(articleCallback) {
                 }
         );
     };
-	/**
-	 * Checks to see if a file is in xml format, and then parses it into
-	 * JSON in the format expected by the API. Returns an error if not .xml
-	 * file type
-	 * 
-	 * @this parseFile are a 
-	 * @param {zipFile} a zipFile, 
-	 * @param {name} the name of the zipFile 
-	 * @param {callback}, the callback function, takes the name of the article as an argument
-	 */
 
+    /**
+     * Parses a file in a zip archive into an article object. Calls the
+     * ArticleParser's registered articleCallback on it. Returns the filename
+     * as an error if given file is not an XML or if other error occurs during
+     * parsing. If no error, calls callback on article object.
+     * 
+     * @this parseFile are a 
+     * @param {zipFile} zip archive
+     * @param {name} name of the file in the archive
+     * @param {callback} callback function, error and article object passed as
+     *     arguments
+     */
     this.parseFile = function(zipFile, name, callback) {
     	var extension = path.extname(name);
 	    if (extension == '.xml') {
@@ -115,16 +117,18 @@ function ArticleParser(articleCallback) {
         parser.write(xml).close();
     };
 
-	/**
-	 * Eliminates unnecessary beginning parts of the article. 
-	 * Creates the article preview, which is the first sentence.
-	 * Takes article object and combines it into a single string. 
-	 * 
-	 * @this {fixArticle}
-	 * @param {article}, the article to be fixed
-	 * @param {callback} the callback function, takes the shortened preview as an argument.
-	 */
-
+    /**
+     * Converts a raw article object with data into format expected by API.
+     * Eliminates unnecessary beginning parts of the article. Creates the
+     * article teaser, which is the first sentence. Reduces the array of
+     * paragraphs into the article body string. Returns an error if the article
+     * data isn't present. 
+     * 
+     * @this {fixArticle}
+     * @param {article}, raw article object from parseXML
+     * @param {callback} callback function, error and corrected article object
+     *     passed as arguments.
+     */
     function fixArticle(article, callback) {
         if (!article.body || !article.title) {
             callback("XML couldn't be parsed");

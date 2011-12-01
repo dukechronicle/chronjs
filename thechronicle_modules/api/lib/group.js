@@ -3,8 +3,9 @@ var _ = require('underscore');
 var db = require('../../db-abstract');
 var log = require('../../log');
 var redis = require('../../redisclient');
+var config = require('../../config');
 
-
+var LAYOUT_GROUPS = config.get('LAYOUT_GROUPS');
 
 var group = exports;
 var BENCHMARK = false;
@@ -153,6 +154,6 @@ group.remove = function(nameSpace, groupName, docId, callback) {
     db.group.remove(nameSpace, groupName, docId, callback);
 };
 
-group.getConfiguration = function() {
-    return _.extend({}, GROUP_CONFIG);
+group.getLayoutGroups = function() {
+    return _.extend({}, LAYOUT_GROUPS);
 };

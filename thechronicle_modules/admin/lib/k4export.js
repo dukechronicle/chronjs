@@ -59,8 +59,9 @@ function ArticleParser(articleCallback) {
         );
     };
 	/**
-	 * Checks to see if a file is in xml format, and then parses it into JSON to return a JSON article
-	 * returns an error if not .xml file type
+	 * Checks to see if a file is in xml format, and then parses it into
+	 * JSON in the format expected by the API. Returns an error if not .xml
+	 * file type
 	 * 
 	 * @this parseFile are a 
 	 * @param {zipFile} a zipFile, 

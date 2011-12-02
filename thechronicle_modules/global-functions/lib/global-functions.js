@@ -1,3 +1,8 @@
+var urlModule = require('url');
+var log = require('../../log');
+var http = require('http');
+var fs = require('fs');
+
 exports.showError = function (res, message) {
     res.render('error', {
         locals: {
@@ -34,4 +39,26 @@ exports.sendJSONResponse = function(res,jsonObject) {
         layout: false
         });
 };
+
+exports.downloadUrlToPath = function (url, path, callback) {
+    var urlObj = urlModule.parse(url);
+    log.info('host: ' + urlObj.host);
+    var options = {
+        host: urlObj.host,
+        port: 80,
+        path: urlObj.pathname
+    };
+    http.get(options, function(res) {
+        res.setEncoding('binary');
+        var data = '';
+        res.on('data', function(chunk) {
+            data += chunk;
+        });
+        res.on('end', function() {
+            fs.writeFile(path, data, 'binary', function(err) {
+                callback(err);
+            });
+        });
+    });
+}
 

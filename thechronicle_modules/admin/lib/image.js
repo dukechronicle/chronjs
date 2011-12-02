@@ -5,7 +5,6 @@ var im = require('imagemagick');
 var site = require('../../api/lib/site.js');
 var fs = require('fs');
 var api = require('../../api/lib/api.js');
-var urlModule = require('url');
 var _ = require("underscore");
 var log = require('../../log');
 
@@ -60,28 +59,6 @@ function _getMagickString(x1, y1, x2, y2) {
     var w = x2 - x1;
     var h = y2 - y1;
     return w.toString() + 'x' + h.toString() + '+' + x1.toString() + '+' + y1.toString();
-}
-
-function _downloadUrlToPath(url, path, callback) {
-    var urlObj = urlModule.parse(url);
-    log.info('host: ' + urlObj.host);
-    var options = {
-        host: urlObj.host,
-        port: 80,
-        path: urlObj.pathname
-    };
-    http.get(options, function(res) {
-        res.setEncoding('binary');
-        var data = '';
-        res.on('data', function(chunk) {
-            data += chunk;
-        });
-        res.on('end', function() {
-            fs.writeFile(path, data, 'binary', function(err) {
-                callback(err);
-            });
-        });
-    });
 }
 
 exports.bindPath = function (app) {
@@ -238,7 +215,7 @@ exports.bindPath = function (app) {
                         function (orig, callback) {
                             croppedName = 'crop_' + orig.value.name; // modify the croppedName
                             log.info(orig.value.url);
-                            _downloadUrlToPath(orig.value.url, orig.value.name,
+                            globalFunctions.downloadUrlToPath(orig.value.url, orig.value.name,
                                     function (err) {
                                         callback(err, orig);
                                     });

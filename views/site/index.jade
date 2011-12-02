@@ -8,8 +8,8 @@
                     .image-container.print-edition.lighten!=partial('container/image', model.printEdition)
                 if (model.adFullBanner)
                     .image-container.full-banner.lighten!=partial('container/image', model.adFullBanner)
-            if (model.NewsHeadlines && model.SportsHeadlines)
-                .top-news.align-group!=partial('container/top-news', {title: "Headlines", news: model.NewsHeadlines, sports: model.SportsHeadlines})
+            if (model["Left Headlines"] && model["Right Headlines"])
+                .top-news.align-group!=partial('container/top-news', {title: "Headlines", news: model["Left Headlines"], sports: model["Right Headlines"]})
 
         .sidebar
             if (model.twitter)

@@ -1,5 +1,4 @@
 var globalFunctions = require('../../global-functions');
-var log = require('../../log');
 var async = require('async');
 var s3 = require('./s3.js');
 var im = require('imagemagick');
@@ -8,6 +7,7 @@ var fs = require('fs');
 var api = require('../../api/lib/api.js');
 var urlModule = require('url');
 var _ = require("underscore");
+var log = require('../../log');
 
 var VALID_EXTENSIONS = {};
 VALID_EXTENSIONS['image/jpeg'] = 'jpg';
@@ -208,18 +208,18 @@ exports.bindPath = function (app) {
                 });
 
         app.get('/:imageName', site.checkAdmin,
-                function (req, httpRes) {
-                    var imageName = req.params.imageName;
+                function (req, httpRes) {  //this function either renders image or calls showError if there is an error
+                    var imageName = req.params.imageName; //get image name from req
                     api.image.getOriginal(imageName,
-                            function (err, orig) {
-                                if (err) globalFunctions.showError(httpRes, err);
+                            function (err, orig) { //anonymous function checks for an error
+                                if (err) globalFunctions.showError(httpRes, err); //show this message if there is an error
                                 else {
                                     api.docsById(orig.value.imageVersions,
                                             function (err2, versions) {
-                                                if (err2) globalFunctions.showError(httpRes, err2);
+                                                if (err2) globalFunctions.showError(httpRes, err2); // if an error is found, 
                                                 else {
-                                                    httpRes.render('admin/image', {
-                                                        locals:{
+                                                    httpRes.render('admin/image', { //no errors have been found, render image
+                                                        locals:{ //specifies/assigns variables to pass into function
                                                             url:orig.value.url,
                                                             name:imageName,
                                                             id:orig.value._id,
@@ -243,8 +243,8 @@ exports.bindPath = function (app) {
         app.post('/info', site.checkAdmin,
                 function (req, httpRes) {
                     var data = {};
-                    var id = req.body.id;
-                    data.name = req.body.name;
+                    var id = req.body.id; //assign id from req
+                    data.name = req.body.name; //fills entries of data from req
                     data.caption = req.body.caption;
                     data.photographer = req.body.photographer;
                     data.location = req.body.location;
@@ -253,31 +253,31 @@ exports.bindPath = function (app) {
                     data.date = parseInt(req.body.date);
                     if(isNaN(data.date)) data.date = req.body.date;
 
-                    api.image.edit(id, data, function () {
-                        httpRes.redirect('/admin/image/' + data.name);
+                    api.image.edit(id, data, function () {  //passes the recently create "id" and "data" and an anonymous function to image.edit, which calls another function from db
+                        httpRes.redirect('/admin/image/' + data.name); //redirects image to domain name /admin/image/data.name
                     });
 
                 });
 
         app.post('/crop', site.checkAdmin,
                 function (req, httpRes) {
-                    var imageName = req.body.name;
+                    var imageName = req.body.name; // assign "name" and "article" from parameter "req"
                     var article = req.body.article;
-                    var geom = _getMagickString(
+                    var geom = _getMagickString( //MagickString takes coordinates and puts that info into a string
                             parseInt(req.body.x1),
                             parseInt(req.body.y1),
                             parseInt(req.body.x2),
                             parseInt(req.body.y2));
-                    var width = req.body.finalWidth;
+                    var width = req.body.finalWidth; // assign "width" and "height" from req
                     var height = req.body.finalHeight;
-                    var croppedName = '';
+                    var croppedName = ''; //initialize croppedName
 
                     async.waterfall([
                         function (callback) {
-                            api.image.getOriginal(imageName, callback);
+                            api.image.getOriginal(imageName, callback); //getOriginal gets image from the database
                         },
                         function (orig, callback) {
-                            croppedName = 'crop_' + orig.value.name;
+                            croppedName = 'crop_' + orig.value.name; // modify the croppedName
                             log.info(orig.value.url);
                             _downloadUrlToPath(orig.value.url, orig.value.name,
                                     function (err) {
@@ -286,7 +286,7 @@ exports.bindPath = function (app) {
                         },
                         function (orig, callback) {
                             im.convert([orig.value.name, '-crop', geom,
-                                '-resize', width.toString() + 'x' + height.toString(), croppedName],
+                                '-resize', width.toString() + 'x' + height.toString(), croppedName],  //crop image with given specifications
                                     function (imErr, stdout, stderr) {
                                         callback(imErr, orig);
                                     });
@@ -298,22 +298,22 @@ exports.bindPath = function (app) {
                                     });
                         },
                         function (orig, buf, callback) {
-                            var versionNum = orig.value.imageVersions.length + 1;
-                            var type = orig.value.contentType;
+                            var versionNum = orig.value.imageVersions.length + 1; //increments the version number by 1
+                            var type = orig.value.contentType; // takes the type from orig
                             var s3Name = versionNum + orig.value.name;
-                            s3.put(buf, s3Name, type,
+                            s3.put(buf, s3Name, type, //put command from s3 
                                     function (s3Err, url) {
                                         callback(s3Err, orig, url);
                                     });
                         },
                         function (orig, url, callback) {
-                            api.image.createVersion(orig.id, url, width, height,
+                            api.image.createVersion(orig.id, url, width, height, //createVersion calls a function from the database that creates an image
                                     function (err, res) {
                                         callback(err, orig);
                                     });
                         },
                         function (orig, callback) {
-                            _deleteFiles([orig.value.name, croppedName],
+                            _deleteFiles([orig.value.name, croppedName], //calls a function defined earlier, which passes arguments to async.reduce()
                                     function (err) {
                                         callback(err, orig);
                                     }
@@ -322,11 +322,11 @@ exports.bindPath = function (app) {
                     ],
                             function (err, orig) {
                                 if (err) {
-                                    globalFunctions.showError(httpRes, err);
+                                    globalFunctions.showError(httpRes, err); //check for an error
                                 } else {
-                                    if (err) globalFunctions.showError(httpRes, err);
-                                    else if (article) httpRes.redirect('/admin/image/' + imageName + '?article=' + article);
-                                    else httpRes.redirect('/admin/image/' + imageName);
+                                    if (err) globalFunctions.showError(httpRes, err); //check for an error again
+                                    else if (article) httpRes.redirect('/admin/image/' + imageName + '?article=' + article); //if there is an article, redirect to this domain
+                                    else httpRes.redirect('/admin/image/' + imageName); // otherwise, redirect to this domain
                                 }
                             }
                     );

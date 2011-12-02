@@ -7,6 +7,7 @@ var fs = require('fs');
 var api = require('../../api/lib/api.js');
 var urlModule = require('url');
 var _ = require("underscore");
+var log = require('../../log');
 
 var VALID_EXTENSIONS = {};
 VALID_EXTENSIONS['image/jpeg'] = 'jpg';

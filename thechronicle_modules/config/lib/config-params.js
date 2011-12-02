@@ -27,7 +27,7 @@ var configParams = [
     {
         name: 'S3_BUCKET',
         description: 'Amazon S3 Bucket Name',
-        defaultValue: 'chron_bucket1'
+        defaultValue: 'chron_dev'
     },
     {
         name: 'S3_KEY',
@@ -63,6 +63,41 @@ var configParams = [
         name: 'SOLR_PATH',
         description: 'WebSolr Server Path',
         defaultValue: '/solr'
+    },
+    {
+        name: 'TAXONOMY_MAIN_SECTIONS',
+        description: 'Main sections of the taxonomy',
+        defaultValue: '{}'
+    },
+    {
+        name: 'TAXONOMY_BAD_SECTIONS',
+        description: 'Sections that exists, but that we don\'t want to show up in the taxonomy',
+        defaultValue: '{}'
+    },
+    {
+        name: 'LAYOUT_GROUPS',
+        description: 'Groups used for layouts',
+        defaultValue: '{}'
+    },
+    {
+        name: 'RSS_FEEDS',
+        description: 'RSS feeds to check and store',
+        defaultValue: '{}'
+    },
+    {
+        name: 'MAILCHIMP_API_KEY',
+        description: 'MailChimp API key',
+        defaultValue: ''
+    },
+    {
+        name: 'MAILCHIMP_LIST_ID',
+        description: 'MailChimp List ID',
+        defaultValue: ''
+    },
+    {
+        name: 'MAILCHIMP_TEMPLATE_ID',
+        description: 'MailChimp Template ID',
+        defaultValue: ''
     }
 ];
 

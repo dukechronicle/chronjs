@@ -24,8 +24,8 @@
                     .wisdom!=partial('container/block-row.jade', {title: 'Wisdom', stories: model.Wisdom})
             
     .sidebar.clearfix
-        if (model.EditorsNote)
-            .editorsNote!=partial('container/block.jade', {title: "Editor's Note", story: model.EditorsNote[0]})
+        if (model["Editors Note"])
+            .editorsNote!=partial('container/block.jade', {title: "Editor's Note", story: model["Editors Note"][0]})
         if (model.adFullRectangle)
             .image-container.medium-rectangle.lighten!=partial('container/image', model.adFullRectangle)
         // prefix

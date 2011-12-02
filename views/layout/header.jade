@@ -50,5 +50,9 @@
                     img.last(src='/images/icons/email.png')
 
 
-    form#search-box(action='/search/', method='GET')
-        input(type='search', name='search', placeholder='Search archives', results='5')
+    - if(typeof(query) !== 'undefined')
+       form#search-box(action='/search/', method='GET')
+         input(type='search', name='search', placeholder='Search archives', results='5', value=query)
+    - else
+       form#search-box(action='/search/', method='GET')
+         input(type='search', name='search', placeholder='Search archives', results='5')

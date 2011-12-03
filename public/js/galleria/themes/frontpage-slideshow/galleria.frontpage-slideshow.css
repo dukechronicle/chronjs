@@ -15,7 +15,7 @@
 }
 .galleria-stage {
     position: absolute;
-    top: 0px;
+    top: 0px; /* fix extra white space above slideshow*/
     bottom: 0px;
     left: 0px;
     right: 0px;

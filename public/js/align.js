@@ -34,6 +34,7 @@ function pageAlign() {
 	});
 
 	// align main and sidebar height
+    /*
 	(function() {
 		var extraHeight = $('#top > .sidebar').height()-$('#top > .content').height();
 		var contentContainer = $('#top > .content .top-news .content-container');
@@ -45,6 +46,6 @@ function pageAlign() {
             // not sure why the -3 is needed, but it is for sidebar to align correctly
             opinionContainer.css('padding-bottom', (extraHeight - 3) * -1);
         }
-	}) ();
+	}) ();*/
 }
 //});

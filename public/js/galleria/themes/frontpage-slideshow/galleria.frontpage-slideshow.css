@@ -87,13 +87,15 @@
 .galleria-info-text {
     color: black;
     background-color: white;
-    padding: 12px;
+    padding: 10px;
     display: none;
     opacity: 0.8;
     /* IE7 */ zoom:1;
 }
 .galleria-info-title {
     margin: 0;
+    font-size: 1.1em;
+    line-height: 1.2em;
     color: black;
 }
 .galleria-info-description {

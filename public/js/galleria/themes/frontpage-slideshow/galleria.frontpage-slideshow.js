@@ -20,10 +20,12 @@ Galleria.addTheme({
     defaults: {
         autoplay: true,
         pauseOnInteraction: true,
+        initialTransition: false,
         transition: 'slide',
         transitionSpeed: 500,
         thumbCrop:  'height',
         thumbnails: false,
+        showCounter: false,
         // set this to false if you want to show the caption all the time:
         _toggleInfo: false
     },
@@ -58,7 +60,6 @@ Galleria.addTheme({
         if (! touch ) {
             this.addIdleState( this.get('image-nav-left'), { left:-50 });
             this.addIdleState( this.get('image-nav-right'), { right:-50 });
-            this.addIdleState( this.get('counter'), { opacity:0 });
         }
 
         // toggle info

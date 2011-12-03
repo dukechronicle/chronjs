@@ -22,7 +22,7 @@ Galleria.addTheme({
         pauseOnInteraction: true,
         initialTransition: false,
         transition: 'slide',
-        transitionSpeed: 500,
+        transitionSpeed: 400,
         thumbCrop:  'height',
         thumbnails: false,
         showCounter: false,
@@ -54,7 +54,7 @@ Galleria.addTheme({
                 }(d))
             };
         for (var i = 0; i < this.getDataLength(); i++) this.$("dots").append(dotClickFn(i));
-        var dotsWidth = this.$("dots").outerWidth();
+        //var dotsWidth = this.$("dots").outerWidth();
 
         // some stuff for non-touch browsers
         if (! touch ) {

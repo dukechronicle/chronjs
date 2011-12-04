@@ -1,5 +1,6 @@
 .nav.clearfix
-    if (subsections)
-        for subsectionName,subsectionPath in subsections
-            h2
-                a(href='/section/' + subsectionPath) #{subsectionName}
+    if (typeof subsections != 'undefined')
+        for subsection in subsections
+            for subsectionName,subsectionPath in subsection
+                h2
+                    a(href='/section/' + subsectionPath) #{subsectionName}

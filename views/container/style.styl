@@ -9,6 +9,11 @@ shadow(opacity, height, width, offset)
     -moz-box-shadow rgba(0, 0, 0, opacity) height width offset
     box-shadow rgba(0, 0, 0, opacity) height width offset
 
+shadowColor(r, g, b, opacity, height, width, offset)
+    -webkit-box-shadow rgba(r, g, b, opacity) height width offset
+    -moz-box-shadow rgba(r, g, b, opacity) height width offset
+    box-shadow rgba(r, g, b, opacity) height width offset
+
 border-radius(corner-radius)
     -webkit-border-radius corner-radius
     -moz-border-radius corner-radius
@@ -144,20 +149,28 @@ body
                 padding 0px
     .twitter
         .container
-            .text
-                h3
-                    margin-top -3px
-                p
-                    font-size 0.85em
-                    line-height 1.2em
-                    padding-left 1.25em
-            img
-                padding-left container-padding
-                margin-left 3px
-                float right
-                width 67px
-                height 67px
+            .content-container
+                height 55px
+                overflow hidden
+                .text
+                    h3
+                        margin-top -3px
+                    p
+                        font-size 0.9em
+                        line-height 1.3em
+                        padding-top 2px
+                        padding-left 1.25em
+                img
+                    padding-left container-padding
+                    margin-left 3px
+                    float right
+                    width 55px
+                    height 55px
 
+
+    .breaking
+        .rounded
+            shadowColor(200, 0, 0, 0.6, 0px, 1px, 3px)
 
     .featured
         h2

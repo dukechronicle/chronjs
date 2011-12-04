@@ -1,0 +1,11 @@
+.container.clearfix
+    .vertical-container
+        h2.vertical Breaking
+
+    .rounded
+        .content-container
+            - if (typeof stories != 'undefined')
+                - each story in stories
+                    a.hover.highlight-right.clearfix(href='#{story.url}')
+                        h2 #{story.title}
+                        p.teaser #{story.teaser}

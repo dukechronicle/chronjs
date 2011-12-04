@@ -38,8 +38,8 @@ function ArticleParser(articleCallback) {
 
      /**
      * Iterates over the contents of a zip archive, parsing each file (with
-     * thisParser.parseFile) and calling _____(cb) on both files and
-     * directories (?). Upon completion, calls a callback function with 
+     * thisParser.parseFile) and calling a callback (cb) after processing both
+     * files and directories. Upon completion, calls a callback function with 
      * a list of errors and titles of those files that were parsed successfully.
      *
      * @this{ArticleParser}

@@ -95,7 +95,6 @@ function addFakeArticles(callback) {
         fakeArticles[i] = article;
     }
 
-    console.log('here');
     async.forEach(fakeArticles, function(article, cb) {
         console.log("adding article with title: '" + article.title + "'...");
         

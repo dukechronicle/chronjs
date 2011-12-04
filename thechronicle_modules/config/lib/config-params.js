@@ -70,8 +70,8 @@ var configParams = [
         defaultValue: '{}'
     },
     {
-        name: 'TAXONOMY_BAD_SECTIONS',
-        description: 'Sections that exists, but that we don\'t want to show up in the taxonomy',
+        name: 'TAXONOMY',
+        description: 'Taxonomy tree for the site, used for categorizing articles and navigation',
         defaultValue: '{}'
     },
     {

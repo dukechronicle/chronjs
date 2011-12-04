@@ -91,7 +91,7 @@ site.init = function (app, callback) {
                     });
                 },
                 function (callback) { //1
-                    redis.client.zrevrange(_articleViewsKey([]), 0, 5, function (err, popular) {
+                    redis.client.zrevrange(_articleViewsKey([]), 0, 3, function (err, popular) {
                         if (err) return callback(err);
                         var popular = popular.map(function (str) {
                             var parts = str.split('||');

@@ -1,10 +1,12 @@
 #frontpage
     #top.clearfix
         .content
+            if (model.Breaking)
+                #breaking!=partial('container/breaking', {stories: model.Breaking})
             if (model.Slideshow)
                 #slideshow!=partial('slideshow', {stories: model.Slideshow})
             if (model["Left Headlines"] && model["Right Headlines"])
-                            .top-news.align-group!=partial('container/top-news', {title: "Headlines", news: model["Left Headlines"], sports: model["Right Headlines"]})
+                .top-news.align-group!=partial('container/top-news', {title: "Headlines", news: model["Left Headlines"], sports: model["Right Headlines"]})
 
             .ads-row.clearfix
                 if (model.printEdition)
@@ -15,8 +17,8 @@
         .sidebar
             if (model.twitter)
                 .twitter!=partial('container/twitter', model.twitter)
-            // if (model.popular)
-            //    .most-popular!=partial('container/most-popular', {title: "Popular", stories: model.popular})
+            if (model.popular)
+                .most-popular!=partial('container/most-popular', {title: "Popular", stories: model.popular})
             if (model.Opinion)
                 .opinion!=partial('container/opinion', {title: "Opinion", stories: model.Opinion})
             if (model.adFullRectangle)

@@ -10,10 +10,15 @@ require(["jquery", "align", "typekit"], function($, align) {
     	Typekit.load({
     		active: function() {
                 align.pageAlign();
+                if (isFront) align.frontpageAlign();
                 align.verticalAlign();
     		}
     	});
-    } catch(e) {
-    }
+    } catch(e) {}
 
-})
+});
+
+
+function isFront() {
+    return ! document.location.href.split("/")[3];
+}

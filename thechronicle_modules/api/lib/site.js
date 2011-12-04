@@ -504,7 +504,9 @@ site.init = function (app, callback) {
                                     }
                                 }
                             },
-                            filename:'views/article.jade'
+                            filename:'views/article.jade',
+                            css:asereje.css(['container/style', 'article']),
+                            layout:'layout-optimized'
                         });
                     }
 

@@ -16,14 +16,9 @@ taxonomy.getMainSections = function() {
 };
 
 // get all document under given taxonomy path ex. ["News", "University"]
-
 taxonomy.docs = function (taxonomyPath, limit, callback) {
     db.taxonomy.docs(taxonomyPath, limit, callback);
 };
-/*
-taxonomy.docs = function(taxonomyPath, limit, callback) {
-    console.log(Object.keys(taxonomyTree));
-}*/
 
 taxonomy.getParentAndChildren = function(navTree, callback) {
     var currentPath = navTree.join('/');

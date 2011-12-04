@@ -207,18 +207,21 @@ site.init = function (app, callback) {
                         });
                     },
                     function (callback) { //1
-                        api.taxonomy.getParentAndChildren(['Sports'], callback);
+                        api.taxonomy.getParentAndChildren(['Sports', 'Men'], callback);
                     },
                     function (callback) { //2
-                        api.taxonomy.docs("Football", 4, callback);
+                        api.taxonomy.getParentAndChildren(['Sports', 'Women'], callback);
                     },
                     function (callback) { //3
-                        api.taxonomy.docs("M Basketball", 4, callback);
+                        api.taxonomy.docs("Football", 4, callback);
                     },
                     function (callback) { //4
-                        api.taxonomy.docs("M Soccer", 4, callback);
+                        api.taxonomy.docs("M Basketball", 4, callback);
                     },
                     function (callback) { //5
+                        api.taxonomy.docs("M Soccer", 4, callback);
+                    },
+                    function (callback) { //6
                         api.taxonomy.docs("W Soccer", 4, callback);
                     }
                 ],
@@ -227,10 +230,10 @@ site.init = function (app, callback) {
                             if (err) return log.warning(err);
                             model.Blog = results[0];
                             /*
-                             model.Football = _.pluck(results[2], 'value');
-                             model.Mbball = _.pluck(results[3], 'value');
-                             model.MSoccer = _.pluck(results[4], 'value');
-                             model.WSoccer = _.pluck(results[5], 'value');*/
+                             model.Football = _.pluck(results[3], 'value');
+                             model.Mbball = _.pluck(results[4], 'value');
+                             model.MSoccer = _.pluck(results[5], 'value');
+                             model.WSoccer = _.pluck(results[6], 'value');*/
 
                             model.adFullRectangle = {
                                 "title":"Advertisement",
@@ -245,7 +248,7 @@ site.init = function (app, callback) {
                             httpRes.render('site/sports', {
                                 css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
                                 layout:'layout-optimized',
-                                subsections:results[1].children,
+                                subsections:[results[1].children, results[2].children],
                                 filename:'views/site/sports.jade',
                                 model:model});
                         });

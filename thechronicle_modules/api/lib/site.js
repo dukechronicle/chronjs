@@ -172,7 +172,13 @@ site.init = function (app, callback) {
                         };
 
                         api.taxonomy.getParentAndChildren(['News'], function (err, parentAndChildren) {
-                            res.render('site/news', {subsections:parentAndChildren.children, filename:'views/site/news.jade', model:model});
+                            res.render('site/news', {
+                                css:asereje.css(['container/style', 'site/section', 'site/news']),
+                                layout:'layout-optimized',
+                                subsections:parentAndChildren.children,
+                                filename:'views/site/news.jade',
+                                model:model
+                            });
                         });
                     });
                 });
@@ -236,7 +242,12 @@ site.init = function (app, callback) {
 
 
                             //log.debug(model.WSoccer);
-                            httpRes.render('site/sports', {subsections:results[1].children, filename:'views/site/sports.jade', model:model});
+                            httpRes.render('site/sports', {
+                                css:asereje.css(['container/style', 'site/section', 'site/sports']),
+                                layout:'layout-optimized',
+                                subsections:results[1].children,
+                                filename:'views/site/sports.jade',
+                                model:model});
                         });
 
             });
@@ -304,7 +315,12 @@ site.init = function (app, callback) {
                             "height":"60px"
                         };
 
-                        res.render('site/opinion', {subsections:results[1].children, filename:'views/site/opinion.jade', model:model});
+                        res.render('site/opinion', {
+                            css:asereje.css(['container/style', 'site/section', 'site/opinion']),
+                            layout:'layout-optimized',
+                            subsections:results[1].children,
+                            filename:'views/site/opinion.jade',
+                            model:model});
                     });
 
         });
@@ -333,7 +349,12 @@ site.init = function (app, callback) {
 
 
                     api.taxonomy.getParentAndChildren(['Recess'], function (err, parentAndChildren) {
-                        res.render('site/recess', {subsections:parentAndChildren.children, filename:'views/site/recess.jade', model:result});
+                        res.render('site/recess', {
+                            css:asereje.css(['container/style', 'site/section', 'site/recess']),
+                            layout:'layout-optimized',
+                            subsections:parentAndChildren.children,
+                            filename:'views/site/recess.jade',
+                            model:result});
                     });
                 })
             });
@@ -351,7 +372,12 @@ site.init = function (app, callback) {
                 };
 
                 api.taxonomy.getParentAndChildren(['Towerview'], function (err, parentAndChildren) {
-                    res.render('site/towerview', {subsections:parentAndChildren.children, filename:'views/site/towerview.jade', model:result});
+                    res.render('site/towerview', {
+                        css:asereje.css(['container/style', 'site/section', 'site/towerview']),
+                        layout:'layout-optimized',
+                        subsections:parentAndChildren.children,
+                        filename:'views/site/towerview.jade',
+                        model:result});
                 });
             });
         });

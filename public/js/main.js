@@ -6,19 +6,23 @@ require.config({
     }
 });
 
-require(["jquery", "align", "typekit"], function($, align) {
+require(["align", "typekit"], function(align) {
     try {
     	Typekit.load({
     		active: function() {
                 align.pageAlign();
-                if (isFront) align.frontpageAlign();
+                if (page() === 'front') align.frontpageAlign();
                 align.verticalAlign();
     		}
     	});
     } catch(e) {}
 
-    if (isFront()) {
+    if (page() === 'front') {
         require(["slideshow/frontpage-slideshow"], function(slideshow) {
+            slideshow.init();
+        });
+    } else if (page() === 'sports') {
+        require(["slideshow/slideshow"], function(slideshow) {
             slideshow.init();
         });
     }
@@ -26,6 +30,11 @@ require(["jquery", "align", "typekit"], function($, align) {
 });
 
 
-function isFront() {
-    return ! document.location.href.split("/")[3];
+function page() {
+    var path = document.location.href.split("/")[3];
+    if (! path) {
+        return "front";
+    } else {
+        return path;
+    }
 }

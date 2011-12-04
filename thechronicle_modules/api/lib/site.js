@@ -408,7 +408,9 @@ site.init = function (app, callback) {
                                         subsections:parentAndChildren.children,
                                         parentPaths:parentAndChildren.parentPaths,
                                         section:section
-                                    }
+                                    },
+                                    layout: "layout-optimized",
+                                    css:asereje.css(['container/style', 'site/section'])
                                 });
                             });
                         }
@@ -453,9 +455,13 @@ site.init = function (app, callback) {
 
                 http_res.render(
                         'site/people',
-                        {locals:{
-                            docs:docs, name:req.params.query.replace('-', ' ')
-                        }}
+                        {
+                            locals:{
+                                docs:docs, name:req.params.query.replace('-', ' ')
+                            },
+                            layout: "layout-optimized",
+                            css:asereje.css(['container/style', 'site/people'])
+                        }
                 );
             });
         });
@@ -878,9 +884,13 @@ function _showSearchArticles(err,req,http_res,docs,facets) {
                     
     http_res.render(
         'site/search',
-         {locals:{
-            docs:docs, currentFacets:currentFacets, facets:facets, query:req.params.query, sort:req.query.sort, order:req.query.order
-         }}
+         {
+             locals:{
+                docs:docs, currentFacets:currentFacets, facets:facets, query:req.params.query, sort:req.query.sort, order:req.query.order
+             },
+             layout: "layout-optimized",
+             css:asereje.css(['container/style', 'site/search'])
+         }
     );
 
     return null;

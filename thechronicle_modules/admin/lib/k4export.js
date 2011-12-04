@@ -36,6 +36,18 @@ function ArticleParser(articleCallback) {
         "K4EXPORT:PUBLICATION:ISSUE:ARTICLE:TEXTOBJECTS:TEXTOBJECT:TEXT:INLINETAG:INLINETAG:BREAK":onTextBreak
     };
 
+     /**
+     * Iterates over the contents of a zip archive, parsing each file (with
+     * thisParser.parseFile) and calling _____(cb) on both files and
+     * directories (?). Upon completion, calls a callback function with 
+     * a list of errors and titles of those files that were parsed successfully.
+     *
+     * @this{ArticleParser}
+     * @param{zipPath} path to the zip archive
+     * @param{callback} A function to call after all files have been iterated over. 
+     * The callback takes as an argument an array of errors and an array of the    
+     * files that were parsed successfully.
+     */
     this.parse = function (zipPath, callback) {
         var succeed = [];
         var failed = [];

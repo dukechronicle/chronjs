@@ -243,7 +243,7 @@ site.init = function (app, callback) {
 
                             //log.debug(model.WSoccer);
                             httpRes.render('site/sports', {
-                                css:asereje.css(['container/style', 'site/section', 'site/sports']),
+                                css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
                                 layout:'layout-optimized',
                                 subsections:results[1].children,
                                 filename:'views/site/sports.jade',

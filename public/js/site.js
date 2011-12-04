@@ -1,3 +1,4 @@
+
 // highlight selected page
 $(function() {
     var currentPage = document.location.href.split("/")[3];

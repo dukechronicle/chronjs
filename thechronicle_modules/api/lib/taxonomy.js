@@ -2,14 +2,10 @@ var fs = require('fs');
 var db = require('../../db-abstract');
 var _ = require('underscore');
 var config = require('../../config');
-var taxonomyTree = JSON.parse(fs.readFileSync("sample-data/taxonomy.json"));
-
 var taxonomy = exports;
 
 var MAIN_SECTIONS = config.get("TAXONOMY_MAIN_SECTIONS");
-
-// sections that exists, but that we don't want to show up in the taxonomy
-var BAD_SECTIONS = config.get("TAXONOMY_BAD_SECTIONS");
+var taxonomyTree = config.get("TAXONOMY");
 
 taxonomy.getMainSections = function() {
     return MAIN_SECTIONS;

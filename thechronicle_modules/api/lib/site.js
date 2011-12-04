@@ -94,7 +94,7 @@ site.init = function (app, callback) {
                     var popularArticles = 7;
                     redis.client.zrevrange(_articleViewsKey([]), 0, popularArticles - 1, function (err, popular) {
                         if (err) return callback(err);
-                        var popular = popular.map(function (str) {
+                        popular = popular.map(function (str) {
                             var parts = str.split('||');
                             return {
                                 url:'/article/' + parts[0],

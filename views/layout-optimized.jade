@@ -5,10 +5,7 @@ html(lang="en")
         -each file in css
             link(rel= 'stylesheet', href= '/' + file + '.css')
 
-        script(src='http://use.typekit.com/dwv2bjy.js')
-        script(src='/js/typekit.js')
-
-
+        script(data-main="/js/main", src="/js/require-jquery.js")
     body
         #shell
             header
@@ -20,7 +17,4 @@ html(lang="en")
     script(src="/js/galleria/galleria-1.2.5.min.js")
     script(src='/js/slideshow/slideshow.js')
     script(src='/js/slideshow/frontpage-slideshow-init.js')
-    script(src='/js/underscore-min.js')
-    script(src='/js/container/vertical-text-align.js')
-    script(src='/js/align.js')
 

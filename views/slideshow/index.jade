@@ -3,4 +3,4 @@
         for story, index in stories
             if (story && story.images && story.images.LargeRect)
                 // add alt=story.teaser for teaser
-                img(src=story.images.LargeRect.url, title=story.title)
+                img(src=story.images.LargeRect.url, title=story.title, longdesc=story.url)

@@ -1,8 +1,5 @@
-.nav.clearfix
-    if (subsections)
-        for subsectionName,subsectionPath in subsections
-            h2
-                a(href='/section/' + subsectionPath) #{subsectionName}
+!=partial('site/subnav', {subsections: subsections})
+
 #opinion
     .top.clearfix
         .left

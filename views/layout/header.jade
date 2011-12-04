@@ -1,3 +1,6 @@
+- if(query == null) var query = ""
+- query = query.replace("-"," ");
+
 .lighten
     img(src='/images/header-overlay.png', id='header-overlay', width='100px', height='122px')
 
@@ -50,9 +53,5 @@
                     img.last(src='/images/icons/email.png')
 
 
-    - if(typeof(query) !== 'undefined')
-       form#search-box(action='/search/', method='GET')
-         input(type='search', name='search', placeholder='Search archives', results='5', value=query)
-    - else
-       form#search-box(action='/search/', method='GET')
-         input(type='search', name='search', placeholder='Search archives', results='5')
+    form#search-box(action='/search/', method='GET')
+        input(type='search', name='search', placeholder='Search archives', results='5', value=query)

@@ -1,0 +1,38 @@
+[
+    {"News":[
+        {"University":[
+            {"Residence Life": []},
+            {"Dining": []},
+            {"DSG": []},
+            {"Graduate and Professional Schools": []},
+            {"Student Life": []},
+            {"Campus Crime": []},
+            {"Academics": []},
+            {"Board of Trustees": []}
+        ]},
+        {"Local & National":[
+            {"City of Durham": []},
+            {"Higher Education": []},
+            {"Durham Crime": []},
+            {"North Carolina": []},
+            {"National News and Politics": []}
+        ]},
+        {"Health & Science":[
+            {"Research": []},
+            {"Pratt": []},
+            {"DUHS": []},
+            {"Environment & Sustainability": []},
+            {"Student Health": []},
+            {"School of Medicine": []}
+        ]}
+    ]},
+    {"Sports":[]},
+    {"Opinion":[]},
+    {"Recess":[
+        {"Page Two": []},
+        {"Arts": []},
+        {"Music": []},
+        {"Film and Literature": []}
+    ]},
+    {"Towerview":[]}
+]

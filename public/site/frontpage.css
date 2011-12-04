@@ -3,6 +3,8 @@ body section > #frontpage .sidebar .container{width:306px;}
 body section > #frontpage .sidebar .container .rounded{width:300px}
 body section > #frontpage .full-banner{float:right}
 body section > #frontpage .print-edition{float:left;width:140px}
+body section > #frontpage #breaking .rounded{width:633px;}
+body section > #frontpage #breaking .rounded h1{font-size:1.2em;margin-bottom:.3em}
 body section > #frontpage #slideshow > .slideshow{background-color:#fff;}
 body section > #frontpage #slideshow > .slideshow #slides{width:636px;height:393px;padding:3px;}
 body section > #frontpage #slideshow > .slideshow #slides img{border-radius:4px}
@@ -12,15 +14,16 @@ body section > #frontpage #top > .content .rounded a.hover.highlight-right{margi
 body section > #frontpage #top > .content .rounded a.hover.highlight-left{margin-left:-7px}
 body section > #frontpage #top > .content .top-news .container{width:642px;}
 body section > #frontpage #top > .content .top-news .container .rounded{width:634px}
-body section > #frontpage #top > .content .top-news .rounded .content-container{padding-bottom:0;}
+body section > #frontpage #top > .content .top-news .rounded .content-container{padding-bottom:.3em;}
 body section > #frontpage #top > .content .top-news .rounded .content-container > .left{width:305px;}
 body section > #frontpage #top > .content .top-news .rounded .content-container > .left a.hover{padding-left:10px}
 body section > #frontpage #top > .content .top-news .rounded .content-container > .right{width:305px;}
 body section > #frontpage #top > .content .top-news .rounded .content-container > .right a.hover{padding-right:10px}
 body section > #frontpage #top > .content .top-news .rounded a.hover h2,body section > #frontpage #top > .content .top-news .rounded a.hover h3{font-size:1.2em}
+body section > #frontpage #top > .content .top-news .rounded a.hover{margin-top:1em}
+body section > #frontpage #top > .content .top-news .rounded a.hover.first{margin-top:0}
 body section > #frontpage #top > .content .top-news .rounded a.hover h3{margin-top:0}
-body section > #frontpage #top > .content .top-news .rounded a.hover{padding-top:3px;padding-bottom:3px}
-body section > #frontpage #top > .content .top-news .rounded a.hover.teaser{padding-bottom:1em}
+body section > #frontpage #top > .content .top-news .rounded a.hover.teaser{padding-bottom:.3em}
 body section > #frontpage #top > .content .top-news .rounded p{font-size:1em;margin-top:5px}
 body section > #frontpage #top > .content .top-news .rounded ul li h3{background:url("/images/bullet.gif") no-repeat left 7px}
 body section > #frontpage #news,body section > #frontpage #sports{width:474.5px;}

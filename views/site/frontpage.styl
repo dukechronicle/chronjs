@@ -32,6 +32,14 @@ body section > #frontpage
     .print-edition
         float left
         width 140px
+
+    #breaking
+        .rounded
+            width 633px
+            h1
+                font-size 1.2em
+                margin-bottom 0.3em
+
     #slideshow
         > .slideshow
             background-color white
@@ -65,7 +73,7 @@ body section > #frontpage
 
 
                     .content-container
-                        padding-bottom 0px
+                        padding-bottom 0.3em
                         > .left
                             width leftColumnWidth - padding
 
@@ -81,22 +89,23 @@ body section > #frontpage
                     a.hover h2, a.hover h3
                         font-size 1.2em
 
+                    a.hover
+                        margin-top 1em
+                    a.hover.first
+                        margin-top 0em
+
                     a.hover h3
                         margin-top 0px
 
-                    a.hover
-                        padding-top 3px
-                        padding-bottom 3px
-
                     a.hover.teaser
-                        padding-bottom 1em
+                        padding-bottom 0.3em
 
                     p
                         font-size 1em
                         margin-top 5px
 
                     ul li h3
-                            background url('/images/bullet.gif') no-repeat left 7px
+                        background url('/images/bullet.gif') no-repeat left 7px
 
     #news, #sports
         container-width = (page-width/2 - container-vertical-spacing/2)

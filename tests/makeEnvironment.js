@@ -5,7 +5,7 @@ var api = require('../thechronicle_modules/api/lib/api');
 var async = require('async');
 
 var FAKE_WORDS = [
-    'Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipisicing', 'elit', 'sed', 'do', 'eiusmod', 'tempor', 'incididunt', 'ut',
+    'lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipisicing', 'elit', 'sed', 'do', 'eiusmod', 'tempor', 'incididunt', 'ut',
     'labore', 'et', 'dolore', 'magna', 'aliqua', 'enim', 'ad', 'minim', 'veniam', 'quis', 'nostrud', 'exercitation', 'ullamco', 'laboris', 'nisi'
 ];
 
@@ -16,29 +16,7 @@ var WORDS_FOR_TEASER = 7;
 
 var NUM_ARTICLES = 25;
 
-var TAXONOMIES_TO_USE = [
-    ["News","University"],
-    ["News","University","Speakers & Events"],
-    ["News","Local & National"],
-    ["News"],
-    ["Sports"],
-    ["Sports","Baseball"],
-    ["Sports","Men's"],
-    ["Sports","Men's","M Basketball"],
-    ["Opinion"],
-    ["Opinion","Editorial"],
-    ["Opinion","Cartoons"],
-    ["Opinion","Column", "Senior Column"],
-    ["Recess"],
-    ["Recess","Arts"],
-    ["Recess","Film"],
-    ["Recess","Food","Food Review"],
-    ["Towerview"],
-    ["Towerview", "Bus Stop"], 
-    ["Towerview", "Prefix"],
-    ["Towerview", "Savvy", "Endorsement"],
-    
-];
+var TAXONOMY = config.get('TAXONOMY');
 
 if(!config.isSetUp()) {
 	console.log('You must set up config.js in the main directory before you can generate an environment');
@@ -90,7 +68,7 @@ function addFakeArticles(callback) {
         article.authors = [generateSentence(WORDS_FOR_AUTHOR)];
         article.teaser = generateSentence(WORDS_FOR_TEASER);
         article.type = "article";
-        article.taxonomy = TAXONOMIES_TO_USE[getRandomNumber(TAXONOMIES_TO_USE.length)];
+        article.taxonomy = generateTaxonomy();
 
         fakeArticles[i] = article;
     }
@@ -118,6 +96,28 @@ function generateSentence(numWords) {
     }
 
     return string;
+}
+
+function generateTaxonomy() {
+    var taxonomy = [];
+    var taxonomyLevelTree = TAXONOMY;
+
+    taxonomyLevelTree = taxonomyLevelTree[getRandomNumber(Object.keys(taxonomyLevelTree).length)];
+    taxonomy[0] = Object.keys(taxonomyLevelTree)[0];
+
+    var i = 1;
+    while(true) {       
+        taxonomyLevelTree = taxonomyLevelTree[taxonomy[i-1]];
+        
+        if(Object.keys(taxonomyLevelTree).length == 0) break;
+        
+        taxonomyLevelTree = taxonomyLevelTree[getRandomNumber(Object.keys(taxonomyLevelTree).length)];
+        taxonomy[i] = Object.keys(taxonomyLevelTree)[getRandomNumber(Object.keys(taxonomyLevelTree).length)];
+        i ++;
+    }
+
+    console.log(taxonomy);
+    return taxonomy;
 }
 
 function getRandomNumber(exclusiveMax) {

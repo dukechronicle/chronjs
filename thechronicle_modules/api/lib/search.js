@@ -277,7 +277,7 @@ function querySolr(query, options, callback) {
 				for(var i = 0; i < field.length; i += 2) {
 					if(field[i + 1] > 0) {
 						if(niceName == "Author") {
-							field[i] = _capitalizeWords(field[i]);
+							field[i] = globalFunctions.capitalizeWords(field[i]);
 						}
 						facets[niceName][field[i]] = field[i + 1];
                     }
@@ -348,11 +348,6 @@ function _makeFacets(facets, callback) {
 	facetFields.push("author_sm");
 
 	callback(facetFields, facetQueries);
-}
-
-
-function _capitalizeWords(str) {
-	return str.replace( /(^|\s)([a-z])/g , function(m,p1,p2){ return p1+p2.toUpperCase(); } );
 }
 
 function _sortObjByKeys(arr){

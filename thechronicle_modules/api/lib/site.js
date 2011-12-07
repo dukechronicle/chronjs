@@ -455,31 +455,24 @@ site.init = function (app, callback) {
                     doc = _parseAuthor(doc);
                 });
 
-
-			var name = req.params.query.replace('-', ' ');
-        	var capName = '';
-        	name = name.split(' ');
-        	for(var c=0; c < name.length; c++) 
-        	{
-                capName += name[c].substring(0,1).toUpperCase() +
-				name[c].substring(1,name[c].length) + ' ';
-        	}
+			    var name = req.params.query.replace('-', ' ');
+            	var capName = '';
+            	name = name.split(' ');
+            	for(var c=0; c < name.length; c++) 
+            	{
+                    capName += name[c].substring(0,1).toUpperCase() +
+				    name[c].substring(1,name[c].length) + ' ';
+            	}
 				
                 http_res.render(
                         'site/people',
-<<<<<<< HEAD
-                        {locals:{
-                            docs:docs, capName
-                        }}
-=======
                         {
                             locals:{
-                                docs:docs, name:req.params.query.replace('-', ' ')
+                                docs:docs, name:capName
                             },
                             layout: "layout-optimized",
                             css:asereje.css(['container/style', 'site/people'])
                         }
->>>>>>> 8635d73e4f3fbd88873c207bfd6dc2b48b06bb79
                 );
             });
         });

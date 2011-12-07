@@ -1,8 +1,5 @@
-.nav.clearfix
-    if (subsections)
-        for subsectionName,subsectionPath in subsections
-            h2
-                a(href='/section/' + subsectionPath) #{subsectionName}
+!=partial('site/subnav', {subsections: subsections})
+
 #news
 
     .main
@@ -33,8 +30,8 @@
 
     .sidebar
         .top
-            if (model.RightHeadlines)
-                .right-headlines!=partial('container/story-list-featured', {title: "Headlines", stories: model.RightHeadlines})
+            if (model["Right Headlines"])
+                .right-headlines!=partial('container/story-list-featured', {title: "Headlines", stories: model["Right Headlines"]})
             if (model.Blog)
                 .blog.last
                     !=partial('container/story-list-image', {title: "News Blog", stories: model.Blog, image:'/images/blogs/newsblog.jpg', imageHref:'http://bigblog.chronicleblogs.com/news'})

@@ -3,9 +3,13 @@ var _ = require('underscore');
 var db = require('../../db-abstract');
 var log = require('../../log');
 var redis = require('../../redisclient');
+var config = require('../../config');
+
+var LAYOUT_GROUPS = config.get('LAYOUT_GROUPS');
 
 var group = exports;
 var BENCHMARK = false;
+
 // list all groups in the given namespace
 group.list = function(namespace, callback) {
     var groupKey = {};
@@ -28,6 +32,7 @@ group.list = function(namespace, callback) {
         }
     });
 };
+
 /*
 group.create = function(namespace, name, callback) {
     //check if group exists
@@ -147,4 +152,8 @@ group.add = function(nameSpace, groupName, docId, weight, callback) {
 
 group.remove = function(nameSpace, groupName, docId, callback) {
     db.group.remove(nameSpace, groupName, docId, callback);
+};
+
+group.getLayoutGroups = function() {
+    return _.extend({}, LAYOUT_GROUPS);
 };

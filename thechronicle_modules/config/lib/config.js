@@ -41,9 +41,11 @@ function initConfig()
 function getConfigParamObjectWithName(name) {
     var params = configParams.getParameters();
 
-    return _.find(params, function(index) {
-        return params[index].name === name;
-    });
+    for(var i = 0; i < params.length; i ++) {
+        if(params[i].name === name) return params[i];
+    }
+
+    return null;
 }
 
 exports.get = function(variable) {
@@ -55,7 +57,9 @@ exports.get = function(variable) {
     if(activeProfile[variable] == null) {
         log.alert('Configuration property: "' + variable + '" not defined!');
     }
-    return activeProfile[variable];
+
+    if(typeof activeProfile[variable] == "object") return _.extend({}, activeProfile[variable]);
+    else return activeProfile[variable];
 };
 
 exports.isSetUp = function () {

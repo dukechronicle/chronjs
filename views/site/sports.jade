@@ -1,8 +1,23 @@
-.nav.clearfix
-    if (subsections)
-        for subsectionName,subsectionPath in subsections
+ul.nav.clearfix
+    if (typeof subsections != 'undefined')
+        li
             h2
-                a(href='/section/'+subsectionPath) #{subsectionName}
+                a.men Men
+            .subnav.men.clearfix
+                for subsection in subsections[0]
+                    for subsectionName,subsectionPath in subsection
+                        h3
+                            a(href='/section/' + subsectionPath) #{subsectionName}
+        li
+            h2
+                a.men Women
+            .subnav.men.clearfix
+                for subsection in subsections[1]
+                    for subsectionName,subsectionPath in subsection
+                        h3
+                            a(href='/section/' + subsectionPath) #{subsectionName}
+
+
 #sports
     .top.clearfix
         if (model.Slideshow)

@@ -1,0 +1,28 @@
+link(rel='stylesheet', href='/admin/layout/styles.css')
+script(src='/js/admin/layout.js')
+script
+    nameSpace = !{JSON.stringify(nameSpace)};
+
+h2 !{page} Layout
+
+#layout
+    - each group in groups
+        br
+        <h2>!{group}</h2>
+        #slideshow.container(data-groupName=group)
+            - if (groupDocs[group])
+                - each story, id in groupDocs[group]
+                    .story(draggable='true', id='#{story._id}')
+                        #{story.title}
+
+#sidebar
+    .fixed-container
+        select(id="taxonomy")
+                option(value="All") All
+                - each section in mainSections            
+                    option(value=section) !{section}
+        #stories-container
+            #stories
+                - each story, id in sectionDocs
+                    .story(draggable="true", id="#{story._id}")
+                        #{story.title}

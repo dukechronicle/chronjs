@@ -18,12 +18,7 @@ var dateFormat = require('dateformat');
 
 var asereje = require('asereje');
 
-var FRONTPAGE_GROUP_NAMESPACE = ['Layouts','Frontpage'];
-var NEWS_GROUP_NAMESPACE = ['Layouts','News'];
-var SPORTS_GROUP_NAMESPACE = ['Layouts','Sports'];
-var OPINION_GROUP_NAMESPACE = ['Layouts','Opinion'];
-var RECESS_GROUP_NAMESPACE = ['Layouts','Recess'];
-var TOWERVIEW_GROUP_NAMESPACE = ['Layouts','Towerview'];
+var LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
 
 var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
 var newsModel = JSON.parse(fs.readFileSync("sample-data/news.json"));
@@ -89,16 +84,17 @@ site.init = function (app, callback) {
             var start = Date.now();
             async.parallel([
                 function (callback) { //0
-                    api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function (err, result) {
+                    api.group.docs(LAYOUT_GROUPS.Frontpage.namespace, null, function (err, result) {
                         if (err) return callback(err);
                         if (BENCHMARK) log.info("API TIME %d", Date.now() - start);
                         return callback(null, result);
                     });
                 },
                 function (callback) { //1
-                    redis.client.zrevrange(_articleViewsKey([]), 0, 5, function (err, popular) {
+                    var popularArticles = 7;
+                    redis.client.zrevrange(_articleViewsKey([]), 0, popularArticles - 1, function (err, popular) {
                         if (err) return callback(err);
-                        var popular = popular.map(function (str) {
+                        popular = popular.map(function (str) {
                             var parts = str.split('||');
                             return {
                                 url:'/article/' + parts[0],
@@ -146,7 +142,7 @@ site.init = function (app, callback) {
         });
 
         app.get('/news', function (req, res) {
-            api.group.docs(NEWS_GROUP_NAMESPACE, null, function (err, model) {
+            api.group.docs(LAYOUT_GROUPS.News.namespace, null, function (err, model) {
                 _.defaults(model, newsModel);
                 redis.client.zrevrange(_articleViewsKey(['News']), 0, 5, function (err, popular) {
                     model.popular = popular.map(function (str) {
@@ -176,7 +172,13 @@ site.init = function (app, callback) {
                         };
 
                         api.taxonomy.getParentAndChildren(['News'], function (err, parentAndChildren) {
-                            res.render('site/news', {subsections:parentAndChildren.children, filename:'views/site/news.jade', model:model});
+                            res.render('site/news', {
+                                css:asereje.css(['container/style', 'site/section', 'site/news']),
+                                layout:'layout-optimized',
+                                subsections:parentAndChildren.children,
+                                filename:'views/site/news.jade',
+                                model:model
+                            });
                         });
                     });
                 });
@@ -184,7 +186,7 @@ site.init = function (app, callback) {
         });
 
         app.get('/sports', function (req, httpRes) {
-            api.group.docs(SPORTS_GROUP_NAMESPACE, null, function (err, model) {
+            api.group.docs(LAYOUT_GROUPS.Sports.namespace, null, function (err, model) {
                 _.defaults(model, sportsModel);
 
                 async.parallel([
@@ -205,18 +207,21 @@ site.init = function (app, callback) {
                         });
                     },
                     function (callback) { //1
-                        api.taxonomy.getParentAndChildren(['Sports'], callback);
+                        api.taxonomy.getParentAndChildren(['Sports', 'Men'], callback);
                     },
                     function (callback) { //2
-                        api.taxonomy.docs("Football", 4, callback);
+                        api.taxonomy.getParentAndChildren(['Sports', 'Women'], callback);
                     },
                     function (callback) { //3
-                        api.taxonomy.docs("M Basketball", 4, callback);
+                        api.taxonomy.docs("Football", 4, callback);
                     },
                     function (callback) { //4
-                        api.taxonomy.docs("M Soccer", 4, callback);
+                        api.taxonomy.docs("M Basketball", 4, callback);
                     },
                     function (callback) { //5
+                        api.taxonomy.docs("M Soccer", 4, callback);
+                    },
+                    function (callback) { //6
                         api.taxonomy.docs("W Soccer", 4, callback);
                     }
                 ],
@@ -225,10 +230,10 @@ site.init = function (app, callback) {
                             if (err) return log.warning(err);
                             model.Blog = results[0];
                             /*
-                             model.Football = _.pluck(results[2], 'value');
-                             model.Mbball = _.pluck(results[3], 'value');
-                             model.MSoccer = _.pluck(results[4], 'value');
-                             model.WSoccer = _.pluck(results[5], 'value');*/
+                             model.Football = _.pluck(results[3], 'value');
+                             model.Mbball = _.pluck(results[4], 'value');
+                             model.MSoccer = _.pluck(results[5], 'value');
+                             model.WSoccer = _.pluck(results[6], 'value');*/
 
                             model.adFullRectangle = {
                                 "title":"Advertisement",
@@ -240,7 +245,12 @@ site.init = function (app, callback) {
 
 
                             //log.debug(model.WSoccer);
-                            httpRes.render('site/sports', {subsections:results[1].children, filename:'views/site/sports.jade', model:model});
+                            httpRes.render('site/sports', {
+                                css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
+                                layout:'layout-optimized',
+                                subsections:[results[1].children, results[2].children],
+                                filename:'views/site/sports.jade',
+                                model:model});
                         });
 
             });
@@ -249,7 +259,7 @@ site.init = function (app, callback) {
         app.get('/opinion', function (req, res) {
             async.parallel([
                 function (callback) { //0
-                    api.group.docs(OPINION_GROUP_NAMESPACE, null, callback);
+                    api.group.docs(LAYOUT_GROUPS.Opinion.namespace, null, callback);
                 },
                 function (callback) { //1
                     api.taxonomy.getParentAndChildren(['Opinion'], callback);
@@ -308,13 +318,18 @@ site.init = function (app, callback) {
                             "height":"60px"
                         };
 
-                        res.render('site/opinion', {subsections:results[1].children, filename:'views/site/opinion.jade', model:model});
+                        res.render('site/opinion', {
+                            css:asereje.css(['container/style', 'site/section', 'site/opinion']),
+                            layout:'layout-optimized',
+                            subsections:results[1].children,
+                            filename:'views/site/opinion.jade',
+                            model:model});
                     });
 
         });
 
         app.get('/recess', function (req, res) {
-            api.group.docs(RECESS_GROUP_NAMESPACE, null, function (err, result) {
+            api.group.docs(LAYOUT_GROUPS.Recess.namespace, null, function (err, result) {
 
                 rss.getRSS('recessblog', function (err, rss) {
                     if (rss && rss.items && rss.items.length > 0) {
@@ -337,14 +352,19 @@ site.init = function (app, callback) {
 
 
                     api.taxonomy.getParentAndChildren(['Recess'], function (err, parentAndChildren) {
-                        res.render('site/recess', {subsections:parentAndChildren.children, filename:'views/site/recess.jade', model:result});
+                        res.render('site/recess', {
+                            css:asereje.css(['container/style', 'site/section', 'site/recess']),
+                            layout:'layout-optimized',
+                            subsections:parentAndChildren.children,
+                            filename:'views/site/recess.jade',
+                            model:result});
                     });
                 })
             });
         });
 
         app.get('/towerview', function (req, res) {
-            api.group.docs(TOWERVIEW_GROUP_NAMESPACE, null, function (err, result) {
+            api.group.docs(LAYOUT_GROUPS.Towerview.namespace, null, function (err, result) {
 
                 result.adFullRectangle = {
                     "title":"Advertisement",
@@ -355,7 +375,12 @@ site.init = function (app, callback) {
                 };
 
                 api.taxonomy.getParentAndChildren(['Towerview'], function (err, parentAndChildren) {
-                    res.render('site/towerview', {subsections:parentAndChildren.children, filename:'views/site/towerview.jade', model:result});
+                    res.render('site/towerview', {
+                        css:asereje.css(['container/style', 'site/section', 'site/towerview']),
+                        layout:'layout-optimized',
+                        subsections:parentAndChildren.children,
+                        filename:'views/site/towerview.jade',
+                        model:result});
                 });
             });
         });
@@ -386,7 +411,9 @@ site.init = function (app, callback) {
                                         subsections:parentAndChildren.children,
                                         parentPaths:parentAndChildren.parentPaths,
                                         section:section
-                                    }
+                                    },
+                                    layout: "layout-optimized",
+                                    css:asereje.css(['container/style', 'site/section'])
                                 });
                             });
                         }
@@ -426,7 +453,7 @@ site.init = function (app, callback) {
                         doc.date = _convertTimestamp(doc.created);
                     }
                     doc = _parseAuthor(doc);
-            ch    });
+                });
 
 
 			var name = req.params.query.replace('-', ' ');
@@ -440,9 +467,19 @@ site.init = function (app, callback) {
 				
                 http_res.render(
                         'site/people',
+<<<<<<< HEAD
                         {locals:{
                             docs:docs, capName
                         }}
+=======
+                        {
+                            locals:{
+                                docs:docs, name:req.params.query.replace('-', ' ')
+                            },
+                            layout: "layout-optimized",
+                            css:asereje.css(['container/style', 'site/people'])
+                        }
+>>>>>>> 8635d73e4f3fbd88873c207bfd6dc2b48b06bb79
                 );
             });
         });
@@ -517,7 +554,9 @@ site.init = function (app, callback) {
                                     }
                                 }
                             },
-                            filename:'views/article.jade'
+                            filename:'views/article.jade',
+                            css:asereje.css(['container/style', 'article']),
+                            layout:'layout-optimized'
                         });
                     }
 
@@ -616,7 +655,7 @@ site.init = function (app, callback) {
                     }
                     else {
 
-                        var rootSections = ["News", "Sports", "Opinion", "Recess", "Towerview"];
+                        var rootSections = config.get("TAXONOMY_MAIN_SECTIONS");
 
                         db.taxonomy.getTaxonomyListing(function (err, taxonomy) {
                             if (!doc.images) doc.images = {};
@@ -799,7 +838,7 @@ site.renderSmtpTest = function (req, http_res, email, num) {
             log.debug("removed");
         });
     else if (num == 3) {
-        api.group.docs(FRONTPAGE_GROUP_NAMESPACE, null, function (err, result) {
+        api.group.docs(LAYOUT_GROUPS.Frontpage.namespace, null, function (err, result) {
             _.defaults(result, homeModel);
 
             api.docsByDate(null, null, function (err, docs) {
@@ -853,7 +892,7 @@ function _showSearchArticles(err,req,http_res,docs,facets) {
     var currentFacets = req.query.facets;
     if(!currentFacets) currentFacets = '';
 
-    var validSections = ["News", "Sports", "Opinion", "Recess", "Towerview"];
+    var validSections = config.get("TAXONOMY_MAIN_SECTIONS");
     // filter out all sections other than main sections
     Object.keys(facets.Section).forEach(function(key) {
         if (!_.include(validSections, key)) {
@@ -863,9 +902,13 @@ function _showSearchArticles(err,req,http_res,docs,facets) {
                     
     http_res.render(
         'site/search',
-         {locals:{
-            docs:docs, currentFacets:currentFacets, facets:facets, query:req.params.query, sort:req.query.sort, order:req.query.order
-         }}
+         {
+             locals:{
+                docs:docs, currentFacets:currentFacets, facets:facets, query:req.params.query, sort:req.query.sort, order:req.query.order
+             },
+             layout: "layout-optimized",
+             css:asereje.css(['container/style', 'site/search'])
+         }
     );
 
     return null;

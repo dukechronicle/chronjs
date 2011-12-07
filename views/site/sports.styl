@@ -11,10 +11,23 @@ transition()
 
 container-vertical-spacing = 23px
 
+.nav
+    li:hover .subnav
+        left 0px
+    li:hover h2 a
+        color #36c
+    .subnav
+        padding-top 20px
+        clear both
+        position absolute
+        left -9999px
+    h2
+        font-size 1.2em
+
 
 
 body section > #sports
-    
+    margin-top 1em
     rounded-image()
         img
             border-radius 4px
@@ -37,6 +50,8 @@ body section > #sports
         -webkit-box-shadow rgba(0, 0, 0, opacity) height width offset
         -moz-box-shadow rgba(0, 0, 0, opacity) height width offset
         box-shadow rgba(0, 0, 0, opacity) height width offset
+
+
 
     .top
         margin-bottom 5px

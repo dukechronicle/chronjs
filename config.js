@@ -97,7 +97,7 @@ var configuration = {
             "LAYOUT_GROUPS":{
                 "Frontpage": {
                     "namespace": ['Layouts','Frontpage'],
-                    "groups": ["Slideshow","Left Headlines","Right Headlines","Opinion","News","Sports","Recess","Towerview"]
+                    "groups": ["Breaking","Slideshow","Left Headlines","Right Headlines","Opinion","News","Sports","Recess","Towerview"]
                 },
                 "News": {
                     "namespace": ['Layouts','News'],

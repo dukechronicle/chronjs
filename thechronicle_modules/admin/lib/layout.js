@@ -2,37 +2,12 @@ var site = require('../../api/lib/site.js');
 var taxonomy = require('../../api/lib/taxonomy.js');
 var groups = require('../../api/lib/group.js');
 var api = require('../../api');
+var globalFunctions = require('../../global-functions');
+var config = require('../../config');
+
 var _ = require("underscore");
 
-
-var GROUP_CONFIG = {
-    "Frontpage": {
-        "namespace": ['Layouts','Frontpage'],
-        "groups": ["Breaking","Slideshow","Left Headlines","Right Headlines","Opinion","News","Sports","Recess","Towerview"]
-    },
-    "News": {
-        "namespace": ['Layouts','News'],
-        "groups": ["Featured", "Right Headlines", "Headlines", "Stories"]
-    },
-    "Sports": {
-        "namespace": ['Layouts','Sports'],
-        "groups": ["Slideshow", "Stories"]
-    },
-    "Opinion": {
-        "namespace": ['Layouts','Opinion'],
-        "groups": ["Featured","Columnists","Edit Board","More Columnists"]
-    },
-    "Recess": {
-        "namespace": ['Layouts','Recess'],
-        "groups": ["Featured","Sandbox","Interviews","Reviews","Stories"]
-    },
-    "Towerview": {
-        "namespace": ['Layouts','Towerview'],
-        "groups": ["Featured","Savvy","Wisdom","Editors Note","Prefix"]
-    }
-};
-
-
+var GROUP_CONFIG = config.get('LAYOUT_GROUPS');
 
 exports.bindPath = function (app) {
     return function() {

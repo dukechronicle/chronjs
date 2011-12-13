@@ -1,41 +1,42 @@
 var configParams = require('./config-params.js');
 
-var fs = require('fs');
 var _ = require('underscore');
+var cradle = require('cradle');
+var url = require('url');
 var log = require('../../log');
 
-var CONFIG_FILE_PATH = "./config.js";
-var DEFAULT_PROFILE_NAME = "production";
+var DEFAULT_PROFILE_NAME = "dev";
 var PROFILE_NAME_KEY = "profile_name";
+var DB_CONFIG_DOCUMENT_NAME = "configProfiles";
 
 var configuration = null;
 var activeProfile = null;
 var configFile = null;
 var activeProfileName = null;
+var configDB = null; 
+var documentExistsInDB = false;
 
-initConfig();    
-
-function initConfig()
+exports.init = function(callback)
 {
-    try {
-        configFile = require('../../../config.js');
-    }
-    catch(err) {
-        // config file hasn't been created yet so try to make the config info accessible
-        return;
-    }
+    configDB = _connectToConfigDB();
 
-    configuration = configFile.getConfiguration();
-    activeProfileName = configuration.activeConfigurationProfile;
-    activeProfile = configuration.profiles[activeProfileName];
+    configDB.get(DB_CONFIG_DOCUMENT_NAME, function(err, data) {
+        if(err) callback(err);        
 
-    if(activeProfile == null) {
-        if(configuration.activeConfigurationProfile == null) {
-            log.alert('Active configuration profile is not defined!');
-        } else {
-            log.alert('Configuration profile: "' + configuration.activeConfigurationProfile + '" does not exist!');
+        // config info hasn't been created yet
+        if(data != null) {
+            documentExistsInDB = true;
+
+            configuration = data;
+            activeProfileName = 'dev'; // should be in env var
+            activeProfile = configuration.profiles[activeProfileName];
+
+            if(activeProfile == null) {
+                log.alert('Configuration profile: "' + activeProfileName + '" does not exist!');
+            }
         }
-    }
+        callback(null);
+    });
 }
 
 function getConfigParamObjectWithName(name) {
@@ -67,8 +68,6 @@ exports.isSetUp = function () {
 };
 
 exports.setUp = function (params, callback) {
-    var addToConfigFile = "exports.getConfiguration = function(){try {return configuration;}catch(err) {return null;}}";
-
     // remove configuration profile name from parameter set as it is not a configuration parameter
     var profileName = params[PROFILE_NAME_KEY];
     delete params[PROFILE_NAME_KEY];
@@ -76,41 +75,45 @@ exports.setUp = function (params, callback) {
     // build the configuration object if needed
     if (configuration == null) configuration = {};
     if (configuration.profiles == null) configuration.profiles = {};
-    if (configuration.profiles[profileName] == null)    configuration.profiles[profileName] = {};
-
-    configuration.activeConfigurationProfile = profileName;
+    if (configuration.profiles[profileName] == null) configuration.profiles[profileName] = {};
 
     Object.keys(params).forEach(function (key) {
         if (params[key].length > 0) {
-            if(typeof activeProfile[key] == "object") {
+            if(typeof getConfigParamObjectWithName(key).defaultValue == "object") {
                 try {
-                    configuration.profiles[configuration.activeConfigurationProfile][key] = JSON.parse(params[key]);
+                    configuration.profiles[profileName][key] = JSON.parse(params[key]);
                 }
                 catch(err) {
                     log.alert('Config param ' + key + ' defined as improper JSON. Ignoring changes.');
-                    configuration.profiles[configuration.activeConfigurationProfile][key] = activeProfile[key];
+                    configuration.profiles[profileName][key] = activeProfile[key];
                 }
             }
             else {
-                configuration.profiles[configuration.activeConfigurationProfile][key] = params[key];
+                configuration.profiles[profileName][key] = params[key];
             }
         }
     });
 
-    activeProfileName = configuration.activeConfigurationProfile;
+    activeProfileName = profileName;
     activeProfile = configuration.profiles[activeProfileName];
 
-    // write the config file
-    var writeToFile = 'var configuration = \n' + JSON.stringify(configuration, null, 4) + ';\n\n' + addToConfigFile;
-    fs.writeFile(CONFIG_FILE_PATH, writeToFile, function (err) {
+    var afterUpdate = function(err, res) {
         if (err) return callback(err);
         if (exports.getUndefinedParameters().length == 0) return callback(null);
         else return callback('some parameters still undefined');
-    });
+    }
+
+    // save the config file
+    if(documentExistsInDB) {
+        configDB.merge(DB_CONFIG_DOCUMENT_NAME, {profiles:configuration.profiles}, afterUpdate);
+    }   
+    else {
+        configDB.save(DB_CONFIG_DOCUMENT_NAME, configuration, afterUpdate);
+    }
 };
 
 exports.getUndefinedParameters = function () {
-    if (configuration == null) return configParams.getParameters();
+    if (configuration == null || activeProfile == null) return configParams.getParameters();
 
     var parameters = configParams.getParameters();
 
@@ -124,7 +127,7 @@ exports.getUndefinedParameters = function () {
 };
 
 exports.getParameters = function () {
-    if(configuration == null) return configParams.getParameters();
+    if(configuration == null || activeProfile == null) return configParams.getParameters();
     
     var returnParams = exports.getUndefinedParameters();
 
@@ -146,3 +149,22 @@ exports.getActiveProfileName = function() {
 exports.getProfileNameKey = function() {
     return PROFILE_NAME_KEY;
 };
+
+function _connectToConfigDB() {
+    var couchdbUrl = "https://jodoglevy:vfr46yhn@jodoglevy.cloudant.com" // should be in env var
+    
+    couchdbUrl = url.parse(couchdbUrl);
+    if (couchdbUrl.auth) {
+        couchdbUrl.auth = couchdbUrl.auth.split(":");
+    }
+
+    if (!couchdbUrl.port) {
+        (couchdbUrl.protocol === "https:") ? couchdbUrl.port = 443 : couchdbUrl.port = 80;
+    }
+    
+    var conn = new (cradle.Connection)(couchdbUrl.protocol + '//' + couchdbUrl.hostname, couchdbUrl.port, {
+        auth: {username: couchdbUrl.auth[0], password: couchdbUrl.auth[1]}
+    }); 
+    
+    return conn.database('config'); // should be in env var
+}

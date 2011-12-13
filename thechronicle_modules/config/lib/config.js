@@ -1,40 +1,48 @@
 var configParams = require('./config-params.js');
 
 var _ = require('underscore');
-var cradle = require('cradle');
+var db = require('../../db-abstract');
 var url = require('url');
 var log = require('../../log');
 
-var DEFAULT_PROFILE_NAME = "dev";
+var PROFILE_NAME = process.env.CONFIG_PROFILE || "production"; // should be in env var
 var PROFILE_NAME_KEY = "profile_name";
-var DB_CONFIG_DOCUMENT_NAME = "configProfiles";
+var DB_CONFIG_DOCUMENT_NAME = "config";
+var COUCHDB_CONFIG_HOST = "https://jodoglevy:vfr46yhn@jodoglevy.cloudant.com" // should be in env var
+var DOCUMENT_CONFIG_KEY = "configParams";
 
-var configuration = null;
-var activeProfile = null;
-var configFile = null;
-var activeProfileName = null;
+var configProfile = null;
 var configDB = null; 
 var documentExistsInDB = false;
 
 exports.init = function(callback)
 {
-    configDB = _connectToConfigDB();
+    log.info("Connecting to config database '" + PROFILE_NAME + "'");
+    configDB = db.connect(COUCHDB_CONFIG_HOST,PROFILE_NAME);
 
-    configDB.get(DB_CONFIG_DOCUMENT_NAME, function(err, data) {
-        if(err) callback(err);        
-
-        // config info hasn't been created yet
-        if(data != null) {
-            documentExistsInDB = true;
-
-            configuration = data;
-            activeProfileName = 'dev'; // should be in env var
-            activeProfile = configuration.profiles[activeProfileName];
-
-            if(activeProfile == null) {
-                log.alert('Configuration profile: "' + activeProfileName + '" does not exist!');
-            }
+    configDB.exists(function (error,exists) {
+        if(error) return callback(error);
+       
+        // initialize database if it doesn't already exist
+        if(!exists) {
+            log.alert("Database for config profile '" + PROFILE_NAME + "' does not exist. Creating...");
+            configDB.create();
+            db.whenDBExists(configDB,function() {
+                getConfig(callback);
+            });
         }
+        else {
+            getConfig(callback);
+        }  
+    });
+}
+
+function getConfig(callback) {
+    configDB.get(DB_CONFIG_DOCUMENT_NAME, function(err, data) {
+        if(err) return callback(err); // goes here if document does not exist yet, otherwise doc exists     
+
+        documentExistsInDB = true;
+        configProfile = data[DOCUMENT_CONFIG_KEY];
         callback(null);
     });
 }
@@ -50,17 +58,17 @@ function getConfigParamObjectWithName(name) {
 }
 
 exports.get = function(variable) {
-    if(activeProfile == null) {
+    if(configProfile == null) {
         log.alert('Configuration is not defined!');
         return null;
     }
 
-    if(activeProfile[variable] == null) {
+    if(configProfile[variable] == null) {
         log.alert('Configuration property: "' + variable + '" not defined!');
     }
 
-    if(typeof activeProfile[variable] == "object") return _.extend({}, activeProfile[variable]);
-    else return activeProfile[variable];
+    if(typeof configProfile[variable] == "object") return _.extend({}, configProfile[variable]);
+    else return configProfile[variable];
 };
 
 exports.isSetUp = function () {
@@ -69,57 +77,55 @@ exports.isSetUp = function () {
 
 exports.setUp = function (params, callback) {
     // remove configuration profile name from parameter set as it is not a configuration parameter
-    var profileName = params[PROFILE_NAME_KEY];
     delete params[PROFILE_NAME_KEY];
 
     // build the configuration object if needed
-    if (configuration == null) configuration = {};
-    if (configuration.profiles == null) configuration.profiles = {};
-    if (configuration.profiles[profileName] == null) configuration.profiles[profileName] = {};
+    if (configProfile == null) configProfile = {};
 
     Object.keys(params).forEach(function (key) {
         if (params[key].length > 0) {
             if(typeof getConfigParamObjectWithName(key).defaultValue == "object") {
                 try {
-                    configuration.profiles[profileName][key] = JSON.parse(params[key]);
+                    configProfile[key] = JSON.parse(params[key]);
                 }
                 catch(err) {
                     log.alert('Config param ' + key + ' defined as improper JSON. Ignoring changes.');
-                    configuration.profiles[profileName][key] = activeProfile[key];
                 }
             }
             else {
-                configuration.profiles[profileName][key] = params[key];
+                configProfile[key] = params[key];
             }
         }
     });
 
-    activeProfileName = profileName;
-    activeProfile = configuration.profiles[activeProfileName];
-
     var afterUpdate = function(err, res) {
         if (err) return callback(err);
+        
+        documentExistsInDB = true;
         if (exports.getUndefinedParameters().length == 0) return callback(null);
         else return callback('some parameters still undefined');
     }
 
+    var newInfo = {};
+    newInfo[DOCUMENT_CONFIG_KEY] = configProfile;
+
     // save the config file
     if(documentExistsInDB) {
-        configDB.merge(DB_CONFIG_DOCUMENT_NAME, {profiles:configuration.profiles}, afterUpdate);
+        configDB.merge(DB_CONFIG_DOCUMENT_NAME, newInfo, afterUpdate);
     }   
     else {
-        configDB.save(DB_CONFIG_DOCUMENT_NAME, configuration, afterUpdate);
+        configDB.save(DB_CONFIG_DOCUMENT_NAME, newInfo, afterUpdate);
     }
 };
 
 exports.getUndefinedParameters = function () {
-    if (configuration == null || activeProfile == null) return configParams.getParameters();
+    if (configProfile == null) return configParams.getParameters();
 
     var parameters = configParams.getParameters();
 
     // find the undefined params and return them
     var undefinedParameters = _.filter(parameters, function (parameter) {
-        return activeProfile[parameter.name] == null;
+        return configProfile[parameter.name] == null;
     });
 
     if (undefinedParameters.length > 0) log.warning("Undefined parameters: " + JSON.stringify(undefinedParameters));
@@ -127,15 +133,15 @@ exports.getUndefinedParameters = function () {
 };
 
 exports.getParameters = function () {
-    if(configuration == null || activeProfile == null) return configParams.getParameters();
+    if(configProfile == null) return configParams.getParameters();
     
     var returnParams = exports.getUndefinedParameters();
 
-    Object.keys(activeProfile).forEach(function(key) {
+    Object.keys(configProfile).forEach(function(key) {
         var defaultParameter = {};
         defaultParameter.name = key;
         defaultParameter.description = getConfigParamObjectWithName(key).description;
-        defaultParameter.defaultValue = activeProfile[key];
+        defaultParameter.defaultValue = configProfile[key];
         returnParams.push(defaultParameter);
     });
 
@@ -143,28 +149,9 @@ exports.getParameters = function () {
 };
 
 exports.getActiveProfileName = function() {
-    return activeProfileName || DEFAULT_PROFILE_NAME;
+    return PROFILE_NAME;
 };
 
 exports.getProfileNameKey = function() {
     return PROFILE_NAME_KEY;
 };
-
-function _connectToConfigDB() {
-    var couchdbUrl = "https://jodoglevy:vfr46yhn@jodoglevy.cloudant.com" // should be in env var
-    
-    couchdbUrl = url.parse(couchdbUrl);
-    if (couchdbUrl.auth) {
-        couchdbUrl.auth = couchdbUrl.auth.split(":");
-    }
-
-    if (!couchdbUrl.port) {
-        (couchdbUrl.protocol === "https:") ? couchdbUrl.port = 443 : couchdbUrl.port = 80;
-    }
-    
-    var conn = new (cradle.Connection)(couchdbUrl.protocol + '//' + couchdbUrl.hostname, couchdbUrl.port, {
-        auth: {username: couchdbUrl.auth[0], password: couchdbUrl.auth[1]}
-    }); 
-    
-    return conn.database('config'); // should be in env var
-}

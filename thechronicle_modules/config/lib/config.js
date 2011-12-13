@@ -5,7 +5,7 @@ var db = require('../../db-abstract');
 var url = require('url');
 var log = require('../../log');
 
-var PROFILE_NAME = process.env.CONFIG_PROFILE || "production"; // should be in env var
+var PROFILE_NAME = process.env.CONFIG_PROFILE || "dev"; // should be in env var
 var PROFILE_NAME_KEY = "profile_name";
 var DB_CONFIG_DOCUMENT_NAME = "config";
 var COUCHDB_CONFIG_HOST = "https://jodoglevy:vfr46yhn@jodoglevy.cloudant.com" // should be in env var

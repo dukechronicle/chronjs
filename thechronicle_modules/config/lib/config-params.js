@@ -12,7 +12,7 @@ var configParams = [
     {
         name: 'ADMIN_PASSWORD',
         description: 'New administrator password to login with from now on',
-        defaultValue: 'chronicle    '
+        defaultValue: 'chronicle'
     },
     {
         name: 'COUCHDB_URL',

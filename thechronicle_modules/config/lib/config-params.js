@@ -67,22 +67,22 @@ var configParams = [
     {
         name: 'TAXONOMY_MAIN_SECTIONS',
         description: 'Main sections of the taxonomy',
-        defaultValue: '{}'
+        defaultValue: {}
     },
     {
         name: 'TAXONOMY',
         description: 'Taxonomy tree for the site, used for categorizing articles and navigation',
-        defaultValue: '{}'
+        defaultValue: {}
     },
     {
         name: 'LAYOUT_GROUPS',
         description: 'Groups used for layouts',
-        defaultValue: '{}'
+        defaultValue: {}
     },
     {
         name: 'RSS_FEEDS',
         description: 'RSS feeds to check and store',
-        defaultValue: '{}'
+        defaultValue: {}
     },
     {
         name: 'MAILCHIMP_API_KEY',

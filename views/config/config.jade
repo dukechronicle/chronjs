@@ -1,3 +1,4 @@
+script(src='/js/jquery.textarea-expander.js', type='text/javascript')
 h1 Chronicle Configuration
 form(action='/config', method='POST')
   label='Config Profile Name:'
@@ -9,7 +10,11 @@ form(action='/config', method='POST')
     div
         label=param.description+':'
         br
-        input(type='text', name=param.name, value=param.defaultValue)
+        - if(typeof param.defaultValue == "object") 
+            textarea(name=param.name, class="expand", style="width:75%")
+                !{JSON.stringify(param.defaultValue,null,"\t")}
+        - else
+            input(type='text', name=param.name, value=param.defaultValue, style="width:75%")
         br
         br
         br

@@ -18,56 +18,61 @@ var NUM_ARTICLES = 25;
 
 var ARTICLES_PER_LAYOUT_GROUP = 4;
 
-var TAXONOMY = config.get('TAXONOMY');
+var TAXONOMY = null;
 
 // holds the IDs of the articles, once they have been found
 var articleIDs = [];
 
-if(!config.isSetUp()) {
-	console.log('You must set up config.js in the main directory before you can generate an environment');
-}
-else if(config.get('COUCHDB_URL').indexOf("heroku") != -1 || config.get('COUCHDB_URL').indexOf("cloudant") != -1) {
-    console.log("You can't create an environment using the production config options. Recommend use of db server chrondev.iriscouch.com");
-}
-else {
-    console.log('creating environment...this could take a few minutes');
+config.init(function(err) {
+    if(!config.isSetUp()) {
+	    console.log('You must run server.js to set up config options before you can generate an environment');
+    }
+    else if(config.get('COUCHDB_URL').indexOf("heroku") != -1 || config.get('COUCHDB_URL').indexOf("cloudant") != -1) {
+        console.log("You can't create an environment using the production config options. Recommend use of db server chrondev.iriscouch.com");
+    }
+    else {
+        TAXONOMY = config.get('TAXONOMY');
+        delete(TAXONOMY["has"]); // extra key added to taxonomy that shouldn't be there
 
-    // TODO: add image code    
-    async.waterfall([
-        function(callback) {
-            api.init(callback);
-        },
-        function(callback) {
-            console.log("creating database...");
+        console.log('creating environment...this could take a few minutes');
 
-            // delete old version of db and then create it again to start the db fresh            
-            api.recreateDatabase('dsfvblkjeiofkjd',callback);
-        },
-        function(callback) {
-            console.log("creating search index...");
-           
-            // delete all articles for this db in the search index to start the index fresh
-            api.search.removeAllDocsFromSearch(function(err) {
-                callback(err);
-            });
-        },
-        function(callback) {
-            console.log("populating site with fake articles...");
-            addFakeArticles(callback);
-        },
-        function(callback) {
-            console.log("creating layouts...");
-            createLayoutGroups(callback);
-        },
-        function(callback) {
-            console.log('environment created!');
-            callback(null);
-        }],
-        function(err) {
-              if (err) console.log(err);
-        }
-    );
-}
+        // TODO: add image code    
+        async.waterfall([
+            function(callback) {
+                api.init(callback);
+            },
+            function(callback) {
+                console.log("creating database...");
+
+                // delete old version of db and then create it again to start the db fresh            
+                api.recreateDatabase('dsfvblkjeiofkjd',callback);
+            },
+            function(callback) {
+                console.log("creating search index...");
+               
+                // delete all articles for this db in the search index to start the index fresh
+                api.search.removeAllDocsFromSearch(function(err) {
+                    callback(err);
+                });
+            },
+            function(callback) {
+                console.log("populating site with fake articles...");
+                addFakeArticles(callback);
+            },
+            function(callback) {
+                console.log("creating layouts...");
+                createLayoutGroups(callback);
+            },
+            function(callback) {
+                console.log('environment created!');
+                callback(null);
+            }],
+            function(err) {
+                  if (err) console.log(err);
+            }
+        );
+    }
+});
 
 function addFakeArticles(callback) {
     var fakeArticles = [];
@@ -160,7 +165,7 @@ function generateSentence(numWords) {
 function generateTaxonomy() {
     var taxonomy = [];
     var taxonomyLevelTree = TAXONOMY;
-
+    
     taxonomyLevelTree = taxonomyLevelTree[getRandomNumber(Object.keys(taxonomyLevelTree).length)];
     taxonomy[0] = Object.keys(taxonomyLevelTree)[0];
 

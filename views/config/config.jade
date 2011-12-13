@@ -3,7 +3,7 @@ h1 Chronicle Configuration
 form(action='/config', method='POST')
   label='Config Profile Name:'
   br
-  input(type='text', name=profileName, value=profileValue)
+  input(type='text', name=profileName, value=profileValue, readonly="true")
   br
   br
   - each param in configParams    

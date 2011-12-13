@@ -14,6 +14,8 @@ api.taxonomy = require("./taxonomy");
 api.accounts = require("./accounts");
 api.search = require("./search");
 api.authors = require("./authors");
+api.newsletter = require("./newsletter");
+api.cron = require("./cron");
 
 var redis = require('../../redisclient');
 
@@ -67,8 +69,11 @@ api.init = function(callback) {
             log.error("db init failed!");
             return callback(error);
         }
-        
+
+      	api.cron.init();
         api.search.init();
+        api.newsletter.init();
+
         //api.search.indexUnindexedArticles(1);
         /** Chron Jobs! **/
         /*

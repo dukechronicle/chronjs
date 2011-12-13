@@ -8,7 +8,6 @@ var sprintf = require('sprintf').sprintf;
 /* require internal modules */
 var globalFunctions = require('./thechronicle_modules/global-functions');
 var config = require('./thechronicle_modules/config');
-var cron = require('./thechronicle_modules/api/lib/cron');
 var api = require('./thechronicle_modules/api');
 var log = require('./thechronicle_modules/log');
 var site = require('./thechronicle_modules/api/lib/site');
@@ -121,9 +120,7 @@ exports.runSite = function(callback) {
 function runSite(callback) {
 	port = config.get('SERVER_PORT');
 
-	cron.init();
 	log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));
-
 	
     // use redis as our session store
     redisClient.init(function (err0) {

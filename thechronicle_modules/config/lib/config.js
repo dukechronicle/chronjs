@@ -82,7 +82,18 @@ exports.setUp = function (params, callback) {
 
     Object.keys(params).forEach(function (key) {
         if (params[key].length > 0) {
-            configuration.profiles[configuration.activeConfigurationProfile][key] = params[key];
+            if(typeof activeProfile[key] == "object") {
+                try {
+                    configuration.profiles[configuration.activeConfigurationProfile][key] = JSON.parse(params[key]);
+                }
+                catch(err) {
+                    log.alert('Config param ' + key + ' defined as improper JSON. Ignoring changes.');
+                    configuration.profiles[configuration.activeConfigurationProfile][key] = activeProfile[key];
+                }
+            }
+            else {
+                configuration.profiles[configuration.activeConfigurationProfile][key] = params[key];
+            }
         }
     });
 

@@ -18,7 +18,7 @@ var dateFormat = require('dateformat');
 
 var asereje = require('asereje');
 
-var LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
+var LAYOUT_GROUPS = null;
 
 var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
 var newsModel = JSON.parse(fs.readFileSync("sample-data/news.json"));
@@ -40,6 +40,7 @@ function _articleViewsKey(taxonomy) {
 
 site.init = function (app, callback) {
     var twitterFeeds = ["DukeChronicle", "ChronicleRecess", "TowerviewMag", "DukeBasketball", "ChronPhoto", "ChronicleSports"];
+    LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
 
     api.init(function (err2) {
         if (err2) {

@@ -44,6 +44,8 @@ In the code, you can access global configuration settings by:
 	var config = require('./thechronicle_modules/config');
 	param_value = config.get('param_name');
 
+Remember that config properties could change during runtime if someone changes settings at http://localhost:4000/config, so you should always access config properties directly via config.get() rather than a global variable within your file that called config.get at file start.
+
 ### Default Admin username and password
 
 You will need the admin username and password to change configuration settings (including setting the new admin username and password). Currently, the default admin username is 'admin' and the default admin password is 'chronicle'. These should be changed to more secure strings when you set the configuration settings.

@@ -38,6 +38,7 @@ search.getIndexVersion = function() {
 search.init = function() {
 	client = solr.createClient(config.get('SOLR_HOST'), config.get('SOLR_PORT'), config.get('SOLR_CORE'), config.get('SOLR_PATH'));
 };
+
 // check for unindexed articles, or articles with index versioning below the current version, and index them in solr.
 search.indexUnindexedArticles = function(count) {
 	log.notice('looking for articles to index...');

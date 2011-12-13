@@ -10,6 +10,7 @@ var PROFILE_NAME_KEY = "profile_name";
 var DB_CONFIG_DOCUMENT_NAME = "config";
 var COUCHDB_CONFIG_HOST = "https://jodoglevy:vfr46yhn@jodoglevy.cloudant.com" // should be in env var
 var DOCUMENT_CONFIG_KEY = "configParams";
+var CONFIG_DB_NAME_SUFFIX = "-config-profile";
 
 var configProfile = null;
 var configDB = null; 
@@ -18,7 +19,7 @@ var documentExistsInDB = false;
 exports.init = function(callback)
 {
     log.info("Connecting to config database '" + PROFILE_NAME + "'");
-    configDB = db.connect(COUCHDB_CONFIG_HOST,PROFILE_NAME);
+    configDB = db.connect(COUCHDB_CONFIG_HOST,PROFILE_NAME+CONFIG_DB_NAME_SUFFIX);
 
     configDB.exists(function (error,exists) {
         if(error) return callback(error);

@@ -5,10 +5,10 @@ var db = require('../../db-abstract');
 var url = require('url');
 var log = require('../../log');
 
-var PROFILE_NAME = process.env.CONFIG_PROFILE || "dev"; // should be in env var
+var PROFILE_NAME = process.env.CHRONICLE_CONFIG_PROFILE || "dev";
 var PROFILE_NAME_KEY = "profile_name";
 var DB_CONFIG_DOCUMENT_NAME = "config";
-var COUCHDB_CONFIG_HOST = "https://jodoglevy:vfr46yhn@jodoglevy.cloudant.com" // should be in env var
+var COUCHDB_CONFIG_HOST = process.env.CHRONICLE_CONFIG_DB;
 var DOCUMENT_CONFIG_KEY = "configParams";
 var CONFIG_DB_NAME_SUFFIX = "-config-profile";
 
@@ -18,6 +18,8 @@ var documentExistsInDB = false;
 
 exports.init = function(callback)
 {
+    if(!COUCHDB_CONFIG_HOST) return callback('No config database defined! Please set your CHRONICLE_CONFIG_DB environment var to the CouchDB host that stores site config info');
+    
     log.info("Connecting to config database '" + PROFILE_NAME + "'");
     configDB = db.connect(COUCHDB_CONFIG_HOST,PROFILE_NAME+CONFIG_DB_NAME_SUFFIX);
 

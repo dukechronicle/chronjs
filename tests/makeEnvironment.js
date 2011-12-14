@@ -24,7 +24,10 @@ var TAXONOMY = null;
 var articleIDs = [];
 
 config.init(function(err) {
-    if(!config.isSetUp()) {
+    if(err) {
+        console.log(err);
+    }
+    else if(!config.isSetUp()) {
 	    console.log('You must run server.js to set up config options before you can generate an environment');
     }
     else if(config.get('COUCHDB_URL').indexOf("heroku") != -1 || config.get('COUCHDB_URL').indexOf("cloudant") != -1) {

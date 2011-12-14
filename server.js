@@ -101,15 +101,18 @@ app.listen(process.env.PORT || port);
 console.log("Server listening on port %d in %s mode", app.address().port, app.settings.env); 
 
 config.init(function(err) {
-    if(!config.isSetUp()) {
-	    app.get('/', function(req, res, next) {
-		    if(!config.isSetUp()) {
-			    res.redirect('/config');
-		    }		
-		    else next();
-	    });
-    } else {
-        runSite(function() {});
+    if(err) log.crit(err);
+    else {
+        if(!config.isSetUp()) {
+	        app.get('/', function(req, res, next) {
+		        if(!config.isSetUp()) {
+			        res.redirect('/config');
+		        }		
+		        else next();
+	        });
+        } else {
+            runSite(function() {});
+        }
     }
 });
 

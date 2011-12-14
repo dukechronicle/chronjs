@@ -42,10 +42,11 @@ exports.init = function(callback)
 
 function getConfig(callback) {
     configDB.get(DB_CONFIG_DOCUMENT_NAME, function(err, data) {
-        if(err) return callback(err); // goes here if document does not exist yet, otherwise doc exists     
-
-        documentExistsInDB = true;
-        configProfile = data[DOCUMENT_CONFIG_KEY];
+        // err if the document doesn't exist yet 
+        if(!err) {
+            documentExistsInDB = true;
+            configProfile = data[DOCUMENT_CONFIG_KEY];
+        }
         callback(null);
     });
 }
@@ -79,6 +80,8 @@ exports.isSetUp = function () {
 };
 
 exports.setUp = function (params, callback) {
+    var jsonError = null;
+        
     // remove configuration profile name from parameter set as it is not a configuration parameter
     delete params[PROFILE_NAME_KEY];
 
@@ -92,7 +95,10 @@ exports.setUp = function (params, callback) {
                     configProfile[key] = JSON.parse(params[key]);
                 }
                 catch(err) {
-                    log.alert('Config param ' + key + ' defined as improper JSON. Ignoring changes.');
+                    if(jsonError == null) jsonError = "";
+                    else jsonError += "<br />";
+
+                    jsonError += 'Config param ' + key + ' defined as improper JSON. Ignoring changes to ' + key + '.';
                 }
             }
             else {
@@ -103,10 +109,11 @@ exports.setUp = function (params, callback) {
 
     var afterUpdate = function(err, res) {
         if (err) return callback(err);
-        
+        if (jsonError) return callback(jsonError);
+
         documentExistsInDB = true;
         if (exports.getUndefinedParameters().length == 0) return callback(null);
-        else return callback('some parameters still undefined');
+        else return callback('Some parameters still undefined. Please define all parameters.');
     }
 
     var newInfo = {};

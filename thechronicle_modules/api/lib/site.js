@@ -773,14 +773,7 @@ site.assignPreInitFunctionality = function (app, server) {
 
     app.get('/config', function (req, res) {
         if (api.accounts.isAdmin(req)) {
-            res.render('config/config', {
-                locals:{
-                    configParams:config.getParameters(),
-                    profileName:config.getProfileNameKey(),
-                    profileValue:config.getActiveProfileName()
-                },
-                layout:'layout-admin.jade'
-            });
+            _renderConfigPage(res,null);
         }
         else {
             site.askForLogin(res, '/config');
@@ -792,11 +785,11 @@ site.assignPreInitFunctionality = function (app, server) {
             config.setUp(req.body, function (err) {
                 if (err == null) {
                     server.runSite(function () {
-                        res.redirect('/');
+                        res.redirect('/config');
                     });
                 }
                 else {
-                    res.redirect('/');
+                    _renderConfigPage(res,err);
                 }
             });
         }
@@ -806,6 +799,17 @@ site.assignPreInitFunctionality = function (app, server) {
     });
 };
 
+function _renderConfigPage(res,err) {
+    res.render('config/config', {
+        locals:{
+            configParams:config.getParameters(),
+            profileName:config.getProfileNameKey(),
+            profileValue:config.getActiveProfileName(),
+            error:err
+        },
+        layout:'layout-admin.jade'
+    });
+}
 
 site.renderSmtpTest = function (req, http_res, email, num) {
     log.debug("rendersmtptest");

@@ -60,7 +60,7 @@ All configuration properties have a default value currently except MailChimpAPI 
 
 ### Adding your own configuration properties
 
-As you continue to extend the Chronicle framework, you may find that defining some configuration globals would be useful. To add a configuration parameter to appear in the initial configuration set up web page, navigate to /thechronicle_modules/config/lib/config-params.js and add your new configuration parameter (name, description, and default value [if the param is an object with no default value use '', if it is an object with no default use {}]) to the configParams object. Then restart the server and go to localhost:4000/ to define a value for your new configuration option.
+As you continue to extend the Chronicle framework, you may find that defining some configuration globals would be useful. To add a configuration parameter to appear in the initial configuration set up web page, navigate to /thechronicle_modules/config/lib/config-params.js and add your new configuration parameter (name, description, and default value [if the param is a string with no default value use '', if it is an object with no default use {} ]) to the configParams object. Then restart the server and go to localhost:4000/ to define a value for your new configuration option.
 
 ### Accessing configuration properties
 

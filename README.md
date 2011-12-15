@@ -38,7 +38,7 @@ In order to retrieve configuration info for the sever to use, you must specify t
 
     $ export CHRONICLE_CONFIG_PROFILE=dev
 
-You will most likely want to add the following to the end of your ~/.bashrc file so that these environment variables are available at all times
+You will most likely want to add the above to the end of your ~/.bashrc file so that these environment variables are available at all times
 
 ### Start server
 

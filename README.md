@@ -42,11 +42,11 @@ You should also specify a port for the site to run on. If no port is specified, 
 
     $ export CHRONICLE_PORT=80
 
-If this is the production version of the site, you must specify this so that production specific settings are used (ex: aserje caching / bundling, cron jobs, off site logging)
+If this is the production version of the site, you must specify this so that production specific settings are used (ex: aserje caching / bundling, cron jobs, off site logging). If this is not meant to be the production version of the site, you should skip this.
 
     $ export NODE_ENV=production
 
-In addition, for production off site logging to work, you must specify some Loggly parameters
+In addition, for production off site logging to work, you must specify some Loggly parameters. If this is not meant to be the production version of the site, or you do not want off site logging, you should skip this.
 
     $ export CHRONICLE_LOGGLY_SUBDOMAIN=thechronicle
     

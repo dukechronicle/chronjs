@@ -31,7 +31,7 @@ asereje.config({
 /* express configuration */
 var app = express.createServer();
 
-var port = 4000;
+var port = process.env.CHRONICLE_PORT || 4000;
 var SECRET = "i'll make you my dirty little secret";
 
 function compile(str, path) {
@@ -97,7 +97,7 @@ app.error(function(err, req, res) {
 
 site.assignPreInitFunctionality(app, this);
 
-app.listen(process.env.PORT || port);
+app.listen(port);
 console.log("Server listening on port %d in %s mode", app.address().port, app.settings.env); 
 
 config.init(function(err) {
@@ -122,8 +122,6 @@ exports.runSite = function(callback) {
 };
 
 function runSite(callback) {
-	port = config.get('SERVER_PORT');
-
 	log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));
 	
     // use redis as our session store

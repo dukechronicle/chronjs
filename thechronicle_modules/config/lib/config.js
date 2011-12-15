@@ -6,15 +6,19 @@ var url = require('url');
 var log = require('../../log');
 
 var PROFILE_NAME = process.env.CHRONICLE_CONFIG_PROFILE || "dev";
-var PROFILE_NAME_KEY = "profile_name";
 var DB_CONFIG_DOCUMENT_NAME = "config";
 var COUCHDB_CONFIG_HOST = process.env.CHRONICLE_CONFIG_DB;
 var DOCUMENT_CONFIG_KEY = "configParams";
 var CONFIG_DB_NAME_SUFFIX = "-config-profile";
 
+// the keys that the config profile name and revision should by keyed to in the params object passed into exports.setUp()
+var PROFILE_NAME_KEY = "profile_name";
+var REVISION_KEY = "rev";
+
 var configProfile = null;
 var configDB = null; 
 var documentExistsInDB = false;
+var configRevision = null;
 
 exports.init = function(callback)
 {
@@ -46,6 +50,7 @@ function getConfig(callback) {
         if(!err) {
             documentExistsInDB = true;
             configProfile = data[DOCUMENT_CONFIG_KEY];
+            configRevision = data._rev;
         }
         callback(null);
     });
@@ -82,8 +87,13 @@ exports.isSetUp = function () {
 exports.setUp = function (params, callback) {
     var jsonError = null;
         
-    // remove configuration profile name from parameter set as it is not a configuration parameter
+    if(params[REVISION_KEY] !== configRevision && configRevision != null) {
+        return callback('The configuration changed since you loaded the config page. Try again.');
+    }
+
+    // remove configuration profile name and config revision from parameter set as they are not configuration parameters
     delete params[PROFILE_NAME_KEY];
+    delete params[REVISION_KEY];
 
     // build the configuration object if needed
     if (configProfile == null) configProfile = {};
@@ -110,7 +120,8 @@ exports.setUp = function (params, callback) {
     var afterUpdate = function(err, res) {
         if (err) return callback(err);
         if (jsonError) return callback(jsonError);
-
+        
+        configRevision = res.rev;
         documentExistsInDB = true;
         if (exports.getUndefinedParameters().length == 0) return callback(null);
         else return callback('Some parameters still undefined. Please define all parameters.');
@@ -164,4 +175,12 @@ exports.getActiveProfileName = function() {
 
 exports.getProfileNameKey = function() {
     return PROFILE_NAME_KEY;
+};
+
+exports.getRevisionKey = function() {
+    return REVISION_KEY;
+};
+
+exports.getConfigRevision = function() {
+    return configRevision;
 };

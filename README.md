@@ -46,7 +46,13 @@ If this is the production version of the site, you must specify this so that pro
 
     $ export NODE_ENV=production
 
-You will most likely want to add the above export lines to the end of your ~/.bashrc file so that these environment variables are available at all times
+In addition, for production off site logging to work, you must specify some Loggly parameters
+
+    $ export CHRONICLE_LOGGLY_SUBDOMAIN=thechronicle
+    
+    $ export CHRONICLE_LOGGLY_TOKEN=your-token
+
+You will most likely want to add the above export lines to the end of your ~/.bashrc file so that these environment variables are available at all times.
 
 ### Start server
 

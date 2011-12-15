@@ -11,11 +11,11 @@ if (!logger) {
     handleExceptions: true
     });
 
-    if (process.env.NODE_ENV === 'production')
+    if (process.env.NODE_ENV === 'production' && process.env.CHRONICLE_LOGGLY_SUBDOMAIN && process.env.CHRONICLE_LOGGLY_TOKEN)
         logger.add(winston.transports.Loggly,
             {
-                subdomain: "thechronicle",
-                inputToken: "4d40e1e2-ef31-491f-b844-8b83aa38b30c",
+                subdomain: process.env.CHRONICLE_LOGGLY_SUBDOMAIN,
+                inputToken: process.env.CHRONICLE_LOGGLY_TOKEN,
                 level: 'warning',
                 json: true,
                 handleExceptions: true

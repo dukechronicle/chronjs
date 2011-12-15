@@ -805,6 +805,8 @@ function _renderConfigPage(res,err) {
             configParams:config.getParameters(),
             profileName:config.getProfileNameKey(),
             profileValue:config.getActiveProfileName(),
+            revisionName:config.getRevisionKey(),
+            revisionValue:config.getConfigRevision(),
             error:err
         },
         layout:'layout-admin.jade'

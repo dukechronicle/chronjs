@@ -30,7 +30,7 @@ Then:
 
     $ npm install
 
-### Set Configuration Environment Variables
+### Set Environment Variables
 
 In order to retrieve configuration info for the sever to use, you must specify the CouchDB Host URL that does or will hold the configuation profiles for the site, as well as the configuration profile to use.
 
@@ -38,7 +38,15 @@ In order to retrieve configuration info for the sever to use, you must specify t
 
     $ export CHRONICLE_CONFIG_PROFILE=dev
 
-You will most likely want to add the above to the end of your ~/.bashrc file so that these environment variables are available at all times
+You should also specify a port for the site to run on. If no port is specified, the site by default listens on port 4000
+
+    $ export CHRONICLE_PORT=80
+
+If this is the production version of the site, you must specify this so that production specific settings are used (ex: aserje caching / bundling, cron jobs, off site logging)
+
+    $ export NODE_ENV=production
+
+You will most likely want to add the above export lines to the end of your ~/.bashrc file so that these environment variables are available at all times
 
 ### Start server
 

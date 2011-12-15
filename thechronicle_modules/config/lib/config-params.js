@@ -1,10 +1,5 @@
 var configParams = [
     {
-        name: 'SERVER_PORT',
-        description: 'Port to run the chronicle site on',
-        defaultValue: '4000'
-    },
-    {
         name: 'ADMIN_USERNAME',
         description: 'New administrator username to login with from now on',
         defaultValue: 'admin'

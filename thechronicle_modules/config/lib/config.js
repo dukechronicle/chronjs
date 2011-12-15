@@ -159,11 +159,12 @@ exports.getParameters = function () {
     var returnParams = exports.getUndefinedParameters();
 
     Object.keys(configProfile).forEach(function(key) {
-        var defaultParameter = {};
-        defaultParameter.name = key;
-        defaultParameter.description = getConfigParamObjectWithName(key).description;
-        defaultParameter.defaultValue = configProfile[key];
-        returnParams.push(defaultParameter);
+        var configParam = getConfigParamObjectWithName(key);
+        
+        if(configParam != null) {
+            configParam.defaultValue = configProfile[key];
+            returnParams.push(configParam);
+        }
     });
 
     return returnParams;

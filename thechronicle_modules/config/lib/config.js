@@ -1,41 +1,59 @@
 var configParams = require('./config-params.js');
 
-var fs = require('fs');
 var _ = require('underscore');
+var db = require('../../db-abstract');
+var url = require('url');
 var log = require('../../log');
 
-var CONFIG_FILE_PATH = "./config.js";
-var DEFAULT_PROFILE_NAME = "production";
+var PROFILE_NAME = process.env.CHRONICLE_CONFIG_PROFILE || "dev";
+var DB_CONFIG_DOCUMENT_NAME = "config";
+var COUCHDB_CONFIG_HOST = process.env.CHRONICLE_CONFIG_DB;
+var DOCUMENT_CONFIG_KEY = "configParams";
+var CONFIG_DB_NAME_SUFFIX = "-config-profile";
+
+// the keys that the config profile name and revision should by keyed to in the params object passed into exports.setUp()
 var PROFILE_NAME_KEY = "profile_name";
+var REVISION_KEY = "rev";
 
-var configuration = null;
-var activeProfile = null;
-var configFile = null;
-var activeProfileName = null;
+var configProfile = null;
+var configDB = null; 
+var documentExistsInDB = false;
+var configRevision = null;
 
-initConfig();    
-
-function initConfig()
+exports.init = function(callback)
 {
-    try {
-        configFile = require('../../../config.js');
-    }
-    catch(err) {
-        // config file hasn't been created yet so try to make the config info accessible
-        return;
-    }
+    if(!COUCHDB_CONFIG_HOST) return callback('No config database defined! Please set your CHRONICLE_CONFIG_DB environment var to the CouchDB host that stores site config info');
+    
+    log.info("Connecting to config database '" + PROFILE_NAME + "'");
+    configDB = db.connect(COUCHDB_CONFIG_HOST,PROFILE_NAME+CONFIG_DB_NAME_SUFFIX);
 
-    configuration = configFile.getConfiguration();
-    activeProfileName = configuration.activeConfigurationProfile;
-    activeProfile = configuration.profiles[activeProfileName];
-
-    if(activeProfile == null) {
-        if(configuration.activeConfigurationProfile == null) {
-            log.alert('Active configuration profile is not defined!');
-        } else {
-            log.alert('Configuration profile: "' + configuration.activeConfigurationProfile + '" does not exist!');
+    configDB.exists(function (error,exists) {
+        if(error) return callback(error);
+       
+        // initialize database if it doesn't already exist
+        if(!exists) {
+            log.alert("Database for config profile '" + PROFILE_NAME + "' does not exist. Creating...");
+            configDB.create();
+            db.whenDBExists(configDB,function() {
+                getConfig(callback);
+            });
         }
-    }
+        else {
+            getConfig(callback);
+        }  
+    });
+}
+
+function getConfig(callback) {
+    configDB.get(DB_CONFIG_DOCUMENT_NAME, function(err, data) {
+        // err if the document doesn't exist yet 
+        if(!err) {
+            documentExistsInDB = true;
+            configProfile = data[DOCUMENT_CONFIG_KEY];
+            configRevision = data._rev;
+        }
+        callback(null);
+    });
 }
 
 function getConfigParamObjectWithName(name) {
@@ -49,17 +67,17 @@ function getConfigParamObjectWithName(name) {
 }
 
 exports.get = function(variable) {
-    if(activeProfile == null) {
+    if(configProfile == null) {
         log.alert('Configuration is not defined!');
         return null;
     }
 
-    if(activeProfile[variable] == null) {
+    if(configProfile[variable] == null) {
         log.alert('Configuration property: "' + variable + '" not defined!');
     }
 
-    if(typeof activeProfile[variable] == "object") return _.extend({}, activeProfile[variable]);
-    else return activeProfile[variable];
+    if(typeof configProfile[variable] == "object") return _.extend({}, configProfile[variable]);
+    else return configProfile[variable];
 };
 
 exports.isSetUp = function () {
@@ -67,45 +85,68 @@ exports.isSetUp = function () {
 };
 
 exports.setUp = function (params, callback) {
-    var addToConfigFile = "exports.getConfiguration = function(){try {return configuration;}catch(err) {return null;}}";
+    var jsonError = null;
+        
+    if(params[REVISION_KEY] !== configRevision && configRevision != null) {
+        return callback('The configuration changed since you loaded the config page. Try again.');
+    }
 
-    // remove configuration profile name from parameter set as it is not a configuration parameter
-    var profileName = params[PROFILE_NAME_KEY];
+    // remove configuration profile name and config revision from parameter set as they are not configuration parameters
     delete params[PROFILE_NAME_KEY];
+    delete params[REVISION_KEY];
 
     // build the configuration object if needed
-    if (configuration == null) configuration = {};
-    if (configuration.profiles == null) configuration.profiles = {};
-    if (configuration.profiles[profileName] == null)    configuration.profiles[profileName] = {};
-
-    configuration.activeConfigurationProfile = profileName;
+    if (configProfile == null) configProfile = {};
 
     Object.keys(params).forEach(function (key) {
         if (params[key].length > 0) {
-            configuration.profiles[configuration.activeConfigurationProfile][key] = params[key];
+            if(typeof getConfigParamObjectWithName(key).defaultValue == "object") {
+                try {
+                    configProfile[key] = JSON.parse(params[key]);
+                }
+                catch(err) {
+                    if(jsonError == null) jsonError = "";
+                    else jsonError += "<br />";
+
+                    jsonError += 'Config param ' + key + ' defined as improper JSON. Ignoring changes to ' + key + '.';
+                }
+            }
+            else {
+                configProfile[key] = params[key];
+            }
         }
     });
 
-    activeProfileName = configuration.activeConfigurationProfile;
-    activeProfile = configuration.profiles[activeProfileName];
-
-    // write the config file
-    var writeToFile = 'var configuration = \n' + JSON.stringify(configuration, null, 4) + ';\n\n' + addToConfigFile;
-    fs.writeFile(CONFIG_FILE_PATH, writeToFile, function (err) {
+    var afterUpdate = function(err, res) {
         if (err) return callback(err);
+        if (jsonError) return callback(jsonError);
+        
+        configRevision = res.rev;
+        documentExistsInDB = true;
         if (exports.getUndefinedParameters().length == 0) return callback(null);
-        else return callback('some parameters still undefined');
-    });
+        else return callback('Some parameters still undefined. Please define all parameters.');
+    }
+
+    var newInfo = {};
+    newInfo[DOCUMENT_CONFIG_KEY] = configProfile;
+
+    // save the config file
+    if(documentExistsInDB) {
+        configDB.merge(DB_CONFIG_DOCUMENT_NAME, newInfo, afterUpdate);
+    }   
+    else {
+        configDB.save(DB_CONFIG_DOCUMENT_NAME, newInfo, afterUpdate);
+    }
 };
 
 exports.getUndefinedParameters = function () {
-    if (configuration == null) return configParams.getParameters();
+    if (configProfile == null) return configParams.getParameters();
 
     var parameters = configParams.getParameters();
 
     // find the undefined params and return them
     var undefinedParameters = _.filter(parameters, function (parameter) {
-        return activeProfile[parameter.name] == null;
+        return configProfile[parameter.name] == null;
     });
 
     if (undefinedParameters.length > 0) log.warning("Undefined parameters: " + JSON.stringify(undefinedParameters));
@@ -113,25 +154,34 @@ exports.getUndefinedParameters = function () {
 };
 
 exports.getParameters = function () {
-    if(configuration == null) return configParams.getParameters();
+    if(configProfile == null) return configParams.getParameters();
     
     var returnParams = exports.getUndefinedParameters();
 
-    Object.keys(activeProfile).forEach(function(key) {
-        var defaultParameter = {};
-        defaultParameter.name = key;
-        defaultParameter.description = getConfigParamObjectWithName(key).description;
-        defaultParameter.defaultValue = activeProfile[key];
-        returnParams.push(defaultParameter);
+    Object.keys(configProfile).forEach(function(key) {
+        var configParam = getConfigParamObjectWithName(key);
+        
+        if(configParam != null) {
+            configParam.defaultValue = configProfile[key];
+            returnParams.push(configParam);
+        }
     });
 
     return returnParams;
 };
 
 exports.getActiveProfileName = function() {
-    return activeProfileName || DEFAULT_PROFILE_NAME;
+    return PROFILE_NAME;
 };
 
 exports.getProfileNameKey = function() {
     return PROFILE_NAME_KEY;
+};
+
+exports.getRevisionKey = function() {
+    return REVISION_KEY;
+};
+
+exports.getConfigRevision = function() {
+    return configRevision;
 };

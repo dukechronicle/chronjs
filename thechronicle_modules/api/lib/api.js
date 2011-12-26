@@ -14,6 +14,8 @@ api.taxonomy = require("./taxonomy");
 api.accounts = require("./accounts");
 api.search = require("./search");
 api.authors = require("./authors");
+api.newsletter = require("./newsletter");
+api.cron = require("./cron");
 
 var redis = require('../../redisclient');
 
@@ -67,8 +69,11 @@ api.init = function(callback) {
             log.error("db init failed!");
             return callback(error);
         }
-        
+
+      	api.cron.init();
         api.search.init();
+        api.newsletter.init();
+
         //api.search.indexUnindexedArticles(1);
         /** Chron Jobs! **/
         /*
@@ -343,11 +348,16 @@ api.removeFromDocArray = function(id, field, toRemove, callback) {
 /**
     Destroys then recreates the database the server is using. Only should be used by the environment maker!
 */
-api.recreateDatabase = function(callback) {
-    db.destroy(function(err) {
-        if (err) return callback(err);
-        db.init(callback);
-    });
+api.recreateDatabase = function(confirmCode, callback) {
+    if(confirmCode == 'dsfvblkjeiofkjd') {
+        db.destroy(function(err) {
+            if (err) return callback(err);
+            db.init(callback);
+        });
+    }
+    else {
+        callback('Confirm code wrong! Not recreating db!');
+    }
 };
 
 api.getDatabaseName = function() {

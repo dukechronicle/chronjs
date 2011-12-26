@@ -4,11 +4,8 @@ var _ = require('underscore');
 var config = require('../../config');
 var taxonomy = exports;
 
-var MAIN_SECTIONS = config.get("TAXONOMY_MAIN_SECTIONS");
-var taxonomyTree = config.get("TAXONOMY");
-
 taxonomy.getMainSections = function() {
-    return MAIN_SECTIONS;
+    return config.get("TAXONOMY_MAIN_SECTIONS");
 };
 
 // get all document under given taxonomy path ex. ["News", "University"]
@@ -20,7 +17,7 @@ taxonomy.getParentAndChildren = function(navTree, callback) {
     var currentPath = navTree.join('/');
     var children = [];
 
-    var currentSection = taxonomyTree;
+    var currentSection = config.get("TAXONOMY");
     navTree.forEach(function(section) {
         currentSection = _.compact(_.pluck(currentSection, section))[0];
         if (!currentSection) callback(section + " in " + navTree + "does not exist");

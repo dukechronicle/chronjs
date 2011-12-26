@@ -16,47 +16,66 @@ var WORDS_FOR_TEASER = 7;
 
 var NUM_ARTICLES = 25;
 
-var TAXONOMY = config.get('TAXONOMY');
+var ARTICLES_PER_LAYOUT_GROUP = 4;
 
-if(!config.isSetUp()) {
-	console.log('You must set up config.js in the main directory before you can generate an environment');
-}
-else if(config.get('COUCHDB_URL').indexOf("heroku") != -1 || config.get('COUCHDB_URL').indexOf("cloudant") != -1) {
-    console.log("You can't create an environment using the production config options. Recommend use of db server chrondev.iriscouch.com");
-}
-else {
-    // TODO: add group/layout and image code    
-    async.waterfall([
-        function(callback) {
-            api.init(callback);
-        },
-        function(callback) {
-            console.log("creating database...");
+var TAXONOMY = null;
 
-            // delete old version of db and then create it again to start the db fresh            
-            api.recreateDatabase(callback);
-        },
-        function(callback) {
-            console.log("creating search index...");
-           
-            // delete all articles for this db in the search index to start the index fresh
-            api.search.removeAllDocsFromSearch(function(err) {
-                callback(err);
-            });
-        },
-        function(callback) {
-            console.log("populating site with fake articles...");
-            addFakeArticles(callback);
-        },
-        function(callback) {
-            console.log('environment created!');
-            callback(null);
-        }],
-        function(err) {
-              if (err) console.log(err);
-        }
-    );
-}
+// holds the IDs of the articles, once they have been found
+var articleIDs = [];
+
+config.init(function(err) {
+    if(err) {
+        console.log(err);
+    }
+    else if(!config.isSetUp()) {
+	    console.log('You must run server.js to set up config options before you can generate an environment');
+    }
+    else if(config.get('COUCHDB_URL').indexOf("heroku") != -1 || config.get('COUCHDB_URL').indexOf("cloudant") != -1) {
+        console.log("You can't create an environment using the production config options. Recommend use of db server chrondev.iriscouch.com");
+    }
+    else {
+        TAXONOMY = config.get('TAXONOMY');
+        delete(TAXONOMY["has"]); // extra key added to taxonomy that shouldn't be there
+
+        console.log('creating environment...this could take a few minutes');
+
+        // TODO: add image code    
+        async.waterfall([
+            function(callback) {
+                api.init(callback);
+            },
+            function(callback) {
+                console.log("creating database...");
+
+                // delete old version of db and then create it again to start the db fresh            
+                api.recreateDatabase('dsfvblkjeiofkjd',callback);
+            },
+            function(callback) {
+                console.log("creating search index...");
+               
+                // delete all articles for this db in the search index to start the index fresh
+                api.search.removeAllDocsFromSearch(function(err) {
+                    callback(err);
+                });
+            },
+            function(callback) {
+                console.log("populating site with fake articles...");
+                addFakeArticles(callback);
+            },
+            function(callback) {
+                console.log("creating layouts...");
+                createLayoutGroups(callback);
+            },
+            function(callback) {
+                console.log('environment created!');
+                callback(null);
+            }],
+            function(err) {
+                  if (err) console.log(err);
+            }
+        );
+    }
+});
 
 function addFakeArticles(callback) {
     var fakeArticles = [];
@@ -73,16 +92,64 @@ function addFakeArticles(callback) {
         fakeArticles[i] = article;
     }
 
-    async.forEach(fakeArticles, function(article, cb) {
+    async.forEachSeries(fakeArticles, function(article, cb) {
         console.log("adding article with title: '" + article.title + "'...");
         
         api.addDoc(article, function(err, url, articleID) {
             if(err) console.log("article could not be added - " + err);
-            else console.log("article with url: '" + url + "' added.");
+            else {
+                console.log("article with url: '" + url + "' added.");
+                articleIDs.push(articleID)
+            }
             cb();
         });
     },
     callback);
+}
+
+function createLayoutGroups(callback) {
+    var layoutGroups = api.group.getLayoutGroups();    
+    var layoutPages = Object.keys(layoutGroups);
+
+    async.forEachSeries(layoutPages,
+        function(layoutPage, cb) {
+            console.log('generating layout for ' + layoutPage);
+            
+            var namespace = layoutGroups[layoutPage].namespace;
+            var groups = layoutGroups[layoutPage].groups;
+            
+            async.forEachSeries(groups,
+                function(group, cb2) {
+                    console.log('generating layout for ' + layoutPage + ' group ' + group);
+                    
+                    var articleIDsForThisGroup = []
+                    for(var i = 0; i < ARTICLES_PER_LAYOUT_GROUP; i ++) {
+                        var id = null;
+                        while(true) {
+                            id = articleIDs[getRandomNumber(articleIDs.length)];
+                            
+                            if(articleIDsForThisGroup.indexOf(id) == -1) break;
+                        }                        
+                        articleIDsForThisGroup.push(id);
+                    }
+
+                    var numAdded = 1;
+                    async.forEachSeries(articleIDsForThisGroup,
+                        function(id, cb3) {
+                            api.group.add(namespace, group, id, numAdded, function(err) {
+                                if(err) console.log(err);
+                                else numAdded ++;
+                                cb3();
+                            });
+                        },
+                        cb2
+                    );
+                },
+                cb
+            );
+        },
+        callback
+    );
 }
 
 function generateSentence(numWords) {
@@ -101,7 +168,7 @@ function generateSentence(numWords) {
 function generateTaxonomy() {
     var taxonomy = [];
     var taxonomyLevelTree = TAXONOMY;
-
+    
     taxonomyLevelTree = taxonomyLevelTree[getRandomNumber(Object.keys(taxonomyLevelTree).length)];
     taxonomy[0] = Object.keys(taxonomyLevelTree)[0];
 
@@ -116,7 +183,6 @@ function generateTaxonomy() {
         i ++;
     }
 
-    console.log(taxonomy);
     return taxonomy;
 }
 

@@ -8,23 +8,30 @@ var async = require('async');
 var log = require('../../log');
 var config = require('../../config');
 
-var apiKey = config.get("MAILCHIMP_API_KEY");
-var taxonomyGroups = config.get("TAXONOMY_MAIN_SECTIONS");
+var apiKey = null;
+var taxonomyGroups = null;
+var listID = null
+var templateID = null;
+var mcAPI = null;
 
 var numDocs = 1;
-
-var listID = config.get("MAILCHIMP_LIST_ID");
-var templateID = config.get("MAILCHIMP_TEMPLATE_ID");
 
 // Strings
 var date = getDate();
 var newsletterSubject = "Duke Chronicle Daily Newsletter " + date;
 var newsletterFromEmail = "chronicle@duke.edu";
 
-try { 
-    var mcAPI = new MailChimpAPI(apiKey, { version : '1.3', secure : false });
-} catch (error) {
-    log.warning(error);
+newsletter.init = function() {
+    apiKey = config.get("MAILCHIMP_API_KEY");
+    taxonomyGroups = config.get("TAXONOMY_MAIN_SECTIONS");
+    listID = config.get("MAILCHIMP_LIST_ID");
+    templateID = config.get("MAILCHIMP_TEMPLATE_ID");
+
+    try { 
+        mcAPI = new MailChimpAPI(apiKey, { version : '1.3', secure : false });
+    } catch (error) {
+        log.warning(error);
+    }
 }
 
 function getDate()

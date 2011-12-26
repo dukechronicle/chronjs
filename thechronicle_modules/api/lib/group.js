@@ -5,8 +5,6 @@ var log = require('../../log');
 var redis = require('../../redisclient');
 var config = require('../../config');
 
-var LAYOUT_GROUPS = config.get('LAYOUT_GROUPS');
-
 var group = exports;
 var BENCHMARK = false;
 
@@ -155,5 +153,5 @@ group.remove = function(nameSpace, groupName, docId, callback) {
 };
 
 group.getLayoutGroups = function() {
-    return _.extend({}, LAYOUT_GROUPS);
+    return _.extend({}, config.get('LAYOUT_GROUPS'));
 };

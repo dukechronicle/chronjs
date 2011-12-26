@@ -18,7 +18,7 @@ var dateFormat = require('dateformat');
 
 var asereje = require('asereje');
 
-var LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
+var LAYOUT_GROUPS = null;
 
 var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
 var newsModel = JSON.parse(fs.readFileSync("sample-data/news.json"));
@@ -40,6 +40,7 @@ function _articleViewsKey(taxonomy) {
 
 site.init = function (app, callback) {
     var twitterFeeds = ["DukeChronicle", "ChronicleRecess", "TowerviewMag", "DukeBasketball", "ChronPhoto", "ChronicleSports"];
+    LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
 
     api.init(function (err2) {
         if (err2) {
@@ -780,14 +781,7 @@ site.assignPreInitFunctionality = function (app, server) {
 
     app.get('/config', function (req, res) {
         if (api.accounts.isAdmin(req)) {
-            res.render('config/config', {
-                locals:{
-                    configParams:config.getParameters(),
-                    profileName:config.getProfileNameKey(),
-                    profileValue:config.getActiveProfileName()
-                },
-                layout:'layout-admin.jade'
-            });
+            _renderConfigPage(res,null);
         }
         else {
             site.askForLogin(res, '/config');
@@ -799,11 +793,11 @@ site.assignPreInitFunctionality = function (app, server) {
             config.setUp(req.body, function (err) {
                 if (err == null) {
                     server.runSite(function () {
-                        res.redirect('/');
+                        res.redirect('/config');
                     });
                 }
                 else {
-                    res.redirect('/');
+                    _renderConfigPage(res,err);
                 }
             });
         }
@@ -813,6 +807,19 @@ site.assignPreInitFunctionality = function (app, server) {
     });
 };
 
+function _renderConfigPage(res,err) {
+    res.render('config/config', {
+        locals:{
+            configParams:config.getParameters(),
+            profileName:config.getProfileNameKey(),
+            profileValue:config.getActiveProfileName(),
+            revisionName:config.getRevisionKey(),
+            revisionValue:config.getConfigRevision(),
+            error:err
+        },
+        layout:'layout-admin.jade'
+    });
+}
 
 site.renderSmtpTest = function (req, http_res, email, num) {
     log.debug("rendersmtptest");

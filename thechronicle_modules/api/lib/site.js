@@ -457,24 +457,15 @@ site.init = function (app, callback) {
                 });
 
 			    var name = req.params.query.replace('-', ' ');
-            	var capName = '';
-            	name = name.split(' ');
-            	for(var c=0; c < name.length; c++) 
-            	{
-                    capName += name[c].substring(0,1).toUpperCase() +
-				    name[c].substring(1,name[c].length) + ' ';
-            	}
-				
-                http_res.render(
-                        'site/people',
-                        {
-                            locals:{
-                                docs:docs, name:capName
-                            },
-                            layout: "layout-optimized",
-                            css:asereje.css(['container/style', 'site/people'])
-                        }
-                );
+                http_res.render('site/people',
+                {
+                    locals:{
+                        docs: docs,
+                        name: globalFunctions.capitalizeWords(name)
+                    },
+                    layout: "layout-optimized",
+                    css:asereje.css(['container/style', 'site/people'])
+                });
             });
         });
 

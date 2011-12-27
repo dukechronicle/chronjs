@@ -2,9 +2,10 @@
     for parent in parentPaths
         h2.selected
             a(href=parent.path) #{parent.name} |
-    for subsectionName,subsectionPath in subsections
-        h2
-            a(href='/section/' + subsectionPath) #{subsectionName}
+    for subsection in subsections
+        for subsectionName,subsectionPath in subsection
+            h2
+                a(href='/section/' + subsectionPath) #{subsectionName}
 #section
     for doc in docs
         a.result.rounded-hover(href=doc.url)

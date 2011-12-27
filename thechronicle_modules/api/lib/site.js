@@ -18,7 +18,7 @@ var dateFormat = require('dateformat');
 
 var asereje = require('asereje');
 
-var LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
+var LAYOUT_GROUPS = null;
 
 var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
 var newsModel = JSON.parse(fs.readFileSync("sample-data/news.json"));
@@ -40,6 +40,7 @@ function _articleViewsKey(taxonomy) {
 
 site.init = function (app, callback) {
     var twitterFeeds = ["DukeChronicle", "ChronicleRecess", "TowerviewMag", "DukeBasketball", "ChronPhoto", "ChronicleSports"];
+    LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
 
     api.init(function (err2) {
         if (err2) {
@@ -91,9 +92,10 @@ site.init = function (app, callback) {
                     });
                 },
                 function (callback) { //1
-                    redis.client.zrevrange(_articleViewsKey([]), 0, 5, function (err, popular) {
+                    var popularArticles = 7;
+                    redis.client.zrevrange(_articleViewsKey([]), 0, popularArticles - 1, function (err, popular) {
                         if (err) return callback(err);
-                        var popular = popular.map(function (str) {
+                        popular = popular.map(function (str) {
                             var parts = str.split('||');
                             return {
                                 url:'/article/' + parts[0],
@@ -171,7 +173,13 @@ site.init = function (app, callback) {
                         };
 
                         api.taxonomy.getParentAndChildren(['News'], function (err, parentAndChildren) {
-                            res.render('site/news', {subsections:parentAndChildren.children, filename:'views/site/news.jade', model:model});
+                            res.render('site/news', {
+                                css:asereje.css(['container/style', 'site/section', 'site/news']),
+                                layout:'layout-optimized',
+                                subsections:parentAndChildren.children,
+                                filename:'views/site/news.jade',
+                                model:model
+                            });
                         });
                     });
                 });
@@ -200,18 +208,21 @@ site.init = function (app, callback) {
                         });
                     },
                     function (callback) { //1
-                        api.taxonomy.getParentAndChildren(['Sports'], callback);
+                        api.taxonomy.getParentAndChildren(['Sports', 'Men'], callback);
                     },
                     function (callback) { //2
-                        api.taxonomy.docs("Football", 4, callback);
+                        api.taxonomy.getParentAndChildren(['Sports', 'Women'], callback);
                     },
                     function (callback) { //3
-                        api.taxonomy.docs("M Basketball", 4, callback);
+                        api.taxonomy.docs("Football", 4, callback);
                     },
                     function (callback) { //4
-                        api.taxonomy.docs("M Soccer", 4, callback);
+                        api.taxonomy.docs("M Basketball", 4, callback);
                     },
                     function (callback) { //5
+                        api.taxonomy.docs("M Soccer", 4, callback);
+                    },
+                    function (callback) { //6
                         api.taxonomy.docs("W Soccer", 4, callback);
                     }
                 ],
@@ -220,10 +231,10 @@ site.init = function (app, callback) {
                             if (err) return log.warning(err);
                             model.Blog = results[0];
                             /*
-                             model.Football = _.pluck(results[2], 'value');
-                             model.Mbball = _.pluck(results[3], 'value');
-                             model.MSoccer = _.pluck(results[4], 'value');
-                             model.WSoccer = _.pluck(results[5], 'value');*/
+                             model.Football = _.pluck(results[3], 'value');
+                             model.Mbball = _.pluck(results[4], 'value');
+                             model.MSoccer = _.pluck(results[5], 'value');
+                             model.WSoccer = _.pluck(results[6], 'value');*/
 
                             model.adFullRectangle = {
                                 "title":"Advertisement",
@@ -235,7 +246,12 @@ site.init = function (app, callback) {
 
 
                             //log.debug(model.WSoccer);
-                            httpRes.render('site/sports', {subsections:results[1].children, filename:'views/site/sports.jade', model:model});
+                            httpRes.render('site/sports', {
+                                css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
+                                layout:'layout-optimized',
+                                subsections:[results[1].children, results[2].children],
+                                filename:'views/site/sports.jade',
+                                model:model});
                         });
 
             });
@@ -303,7 +319,12 @@ site.init = function (app, callback) {
                             "height":"60px"
                         };
 
-                        res.render('site/opinion', {subsections:results[1].children, filename:'views/site/opinion.jade', model:model});
+                        res.render('site/opinion', {
+                            css:asereje.css(['container/style', 'site/section', 'site/opinion']),
+                            layout:'layout-optimized',
+                            subsections:results[1].children,
+                            filename:'views/site/opinion.jade',
+                            model:model});
                     });
 
         });
@@ -332,7 +353,12 @@ site.init = function (app, callback) {
 
 
                     api.taxonomy.getParentAndChildren(['Recess'], function (err, parentAndChildren) {
-                        res.render('site/recess', {subsections:parentAndChildren.children, filename:'views/site/recess.jade', model:result});
+                        res.render('site/recess', {
+                            css:asereje.css(['container/style', 'site/section', 'site/recess']),
+                            layout:'layout-optimized',
+                            subsections:parentAndChildren.children,
+                            filename:'views/site/recess.jade',
+                            model:result});
                     });
                 })
             });
@@ -350,7 +376,12 @@ site.init = function (app, callback) {
                 };
 
                 api.taxonomy.getParentAndChildren(['Towerview'], function (err, parentAndChildren) {
-                    res.render('site/towerview', {subsections:parentAndChildren.children, filename:'views/site/towerview.jade', model:result});
+                    res.render('site/towerview', {
+                        css:asereje.css(['container/style', 'site/section', 'site/towerview']),
+                        layout:'layout-optimized',
+                        subsections:parentAndChildren.children,
+                        filename:'views/site/towerview.jade',
+                        model:result});
                 });
             });
         });
@@ -381,7 +412,9 @@ site.init = function (app, callback) {
                                         subsections:parentAndChildren.children,
                                         parentPaths:parentAndChildren.parentPaths,
                                         section:section
-                                    }
+                                    },
+                                    layout: "layout-optimized",
+                                    css:asereje.css(['container/style', 'site/section'])
                                 });
                             });
                         }
@@ -423,13 +456,16 @@ site.init = function (app, callback) {
                     doc = _parseAuthor(doc);
                 });
 
-
-                http_res.render(
-                        'site/people',
-                        {locals:{
-                            docs:docs, name:req.params.query.replace('-', ' ')
-                        }}
-                );
+			    var name = req.params.query.replace('-', ' ');
+                http_res.render('site/people',
+                {
+                    locals:{
+                        docs: docs,
+                        name: globalFunctions.capitalizeWords(name)
+                    },
+                    layout: "layout-optimized",
+                    css:asereje.css(['container/style', 'site/people'])
+                });
             });
         });
 
@@ -503,7 +539,9 @@ site.init = function (app, callback) {
                                     }
                                 }
                             },
-                            filename:'views/article.jade'
+                            filename:'views/article.jade',
+                            css:asereje.css(['container/style', 'article']),
+                            layout:'layout-optimized'
                         });
                     }
 
@@ -734,14 +772,7 @@ site.assignPreInitFunctionality = function (app, server) {
 
     app.get('/config', function (req, res) {
         if (api.accounts.isAdmin(req)) {
-            res.render('config/config', {
-                locals:{
-                    configParams:config.getParameters(),
-                    profileName:config.getProfileNameKey(),
-                    profileValue:config.getActiveProfileName()
-                },
-                layout:'layout-admin.jade'
-            });
+            _renderConfigPage(res,null);
         }
         else {
             site.askForLogin(res, '/config');
@@ -753,11 +784,11 @@ site.assignPreInitFunctionality = function (app, server) {
             config.setUp(req.body, function (err) {
                 if (err == null) {
                     server.runSite(function () {
-                        res.redirect('/');
+                        res.redirect('/config');
                     });
                 }
                 else {
-                    res.redirect('/');
+                    _renderConfigPage(res,err);
                 }
             });
         }
@@ -767,6 +798,19 @@ site.assignPreInitFunctionality = function (app, server) {
     });
 };
 
+function _renderConfigPage(res,err) {
+    res.render('config/config', {
+        locals:{
+            configParams:config.getParameters(),
+            profileName:config.getProfileNameKey(),
+            profileValue:config.getActiveProfileName(),
+            revisionName:config.getRevisionKey(),
+            revisionValue:config.getConfigRevision(),
+            error:err
+        },
+        layout:'layout-admin.jade'
+    });
+}
 
 site.renderSmtpTest = function (req, http_res, email, num) {
     log.debug("rendersmtptest");
@@ -849,9 +893,13 @@ function _showSearchArticles(err,req,http_res,docs,facets) {
                     
     http_res.render(
         'site/search',
-         {locals:{
-            docs:docs, currentFacets:currentFacets, facets:facets, query:req.params.query, sort:req.query.sort, order:req.query.order
-         }}
+         {
+             locals:{
+                docs:docs, currentFacets:currentFacets, facets:facets, query:req.params.query, sort:req.query.sort, order:req.query.order
+             },
+             layout: "layout-optimized",
+             css:asereje.css(['container/style', 'site/search'])
+         }
     );
 
     return null;

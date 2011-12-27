@@ -1,4 +1,4 @@
-$(function(){
+define(['jquery'], function($) {
 	var currentSlide = 0;
 	var nextSlide = 0;
 	var totalSlides = $('.slideshow .slides img').size();

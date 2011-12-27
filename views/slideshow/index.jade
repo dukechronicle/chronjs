@@ -1,22 +1,6 @@
 .slideshow.vertical
-    .slides
+    #slides
         for story, index in stories
-            a(href=story.url)
-
-                 if (story && story.images && story.images.LargeRect)
-                    if (index == 0)
-                        img(src=story.images.LargeRect.url)
-                    else
-                        img(src=story.images.LargeRect.url, style="display: none")
-                 .text
-                     if (index == 0)
-                         h1 #{story.title}
-                         h2 #{story.teaser}
-                     else
-                         h1(style="display:none") #{story.title}
-                         h2(style="display:none") #{story.teaser}
-               
-
-    .headlines.roundedbottom
-        for story in stories
-            a.page(href=story.url) #{story.title}
+            if (story && story.images && story.images.LargeRect)
+                // add alt=story.teaser for teaser
+                img(src=story.images.LargeRect.url, title=story.title, longdesc=story.url)

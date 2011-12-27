@@ -3,6 +3,7 @@ var config = require('../thechronicle_modules/config');
 var api = require('../thechronicle_modules/api/lib/api');
 var image = require('../thechronicle_modules/api/lib/image');
 var s3 = require('../thechronicle_modules/api/lib/s3');
+var globalFunctions = require('../thechronicle_modules/global-functions');
 
 var async = require('async');
 
@@ -10,6 +11,20 @@ var FAKE_WORDS = [
     'lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipisicing', 'elit', 'sed', 'do', 'eiusmod', 'tempor', 'incididunt', 'ut',
     'labore', 'et', 'dolore', 'magna', 'aliqua', 'enim', 'ad', 'minim', 'veniam', 'quis', 'nostrud', 'exercitation', 'ullamco', 'laboris', 'nisi'
 ];
+
+var IMAGES = [
+{
+    name: 'PhilipCatterall.jpg',
+    url: 'http://s3.amazonaws.com/chron_bucket1/AlsuBt8I-wbbgamer_PhilipCatterall.jpg'
+},
+{
+    name: 'ShayanAsadi.jpg',
+    url: 'http://s3.amazonaws.com/chron_bucket1/a21ubX7T-wsocanalysis_ShayanAsadi.jpg'
+},
+{
+    name: 'File.jpg',
+    url: 'http://s3.amazonaws.com/chron_bucket1/4bcnEsiM-paulusandK_File.jpg'
+}];
 
 var WORDS_FOR_BODY = 70;
 var WORDS_FOR_TITLE = 4;
@@ -46,8 +61,14 @@ config.init(function(err) {
                 api.init(callback);
             },
             function(callback) {
+                s3.init(callback);
+            },
+            function(callback) {
+                createImages(callback);
+            },
+            function(callback) {
                 console.log("creating database...");
-
+            
                 // delete old version of db and then create it again to start the db fresh            
                 api.recreateDatabase('dsfvblkjeiofkjd',callback);
             },
@@ -77,6 +98,16 @@ config.init(function(err) {
         );
     }
 });
+
+function createImages(callback) {
+    async.map(IMAGES, function(img) {
+        globalFunctions.downloadUrlToPath(img.url, img.name, function(err) {
+            api.image.createOriginalFromFile(img.name, 'image/jpg', true, function(err, results) {
+                console.log(results);
+            });
+        });
+    }, callback);
+}
 
 function addFakeArticles(callback) {
     var fakeArticles = [];

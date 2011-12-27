@@ -38,6 +38,7 @@ search.getIndexVersion = function() {
 search.init = function() {
 	client = solr.createClient(config.get('SOLR_HOST'), config.get('SOLR_PORT'), config.get('SOLR_CORE'), config.get('SOLR_PATH'));
 };
+
 // check for unindexed articles, or articles with index versioning below the current version, and index them in solr.
 search.indexUnindexedArticles = function(count) {
 	log.notice('looking for articles to index...');
@@ -277,7 +278,7 @@ function querySolr(query, options, callback) {
 				for(var i = 0; i < field.length; i += 2) {
 					if(field[i + 1] > 0) {
 						if(niceName == "Author") {
-							field[i] = _capitalizeWords(field[i]);
+							field[i] = globalFunctions.capitalizeWords(field[i]);
 						}
 						facets[niceName][field[i]] = field[i + 1];
                     }
@@ -348,11 +349,6 @@ function _makeFacets(facets, callback) {
 	facetFields.push("author_sm");
 
 	callback(facetFields, facetQueries);
-}
-
-
-function _capitalizeWords(str) {
-	return str.replace( /(^|\s)([a-z])/g , function(m,p1,p2){ return p1+p2.toUpperCase(); } );
 }
 
 function _sortObjByKeys(arr){

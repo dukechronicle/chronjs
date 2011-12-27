@@ -15,15 +15,21 @@ var FAKE_WORDS = [
 var IMAGES = [
 {
     name: 'PhilipCatterall.jpg',
-    url: 'http://s3.amazonaws.com/chron_bucket1/AlsuBt8I-wbbgamer_PhilipCatterall.jpg'
+    url: 'http://s3.amazonaws.com/chron_bucket1/AlsuBt8I-wbbgamer_PhilipCatterall.jpg',
+    LargeRect: 'http://s3.amazonaws.com/chron_bucket1/1AlsuBt8I-wbbgamer_PhilipCatterall.jpg',
+    ThumbRect: 'http://s3.amazonaws.com/chron_bucket1/2AlsuBt8I-wbbgamer_PhilipCatterall.jpg'
 },
 {
     name: 'ShayanAsadi.jpg',
-    url: 'http://s3.amazonaws.com/chron_bucket1/a21ubX7T-wsocanalysis_ShayanAsadi.jpg'
+    url: 'http://s3.amazonaws.com/chron_bucket1/a21ubX7T-wsocanalysis_ShayanAsadi.jpg',
+    LargeRect: 'http://s3.amazonaws.com/chron_bucket1/1a21ubX7T-wsocanalysis_ShayanAsadi.jpg',
+    ThumbRect: 'http://s3.amazonaws.com/chron_bucket1/2a21ubX7T-wsocanalysis_ShayanAsadi.jpg'
 },
 {
     name: 'File.jpg',
-    url: 'http://s3.amazonaws.com/chron_bucket1/4bcnEsiM-paulusandK_File.jpg'
+    url: 'http://s3.amazonaws.com/chron_bucket1/4bcnEsiM-paulusandK_File.jpg',
+    LargeRect: 'http://s3.amazonaws.com/chron_bucket1/14bcnEsiM-paulusandK_File.jpg',
+    ThumbRect: 'http://s3.amazonaws.com/chron_bucket1/24bcnEsiM-paulusandK_File.jpg'
 }];
 
 var WORDS_FOR_BODY = 70;
@@ -66,7 +72,7 @@ config.init(function(err) {
             function(callback) {
                 createImages(callback);
             },
-            function(callback) {
+            function(res, callback) {
                 console.log("creating database...");
             
                 // delete old version of db and then create it again to start the db fresh            
@@ -99,14 +105,30 @@ config.init(function(err) {
     }
 });
 
-function createImages(callback) {
-    async.map(IMAGES, function(img) {
-        globalFunctions.downloadUrlToPath(img.url, img.name, function(err) {
-            api.image.createOriginalFromFile(img.name, 'image/jpg', true, function(err, results) {
-                console.log(results);
-            });
-        });
-    }, callback);
+function createImage(img, callback) {
+    var origId;
+    async.waterfall([ 
+    
+    function(callback) {
+        globalFunctions.downloadUrlToPath(img.url, img.name, callback);
+    },
+    function(callback) {
+        api.image.createOriginalFromFile(img.name, 'image/jpg', true, callback);
+    },
+    function(result, url, callback) {
+        origId = result.id;
+        api.image.createVersion(origId, img.LargeRect, 636, 393, callback);
+    },
+    function(result, callback) {
+        api.image.createVersion(origId, img.ThumbRect, 186, 133, callback);
+    }
+    ], function(err, res) {
+        callback(err, img);
+    });
+}
+
+function createImages(topCallback) {
+    async.map(IMAGES, createImage, topCallback);
 }
 
 function addFakeArticles(callback) {

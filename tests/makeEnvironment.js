@@ -70,9 +70,12 @@ config.init(function(err) {
                 s3.init(callback);
             },
             function(callback) {
-                createImages(callback);
+                createImages(function(err, newImg) {
+                    console.log(newImg);
+                    callback(null);
+                });
             },
-            function(res, callback) {
+            function(callback) {
                 console.log("creating database...");
             
                 // delete old version of db and then create it again to start the db fresh            
@@ -107,6 +110,7 @@ config.init(function(err) {
 
 function createImage(img, callback) {
     var origId;
+    var newImage = {};
     async.waterfall([ 
     
     function(callback) {
@@ -120,10 +124,12 @@ function createImage(img, callback) {
         api.image.createVersion(origId, img.LargeRect, 636, 393, callback);
     },
     function(result, callback) {
+        newImage.LargeRect = result._versionAdded;
         api.image.createVersion(origId, img.ThumbRect, 186, 133, callback);
     }
     ], function(err, res) {
-        callback(err, img);
+        newImage.ThumbRect = res._versionAdded;
+        callback(err, newImage);
     });
 }
 

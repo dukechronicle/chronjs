@@ -118,8 +118,17 @@ newsletter.createNewsletter = function (callback) {
 
                 for (var x = 0; x < taxonomyGroups.length; x++) {
                     newsHTML += "<h2>" + taxonomyGroups[x] + "</h2>";
-                    newsHTML += "<p>" + res[x][0].value.teaser + "</p>";
-                    newsText += res[x][0].value.teaser;
+                    
+                    for(var i = 0; i < 1; i ++) {
+                        var url = "http://www.dukechronicle.com/article/"+res[x][i].value.urls[0];
+
+                        newsHTML += "<br />";
+                        newsHTML += "<a href='" + url + "'><h3>" + res[x][i].value.title + "</h3></a>";
+                        newsHTML += "<p>" + res[x][i].value.teaser + "</p>";
+
+                        newsText += res[x][i].value.teaser;
+                    }
+                    newsHTML += "<br />";
                 }
 
                 var sideBarText = "SideBar Text";

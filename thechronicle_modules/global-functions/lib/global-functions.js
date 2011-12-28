@@ -39,3 +39,14 @@ exports.capitalizeWords = function(str) {
 	return str.replace( /(^|\s)([a-z])/g , function(m,p1,p2){ return p1+p2.toUpperCase(); } );
 }
 
+exports.convertObjectToArray = function(obj) {
+    var array = [];
+
+    for(var key in Object.keys(obj)) {
+        if(typeof obj[key] != "function" && typeof obj[key] != "undefined") {
+            array.push(obj[key]);
+        }
+    }
+    
+    return array;
+};

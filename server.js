@@ -31,7 +31,8 @@ asereje.config({
 /* express configuration */
 var app = express.createServer();
 
-var port = process.env.CHRONICLE_PORT || 4000;
+// Heroku requires the use of process.env.PORT to dynamically configure port
+var port = process.env.PORT || process.env.CHRONICLE_PORT || 4000;
 var SECRET = "i'll make you my dirty little secret";
 
 function compile(str, path) {

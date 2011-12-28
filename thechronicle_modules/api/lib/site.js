@@ -891,7 +891,7 @@ function _showSearchArticles(err,req,http_res,docs,facets) {
     var currentFacets = req.query.facets;
     if(!currentFacets) currentFacets = '';
 
-    var validSections = config.get("TAXONOMY_MAIN_SECTIONS");
+    var validSections = globalFunctions.convertObjectToArray(config.get("TAXONOMY_MAIN_SECTIONS"));
     // filter out all sections other than main sections
     Object.keys(facets.Section).forEach(function(key) {
         if (!_.include(validSections, key)) {

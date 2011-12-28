@@ -4,6 +4,7 @@ var fs = require('fs');
 var im = require('imagemagick');
 var _ = require("underscore");
 var s3 = require('./s3.js');
+var urllib = require('url');
 
 var image = exports;
 
@@ -57,6 +58,21 @@ image.createVersion = function (parentId, url, width, height, callback) {
         height:height
     };
     db.image.createVersion(parentId, options, callback);
+};
+
+image.deleteVersion = function (versionId, topCallback) {
+    async.waterfall([
+        function (callback) {
+            db.image.deleteVersion(versionId, callback);
+        },
+        function (version, callback) {
+            var url = urllib.parse(version.url);
+            console.log('deleting from s3');
+            s3.delete(url.path, callback);
+        }
+    ],
+    topCallback);
+    
 };
 
 image.originalsForPhotographer = function (photog, callback) {

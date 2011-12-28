@@ -257,6 +257,36 @@ site.init = function (app, callback) {
         });
 
         app.get('/opinion', function (req, res) {
+            var columnists = [
+                        "Connor Southard",
+//                        "Sony Rao",
+//                        "Elena Botella",
+//                        "William Reach",
+//                        "Darren Beattie",
+//                        "Indu Ramesh",
+//                        "Rui Dai",
+//                        "Monday Monday",
+//                        "Abdullah Antepli",
+//                        "Connel Fullenkamp",
+//                        "Leilani Doktor",
+//                        "Milap Mehta",
+//                        "Sonia Havale",
+//                        "Ahmad Jitan",
+//                        "Daniel Strunk",
+//                        "Antonio Segalini",
+//                        "Jeremy Ruch",
+//                        "Maggie LaFalce",
+//                        "Jessica Kim",
+//                        "Josh Brewer",
+//                        "Travis Smith",
+//                        "William Weir",
+//                        "Liz Bloomhardt",
+//                        "Scott Briggs",
+//                        "Mike Goodrich",
+//                        "Amanda Garfinkel",
+//                        "Tegan Joseph Mosugu"
+            ];
+
             async.parallel([
                 function (callback) { //0
                     api.group.docs(LAYOUT_GROUPS.Opinion.namespace, null, callback);
@@ -265,18 +295,6 @@ site.init = function (app, callback) {
                     api.taxonomy.getParentAndChildren(['Opinion'], callback);
                 },
                 function (callback) { //2
-                    api.authors.getLatest("Editorial Board", 5, callback);
-                },
-                function (callback) { //3
-                    api.authors.getLatest("Shining Li", 6, callback);
-                },
-                function (callback) { //4
-                    api.authors.getLatest("Rui Dai", 6, callback);
-                },
-                function (callback) { //5
-                    api.authors.getLatest("Jason Wagner", 6, callback);
-                },
-                function (callback) { //6
                     rss.getRSS('blog-opinion', function (err, res) {
                         if (res && res.items && res.items.length > 0) {
                             var Blog = res.items.map(function (item) {
@@ -291,40 +309,54 @@ site.init = function (app, callback) {
                             callback(null, []);
                         }
                     });
+                },
+                function (callback) { //3
+                    async.map(columnists,
+                            function(columnist, _callback) {
+                                api.authors.getLatest(columnist, 2, _callback)
+                            },
+                            callback
+                    );
                 }
             ],
-                    function (err, results) {
-                        var model = results[0];
-                        model.EditBoard = results[2];
-                        model.Columnists = [];
-                        model.Columnists.push({title:"Shining Li", stories:results[3]});
-                        model.Columnists.push({title:"Rui Dai", stories:results[4]});
-                        model.Columnists.push({title:"Jason Wagner", stories:results[5]});
-                        model.Blog = results[6];
-
-                        model.adFullRectangle = {
-                            "title":"Advertisement",
-                            "imageUrl":"/images/ads/monster.png",
-                            "url":"http://google.com",
-                            "width":"300px",
-                            "height":"250px"
+            function (err, results) {
+                var model = results[0];
+                model.Blog = results[2];
+//                console.log(results[3]);
+                model.Columnists = results[3];
+                // assign each columnist an object containing name and stories to make output jade easier
+                model.Columnists.forEach(function(columnist, index) {
+                    if (columnist && columnist.length > 0) {
+                        model.Columnists[index] = {
+                            name: columnist[0].authors[0],
+                            stories: columnist
                         };
+                    }
+                });
 
-                        model.adFullBanner = {
-                            "title":"Ad",
-                            "imageUrl":"/images/ads/full-banner.jpg",
-                            "url":"http://google.com",
-                            "width":"468px",
-                            "height":"60px"
-                        };
+                model.adFullRectangle = {
+                    "title":"Advertisement",
+                    "imageUrl":"/images/ads/monster.png",
+                    "url":"http://google.com",
+                    "width":"300px",
+                    "height":"250px"
+                };
 
-                        res.render('site/opinion', {
-                            css:asereje.css(['container/style', 'site/section', 'site/opinion']),
-                            layout:'layout-optimized',
-                            subsections:results[1].children,
-                            filename:'views/site/opinion.jade',
-                            model:model});
-                    });
+                model.adFullBanner = {
+                    "title":"Ad",
+                    "imageUrl":"/images/ads/full-banner.jpg",
+                    "url":"http://google.com",
+                    "width":"468px",
+                    "height":"60px"
+                };
+
+                res.render('site/opinion', {
+                    css:asereje.css(['container/style', 'site/section', 'site/opinion']),
+                    layout:'layout-optimized',
+                    subsections:results[1].children,
+                    filename:'views/site/opinion.jade',
+                    model:model});
+            });
 
         });
 

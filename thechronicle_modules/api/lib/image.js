@@ -60,10 +60,10 @@ image.createVersion = function (parentId, url, width, height, callback) {
     db.image.createVersion(parentId, options, callback);
 };
 
-image.deleteVersion = function (versionId, topCallback) {
+image.deleteVersion = function (versionId, updateOriginal, topCallback) {
     async.waterfall([
         function (callback) {
-            db.image.deleteVersion(versionId, callback);
+            db.image.deleteVersion(versionId, updateOriginal, callback);
         },
         function (version, callback) {
             var url = urllib.parse(version.url);

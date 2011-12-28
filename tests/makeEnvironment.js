@@ -70,12 +70,6 @@ config.init(function(err) {
                 s3.init(callback);
             },
             function(callback) {
-                createImages(function(err, newImg) {
-                    console.log(newImg);
-                    callback(null);
-                });
-            },
-            function(callback) {
                 console.log("creating database...");
             
                 // delete old version of db and then create it again to start the db fresh            
@@ -90,8 +84,12 @@ config.init(function(err) {
                 });
             },
             function(callback) {
+                console.log('creating image originals and versions...');
+                createImages(callback);
+            },
+            function(images, callback) {
                 console.log("populating site with fake articles...");
-                addFakeArticles(callback);
+                addFakeArticles(images, callback);
             },
             function(callback) {
                 console.log("creating layouts...");
@@ -137,7 +135,7 @@ function createImages(topCallback) {
     async.map(IMAGES, createImage, topCallback);
 }
 
-function addFakeArticles(callback) {
+function addFakeArticles(images, callback) {
     var fakeArticles = [];
 
     for(var i = 0; i < NUM_ARTICLES; i ++) {
@@ -148,7 +146,8 @@ function addFakeArticles(callback) {
         article.teaser = generateSentence(WORDS_FOR_TEASER);
         article.type = "article";
         article.taxonomy = generateTaxonomy();
-
+        article.images = images[getRandomNumber(images.length)];
+        
         fakeArticles[i] = article;
     }
 

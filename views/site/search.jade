@@ -13,7 +13,7 @@ script(type='text/javascript')
                 h2.vertical Sort
             .rounded
                 .content-container
-                    a.hover.highlight-right(href=query+'?sort=relevance&order='+order+'&facets='+currentFacets) Relevance
+                    a.hover.highlight-right(href=query+'?sort=relevance&order=desc'+'&facets='+currentFacets) Relevance
                     a.hover.highlight-right(href=query+'?sort=date&order=desc'+'&facets='+currentFacets) Newest First
                     a.hover.highlight-right(href=query+'?sort=date&order=asc'+'&facets='+currentFacets) Oldest First
         - if(currentFacets.length > 0)

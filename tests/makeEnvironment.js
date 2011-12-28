@@ -1,7 +1,6 @@
 /* require internal modules */
 var config = require('../thechronicle_modules/config');
 var api = require('../thechronicle_modules/api/lib/api');
-var image = require('../thechronicle_modules/api/lib/image');
 var s3 = require('../thechronicle_modules/api/lib/s3');
 var globalFunctions = require('../thechronicle_modules/global-functions');
 

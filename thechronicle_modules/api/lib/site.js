@@ -5,7 +5,6 @@ var api = require('./api');
 var globalFunctions = require('../../global-functions');
 var log = require('../../log');
 var smtp = require('./smtp');
-var newsletter = require('./newsletter');
 var redis = require('../../redisclient');
 var config = require('../../config');
 var rss = require('./rss');
@@ -691,30 +690,30 @@ site.init = function (app, callback) {
             http_res.render('smtp', {layout:false, model:[""] });
         });
 
-        app.get('/testmail', function (req, http_res) {
-            newsletter.createNewsletter(function (err) {
-                if (err) return log.error(err);
-                log.debug("Added Subscriber");
-            });
-            /*newsletter.addSubscriber("yhgoh88@gmail.com", function(err){
-             log.debug("Added Subscriber");
-             });*/
-            /*newsletter.removeSubscriber("yhgoh88@gmail.com", function(err){
-             log.debug("removed Subscriber");
-             });*/
-        });
-
-
         app.get('/newsletter', function (req, http_res) {
-            http_res.render('site/newsletter', {model:[""] });
+            http_res.render('site/newsletter');
         });
 
-        app.post('/smtp', function (req, http_res) {
-            var postData = req.body;
-            if (postData.num === '1') http_res.render('site/newsletter-subscribed', {email:postData.email });
-            else if (postData.num === '2') http_res.render('site/newsletter', {model:[""] });
-            else http_res.render('site/newsletter', {model:[""] });
-            //http_res(req, http_res, req.body.email, req.body.num);
+        app.post('/newsletter', function (req, http_res) {
+            var email = req.body.email;
+            var action = req.body.action;
+
+            var afterFunc = function() {
+                http_res.render('site/newsletter', {
+                    email: email,
+                    action: action
+                });
+            };
+
+            if(action == "subscribe") {
+                api.newsletter.addSubscriber(email, afterFunc);
+            }
+            else if(action == "unsubscribe") {
+                api.newsletter.removeSubscriber(email, afterFunc);
+            }
+            else {
+                afterFunc();
+            }
         });
 
         app.get('/mu-7843c2b9-3b9490d6-8f535259-e645b756', function (req, http_res) {

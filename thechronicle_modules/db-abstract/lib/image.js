@@ -65,29 +65,37 @@ image.createVersion = function (parentId, options, callback) {
     });
 };
 
-image.deleteVersion = function (versionId, topCallback) {
+image.deleteVersion = function (versionId, updateOriginal, topCallback) {
     async.waterfall([
         function (callback) {
             db.get(versionId, callback);
         },
         function (version, callback) {
-            db.get(version.original, function(err, orig) {
-                callback(err, orig, version);
-            });
-        },
-        function (orig, version, callback) {
-            var versions = orig.imageVersions;
-            var i = versions.indexOf(versionId);
-            if(i != -1) {
-                versions.splice(i, 1);
-                orig.imageVersions = versions;
-                console.log('updating original');
-                db.save(orig, function(err, res) {
-                    callback(err, version);
+            if(updateOriginal) {
+                db.get(version.original, function(err, orig) {
+                    callback(err, orig, version);
                 });
             } else {
-                callback(null, version);
+                callback(null, null, version);
             }
+        },
+        function (orig, version, callback) {
+            if(updateOriginal) {
+                var versions = orig.imageVersions;
+                var i = versions.indexOf(versionId);
+                if(i != -1) {
+                    versions.splice(i, 1);
+                    orig.imageVersions = versions;
+                    console.log('updating original');
+                    db.save(orig, function(err, res) {
+                        callback(err, version);
+                    });
+                } else {
+                    callback(null, version);
+                }
+            } else {
+                callback(null, version);
+            }  
         },
         function (version, callback) {
             console.log('removing version');

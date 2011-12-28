@@ -128,8 +128,6 @@ newsletter.createNewsletter = function (callback) {
                 var contentArr = {"html_MAIN":newsHTML, "html_SIDECOLUMN":sideBarText, "html_FOOTER":footerText, "html_ISSUEDATE":getDate(), "html_EVENTS":eventsText, "text":newsText};
                 log.info(contentArr);
 
-                console.log(contentArr);
-
                 var params = {"type":"regular", "options":optArray, "content":contentArr};
                 mcAPI.campaignCreate(params, function (res) {
                     if (res.error) {

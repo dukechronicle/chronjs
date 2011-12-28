@@ -7,6 +7,7 @@ var _ = require('underscore');
 var async = require('async');
 var log = require('../../log');
 var config = require('../../config');
+var globalFunctions = require('../../global-functions');
 
 var apiKey = null;
 var taxonomyGroups = null;
@@ -16,10 +17,8 @@ var mcAPI = null;
 
 var numDocs = 1;
 
-// Strings
-var date = getDate();
-var newsletterSubject = "Duke Chronicle Daily Newsletter " + date;
-var newsletterFromEmail = "chronicle@duke.edu";
+var newsletterFromEmail = "no-reply@dukechronicle.com";
+var newsletterFromName = "The Chronicle";
 
 newsletter.init = function() {
     apiKey = config.get("MAILCHIMP_API_KEY");
@@ -34,6 +33,10 @@ newsletter.init = function() {
     }
 }
 
+function getNewsletterSubject() {
+    return "Duke Chronicle Daily Newsletter " + getDate();
+};
+
 function getDate()
 {
     var today = new Date();
@@ -47,7 +50,7 @@ function getDate()
         mm='0'+mm;
     }  
     return mm+'/'+dd+'/'+yyyy;
-}
+};
 
 newsletter.addSubscriber = function (subscriberEmail, callback) {
     var params = {"id":listID, "email_address":subscriberEmail, "send_welcome":true};
@@ -72,7 +75,7 @@ newsletter.removeSubscriber = function (subscriberEmail, callback) {
 };
 
 newsletter.sendNewsletter = function (callback) {
-    var name = "Newsletter " + date;
+    var name = getNewsletterSubject();
     log.info(name);
     mcAPI.campaigns({ start:0, limit:1, filters:{"title":name}}, function (res) {
         if (res.error) {
@@ -97,7 +100,9 @@ newsletter.sendNewsletter = function (callback) {
 };
 
 newsletter.createNewsletter = function (callback) {
-    var optArray = {"list_id":listID, "subject":newsletterSubject, "from_email":newsletterFromEmail, "from_name":"The Chronicle", "title":"Newsletter " + date, "template_id":templateID};
+    var optArray = {"list_id":listID, "subject":getNewsletterSubject(), "from_email":newsletterFromEmail, "from_name":newsletterFromName, "title":getNewsletterSubject(), "template_id":templateID};
+    
+    taxonomyGroups = globalFunctions.convertObjectToArray(taxonomyGroups);
 
     async.map(taxonomyGroups, function (item, callback) {
                 log.debug(item);
@@ -108,7 +113,6 @@ newsletter.createNewsletter = function (callback) {
                 });
             },
             function (err, res) {
-
                 var newsText = "";
                 var newsHTML = "";
 
@@ -121,8 +125,10 @@ newsletter.createNewsletter = function (callback) {
                 var sideBarText = "SideBar Text";
                 var footerText = "Footer Text";
                 var eventsText = "Some events";
-                var contentArr = {"html_MAIN":newsHTML, "html_SIDECOLUMN":sideBarText, "html_FOOTER":footerText, "html_ISSUEDATE":date, "html_EVENTS":eventsText, "text":newsText};
+                var contentArr = {"html_MAIN":newsHTML, "html_SIDECOLUMN":sideBarText, "html_FOOTER":footerText, "html_ISSUEDATE":getDate(), "html_EVENTS":eventsText, "text":newsText};
                 log.info(contentArr);
+
+                console.log(contentArr);
 
                 var params = {"type":"regular", "options":optArray, "content":contentArr};
                 mcAPI.campaignCreate(params, function (res) {

@@ -52,7 +52,12 @@ image.createVersion = function (parentId, options, callback) {
                     db.merge(parentId, {
                                 imageVersions:versions
                             },
-                            callback);
+                            function(err3, res) {
+                                if(res) {
+                                    res['_versionAdded'] = versionId;
+                                }
+                                callback(err3,res);
+                            });
                 }
             });
         }

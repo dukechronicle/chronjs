@@ -259,32 +259,32 @@ site.init = function (app, callback) {
         app.get('/opinion', function (req, res) {
             var columnists = [
                         "Connor Southard",
-//                        "Sony Rao",
-//                        "Elena Botella",
-//                        "William Reach",
-//                        "Darren Beattie",
-//                        "Indu Ramesh",
-//                        "Rui Dai",
-//                        "Monday Monday",
-//                        "Abdullah Antepli",
-//                        "Connel Fullenkamp",
-//                        "Leilani Doktor",
-//                        "Milap Mehta",
-//                        "Sonia Havale",
-//                        "Ahmad Jitan",
-//                        "Daniel Strunk",
-//                        "Antonio Segalini",
-//                        "Jeremy Ruch",
-//                        "Maggie LaFalce",
-//                        "Jessica Kim",
-//                        "Josh Brewer",
-//                        "Travis Smith",
-//                        "William Weir",
-//                        "Liz Bloomhardt",
-//                        "Scott Briggs",
-//                        "Mike Goodrich",
-//                        "Amanda Garfinkel",
-//                        "Tegan Joseph Mosugu"
+                        "Sony Rao",
+                        "Elena Botella",
+                        "William Reach",
+                        "Darren Beattie",
+                        "Indu Ramesh",
+                        "Rui Dai",
+                        "Monday Monday",
+                        "Abdullah Antepli",
+                        "Connel Fullenkamp",
+                        "Leilani Doktor",
+                        "Milap Mehta",
+                        "Sonia Havale",
+                        "Ahmad Jitan",
+                        "Daniel Strunk",
+                        "Antonio Segalini",
+                        "Jeremy Ruch",
+                        "Maggie LaFalce",
+                        "Jessica Kim",
+                        "Josh Brewer",
+                        "Travis Smith",
+                        "William Weir",
+                        "Liz Bloomhardt",
+                        "Scott Briggs",
+                        "Mike Goodrich",
+                        "Amanda Garfinkel",
+                        "Tegan Joseph Mosugu"
             ];
 
             async.parallel([
@@ -323,9 +323,9 @@ site.init = function (app, callback) {
                 var model = results[0];
                 model.Blog = results[2];
 //                console.log(results[3]);
-                model.Columnists = results[3];
+                model.Columnists = {};
                 // assign each columnist an object containing name and stories to make output jade easier
-                model.Columnists.forEach(function(columnist, index) {
+                results[3].forEach(function(columnist, index) {
                     if (columnist && columnist.length > 0) {
                         model.Columnists[index] = {
                             name: columnist[0].authors[0],
@@ -333,7 +333,8 @@ site.init = function (app, callback) {
                         };
                     }
                 });
-
+                // need to call compact to remove undefined entries in array
+                _.compact(model.Columnists);
                 model.adFullRectangle = {
                     "title":"Advertisement",
                     "imageUrl":"/images/ads/monster.png",

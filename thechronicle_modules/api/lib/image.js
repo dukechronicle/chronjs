@@ -60,6 +60,7 @@ image.createVersion = function (parentId, url, width, height, callback) {
     db.image.createVersion(parentId, options, callback);
 };
 
+// should call with updateOriginal=true unless we are deleting a version in preparation for deleting an original.
 image.deleteVersion = function (versionId, updateOriginal, topCallback) {
     async.waterfall([
         function (callback) {
@@ -67,13 +68,43 @@ image.deleteVersion = function (versionId, updateOriginal, topCallback) {
         },
         function (version, callback) {
             var url = urllib.parse(version.url);
-            console.log('deleting from s3');
+            console.log('deleting version from s3');
             s3.delete(url.path, callback);
         }
     ],
     topCallback);
     
 };
+
+image.deleteOriginal = function (originalId, topCallback) {
+    async.waterfall([
+        function (callback) {
+            db.get(originalId, callback);
+        },
+        function (orig, callback) {
+            var versions = orig.imageVersions;
+            async.map(versions, function(version, cbck) {
+                image.deleteVersion(version, false, function(err, res) {
+                    cbck(err, version);
+                });
+            },
+            function(err, versions) {
+                callback(err, orig);
+            });
+        },
+        function (orig, callback) {
+            console.log('deleting original from db');
+            db.remove(originalId, orig._rev, function (err, res) {
+                callback(err, orig);
+            });
+        },
+        function (orig, callback) {
+            var url = urllib.parse(orig.url);
+            console.log('deleting original from s3');
+            s3.delete(url.path, callback);
+        }
+    ], topCallback);
+}
 
 image.originalsForPhotographer = function (photog, callback) {
     db.image.originalsForPhotographer(photog, callback);

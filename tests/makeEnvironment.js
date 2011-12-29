@@ -1,6 +1,8 @@
 /* require internal modules */
 var config = require('../thechronicle_modules/config');
 var api = require('../thechronicle_modules/api/lib/api');
+var s3 = require('../thechronicle_modules/api/lib/s3');
+var globalFunctions = require('../thechronicle_modules/global-functions');
 
 var async = require('async');
 
@@ -9,11 +11,30 @@ var FAKE_WORDS = [
     'labore', 'et', 'dolore', 'magna', 'aliqua', 'enim', 'ad', 'minim', 'veniam', 'quis', 'nostrud', 'exercitation', 'ullamco', 'laboris', 'nisi'
 ];
 
+var IMAGES = [
+{
+    name: 'PhilipCatterall.jpg',
+    url: 'http://s3.amazonaws.com/chron_bucket1/AlsuBt8I-wbbgamer_PhilipCatterall.jpg',
+    LargeRect: 'http://s3.amazonaws.com/chron_bucket1/1AlsuBt8I-wbbgamer_PhilipCatterall.jpg',
+    ThumbRect: 'http://s3.amazonaws.com/chron_bucket1/2AlsuBt8I-wbbgamer_PhilipCatterall.jpg'
+},
+{
+    name: 'ShayanAsadi.jpg',
+    url: 'http://s3.amazonaws.com/chron_bucket1/a21ubX7T-wsocanalysis_ShayanAsadi.jpg',
+    LargeRect: 'http://s3.amazonaws.com/chron_bucket1/1a21ubX7T-wsocanalysis_ShayanAsadi.jpg',
+    ThumbRect: 'http://s3.amazonaws.com/chron_bucket1/2a21ubX7T-wsocanalysis_ShayanAsadi.jpg'
+},
+{
+    name: 'File.jpg',
+    url: 'http://s3.amazonaws.com/chron_bucket1/4bcnEsiM-paulusandK_File.jpg',
+    LargeRect: 'http://s3.amazonaws.com/chron_bucket1/14bcnEsiM-paulusandK_File.jpg',
+    ThumbRect: 'http://s3.amazonaws.com/chron_bucket1/24bcnEsiM-paulusandK_File.jpg'
+}];
+
 var WORDS_FOR_BODY = 70;
 var WORDS_FOR_TITLE = 4;
 var WORDS_FOR_AUTHOR = 2;
 var WORDS_FOR_TEASER = 7;
-
 var NUM_ARTICLES = 25;
 
 var ARTICLES_PER_LAYOUT_GROUP = 4;
@@ -45,8 +66,11 @@ config.init(function(err) {
                 api.init(callback);
             },
             function(callback) {
+                s3.init(callback);
+            },
+            function(callback) {
                 console.log("creating database...");
-
+            
                 // delete old version of db and then create it again to start the db fresh            
                 api.recreateDatabase('dsfvblkjeiofkjd',callback);
             },
@@ -59,8 +83,12 @@ config.init(function(err) {
                 });
             },
             function(callback) {
+                console.log('creating image originals and versions...');
+                createImages(callback);
+            },
+            function(images, callback) {
                 console.log("populating site with fake articles...");
-                addFakeArticles(callback);
+                addFakeArticles(images, callback);
             },
             function(callback) {
                 console.log("creating layouts...");
@@ -77,7 +105,36 @@ config.init(function(err) {
     }
 });
 
-function addFakeArticles(callback) {
+function createImage(img, callback) {
+    var origId;
+    var newImage = {};
+    async.waterfall([ 
+    
+    function(callback) {
+        globalFunctions.downloadUrlToPath(img.url, img.name, callback);
+    },
+    function(callback) {
+        api.image.createOriginalFromFile(img.name, 'image/jpg', true, callback);
+    },
+    function(result, url, callback) {
+        origId = result.id;
+        api.image.createVersion(origId, img.LargeRect, 636, 393, callback);
+    },
+    function(result, callback) {
+        newImage.LargeRect = result._versionAdded;
+        api.image.createVersion(origId, img.ThumbRect, 186, 133, callback);
+    }
+    ], function(err, res) {
+        newImage.ThumbRect = res._versionAdded;
+        callback(err, newImage);
+    });
+}
+
+function createImages(topCallback) {
+    async.map(IMAGES, createImage, topCallback);
+}
+
+function addFakeArticles(images, callback) {
     var fakeArticles = [];
 
     for(var i = 0; i < NUM_ARTICLES; i ++) {
@@ -88,7 +145,8 @@ function addFakeArticles(callback) {
         article.teaser = generateSentence(WORDS_FOR_TEASER);
         article.type = "article";
         article.taxonomy = generateTaxonomy();
-
+        article.images = images[getRandomNumber(images.length)];
+        
         fakeArticles[i] = article;
     }
 

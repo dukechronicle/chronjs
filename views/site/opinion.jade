@@ -25,6 +25,15 @@
                 .image-container.full-banner.lighten!=partial('container/image', model.adFullBanner)
 
     .bottom.clearfix
-        - each columnist in model.Columnists
-            p
+        .columnists-list
+            ul
+            - each columnist in model.Columnists
+                li #{columnist.name}
+        .columnist-articles
+            - each columnist in model.Columnists
+                .columnist-stories
+                    h2 #{columnist.name}
+                    - each columnistStory in columnist.stories
+                        p #{columnistStory.title}
+        .editorial-board
 

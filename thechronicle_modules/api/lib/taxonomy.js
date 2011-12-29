@@ -4,10 +4,6 @@ var _ = require('underscore');
 var config = require('../../config');
 var taxonomy = exports;
 
-taxonomy.getMainSections = function() {
-    return config.get("TAXONOMY_MAIN_SECTIONS");
-};
-
 // get all document under given taxonomy path ex. ["News", "University"]
 taxonomy.docs = function (taxonomyPath, limit, callback) {
     db.taxonomy.docs(taxonomyPath, limit, callback);

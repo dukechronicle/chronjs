@@ -270,7 +270,7 @@ site.init = function (app, callback) {
                 {name:"Connel Fullenkamp", year:"Trinity 2012"},
                 {name:"Leilani Doktor", year:"Trinity 2012"},
                 {name:"Milap Mehta", year:"Trinity 2012"},
-                {name:"Sonia Havale", year:"Trinity 2012"},
+//                {name:"Sonia Havale", year:"Trinity 2012"},
                 {name:"Ahmad Jitan", year:"Trinity 2012"},
                 {name:"Daniel Strunk", year:"Trinity 2012"},
                 {name:"Antonio Segalini", year:"Trinity 2012"},
@@ -282,7 +282,7 @@ site.init = function (app, callback) {
                 {name:"William Weir", year:"Trinity 2012"},
                 {name:"Liz Bloomhardt", year:"Trinity 2012"},
                 {name:"Scott Briggs", year:"Trinity 2012"},
-                {name:"Mike Goodrich", year:"Trinity 2012"},
+//                {name:"Mike Goodrich", year:"Trinity 2012"},
                 {name:"Amanda Garfinkel", year:"Trinity 2012"},
                 {name:"Tegan Joseph Mosugu", year:"Trinity 2012"}
             ];
@@ -313,7 +313,7 @@ site.init = function (app, callback) {
                 function (callback) { //3
                     async.map(columnists,
                             function(columnist, _callback) {
-                                api.authors.getLatest(columnist.name, 2, function(err, res) {
+                                api.authors.getLatest(columnist.name, 5, function(err, res) {
                                     columnist.stories = res;
                                     _callback(err, columnist);
                                 })

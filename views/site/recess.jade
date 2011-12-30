@@ -22,7 +22,7 @@
 
     .middle.clearfix
         // reviews
-        if (model.Reviews)
+        if (model.Music)
          .reviews!=partial('container/block-row.jade', {title: 'Music', stories: model.Music})
         if (model.Stories)
             .bottom
@@ -38,9 +38,9 @@
                         .last!=partial('container/block.jade', {title: "", story:model.Stories[3]})
 
         // interviews
-        if (model.Interviews)
+        if (model.Film)
             .interviews!=partial('container/block-row.jade', {title: 'Film', stories: model.Film})
         // sandbox
-        if (model.Sandbox)
+        if (model.Art)
             .sandbox!=partial('container/block-row.jade', {title: 'Art', stories: model.Art})
 

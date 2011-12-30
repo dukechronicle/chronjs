@@ -392,12 +392,12 @@ var configParams = [
     {
         name: 'MAILCHIMP_LIST_ID',
         description: 'MailChimp List ID',
-        defaultValue: 'bc302eeb8d'
+        defaultValue: '21f5467afc'
     },
     {
         name: 'MAILCHIMP_TEMPLATE_ID',
         description: 'MailChimp Template ID',
-        defaultValue: '233513'
+        defaultValue: '429'
     }
 ];
 

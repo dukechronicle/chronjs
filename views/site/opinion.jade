@@ -25,6 +25,7 @@
                 .image-container.full-banner.lighten!=partial('container/image', model.adFullBanner)
 
     .bottom.clearfix
+        .editorial-board!=partial('container/teaser-with-date.jade', {title: "Editorial Board", stories: model.EditorialBoard})
         #columnists
             #columnist-list
                 .container.clearfix.story-list

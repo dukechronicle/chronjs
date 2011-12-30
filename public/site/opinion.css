@@ -21,6 +21,10 @@ body section > #opinion .row.columnists > div{margin-right:20px;}
 body section > #opinion .row.columnists > div .rounded{width:222px;height:180px;}
 body section > #opinion .row.columnists > div .rounded .content-container{width:217px}
 body section > #opinion .row.columnists > .last{margin-right:0}
+body section > #opinion .bottom .editorial-board .rounded{width:320px;height:630px;}
+body section > #opinion .bottom .editorial-board .rounded a.hover{padding-bottom:18px;}
+body section > #opinion .bottom .editorial-board .rounded a.hover h2{font-size:1.3em}
+body section > #opinion .bottom .editorial-board .rounded a.hover p.date{font-size:.9em;margin-bottom:6px}
 body section > #opinion .bottom #columnists{display:none;float:right;}
 body section > #opinion .bottom #columnists #columnist-list .rounded{height:630px;}
 body section > #opinion .bottom #columnists #columnist-list .rounded h2 a{padding-left:7px}
@@ -29,7 +33,7 @@ body section > #opinion .bottom #columnists #columnist-articles .columnist-stori
 body section > #opinion .bottom #columnists #columnist-articles .columnist-stories .columnist-info{float:none;border-bottom:1px solid #eee;padding-bottom:5px;width:100%;}
 body section > #opinion .bottom #columnists #columnist-articles .columnist-stories .columnist-info h2{font-size:1.6em;float:left}
 body section > #opinion .bottom #columnists #columnist-articles .columnist-stories .columnist-info p.year{float:right;margin-top:6px;padding-right:5px}
-body section > #opinion .bottom #columnists #columnist-articles .columnist-stories a.hover.highlight-right{margin-right:-4px;padding-right:5px;margin-top:18px;}
+body section > #opinion .bottom #columnists #columnist-articles .columnist-stories a.hover.highlight-right{margin-right:-4px;padding-right:5px;padding-top:18px;}
 body section > #opinion .bottom #columnists #columnist-articles .columnist-stories a.hover.highlight-right .date{margin-bottom:6px;font-size:.9em;line-height:1.2em}
 body section > #opinion .bottom #columnists #columnist-articles .columnist-stories a.hover.highlight-right h2{font-size:1.3em}
 body section > #opinion div > div{float:left;}

@@ -310,7 +310,10 @@ site.init = function (app, callback) {
                         }
                     });
                 },
-                function (callback) { //3
+                function (callback) { // 3
+                    api.authors.getLatest("Editorial Board", 5, callback);
+                },
+                function (callback) { //4
                     async.map(columnists,
                             function(columnist, _callback) {
                                 api.authors.getLatest(columnist.name, 5, function(err, res) {
@@ -326,9 +329,10 @@ site.init = function (app, callback) {
                 var model = results[0];
                 model.Blog = results[2];
 //                console.log(results[3]);
+                model.EditorialBoard = results[3];
                 model.Columnists = {};
                 // assign each columnist an object containing name and stories to make output jade easier
-                results[3].forEach(function(columnist, index) {
+                results[4].forEach(function(columnist, index) {
                         model.Columnists[index] = columnist;
                 });
                 // need to call compact to remove undefined entries in array

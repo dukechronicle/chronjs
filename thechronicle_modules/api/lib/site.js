@@ -466,13 +466,15 @@ site.init = function (app, callback) {
             Calls Search Functionality
         */
         app.get('/search/:query', function (req, http_res) {
-            api.search.docsBySearchQuery(req.params.query.replace('-', ' '), req.query.sort, req.query.order, req.query.facets, 1, function (err, docs, facets) {
+            api.search.docsBySearchQuery(req.params.query.replace(/-/g, ' '), req.query.sort, req.query.order, req.query.facets, 1, function (err, docs, facets) {
                 _showSearchArticles(err, req, http_res, docs, facets);
             });
         });
 
         app.get('/staff/:query', function (req, http_res) {
-            api.search.docsByAuthor(req.params.query.replace('-', ' '), 'desc', '', 1, function (err, docs) {
+            var name = req.params.query.replace(/-/g, ' ');
+
+            api.search.docsByAuthor(name, 'desc', '', 1, function (err, docs) {
                 if (err) return globalFunctions.showError(http_res, err);
 
                 docs.forEach(function (doc) {
@@ -486,8 +488,7 @@ site.init = function (app, callback) {
                     doc = _parseAuthor(doc);
                 });
 
-			    var name = req.params.query.replace('-', ' ');
-                http_res.render('site/people',
+			    http_res.render('site/people',
                 {
                     locals:{
                         docs: docs,

@@ -31,9 +31,5 @@
                 li #{columnist.name}
         .columnist-articles
             - each columnist in model.Columnists
-                .columnist-stories
-                    h2 #{columnist.name}
-                    - each columnistStory in columnist.stories
-                        p #{columnistStory.title}
-        .editorial-board
+                .columnist-stories!=partial('container/opinion-story-list.jade', columnist)
 

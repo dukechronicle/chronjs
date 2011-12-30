@@ -3,14 +3,14 @@ body .container .content-container{padding:3px}
 body .container a.hover{display:block;border-right:1px solid transparent;border-left:1px solid transparent;-webkit-transition-property:color,border-color;-moz-transition-property:color,border-color;-o-transition-property:color,border-color;-webkit-transition-duration:.25s,.25s,.25s;-moz-transition-duration:.25s,.25s;-o-transition-duration:.25s,.25s;-webkit-transition-duration:linear,linear,linear;-moz-transition-duration:linear,linear;-o-transition-duration:linear,linear;}
 body .container a.hover h1,body .container a.hover h2,body .container a.hover h3,body .container a.hover h4,body .container a.hover h5,body .container a.hover p{-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear;color:#000}
 body .container a.hover p{color:#444;line-height:1.5em}
-body .container a.hover:hover h1,body .container a.hover:hover h2,body .container a.hover:hover h3,body .container a.hover:hover h4{color:#36c}
-body .container a.hover.highlight-left:hover{border-left-color:#4d90f0}
-body .container a.hover.highlight-right:hover{border-right-color:#4d90f0}
+body .container a.hover:hover h1,body .container a.hover.selected h1,body .container a.hover:hover h2,body .container a.hover.selected h2,body .container a.hover:hover h3,body .container a.hover.selected h3,body .container a.hover:hover h4,body .container a.hover.selected h4{color:#36c}
+body .container a.hover.highlight-left:hover,body .container a.hover.highlight-left.selected{border-left-color:#4d90f0}
+body .container a.hover.highlight-right:hover,body .container a.hover.highlight-right.selected{border-right-color:#4d90f0}
 body .container a.hover.highlight-bottom{border-bottom:1px solid transparent}
-body .container a.hover.highlight-bottom:hover{border-bottom-color:#4d90f0}
+body .container a.hover.highlight-bottom:hover,body .container a.hover.highlight-bottom.selected{border-bottom-color:#4d90f0}
 body .container a.hover.highlight-top{border-top:1px solid transparent;margin-top:-5px;padding-top:5px}
-body .container a.hover.highlight-top:hover{border-top-color:#4d90f0}
-body .container a.hover:hover h1,body .container a.hover:hover h2,body .container a.hover:hover h3,body .container a.hover:hover h4,body .container a.hover:hover h5{color:#36c}
+body .container a.hover.highlight-top:hover,body .container a.hover.highlight-top.selected{border-top-color:#4d90f0}
+body .container a.hover:hover h1,body .container a.hover.selected h1,body .container a.hover:hover h2,body .container a.hover.selected h2,body .container a.hover:hover h3,body .container a.hover.selected h3,body .container a.hover:hover h4,body .container a.hover.selected h4,body .container a.hover:hover h5,body .container a.hover.selected h5{color:#36c}
 body .container a.hover p.author{font-family:"Lucida Grande","Lucida Sans Unicode",Helvetica,Arial,Verdana,sans-serif;font-size:.7em;padding-top:0;text-transform:uppercase}
 body .rounded{padding:2px 3px 4px 3px;}
 body .rounded a.hover.highlight-right{margin-right:-7px}
@@ -50,7 +50,7 @@ body a.rounded-hover h3{-webkit-transition:color .25s linear;-moz-transition:col
 body a.list-story{color:#000;display:block;padding:4px 0 4px 2px}
 body a.list-story.first{padding-top:2px}
 body a.list-story.last{padding-bottom:2px}
-body a.hover:hover{color:#36c;border-bottom-color:#4d90f0}
+body a.hover:hover,body a.hover.selected{color:#36c;border-bottom-color:#4d90f0}
 body .vertical-container{visibility:hidden;font-size:1em;writing-mode:tb-rl;filter:flipv fliph;-webkit-transform:rotate(-90deg);-moz-transform:rotate(-90deg);-o-transform:rotate(-90deg);white-space:nowrap;display:block;float:left;-webkit-transform-origin-x:0;-webkit-transform-origin-y:100%;-moz-transform-origin:0 100%;position:absolute;margin-top:-14px;margin-left:1px;}
 body .vertical-container .vertical{font-size:.9em;color:#444;letter-spacing:1px;text-shadow:0 1px 1px #fff;text-transform:uppercase;margin-bottom:-2px}
 body .most-popular ol li{list-style:decimal outside}

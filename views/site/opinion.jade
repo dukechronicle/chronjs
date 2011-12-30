@@ -25,11 +25,25 @@
                 .image-container.full-banner.lighten!=partial('container/image', model.adFullBanner)
 
     .bottom.clearfix
-        .columnists-list
-            ul
-            - each columnist in model.Columnists
-                li #{columnist.name}
-        .columnist-articles
-            - each columnist in model.Columnists
-                .columnist-stories!=partial('container/opinion-story-list.jade', columnist)
+        #columnists
+            #columnist-list
+                .container.clearfix.story-list
+                    .vertical-container
+                        h2.vertical Columnists
+
+                    .rounded
+                        .content-container
+                            - each columnist, index in model.Columnists
+                                h2
+                                    a.list-story.hover.highlight-left(data-index=index, href="#")
+                                        #{columnist.name}
+            #columnist-articles.container.clearfix
+                .vertical-container
+                    if (typeof title != 'undefined')
+                            h2.vertical #{title}
+                        else
+                            h2.vertical &nbsp;
+                .rounded
+                    - each columnist, index in model.Columnists
+                        .columnist-stories(id="columnist-story-#{index}")!=partial('container/opinion-story-list.jade', columnist)
 

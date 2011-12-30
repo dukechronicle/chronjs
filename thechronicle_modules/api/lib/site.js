@@ -311,9 +311,12 @@ site.init = function (app, callback) {
                     });
                 },
                 function (callback) { //3
-                    async.map(_.pluck(columnists, 'name'),
+                    async.map(columnists,
                             function(columnist, _callback) {
-                                api.authors.getLatest(columnist, 2, _callback)
+                                api.authors.getLatest(columnist.name, 2, function(err, res) {
+                                    columnist.stories = res;
+                                    _callback(err, columnist);
+                                })
                             },
                             callback
                     );
@@ -326,12 +329,7 @@ site.init = function (app, callback) {
                 model.Columnists = {};
                 // assign each columnist an object containing name and stories to make output jade easier
                 results[3].forEach(function(columnist, index) {
-                    if (columnist && columnist.length > 0) {
-                        model.Columnists[index] = {
-                            name: columnist[0].authors[0],
-                            stories: columnist
-                        };
-                    }
+                        model.Columnists[index] = columnist;
                 });
                 // need to call compact to remove undefined entries in array
                 _.compact(model.Columnists);

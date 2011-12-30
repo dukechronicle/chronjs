@@ -1,6 +1,9 @@
 .content-container
-    h2 #{name}
+    .columnist-info.clearfix
+        h2 #{name}
+        p.year #{year}
     - each story in stories
         a.hover.highlight-right.first.teaser(href='#{story.url}')
             h2 #{story.title}
+            p.date #{story.date}
             p #{story.teaser}

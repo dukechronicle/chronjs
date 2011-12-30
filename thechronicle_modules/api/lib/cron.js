@@ -22,3 +22,7 @@ exports.init = function () {
         });
     }
 };
+
+exports.CronJob = function(whenToRunString, funcToRun) {
+    return new cron.CronJob(whenToRunString, funcToRun);
+};

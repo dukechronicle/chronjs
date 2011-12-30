@@ -102,14 +102,27 @@ body section > #opinion
             margin-right 0px
 
     .bottom
+        column-height = 630px
         column-width = 468px
-        .columnist-articles
-            width column-width + 6px
+        #columnists
+            display none
             float right
-            .columnist-stories
-                position absolute
+            #columnist-list
                 .rounded
+                    height column-height
+                    h2 a
+                        padding-left 7px
+            #columnist-articles
+                .rounded
+
+                    height column-height
                     width column-width
+                .columnist-stories
+                    display none
+                    position absolute
+                    a.hover.highlight-right
+                        margin-right -4px
+                        padding-right 5px
     div
         > div
             float left

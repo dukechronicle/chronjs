@@ -21,9 +21,12 @@ body section > #opinion .row.columnists > div{margin-right:20px;}
 body section > #opinion .row.columnists > div .rounded{width:222px;height:180px;}
 body section > #opinion .row.columnists > div .rounded .content-container{width:217px}
 body section > #opinion .row.columnists > .last{margin-right:0}
-body section > #opinion .bottom .columnist-articles{width:474px;float:right;}
-body section > #opinion .bottom .columnist-articles .columnist-stories{position:absolute;}
-body section > #opinion .bottom .columnist-articles .columnist-stories .rounded{width:468px}
+body section > #opinion .bottom #columnists{display:none;float:right;}
+body section > #opinion .bottom #columnists #columnist-list .rounded{height:630px;}
+body section > #opinion .bottom #columnists #columnist-list .rounded h2 a{padding-left:7px}
+body section > #opinion .bottom #columnists #columnist-articles .rounded{height:630px;width:468px}
+body section > #opinion .bottom #columnists #columnist-articles .columnist-stories{display:none;position:absolute;}
+body section > #opinion .bottom #columnists #columnist-articles .columnist-stories a.hover.highlight-right{margin-right:-4px;padding-right:5px}
 body section > #opinion div > div{float:left;}
 body section > #opinion div > div .container.block{float:left;margin-right:20px;}
 body section > #opinion div > div .container.block .rounded-hover{width:222px;height:222px;}

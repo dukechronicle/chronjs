@@ -35,17 +35,19 @@ ul.nav.clearfix
                         .first!=partial('container/row-2', {story: model.Stories[0]})
                     if (model.Stories[2])
                         .last!=partial('container/row-2', {story: model.Stories[2]})
-                    //
-                        if (model.Stories[4])
+                    if (model.Stories[4])
                             .last!=partial('container/row-2', {story: model.Stories[4]})
+                    if (model.Stories[6])
+                            .last!=partial('container/row-2', {story: model.Stories[6]})
                 .column
                     if (model.Stories[1])
                         .first!=partial('container/row-2', {story: model.Stories[1]})
                     if (model.Stories[3])
                         .last!=partial('container/row-2', {story: model.Stories[3]})
-                    //
-                        if (model.Stories[5])
+                    if (model.Stories[5])
                             .last!=partial('container/row-2', {story: model.Stories[5]})
+                    if (model.Stories[7])
+                            .last!=partial('container/row-2', {story: model.Stories[7]})
 
     .middle2.clearfix
         if (model.Blog)

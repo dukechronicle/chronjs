@@ -258,33 +258,33 @@ site.init = function (app, callback) {
 
         app.get('/opinion', function (req, res) {
             var columnists = [
-                        "Connor Southard",
-                        "Sony Rao",
-                        "Elena Botella",
-                        "William Reach",
-                        "Darren Beattie",
-                        "Indu Ramesh",
-                        "Rui Dai",
-                        "Monday Monday",
-                        "Abdullah Antepli",
-                        "Connel Fullenkamp",
-                        "Leilani Doktor",
-                        "Milap Mehta",
-                        "Sonia Havale",
-                        "Ahmad Jitan",
-                        "Daniel Strunk",
-                        "Antonio Segalini",
-                        "Jeremy Ruch",
-                        "Maggie LaFalce",
-                        "Jessica Kim",
-                        "Josh Brewer",
-                        "Travis Smith",
-                        "William Weir",
-                        "Liz Bloomhardt",
-                        "Scott Briggs",
-                        "Mike Goodrich",
-                        "Amanda Garfinkel",
-                        "Tegan Joseph Mosugu"
+                {name:"Connor Southard", year:"Trinity 2012"},
+                {name:"Sony Rao", year:"Trinity 2013"},
+//                        "Elena Botella",
+//                        "William Reach",
+//                        "Darren Beattie",
+//                        "Indu Ramesh",
+//                        "Rui Dai",
+//                        "Monday Monday",
+//                        "Abdullah Antepli",
+//                        "Connel Fullenkamp",
+//                        "Leilani Doktor",
+//                        "Milap Mehta",
+//                        "Sonia Havale",
+//                        "Ahmad Jitan",
+//                        "Daniel Strunk",
+//                        "Antonio Segalini",
+//                        "Jeremy Ruch",
+//                        "Maggie LaFalce",
+//                        "Jessica Kim",
+//                        "Josh Brewer",
+//                        "Travis Smith",
+//                        "William Weir",
+//                        "Liz Bloomhardt",
+//                        "Scott Briggs",
+//                        "Mike Goodrich",
+//                        "Amanda Garfinkel",
+//                        "Tegan Joseph Mosugu"
             ];
 
             async.parallel([
@@ -311,7 +311,7 @@ site.init = function (app, callback) {
                     });
                 },
                 function (callback) { //3
-                    async.map(columnists,
+                    async.map(_.pluck(columnists, 'name'),
                             function(columnist, _callback) {
                                 api.authors.getLatest(columnist, 2, _callback)
                             },

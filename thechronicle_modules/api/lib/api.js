@@ -76,12 +76,12 @@ api.init = function(callback) {
 
         //api.search.indexUnindexedArticles(1);
         /** Chron Jobs! **/
-        /*
-        new cron.CronJob('0 * * * * *', function() {
+        
+        new api.cron.CronJob('0 * * * * *', function() {
             process.nextTick(function() {
                 api.search.indexUnindexedArticles(300);
             });
-        });*/
+        }); 
 
         callback(null);
     });

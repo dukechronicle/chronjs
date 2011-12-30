@@ -25,6 +25,8 @@ require(["align", "typekit"], function(align) {
         require(["slideshow/slideshow"], function(slideshow) {
             slideshow.init();
         });
+    } else if (page() === 'opinion') {
+        require(["opinion"]);
     }
 
 });
@@ -35,6 +37,6 @@ function page() {
     if (! path) {
         return "front";
     } else {
-        return path;
+        return path.split("#")[0];
     }
 }

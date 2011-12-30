@@ -23,7 +23,7 @@
     .middle.clearfix
         // reviews
         if (model.Reviews)
-         .reviews!=partial('container/block-row.jade', {title: 'Reviews', stories: model.Reviews})
+         .reviews!=partial('container/block-row.jade', {title: 'Music', stories: model.Music})
         if (model.Stories)
             .bottom
                 // stories
@@ -39,8 +39,8 @@
 
         // interviews
         if (model.Interviews)
-            .interviews!=partial('container/block-row.jade', {title: 'Interviews', stories: model.Interviews})
+            .interviews!=partial('container/block-row.jade', {title: 'Film', stories: model.Film})
         // sandbox
         if (model.Sandbox)
-            .sandbox!=partial('container/block-row.jade', {title: 'Sandbox', stories: model.Sandbox})
+            .sandbox!=partial('container/block-row.jade', {title: 'Art', stories: model.Art})
 

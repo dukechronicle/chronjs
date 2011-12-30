@@ -14,6 +14,19 @@ authors.getLatest = function (authorName, count, callback) {
 
     db.view('articles/authors', query,
             function (err, res) {
+                /*
+                console.log('-----')
+                for (var i = 0; i < res.length; i++) {
+                    console.log(res[i].doc.created);
+                }
+                console.log('--')
+                res.forEach(function(result) {
+                    console.log(result.created);
+                })
+                console.log('--')
+                _.pluck(res, 'doc').forEach(function(result) {
+                    console.log(result.created);
+                })*/
                 callback(err, _.pluck(res, 'doc'));
             }
     );

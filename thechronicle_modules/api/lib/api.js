@@ -191,6 +191,9 @@ api.addDoc = function(fields, callback) {
                 fields.updated = unix_timestamp;
                 fields.urls = [url];
                 fields.indexedBySolr = api.search.getIndexVersion();
+                
+                // strip all html tags from the teaser
+                fields.teaser = fields.teaser.replace(/<(.|\n)*?>/g,"");
 
                 db.save(fields, function(db_err, res) {
 

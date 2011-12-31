@@ -331,7 +331,6 @@ site.init = function (app, callback) {
                     article.author = article.authors[0];
                 });
                 model.Blog = results[2];
-//                console.log(results[3]);
                 model.EditorialBoard = results[3];
                 model.Columnists = {};
                 // assign each columnist an object containing name and stories to make output jade easier

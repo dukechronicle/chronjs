@@ -2,11 +2,11 @@
 html(lang="en")
     head
         title The Chronicle | Duke University's Daily Independent Newspaper
-
         -each file in css
             link(rel= 'stylesheet', href= '/' + file + '.css')
 
         script(data-main="/js/main", src="/js/require-jquery.js")
+        script(src="http://html5shim.googlecode.com/svn/trunk/html5.js")
 
     body
         #shell

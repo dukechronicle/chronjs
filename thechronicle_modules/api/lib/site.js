@@ -327,6 +327,9 @@ site.init = function (app, callback) {
             ],
             function (err, results) {
                 var model = results[0];
+                model.Featured.forEach(function(article) {
+                    article.author = article.authors[0];
+                });
                 model.Blog = results[2];
 //                console.log(results[3]);
                 model.EditorialBoard = results[3];

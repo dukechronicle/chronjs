@@ -1,0 +1,20 @@
+.container.clearfix
+    .vertical-container
+        if (typeof title !== 'undefined')
+                h2.vertical #{title}
+            else
+                h2.vertical &nbsp;
+    .rounded
+        .content-container
+            - each story, index in stories
+                - if (index % 2 === 0)
+                    a.hover.highlight-left.first.teaser(href='#{story.url}')
+                        p.author #{story.author}
+                        h2 #{story.title}
+                        p #{story.teaser}
+                - else
+                    a.hover.highlight-right.first.teaser(href='#{story.url}')
+                        p.author #{story.author}
+                        h2 #{story.title}
+                        p #{story.teaser}
+                    .separator

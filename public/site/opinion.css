@@ -1,6 +1,13 @@
 body section > #opinion .rounded-hover h2{-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear}
 body section > #opinion .rounded-hover :hover h2{color:#36c}
 body section > #opinion p.teaser{color:#444}
+body section > #opinion .top > .main .rounded{width:468px;}
+body section > #opinion .top > .main .rounded .content-container{float:none}
+body section > #opinion .top > .main .rounded .separator{clear:both;height:18px;width:100%}
+body section > #opinion .top > .main .rounded a.hover{width:210px;}
+body section > #opinion .top > .main .rounded a.hover h2{font-size:1.3em;margin-bottom:3px}
+body section > #opinion .top > .main .rounded a.hover.highlight-left{padding-left:10px;float:left}
+body section > #opinion .top > .main .rounded a.hover.highlight-right{padding-right:10px;float:right}
 body section > #opinion .top > .main .rounded-hover{width:474px;}
 body section > #opinion .top > .main .rounded-hover .content-container{padding-left:2px;padding-right:2px}
 body section > #opinion .top > .main .rounded-hover img{width:470px}
@@ -21,7 +28,7 @@ body section > #opinion .row.columnists > div{margin-right:20px;}
 body section > #opinion .row.columnists > div .rounded{width:222px;height:180px;}
 body section > #opinion .row.columnists > div .rounded .content-container{width:217px}
 body section > #opinion .row.columnists > .last{margin-right:0}
-body section > #opinion .bottom .editorial-board .rounded{width:320px;height:630px;}
+body section > #opinion .bottom .editorial-board .rounded{width:327px;height:630px;}
 body section > #opinion .bottom .editorial-board .rounded a.hover{padding-bottom:18px;}
 body section > #opinion .bottom .editorial-board .rounded a.hover h2{font-size:1.3em}
 body section > #opinion .bottom .editorial-board .rounded a.hover p.date{font-size:.9em;margin-bottom:6px}

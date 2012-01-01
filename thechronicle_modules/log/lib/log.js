@@ -1,5 +1,6 @@
 var winston = require('winston');
 var config = require('../../config');
+var util = require('util');
 
 var logger = null;
 if (!logger) {
@@ -23,6 +24,14 @@ if (!logger) {
         );
 
     logger.handleExceptions();
+
+    logger.superLog = logger.log;
+    logger.log = function (level, msg) {
+	// format msg here
+	msg = util.inspect(msg, false, null);
+	logger.superLog(level, msg);
+    }
+
     logger.info('Logger is up');
 
     // TODO: Handle logging errors with email alert

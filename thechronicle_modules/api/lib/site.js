@@ -845,6 +845,10 @@ site.assignPreInitFunctionality = function (app, server) {
 };
 
 function _renderConfigPage(res,err) {
+    if(err != null) {
+        err = err + "<br /><br />The site was not updated to use the config changes you just made due to errors."
+    }
+
     res.render('config/config', {
         locals:{
             configParams:config.getParameters(),
@@ -852,7 +856,7 @@ function _renderConfigPage(res,err) {
             profileValue:config.getActiveProfileName(),
             revisionName:config.getRevisionKey(),
             revisionValue:config.getConfigRevision(),
-            error:err
+            error: err
         },
         layout:'layout-admin.jade'
     });

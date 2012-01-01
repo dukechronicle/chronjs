@@ -4,6 +4,14 @@ var util = require('util');
 
 var logger = null;
 if (!logger) {
+    var Console = winston.transports.Console;
+    Console.prototype.superLog = Console.prototype.log;
+    Console.prototype.log = function (level, msg, meta, callback) {
+	if (typeof msg == "object")
+	    msg = util.inspect(msg, false, null);
+	Console.prototype.superLog(level, msg, meta, callback);
+    };
+
     logger = new (winston.Logger)();
 
     logger.setLevels(winston.config.syslog.levels);
@@ -23,23 +31,16 @@ if (!logger) {
             }
         );
 
-    logger.superLog = logger.log;
-    logger.log = function (level, msg) {
-	// format msg here
-	if (typeof msg == "object")
-	    msg = util.inspect(msg, false, null);
-	logger.superLog(level, msg);
-    }
-
-
     logger.handleExceptions();
 
-    logger.info('Logger is up');
 
     // TODO: Handle logging errors with email alert
     logger.on('error', function(err) {
         console.error("Logging error: " + JSON.stringify(err));
     });
+
+    logger.info('Logger is up');
 }
 
+logger.debug(logger);
 logger.extend(exports);

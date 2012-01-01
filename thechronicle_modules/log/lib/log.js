@@ -1,14 +1,18 @@
+var util = require('util');
 var winston = require('winston');
 var config = require('../../config');
+var CustomConsole = require('./console').CustomConsole;
+
 
 var logger = null;
 if (!logger) {
     logger = new (winston.Logger)();
 
     logger.setLevels(winston.config.syslog.levels);
-    logger.add(winston.transports.Console, {
-    level: 'debug',
-    handleExceptions: true
+    logger.add(CustomConsole, {
+	level: 'debug',
+	msgStringify: util.inspect,
+	handleExceptions: true
     });
 
     if (process.env.NODE_ENV === 'production' && process.env.CHRONICLE_LOGGLY_SUBDOMAIN && process.env.CHRONICLE_LOGGLY_TOKEN)
@@ -23,12 +27,14 @@ if (!logger) {
         );
 
     logger.handleExceptions();
-    logger.info('Logger is up');
+
 
     // TODO: Handle logging errors with email alert
     logger.on('error', function(err) {
         console.error("Logging error: " + JSON.stringify(err));
     });
+
+    logger.info('Logger is up');
 }
 
 logger.extend(exports);

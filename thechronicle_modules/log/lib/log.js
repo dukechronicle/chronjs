@@ -23,14 +23,16 @@ if (!logger) {
             }
         );
 
-    logger.handleExceptions();
-
     logger.superLog = logger.log;
     logger.log = function (level, msg) {
 	// format msg here
-	msg = util.inspect(msg, false, null);
+	if (typeof msg == "object")
+	    msg = util.inspect(msg, false, null);
 	logger.superLog(level, msg);
     }
+
+
+    logger.handleExceptions();
 
     logger.info('Logger is up');
 

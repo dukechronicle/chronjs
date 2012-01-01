@@ -41,3 +41,8 @@ CustomConsole.prototype.log = function (level, msg, meta, callback) {
     if (typeof meta == "object") meta = this.metaStringify(meta);
     Console.prototype.log(level, msg, meta, callback);
 };
+
+CustomConsole.prototype.logException = function (msg, meta, callback) {
+    meta = "\n" + meta.stack.join("\n");
+    Console.prototype.logException(msg, meta, callback);
+};

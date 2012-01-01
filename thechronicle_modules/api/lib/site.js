@@ -846,7 +846,7 @@ site.assignPreInitFunctionality = function (app, server) {
 
 function _renderConfigPage(res,err) {
     if(err != null) {
-        err = err + "<br /><br />The site was not updated to use the config changes you just made due to errors."
+        err = err + "<br /><br />The live site was not updated to use the new configuration due to errors."
     }
 
     res.render('config/config', {

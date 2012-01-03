@@ -8,27 +8,27 @@
                 .row.first!=partial('container/featured-image.jade', {title: '', story: model.Featured[0]})
             .row.feature.clearfix
                 if (model.Featured[1])
-                    .first!=partial('container/block-square-image', {title: '', story: model.Featured[1]})
+                    .first!=partial('container/block-square-image', {title: 'Features', story: model.Featured[1]})
                 if (model.Featured[2])
                     .last!=partial('container/block-square-image',{title: '', story: model.Featured[2]})
                 
             .row.last
                 // savvy
                 if (model.Savvy)
-                    .savvy!=partial('container/block-row.jade', {title: 'Savvy', stories: model.Savvy})
+                    .savvy!=partial('container/block-row.jade', {title: '', stories: model.Savvy})
                 // wisdom
                 if (model.Wisdom)
                     .wisdom!=partial('container/block-row.jade', {title: 'Wisdom', stories: model.Wisdom})
             
     .sidebar.clearfix
         if (model["Editors Note"])
-            .editorsNote!=partial('container/block.jade', {title: "Editor's Note", story: model["Editors Note"][0]})
+            .editorsNote!=partial('container/block.jade', {title: "Letter from the Editor", story: model["Editors Note"][0]})
         if (model.adFullRectangle)
             .image-container.medium-rectangle.lighten!=partial('container/image', model.adFullRectangle)
         // prefix
         if (model.Prefix)
             if (model.Prefix[0])
-                .prefix!=partial('container/block-wide-image.jade', {title: 'Prefix', story: model.Prefix[0]})
+                .prefix!=partial('container/block-wide-image.jade', {title: '', story: model.Prefix[0]})
             if (model.Prefix[1])
                 .prefix!=partial('container/block-wide-image.jade', {title: '', story: model.Prefix[1]})
             if (model.Prefix[2])

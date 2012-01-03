@@ -11,7 +11,7 @@ if (!logger) {
     logger.setLevels(winston.config.syslog.levels);
     logger.add(CustomConsole, {
 	level: 'debug',
-	msgStringify: util.inspect,
+	msgStringify: function (msg) { return util.inspect(msg, false, null); },
 	handleExceptions: true
     });
 

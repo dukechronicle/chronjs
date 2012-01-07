@@ -8,7 +8,9 @@
 #article .social-media .print a{background:url("/images/icons/article_print.gif");background-repeat:no-repeat;background-position:0 2px;padding:0 0 3px 20px;color:#000}
 #article .social-media .print{padding-bottom:3px}
 #article .content{width:580px;float:left;padding:.7em 1.5em .6em 1.5em;background:#fff;}
-#article .content p{color:#333;margin-bottom:1em;font-size:.95em;line-height:1.6em}
+#article .content .photo-credit{float:right;color:#777;font-size:.8em}
+#article .content .photo-caption{color:#555;font-size:.8em;font-style:italic}
+#article .content .article-body p{color:#333;margin-bottom:1em;font-size:.95em;line-height:1.6em}
 #article .sidebar{float:right;}
 #article .sidebar .container{width:306px}
 #article #disqus_thread{float:left;margin-top:2em;width:580px;padding:.3em 1.5em 0 1.5em;clear:both;}

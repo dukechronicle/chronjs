@@ -6,7 +6,7 @@
             if (model.Slideshow)
                 #slideshow!=partial('slideshow', {stories: model.Slideshow})
             if (model["Left Headlines"] && model["Right Headlines"])
-                .top-news.align-group!=partial('container/top-news', {title: "Headlines", news: model["Left Headlines"], sports: model["Right Headlines"]})
+                .top-news.align-group!=partial('container/top-news', {title: "Top Stories", news: model["Left Headlines"], sports: model["Right Headlines"]})
 
             .ads-row.clearfix
                 if (model.printEdition)

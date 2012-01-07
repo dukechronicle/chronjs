@@ -15,8 +15,8 @@
 
             // caption
             if (doc.images && doc.images.Original)
-                p.credit #{doc.images.Original.photographer}
-                p.caption #{doc.images.Original.caption}
+                p.photo-credit #{doc.images.Original.photographer}
+                p.photo-caption #{doc.images.Original.caption}
 
             // author and date
             .metadata
@@ -36,7 +36,7 @@
                         | Tweet
                 .google
                     g:plusone(size="medium")
-            !=doc.body
+            .article-body!=doc.body
 
         .sidebar
             // facebook recommend

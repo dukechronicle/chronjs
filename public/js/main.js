@@ -2,20 +2,19 @@ require.config({
     paths: {
         'galleria': '/js/galleria/galleria-1.2.5.min',
         'underscore': '/js/underscore-min',
-        'typekit' : 'http://use.typekit.com/dwv2bjy'
+        'typekit' : 'http://use.typekit.com/dwv2bjy',
+        'html5ie' : 'http://html5shim.googlecode.com/svn/trunk/html5'
     }
 });
 
-require(["align", "typekit"], function(align) {
-    try {
-    	Typekit.load({
-    		active: function() {
-                align.pageAlign();
-                if (page() === 'front') align.frontpageAlign();
-                align.verticalAlign();
-    		}
-    	});
-    } catch(e) {}
+require(["align", "html5ie"], function(align) {
+    if (Typekit) {
+        alignPage(align);
+    } else {
+        require(["typekit"], function(Typekit) {
+            try{Typekit.load(alignPage(align));}catch(e){}
+        })
+    }
 
     if (page() === 'front') {
         require(["slideshow/frontpage-slideshow"], function(slideshow) {
@@ -28,9 +27,13 @@ require(["align", "typekit"], function(align) {
     } else if (page() === 'opinion') {
         require(["opinion"]);
     }
-
 });
 
+function alignPage(align) {
+    align.pageAlign();
+    if (page() === 'front') align.frontpageAlign();
+    align.verticalAlign();
+}
 
 function page() {
     var path = document.location.href.split("/")[3];

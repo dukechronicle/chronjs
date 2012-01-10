@@ -2,7 +2,7 @@
 
 #opinion
     .top.clearfix
-        .main!=partial('container/main-opinion', {stories: model.Featured})
+        .main!=partial('container/main-opinion', {title: "Today's Columns", stories: model.Featured})
         .right
             if (model.Blog)
                 .blog!=partial('container/story-list', {title: "Backpages", stories: model.Blog})

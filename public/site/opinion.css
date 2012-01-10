@@ -37,6 +37,7 @@ body section > #opinion .bottom #columnists #columnist-list .rounded{height:630p
 body section > #opinion .bottom #columnists #columnist-list .rounded h2 a{padding-left:7px}
 body section > #opinion .bottom #columnists #columnist-articles .rounded{height:630px;width:468px}
 body section > #opinion .bottom #columnists #columnist-articles .columnist-stories{display:none;position:absolute;}
+body section > #opinion .bottom #columnists #columnist-articles .columnist-stories .content-container{width:465px}
 body section > #opinion .bottom #columnists #columnist-articles .columnist-stories .columnist-info{float:none;border-bottom:1px solid #eee;padding-bottom:5px;width:100%;}
 body section > #opinion .bottom #columnists #columnist-articles .columnist-stories .columnist-info h2{font-size:1.6em;float:left}
 body section > #opinion .bottom #columnists #columnist-articles .columnist-stories .columnist-info p.year{float:right;margin-top:6px;padding-right:5px}

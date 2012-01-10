@@ -258,6 +258,26 @@ site.init = function (app, callback) {
 
         app.get('/opinion', function (req, res) {
             var columnists = [
+                {name:"Monday, Monday", year: "Monday"},
+                {name:"Darren Beattie", year: "Monday"},
+                {name:"Elena Botella", year: "Monday"},
+
+                {name:"dPS", year: "Tuesday"},
+                {name:"Sony Rao", year: "Tuesday"},
+                {name:"Ashley Camano", year: "Tuesday"},
+
+                {name:"Connor Southard", year: "Wednesday"},
+                {name:"Lindsay Tomson", year: "Wednesday"},
+                {name:"Scott Briggs", year: "Wednesday"},
+
+                {name:"Sam Lachman", year: "Thursday"},
+                {name:"Priya Bhat", year: "Thursday"},
+                {name:"Roshni Jain", year: "Thursday"},
+
+                {name:"Rajlakshmi De", year: "Friday"},
+                {name:"Scott Dobbie", year: "Friday"},
+                {name:"Harry Liberman", year: "Friday"}
+                    /*
                 {name:"Connor Southard", year:"Trinity 2012"},
                 {name:"Sony Rao", year:"Trinity 2013"},
                 {name:"Elena Botella", year:"Trinity 2012"},
@@ -284,7 +304,7 @@ site.init = function (app, callback) {
                 {name:"Scott Briggs", year:"Trinity 2012"},
 //                {name:"Mike Goodrich", year:"Trinity 2012"},
                 {name:"Amanda Garfinkel", year:"Trinity 2012"},
-                {name:"Tegan Joseph Mosugu", year:"Trinity 2012"}
+                {name:"Tegan Joseph Mosugu", year:"Trinity 2012"}*/
             ];
 
             async.parallel([

@@ -26,6 +26,12 @@ require(["align", "html5ie"], function(align) {
         });
     } else if (page() === 'opinion') {
         require(["opinion"]);
+    } else if (page() === 'staff') {
+        require(['scrollLoad'], function() {
+            var scrollLoadUrl = "staff/#{name}?";
+            var searchboxHTML =
+                    '<h3><a href="/article/URL_REPLACE" class="addedArticle">HEADER_REPLACE</a></h3><div class="date">DATE_REPLACE</div>';
+        });
     }
 });
 

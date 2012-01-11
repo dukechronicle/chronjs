@@ -3,7 +3,7 @@ var dateFormat = require('dateformat');
 
 var authors = exports;
 
-authors.getLatest = function (authorName, count, callback) {
+authors.getLatest = function (authorName, taxonomy, count, callback) {
     db.authors.getLatest(authorName, count, function(err, articles) {
         // remove body text since it will not be used
         articles.forEach(function(article){
@@ -20,3 +20,5 @@ authors.getLatest = function (authorName, count, callback) {
         callback(err, articles);
     });
 };
+
+

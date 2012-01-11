@@ -61,6 +61,17 @@ var views = {
             }
         }
     },
+    authors_and_taxonomy:{
+        map:function(doc) {
+            if (doc.authors && doc.taxonomy) {
+                for (var t in doc.taxonomy) {
+                    for (var a in doc.authors) {
+                        emit([doc.authors[a], doc.taxonomy[t], parseInt(doc.created, 10)], doc);
+                    }
+                }
+            }
+        }
+    },
     // get the uuid of all children keyed by fully qualified group name
     groups:{
         map:function (doc) {

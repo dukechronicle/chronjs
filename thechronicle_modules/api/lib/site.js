@@ -331,12 +331,12 @@ site.init = function (app, callback) {
                     });
                 },
                 function (callback) { // 3
-                    api.authors.getLatest("Editorial Board", 5, callback);
+                    api.authors.getLatest("Editorial Board", "Opinion", 5, callback);
                 },
                 function (callback) { //4
                     async.map(columnists,
                             function(columnist, _callback) {
-                                api.authors.getLatest(columnist.name, 5, function(err, res) {
+                                api.authors.getLatest(columnist.name, "Opinion", 5, function(err, res) {
                                     columnist.stories = res;
                                     _callback(err, columnist);
                                 })

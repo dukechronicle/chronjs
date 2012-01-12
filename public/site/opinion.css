@@ -5,15 +5,15 @@ body section > #opinion .top > .main .rounded{width:468px;}
 body section > #opinion .top > .main .rounded .content-container{float:none}
 body section > #opinion .top > .main .rounded .separator{clear:both;height:18px;width:100%}
 body section > #opinion .top > .main .rounded a.hover{width:210px;}
-body section > #opinion .top > .main .rounded a.hover h2{font-size:1.3em;margin-bottom:3px}
+body section > #opinion .top > .main .rounded a.hover h2{font-size:1.3em}
 body section > #opinion .top > .main .rounded a.hover img.thumb{margin-top:4px;width:50px;height:50px;float:right;margin-left:10px}
+body section > #opinion .top > .main .rounded a.hover p.teaser{font-size:.95em;line-height:1.3em}
 body section > #opinion .top > .main .rounded a.hover.highlight-left{padding-left:10px;float:left}
 body section > #opinion .top > .main .rounded a.hover.highlight-right{padding-right:10px;float:right}
 body section > #opinion .top > .main .rounded-hover{width:474px;}
 body section > #opinion .top > .main .rounded-hover .content-container{padding-left:2px;padding-right:2px}
 body section > #opinion .top > .main .rounded-hover img{width:470px}
 body section > #opinion .top > .main .rounded-hover h2{font-size:1.2em;margin:0 3px}
-body section > #opinion .top > .main .rounded-hover p.teaser{margin:0 3px}
 body section > #opinion .top > .right{float:right;width:474px;}
 body section > #opinion .top > .right .medium-rectangle{float:right}
 body section > #opinion .top > .right .blog .rounded{width:140px;height:250px}

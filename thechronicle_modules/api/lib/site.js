@@ -258,7 +258,7 @@ site.init = function (app, callback) {
 
         app.get('/opinion', function (req, res) {
             var columnists = [
-                {name:"Monday, Monday", year: "Monday"},
+                {name:"Monday Monday", year: "Monday"},
                 {name:"Darren Beattie", year: "Monday"},
                 {name:"Elena Botella", year: "Monday"},
 

@@ -46,6 +46,13 @@ body section > #opinion
                     h2
                         font-size 1.3em
                         margin-bottom 3px
+                    img.thumb
+                        thumb-dim = 50px
+                        margin-top 4px
+                        width thumb-dim
+                        height thumb-dim
+                        float right
+                        margin-left 10px
                 a.hover.highlight-left
                     padding-left 10px
                     float left
@@ -64,31 +71,6 @@ body section > #opinion
                     margin 0px 3px
                 p.teaser
                     margin 0px 3px
-        > .left
-            width 476px
-            .grid
-
-                .row
-                    .first
-                        margin-right 20px
-
-                .rounded-hover
-                    width 222px
-                    height 156px
-                    thumb-dim = 60px
-                    h2
-                        font-size 1.3em
-                        margin-bottom 5px
-                    img
-                        margin-top 4px
-                        border-radius 4px
-                        width thumb-dim
-                        height thumb-dim
-                        float right
-                        margin-left 10px
-
-                    p.teaser
-                        color #444
         > .right
             float right
             width 474px
@@ -152,13 +134,22 @@ body section > #opinion
                         border-bottom 1px solid #EEE
                         padding-bottom 5px
                         width 100%
-                        h2
+                        h3.name
                             font-size 1.6em
-                            float left
-                        p.year
+                            line-height 1em
+                        img.headshot
                             float right
-                            margin-top 6px
+                            width 70px
+                            height 70px
+                        p.year
+
                             padding-right 5px
+                        a.twitter
+                            font-size 0.8em
+                        p.tagline
+                            margin-top 6px
+                            font-size 1.2em
+                            font-style italic
                     display none
                     position absolute
                     a.hover.highlight-right

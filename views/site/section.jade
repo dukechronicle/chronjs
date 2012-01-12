@@ -14,6 +14,8 @@
                 .date #{doc.date}
                 .teaser #{doc.teaser}
     .sidebar
+        - if (typeof popular != 'undefined' && popular.length > 0)
+            .most-popular!=partial('container/most-popular', {title: "Popular", stories: popular})
         // facebook recommend
         .container.clearfix.facebook-recommendations(style="margin-bottom: 20px")
             .vertical-container
@@ -28,3 +30,4 @@
                 js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
                 fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'facebook-jssdk'));
+

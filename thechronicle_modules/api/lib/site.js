@@ -555,24 +555,37 @@ site.init = function (app, callback) {
                         doc.path = "/article/" + latestUrl;
 
                         var isAdmin = api.accounts.isAdmin(req);
+                        redis.client.zrevrange(_articleViewsKey([]), 0, 4, function (err, popular) {
+                                                if (err) return callback(err);
+                                                popular = popular.map(function (str) {
+                                                    var parts = str.split('||');
+                                                    return {
+                                                        url:'/article/' + parts[0],
+                                                        title:parts[1]
+                                                    };
+                                                });
+                            var model = {
+                                "adFullRectangle":{
+                                    "title":"Advertisement",
+                                    "imageUrl":"/images/ads/monster.png",
+                                    "url":"http://google.com",
+                                    "width":"300px",
+                                    "height":"250px"
+                                },
+                                "popular": popular
+                            };
+                            console.log(model)
+                            http_res.render('article', {
+                                locals:{
+                                    doc:doc,
+                                    isAdmin:isAdmin,
+                                    model:model
 
-                        http_res.render('article', {
-                            locals:{
-                                doc:doc,
-                                isAdmin:isAdmin,
-                                model:{
-                                    "adFullRectangle":{
-                                        "title":"Advertisement",
-                                        "imageUrl":"/images/ads/monster.png",
-                                        "url":"http://google.com",
-                                        "width":"300px",
-                                        "height":"250px"
-                                    }
-                                }
-                            },
-                            filename:'views/article.jade',
-                            css:asereje.css(['container/style', 'article']),
-                            layout:'layout-optimized'
+                                },
+                                filename:'views/article.jade',
+                                css:asereje.css(['container/style', 'article']),
+                                layout:'layout-optimized'
+                            });
                         });
                     }
 

@@ -11,6 +11,7 @@ section > .nav h2 a:hover,section > .nav h3 a:hover,section > .nav h2 a.selected
 #section .articles .sep{font-size:.7em;margin-left:4px;margin-right:4px;}
 #section .articles .sep h2.first a{padding-left:3px}
 #section .articles .sep a{color:#333}
-#section .sidebar{float:right}
+#section .sidebar{float:right;}
+#section .sidebar .most-popular .rounded{width:300px}
 .nav h2.selected a{color:#36c;margin-right:0;padding-right:0}
 .nav h2.selected a:hover{text-decoration:line-through}

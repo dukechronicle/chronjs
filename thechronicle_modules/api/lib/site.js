@@ -219,7 +219,7 @@ site.init = function (app, callback) {
                     },
                     function (callback) { //2
                         api.taxonomy.getParentAndChildren(['Sports', 'Women'], callback);
-                    },
+                    }
                         /*
                     function (callback) { //3
                         api.taxonomy.docs("Football", 4, callback);
@@ -409,7 +409,15 @@ site.init = function (app, callback) {
         app.get('/section/*', function (req, res) {
             var params = req.params.toString().split('/');
             var section = params[params.length - 1];
-            api.taxonomy.docs(section, 20,
+            redis.client.zrevrange(_articleViewsKey(params), 0, 4, function (err, popular) {
+                popular = popular.map(function (str) {
+                    var parts = str.split('||');
+                    return {
+                        url:'/article/' + parts[0],
+                        title:parts[1]
+                    };
+                });
+                api.taxonomy.docs(section, 20,
                     function (err, docs) {
                         if (err) globalFunctions.showError(res, err);
                         else {
@@ -431,7 +439,8 @@ site.init = function (app, callback) {
                                         docs:docs,
                                         subsections:parentAndChildren.children,
                                         parentPaths:parentAndChildren.parentPaths,
-                                        section:section
+                                        section:section,
+                                        popular: popular
                                     },
                                     layout: "layout-optimized",
                                     css:asereje.css(['container/style', 'site/section'])
@@ -439,7 +448,8 @@ site.init = function (app, callback) {
                             });
                         }
                     }
-            );
+                );
+            });
         });
         
         /**

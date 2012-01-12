@@ -15,7 +15,7 @@
                 // rss feed
                 .column.last
                     if (model.Blog)
-                        .blog!=partial('container/story-list', {title: "Playground", stories:model.Blog})
+                        .blog!=partial('container/story-list', {title: "Blog", stories:model.Blog})
                     if (model.adMedRectangle)
                         .image-container.medium-rectangle.lighten!=partial('container/image', model.adMedRectangle)
 

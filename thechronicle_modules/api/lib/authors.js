@@ -4,7 +4,7 @@ var dateFormat = require('dateformat');
 var authors = exports;
 
 authors.getLatest = function (authorName, taxonomy, count, callback) {
-    db.authors.getLatest(authorName, count, function(err, articles) {
+    db.authors.getLatest(authorName, taxonomy, count, function(err, articles) {
         // remove body text since it will not be used
         articles.forEach(function(article){
             if (article.urls) {

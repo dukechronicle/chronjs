@@ -18,9 +18,9 @@ body section > #recess .top > .right .blog .rounded{height:90px}
 body section > #recess .bottom > .row > div{float:left;}
 body section > #recess .bottom > .row > div .container.block{float:left;margin-right:20px;}
 body section > #recess .bottom > .row > div .container.block .rounded-hover{width:222px;height:182px;}
-body section > #recess .bottom > .row > div .container.block .rounded-hover h2{font-size:1.2em;margin-bottom:5px}
+body section > #recess .bottom > .row > div .container.block .rounded-hover h2{font-size:1.2em;line-height:1.3em;margin-bottom:5px;height:44px}
 body section > #recess .bottom > .row > div .container.block .rounded-hover p.teaser{color:#444;line-height:1.3em;font-size:1em}
-body section > #recess .bottom > .row > div .container.block .rounded-hover img{width:70px;height:70px;float:right}
+body section > #recess .bottom > .row > div .container.block .rounded-hover img{width:70px;height:70px;float:right;margin-left:7px}
 body section > #recess .bottom > .row > .last > .container.block{margin-right:0}
 body section > #recess .multimedia .rounded-hover{width:966px;}
 body section > #recess .multimedia .rounded-hover .element{float:left;margin-right:8px}

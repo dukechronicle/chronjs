@@ -38,7 +38,7 @@ var BENCHMARK = false;
 
 function _convertTimestamp(timestamp) {
     var date = new Date(timestamp*1000);
-    return dateFormat(date,"mmmm dS, yyyy");
+    return dateFormat(date,"mmmm d, yyyy");
 }
 
 function _articleViewsKey(taxonomy) {

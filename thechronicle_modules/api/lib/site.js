@@ -220,6 +220,7 @@ site.init = function (app, callback) {
                     function (callback) { //2
                         api.taxonomy.getParentAndChildren(['Sports', 'Women'], callback);
                     },
+                        /*
                     function (callback) { //3
                         api.taxonomy.docs("Football", 4, callback);
                     },
@@ -231,7 +232,7 @@ site.init = function (app, callback) {
                     },
                     function (callback) { //6
                         api.taxonomy.docs("W Soccer", 4, callback);
-                    }
+                    }*/
                 ],
                         // optional callback
                         function (err, results) {

@@ -56,6 +56,8 @@
 
              // advertising
             .image-container.medium-rectangle!=partial('container/image', model.adFullRectangle)
+            - if (model.popular && model.popular.length > 0)
+                .most-popular!=partial('container/most-popular', {title: "Popular", stories: model.popular})
 
     // comments
     #disqus_thread.rounded

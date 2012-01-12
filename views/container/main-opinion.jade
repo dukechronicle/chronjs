@@ -9,18 +9,26 @@
             - each story, index in stories
                 - if (index % 2 === 0)
                     a.hover.highlight-left.first.teaser(href='#{story.url}')
-                        p.author #{story.author}
+                        - if (story.tagline)
+                            p.author #{story.tagline}
+                        - else
+                            p.author #{story.taxonomy[1]}
                         h2 #{story.title}
+                        p.author By #{story.author}
                         - if (story.thumb)
                             img.thumb(src=story.thumb)
-                        p #{story.teaser}
+                        p.teaser #{story.teaser}
 
                 - else
                     a.hover.highlight-right.first.teaser(href='#{story.url}')
-                        p.author #{story.author}
+                        - if (story.tagline)
+                            p.tagline #{story.tagline}
+                        - else
+                            p.tagline #{story.taxonomy[1]}
                         h2 #{story.title}
+                        p.author By #{story.author}
                         - if (story.thumb)
                             img.thumb(src=story.thumb)
-                        p #{story.teaser}
+                        p.teaser #{story.teaser}
 
                     .separator

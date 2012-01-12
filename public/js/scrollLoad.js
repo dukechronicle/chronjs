@@ -52,7 +52,7 @@ define(["jquery", "libs/dateFormat"], function($, dateFormat) {
         var addHTML = searchboxHTML;
         addHTML = addHTML.replace("URL_REPLACE",article.urls[0]);
         addHTML = addHTML.replace("HEADER_REPLACE",article.title);
-        addHTML = addHTML.replace("DATE_REPLACE", dateFormat(new Date(article.created*1000),"mmmm dS, yyyy"));
+        addHTML = addHTML.replace("DATE_REPLACE", dateFormat(new Date(article.created*1000),"mmmm d, yyyy"));
         addHTML = addHTML.replace("AUTHOR_REPLACE",article.authors.join(", "));
         addHTML = addHTML.replace("TEASER_REPLACE",article.teaser);
 

@@ -28,14 +28,14 @@ body section > #opinion .row.columnists > div{margin-right:20px;}
 body section > #opinion .row.columnists > div .rounded{width:222px;height:180px;}
 body section > #opinion .row.columnists > div .rounded .content-container{width:217px}
 body section > #opinion .row.columnists > .last{margin-right:0}
-body section > #opinion .bottom .editorial-board .rounded{width:327px;height:630px;}
+body section > #opinion .bottom .editorial-board .rounded{width:327px;height:680px;}
 body section > #opinion .bottom .editorial-board .rounded a.hover{padding-bottom:18px;}
 body section > #opinion .bottom .editorial-board .rounded a.hover h2{font-size:1.3em}
 body section > #opinion .bottom .editorial-board .rounded a.hover p.date{font-size:.9em;margin-bottom:6px}
 body section > #opinion .bottom #columnists{float:right;}
-body section > #opinion .bottom #columnists #columnist-list .rounded{height:630px;}
+body section > #opinion .bottom #columnists #columnist-list .rounded{height:680px;}
 body section > #opinion .bottom #columnists #columnist-list .rounded h2 a{padding-left:7px}
-body section > #opinion .bottom #columnists #columnist-articles .rounded{height:630px;width:468px}
+body section > #opinion .bottom #columnists #columnist-articles .rounded{height:680px;width:468px}
 body section > #opinion .bottom #columnists #columnist-articles .columnist-stories{display:none;position:absolute;}
 body section > #opinion .bottom #columnists #columnist-articles .columnist-stories .content-container{width:465px}
 body section > #opinion .bottom #columnists #columnist-articles .columnist-stories .columnist-info{float:none;border-bottom:1px solid #eee;padding-bottom:5px;width:100%;}

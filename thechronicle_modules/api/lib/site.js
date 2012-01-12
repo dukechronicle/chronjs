@@ -574,7 +574,6 @@ site.init = function (app, callback) {
                                 },
                                 "popular": popular
                             };
-                            console.log(model)
                             http_res.render('article', {
                                 locals:{
                                     doc:doc,

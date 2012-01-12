@@ -11,10 +11,16 @@
                     a.hover.highlight-left.first.teaser(href='#{story.url}')
                         p.author #{story.author}
                         h2 #{story.title}
+                        - if (story.thumb)
+                            img.thumb(src=story.thumb)
                         p #{story.teaser}
+
                 - else
                     a.hover.highlight-right.first.teaser(href='#{story.url}')
                         p.author #{story.author}
                         h2 #{story.title}
+                        - if (story.thumb)
+                            img.thumb(src=story.thumb)
                         p #{story.teaser}
+
                     .separator

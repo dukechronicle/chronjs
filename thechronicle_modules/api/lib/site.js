@@ -22,6 +22,11 @@ var LAYOUT_GROUPS = null;
 var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
 var newsModel = JSON.parse(fs.readFileSync("sample-data/news.json"));
 var sportsModel = JSON.parse(fs.readFileSync("sample-data/sports.json"));
+var columnistsData = JSON.parse(fs.readFileSync("sample-data/columnists.json"));
+var columnistsHeadshots = {};
+columnistsData.forEach(function(columnist) {
+    columnistsHeadshots[columnist.name] = columnist.headshot;
+});
 
 // TODO remove and put in to api
 var db = require('../../db-abstract');
@@ -257,66 +262,6 @@ site.init = function (app, callback) {
         });
 
         app.get('/opinion', function (req, res) {
-            var columnists = [
-
-                {name:"Abdullah Antepli", year:"Facutly", tagline:"the land of delights and wonders", day: "Tuesday"},
-                {name:"Darren Beattie", year:"Ph.D. Candidate", tagline:"oy weber", day: "Monday"},
-                {name:"Priya Bhat", year:"Trinity 2011", tagline:"life as ms. b.", day: "Thursday", twitter:"tbpriya"},
-                {name:"Elena Botella", year:"Trinity 2013", tagline:"duke's biggest party", day: "Monday", twitter:"dukedemocrats"},
-                {name:"Scott Briggs", year:"Trinity 2014", tagline:"as i see it", day: "Wednesday"},
-                {name:"Ellie Bullard", year:"Trinity 2013", tagline:"", day: "Wednesday"},
-                {name:"Ashley Camano", year:"Trinity 2014", tagline:"going camando", day: "Tuesday"},
-                {name:"Rajlakshmi De", year:"Trinity 2013", tagline:"minority report", day: "Friday", twitter:"RajDe4"},
-                {name:"Scott Dobbie", year:"Trinity 2013", tagline:"the variable", day: "Friday"},
-                {name:"dPS (Sanjay Kishore)", year:"Trinity 2014", tagline:"think globally, act locally", day: "Tuesday", twitter: "dukePS"},
-                {name:"Caleb Duncanson", year:"Pratt 2012", tagline:"news flash", day: "Friday"},
-                {name:"Amanda Garfinkel", year:"Trinity 2013", tagline:"the devil doesn't wear prada", day: "Tuesday"},
-                {name:"Roshni Jain", year:"Trinity 2015", tagline:"muddled and befuddled", day: "Thursday"},
-                {name:"Ahmad Jitan", year:"Trinity 2013", tagline:"indecent family man", day: "Thursday"},
-                {name:"Sam Lachman", year:"Trinity 2013", tagline:"what's our age again?", day: "Thursday", twitter:"SamLachman"},
-                {name:"Kristen Lee", year:"Trinity 2013", tagline:"between worlds", day: "Monday"},
-                {name:"Mia Lehrer", year:"Trinity 2012", tagline:"but actually", day: "Thursday"},
-                {name:"Harry Liberman", year:"Trinity 2013", tagline:"", day: "Friday"},
-                {name:"Monday Monday", year:"Undergrad", tagline:"the devil", day: "Friday"},
-                {name:"Tegan Joseph Mosugu", year:"Trinity 2014", tagline:"be fierce, be real", day: "Friday", twitter:"tjcaliboy"},
-                {name:"Indu Ramesh", year:"Trinity 2013", tagline:"walk the walk, talk the talk", day: "Friday"},
-                {name:"Sonul Rao", year:"Trinity 2013", tagline:"that's what she said", day: "Tuesday"},
-                {name:"Lillie Reed", year:"Trinity 2014", tagline:"wumbology", day: "Wednesday"},
-                {name:"Jeremy Ruch", year:"Trinity 2013", tagline:"run and tell that", day: "Wednesday"},
-                {name:"Antonio Segalini", year:"Trinity 2013", tagline:"musings", day: "Monday"},
-                {name:"Travis Smith", year:"Trinity 2013", tagline:"It’s all in the game", day: "Thursday"},
-                {name:"Connor Southard", year:"Trinity 2012", tagline:"dead poet", day: "Wednesday"},
-                {name:"Lindsay Tomson", year:"Trinity 2012", tagline:"middle child syndrome", day: "Wednesday", twitter:"elle4tee"},
-                    /*
-                {name:"Connor Southard", year:"Trinity 2012"},
-                {name:"Sony Rao", year:"Trinity 2013"},
-                {name:"Elena Botella", year:"Trinity 2012"},
-                {name:"William Reach", year:"Trinity 2012"},
-                {name:"Darren Beattie", year:"Trinity 2012"},
-                {name:"Indu Ramesh", year:"Trinity 2012"},
-                {name:"Rui Dai", year:"Trinity 2012"},
-                {name:"Monday Monday", year:"Trinity 2012"},
-                {name:"Abdullah Antepli", year:"Trinity 2012"},
-                {name:"Connel Fullenkamp", year:"Trinity 2012"},
-                {name:"Leilani Doktor", year:"Trinity 2012"},
-                {name:"Milap Mehta", year:"Trinity 2012"},
-//                {name:"Sonia Havale", year:"Trinity 2012"},
-                {name:"Ahmad Jitan", year:"Trinity 2012"},
-                {name:"Daniel Strunk", year:"Trinity 2012"},
-                {name:"Antonio Segalini", year:"Trinity 2012"},
-                {name:"Jeremy Ruch", year:"Trinity 2012"},
-                {name:"Maggie LaFalce", year:"Trinity 2012"},
-                {name:"Jessica Kim", year:"Trinity 2012"},
-                {name:"Josh Brewer", year:"Trinity 2012"},
-                {name:"Travis Smith", year:"Trinity 2012"},
-                {name:"William Weir", year:"Trinity 2012"},
-                {name:"Liz Bloomhardt", year:"Trinity 2012"},
-                {name:"Scott Briggs", year:"Trinity 2012"},
-//                {name:"Mike Goodrich", year:"Trinity 2012"},
-                {name:"Amanda Garfinkel", year:"Trinity 2012"},
-                {name:"Tegan Joseph Mosugu", year:"Trinity 2012"}*/
-            ];
-
             async.parallel([
                 function (callback) { //0
                     api.group.docs(LAYOUT_GROUPS.Opinion.namespace, null, callback);
@@ -344,7 +289,7 @@ site.init = function (app, callback) {
                     api.authors.getLatest("Editorial Board", "Opinion", 5, callback);
                 },
                 function (callback) { //4
-                    async.map(columnists,
+                    async.map(columnistsData,
                             function(columnist, _callback) {
                                 api.authors.getLatest(columnist.name, "Opinion", 5, function(err, res) {
                                     columnist.stories = res;
@@ -359,6 +304,9 @@ site.init = function (app, callback) {
                 var model = results[0];
                 model.Featured.forEach(function(article) {
                     article.author = article.authors[0];
+                    if (columnistsHeadshots[article.author]) {
+                        article.thumb = columnistsHeadshots[article.author];
+                    }
                 });
                 model.Blog = results[2];
                 model.EditorialBoard = results[3];

@@ -6,6 +6,7 @@ body section > #opinion .top > .main .rounded .content-container{float:none}
 body section > #opinion .top > .main .rounded .separator{clear:both;height:18px;width:100%}
 body section > #opinion .top > .main .rounded a.hover{width:210px;}
 body section > #opinion .top > .main .rounded a.hover h2{font-size:1.3em;margin-bottom:3px}
+body section > #opinion .top > .main .rounded a.hover img.thumb{margin-top:4px;width:50px;height:50px;float:right;margin-left:10px}
 body section > #opinion .top > .main .rounded a.hover.highlight-left{padding-left:10px;float:left}
 body section > #opinion .top > .main .rounded a.hover.highlight-right{padding-right:10px;float:right}
 body section > #opinion .top > .main .rounded-hover{width:474px;}
@@ -13,12 +14,6 @@ body section > #opinion .top > .main .rounded-hover .content-container{padding-l
 body section > #opinion .top > .main .rounded-hover img{width:470px}
 body section > #opinion .top > .main .rounded-hover h2{font-size:1.2em;margin:0 3px}
 body section > #opinion .top > .main .rounded-hover p.teaser{margin:0 3px}
-body section > #opinion .top > .left{width:476px;}
-body section > #opinion .top > .left .grid .row .first{margin-right:20px}
-body section > #opinion .top > .left .grid .rounded-hover{width:222px;height:156px;}
-body section > #opinion .top > .left .grid .rounded-hover h2{font-size:1.3em;margin-bottom:5px}
-body section > #opinion .top > .left .grid .rounded-hover img{margin-top:4px;border-radius:4px;width:60px;height:60px;float:right;margin-left:10px}
-body section > #opinion .top > .left .grid .rounded-hover p.teaser{color:#444}
 body section > #opinion .top > .right{float:right;width:474px;}
 body section > #opinion .top > .right .medium-rectangle{float:right}
 body section > #opinion .top > .right .blog .rounded{width:140px;height:250px}
@@ -39,8 +34,11 @@ body section > #opinion .bottom #columnists #columnist-articles .rounded{height:
 body section > #opinion .bottom #columnists #columnist-articles .columnist-stories{display:none;position:absolute;}
 body section > #opinion .bottom #columnists #columnist-articles .columnist-stories .content-container{width:465px}
 body section > #opinion .bottom #columnists #columnist-articles .columnist-stories .columnist-info{float:none;border-bottom:1px solid #eee;padding-bottom:5px;width:100%;}
-body section > #opinion .bottom #columnists #columnist-articles .columnist-stories .columnist-info h2{font-size:1.6em;float:left}
-body section > #opinion .bottom #columnists #columnist-articles .columnist-stories .columnist-info p.year{float:right;margin-top:6px;padding-right:5px}
+body section > #opinion .bottom #columnists #columnist-articles .columnist-stories .columnist-info h3.name{font-size:1.6em;line-height:1em}
+body section > #opinion .bottom #columnists #columnist-articles .columnist-stories .columnist-info img.headshot{float:right;width:70px;height:70px}
+body section > #opinion .bottom #columnists #columnist-articles .columnist-stories .columnist-info p.year{padding-right:5px}
+body section > #opinion .bottom #columnists #columnist-articles .columnist-stories .columnist-info a.twitter{font-size:.8em}
+body section > #opinion .bottom #columnists #columnist-articles .columnist-stories .columnist-info p.tagline{margin-top:6px;font-size:1.2em;font-style:italic}
 body section > #opinion .bottom #columnists #columnist-articles .columnist-stories a.hover.highlight-right{margin-right:-4px;padding-right:5px;padding-top:18px;}
 body section > #opinion .bottom #columnists #columnist-articles .columnist-stories a.hover.highlight-right .date{margin-bottom:6px;font-size:.9em;line-height:1.2em}
 body section > #opinion .bottom #columnists #columnist-articles .columnist-stories a.hover.highlight-right h2{font-size:1.3em}

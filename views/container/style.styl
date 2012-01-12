@@ -186,16 +186,19 @@ body
             border-top-left-radius corner-radius
             border-top-right-radius corner-radius
 
+    block-width = 133px
+    block-padding = 15px
+    full-block-width = block-width * 2 + block-padding * 2
+    blocks = 6
+    block-padding = 15px
+
     .block-row
         rounded-image()
-        blocks = 6
-        block-padding = 15px
         container-padding = 12px
 
         row-width = 980px
         //block-width = (row-width + (block-padding * 2)) / blocks - (block-padding * 2)
-        block-width = 138px
-        full-block-width = block-width * 2
+
         .rounded
             width 972px
             padding 0px
@@ -220,7 +223,7 @@ body
             border-left 0px
             padding 0px block-padding
             width block-width
-            height 241px - container-padding
+            height 230px + container-padding
             float left
 
             img
@@ -240,6 +243,7 @@ body
 
         a.hover.last
             padding-right 0px
+
     .block-row.large-first
         .list-story.first
             padding-top 0px

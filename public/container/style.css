@@ -34,16 +34,16 @@ body .block-row .rounded{width:972px;padding:0;}
 body .block-row .rounded h2,body .block-row .rounded h3{font-size:1em;margin-bottom:.5em;height:47px;margin-top:-5px;line-height:1.2em}
 body .block-row .rounded h2{font-size:1.5em;line-height:1.3em}
 body .block-row .rounded .content-container{padding:12px 12px 0 12px;margin-bottom:-1px}
-body .block-row a.hover{border:none;border-right:0;border-left:0;padding:0 15px;width:138px;height:229px;float:left;}
-body .block-row a.hover img{display:block;width:138px;margin-bottom:14px}
+body .block-row a.hover{border:none;border-right:0;border-left:0;padding:0 15px;width:133px;height:242px;float:left;}
+body .block-row a.hover img{display:block;width:133px;margin-bottom:14px}
 body .block-row a.hover p.teaser{height:65px;margin-top:-4px;font-size:.9em;line-height:1.4em}
 body .block-row a.hover.first{padding-left:0}
 body .block-row a.hover.last{padding-right:0}
 body .block-row.large-first .list-story.first{padding-top:0;}
 body .block-row.large-first .list-story.first p.teaser{font-size:1.2em}
 body .block-row.large-first .list-story.last{padding-bottom:0}
-body .block-row.large-first a.hover.first{width:full-block-width;}
-body .block-row.large-first a.hover.first img{width:full-block-width;margin-bottom:0}
+body .block-row.large-first a.hover.first{width:296px;}
+body .block-row.large-first a.hover.first img{width:296px;margin-bottom:0}
 body .rounded,body .rounded-hover{-webkit-border-radius:4px;-moz-border-radius:4px;-o-border-radius:4px;-khtml-border-radius:4px;border-top-left-radius:4px 4px;border-top-right-radius:4px 4px;border-bottom-right-radius:4px 4px;border-bottom-left-radius:4px 4px;-webkit-box-shadow:rgba(0,0,0,0.40) 0 1px 3px;-moz-box-shadow:rgba(0,0,0,0.40) 0 1px 3px;box-shadow:rgba(0,0,0,0.40) 0 1px 3px;background-color:#fff;background:-webkit-gradient(linear,left bottom,left top,color-stop(0,whiteSmoke),color-stop(.33,#fff));background:-moz-linear-gradient(center bottom,whiteSmoke 0%,#fff 33%);float:left}
 body a.rounded-hover{border-left:1px solid transparent;border-right:1px solid transparent;}
 body a.rounded-hover h3{-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear}

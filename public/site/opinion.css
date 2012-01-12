@@ -32,7 +32,7 @@ body section > #opinion .bottom .editorial-board .rounded{width:327px;height:630
 body section > #opinion .bottom .editorial-board .rounded a.hover{padding-bottom:18px;}
 body section > #opinion .bottom .editorial-board .rounded a.hover h2{font-size:1.3em}
 body section > #opinion .bottom .editorial-board .rounded a.hover p.date{font-size:.9em;margin-bottom:6px}
-body section > #opinion .bottom #columnists{display:none;float:right;}
+body section > #opinion .bottom #columnists{float:right;}
 body section > #opinion .bottom #columnists #columnist-list .rounded{height:630px;}
 body section > #opinion .bottom #columnists #columnist-list .rounded h2 a{padding-left:7px}
 body section > #opinion .bottom #columnists #columnist-articles .rounded{height:630px;width:468px}

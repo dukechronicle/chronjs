@@ -22,7 +22,6 @@ require(["align", "html5ie"], function(align) {
         });
     } else if (page() === 'sports') {
         require(["slideshow/slideshow"], function(slideshow) {
-            slideshow.init();
         });
     } else if (page() === 'opinion') {
         require(["opinion"]);

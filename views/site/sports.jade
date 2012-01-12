@@ -52,7 +52,7 @@ ul.nav.clearfix
     .middle2.clearfix
         if (model.Blog)
             .blog!=partial('container/story-list-image', {locals: {title: "The Blue Zone", image: "/images/blogs/sportsblog-banner.jpg", imageHref:'http://sports.chronicleblogs.com', stories:model.Blog}})
-        .multimedia!=partial('container/multimedia-sports', {title: "multimedia"})
+        .multimedia!=partial('container/multimedia-sports', {title: "Multimedia"})
     .bottom
         .row.clearfix
             if (model.Football)

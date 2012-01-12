@@ -22,3 +22,6 @@ body section > #recess .bottom > .row > div .container.block .rounded-hover h2{f
 body section > #recess .bottom > .row > div .container.block .rounded-hover p.teaser{color:#444;line-height:1.3em;font-size:1em}
 body section > #recess .bottom > .row > div .container.block .rounded-hover img{width:70px;height:70px;float:right}
 body section > #recess .bottom > .row > .last > .container.block{margin-right:0}
+body section > #recess .multimedia .rounded-hover{width:966px;}
+body section > #recess .multimedia .rounded-hover .element{float:left;margin-right:8px}
+body section > #recess .multimedia .rounded-hover .element.last{margin-right:0}

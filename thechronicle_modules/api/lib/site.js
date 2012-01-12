@@ -25,7 +25,10 @@ var sportsModel = JSON.parse(fs.readFileSync("sample-data/sports.json"));
 var columnistsData = JSON.parse(fs.readFileSync("sample-data/columnists.json"));
 var columnistsHeadshots = {};
 columnistsData.forEach(function(columnist) {
-    columnistsHeadshots[columnist.name] = columnist.headshot;
+    columnistsHeadshots[columnist.name] = {
+        headshot: columnist.headshot,
+        tagline: columnist.tagline
+    };
 });
 
 // TODO remove and put in to api
@@ -304,8 +307,10 @@ site.init = function (app, callback) {
                 var model = results[0];
                 model.Featured.forEach(function(article) {
                     article.author = article.authors[0];
-                    if (columnistsHeadshots[article.author]) {
-                        article.thumb = columnistsHeadshots[article.author];
+                    var columnistObj = null;
+                    if (columnistObj = columnistsHeadshots[article.author]) {
+                        if (columnistObj.headshot) article.thumb = columnistObj.headshot;
+                        if (columnistObj.tagline) article.tagline = columnistObj.tagline;
                     }
                 });
                 model.Blog = results[2];

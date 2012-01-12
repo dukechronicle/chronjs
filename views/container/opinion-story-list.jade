@@ -1,8 +1,18 @@
 .content-container
-    - if (name != 'undefined')
     .columnist-info.clearfix
-        h2 #{name}
-        p.year #{year}
+        - if (typeof headshot != 'undefined')
+            img.headshot(src=headshot)
+        - if (typeof name != 'undefined')
+            h3.name
+                | #{name}&nbsp;
+                - if (typeof twitter != 'undefined')
+
+                    a.twitter(href="http://twitter.com/#{twitter}") @#{twitter}
+        - if (typeof year != 'undefined')
+            p.year #{year}
+        - if (typeof tagline != 'undefined')
+            p.tagline #{tagline}
+
     - each story in stories
         a.hover.highlight-right.first.teaser(href='#{story.url}')
             h2 #{story.title}

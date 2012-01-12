@@ -3,7 +3,7 @@ var _ = require('underscore');
 
 var authors = exports;
 
-authors.getLatest = function (authorName, count, callback) {
+authors.getLatest = function (authorName, taxonomy, count, callback) {
     var query = {
         startkey:[authorName, {}],
         endkey:[authorName],
@@ -12,21 +12,14 @@ authors.getLatest = function (authorName, count, callback) {
         include_docs:true
     };
 
-    db.view('articles/authors', query,
+    if (taxonomy) {
+        query.startkey = [authorName, taxonomy, {}];
+        query.endkey = [authorName, taxonomy];
+        query.descending = true;
+    }
+
+    db.view('articles/authors_and_taxonomy', query,
             function (err, res) {
-                /*
-                console.log('-----')
-                for (var i = 0; i < res.length; i++) {
-                    console.log(res[i].doc.created);
-                }
-                console.log('--')
-                res.forEach(function(result) {
-                    console.log(result.created);
-                })
-                console.log('--')
-                _.pluck(res, 'doc').forEach(function(result) {
-                    console.log(result.created);
-                })*/
                 callback(err, _.pluck(res, 'doc'));
             }
     );

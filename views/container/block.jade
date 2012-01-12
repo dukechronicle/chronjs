@@ -8,6 +8,10 @@
     a.rounded-hover.hover.highlight-right(href=story.url)
         .content-container
             h2 #{story.title}
-            if (story.images && story.images.ThumbRect)
-                img.thumb(src=story.images.ThumbRect.url)
+            if (typeof imageType != 'undefined' && imageType == "rect")
+                if (story.images && story.images.ThumbRect)
+                    img.thumb(src=story.images.ThumbRect.url)
+            else
+                if (story.images && story.images.ThumbSquareM)
+                    img.thumb(src=story.images.ThumbSquareM.url)
             p.teaser #{story.teaser}

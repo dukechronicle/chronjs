@@ -26,7 +26,7 @@ require(["align", "html5ie"], function(align) {
         });
     } else if (page() === 'opinion') {
         require(["opinion"]);
-    } else if (page() === 'staff') {
+    } else if (page() === 'staff' || page() === 'search') {
         require(['scrollLoad'], function() {
             var scrollLoadUrl = "staff/#{name}?";
             var searchboxHTML =

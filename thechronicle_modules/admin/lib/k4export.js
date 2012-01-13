@@ -231,9 +231,9 @@ function exportToProduction(article, callback) {
  * runExporter also returns two distinct arrays, failed and successes
  * failed is an array of the filenames of the articles that weren't parsed
  * successes is an array of the articles successfuly parsed
- * @this{runExporter} exports unzipped xml files
- * @param{zipPath} zipPath holds the path of the zip file while s
- * @param{exportCallbacl}exportCallback returns failures and successes
+ * runExporter exports unzipped xml files
+ * @param{string} zipPath, Holds the path of the zip file while s
+ * @param{callbacl}exportCallback, Returns failures and successes
  */
 function runExporter(zipPath, exportCallback) {
     var parser = new ArticleParser(function (article, callback) {

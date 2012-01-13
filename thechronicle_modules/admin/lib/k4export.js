@@ -77,11 +77,10 @@ function ArticleParser(articleCallback) {
      * as an error if given file is not an XML or if other error occurs during
      * parsing. If no error, calls callback on article object.
      * 
-     * @this parseFile are a 
-     * @param {zipFile} zip archive
-     * @param {name} name of the file in the archive
-     * @param {callback} callback function, error and article object passed as
-     *     arguments
+     * @param{string} zipFile Path to zip archive
+     * @param{string} name Name of the file in the archive
+     * @param{function} callback Callback function taking error and
+     *     article object passed as arguments
      */
     this.parseFile = function(zipFile, name, callback) {
     	var extension = path.extname(name);
@@ -136,10 +135,8 @@ function ArticleParser(articleCallback) {
      * paragraphs into the article body string. Returns an error if the article
      * data isn't present. 
      * 
-     * @this {fixArticle}
-     * @param {article}, raw article object from parseXML
-     * @param {callback} callback function, error and corrected article object
-     *     passed as arguments.
+     * @param{Article} article Raw article object from parseXML
+     * @param{function} callback Callback taking the corrected article object
      */
     function fixArticle(article, callback) {
         if (!article.body || !article.title) {

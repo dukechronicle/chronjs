@@ -223,14 +223,14 @@ function ArticleParser(articleCallback) {
 
 
 /**
- * Creates new instance of the class ArticleParser called parser
- * parser's primary role is to take in zipPath, unzip it and then export the article
- * runExporter also returns two distinct arrays, failed and successes
- * failed is an array of the filenames of the articles that weren't parsed
- * successes is an array of the articles successfuly parsed
- * runExporter exports unzipped xml files
- * @param{string} zipPath, Holds the path of the zip file while s
- * @param{callbacl}exportCallback, Returns failures and successes
+ * Takes a path on the filesystem to the zip file with article XML files. Parses
+ * all articles and adds them to the site. Upon completion, the function
+ * deletes the zip file and calls a callback function with two arguments: an
+ * array of the filenames of the articles that weren't parsed and an array of
+ * the successfuly parsed article objects.
+ *
+ * @param{string} zipPath The path of the zip file with the article XML files
+ * @param{function} exportCallback Callback function of failures and successes
  */
 function runExporter(zipPath, exportCallback) {
     var parser = new ArticleParser(function (article, callback) {

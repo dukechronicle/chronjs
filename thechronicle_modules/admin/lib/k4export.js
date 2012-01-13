@@ -227,9 +227,7 @@ function exportToProduction(article, callback) {
 
 /**
  * Creates new instance of the class ArticleParser called parser
- * parser's primary role is to take in zipPath, unzip it and check to see if it's a valid xml document.
- * It then returns either an error or the parsed xml document
- * It then exports the article
+ * parser's primary role is to take in zipPath, unzip it and then export the article
  * runExporter also returns two distinct arrays, failed and successes
  * failed is an array of the filenames of the articles that weren't parsed
  * successes is an array of the articles successfuly parsed

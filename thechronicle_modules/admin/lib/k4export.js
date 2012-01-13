@@ -147,10 +147,14 @@ function ArticleParser(articleCallback) {
             return;
         }
         try {
+            if (article.taxonomy[0] == "Editorial")
+		article.taxonomy = [ "Opinion", "Editorial" ];
             if (article.body[0].match(/^by [^\.]*$/i)) article.body.shift();
             if (article.body[0].match(/^from [^\.]*$/i)) article.body.shift();
             if (article.body[0].match(/^THE CHRONICLE$/)) article.body.shift();
             article.teaser = article.body[0].replace(/\.\s+[A-Z].*$/, ".");
+
+            else
         } catch (err) {
             callback(err);
             return;
@@ -174,10 +178,7 @@ function ArticleParser(articleCallback) {
     }
 
     function onSection(parser) {
-        if (parser.textNode == "Editorial")
-            parser.article.taxonomy = [ "Opinion", "Editorial" ];
-        else
-            parser.article.taxonomy = [ parser.textNode ];
+        parser.article.taxonomy = [ parser.textNode ];
     }
 
     function onDate(parser) {
@@ -220,10 +221,6 @@ function ArticleParser(articleCallback) {
 
 }
 
-function exportToProduction(article, callback) {
-    api.addDoc(article, callback);
-}
-
 
 /**
  * Creates new instance of the class ArticleParser called parser
@@ -237,7 +234,7 @@ function exportToProduction(article, callback) {
  */
 function runExporter(zipPath, exportCallback) {
     var parser = new ArticleParser(function (article, callback) {
-        exportToProduction(article, function (err, url, id) {
+	api.addDoc(article, function (err, url, id) {
             if (err) {
                 log.warning("Error adding article: " + err);
                 callback(article.title);

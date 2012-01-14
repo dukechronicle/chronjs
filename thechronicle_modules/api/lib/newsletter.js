@@ -15,7 +15,7 @@ var listID = null
 var templateID = null;
 var mcAPI = null;
 
-var numDocs = 1;
+var numDocs = 3;
 
 var newsletterFromEmail = "no-reply@dukechronicle.com";
 var newsletterFromName = "The Chronicle";
@@ -118,17 +118,22 @@ newsletter.createNewsletter = function (callback) {
 
                 for (var x = 0; x < taxonomyGroups.length; x++) {
                     newsHTML += "<h2>" + taxonomyGroups[x] + "</h2>";
-                    
-                    for(var i = 0; i < 1; i ++) {
+                    newsText += taxonomyGroups[x]+"\n\n";
+
+                    for(var i = 0; i < numDocs; i ++) {
                         var url = "http://www.dukechronicle.com/article/"+res[x][i].value.urls[0];
 
                         newsHTML += "<br />";
                         newsHTML += "<a href='" + url + "'><h3>" + res[x][i].value.title + "</h3></a>";
                         newsHTML += "<p>" + res[x][i].value.teaser + "</p>";
 
-                        newsText += res[x][i].value.teaser;
+                        newsText += res[x][i].value.title+"\n";
+                        newsText += res[x][i].value.teaser+"\n";
+                        newsText += url+"\n";
+                        newsText += "\n";
                     }
                     newsHTML += "<br />";
+                    newsText += "\n";
                 }
 
                 var sideBarText = "SideBar Text";

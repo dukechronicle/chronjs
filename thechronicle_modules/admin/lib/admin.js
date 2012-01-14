@@ -70,6 +70,12 @@ exports.init = function (app, callback) {
                         });
                     });
 
+                    app.get('/newsletter', site.checkAdmin, function (req, res) {
+                        api.newsletter.createNewsletter(function(campaignID) {
+                            res.redirect('https://admin.mailchimp.com/campaigns/');  
+                        });
+                    });
+
                     app.post('/group/add', site.checkAdmin,
                             function (req, res) {
                                 var _res = res;

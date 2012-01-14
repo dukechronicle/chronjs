@@ -144,7 +144,7 @@ newsletter.createNewsletter = function (callback) {
                         return callback('Error: ' + res.error + ' (' + res.code + ')');
                     }
                     log.info("Campaign ID: " + res);
-                    callback(null);
+                    callback(res);
                 });
             });
 };

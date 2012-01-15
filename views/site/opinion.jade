@@ -2,7 +2,11 @@
 
 #opinion
     .top.clearfix
-        .main!=partial('container/main-opinion', {title: "Today's Columns", stories: model.Featured})
+        .main
+            if (model.Featured)
+                .columns-today!=partial('container/main-opinion', {title: "Today's Columns", stories: model.Featured})
+            if (model.EditorialBoard)
+                .editorial-board!=partial('container/teaser-with-date.jade', {title: "Editorial Board", stories: model.EditorialBoard})
         .right
             if (model.Blog)
                 .blog!=partial('container/story-list', {title: "Backpages", stories: model.Blog})
@@ -12,27 +16,27 @@
                 .image-container.medium-rectangle.lighten!=partial('container/image', model.adFullRectangle)
             if (model.adFullBanner)
                 .image-container.full-banner.lighten!=partial('container/image', model.adFullBanner)
-
-    .bottom.clearfix
-        .editorial-board!=partial('container/teaser-with-date.jade', {title: "Editorial Board", stories: model.EditorialBoard})
-        #columnists
-            #columnist-list
-                .container.clearfix.story-list
-                    .vertical-container
-                        h2.vertical Columnists
-                    .rounded
-                        .content-container
+            if (model.Columnists)
+                #columnists
+                    #columnist-list
+                        .container.clearfix.story-list
+                            .vertical-container
+                                h2.vertical Columnists
+                            .rounded
+                                .content-container
+                                    - each columnist, index in model.Columnists
+                                        h2
+                                            a.list-story.hover.highlight-left(data-index=index, href="#")
+                                                #{columnist.name}
+                    #columnist-articles.container.clearfix
+                        .vertical-container
+                            if (typeof title != 'undefined')
+                                    h2.vertical #{title}
+                                else
+                                    h2.vertical &nbsp;
+                        .rounded
                             - each columnist, index in model.Columnists
-                                h2
-                                    a.list-story.hover.highlight-left(data-index=index, href="#")
-                                        #{columnist.name}
-            #columnist-articles.container.clearfix
-                .vertical-container
-                    if (typeof title != 'undefined')
-                            h2.vertical #{title}
-                        else
-                            h2.vertical &nbsp;
-                .rounded
-                    - each columnist, index in model.Columnists
-                        .columnist-stories(id="columnist-story-#{index}")!=partial('container/opinion-story-list.jade', columnist)
+                                .columnist-stories(id="columnist-story-#{index}")!=partial('container/opinion-story-list.jade', columnist)
+
+
 

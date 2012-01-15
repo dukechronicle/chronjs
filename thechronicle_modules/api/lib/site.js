@@ -130,23 +130,23 @@ site.init = function (app, callback) {
                     });
                 }
             ],
-                    function (err, results) {
-                        if (BENCHMARK) log.info("TOTAL TIME %d", Date.now() - start);
-                        var model = results[0];
-                        _.defaults(model, homeModel);
+            function (err, results) {
+                if (BENCHMARK) log.info("TOTAL TIME %d", Date.now() - start);
+                var model = results[0];
+                _.defaults(model, homeModel);
 
-                        model.popular = results[1];
-                        model.twitter = results[2];
-                        res.render('site/index', {
-                            css:asereje.css(['slideshow/style', 'container/style', 'site/frontpage']),
-                            layout:'layout-optimized',
-                            filename:'views/site/index.jade',
-                            locals:{
-                                model:model
-                            }
-                        });
+                model.popular = results[1];
+                model.twitter = results[2];
+                res.render('site/index', {
+                    css:asereje.css(['slideshow/style', 'container/style', 'site/frontpage']),
+                    layout:'layout-optimized',
+                    filename:'views/site/index.jade',
+                    locals:{
+                        model:model
+                    }
+                });
 
-                    });
+            });
         });
 
         app.get('/news', function (req, res) {

@@ -2,7 +2,7 @@
     #top.clearfix
         .content
             if (model["Top Headline"])
-                #top-headline!=partial('container/breaking', {stories: model["Top Headline"]})
+                #top-headline!=partial('container/top-headline', {stories: model["Top Headline"]})
             if (model.Breaking)
                 #breaking!=partial('container/breaking', {stories: model.Breaking})
             if (model.Slideshow)

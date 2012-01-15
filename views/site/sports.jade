@@ -26,6 +26,8 @@ ul.nav.clearfix
         .left
             if (model.adFullRectangle)
                 .image-container.medium-rectangle.lighten!=partial('container/image', model.adFullRectangle)
+            if (model.Blog)
+                .blog!=partial('container/story-list-image', {locals: {title: "The Blue Zone", image: "/images/blogs/sportsblog-banner.jpg", imageHref:'http://sports.chronicleblogs.com', stories:model.Blog}})
             //
 
         .right
@@ -48,11 +50,8 @@ ul.nav.clearfix
                         div!=partial('container/row-2', {story: model.Stories[5], tax: true})
                     if (model.Stories[7])
                         .last!=partial('container/row-2', {story: model.Stories[7], tax: true})
+            .multimedia!=partial('container/multimedia-sports', {title: "Multimedia"})
 
-    .middle2.clearfix
-        if (model.Blog)
-            .blog!=partial('container/story-list-image', {locals: {title: "The Blue Zone", image: "/images/blogs/sportsblog-banner.jpg", imageHref:'http://sports.chronicleblogs.com', stories:model.Blog}})
-        .multimedia!=partial('container/multimedia-sports', {title: "Multimedia"})
     .bottom
         .row.clearfix
             if (model.Football)

@@ -23,7 +23,7 @@ body a *{color:#333}
 body h1,body h2,body h3,body h4,body h5,body h6{font-family:skolar,Georgia,"Century Schoolbook","Times New Roman",Times,serif}
 body #shell{margin:0 auto;width:972px}
 body header,body section,body footer{width:972px}
-body header{position:relative;background-color:#001a57;color:#fff;padding-bottom:2px;border-bottom-right-radius:4px;border-bottom-left-radius:4px;box-shadow:rgba(0,0,0,0.40) 0 1px 3px}
+body header{position:relative;background-color:#069;color:#fff;padding-bottom:2px;border-bottom-right-radius:4px;border-bottom-left-radius:4px;box-shadow:rgba(0,0,0,0.40) 0 1px 3px}
 body #header-overlay{position:absolute;z-index:0;left:50px;top:-28px}
 body #header-top{height:70px;}
 body #header-top h1{position:relative;z-index:2;margin-top:20px;font-weight:bold;float:left;font-size:1.2em;line-height:2em;margin-bottom:-3px;}

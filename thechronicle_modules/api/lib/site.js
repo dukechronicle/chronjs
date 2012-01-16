@@ -738,15 +738,6 @@ site.init = function (app, callback) {
             http_res.render('site/newsletter');
         });
 
-        // eventually sending of newsletter should be put in a cron job, or very least at a url behind /admin/
-        app.get('/send-newsletter', function (req, http_res) {
-            api.newsletter.createNewsletter(function() {
-                api.newsletter.sendNewsletter(function() {});  
-            });
-          
-            http_res.render('site/newsletter');
-        });
-
         app.post('/newsletter', function (req, http_res) {
             var email = req.body.email;
             var action = req.body.action;

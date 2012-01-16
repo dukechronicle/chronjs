@@ -104,7 +104,27 @@ image.deleteOriginal = function (originalId, topCallback) {
             s3.delete(url.path, callback);
         }
     ], topCallback);
-}
+};
+
+image.articlesForVersion = function (versionId, topCallback) {
+    async.waterfall([
+        function (callback) {
+            db.image.articleImages(versionId, callback);
+        },
+        function (articles, callback) {
+            console.log(articles);
+            // async.map(articles, function (article, cbck) {
+            //     
+            //     cbck(null, article.value);
+            // },
+            // callback);
+            for (var i in articles) {
+                console.log(articles[i].value);
+            }
+            callback(null);
+        }],
+        topCallback);
+};
 
 image.originalsForPhotographer = function (photog, callback) {
     db.image.originalsForPhotographer(photog, callback);

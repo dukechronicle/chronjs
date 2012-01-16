@@ -46,6 +46,10 @@ site.init = function (app, callback) {
             log.crit("api init failed!");
             return callback(err2);
         }
+        
+        api.image.articlesForVersion('154d69b4c3f8cfe39811085ec1001dc3', function(err, res) {
+            //console.log(res);
+        });
 
         app.get('/about-us', function (req, res) {
             res.render('pages/about-us', {filename:'pages/about-us'});

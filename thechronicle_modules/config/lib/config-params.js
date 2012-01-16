@@ -411,7 +411,7 @@ var configParams = [
             ThumbRect: {
                 width: 186,
                 height: 133,
-                description: "Used as the thumbnail for articles on all layout pages. Any image for an article that will be on the layout should have it."
+                description: "Used as the thumbnail for articles on all layout pages, and in the newsletter. Any image for an article that will be on the layout should have it."
             },
             ThumbRectL: {
                 width: 276,

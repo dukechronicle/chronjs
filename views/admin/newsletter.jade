@@ -1,0 +1,20 @@
+h1 Newsletter
+
+span(id='message')
+br
+br
+
+form(action='/admin/newsletter', onsubmit="sendNewsletter(this,false,'Test Sent.'); return false;")
+  label(for='testEmail') Test Email Address:
+  input(type='text', name='testEmail')
+  input(type='hidden', name='campaignID', value=campaignID)
+  &nbsp;
+  input(type='submit', value='Send Test Newsletter')
+br
+br
+
+form(action='/admin/newsletter', method='post', onsubmit="sendNewsletter(this,true,'Newsletter Sent.'); return false;")
+  input(type='hidden', name='campaignID', value=campaignID)
+  input(type='submit', value='Send Newsletter')
+
+script(src='/js/admin/newsletter.js')

@@ -3,3 +3,4 @@ node_modules
 ak.txt
 .idea
 config.js
+public/dist

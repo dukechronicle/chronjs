@@ -11,7 +11,7 @@ var globalFunctions = require('../../global-functions');
 
 var apiKey = null;
 var taxonomyGroups = null;
-var listID = null
+var listID = null;
 var templateID = null;
 var mcAPI = null;
 
@@ -26,6 +26,7 @@ newsletter.init = function() {
     apiKey = config.get("MAILCHIMP_API_KEY");
     taxonomyGroups = config.get("TAXONOMY_MAIN_SECTIONS");
     listID = config.get("MAILCHIMP_LIST_ID");
+
     templateID = config.get("MAILCHIMP_TEMPLATE_ID");
 
     try { 
@@ -54,8 +55,13 @@ function getDate()
     return mm+'/'+dd+'/'+yyyy;
 };
 
+newsletter.sendTestNewsletter = function(campaignID, emailToSendTo, callback) {
+    var params = {"test_emails":[emailToSendTo], "cid":campaignID};
+    mcAPI.campaignSendTest(params, callback);
+};
+
 newsletter.addSubscriber = function (subscriberEmail, callback) {
-    var params = {"id":listID, "email_address":subscriberEmail, "send_welcome":true};
+   var params = {"id":listID, "email_address":subscriberEmail, "send_welcome":true};
     mcAPI.listSubscribe(params, function (res) {
         if (res === false) {
             log.warning("Adding subscriber to list failed!");
@@ -76,28 +82,13 @@ newsletter.removeSubscriber = function (subscriberEmail, callback) {
     });
 };
 
-newsletter.sendNewsletter = function (callback) {
-    var name = getNewsletterSubject();
-    log.info(name);
-    mcAPI.campaigns({ start:0, limit:1, filters:{"title":name}}, function (res) {
-        if (res.error) {
-            log.warning(res.error + ' (' + res.code + ')');
-            return callback('Error: ' + res.error + ' (' + res.code + ')');
+newsletter.sendNewsletter = function (campaignID, callback) {
+    mcAPI.campaignSendNow({cid:campaignID}, function (res) {
+        if (res === false) {
+            log.warning("Sending Campaign failed!");
+            return callback("Sending Campaign failed!");
         }
-
-        log.debug(JSON.stringify(res)); // Do something with your data!
-
-        var campaignID = res.data[0].id;
-        log.info(campaignID);
-
-        mcAPI.campaignSendNow({cid:campaignID}, function (res2) {
-            log.debug(res2);
-            if (res2 === false) {
-                log.warning("Sending Campaign failed!");
-                return callback("Sending Campaign failed!");
-            }
-            return callback(null);
-        });
+        return callback(null);
     });
 };
 

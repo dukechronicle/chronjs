@@ -71,9 +71,28 @@ exports.init = function (app, callback) {
                     });
 
                     app.get('/newsletter', site.checkAdmin, function (req, res) {
-                        api.newsletter.createNewsletter(function(campaignID) {
-                            res.redirect('https://admin.mailchimp.com/campaigns/');  
+                       api.newsletter.createNewsletter(function(campaignID) {
+                            res.render('admin/newsletter', {
+                                layout: "layout-admin.jade",
+                                locals: {campaignID: campaignID}
+                            });
                         });
+                    });
+
+                    app.post('/newsletter', site.checkAdmin, function(req,res) {
+                        var testEmailToSendTo = req.body.testEmail;
+                        var campaignID = req.body.campaignID;
+
+                        if(testEmailToSendTo != null) {
+                            api.newsletter.sendTestNewsletter(campaignID, testEmailToSendTo, function(err) {
+                                res.send("sent");
+                            });
+                        }
+                        else {
+                            api.newsletter.sendNewsletter(campaignID, function(err) {
+                                res.send("sent");
+                            });
+                        }
                     });
 
                     app.post('/group/add', site.checkAdmin,

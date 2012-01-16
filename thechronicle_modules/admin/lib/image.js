@@ -1,11 +1,11 @@
 var globalFunctions = require('../../global-functions');
+var config = require('../../config');
 var async = require('async');
-var s3 = require('./s3.js');
+var s3 = require('../../api/lib/s3.js');
 var im = require('imagemagick');
 var site = require('../../api/lib/site.js');
 var fs = require('fs');
 var api = require('../../api/lib/api.js');
-var urlModule = require('url');
 var _ = require("underscore");
 var log = require('../../log');
 
@@ -13,34 +13,6 @@ var VALID_EXTENSIONS = {};
 VALID_EXTENSIONS['image/jpeg'] = 'jpg';
 VALID_EXTENSIONS['image/png'] = 'png';
 VALID_EXTENSIONS['image/gif'] = 'gif';
-
-var IMAGE_TYPES = {
-    LargeRect: {
-        width: 636,
-        height: 393,
-        description: "Used for the main image on the article page, as well as for the slideshow"
-    },
-    ThumbRect: {
-        width: 186,
-        height: 133,
-         description: "Dean, add a description here"
-    },
-    ThumbRectL: {
-        width: 276,
-        height: 165,
-        description: "Dean, add a description here"
-    },
-    ThumbSquareM: {
-        width: 183,
-        height: 183,
-        description: "Dean, add a description here"
-    },
-    ThumbWide: {
-        width: 300,
-        height: 120,
-        description: "Dean, add a description here"
-    }
-};
 
 var THUMB_DIMENSIONS = '100x100';
 
@@ -60,28 +32,6 @@ function _getMagickString(x1, y1, x2, y2) {
     var w = x2 - x1;
     var h = y2 - y1;
     return w.toString() + 'x' + h.toString() + '+' + x1.toString() + '+' + y1.toString();
-}
-
-function _downloadUrlToPath(url, path, callback) {
-    var urlObj = urlModule.parse(url);
-    log.info('host: ' + urlObj.host);
-    var options = {
-        host: urlObj.host,
-        port: 80,
-        path: urlObj.pathname
-    };
-    http.get(options, function(res) {
-        res.setEncoding('binary');
-        var data = '';
-        res.on('data', function(chunk) {
-            data += chunk;
-        });
-        res.on('end', function() {
-            fs.writeFile(path, data, 'binary', function(err) {
-                callback(err);
-            });
-        });
-    });
 }
 
 exports.bindPath = function (app) {
@@ -140,48 +90,7 @@ exports.bindPath = function (app) {
                                     });
                         },
                         function (callback) {
-                            fs.readFile(imageName,
-                                    function (err, data) {
-                                        callback(err, data);
-                                    });
-                        },
-                        function (data, callback) {
-                            //put image in AWS S3 storage
-                            s3.put(data, imageName, imageType,
-                                    function (err, url) {
-                                        callback(err, url);
-                                    });
-                        },
-                        function (url, callback) {
-                            im.convert([imageName, '-thumbnail', THUMB_DIMENSIONS, thumbName],
-                                    function (imErr, stdout, stderr) {
-                                        callback(imErr, url);
-                                    });
-                        },
-                        function (url, callback) {
-                            fs.readFile(thumbName,
-                                    function (err, data) {
-                                        callback(err, url, data);
-                                    });
-                        },
-                        function (url, data, callback) {
-                            s3.put(data, thumbName, imageType,
-                                    function (err, thumbUrl) {
-                                        callback(err, url, thumbUrl);
-                                    });
-                        },
-                        function (url, thumbUrl, callback) {
-                            api.image.createOriginal(imageName, url, imageType, thumbUrl, null, null, null,
-                                    function (err, res) {
-                                        callback(err, res, url);
-                                    });
-                        },
-                        //clean up files
-                        function (res, url, callback) {
-                            _deleteFiles([imageName, thumbName],
-                                    function (err) {
-                                        callback(err, res, url);
-                                    });
+                            api.image.createOriginalFromFile(imageName, imageType, true, callback);
                         }
                     ],
                             function (err, result, url) {
@@ -218,6 +127,8 @@ exports.bindPath = function (app) {
                                             function (err2, versions) {
                                                 if (err2) globalFunctions.showError(httpRes, err2); // if an error is found, 
                                                 else {
+                                                    var imageTypes = config.get('IMAGE_TYPES');
+
                                                     httpRes.render('admin/image', { //no errors have been found, render image
                                                         locals:{ //specifies/assigns variables to pass into function
                                                             url:orig.value.url,
@@ -228,9 +139,9 @@ exports.bindPath = function (app) {
                                                             photographer:orig.value.photographer,
                                                             date:orig.value.date,
                                                             versions:versions,
-                                                            imageTypes:Object.keys(IMAGE_TYPES),
+                                                            imageTypes:Object.keys(imageTypes),
                                                             article:req.query.article,
-                                                            imageDetails:IMAGE_TYPES
+                                                            imageDetails:imageTypes
                                                         },
                                                         layout:"layout-admin.jade"
                                                     });
@@ -279,7 +190,7 @@ exports.bindPath = function (app) {
                         function (orig, callback) {
                             croppedName = 'crop_' + orig.value.name; // modify the croppedName
                             log.info(orig.value.url);
-                            _downloadUrlToPath(orig.value.url, orig.value.name,
+                            globalFunctions.downloadUrlToPath(orig.value.url, orig.value.name,
                                     function (err) {
                                         callback(err, orig);
                                     });
@@ -324,8 +235,7 @@ exports.bindPath = function (app) {
                                 if (err) {
                                     globalFunctions.showError(httpRes, err); //check for an error
                                 } else {
-                                    if (err) globalFunctions.showError(httpRes, err); //check for an error again
-                                    else if (article) httpRes.redirect('/admin/image/' + imageName + '?article=' + article); //if there is an article, redirect to this domain
+                                    if (article) httpRes.redirect('/admin/image/' + imageName + '?article=' + article); //if there is an article, redirect to this domain
                                     else httpRes.redirect('/admin/image/' + imageName); // otherwise, redirect to this domain
                                 }
                             }

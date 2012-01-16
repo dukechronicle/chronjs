@@ -1,83 +1,249 @@
 /* require internal modules */
 var config = require('../thechronicle_modules/config');
 var api = require('../thechronicle_modules/api/lib/api');
+var s3 = require('../thechronicle_modules/api/lib/s3');
+var globalFunctions = require('../thechronicle_modules/global-functions');
 
 var async = require('async');
 
-var fakeArticles = [
-    {title:"title 1", body:"body 1", taxonomy:["News"], authors:["author 1"], teaser:"teaser 1", type:"article"},
-    {title:"title 2", body:"body 2", taxonomy:["News","University"], authors:["author 2"], teaser:"teaser 2", type:"article"},
-    {title:"title 3", body:"body 3", taxonomy:["News","University","Speakers & Events"], authors:["author 3"], teaser:"teaser 3", type:"article"},
-    {title:"title 4", body:"body 4", taxonomy:["News","Local & National"], authors:["author 4"], teaser:"teaser 4", type:"article"},
-    {title:"title 5", body:"body 5", taxonomy:["News"], authors:["author 5"], teaser:"teaser 5", type:"article"},
-    {title:"title 6", body:"body 6", taxonomy:["Sports"], authors:["author 6"], teaser:"teaser 6", type:"article"},
-    {title:"title 7", body:"body 7", taxonomy:["Sports","Baseball"], authors:["author 7"], teaser:"teaser 7", type:"article"},
-    {title:"title 8", body:"body 8", taxonomy:["Sports","Men's"], authors:["author 8"], teaser:"teaser 8", type:"article"},
-    {title:"title 9", body:"body 9", taxonomy:["Sports","Men's","M Basketball"], authors:["author 9"], teaser:"teaser 9", type:"article"},
-    {title:"title 10", body:"body 10", taxonomy:["Opinion"], authors:["author 10"], teaser:"teaser 10", type:"article"},
-    {title:"title 11", body:"body 11", taxonomy:["Opinion","Editorial"], authors:["author 11"], teaser:"teaser 11", type:"article"},
-    {title:"title 12", body:"body 12", taxonomy:["Opinion","Cartoons"], authors:["author 12"], teaser:"teaser 12", type:"article"},
-    {title:"title 13", body:"body 13", taxonomy:["Opinion","Column", "Senior Column"], authors:["author 13", "author 12"], teaser:"teaser 13", type:"article"},
-    {title:"title 14", body:"body 14", taxonomy:["Recess"], authors:["author 14"], teaser:"teaser 14", type:"article"},
-    {title:"title 15", body:"body 15", taxonomy:["Recess","Arts"], authors:["author 15"], teaser:"teaser 15", type:"article"},
-    {title:"title 16", body:"body 16", taxonomy:["Recess","Film"], authors:["author 16"], teaser:"teaser 16", type:"article"},
-    {title:"title 17", body:"body 17", taxonomy:["Recess","Food","Food Review"], authors:["author 17"], teaser:"teaser 17", type:"article"},
-    {title:"title 18", body:"body 18", taxonomy:["Towerview"], authors:["author 18"], teaser:"teaser 18", type:"article"},
-    {title:"title 19", body:"body 19", taxonomy:["Towerview", "Bus Stop"], authors:["author 19"], teaser:"teaser 19", type:"article"},
-    {title:"title 20", body:"body 20", taxonomy:["Towerview", "Prefix"], authors:["author 20", "author 19"], teaser:"teaser 20", type:"article"},
-    {title:"title 21", body:"body 21", taxonomy:["Towerview", "Savvy", "Endorsement"], authors:["author 21", "author 1"], teaser:"teaser 21", type:"article"},
+var FAKE_WORDS = [
+    'lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipisicing', 'elit', 'sed', 'do', 'eiusmod', 'tempor', 'incididunt', 'ut',
+    'labore', 'et', 'dolore', 'magna', 'aliqua', 'enim', 'ad', 'minim', 'veniam', 'quis', 'nostrud', 'exercitation', 'ullamco', 'laboris', 'nisi'
 ];
 
-if(!config.isSetUp()) {
-	console.log('You must set up config.js in the main directory before you can generate an environment');
-}
-else if(config.get('COUCHDB_URL').indexOf("heroku") != -1 || config.get('COUCHDB_URL').indexOf("cloudant") != -1) {
-    console.log("You can't create an environment using the production config options. Recommend use of db server chrondev.iriscouch.com");
-}
-else {
-    // TODO: add group/layout and image code    
-    async.waterfall([
-        function(callback) {
-            api.init(callback);
-        },
-        function(callback) {
-            console.log("creating database...");
+var IMAGES = [
+{
+    name: 'PhilipCatterall.jpg',
+    url: 'http://s3.amazonaws.com/chron_bucket1/AlsuBt8I-wbbgamer_PhilipCatterall.jpg',
+    LargeRect: 'http://s3.amazonaws.com/chron_bucket1/1AlsuBt8I-wbbgamer_PhilipCatterall.jpg',
+    ThumbRect: 'http://s3.amazonaws.com/chron_bucket1/2AlsuBt8I-wbbgamer_PhilipCatterall.jpg'
+},
+{
+    name: 'ShayanAsadi.jpg',
+    url: 'http://s3.amazonaws.com/chron_bucket1/a21ubX7T-wsocanalysis_ShayanAsadi.jpg',
+    LargeRect: 'http://s3.amazonaws.com/chron_bucket1/1a21ubX7T-wsocanalysis_ShayanAsadi.jpg',
+    ThumbRect: 'http://s3.amazonaws.com/chron_bucket1/2a21ubX7T-wsocanalysis_ShayanAsadi.jpg'
+},
+{
+    name: 'File.jpg',
+    url: 'http://s3.amazonaws.com/chron_bucket1/4bcnEsiM-paulusandK_File.jpg',
+    LargeRect: 'http://s3.amazonaws.com/chron_bucket1/14bcnEsiM-paulusandK_File.jpg',
+    ThumbRect: 'http://s3.amazonaws.com/chron_bucket1/24bcnEsiM-paulusandK_File.jpg'
+}];
 
-            // delete old version of db and then create it again to start the db fresh            
-            api.recreateDatabase(callback);
-        },
-        function(callback) {
-            console.log("creating search index...");
-           
-            // delete all articles for this db in the search index to start the index fresh
-            api.search.removeAllDocsFromSearch(function(err) {
-                callback(err);
-            });
-        },
-        function(callback) {
-            console.log("populating site with fake articles...");
-            addFakeArticles(callback);
-        },
-        function(callback) {
-            console.log('environment created!');
-            callback(null);
-        }],
-        function(err) {
-              if (err) console.log(err);
-        }
-    );
+var WORDS_FOR_BODY = 70;
+var WORDS_FOR_TITLE = 4;
+var WORDS_FOR_AUTHOR = 2;
+var WORDS_FOR_TEASER = 7;
+var NUM_ARTICLES = 25;
+
+var ARTICLES_PER_LAYOUT_GROUP = 4;
+
+var TAXONOMY = null;
+
+// holds the IDs of the articles, once they have been found
+var articleIDs = [];
+
+config.init(function(err) {
+    if(err) {
+        console.log(err);
+    }
+    else if(!config.isSetUp()) {
+	    console.log('You must run server.js to set up config options before you can generate an environment');
+    }
+    else if(config.get('COUCHDB_URL').indexOf("heroku") != -1 || config.get('COUCHDB_URL').indexOf("cloudant") != -1) {
+        console.log("You can't create an environment using the production config options. Recommend use of db server chrondev.iriscouch.com");
+    }
+    else {
+        TAXONOMY = config.get('TAXONOMY');
+        delete(TAXONOMY["has"]); // extra key added to taxonomy that shouldn't be there
+
+        console.log('creating environment...this could take a few minutes');
+
+        // TODO: add image code    
+        async.waterfall([
+            function(callback) {
+                api.init(callback);
+            },
+            function(callback) {
+                s3.init(callback);
+            },
+            function(callback) {
+                console.log("creating database...");
+            
+                // delete old version of db and then create it again to start the db fresh            
+                api.recreateDatabase('dsfvblkjeiofkjd',callback);
+            },
+            function(callback) {
+                console.log("creating search index...");
+               
+                // delete all articles for this db in the search index to start the index fresh
+                api.search.removeAllDocsFromSearch(function(err) {
+                    callback(err);
+                });
+            },
+            function(callback) {
+                console.log('creating image originals and versions...');
+                createImages(callback);
+            },
+            function(images, callback) {
+                console.log("populating site with fake articles...");
+                addFakeArticles(images, callback);
+            },
+            function(callback) {
+                console.log("creating layouts...");
+                createLayoutGroups(callback);
+            },
+            function(callback) {
+                console.log('environment created!');
+                callback(null);
+            }],
+            function(err) {
+                  if (err) console.log(err);
+            }
+        );
+    }
+});
+
+function createImage(img, callback) {
+    var origId;
+    var newImage = {};
+    async.waterfall([ 
+    
+    function(callback) {
+        globalFunctions.downloadUrlToPath(img.url, img.name, callback);
+    },
+    function(callback) {
+        api.image.createOriginalFromFile(img.name, 'image/jpg', true, callback);
+    },
+    function(result, url, callback) {
+        origId = result.id;
+        api.image.createVersion(origId, img.LargeRect, 636, 393, callback);
+    },
+    function(result, callback) {
+        newImage.LargeRect = result._versionAdded;
+        api.image.createVersion(origId, img.ThumbRect, 186, 133, callback);
+    }
+    ], function(err, res) {
+        newImage.ThumbRect = res._versionAdded;
+        callback(err, newImage);
+    });
 }
 
-function addFakeArticles(callback) {
-    console.log(callback.toString());
-    async.forEach(fakeArticles, function(article, cb) {
+function createImages(topCallback) {
+    async.map(IMAGES, createImage, topCallback);
+}
+
+function addFakeArticles(images, callback) {
+    var fakeArticles = [];
+
+    for(var i = 0; i < NUM_ARTICLES; i ++) {
+        var article = {};
+        article.title = generateSentence(WORDS_FOR_TITLE);
+        article.body = generateSentence(WORDS_FOR_BODY);
+        article.authors = [generateSentence(WORDS_FOR_AUTHOR)];
+        article.teaser = generateSentence(WORDS_FOR_TEASER);
+        article.type = "article";
+        article.taxonomy = generateTaxonomy();
+        article.images = images[getRandomNumber(images.length)];
+        
+        fakeArticles[i] = article;
+    }
+
+    async.forEachSeries(fakeArticles, function(article, cb) {
         console.log("adding article with title: '" + article.title + "'...");
         
         api.addDoc(article, function(err, url, articleID) {
             if(err) console.log("article could not be added - " + err);
-            else console.log("article with url: '" + url + "' added.");
+            else {
+                console.log("article with url: '" + url + "' added.");
+                articleIDs.push(articleID)
+            }
             cb();
         });
     },
     callback);
+}
+
+function createLayoutGroups(callback) {
+    var layoutGroups = api.group.getLayoutGroups();    
+    var layoutPages = Object.keys(layoutGroups);
+
+    async.forEachSeries(layoutPages,
+        function(layoutPage, cb) {
+            console.log('generating layout for ' + layoutPage);
+            
+            var namespace = layoutGroups[layoutPage].namespace;
+            var groups = layoutGroups[layoutPage].groups;
+            
+            async.forEachSeries(groups,
+                function(group, cb2) {
+                    console.log('generating layout for ' + layoutPage + ' group ' + group);
+                    
+                    var articleIDsForThisGroup = []
+                    for(var i = 0; i < ARTICLES_PER_LAYOUT_GROUP; i ++) {
+                        var id = null;
+                        while(true) {
+                            id = articleIDs[getRandomNumber(articleIDs.length)];
+                            
+                            if(articleIDsForThisGroup.indexOf(id) == -1) break;
+                        }                        
+                        articleIDsForThisGroup.push(id);
+                    }
+
+                    var numAdded = 1;
+                    async.forEachSeries(articleIDsForThisGroup,
+                        function(id, cb3) {
+                            api.group.add(namespace, group, id, numAdded, function(err) {
+                                if(err) console.log(err);
+                                else numAdded ++;
+                                cb3();
+                            });
+                        },
+                        cb2
+                    );
+                },
+                cb
+            );
+        },
+        callback
+    );
+}
+
+function generateSentence(numWords) {
+    var string = "";
+    
+    for(var i = 0; i < numWords; i ++) {
+        if(i != 0) {
+            string = string + " ";
+        }
+        string = string + FAKE_WORDS[getRandomNumber(FAKE_WORDS.length)];
+    }
+
+    return string;
+}
+
+function generateTaxonomy() {
+    var taxonomy = [];
+    var taxonomyLevelTree = TAXONOMY;
+    
+    taxonomyLevelTree = taxonomyLevelTree[getRandomNumber(Object.keys(taxonomyLevelTree).length)];
+    taxonomy[0] = Object.keys(taxonomyLevelTree)[0];
+
+    var i = 1;
+    while(true) {       
+        taxonomyLevelTree = taxonomyLevelTree[taxonomy[i-1]];
+        
+        if(Object.keys(taxonomyLevelTree).length == 0) break;
+        
+        taxonomyLevelTree = taxonomyLevelTree[getRandomNumber(Object.keys(taxonomyLevelTree).length)];
+        taxonomy[i] = Object.keys(taxonomyLevelTree)[getRandomNumber(Object.keys(taxonomyLevelTree).length)];
+        i ++;
+    }
+
+    return taxonomy;
+}
+
+function getRandomNumber(exclusiveMax) {
+    return Math.floor(Math.random()*exclusiveMax);
 }

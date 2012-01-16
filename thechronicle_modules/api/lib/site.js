@@ -5,7 +5,6 @@ var api = require('./api');
 var globalFunctions = require('../../global-functions');
 var log = require('../../log');
 var smtp = require('./smtp');
-var newsletter = require('./newsletter');
 var redis = require('../../redisclient');
 var config = require('../../config');
 var rss = require('./rss');
@@ -18,11 +17,19 @@ var dateFormat = require('dateformat');
 
 var asereje = require('asereje');
 
-var LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
+var LAYOUT_GROUPS = null;
 
 var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
 var newsModel = JSON.parse(fs.readFileSync("sample-data/news.json"));
 var sportsModel = JSON.parse(fs.readFileSync("sample-data/sports.json"));
+var columnistsData = JSON.parse(fs.readFileSync("sample-data/columnists.json"));
+var columnistsHeadshots = {};
+columnistsData.forEach(function(columnist) {
+    columnistsHeadshots[columnist.name] = {
+        headshot: columnist.headshot,
+        tagline: columnist.tagline
+    };
+});
 
 // TODO remove and put in to api
 var db = require('../../db-abstract');
@@ -31,7 +38,7 @@ var BENCHMARK = false;
 
 function _convertTimestamp(timestamp) {
     var date = new Date(timestamp*1000);
-    return dateFormat(date,"mmmm dS, yyyy");
+    return dateFormat(date,"mmmm d, yyyy");
 }
 
 function _articleViewsKey(taxonomy) {
@@ -40,6 +47,7 @@ function _articleViewsKey(taxonomy) {
 
 site.init = function (app, callback) {
     var twitterFeeds = ["DukeChronicle", "ChronicleRecess", "TowerviewMag", "DukeBasketball", "ChronPhoto", "ChronicleSports"];
+    LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
 
     api.init(function (err2) {
         if (err2) {
@@ -91,9 +99,10 @@ site.init = function (app, callback) {
                     });
                 },
                 function (callback) { //1
-                    redis.client.zrevrange(_articleViewsKey([]), 0, 5, function (err, popular) {
+                    var popularArticles = 7;
+                    redis.client.zrevrange(_articleViewsKey([]), 0, popularArticles - 1, function (err, popular) {
                         if (err) return callback(err);
-                        var popular = popular.map(function (str) {
+                        popular = popular.map(function (str) {
                             var parts = str.split('||');
                             return {
                                 url:'/article/' + parts[0],
@@ -121,29 +130,29 @@ site.init = function (app, callback) {
                     });
                 }
             ],
-                    function (err, results) {
-                        if (BENCHMARK) log.info("TOTAL TIME %d", Date.now() - start);
-                        var model = results[0];
-                        _.defaults(model, homeModel);
+            function (err, results) {
+                if (BENCHMARK) log.info("TOTAL TIME %d", Date.now() - start);
+                var model = results[0];
+                _.defaults(model, homeModel);
 
-                        model.popular = results[1];
-                        model.twitter = results[2];
-                        res.render('site/index', {
-                            css:asereje.css(['slideshow/style', 'container/style', 'site/frontpage']),
-                            layout:'layout-optimized',
-                            filename:'views/site/index.jade',
-                            locals:{
-                                model:model
-                            }
-                        });
+                model.popular = results[1];
+                model.twitter = results[2];
+                res.render('site/index', {
+                    css:asereje.css(['slideshow/style', 'container/style', 'site/frontpage']),
+                    layout:'layout-optimized',
+                    filename:'views/site/index.jade',
+                    locals:{
+                        model:model
+                    }
+                });
 
-                    });
+            });
         });
 
         app.get('/news', function (req, res) {
             api.group.docs(LAYOUT_GROUPS.News.namespace, null, function (err, model) {
                 _.defaults(model, newsModel);
-                redis.client.zrevrange(_articleViewsKey(['News']), 0, 5, function (err, popular) {
+                redis.client.zrevrange(_articleViewsKey(['News']), 0, 4, function (err, popular) {
                     model.popular = popular.map(function (str) {
                         var parts = str.split('||');
                         return {
@@ -171,7 +180,13 @@ site.init = function (app, callback) {
                         };
 
                         api.taxonomy.getParentAndChildren(['News'], function (err, parentAndChildren) {
-                            res.render('site/news', {subsections:parentAndChildren.children, filename:'views/site/news.jade', model:model});
+                            res.render('site/news', {
+                                css:asereje.css(['container/style', 'site/section', 'site/news']),
+                                layout:'layout-optimized',
+                                subsections:parentAndChildren.children,
+                                filename:'views/site/news.jade',
+                                model:model
+                            });
                         });
                     });
                 });
@@ -200,30 +215,34 @@ site.init = function (app, callback) {
                         });
                     },
                     function (callback) { //1
-                        api.taxonomy.getParentAndChildren(['Sports'], callback);
+                        api.taxonomy.getParentAndChildren(['Sports', 'Men'], callback);
                     },
                     function (callback) { //2
+                        api.taxonomy.getParentAndChildren(['Sports', 'Women'], callback);
+                    }
+                        /*
+                    function (callback) { //3
                         api.taxonomy.docs("Football", 4, callback);
                     },
-                    function (callback) { //3
+                    function (callback) { //4
                         api.taxonomy.docs("M Basketball", 4, callback);
                     },
-                    function (callback) { //4
+                    function (callback) { //5
                         api.taxonomy.docs("M Soccer", 4, callback);
                     },
-                    function (callback) { //5
+                    function (callback) { //6
                         api.taxonomy.docs("W Soccer", 4, callback);
-                    }
+                    }*/
                 ],
                         // optional callback
                         function (err, results) {
                             if (err) return log.warning(err);
                             model.Blog = results[0];
                             /*
-                             model.Football = _.pluck(results[2], 'value');
-                             model.Mbball = _.pluck(results[3], 'value');
-                             model.MSoccer = _.pluck(results[4], 'value');
-                             model.WSoccer = _.pluck(results[5], 'value');*/
+                             model.Football = _.pluck(results[3], 'value');
+                             model.Mbball = _.pluck(results[4], 'value');
+                             model.MSoccer = _.pluck(results[5], 'value');
+                             model.WSoccer = _.pluck(results[6], 'value');*/
 
                             model.adFullRectangle = {
                                 "title":"Advertisement",
@@ -235,7 +254,12 @@ site.init = function (app, callback) {
 
 
                             //log.debug(model.WSoccer);
-                            httpRes.render('site/sports', {subsections:results[1].children, filename:'views/site/sports.jade', model:model});
+                            httpRes.render('site/sports', {
+                                css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
+                                layout:'layout-optimized',
+                                subsections:[results[1].children, results[2].children],
+                                filename:'views/site/sports.jade',
+                                model:model});
                         });
 
             });
@@ -250,18 +274,6 @@ site.init = function (app, callback) {
                     api.taxonomy.getParentAndChildren(['Opinion'], callback);
                 },
                 function (callback) { //2
-                    api.authors.getLatest("Editorial Board", 5, callback);
-                },
-                function (callback) { //3
-                    api.authors.getLatest("Shining Li", 6, callback);
-                },
-                function (callback) { //4
-                    api.authors.getLatest("Rui Dai", 6, callback);
-                },
-                function (callback) { //5
-                    api.authors.getLatest("Jason Wagner", 6, callback);
-                },
-                function (callback) { //6
                     rss.getRSS('blog-opinion', function (err, res) {
                         if (res && res.items && res.items.length > 0) {
                             var Blog = res.items.map(function (item) {
@@ -276,35 +288,64 @@ site.init = function (app, callback) {
                             callback(null, []);
                         }
                     });
+                },
+                function (callback) { // 3
+                    api.authors.getLatest("Editorial Board", "Opinion", 5, callback);
+                },
+                function (callback) { //4
+                    async.map(columnistsData,
+                            function(columnist, _callback) {
+                                api.authors.getLatest(columnist.name, "Opinion", 5, function(err, res) {
+                                    columnist.stories = res;
+                                    _callback(err, columnist);
+                                })
+                            },
+                            callback
+                    );
                 }
             ],
-                    function (err, results) {
-                        var model = results[0];
-                        model.EditBoard = results[2];
-                        model.Columnists = [];
-                        model.Columnists.push({title:"Shining Li", stories:results[3]});
-                        model.Columnists.push({title:"Rui Dai", stories:results[4]});
-                        model.Columnists.push({title:"Jason Wagner", stories:results[5]});
-                        model.Blog = results[6];
+            function (err, results) {
+                var model = results[0];
+                model.Featured.forEach(function(article) {
+                    article.author = article.authors[0];
+                    var columnistObj = null;
+                    if (columnistObj = columnistsHeadshots[article.author]) {
+                        if (columnistObj.headshot) article.thumb = columnistObj.headshot;
+                        if (columnistObj.tagline) article.tagline = columnistObj.tagline;
+                    }
+                });
+                model.Blog = results[2];
+                model.EditorialBoard = results[3];
+                model.Columnists = {};
+                // assign each columnist an object containing name and stories to make output jade easier
+                results[4].forEach(function(columnist, index) {
+                        model.Columnists[index] = columnist;
+                });
+                // need to call compact to remove undefined entries in array
+                _.compact(model.Columnists);
+                model.adFullRectangle = {
+                    "title":"Advertisement",
+                    "imageUrl":"/images/ads/monster.png",
+                    "url":"http://google.com",
+                    "width":"300px",
+                    "height":"250px"
+                };
 
-                        model.adFullRectangle = {
-                            "title":"Advertisement",
-                            "imageUrl":"/images/ads/monster.png",
-                            "url":"http://google.com",
-                            "width":"300px",
-                            "height":"250px"
-                        };
+                model.adFullBanner = {
+                    "title":"Ad",
+                    "imageUrl":"/images/ads/full-banner.jpg",
+                    "url":"http://google.com",
+                    "width":"468px",
+                    "height":"60px"
+                };
 
-                        model.adFullBanner = {
-                            "title":"Ad",
-                            "imageUrl":"/images/ads/full-banner.jpg",
-                            "url":"http://google.com",
-                            "width":"468px",
-                            "height":"60px"
-                        };
-
-                        res.render('site/opinion', {subsections:results[1].children, filename:'views/site/opinion.jade', model:model});
-                    });
+                res.render('site/opinion', {
+                    css:asereje.css(['container/style', 'site/section', 'site/opinion']),
+                    layout:'layout-optimized',
+                    subsections:results[1].children,
+                    filename:'views/site/opinion.jade',
+                    model:model});
+            });
 
         });
 
@@ -332,7 +373,12 @@ site.init = function (app, callback) {
 
 
                     api.taxonomy.getParentAndChildren(['Recess'], function (err, parentAndChildren) {
-                        res.render('site/recess', {subsections:parentAndChildren.children, filename:'views/site/recess.jade', model:result});
+                        res.render('site/recess', {
+                            css:asereje.css(['container/style', 'site/section', 'site/recess']),
+                            layout:'layout-optimized',
+                            subsections:parentAndChildren.children,
+                            filename:'views/site/recess.jade',
+                            model:result});
                     });
                 })
             });
@@ -350,7 +396,12 @@ site.init = function (app, callback) {
                 };
 
                 api.taxonomy.getParentAndChildren(['Towerview'], function (err, parentAndChildren) {
-                    res.render('site/towerview', {subsections:parentAndChildren.children, filename:'views/site/towerview.jade', model:result});
+                    res.render('site/towerview', {
+                        css:asereje.css(['container/style', 'site/section', 'site/towerview']),
+                        layout:'layout-optimized',
+                        subsections:parentAndChildren.children,
+                        filename:'views/site/towerview.jade',
+                        model:result});
                 });
             });
         });
@@ -358,7 +409,15 @@ site.init = function (app, callback) {
         app.get('/section/*', function (req, res) {
             var params = req.params.toString().split('/');
             var section = params[params.length - 1];
-            api.taxonomy.docs(section, 20,
+            redis.client.zrevrange(_articleViewsKey(params), 0, 4, function (err, popular) {
+                popular = popular.map(function (str) {
+                    var parts = str.split('||');
+                    return {
+                        url:'/article/' + parts[0],
+                        title:parts[1]
+                    };
+                });
+                api.taxonomy.docs(section, 20,
                     function (err, docs) {
                         if (err) globalFunctions.showError(res, err);
                         else {
@@ -380,13 +439,17 @@ site.init = function (app, callback) {
                                         docs:docs,
                                         subsections:parentAndChildren.children,
                                         parentPaths:parentAndChildren.parentPaths,
-                                        section:section
-                                    }
+                                        section:section,
+                                        popular: popular
+                                    },
+                                    layout: "layout-optimized",
+                                    css:asereje.css(['container/style', 'site/section'])
                                 });
                             });
                         }
                     }
-            );
+                );
+            });
         });
         
         /**
@@ -403,13 +466,15 @@ site.init = function (app, callback) {
             Calls Search Functionality
         */
         app.get('/search/:query', function (req, http_res) {
-            api.search.docsBySearchQuery(req.params.query.replace('-', ' '), req.query.sort, req.query.order, req.query.facets, 1, function (err, docs, facets) {
+            api.search.docsBySearchQuery(req.params.query.replace(/-/g, ' '), req.query.sort, req.query.order, req.query.facets, 1, function (err, docs, facets) {
                 _showSearchArticles(err, req, http_res, docs, facets);
             });
         });
 
         app.get('/staff/:query', function (req, http_res) {
-            api.search.docsByAuthor(req.params.query.replace('-', ' '), 'desc', '', 1, function (err, docs) {
+            var name = req.params.query.replace(/-/g, ' ');
+
+            api.search.docsByAuthor(name, 'desc', '', 1, function (err, docs) {
                 if (err) return globalFunctions.showError(http_res, err);
 
                 docs.forEach(function (doc) {
@@ -423,13 +488,15 @@ site.init = function (app, callback) {
                     doc = _parseAuthor(doc);
                 });
 
-
-                http_res.render(
-                        'site/people',
-                        {locals:{
-                            docs:docs, name:req.params.query.replace('-', ' ')
-                        }}
-                );
+			    http_res.render('site/people',
+                {
+                    locals:{
+                        docs: docs,
+                        name: globalFunctions.capitalizeWords(name)
+                    },
+                    layout: "layout-optimized",
+                    css:asereje.css(['container/style', 'site/people'])
+                });
             });
         });
 
@@ -488,22 +555,36 @@ site.init = function (app, callback) {
                         doc.path = "/article/" + latestUrl;
 
                         var isAdmin = api.accounts.isAdmin(req);
+                        redis.client.zrevrange(_articleViewsKey([]), 0, 4, function (err, popular) {
+                                                if (err) return callback(err);
+                                                popular = popular.map(function (str) {
+                                                    var parts = str.split('||');
+                                                    return {
+                                                        url:'/article/' + parts[0],
+                                                        title:parts[1]
+                                                    };
+                                                });
+                            var model = {
+                                "adFullRectangle":{
+                                    "title":"Advertisement",
+                                    "imageUrl":"/images/ads/monster.png",
+                                    "url":"http://google.com",
+                                    "width":"300px",
+                                    "height":"250px"
+                                },
+                                "popular": popular
+                            };
+                            http_res.render('article', {
+                                locals:{
+                                    doc:doc,
+                                    isAdmin:isAdmin,
+                                    model:model
 
-                        http_res.render('article', {
-                            locals:{
-                                doc:doc,
-                                isAdmin:isAdmin,
-                                model:{
-                                    "adFullRectangle":{
-                                        "title":"Advertisement",
-                                        "imageUrl":"/images/ads/monster.png",
-                                        "url":"http://google.com",
-                                        "width":"300px",
-                                        "height":"250px"
-                                    }
-                                }
-                            },
-                            filename:'views/article.jade'
+                                },
+                                filename:'views/article.jade',
+                                css:asereje.css(['container/style', 'article']),
+                                layout:'layout-optimized'
+                            });
                         });
                     }
 
@@ -653,30 +734,30 @@ site.init = function (app, callback) {
             http_res.render('smtp', {layout:false, model:[""] });
         });
 
-        app.get('/testmail', function (req, http_res) {
-            newsletter.createNewsletter(function (err) {
-                if (err) return log.error(err);
-                log.debug("Added Subscriber");
-            });
-            /*newsletter.addSubscriber("yhgoh88@gmail.com", function(err){
-             log.debug("Added Subscriber");
-             });*/
-            /*newsletter.removeSubscriber("yhgoh88@gmail.com", function(err){
-             log.debug("removed Subscriber");
-             });*/
-        });
-
-
         app.get('/newsletter', function (req, http_res) {
-            http_res.render('site/newsletter', {model:[""] });
+            http_res.render('site/newsletter');
         });
 
-        app.post('/smtp', function (req, http_res) {
-            var postData = req.body;
-            if (postData.num === '1') http_res.render('site/newsletter-subscribed', {email:postData.email });
-            else if (postData.num === '2') http_res.render('site/newsletter', {model:[""] });
-            else http_res.render('site/newsletter', {model:[""] });
-            //http_res(req, http_res, req.body.email, req.body.num);
+        app.post('/newsletter', function (req, http_res) {
+            var email = req.body.email;
+            var action = req.body.action;
+
+            var afterFunc = function() {
+                http_res.render('site/newsletter', {
+                    email: email,
+                    action: action
+                });
+            };
+
+            if(action == "subscribe") {
+                api.newsletter.addSubscriber(email, afterFunc);
+            }
+            else if(action == "unsubscribe") {
+                api.newsletter.removeSubscriber(email, afterFunc);
+            }
+            else {
+                afterFunc();
+            }
         });
 
         app.get('/mu-7843c2b9-3b9490d6-8f535259-e645b756', function (req, http_res) {
@@ -734,14 +815,7 @@ site.assignPreInitFunctionality = function (app, server) {
 
     app.get('/config', function (req, res) {
         if (api.accounts.isAdmin(req)) {
-            res.render('config/config', {
-                locals:{
-                    configParams:config.getParameters(),
-                    profileName:config.getProfileNameKey(),
-                    profileValue:config.getActiveProfileName()
-                },
-                layout:'layout-admin.jade'
-            });
+            _renderConfigPage(res,null);
         }
         else {
             site.askForLogin(res, '/config');
@@ -753,11 +827,11 @@ site.assignPreInitFunctionality = function (app, server) {
             config.setUp(req.body, function (err) {
                 if (err == null) {
                     server.runSite(function () {
-                        res.redirect('/');
+                        res.redirect('/config');
                     });
                 }
                 else {
-                    res.redirect('/');
+                    _renderConfigPage(res,err);
                 }
             });
         }
@@ -767,6 +841,23 @@ site.assignPreInitFunctionality = function (app, server) {
     });
 };
 
+function _renderConfigPage(res,err) {
+    if(err != null) {
+        err = err + "<br /><br />The live site was not updated to use the new configuration due to errors."
+    }
+
+    res.render('config/config', {
+        locals:{
+            configParams:config.getParameters(),
+            profileName:config.getProfileNameKey(),
+            profileValue:config.getActiveProfileName(),
+            revisionName:config.getRevisionKey(),
+            revisionValue:config.getConfigRevision(),
+            error: err
+        },
+        layout:'layout-admin.jade'
+    });
+}
 
 site.renderSmtpTest = function (req, http_res, email, num) {
     log.debug("rendersmtptest");
@@ -839,7 +930,7 @@ function _showSearchArticles(err,req,http_res,docs,facets) {
     var currentFacets = req.query.facets;
     if(!currentFacets) currentFacets = '';
 
-    var validSections = config.get("TAXONOMY_MAIN_SECTIONS");
+    var validSections = globalFunctions.convertObjectToArray(config.get("TAXONOMY_MAIN_SECTIONS"));
     // filter out all sections other than main sections
     Object.keys(facets.Section).forEach(function(key) {
         if (!_.include(validSections, key)) {
@@ -849,9 +940,13 @@ function _showSearchArticles(err,req,http_res,docs,facets) {
                     
     http_res.render(
         'site/search',
-         {locals:{
-            docs:docs, currentFacets:currentFacets, facets:facets, query:req.params.query, sort:req.query.sort, order:req.query.order
-         }}
+         {
+             locals:{
+                docs:docs, currentFacets:currentFacets, facets:facets, query:req.params.query, sort:req.query.sort, order:req.query.order
+             },
+             layout: "layout-optimized",
+             css:asereje.css(['container/style', 'site/search'])
+         }
     );
 
     return null;

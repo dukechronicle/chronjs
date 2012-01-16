@@ -16,8 +16,8 @@ var templateID = null;
 var mcAPI = null;
 
 var NUM_ARTICLES_IN_EACH_CATEGORY = 3;
-var ARTICLE_IMAGE_WIDTH = 186;
-var ARTICLE_IMAGE_HEIGHT = 133;
+var ARTICLE_IMAGE_WIDTH = 124;
+var ARTICLE_IMAGE_HEIGHT = 89;
 
 var newsletterFromEmail = "no-reply@dukechronicle.com";
 var newsletterFromName = "The Chronicle";
@@ -119,21 +119,26 @@ newsletter.createNewsletter = function (callback) {
             var imageCount = 0;
 
             for (var x = 0; x < taxonomyGroups.length; x++) {
+                if(x > 0) newsHTML += "<br />";
                 newsHTML += "<h2>" + taxonomyGroups[x] + "</h2>";
+
                 newsText += taxonomyGroups[x]+"\n\n";
 
                 for(var i = 0; i < NUM_ARTICLES_IN_EACH_CATEGORY; i ++) {
-                    var url = "http://www.dukechronicle.com/article/"+res[x][i].value.urls[0];
+                    var url = "http://www.dukechronicle.com/article/"+res[x][i].value.urls[0];                       
 
-                    newsHTML += "<br />";
-                        
+                    newsHTML += "<br /><div><a href='" + url + "'><h3>" + res[x][i].value.title + "</h3></a><p>";
+
                     if(res[x][i].value.images != null && res[x][i].value.images.ThumbRect != null) {
-                        newsHTML += "<a href='" + url + "'><img src='"+imageResponse[imageCount].doc.url+"' width='"+ARTICLE_IMAGE_WIDTH+"' height='"+ARTICLE_IMAGE_HEIGHT+"'></img></a>";                 
+                        newsHTML += "<a href='" + url + "'><img align='left' src='"+imageResponse[imageCount].doc.url+"' width='"+ARTICLE_IMAGE_WIDTH+"' height='"+ARTICLE_IMAGE_HEIGHT+"' alt='Chronicle image'></img></a>";                 
                         imageCount ++;
-                    }                        
+                    } 
+                    
+                    newsHTML += res[x][i].value.teaser + "</p></div>";
 
-                    newsHTML += "<a href='" + url + "'><h3>" + res[x][i].value.title + "</h3></a>";
-                    newsHTML += "<p>" + res[x][i].value.teaser + "</p>";
+                    if(res[x][i].value.images != null && res[x][i].value.images.ThumbRect != null) {
+                        newsHTML += "<br style='clear:both;' />";
+                    }
 
                     newsText += res[x][i].value.title+"\n";
                     newsText += res[x][i].value.teaser+"\n";
@@ -144,10 +149,8 @@ newsletter.createNewsletter = function (callback) {
                 newsText += "\n";
             }
 
-            var sideBarAdHTML = "<img src='https://www.google.com/help/hc/images/adsense_185666_adformat-display_160x600_en.jpg'></img>";
-            var footerText = "Footer Text";
-            var eventsText = "Some events";
-            var contentArr = {"html_MAIN":newsHTML, "html_SIDECOLUMN":sideBarAdHTML, "html_FOOTER":footerText, "html_ISSUEDATE":getDate(), "html_EVENTS":eventsText, "text":newsText};
+            var adHTML = "<a href='www.google.com'><img src='https://www.google.com/help/hc/images/adsense_185666_adformat-display_160x600_en.jpg'></img></a>";
+            var contentArr = {"html_MAIN":newsHTML, "html_ADIMAGE":adHTML, "html_ISSUEDATE":getDate(), "text":newsText};
 
             var params = {"type":"regular", "options":optArray, "content":contentArr};
             mcAPI.campaignCreate(params, function (res) {

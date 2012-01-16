@@ -116,3 +116,9 @@ image.originalsForPhotographer = function (photog, callback) {
         key:photog
     }, callback);
 };
+
+image.articleImages = function(versionId, callback) {
+    db.view('articles/article_images', {
+        key: versionId
+    }, callback);
+};

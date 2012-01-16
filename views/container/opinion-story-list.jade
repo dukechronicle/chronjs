@@ -1,0 +1,20 @@
+.content-container
+    .columnist-info.clearfix
+        - if (typeof headshot != 'undefined')
+            img.headshot(src=headshot)
+        - if (typeof name != 'undefined')
+            h3.name
+                | #{name}&nbsp;
+                - if (typeof twitter != 'undefined')
+
+                    a.twitter(href="http://twitter.com/#{twitter}") @#{twitter}
+        - if (typeof year != 'undefined')
+            p.year #{year}
+        - if (typeof tagline != 'undefined')
+            p.tagline #{tagline}
+
+    - each story in stories
+        a.hover.highlight-right.first.teaser(href='#{story.url}')
+            h2 #{story.title}
+            p.date #{story.date}
+            p #{story.teaser}

@@ -1,7 +1,25 @@
 var db = require('../../db-abstract');
+var async = require('async');
+var fs = require('fs');
+var im = require('imagemagick');
 var _ = require("underscore");
+var s3 = require('./s3.js');
 
 var image = exports;
+
+var THUMB_DIMENSIONS = '100x100';
+
+function _deleteFiles(paths, callback) {
+    async.reduce(paths, [], function(memo, item, callback) {
+        memo.push(function(acallback) {
+            fs.unlink(item, acallback);
+        });
+        callback(null, memo);
+    },
+    function(err, result) {
+        async.series(result, callback);
+    });
+}
 
 image.getOriginal = function (name, callback) {
     db.image.originalsIndex({
@@ -57,3 +75,55 @@ image.getAllOriginals = function (beforeKey, beforeID, callback) {
         callback(err, res);
     });
 };
+
+// Complete image workflow from file to DB
+image.createOriginalFromFile = function (imageName, imageType, deleteLocal, topCallback) {
+    // create a unique name for the image to avoid s3 blob collisions
+    var fileName = imageName;
+    var thumbName = 'thumb_' + imageName;
+    
+    functions = [
+        function (callback) {
+            fs.readFile(fileName, callback);
+        },
+        function (data, callback) {
+            //put image in AWS S3 storage
+            s3.put(data, imageName, imageType, callback);
+        },
+        function (url, callback) {
+            im.convert([fileName, '-thumbnail', THUMB_DIMENSIONS, thumbName],
+                function (imErr, stdout, stderr) {
+                    callback(imErr, url);
+                });
+        },
+        function (url, callback) {
+            fs.readFile(thumbName,
+                function (err, data) {
+                    callback(err, url, data);
+                });
+        },
+        function (url, data, callback) {
+            s3.put(data, thumbName, imageType,
+                function (err, thumbUrl) {
+                    callback(err, url, thumbUrl);
+                });
+        },
+        function (url, thumbUrl, callback) {
+            image.createOriginal(imageName, url, imageType, thumbUrl, null, null, null,
+                function (err, res) {
+                    callback(err, res, url);
+                });
+        }
+    ];
+    
+    if(deleteLocal) {
+        functions.push(function (res, url, callback) {
+            _deleteFiles([imageName, thumbName],
+                function (err) {
+                    callback(err, res, url);
+                });
+        });
+    }
+    
+    async.waterfall(functions, topCallback);
+}

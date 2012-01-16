@@ -33,44 +33,47 @@ body section > #opinion
             width (top-content-width - (container-padding * 2))
     .top
         > .main
-
-            .rounded-hover
-                .content-container
-                    padding-left 2px
-                    padding-right 2px
-                width 474px
-                img
-                    width 470px
-                h2
-                    font-size 1.2em
-                    margin 0px 3px
-                p.teaser
-                    margin 0px 3px
-        > .left
-            width 476px
-            .grid
-
-                .row
-                    .first
-                        margin-right 20px
-
-                .rounded-hover
-                    width 222px
-                    height 156px
-                    thumb-dim = 60px
-                    h2
-                        font-size 1.3em
-                        margin-bottom 5px
-                    img
-                        margin-top 4px
-                        border-radius 4px
-                        width thumb-dim
-                        height thumb-dim
+            width 474px
+            .columns-today
+                .rounded
+                    .content-container
+                        float none
+                    .separator
+                        clear both
+                        height 18px
+                        width 100%
+                    width 468px
+                    a.hover
+                        width 210px
+                        h2
+                            font-size 1.3em
+                        img.thumb
+                            thumb-dim = 50px
+                            margin-top 4px
+                            width thumb-dim
+                            height thumb-dim
+                            float right
+                            margin-left 10px
+                        p.teaser
+                            font-size 0.95em
+                            line-height 1.3em
+                    a.hover.highlight-left
+                        padding-left 10px
+                        float left
+                    a.hover.highlight-right
+                        padding-right 10px
                         float right
-                        margin-left 10px
+                .rounded-hover
+                    .content-container
+                        padding-left 2px
+                        padding-right 2px
+                    width 474px
+                    img
+                        width 470px
+                    h2
+                        font-size 1.2em
+                        margin 0px 3px
 
-                    p.teaser
-                        color #444
         > .right
             float right
             width 474px
@@ -101,6 +104,67 @@ body section > #opinion
         > .last
             margin-right 0px
 
+
+    .editorial-board
+        .rounded
+            width 468px
+            height 500px
+            a.hover
+                padding-bottom 18px
+                h2
+                    font-size 1.3em
+                p.date
+                    font-size 0.9em
+                    margin-bottom 6px
+    column-height = 680px
+    column-width = 326px
+    #columnists
+        float right
+        #columnist-list
+            .rounded
+                height column-height
+                h2 a
+                    padding-left 7px
+        #columnist-articles
+            .rounded
+                height column-height
+                width column-width
+            .columnist-stories
+                .content-container
+                    width column-width - 3px
+                .columnist-info
+                    float none
+                    border-bottom 1px solid #EEE
+                    padding-bottom 5px
+                    width 100%
+                    h3.name
+                        font-size 1.6em
+                        line-height 1em
+                    img.headshot
+                        float right
+                        width 70px
+                        height 70px
+                    p.year
+
+                        padding-right 5px
+                    a.twitter
+                        font-size 0.8em
+                    p.tagline
+                        margin-top 6px
+                        font-size 1.2em
+                        font-style italic
+                display none
+                position absolute
+                a.hover.highlight-right
+                    .date
+                        margin-bottom 6px
+                        font-size 0.9em
+                        line-height 1.2em
+                    margin-right -4px
+                    padding-right 5px
+                    padding-top 18px
+                    h2
+                        font-size 1.3em
     div
         > div
             float left

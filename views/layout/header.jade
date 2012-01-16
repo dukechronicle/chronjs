@@ -1,4 +1,7 @@
-.lighten
+- if(query == null) var query = ""
+- query = query.replace(/-/g, ' ');
+
+.div
     img(src='/images/header-overlay.png', id='header-overlay', width='100px', height='122px')
 
 #header-top
@@ -12,6 +15,7 @@
             a(href='http://chroniclehousing.com/') Housing
         h1
             a(href='/') The Chronicle
+        p.date January 12, 2012
 
     .leaderboard
         a(href='http://sprint.com')
@@ -50,9 +54,5 @@
                     img.last(src='/images/icons/email.png')
 
 
-    - if(typeof(query) !== 'undefined')
-       form#search-box(action='/search/', method='GET')
-         input(type='search', name='search', placeholder='Search archives', results='5', value=query)
-    - else
-       form#search-box(action='/search/', method='GET')
-         input(type='search', name='search', placeholder='Search archives', results='5')
+    form#search-box(action='/search/', method='GET')
+        input(type='search', name='search', placeholder='Search archives', results='5', value=query)

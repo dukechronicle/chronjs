@@ -7,25 +7,38 @@ var _ = require('underscore');
 var async = require('async');
 var log = require('../../log');
 var config = require('../../config');
+var globalFunctions = require('../../global-functions');
 
-var apiKey = config.get("MAILCHIMP_API_KEY");
-var taxonomyGroups = config.get("TAXONOMY_MAIN_SECTIONS");
+var apiKey = null;
+var taxonomyGroups = null;
+var listID = null;
+var templateID = null;
+var mcAPI = null;
 
-var numDocs = 1;
+var NUM_ARTICLES_IN_EACH_CATEGORY = 3;
+var ARTICLE_IMAGE_WIDTH = 124;
+var ARTICLE_IMAGE_HEIGHT = 89;
 
-var listID = config.get("MAILCHIMP_LIST_ID");
-var templateID = config.get("MAILCHIMP_TEMPLATE_ID");
+var newsletterFromEmail = "no-reply@dukechronicle.com";
+var newsletterFromName = "The Chronicle";
 
-// Strings
-var date = getDate();
-var newsletterSubject = "Duke Chronicle Daily Newsletter " + date;
-var newsletterFromEmail = "chronicle@duke.edu";
+newsletter.init = function() {
+    apiKey = config.get("MAILCHIMP_API_KEY");
+    taxonomyGroups = config.get("TAXONOMY_MAIN_SECTIONS");
+    listID = config.get("MAILCHIMP_LIST_ID");
 
-try { 
-    var mcAPI = new MailChimpAPI(apiKey, { version : '1.3', secure : false });
-} catch (error) {
-    log.warning(error);
+    templateID = config.get("MAILCHIMP_TEMPLATE_ID");
+
+    try { 
+        mcAPI = new MailChimpAPI(apiKey, { version : '1.3', secure : false });
+    } catch (error) {
+        log.warning(error);
+    }
 }
+
+function getNewsletterSubject() {
+    return "Duke Chronicle Daily Newsletter " + getDate();
+};
 
 function getDate()
 {
@@ -40,10 +53,15 @@ function getDate()
         mm='0'+mm;
     }  
     return mm+'/'+dd+'/'+yyyy;
-}
+};
+
+newsletter.sendTestNewsletter = function(campaignID, emailToSendTo, callback) {
+    var params = {"test_emails":[emailToSendTo], "cid":campaignID};
+    mcAPI.campaignSendTest(params, callback);
+};
 
 newsletter.addSubscriber = function (subscriberEmail, callback) {
-    var params = {"id":listID, "email_address":subscriberEmail, "send_welcome":true};
+   var params = {"id":listID, "email_address":subscriberEmail, "send_welcome":true};
     mcAPI.listSubscribe(params, function (res) {
         if (res === false) {
             log.warning("Adding subscriber to list failed!");
@@ -64,68 +82,86 @@ newsletter.removeSubscriber = function (subscriberEmail, callback) {
     });
 };
 
-newsletter.sendNewsletter = function (callback) {
-    var name = "Newsletter " + date;
-    log.info(name);
-    mcAPI.campaigns({ start:0, limit:1, filters:{"title":name}}, function (res) {
-        if (res.error) {
-            log.warning(res.error + ' (' + res.code + ')');
-            return callback('Error: ' + res.error + ' (' + res.code + ')');
+newsletter.sendNewsletter = function (campaignID, callback) {
+    mcAPI.campaignSendNow({cid:campaignID}, function (res) {
+        if (res === false) {
+            log.warning("Sending Campaign failed!");
+            return callback("Sending Campaign failed!");
         }
-
-        log.debug(JSON.stringify(res)); // Do something with your data!
-
-        var campaignID = res.data[0].id;
-        log.info(campaignID);
-
-        mcAPI.campaignSendNow({cid:campaignID}, function (res2) {
-            log.debug(res2);
-            if (res2 === false) {
-                log.warning("Sending Campaign failed!");
-                return callback("Sending Campaign failed!");
-            }
-            return callback(null);
-        });
+        return callback(null);
     });
 };
 
 newsletter.createNewsletter = function (callback) {
-    var optArray = {"list_id":listID, "subject":newsletterSubject, "from_email":newsletterFromEmail, "from_name":"The Chronicle", "title":"Newsletter " + date, "template_id":templateID};
+    var optArray = {"list_id":listID, "subject":getNewsletterSubject(), "from_email":newsletterFromEmail, "from_name":newsletterFromName, "title":getNewsletterSubject(), "template_id":templateID};
+    
+    taxonomyGroups = globalFunctions.convertObjectToArray(taxonomyGroups);
 
     async.map(taxonomyGroups, function (item, callback) {
-                log.debug(item);
-                api.taxonomy.docs(item, numDocs, function (err, docs) {
-                    if (err)
-                        return callback(err, null);
-                    return callback(err, docs);
-                });
-            },
-            function (err, res) {
-
-                var newsText = "";
-                var newsHTML = "";
-
-                for (var x = 0; x < taxonomyGroups.length; x++) {
-                    newsHTML += "<h2>" + taxonomyGroups[x] + "</h2>";
-                    newsHTML += "<p>" + res[x][0].value.teaser + "</p>";
-                    newsText += res[x][0].value.teaser;
+        api.taxonomy.docs(item, NUM_ARTICLES_IN_EACH_CATEGORY, function (err, docs) {
+            if (err) return callback(err, null);
+            return callback(err, docs);
+        });
+    },
+    function (err, res) {
+        var imageIDs = [];
+        for (var x = 0; x < taxonomyGroups.length; x++) {
+            for(var i = 0; i < NUM_ARTICLES_IN_EACH_CATEGORY; i ++) {
+                if(res[x][i].value.images != null && res[x][i].value.images.ThumbRect != null) {
+                    imageIDs.push(res[x][i].value.images.ThumbRect);
                 }
+            }
+        }
 
-                var sideBarText = "SideBar Text";
-                var footerText = "Footer Text";
-                var eventsText = "Some events";
-                var contentArr = {"html_MAIN":newsHTML, "html_SIDECOLUMN":sideBarText, "html_FOOTER":footerText, "html_ISSUEDATE":date, "html_EVENTS":eventsText, "text":newsText};
-                log.info(contentArr);
+        api.docsById(imageIDs, function(err, imageResponse) {
+            var newsText = "";
+            var newsHTML = "";
+            var imageCount = 0;
 
-                var params = {"type":"regular", "options":optArray, "content":contentArr};
-                mcAPI.campaignCreate(params, function (res) {
-                    if (res.error) {
-                        log.warning('Error: ' + res.error + ' (' + res.code + ')');
-                        return callback('Error: ' + res.error + ' (' + res.code + ')');
+            for (var x = 0; x < taxonomyGroups.length; x++) {
+                if(x > 0) newsHTML += "<br />";
+                newsHTML += "<h2>" + taxonomyGroups[x] + "</h2>";
+
+                newsText += taxonomyGroups[x]+"\n\n";
+
+                for(var i = 0; i < NUM_ARTICLES_IN_EACH_CATEGORY; i ++) {
+                    var url = "http://www.dukechronicle.com/article/"+res[x][i].value.urls[0];                       
+
+                    newsHTML += "<br /><div><a href='" + url + "'><h3>" + res[x][i].value.title + "</h3></a><p>";
+
+                    if(res[x][i].value.images != null && res[x][i].value.images.ThumbRect != null) {
+                        newsHTML += "<a href='" + url + "'><img align='left' src='"+imageResponse[imageCount].doc.url+"' width='"+ARTICLE_IMAGE_WIDTH+"' height='"+ARTICLE_IMAGE_HEIGHT+"' alt='Chronicle image'></img></a>";                 
+                        imageCount ++;
+                    } 
+                    
+                    newsHTML += res[x][i].value.teaser + "</p></div>";
+
+                    if(res[x][i].value.images != null && res[x][i].value.images.ThumbRect != null) {
+                        newsHTML += "<br style='clear:both;' />";
                     }
-                    log.info("Campaign ID: " + res);
-                    callback(null);
-                });
+
+                    newsText += res[x][i].value.title+"\n";
+                    newsText += res[x][i].value.teaser+"\n";
+                    newsText += url+"\n";
+                    newsText += "\n";
+                }
+                newsHTML += "<br />";
+                newsText += "\n";
+            }
+
+            var adHTML = "<a href='www.google.com'><img src='https://www.google.com/help/hc/images/adsense_185666_adformat-display_160x600_en.jpg'></img></a>";
+            var contentArr = {"html_MAIN":newsHTML, "html_ADIMAGE":adHTML, "html_ISSUEDATE":getDate(), "text":newsText};
+
+            var params = {"type":"regular", "options":optArray, "content":contentArr};
+            mcAPI.campaignCreate(params, function (res) {
+                if (res.error) {
+                    log.warning('Error: ' + res.error + ' (' + res.code + ')');
+                    return callback('Error: ' + res.error + ' (' + res.code + ')');
+                }
+                log.info("Campaign ID: " + res);
+                callback(res);
             });
+        });
+    });         
 };
 

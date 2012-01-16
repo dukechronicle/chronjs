@@ -13,28 +13,6 @@ var DATABASE = null;
 var DB_HOST = null;
 var DB_PORT = null;
 
-// parse environment variable CLOUDANT_URL OR COUCHDB_URL to extract authentication information
-function connect(database) {
-    //var couchdbUrl = process.env.CLOUDANT_URL || config.get("COUCHDB_URL");
-    var couchdbUrl = config.get("COUCHDB_URL");
-    if(!couchdbUrl) throw "No Cloudant URL specified...";
-    log.info("Connecting to " + database + " at " + couchdbUrl);
-    couchdbUrl = url.parse(couchdbUrl);
-    if (couchdbUrl.auth) {
-        couchdbUrl.auth = couchdbUrl.auth.split(":");
-    }
-
-    if (!couchdbUrl.port) {
-        (couchdbUrl.protocol === "https:") ? couchdbUrl.port = 443 : couchdbUrl.port = 80;
-    }
-    
-    var conn = new (cradle.Connection)(couchdbUrl.protocol + '//' + couchdbUrl.hostname, couchdbUrl.port, {
-        auth: {username: couchdbUrl.auth[0], password: couchdbUrl.auth[1]}
-    }); 
-    
-    return conn.database(database);
-}
-
 function updateViews(callback)
 {
     // Check if views are up to date
@@ -72,13 +50,31 @@ db.getDatabaseHost = function() {
     return DB_HOST;
 };
 
+db.connect = function (host, database) {
+    log.info("Connecting to " + database + " at " + host);
+    var couchdbUrl = url.parse(host);
+    if (couchdbUrl.auth) {
+        couchdbUrl.auth = couchdbUrl.auth.split(":");
+    }
+
+    if (!couchdbUrl.port) {
+        (couchdbUrl.protocol === "https:") ? couchdbUrl.port = 443 : couchdbUrl.port = 80;
+    }
+
+    var conn = new (cradle.Connection)(couchdbUrl.protocol + '//' + couchdbUrl.hostname, couchdbUrl.port, {
+        auth:{username:couchdbUrl.auth[0], password:couchdbUrl.auth[1]}
+    });
+
+    return conn.database(database);
+};
+
 db.init = function(callback) {
 	DATABASE = config.get("COUCHDB_DATABASE");
     DB_HOST = url.parse(config.get("COUCHDB_URL")).hostname;
     DB_PORT = url.parse(config.get("COUCHDB_URL")).port;
 
     // assign all methods of the cradle object to db
-    var database = connect(DATABASE);
+    var database = db.connect(config.get("COUCHDB_URL"),DATABASE);
     _.extend(db, database);
 
     db.exists(function (error,exists) {
@@ -91,7 +87,7 @@ db.init = function(callback) {
         // initialize database if it doesn't already exist
         if(!exists) {
             db.create();
-            whenDBExists(function() {
+            db.whenDBExists(db,function() {
                 updateViews(callback);
             });
         }
@@ -102,12 +98,12 @@ db.init = function(callback) {
 };
 
 // only calls the callback when the DB exists, loops until then. Should not be used anywhere other than db init due to its blocking nature
-function whenDBExists(callback) {
-     db.exists(function (error,exists) {
+db.whenDBExists = function(database,callback) {
+     database.exists(function (error,exists) {
         if(exists) callback();
-        else whenDBExists(callback);     
+        else db.whenDBExists(database,callback);     
      });
-}
+};
 
 function createViews(modifiedTime, hash, callback) {
     var design_doc = require(DESIGN_DOCUMENT_FILENAME);

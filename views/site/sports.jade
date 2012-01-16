@@ -1,8 +1,23 @@
-.nav.clearfix
-    if (subsections)
-        for subsectionName,subsectionPath in subsections
+ul.nav.clearfix
+    if (typeof subsections != 'undefined')
+        li
             h2
-                a(href='/section/'+subsectionPath) #{subsectionName}
+                a.men Men
+            .subnav.men.clearfix
+                for subsection in subsections[0]
+                    for subsectionName,subsectionPath in subsection
+                        h3
+                            a(href='/section/' + subsectionPath) #{subsectionName}
+        li
+            h2
+                a.men Women
+            .subnav.men.clearfix
+                for subsection in subsections[1]
+                    for subsectionName,subsectionPath in subsection
+                        h3
+                            a(href='/section/' + subsectionPath) #{subsectionName}
+
+
 #sports
     .top.clearfix
         if (model.Slideshow)
@@ -11,31 +26,32 @@
         .left
             if (model.adFullRectangle)
                 .image-container.medium-rectangle.lighten!=partial('container/image', model.adFullRectangle)
+            if (model.Blog)
+                .blog!=partial('container/story-list-image', {locals: {title: "The Blue Zone", image: "/images/blogs/sportsblog-banner.jpg", imageHref:'http://sports.chronicleblogs.com', stories:model.Blog}})
             //
 
         .right
             if (model.Stories)
                 .column.first
                     if (model.Stories[0])
-                        .first!=partial('container/row-2', {story: model.Stories[0]})
+                        .first!=partial('container/row-2', {story: model.Stories[0], tax: true})
                     if (model.Stories[2])
-                        .last!=partial('container/row-2', {story: model.Stories[2]})
-                    //
-                        if (model.Stories[4])
-                            .last!=partial('container/row-2', {story: model.Stories[4]})
+                        div!=partial('container/row-2', {story: model.Stories[2], tax: true})
+                    if (model.Stories[4])
+                            div!=partial('container/row-2', {story: model.Stories[4], tax: true})
+                    if (model.Stories[6])
+                            .last!=partial('container/row-2', {story: model.Stories[6], tax: true})
                 .column
                     if (model.Stories[1])
-                        .first!=partial('container/row-2', {story: model.Stories[1]})
+                        .first!=partial('container/row-2', {story: model.Stories[1], tax: true})
                     if (model.Stories[3])
-                        .last!=partial('container/row-2', {story: model.Stories[3]})
-                    //
-                        if (model.Stories[5])
-                            .last!=partial('container/row-2', {story: model.Stories[5]})
+                        div!=partial('container/row-2', {story: model.Stories[3], tax: true})
+                    if (model.Stories[5])
+                        div!=partial('container/row-2', {story: model.Stories[5], tax: true})
+                    if (model.Stories[7])
+                        .last!=partial('container/row-2', {story: model.Stories[7], tax: true})
+            .multimedia!=partial('container/multimedia-sports', {title: "Multimedia"})
 
-    .middle2.clearfix
-        if (model.Blog)
-            .blog!=partial('container/story-list-image', {locals: {title: "The Blue Zone", image: "/images/blogs/sportsblog-banner.jpg", imageHref:'http://sports.chronicleblogs.com', stories:model.Blog}})
-        .multimedia!=partial('container/multimedia-sports', {title: "multimedia"})
     .bottom
         .row.clearfix
             if (model.Football)

@@ -150,8 +150,6 @@ function ArticleParser(articleCallback) {
             if (article.body[0].match(/^from [^\.]*$/i)) article.body.shift();
             if (article.body[0].match(/^THE CHRONICLE$/)) article.body.shift();
             article.teaser = article.body[0].replace(/\.\s+[A-Z].*$/, ".");
-
-            else
         } catch (err) {
             callback(err);
             return;

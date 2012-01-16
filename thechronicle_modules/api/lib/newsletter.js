@@ -144,10 +144,10 @@ newsletter.createNewsletter = function (callback) {
                 newsText += "\n";
             }
 
-            var sideBarText = "SideBar Text";
+            var sideBarAdHTML = "<img src='https://www.google.com/help/hc/images/adsense_185666_adformat-display_160x600_en.jpg'></img>";
             var footerText = "Footer Text";
             var eventsText = "Some events";
-            var contentArr = {"html_MAIN":newsHTML, "html_SIDECOLUMN":sideBarText, "html_FOOTER":footerText, "html_ISSUEDATE":getDate(), "html_EVENTS":eventsText, "text":newsText};
+            var contentArr = {"html_MAIN":newsHTML, "html_SIDECOLUMN":sideBarAdHTML, "html_FOOTER":footerText, "html_ISSUEDATE":getDate(), "html_EVENTS":eventsText, "text":newsText};
 
             var params = {"type":"regular", "options":optArray, "content":contentArr};
             mcAPI.campaignCreate(params, function (res) {

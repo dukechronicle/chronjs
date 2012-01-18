@@ -142,6 +142,15 @@ exports.bindPath = function (app) {
                                 }
                             });
                 });
+                
+        app.get('/articles', site.checkAdmin,
+                function (req, httpRes) {
+                    var id = req.query.id;
+                    console.log(id);
+                    api.image.articlesForOriginal(id, function(err, res) {
+                        globalFunctions.sendJSONResponse(httpRes, res);
+                    });
+                });
 
         app.get('/:imageName', site.checkAdmin,
                 function (req, httpRes) {  //this function either renders image or calls showError if there is an error

@@ -88,7 +88,7 @@ site.init = function (app, callback) {
         });
 
 
-        app.get('/', function (req, res) {
+        app.get('/', site.checkAdmin, function (req, res) {
             var start = Date.now();
             async.parallel([
                 function (callback) { //0

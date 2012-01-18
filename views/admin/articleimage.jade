@@ -24,38 +24,41 @@ script
             event.preventDefault();
 
             var anchor = $(event.target);
-            /*
-            var title = anchor.attr('data-title');
-            var docId = anchor.attr('data-docId');
-            var docRev = anchor.attr('data-docRev');
-            */
-            $('<div id="dialog-confirm">Deleting images is not supported right now</div>').appendTo('body');
+            var id = anchor.attr('data-id');
+            
+            $.getJSON(
+                '/admin/image/articles',
+                {id: id},
+                function(data) {
+                
+                    var msg = '<div id="dialog-confirm">This image will be removed from the following articles:<ul>';
+                    $.each(data, function(index, value) {
+                        msg += '<li>' + value.title + '</li>';
+                    });
+                    msg += '</ul></div>';
+                    
+                    $(msg).appendTo('body');
 
-            $("#dialog-confirm").dialog({
-                dialogClass: 'delete-confirmation-dialog',
-                title: 'Delete Image',
-                resizable: false,
-                autoOpen: true,
-                height:140,
-                modal: true,
-                buttons: {
-                    "Delete": function() {
-                        /*
-                        $.ajax({
-                            type: 'DELETE',
-                            url: '/admin/article/' + docId,
-                            data: 'rev=' + docRev,
-                            success: function() {
+                    $("#dialog-confirm").dialog({
+                        dialogClass: 'delete-confirmation-dialog',
+                        title: 'Delete Image',
+                        resizable: false,
+                        autoOpen: true,
+                        height:140,
+                        modal: true,
+                        buttons: {
+                            "Delete": function() {
                                 $(this).remove();
-                                location.reload();
+                            },
+                            Cancel: function() {
+                                $(this).remove();
                             }
-                        });*/
-                    },
-                    Cancel: function() {
-                        $(this).remove();
-                    }
+                        }
+                    });
                 }
-            });
+            );
+
+            
 
         });
     });

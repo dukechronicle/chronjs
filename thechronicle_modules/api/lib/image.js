@@ -5,6 +5,7 @@ var im = require('imagemagick');
 var _ = require("underscore");
 var s3 = require('./s3.js');
 var urllib = require('url');
+var globalFunctions = require('../../global-functions');
 
 var image = exports;
 
@@ -106,22 +107,46 @@ image.deleteOriginal = function (originalId, topCallback) {
     ], topCallback);
 };
 
+image.articlesForOriginal = function (origId, topCallback) {
+    async.waterfall([
+        function (callback) {
+            db.get(origId, callback);
+        },
+        function (orig, callback) {
+            var versions = orig.imageVersions;
+            async.reduce(versions, {}, function(obj, version, cbck) {
+                image.articlesForVersion(version, function(err, articles) {
+                    if(err) cbck(err);
+                    else {
+                        for (var i in articles) {
+                            if(articles[i]._id && !obj[articles[i]._id]) {
+                                obj[articles[i]._id] = articles[i];
+                            }
+                        }
+                        cbck(null, obj);
+                    }
+                })
+            }, callback);
+        },
+        function (articles, callback) {
+            callback(null, globalFunctions.convertObjectToArray(articles));
+        }
+    ], topCallback);
+}
+
 image.articlesForVersion = function (versionId, topCallback) {
     async.waterfall([
         function (callback) {
             db.image.articleImages(versionId, callback);
         },
         function (articles, callback) {
-            console.log(articles);
-            // async.map(articles, function (article, cbck) {
-            //     
-            //     cbck(null, article.value);
-            // },
-            // callback);
-            for (var i in articles) {
-                console.log(articles[i].value);
+            var newArticles = [];
+            for (var i in Object.keys(articles)) {
+                if(typeof articles[i] != 'function' && typeof articles[i] != 'undefined') {
+                    newArticles.push(articles[i].value);
+                }
             }
-            callback(null);
+            callback(null, newArticles);
         }],
         topCallback);
 };

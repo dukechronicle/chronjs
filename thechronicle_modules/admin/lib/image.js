@@ -146,10 +146,29 @@ exports.bindPath = function (app) {
         app.get('/articles', site.checkAdmin,
                 function (req, httpRes) {
                     var id = req.query.id;
-                    console.log(id);
-                    api.image.articlesForOriginal(id, function(err, res) {
+                    var func = api.image.articlesForVersion;
+                    if(req.query.orig && req.query.orig == '1')
+                        func = api.image.articlesForOriginal;
+                        
+                    func(id, function(err, res) {
                         globalFunctions.sendJSONResponse(httpRes, res);
                     });
+                });
+                
+        app.get('/delete', site.checkAdmin,
+                function (req, httpRes) {
+                    var id = req.query.id;
+                    if(req.query.orig && req.query.orig == '1') {
+                        api.image.deleteOriginal(id, function(err, res) {
+                            var ret = (err != null);
+                            globalFunctions.sendJSONResponse(httpRes, {ok: ret});
+                        });
+                    } else {
+                        api.image.deleteVersion(id, true, function(err, res) {
+                            var ret = (err != null);
+                            globalFunctions.sendJSONResponse(httpRes, {ok: ret});
+                        })
+                    }
                 });
 
         app.get('/:imageName', site.checkAdmin,

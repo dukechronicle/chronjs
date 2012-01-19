@@ -9,6 +9,8 @@ table(border=1)
     td #{version.doc.height}
     td
       img(src=version.doc.url)
+    td
+      a.delete(href='#', data-id=version.doc._id) Delete
     - if(article)
       td
         form(action='/admin/edit', method='POST')

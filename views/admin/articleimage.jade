@@ -28,7 +28,7 @@ script
             
             $.getJSON(
                 '/admin/image/articles',
-                {id: id},
+                {id: id, orig:1},
                 function(data) {
                 
                     var msg = '<div id="dialog-confirm">This image will be removed from the following articles:<ul>';
@@ -48,7 +48,13 @@ script
                         modal: true,
                         buttons: {
                             "Delete": function() {
-                                $(this).remove();
+                                $.getJSON(
+                                    '/admin/image/delete',
+                                    {id: id, orig: 1},
+                                    function(data) {
+                                        location.reload();
+                                    }
+                                );
                             },
                             Cancel: function() {
                                 $(this).remove();

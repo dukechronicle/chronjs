@@ -65,6 +65,25 @@ image.createVersion = function (parentId, url, width, height, callback) {
 image.deleteVersion = function (versionId, updateOriginal, topCallback) {
     async.waterfall([
         function (callback) {
+            image.articlesForVersion(versionId, callback);
+        },
+        function (articles, callback) {
+            async.map(articles, function(article, cbck) {
+                var versions = article.images;
+                for (var i in versions) {
+                    if(versions[i] == versionId)
+                        delete versions[i];
+                }
+                article.images = versions;
+                db.merge(article, function(err, res) {
+                    cbck(err, article);
+                });
+                cbck(null, article);
+            }, function(err, res) {
+                callback(err);
+            });
+        },
+        function (callback) {
             db.image.deleteVersion(versionId, updateOriginal, callback);
         },
         function (version, callback) {

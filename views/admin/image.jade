@@ -1,55 +1,3 @@
-script
-    $(document).ready(function(){
-
-        $(".delete").click(function(event) {
-            event.preventDefault();
-
-            var anchor = $(event.target);
-            var id = anchor.attr('data-id');
-            
-            $.getJSON(
-                '/admin/image/articles',
-                {id: id},
-                function(data) {
-                
-                    var msg = '<div id="dialog-confirm">This image will be removed from the following articles:<ul>';
-                    $.each(data, function(index, value) {
-                        msg += '<li>' + value.title + '</li>';
-                    });
-                    msg += '</ul></div>';
-                    
-                    $(msg).appendTo('body');
-
-                    $("#dialog-confirm").dialog({
-                        dialogClass: 'delete-confirmation-dialog',
-                        title: 'Delete Image',
-                        resizable: false,
-                        autoOpen: true,
-                        height:140,
-                        modal: true,
-                        buttons: {
-                            "Delete": function() {
-                                $.getJSON(
-                                    '/admin/image/delete',
-                                    {id: id},
-                                    function(data) {
-                                        location.reload();
-                                    }
-                                );
-                            },
-                            Cancel: function() {
-                                $(this).remove();
-                            }
-                        }
-                    });
-                }
-            );
-
-            
-
-        });
-    });
-
 h1 Crop
 - if(url)
   img#toCrop(src=url)
@@ -107,3 +55,4 @@ p
   - else
     h1 Existing Versions (click to add to article)
   #versions!= partial('version', {collection: versions, locals: {article: article, imageTypes: imageTypes, cropSizes: imageDetails}})
+  script(src='/js/imgdelete.js', type='text/javascript')

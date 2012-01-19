@@ -61,6 +61,12 @@ define(["jquery", "underscore"], function($) {
             contentContainer.css('padding-bottom', extraHeight);
             //console.log($('#top > .sidebar').height() - $('#top > .content').height());
         },
+
+        overflowFix: function() {
+            $('.auto-fix-overflow').each(function(index) {
+                $(this);
+            })
+        },
         verticalAlign: function() {
             // position vertical labels
             $(".vertical-container").each(function(i) {

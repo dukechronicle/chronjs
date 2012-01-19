@@ -50,7 +50,7 @@ db.getDatabaseHost = function() {
     return DB_HOST;
 };
 
-db.connect = function(host,database) {
+db.connect = function (host, database) {
     log.info("Connecting to " + database + " at " + host);
     var couchdbUrl = url.parse(host);
     if (couchdbUrl.auth) {
@@ -60,13 +60,13 @@ db.connect = function(host,database) {
     if (!couchdbUrl.port) {
         (couchdbUrl.protocol === "https:") ? couchdbUrl.port = 443 : couchdbUrl.port = 80;
     }
-    
+
     var conn = new (cradle.Connection)(couchdbUrl.protocol + '//' + couchdbUrl.hostname, couchdbUrl.port, {
-        auth: {username: couchdbUrl.auth[0], password: couchdbUrl.auth[1]}
-    }); 
-    
+        auth:{username:couchdbUrl.auth[0], password:couchdbUrl.auth[1]}
+    });
+
     return conn.database(database);
-}
+};
 
 db.init = function(callback) {
 	DATABASE = config.get("COUCHDB_DATABASE");
@@ -103,7 +103,7 @@ db.whenDBExists = function(database,callback) {
         if(exists) callback();
         else db.whenDBExists(database,callback);     
      });
-}
+};
 
 function createViews(modifiedTime, hash, callback) {
     var design_doc = require(DESIGN_DOCUMENT_FILENAME);

@@ -217,18 +217,16 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 
 	words = words.map(function(word) {
 		var newString = solr.valueEscape(word.replace(/"/g, '')); //remove "s from the query
-		
+
         if(newString.length == 0)
 			return '""';
 		else
 			return newString;
 	});
 
-	var fullQuery = "";
+	var fullQuery = 'author_sm:"' + wordsQuery.replace(/"/g, '') + '"';
 	for(var index = 0; index < words.length; index++) {
-		if(index != 0)
-			fullQuery = fullQuery + " OR ";
-		fullQuery = fullQuery + "title_text:" + words[index] + " OR body_text:" + words[index];
+		fullQuery = fullQuery + " OR title_text:" + words[index] + " OR body_text:" + words[index];
 	}
 
 	querySolr(fullQuery, {

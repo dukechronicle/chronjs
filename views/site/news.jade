@@ -1,47 +1,31 @@
 !=partial('site/subnav', {subsections: subsections})
 
 #news
+    .top.clearfix
+        .main
+            if (model.Featured && model.Featured[0])
+                .featured!=partial('container/featured-image', {title: "", story: model.Featured[0]});
 
-    .main
-        if (model.Featured && model.Featured[0])
-            .featured!=partial('container/featured-image', {title: "", story: model.Featured[0]});
+            if (model.Headlines && model.Headlines[0])
+                .headline!=partial('container/row', {title: "", story: model.Headlines[0]})
+            if (model.Headlines && model.Headlines[1])
+                .headline!=partial('container/row', {title: "", story: model.Headlines[1]})
 
-        if (model.Headlines && model.Headlines[0])
-            .headline!=partial('container/row', {title: "", story: model.Headlines[0]})
-        if (model.Headlines && model.Headlines[1])
-            .headline!=partial('container/row', {title: "", story: model.Headlines[1]})
-        .row.clearfix
-            if (model.Stories && model.Stories[0])
-                .block.first!=partial('container/block', {title: "", story: model.Stories[0]})
-            if (model.Stories && model.Stories[1])
-                .block!=partial('container/block', {title: "", story: model.Stories[1]})
-            if (model.Stories && model.Stories[2])
-                .block!=partial('container/block', {title: "", story: model.Stories[2]})
-        .row.clearfix
-            if (model.Stories && model.Stories[3])
-                .block.first!=partial('container/block', {title: "", story: model.Stories[3]})
-            if (model.Stories && model.Stories[4])
-                .block!=partial('container/block', {title: "", story: model.Stories[4]})
-            if (model.Stories && model.Stories[5])
-                .block!=partial('container/block', {title: "", story: model.Stories[5]})
+        .sidebar
+            .top
+                if (model["Right Headlines"])
+                    .right-headlines!=partial('container/story-list-featured', {title: "Headlines", stories: model["Right Headlines"]})
+                if (model.Blog)
+                    .blog.last
+                        !=partial('container/story-list-image', {title: "News Blog", stories: model.Blog, image:'/images/blogs/newsblog.jpg', imageHref:'http://bigblog.chronicleblogs.com/news'})
 
+            .middle
+                if (model.popular)
+                    .most-popular!=partial('container/most-popular', {title: "Popular", stories: model.popular})
+                if (model.adFullRectangle)
+                    .image-container.medium-rectangle.lighten!=partial('container/image', model.adFullRectangle)
 
-
-
-    .sidebar
-        .top
-            if (model["Right Headlines"])
-                .right-headlines!=partial('container/story-list-featured', {title: "Headlines", stories: model["Right Headlines"]})
-            if (model.Blog)
-                .blog.last
-                    !=partial('container/story-list-image', {title: "News Blog", stories: model.Blog, image:'/images/blogs/newsblog.jpg', imageHref:'http://bigblog.chronicleblogs.com/news'})
-
-        .middle
-            if (model.popular)
-                .most-popular!=partial('container/most-popular', {title: "Popular", stories: model.popular})
-            if (model.adFullRectangle)
-                .image-container.medium-rectangle.lighten!=partial('container/image', model.adFullRectangle)
-
-        .bottom
-            .multimedia!=partial('container/multimedia-news', {title: "multimedia"})
+    .bottom
+        .multimedia!=partial('container/multimedia-news', {title: "Multimedia"})
+        .more-news!=partial('container/block-row-same', {title: "More News", stories: model.Stories, sameSize: true})
 

@@ -1,4 +1,5 @@
 var globalFunctions = require('../../global-functions');
+var config = require('../../config');
 var async = require('async');
 var s3 = require('../../api/lib/s3.js');
 var im = require('imagemagick');
@@ -12,34 +13,6 @@ var VALID_EXTENSIONS = {};
 VALID_EXTENSIONS['image/jpeg'] = 'jpg';
 VALID_EXTENSIONS['image/png'] = 'png';
 VALID_EXTENSIONS['image/gif'] = 'gif';
-
-var IMAGE_TYPES = {
-    LargeRect: {
-        width: 636,
-        height: 393,
-        description: "Used for the main image on the article page, as well as for the slideshow"
-    },
-    ThumbRect: {
-        width: 186,
-        height: 133,
-         description: "Dean, add a description here"
-    },
-    ThumbRectL: {
-        width: 276,
-        height: 165,
-        description: "Dean, add a description here"
-    },
-    ThumbSquareM: {
-        width: 183,
-        height: 183,
-        description: "Dean, add a description here"
-    },
-    ThumbWide: {
-        width: 300,
-        height: 120,
-        description: "Dean, add a description here"
-    }
-};
 
 var THUMB_DIMENSIONS = '100x100';
 
@@ -182,6 +155,8 @@ exports.bindPath = function (app) {
                                             function (err2, versions) {
                                                 if (err2) globalFunctions.showError(httpRes, err2); // if an error is found, 
                                                 else {
+                                                    var imageTypes = config.get('IMAGE_TYPES');
+
                                                     httpRes.render('admin/image', { //no errors have been found, render image
                                                         locals:{ //specifies/assigns variables to pass into function
                                                             url:orig.value.url,
@@ -192,9 +167,9 @@ exports.bindPath = function (app) {
                                                             photographer:orig.value.photographer,
                                                             date:orig.value.date,
                                                             versions:versions,
-                                                            imageTypes:Object.keys(IMAGE_TYPES),
+                                                            imageTypes:Object.keys(imageTypes),
                                                             article:req.query.article,
-                                                            imageDetails:IMAGE_TYPES
+                                                            imageDetails:imageTypes
                                                         },
                                                         layout:"layout-admin.jade"
                                                     });

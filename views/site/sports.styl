@@ -58,7 +58,7 @@ body section > #sports
 
         .slideshow-wrapper.right-select > .slideshow
             width width + 6 + right-width
-
+            position relative
             .slides img
                 width width
                 border-radius 4px
@@ -88,8 +88,7 @@ body section > #sports
                      cursor pointer
                      width right-width - margin
                      display inline-block
-                     margin 0px
-                     margin-bottom 13px
+                     margin 0px 0px 13px 0px
                      padding-right padding-right
                      padding-top 3px
                      font-size 1.2em
@@ -152,6 +151,7 @@ body section > #sports
     .middle
         margin-bottom 6px
         .left
+            float left
             .container .rounded
                 width 305px
                 height 297px
@@ -201,24 +201,24 @@ body section > #sports
                         width 221px
                         padding-left 5px
                         float left
-    .middle2
-        .blog
-            float left
-            .rounded
-                width 306px
 
-        .multimedia
-            float right
-            .rounded-hover
-                width 636px
-                height 211px
+    .blog
+        .rounded
+            width 306px
+            height 211px
 
-                .element
-                    width 205px
-                    float left
-                    margin-right 7px
-                .element.last
-                    margin-right 0px
+    .multimedia
+        clear both
+        .rounded-hover
+            width 636px
+            height 211px
+
+            .element
+                width 205px
+                float left
+                margin-right 7px
+            .element.last
+                margin-right 0px
     .sport-block
         width 311px
         float left

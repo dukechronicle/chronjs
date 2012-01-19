@@ -88,7 +88,7 @@ site.init = function (app, callback) {
         });
 
 
-        app.get('/', site.checkAdmin, function (req, res) {
+        app.get('/', site.restrictToAdmin, function (req, res) {
             var start = Date.now();
             async.parallel([
                 function (callback) { //0
@@ -768,14 +768,23 @@ site.init = function (app, callback) {
     });
 };
 
-// Checks if you are an admin
+// Checks if you are an admin with browser check
 site.checkAdmin = function (req, res, next) {
+    site.restrictToAdmin(req, res, function() {
+        if (req.headers['user-agent'].indexOf("Chrome") === -1) {
+            site.askForLogin(res, req.url, '', 'Please use Google Chrome to use the admin interface');
+        }
+        else {
+            next();
+        }
+    });
+};
+
+// Checks if you are an admin
+site.restrictToAdmin = function (req, res, next) {
     //if not admin, require login
     if (!api.accounts.isAdmin(req)) {
         site.askForLogin(res, req.url);
-    }
-    else if (req.headers['user-agent'].indexOf("Chrome") === -1) {
-        site.askForLogin(res, req.url, '', 'Please use Google Chrome to use the admin interface');
     }
     else {
         next();

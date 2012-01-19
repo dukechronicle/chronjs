@@ -77,11 +77,11 @@ api.init = function(callback) {
         //api.search.indexUnindexedArticles(1);
         /** Chron Jobs! **/
         /*
-        new cron.CronJob('0 * * * * *', function() {
+        new api.cron.CronJob('0 * * * * *', function() {
             process.nextTick(function() {
                 api.search.indexUnindexedArticles(300);
             });
-        });*/
+        });*/ 
 
         callback(null);
     });
@@ -191,6 +191,9 @@ api.addDoc = function(fields, callback) {
                 fields.updated = unix_timestamp;
                 fields.urls = [url];
                 fields.indexedBySolr = api.search.getIndexVersion();
+                
+                // strip all html tags from the teaser
+                fields.teaser = fields.teaser.replace(/<(.|\n)*?>/g,"");
 
                 db.save(fields, function(db_err, res) {
 

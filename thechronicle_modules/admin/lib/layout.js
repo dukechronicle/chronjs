@@ -2,6 +2,8 @@ var site = require('../../api/lib/site.js');
 var taxonomy = require('../../api/lib/taxonomy.js');
 var groups = require('../../api/lib/group.js');
 var api = require('../../api');
+var config = require('../../config');
+var globalFunctions = require('../../global-functions');
 
 var _ = require("underscore");
 
@@ -37,24 +39,24 @@ function _getDocsInSection(req,res) {
 
 function renderPage(req,res,section_docs) {
     var group = _capitalize(req.params.group);
-    var config = groups.getLayoutGroups();
+    var layoutConfig = groups.getLayoutGroups();
 
     var section_docs = _.sortBy(section_docs, function (doc) {
         return doc.title;
     }); // sort section docs alphabetically
     
     // get and show the current groupings
-    api.group.docs(config[group].namespace, null, function (err, group_docs) {
+    api.group.docs(layoutConfig[group].namespace, null, function (err, group_docs) {
         res.render("admin/layout",
         {
             layout:"layout-admin.jade",
             locals:{
                 page: group,
-                groups: config[group].groups,
-                mainSections: taxonomy.getMainSections(),
+                groups: layoutConfig[group].groups,
+                mainSections: globalFunctions.convertObjectToArray(config.get("TAXONOMY_MAIN_SECTIONS")),
                 sectionDocs: section_docs,
                 groupDocs: group_docs,
-                nameSpace: config[group].namespace
+                nameSpace: layoutConfig[group].namespace
             }
         });
     });

@@ -22,6 +22,14 @@ var LAYOUT_GROUPS = null;
 var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
 var newsModel = JSON.parse(fs.readFileSync("sample-data/news.json"));
 var sportsModel = JSON.parse(fs.readFileSync("sample-data/sports.json"));
+var columnistsData = JSON.parse(fs.readFileSync("sample-data/columnists.json"));
+var columnistsHeadshots = {};
+columnistsData.forEach(function(columnist) {
+    columnistsHeadshots[columnist.name] = {
+        headshot: columnist.headshot,
+        tagline: columnist.tagline
+    };
+});
 
 // TODO remove and put in to api
 var db = require('../../db-abstract');
@@ -30,7 +38,7 @@ var BENCHMARK = false;
 
 function _convertTimestamp(timestamp) {
     var date = new Date(timestamp*1000);
-    return dateFormat(date,"mmmm dS, yyyy");
+    return dateFormat(date,"mmmm d, yyyy");
 }
 
 function _articleViewsKey(taxonomy) {
@@ -80,7 +88,7 @@ site.init = function (app, callback) {
         });
 
 
-        app.get('/', function (req, res) {
+        app.get('/', site.restrictToAdmin, function (req, res) {
             var start = Date.now();
             async.parallel([
                 function (callback) { //0
@@ -122,29 +130,29 @@ site.init = function (app, callback) {
                     });
                 }
             ],
-                    function (err, results) {
-                        if (BENCHMARK) log.info("TOTAL TIME %d", Date.now() - start);
-                        var model = results[0];
-                        _.defaults(model, homeModel);
+            function (err, results) {
+                if (BENCHMARK) log.info("TOTAL TIME %d", Date.now() - start);
+                var model = results[0];
+                _.defaults(model, homeModel);
 
-                        model.popular = results[1];
-                        model.twitter = results[2];
-                        res.render('site/index', {
-                            css:asereje.css(['slideshow/style', 'container/style', 'site/frontpage']),
-                            layout:'layout-optimized',
-                            filename:'views/site/index.jade',
-                            locals:{
-                                model:model
-                            }
-                        });
+                model.popular = results[1];
+                model.twitter = results[2];
+                res.render('site/index', {
+                    css:asereje.css(['slideshow/style', 'container/style', 'site/frontpage']),
+                    layout:'layout-optimized',
+                    filename:'views/site/index.jade',
+                    locals:{
+                        model:model
+                    }
+                });
 
-                    });
+            });
         });
 
         app.get('/news', function (req, res) {
             api.group.docs(LAYOUT_GROUPS.News.namespace, null, function (err, model) {
                 _.defaults(model, newsModel);
-                redis.client.zrevrange(_articleViewsKey(['News']), 0, 5, function (err, popular) {
+                redis.client.zrevrange(_articleViewsKey(['News']), 0, 4, function (err, popular) {
                     model.popular = popular.map(function (str) {
                         var parts = str.split('||');
                         return {
@@ -211,7 +219,8 @@ site.init = function (app, callback) {
                     },
                     function (callback) { //2
                         api.taxonomy.getParentAndChildren(['Sports', 'Women'], callback);
-                    },
+                    }
+                        /*
                     function (callback) { //3
                         api.taxonomy.docs("Football", 4, callback);
                     },
@@ -223,7 +232,7 @@ site.init = function (app, callback) {
                     },
                     function (callback) { //6
                         api.taxonomy.docs("W Soccer", 4, callback);
-                    }
+                    }*/
                 ],
                         // optional callback
                         function (err, results) {
@@ -265,18 +274,6 @@ site.init = function (app, callback) {
                     api.taxonomy.getParentAndChildren(['Opinion'], callback);
                 },
                 function (callback) { //2
-                    api.authors.getLatest("Editorial Board", 5, callback);
-                },
-                function (callback) { //3
-                    api.authors.getLatest("Shining Li", 6, callback);
-                },
-                function (callback) { //4
-                    api.authors.getLatest("Rui Dai", 6, callback);
-                },
-                function (callback) { //5
-                    api.authors.getLatest("Jason Wagner", 6, callback);
-                },
-                function (callback) { //6
                     rss.getRSS('blog-opinion', function (err, res) {
                         if (res && res.items && res.items.length > 0) {
                             var Blog = res.items.map(function (item) {
@@ -291,40 +288,64 @@ site.init = function (app, callback) {
                             callback(null, []);
                         }
                     });
+                },
+                function (callback) { // 3
+                    api.authors.getLatest("Editorial Board", "Opinion", 5, callback);
+                },
+                function (callback) { //4
+                    async.map(columnistsData,
+                            function(columnist, _callback) {
+                                api.authors.getLatest(columnist.name, "Opinion", 5, function(err, res) {
+                                    columnist.stories = res;
+                                    _callback(err, columnist);
+                                })
+                            },
+                            callback
+                    );
                 }
             ],
-                    function (err, results) {
-                        var model = results[0];
-                        model.EditBoard = results[2];
-                        model.Columnists = [];
-                        model.Columnists.push({title:"Shining Li", stories:results[3]});
-                        model.Columnists.push({title:"Rui Dai", stories:results[4]});
-                        model.Columnists.push({title:"Jason Wagner", stories:results[5]});
-                        model.Blog = results[6];
+            function (err, results) {
+                var model = results[0];
+                model.Featured.forEach(function(article) {
+                    article.author = article.authors[0];
+                    var columnistObj = null;
+                    if (columnistObj = columnistsHeadshots[article.author]) {
+                        if (columnistObj.headshot) article.thumb = columnistObj.headshot;
+                        if (columnistObj.tagline) article.tagline = columnistObj.tagline;
+                    }
+                });
+                model.Blog = results[2];
+                model.EditorialBoard = results[3];
+                model.Columnists = {};
+                // assign each columnist an object containing name and stories to make output jade easier
+                results[4].forEach(function(columnist, index) {
+                        model.Columnists[index] = columnist;
+                });
+                // need to call compact to remove undefined entries in array
+                _.compact(model.Columnists);
+                model.adFullRectangle = {
+                    "title":"Advertisement",
+                    "imageUrl":"/images/ads/monster.png",
+                    "url":"http://google.com",
+                    "width":"300px",
+                    "height":"250px"
+                };
 
-                        model.adFullRectangle = {
-                            "title":"Advertisement",
-                            "imageUrl":"/images/ads/monster.png",
-                            "url":"http://google.com",
-                            "width":"300px",
-                            "height":"250px"
-                        };
+                model.adFullBanner = {
+                    "title":"Ad",
+                    "imageUrl":"/images/ads/full-banner.jpg",
+                    "url":"http://google.com",
+                    "width":"468px",
+                    "height":"60px"
+                };
 
-                        model.adFullBanner = {
-                            "title":"Ad",
-                            "imageUrl":"/images/ads/full-banner.jpg",
-                            "url":"http://google.com",
-                            "width":"468px",
-                            "height":"60px"
-                        };
-
-                        res.render('site/opinion', {
-                            css:asereje.css(['container/style', 'site/section', 'site/opinion']),
-                            layout:'layout-optimized',
-                            subsections:results[1].children,
-                            filename:'views/site/opinion.jade',
-                            model:model});
-                    });
+                res.render('site/opinion', {
+                    css:asereje.css(['container/style', 'site/section', 'site/opinion']),
+                    layout:'layout-optimized',
+                    subsections:results[1].children,
+                    filename:'views/site/opinion.jade',
+                    model:model});
+            });
 
         });
 
@@ -388,7 +409,15 @@ site.init = function (app, callback) {
         app.get('/section/*', function (req, res) {
             var params = req.params.toString().split('/');
             var section = params[params.length - 1];
-            api.taxonomy.docs(section, 20,
+            redis.client.zrevrange(_articleViewsKey(params), 0, 4, function (err, popular) {
+                popular = popular.map(function (str) {
+                    var parts = str.split('||');
+                    return {
+                        url:'/article/' + parts[0],
+                        title:parts[1]
+                    };
+                });
+                api.taxonomy.docs(section, 20,
                     function (err, docs) {
                         if (err) globalFunctions.showError(res, err);
                         else {
@@ -410,7 +439,8 @@ site.init = function (app, callback) {
                                         docs:docs,
                                         subsections:parentAndChildren.children,
                                         parentPaths:parentAndChildren.parentPaths,
-                                        section:section
+                                        section:section,
+                                        popular: popular
                                     },
                                     layout: "layout-optimized",
                                     css:asereje.css(['container/style', 'site/section'])
@@ -418,7 +448,8 @@ site.init = function (app, callback) {
                             });
                         }
                     }
-            );
+                );
+            });
         });
         
         /**
@@ -435,13 +466,15 @@ site.init = function (app, callback) {
             Calls Search Functionality
         */
         app.get('/search/:query', function (req, http_res) {
-            api.search.docsBySearchQuery(req.params.query.replace('-', ' '), req.query.sort, req.query.order, req.query.facets, 1, function (err, docs, facets) {
+            api.search.docsBySearchQuery(req.params.query.replace(/-/g, ' '), req.query.sort, req.query.order, req.query.facets, 1, function (err, docs, facets) {
                 _showSearchArticles(err, req, http_res, docs, facets);
             });
         });
 
         app.get('/staff/:query', function (req, http_res) {
-            api.search.docsByAuthor(req.params.query.replace('-', ' '), 'desc', '', 1, function (err, docs) {
+            var name = req.params.query.replace(/-/g, ' ');
+
+            api.search.docsByAuthor(name, 'desc', '', 1, function (err, docs) {
                 if (err) return globalFunctions.showError(http_res, err);
 
                 docs.forEach(function (doc) {
@@ -455,8 +488,7 @@ site.init = function (app, callback) {
                     doc = _parseAuthor(doc);
                 });
 
-			    var name = req.params.query.replace('-', ' ');
-                http_res.render('site/people',
+			    http_res.render('site/people',
                 {
                     locals:{
                         docs: docs,
@@ -523,24 +555,36 @@ site.init = function (app, callback) {
                         doc.path = "/article/" + latestUrl;
 
                         var isAdmin = api.accounts.isAdmin(req);
+                        redis.client.zrevrange(_articleViewsKey([]), 0, 4, function (err, popular) {
+                                                if (err) return callback(err);
+                                                popular = popular.map(function (str) {
+                                                    var parts = str.split('||');
+                                                    return {
+                                                        url:'/article/' + parts[0],
+                                                        title:parts[1]
+                                                    };
+                                                });
+                            var model = {
+                                "adFullRectangle":{
+                                    "title":"Advertisement",
+                                    "imageUrl":"/images/ads/monster.png",
+                                    "url":"http://google.com",
+                                    "width":"300px",
+                                    "height":"250px"
+                                },
+                                "popular": popular
+                            };
+                            http_res.render('article', {
+                                locals:{
+                                    doc:doc,
+                                    isAdmin:isAdmin,
+                                    model:model
 
-                        http_res.render('article', {
-                            locals:{
-                                doc:doc,
-                                isAdmin:isAdmin,
-                                model:{
-                                    "adFullRectangle":{
-                                        "title":"Advertisement",
-                                        "imageUrl":"/images/ads/monster.png",
-                                        "url":"http://google.com",
-                                        "width":"300px",
-                                        "height":"250px"
-                                    }
-                                }
-                            },
-                            filename:'views/article.jade',
-                            css:asereje.css(['container/style', 'article']),
-                            layout:'layout-optimized'
+                                },
+                                filename:'views/article.jade',
+                                css:asereje.css(['container/style', 'article']),
+                                layout:'layout-optimized'
+                            });
                         });
                     }
 
@@ -694,15 +738,6 @@ site.init = function (app, callback) {
             http_res.render('site/newsletter');
         });
 
-        // eventually sending of newsletter should be put in a cron job, or very least at a url behind /admin/
-        app.get('/send-newsletter', function (req, http_res) {
-            api.newsletter.createNewsletter(function() {
-                api.newsletter.sendNewsletter(function() {});  
-            });
-          
-            http_res.render('site/newsletter');
-        });
-
         app.post('/newsletter', function (req, http_res) {
             var email = req.body.email;
             var action = req.body.action;
@@ -733,14 +768,23 @@ site.init = function (app, callback) {
     });
 };
 
-// Checks if you are an admin
+// Checks if you are an admin with browser check
 site.checkAdmin = function (req, res, next) {
+    site.restrictToAdmin(req, res, function() {
+        if (req.headers['user-agent'].indexOf("Chrome") === -1) {
+            site.askForLogin(res, req.url, '', 'Please use Google Chrome to use the admin interface');
+        }
+        else {
+            next();
+        }
+    });
+};
+
+// Checks if you are an admin
+site.restrictToAdmin = function (req, res, next) {
     //if not admin, require login
     if (!api.accounts.isAdmin(req)) {
         site.askForLogin(res, req.url);
-    }
-    else if (req.headers['user-agent'].indexOf("Chrome") === -1) {
-        site.askForLogin(res, req.url, '', 'Please use Google Chrome to use the admin interface');
     }
     else {
         next();
@@ -807,6 +851,10 @@ site.assignPreInitFunctionality = function (app, server) {
 };
 
 function _renderConfigPage(res,err) {
+    if(err != null) {
+        err = err + "<br /><br />The live site was not updated to use the new configuration due to errors."
+    }
+
     res.render('config/config', {
         locals:{
             configParams:config.getParameters(),
@@ -814,7 +862,7 @@ function _renderConfigPage(res,err) {
             profileValue:config.getActiveProfileName(),
             revisionName:config.getRevisionKey(),
             revisionValue:config.getConfigRevision(),
-            error:err
+            error: err
         },
         layout:'layout-admin.jade'
     });
@@ -891,7 +939,7 @@ function _showSearchArticles(err,req,http_res,docs,facets) {
     var currentFacets = req.query.facets;
     if(!currentFacets) currentFacets = '';
 
-    var validSections = config.get("TAXONOMY_MAIN_SECTIONS");
+    var validSections = globalFunctions.convertObjectToArray(config.get("TAXONOMY_MAIN_SECTIONS"));
     // filter out all sections other than main sections
     Object.keys(facets.Section).forEach(function(key) {
         if (!_.include(validSections, key)) {

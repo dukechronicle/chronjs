@@ -28,13 +28,13 @@
             margin-bottom 0.3em
         
         .comments a
-            background url('http://graphics8.nytimes.com/images/article/comments/icons/comment_black.gif')
+            background-image url('/images/icons/article_comment.gif')
             background-repeat no-repeat
             background-position 0px 2px
             padding 0 0 3px 20px
             color black
         .print a
-            background url('http://graphics8.nytimes.com/images/article/functions/tools_print.gif')
+            background-image url('/images/icons/article_print.gif')
             background-repeat no-repeat
             background-position 0 2px
             padding 0 0 3px 20px
@@ -46,17 +46,27 @@
         float left
         padding 0.7em 1.5em 0.6em 1.5em
         background white
-        p
-            color #333
-            margin-bottom 1em
-            font-size 0.95em
-            line-height 1.6em
+        .photo-credit
+            float right
+            color #777
+            font-size 0.8em
+        .photo-caption
+            color #555
+            font-size 0.8em
+            font-style italic
+        .article-body
+            p
+                color #333
+                margin-bottom 1em
+                font-size 0.95em
+                line-height 1.6em
 
     .sidebar
         float right
 
-        .container
-            width 306px
+        .rounded
+            width 300px
+
 
     #disqus_thread
         float left

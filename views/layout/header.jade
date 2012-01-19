@@ -1,7 +1,7 @@
 - if(query == null) var query = ""
-- query = query.replace("-"," ");
+- query = query.replace(/-/g, ' ');
 
-.lighten
+.div
     img(src='/images/header-overlay.png', id='header-overlay', width='100px', height='122px')
 
 #header-top
@@ -15,6 +15,7 @@
             a(href='http://chroniclehousing.com/') Housing
         h1
             a(href='/') The Chronicle
+        p.date January 12, 2012
 
     .leaderboard
         a(href='http://sprint.com')

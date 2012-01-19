@@ -2,10 +2,12 @@
 html(lang="en")
     head
         title The Chronicle | Duke University's Daily Independent Newspaper
+        script(src="http://use.typekit.com/dwv2bjy.js")
+        script try{Typekit.load();}catch(e){}
+
         -each file in css
             link(rel= 'stylesheet', href= '/' + file + '.css')
 
-        script(data-main="/js/main", src="/js/require-jquery.js")
     body
         #shell
             header
@@ -13,3 +15,7 @@ html(lang="en")
             section!=body
             footer
                 include /layout/footer
+
+    script(data-main="/js/main", src="/js/require-jquery.js")
+
+

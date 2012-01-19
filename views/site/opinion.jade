@@ -2,59 +2,41 @@
 
 #opinion
     .top.clearfix
-        .left
-            .grid
-                if (model.Featured)
-                    .row.first
-                        if (model.Featured[1])
-                            .first!=partial('container/row-2', {title: model.Featured[1].authors[0], story: model.Featured[1]})
-                        if (model.Featured[2])
-                            .last!=partial('container/row-2', {title: model.Featured[2].authors[0], story: model.Featured[2]})
-                if (model.Featured && model.Featured[2])
-                    .row.last
-                        if (model.Featured[3])
-                            .first!=partial('container/row-2', {title: model.Featured[3].authors[0], story: model.Featured[3]})
-                        if (model.Featured[4])
-                            .last!=partial('container/row-2', {title: model.Featured[4].authors[0], story: model.Featured[4]})
+        .main
+            if (model.Featured)
+                .columns-today!=partial('container/main-opinion', {title: "Today's Columns", stories: model.Featured})
+            if (model.EditorialBoard)
+                .editorial-board!=partial('container/teaser-with-date.jade', {title: "Editorial Board", stories: model.EditorialBoard})
         .right
             if (model.Blog)
                 .blog!=partial('container/story-list', {title: "Backpages", stories: model.Blog})
+            if (model.Popular)
+                .popular!=partial('container/story-list', {title: "Popular", stories: model.Popular})
             if (model.adFullRectangle)
                 .image-container.medium-rectangle.lighten!=partial('container/image', model.adFullRectangle)
             if (model.adFullBanner)
                 .image-container.full-banner.lighten!=partial('container/image', model.adFullBanner)
-        // feature
-        //
-            if (model.Featured && model.Featured[0])
-                .main!=partial('container/featured-image.jade', {title: "", story: model.Featured[0]})
+            if (model.Columnists)
+                #columnists
+                    #columnist-list
+                        .container.clearfix.story-list
+                            .vertical-container
+                                h2.vertical Columnists
+                            .rounded
+                                .content-container
+                                    - each columnist, index in model.Columnists
+                                        h2
+                                            a.list-story.hover.highlight-left(data-index=index, href="#")
+                                                #{columnist.name}
+                    #columnist-articles.container.clearfix
+                        .vertical-container
+                            if (typeof title != 'undefined')
+                                    h2.vertical #{title}
+                                else
+                                    h2.vertical &nbsp;
+                        .rounded
+                            - each columnist, index in model.Columnists
+                                .columnist-stories(id="columnist-story-#{index}")!=partial('container/opinion-story-list.jade', columnist)
 
 
-            
-        // columnist
-        .row.columnists
-            if (model["Edit Board"])
-                div!=partial('container/story-list', {title: "Editorial Board", stories:model["Edit Board"]})
-            if (model.Columnists && model.Columnists[0])
-                div!=partial('container/story-list', model.Columnists[0])
-            if (model.Columnists && model.Columnists[1])
-                div!=partial('container/story-list', model.Columnists[1])
-            if (model.Columnists && model.Columnists[2])
-                .last!=partial('container/story-list', model.Columnists[2])
-    //
-        .middle.clearfix
-            if (model.Blog)
-                .blog!=partial('container/story-list.jade', {title: "Blog", stories: model.Blog})
-            if (model["Edit Board"] && model["Edit Board"][3])
-                .editBoard!=partial('container/block.jade', {title: "Editorial Board", story:model["Edit Board"][0]})
-            .mostPopular.last!=partial('container/sample-block.jade', {title: "Popular"})
-    .bottom
-        // more columnists
-        .row
-            if (model["More Columnists"] && model["More Columnists"][0])
-                div!=partial('container/block.jade', {title: "Columnist", story:model["More Columnists"][0]})
-            if (model["More Columnists"] && model["More Columnists"][1])
-                div!=partial('container/block.jade', {title: "Columnist", story:model["More Columnists"][1]})
-            if (model["More Columnists"] && model["More Columnists"][2])
-                div!=partial('container/block.jade', {title: "Columnist", story:model["More Columnists"][2]})
-            if (model["More Columnists"] && model["More Columnists"][3])
-                .last!=partial('container/block.jade', {title: "Columnist", story:model["More Columnists"][3]})
+

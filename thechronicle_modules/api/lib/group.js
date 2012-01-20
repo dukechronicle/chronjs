@@ -62,86 +62,68 @@ group.remove = function(docid, namespace, name, callback) {
 */
 group.docs = function(namespace, group, callback) {
     var start = Date.now();
-    var key = null;
-    if (group == null) {
-        key = "group.docs:" + namespace.toString()
-    } else {
-        key = "group.docs:" + namespace.toString() + ":" + group.toString();
-    }
+    var redisKey = "group.docs:" + namespace.toString()
+    if (group)
+        rediskey += ":" + group.toString();
 
-    redis.client.get(key, function(err, res) {
-        if (res === null) {
-            var DOC_TYPE_KEY = 3;
-            db.group.docs(namespace, group, function(err, res) {
+    redis.client.get(redisKey, function(err, res) {
+        if (res)
+	    callback(null, JSON.parse(res));
+	else
+	    db.group.docs(namespace, group, function(err, res) {
                 if (BENCHMARK) log.info("RECEIVED %d", Date.now() - start);
+
                 // if querying name space, map each group to it's own object
-                if (err) return callback(err);
-                else {
-                    if (!group) {
-                        var groupedResults = {};
-                        var groupName;
-                        var prevGroupName;
-                        var currentArticle;
+                if (err)
+		    callback(err);
+                else if (!group) {
+                    var groupedResults = {};
+		    var currentArticle
 
-                        res.forEach(function(key, doc) {
-                            var docType = key[DOC_TYPE_KEY];
+                    res.forEach(function (key, doc) {
+                        var groupName = key[1];
+                        var docType = key[3];
 
-                            if (docType === "article") {
-                                prevGroupName = groupName;
-                                groupName = key[1];
+                        if (docType === "article") {
+			    // retain reference to current article so images
+			    // that are processed next can easily access it
+			    currentArticle = doc;
 
-                                // start of a new group
-                                if (!groupedResults[groupName]) {
-                                    groupedResults[groupName] = [];
-                                    doc.cssClass = "first";
+                            if (! (groupName in groupedResults))
+				groupedResults[groupName] = [];
+                            if (doc.urls)
+                                doc.url = "/article/" + doc.urls[doc.urls.length - 1];
 
-                                    // assign css class to last article of previous group
-                                    if (prevGroupName && groupedResults[prevGroupName]) {
-                                        groupedResults[prevGroupName][groupedResults[prevGroupName].length - 1].cssClass = "last";
-                                    }
-                                }
+                            // remove body to save space
+                            delete doc.body;
+                            delete doc.renderedBody;
 
-                                if (doc.urls) {
-                                    doc.url = "/article/" + doc.urls[doc.urls.length - 1];
-                                }
+                            groupedResults[groupName].push(doc);
 
-                                // remove body to save space
-                                doc.body = '';
-                                doc.renderedBody = '';
-
-                                groupedResults[groupName].push(doc);
-
-                                // retain reference to current article so images that are processed next can easily access it
-                                currentArticle = groupedResults[groupName][groupedResults[groupName].length - 1];
-
-                                // TODO this should NEVER happen
-                                currentArticle.images = {};
-                            } else if (docType === "image") {
-                                // if it
-                                var imageType = key[DOC_TYPE_KEY + 1];
-                                currentArticle.images[imageType] = doc;
-                            }
-                        });
-
-                        // assign last css class since previous loop may have not hit it
-                        if (prevGroupName && groupedResults[prevGroupName]) {
-                            groupedResults[prevGroupName][groupedResults[prevGroupName].length - 1].cssClass = "last";
+                            // TODO this should NEVER happen
+                            doc.images = {};
                         }
-                        redis.client.set(key, JSON.stringify(groupedResults));
-                        redis.client.expire(key, 2);
-                        callback(null, groupedResults);
-                    } else {
-                        // TODO modify this
-                        return callback(null, {});
+			else if (docType === "image") {
+                            var imageType = key[4];
+                            currentArticle.images[imageType] = doc;
+                        }
+                    });
+
+		    for (var groupName in groupedResults) {
+			groupedResults[groupName][0].cssClass = "first";
+                        groupedResults[groupName][groupedResults[groupName].length - 1].cssClass = "last";
                     }
+
+                    redis.client.set(redisKey, JSON.stringify(groupedResults));
+                    redis.client.expire(redisKey, 2);
+                    callback(null, groupedResults);
+                }
+		else {
+                    // TODO modify this
+                    return callback(null, {});
                 }
             });
-        } else {
-            //log.debug(res);
-            callback(null, JSON.parse(res));
-        }
-    })
-
+    });
 };
 
 group.add = function(nameSpace, groupName, docId, weight, callback) {

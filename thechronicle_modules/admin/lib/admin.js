@@ -5,7 +5,6 @@ var async = require('async');
 var fs = require('fs');
 var s3 = require('../../api/lib/s3.js');
 var http = require('http');
-var formidable = require('formidable');
 var k4export = require('./k4export');
 var solr = require('solr');
 var md = require('node-markdown').Markdown;
@@ -220,8 +219,8 @@ exports.init = function (app, callback) {
                             });
 
                     app.get('/k4export', site.checkAdmin,
-                            function (req, http_res) {
-                                http_res.render('admin/k4export', {
+                            function (req, res) {
+                                res.render('admin/k4export', {
                                     locals:{
                                         groups:[],
                                         failed:null,
@@ -233,34 +232,19 @@ exports.init = function (app, callback) {
                             });
 
                     app.post('/k4export', site.checkAdmin,
-                            function (req, http_res) {
-                                try {
-                                    fs.mkdirSync("./tmp", "0755")
-                                }
-                                catch (err) {
-                                } // directory already exists
-
-                                var form = new formidable.IncomingForm();
-                                form.uploadDir = './tmp';
-                                form.parse(req, function (err, fields, files) {
-                                    if (err)
-                                        http_res.end(err);
-                                    else {
-                                        db.taxonomy.getTaxonomyListing(function (err, taxonomy) {
-                                            k4export.runExporter(files.zip.path,
-                                                    function (failed, success) {
-                                                        http_res.render('admin/k4export', {
-                                                            locals:{
-                                                                groups:[],
-                                                                failed:failed,
-                                                                succeeded:success,
-                                                                taxonomy:taxonomy
-                                                            },
-                                                            layout:"layout-admin.jade"
-                                                        });
-                                                    });
+                            function (req, res) {
+                                db.taxonomy.getTaxonomyListing(function (err, taxonomy) {
+                                    k4export.runExporter(req.files.zip.path, function (failed, success) {
+                                        res.render('admin/k4export', {
+					    locals:{
+                                                groups:[],
+                                                failed:failed,
+                                                succeeded:success,
+                                                taxonomy:taxonomy
+					    },
+					    layout:"layout-admin.jade"
                                         });
-                                    }
+				    });
                                 });
                             });
 

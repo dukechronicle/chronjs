@@ -227,7 +227,7 @@ function ArticleParser(articleCallback) {
  * @param{string} zipPath The path of the zip file with the article XML files
  * @param{function} exportCallback Callback function of failures and successes
  */
-function runExporter(zipPath, exportCallback) {
+function runExporter(zipPath, callback) {
     var parser = new ArticleParser(function (article, callback) {
 	api.addDoc(article, function (err, url, id) {
             if (err) {
@@ -242,8 +242,5 @@ function runExporter(zipPath, exportCallback) {
         });
     });
 
-    parser.parse(zipPath, function (failed, successes) {
-        fs.unlink(zipPath);
-        exportCallback(failed, successes);
-    });
+    parser.parse(zipPath, callback);
 }

@@ -18,21 +18,16 @@ group.create = function (namespace, name, callback) {
 
 // lists all groups with given query options
 group.list = function(options, callback) {
-    db.view('articles/groups', options,
-        function(err, res) {
-            callback(err, res);
-        }
-    );
+    db.view('articles/groups', options, callback);
 };
 
 // fetch documents from namespace or groups
 group.docs = function (namespace, group, callback) {
     if (BENCHMARK) var start = Date.now();
-    var query = {};
-
-    query.reduce = false;
-    query.include_docs = true;
-
+    var query = {
+	reduce: false,
+	include_docs: true
+    };
 
     if (group === null) {
         // fetch all docs in namespace
@@ -42,18 +37,11 @@ group.docs = function (namespace, group, callback) {
         query.startkey = [namespace, group];
         query.endkey = [namespace, group, {}];
     }
-    db.view('articles/groups', query,
-            function (err, res) {
-                if (BENCHMARK) console.log("QUERY RECEIVED %d", Date.now() - start);
-                if (err) return callback(err);
-                if (res) {
-                    //console.log(res);
-                    callback(null, res);
-                } else {
-                    callback(null, []);
-                }
-            }
-    );
+
+    db.view('articles/groups', query, function (err, res) {
+        if (BENCHMARK) console.log("QUERY RECEIVED %d", Date.now() - start);
+	callback(err, res || []);
+    });
 };
 
 group.docsN = function (namespace, groupName, baseDocNum, numDocs, callback) {
@@ -88,66 +76,60 @@ group.docsN = function (namespace, groupName, baseDocNum, numDocs, callback) {
             });
 };
 
-
-// add document to group
+/**
+ * Add a document to a group with the given namespace and group name. The
+ * document's weight in the group is specified as a parameter.
+ */
 group.add = function (nameSpace, groupName, docId, weight, callback) {
-
     db.get(docId, function (err, doc) {
-        if (err) return callback(err);
+        if (err)
+	    callback(err);
+	else {
+            var groups = doc.groups || [];
+	    
+            // update existing entry
+            var updated = false;
+            groups.forEach(function (groupEntry) {
+		if (groupMatch(nameSpace, groupName, groupEntry)) {
+                    groupEntry[2] = weight;
+                    updated = true;
+		}
+            });
+            if (!updated)
+		groups.push([nameSpace, groupName, weight]);
 
-        var groups = doc.groups;
-        if (!groups) groups = [];
-
-        // remove existing entry
-        var updated = false;
-        groups = groups.map(function (groupEntry) {
-            // [nameSpace, groupName, weight]
-            // need toString to compare arrays
-            if (groupEntry[0].toString() == nameSpace.toString() &&
-                    groupEntry[1] == groupName) {
-                groupEntry[2] = weight;
-                updated = true;
-            }
-            return groupEntry;
-        });
-
-        if (!updated) {
-            groups.push([nameSpace, groupName, weight]);
-        }
-        console.log("adding " + doc.title + " to " + groupName);
-        db.merge(docId, {
-            groups:groups
-        }, callback);
-
+            db.merge(docId, {groups: groups}, callback);
+	}
     });
 };
 
-// add document to group
+/**
+ * Remove a document from a group with the given namespace and group name.
+ */
 group.remove = function (nameSpace, groupName, docId, callback) {
     db.get(docId, function (err, doc) {
-        if (err) return callback(err);
+        if (err)
+	    callback(err);
+	else {
+            var groups = doc.groups || [];
+	    
+            // remove existing entry
+            var updated = false;
+            groups = _.filter(groups, function (groupEntry) {
+		var matches = groupMatch(nameSpace, groupName, groupEntry);
+		updated = updated || matches;
+		return !matches;
+	    });
 
-        var groups = doc.groups;
-        if (!groups) groups = [];
-
-        // remove existing entry
-        var updated = false;
-        groups = groups.map(function (groupEntry) {
-            // [nameSpace, groupName, weight]
-            // need toString to compare arrays
-            if (groupEntry[0].toString() == nameSpace.toString() &&
-                    groupEntry[1] == groupName) {
-                updated = true;
-                return null;
-            }
-            console.log("keeping" + groupEntry);
-            return groupEntry;
-        });
-
-        if (updated) {
-            db.merge(docId, {
-                groups:_.compact(groups)
-            }, callback);
-        }
+            if (updated)
+		db.merge(docId, {groups: groups}, callback);
+	}
     });
+};
+
+function groupMatch(namespace, groupName, groupEntry) {
+    // groupEntry is [nameSpace, groupName, weight]
+    // need toString to compare arrays
+    return groupEntry[0].toString() == namespace.toString() &&
+	groupEntry[1] == groupName;
 };

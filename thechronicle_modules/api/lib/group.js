@@ -51,10 +51,17 @@ group.docs = function(namespace, group, callback) {
     });
 };
 
+/**
+ * Add a document to a group with the given namespace and group name. The
+ * document's weight in the group is specified as a parameter.
+ */
 group.add = function(nameSpace, groupName, docId, weight, callback) {
     db.group.add(nameSpace, groupName, docId, weight, callback);
 };
 
+/**
+ * Remove a document from a group with the given namespace and group name.
+ */
 group.remove = function(nameSpace, groupName, docId, callback) {
     db.group.remove(nameSpace, groupName, docId, callback);
 };
@@ -69,12 +76,12 @@ function groupDocs(namespace, group, callback) {
     db.group.docs(namespace, group, function(err, res) {
         if (BENCHMARK) log.info("RECEIVED %d", Date.now() - start);
 
-        // if querying name space, map each group to it's own object
         if (err)
 	    callback(err);
         else if (!group) {
+            // if querying name space, map each group to it's own object
             var groupedResults = {};
-	    var currentArticle
+	    var currentArticle;
 
             res.forEach(function (key, doc) {
                 var groupName = key[1];

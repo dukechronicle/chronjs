@@ -38,15 +38,15 @@ function ArticleParser(articleCallback) {
     };
 
      /**
-     * Iterates over the contents of a zip archive, parsing each file (with
-     * thisParser.parseFile) and calling a callback (cb) after processing both
-     * files and directories. Upon completion, calls a callback function with 
-     * a list of errors and titles of those files that were parsed successfully.
+     * Parses all XML documents in the given zip archive into Javascript article
+     * objects and calls the ArticleParsers articleCallback function on each
+     * object. Upon completion, calls the callback function with an array of
+     * filenames of articles that could not be parsed and an array of
+     * successfully parsed objects as arguments.
      *
      * @param{string} zipPath Path to the zip archive
-     * @param{function} callback A function to call after all files have been
-     *     iterated over. The callback takes as an argument an array of errors
-     *     and an array of the files that were parsed successfully.
+     * @param{function} callback A callback that takes as parameters an array
+     *     of errors and an array of the articles created
      */
     this.parse = function (zipPath, callback) {
         var succeed = [];

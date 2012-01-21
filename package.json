@@ -41,7 +41,6 @@
         "dateformat":"1.0.x",
         "htmlparser":"1.7.x",
 
-        "formidable": "1.0.x",
         "zipfile": "0.2.x",
     	"sax": "0.3.x",
         "mailchimp":"0.8.x",

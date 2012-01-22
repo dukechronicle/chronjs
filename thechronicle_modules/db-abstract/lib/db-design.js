@@ -169,6 +169,15 @@ var views = {
     }
 };
 
+var lists = {
+    filterCount: function(head, req) {
+        var row;
+        while(row = getRow()) {
+            if (row.value > req.query.min) send(row)
+        }
+    }
+};
+
 exports.getViews = function () {
     return _.extend({}, views);
 };

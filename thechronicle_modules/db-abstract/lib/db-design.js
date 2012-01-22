@@ -169,6 +169,20 @@ var views = {
     }
 };
 
-exports.getViews = function () {
-    return _.extend({}, views);
+var lists = {
+    filterCount: function(head, req) {
+        var row;
+        while(row = getRow()) {
+            if (row.value > req.query.min) send(row)
+        }
+    }
 };
+
+exports.getDoc = function () {
+    var designDoc = {};
+    designDoc.language = "javascript";
+    designDoc.views = views;
+    designDoc.lists = lists;
+    return designDoc;
+};
+

@@ -7,7 +7,8 @@ database.findDuplicateUrls = function(callback) {
     var query = {
         reduce: true,
         group: true,
-        min: 1
+        min: 1,
+        listLimit: 100
     };
 
     console.log("calling find dup")

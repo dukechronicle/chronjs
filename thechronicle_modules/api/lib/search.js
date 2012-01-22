@@ -124,15 +124,9 @@ search.indexArticle = function(id, title, body, taxonomy, authors, createdDate, 
 		created_day_i : solrDay
 	};
 
-	// unindex the article before you index it, just incase it was using an old verion of the indexing
-	search.unindexArticle(id, function(err, resp) {
-		if(err)
-			log.warning(err);
-		else
-			client.add(solrDoc, {
-				commit : true
-			}, callback);
-	});
+	client.add(solrDoc, {
+    	commit : true
+    }, callback);
 };
 
 search.unindexArticle = function(id, callback) {

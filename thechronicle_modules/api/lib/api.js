@@ -193,8 +193,8 @@ api.addDoc = function(fields, callback) {
             }
             else {
                 var unix_timestamp = Math.round(new Date().getTime() / 1000);
-                fields.created = unix_timestamp;
-                fields.updated = unix_timestamp;
+                fields.created = fields.created || unix_timestamp;
+                fields.updated = fields.created || unix_timestamp;
                 fields.urls = [url];
                 fields.indexedBySolr = api.search.getIndexVersion();
                 

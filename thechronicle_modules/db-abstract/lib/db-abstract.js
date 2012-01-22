@@ -108,7 +108,7 @@ db.whenDBExists = function(database,callback) {
 
 function createViews(modifiedTime, hash, callback) {
     var design_doc = require(DESIGN_DOCUMENT_FILENAME);
-    db.save(DESIGN_DOCUMENT_NAME, design_doc.getViews(), function(err) {
+    db.save(DESIGN_DOCUMENT_NAME, design_doc.getDoc(), function(err) {
         // update the versioning info for the design document
         if(err) return callback(err);
 
@@ -119,24 +119,19 @@ function createViews(modifiedTime, hash, callback) {
 }
 
 function viewsAreUpToDate(callback) {
-    var design_doc = require(DESIGN_DOCUMENT_FILENAME);    
+    var design_doc = require(DESIGN_DOCUMENT_FILENAME);
     
     // calculate the hash of the local design doc    
     var md5sum = crypto.createHash('md5');
-    var views = design_doc.getViews();
-    
-    // since functions can't be stringified to json, convert them to strings manually
-    Object.keys(views).forEach(function(key) {
-        var stringIt = 'map:'+views[key].map.toString();
-
-        if(views[key].reduce) {
-            stringIt += 'reduce:'+views[key].reduce.toString();
-        }
-        views[key] = stringIt;
-    });
+    var designDoc = design_doc.getDoc();
 
     // compute the hash of the json object representing the design document
-    md5sum.update(JSON.stringify(views));
+    md5sum.update(JSON.stringify(designDoc), function(key, val) {
+      if (typeof val === 'function') {
+        return val + ''; // implicitly `toString` it
+      }
+      return val;
+    });
     var localHash = md5sum.digest('base64');
 
 

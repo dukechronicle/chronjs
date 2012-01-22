@@ -1,8 +1,11 @@
 /* require npm nodejs modules */
+var asereje = require('asereje');
+var async = require('async');
 var express = require('express');
 require('express-namespace');
 var stylus = require('stylus');
 var sprintf = require('sprintf').sprintf;
+var fs = require('fs');
 
 
 /* require internal modules */
@@ -16,9 +19,7 @@ var mobileapi = require('./thechronicle_modules/mobileapi/lib/mobileapi');
 var redisClient = require('./thechronicle_modules/redisclient');
 var RedisStore = require('connect-redis')(express);
 
-var async = require('async');
 
-var asereje = require('asereje');
 asereje.config({
       active: process.env.NODE_ENV === 'production'        // enable it just for production
     , js_globals: ['typekit', 'underscore-min', 'jquery']   // js files that will be present always
@@ -47,7 +48,7 @@ function compile(str, path) {
 
 
 app.use(stylus.middleware({
-	src: __dirname + '/views'
+    src: __dirname + '/views'
   , dest: __dirname + '/public'
   , compile: compile
   , firebug: true
@@ -56,7 +57,7 @@ app.use(stylus.middleware({
 app.configure(function() {
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
-    app.use(express.bodyParser());
+    app.use(express.bodyParser({uploadDir: tmpDirectory()}));
     app.use(express.methodOverride());
     // set up session
     app.use(express.cookieParser());
@@ -153,4 +154,15 @@ function runSite(callback) {
             return callback();
         })
     });
+}
+
+function tmpDirectory() {
+    var tmpDir = __dirname + '/tmp';
+    try {
+	fs.mkdirSync(tmpDir, "0755")
+    }
+    catch (err) {
+	// directory already exists
+    }
+    return tmpDir;
 }

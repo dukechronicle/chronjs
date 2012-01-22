@@ -171,11 +171,21 @@ var views = {
 
 var lists = {
     filterCount: function(head, req) {
+        if (!req.query.listLimit) {
+            req.query.listLimit = 1;
+        }
         var row;
         var rows = [];
         while(row = getRow()) {
-            if (row.value > req.query.min) rows.push(row);
+            if (row.value > req.query.min) {
+                rows.push(row);
+                if (rows.length >= req.query.listLimit) {
+                    send(JSON.stringify(rows));
+                    return;
+                }
+            }
         }
+
         send(JSON.stringify(rows));
     }
 };

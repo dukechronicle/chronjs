@@ -3,12 +3,12 @@ var _ = require('underscore');
 
 var database = exports;
 
-database.findDuplicateUrls = function(callback) {
+database.findDuplicateUrls = function(limit, callback) {
     var query = {
         reduce: true,
         group: true,
         min: 1,
-        listLimit: 100
+        listLimit: limit
     };
 
     console.log("calling find dup")

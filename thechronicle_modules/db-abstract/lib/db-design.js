@@ -178,7 +178,7 @@ var lists = {
         var rows = [];
         while(row = getRow()) {
             if (row.value > req.query.min) {
-                rows.push(row);
+                rows.push(row.key);
                 if (rows.length >= req.query.listLimit) {
                     send(JSON.stringify(rows));
                     return;

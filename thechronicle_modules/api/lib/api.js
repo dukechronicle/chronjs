@@ -74,7 +74,7 @@ api.init = function(callback) {
       	api.cron.init();
         api.search.init();
         api.newsletter.init();
-        api.database.findDuplicateUrls();
+        api.database.findDuplicateUrls(100);
         //api.search.indexUnindexedArticles(1);
         /** Chron Jobs! **/
         /*

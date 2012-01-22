@@ -178,6 +178,11 @@ var lists = {
     }
 };
 
-exports.getViews = function () {
-    return _.extend({}, views);
+exports.getDoc = function () {
+    var designDoc = {};
+    designDoc.language = "javascript";
+    designDoc.views = views;
+    designDoc.lists = lists;
+    return designDoc;
 };
+

@@ -1,20 +1,21 @@
 var db = require('./db-abstract');
+var _ = require('underscore');
 
 var database = exports;
 
-database.findDuplicateUrls = function() {
+database.findDuplicateUrls = function(callback) {
     var query = {
-        startkey:[authorName, {}],
-        endkey:[authorName],
-        descending:true,
-        limit:count,
-        include_docs:true
+        reduce: true,
+        group: true,
+        min: 1
     };
 
-
-    db.view('articles/authors_and_taxonomy', query,
+    console.log("calling find dup")
+    db.list('articles/filterCount/duplicate_urls', query,
             function (err, res) {
-                callback(err, _.pluck(res, 'doc'));
+                console.log("results");
+                console.log(res);
+                callback(err, res);
             }
     );
-}
+};

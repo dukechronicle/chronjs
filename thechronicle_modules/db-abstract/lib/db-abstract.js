@@ -126,14 +126,13 @@ function viewsAreUpToDate(callback) {
     var designDoc = design_doc.getDoc();
 
     // compute the hash of the json object representing the design document
-    md5sum.update(JSON.stringify(designDoc), function(key, val) {
+    md5sum.update(JSON.stringify(designDoc, function(key, val) {
       if (typeof val === 'function') {
         return val + ''; // implicitly `toString` it
       }
       return val;
-    });
+    }));
     var localHash = md5sum.digest('base64');
-
 
     fs.stat(DESIGN_DOCUMENT_FILENAME, function(err, stats) {
         var localModifiedTime = stats.mtime;

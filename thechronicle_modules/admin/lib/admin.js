@@ -16,6 +16,7 @@ var globalFunctions = require('../../global-functions');
 
 var layoutAdmin = require('./layout');
 var imageAdmin = require('./image');
+var databaseAdmin = require('./database');
 
 var VIDEO_PLAYERS = {
     "youtube": "<iframe width=\"560\" height=\"345\" src=\"http://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>",
@@ -380,6 +381,7 @@ exports.init = function (app, callback) {
 
         app.namespace('/admin/layout', layoutAdmin.bindPath(app));
         app.namespace('/admin/image', imageAdmin.bindPath(app));
+        app.namespace('/admin/database', databaseAdmin.bindPath(app));
 
         callback(null);
     });

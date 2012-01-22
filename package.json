@@ -18,6 +18,7 @@
         "underscore":"1.2.x",
 
         "cradle":"0.5.x",
+	"connect":"1.8.x",
 
         "knox":"0.0.x",
         "imagemagick":"0.1.x",

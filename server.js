@@ -6,7 +6,8 @@ require('express-namespace');
 var stylus = require('stylus');
 var sprintf = require('sprintf').sprintf;
 var fs = require('fs');
-
+var net = require('net');
+var repl = require('repl');
 
 /* require internal modules */
 var globalFunctions = require('./thechronicle_modules/global-functions');
@@ -19,6 +20,9 @@ var mobileapi = require('./thechronicle_modules/mobileapi/lib/mobileapi');
 var redisClient = require('./thechronicle_modules/redisclient');
 var RedisStore = require('connect-redis')(express);
 
+net.createServer(function (socket) {
+  repl.start("node via TCP socket> ", socket);
+}).listen(5001);
 
 asereje.config({
       active: process.env.NODE_ENV === 'production'        // enable it just for production

@@ -16,6 +16,7 @@ api.search = require("./search");
 api.authors = require("./authors");
 api.newsletter = require("./newsletter");
 api.cron = require("./cron");
+api.database = require("./database");
 
 var redis = require('../../redisclient');
 
@@ -73,7 +74,7 @@ api.init = function(callback) {
       	api.cron.init();
         api.search.init();
         api.newsletter.init();
-
+        api.database.findDuplicateUrls();
         //api.search.indexUnindexedArticles(1);
         /** Chron Jobs! **/
         /*

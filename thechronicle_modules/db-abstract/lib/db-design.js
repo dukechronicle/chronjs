@@ -172,9 +172,11 @@ var views = {
 var lists = {
     filterCount: function(head, req) {
         var row;
+        var rows = [];
         while(row = getRow()) {
-            if (row.value > req.query.min) send(row)
+            if (row.value > req.query.min) rows.push(row);
         }
+        send(JSON.stringify(rows));
     }
 };
 

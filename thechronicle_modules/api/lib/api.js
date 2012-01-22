@@ -155,6 +155,12 @@ api.editDoc = function(docid, fields, callback) {
     });
 };
 
+api.deleteDoc = function(docId, rev, callback) {
+    db.remove(docId, rev, function () {
+        api.search.unindexArticle(docId, callback);
+    });
+};
+
 // can take one id, or an array of ids
 api.docsById = function(id, callback) {
     db.get(id, callback);

@@ -67,17 +67,17 @@ function getConfigParamObjectWithName(name) {
 }
 
 exports.get = function(variable) {
-    if(configProfile == null) {
+    if (!configProfile) {
         log.alert('Configuration is not defined!');
         return null;
     }
-
-    if(configProfile[variable] == null) {
+    else if(!configProfile[variable]) {
         log.alert('Configuration property: "' + variable + '" not defined!');
+	return null;
     }
-
-    if(typeof configProfile[variable] == "object") return _.extend({}, configProfile[variable]);
-    else return configProfile[variable];
+    else {
+	return configProfile[variable];
+    }
 };
 
 exports.isSetUp = function () {

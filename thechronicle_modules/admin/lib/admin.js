@@ -141,32 +141,7 @@ exports.init = function (app, callback) {
 
                     app.get('/add', site.checkAdmin,
                             function (req, http_res) {
-                                var rootSections = ["News", "Sports", "Opinion", "Recess", "Towerview"];
-
-                                db.taxonomy.getHierarchy(function (err, res) {
-                                    var taxonomy = {};
-                                    res.forEach(function (value) {
-                                        value = value.key;
-                                        //var current = taxonomy;
-
-                                        if (value && value.length > 0 && rootSections.indexOf(value[0]) != -1) {
-                                            var key = "";
-                                            for (var i = 0; i < value.length - 1; i++) {
-                                                key += "-";
-                                            }
-                                            key += " " + value[value.length - 1];
-
-                                            taxonomy[key] = JSON.stringify(value);
-                                            /*
-                                             value.forEach(function(x) {
-                                             if (!current[x]) {
-                                             current[x] = {};
-                                             }
-                                             current = current[x];
-                                             })*/
-                                        }
-                                    });
-
+                                api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
                                     http_res.render('admin/add', {
                                         locals:{
                                             groups:[],
@@ -175,8 +150,6 @@ exports.init = function (app, callback) {
                                         layout:"layout-admin.jade"
                                     });
                                 });
-
-
                             });
 
                     app.get('/addPage', site.checkAdmin,
@@ -234,7 +207,7 @@ exports.init = function (app, callback) {
 
                     app.post('/k4export', site.checkAdmin,
                              function (req, res) {
-                                 db.taxonomy.getTaxonomyListing(function (err, taxonomy) {
+                                 api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
                                      k4export.runExporter(req.files.zip.path, function (failed, success) {
 					 fs.unlink(req.files.zip.path);
                                          res.render('admin/k4export', {

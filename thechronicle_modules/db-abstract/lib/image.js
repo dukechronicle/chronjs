@@ -117,8 +117,8 @@ image.originalsForPhotographer = function (photog, callback) {
     }, callback);
 };
 
-image.articleImages = function(versionId, callback) {
-    db.view('articles/article_images', {
+image.docsForVersion = function(versionId, callback) {
+    db.view('articles/doc_images', {
         key: versionId
     }, callback);
 };

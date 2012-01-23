@@ -79,6 +79,31 @@ taxonomy.getParentsAndChildren = function(taxonomyPath, callback) {
     });
 };
 
+taxonomy.getTaxonomyListing = function (callback) {
+    db.taxonomy.getHierarchy(function (err, res) {
+        if (err) callback(err);
+        else {
+            var listing = { News:{},
+                Sports:{},
+                Opinion:{},
+                Recess:{},
+                Towerview:{}
+            };
+            async.reduce(res, listing,
+                    function (memo, item, cb) {
+                        var fields = item.key;
+                        var dashes = "";
+                        for (var i = 0; i < fields.length - 1; i++)
+			    dashes += "-";
+                        if (fields[0] in memo)
+                            memo[fields[0]][JSON.stringify(fields)] =
+                                    dashes + " " + fields[fields.length - 1];
+                        cb(undefined, memo);
+                    }, callback);
+	}
+    });
+};
+
 function buildTree(taxonomy, callback) {
     async.reduce(taxonomy, {},
 		 function (tree, section, cb) {

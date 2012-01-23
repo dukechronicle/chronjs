@@ -121,9 +121,9 @@ exports.bindPath = function (app) {
         app.get('/articles', site.checkAdmin,
                 function (req, httpRes) {
                     var id = req.query.id;
-                    var func = api.image.articlesForVersion;
+                    var func = api.image.docsForVersion;
                     if(req.query.orig && req.query.orig == '1')
-                        func = api.image.articlesForOriginal;
+                        func = api.image.docsForOriginal;
                         
                     func(id, function(err, res) {
                         globalFunctions.sendJSONResponse(httpRes, res);

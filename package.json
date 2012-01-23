@@ -6,7 +6,7 @@
         "url":"git@github.com:thechronicle/website.git"
     },
     "dependencies":{
-        "express":"2.5.x",
+        "express":"2.5.6",
         "express-namespace":"0.0.x",
         "express-resource":"0.2.x",
         "jade":"0.15.x",
@@ -18,6 +18,7 @@
         "underscore":"1.2.x",
 
         "cradle":"0.5.x",
+	"connect":"1.8.x",
 
         "knox":"0.0.x",
         "imagemagick":"0.1.x",
@@ -41,7 +42,6 @@
         "dateformat":"1.0.x",
         "htmlparser":"1.7.x",
 
-        "formidable": "1.0.x",
         "zipfile": "0.2.x",
     	"sax": "0.3.x",
         "mailchimp":"0.8.x",

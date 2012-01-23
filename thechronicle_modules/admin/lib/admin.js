@@ -255,7 +255,7 @@ exports.init = function (app, callback) {
                                 if (req.body.imageVersionId) {
                                    api.image.addVersionToDoc(req.body.docId, req.body.original, req.body.imageVersionId, req.body.imageType, function (err, res) {
                                         if (err) globalFunctions.showError(http_res, err);
-                                        else if(req.body.article) http_res.redirect('/article/' + req.body.article + '/edit');
+                                        else if(req.body.afterUrl) http_res.redirect(req.body.afterUrl);
                                         else http_res.redirect('/admin');
                                    });
                                 } 

@@ -39,15 +39,16 @@ taxonomy.getTaxonomySubtree = function(taxonomyPath, callback) {
 
 taxonomy.getParents = function(taxonomyPath, callback) {
     var parents = [];
+    var taxonomyPath = _.clone(taxonomyPath);
     while (taxonomyPath.length > 1) {
         var parentName = taxonomyPath.pop();
         parents.push({path:'/' + taxonomyPath.join('/'), name:parentName});
     }
-    return parents.reverse();
+    callback(null, parents.reverse());
 };
 
 taxonomy.getChildren = function(taxonomyPath, callback) {
-    var path = '/' + taxonomyPath.join('/');
+    var path = taxonomyPath.join('/');
     taxonomy.getTaxonomySubtree(taxonomyPath, function (err, tree) {
 	if (err)
 	    callback(err);

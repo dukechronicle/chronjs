@@ -433,15 +433,17 @@ site.init = function (app, callback) {
                         });
 
                         api.taxonomy.getParentsAndChildren(params, function (err, parents, children) {
-			    if (err) globalFunctions.showError(res, err);
-                            res.render('site/section', {
-                                locals:{
-                                    docs:docs,
-                                    subsections:children,
-                                    parentPaths:parents,
-                                    section:section,
-                                    popular: popular
-                                },
+			    if (err)
+				globalFunctions.showError(res, err);
+			    else
+				res.render('site/section', {
+                                    locals:{
+					docs:docs,
+					subsections:children,
+					parentPaths:parents,
+					section:section,
+					popular: popular
+                                    },
                                     layout: "layout-optimized",
                                     css:asereje.css(['container/style', 'site/section'])
                                 });

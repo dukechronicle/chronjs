@@ -684,10 +684,7 @@ site.init = function (app, callback) {
                         });
                     }
                     else {
-
-                        var rootSections = config.get("TAXONOMY_MAIN_SECTIONS");
-
-                        db.taxonomy.getTaxonomyListing(function (err, taxonomy) {
+                        api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
                             if (!doc.images) doc.images = {};
                             if (doc.authors) {
                                 doc.authors = doc.authors.join(", ");

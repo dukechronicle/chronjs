@@ -81,7 +81,14 @@ taxonomy.getParentsAndChildren = function(taxonomyPath, callback) {
 
 taxonomy.getTaxonomyListing = function (callback) {
     taxonomy.getTaxonomyTree(function (err, tree) {
-	createTaxonomyListingHelper(tree, [], 0, callback);
+	var taxonomy = {};
+	_.forEach(tree, function (value, key) {
+	    var listing = {}, path = [key];
+	    listing[JSON.stringify(path)] = key;
+	    getTaxonomyListingHelper(value, listing, path, 1);
+	    taxonomy[key] = listing;
+	});
+	callback(null, taxonomy);
     });
 };
 
@@ -102,14 +109,15 @@ function buildTree(taxonomy, callback) {
 		 });
 }
 
-function createTaxonomyListingHelper(tree, listing, depth, callback) {
+function getTaxonomyListingHelper(tree, listing, path, depth) {
     _.forEach(tree, function (value, key) {
-        var prefix = " ";
+        var dashes = "";
         for (var i = 0; i < depth; i++)
-	    prefix = "-" + prefix;
-	var name = depth > 0 ? prefix + key : key;
-	listing.push(name);
-	createTaxonomyListingHelper(value, listing, depth + 1, function(){});
+	    dashes += "-";
+	path.push(key);
+	listing[JSON.stringify(path)] = dashes + "  " + key;
+	getTaxonomyListingHelper(value, listing, path, depth + 1);
+	path.pop();
     });
-    callback(null, listing);
+    return listing;
 }

@@ -80,7 +80,7 @@ image.createVersion = function (parentId, url, width, height, callback) {
 image.deleteVersion = function (versionId, updateOriginal, topCallback) {
     async.waterfall([
         function (callback) {
-            image.articlesForVersion(versionId, callback);
+            image.docsForVersion(versionId, callback);
         },
         function (articles, callback) {
             async.map(articles, function(article, cbck) {
@@ -141,7 +141,7 @@ image.deleteOriginal = function (originalId, topCallback) {
     ], topCallback);
 };
 
-image.articlesForOriginal = function (origId, topCallback) {
+image.docsForOriginal = function (origId, topCallback) {
     async.waterfall([
         function (callback) {
             db.get(origId, callback);
@@ -149,7 +149,7 @@ image.articlesForOriginal = function (origId, topCallback) {
         function (orig, callback) {
             var versions = orig.imageVersions;
             async.reduce(versions, {}, function(obj, version, cbck) {
-                image.articlesForVersion(version, function(err, articles) {
+                image.docsForVersion(version, function(err, articles) {
                     if(err) cbck(err);
                     else {
                         for (var i in articles) {
@@ -166,21 +166,21 @@ image.articlesForOriginal = function (origId, topCallback) {
             callback(null, globalFunctions.convertObjectToArray(articles));
         }
     ], topCallback);
-}
+};
 
-image.articlesForVersion = function (versionId, topCallback) {
+image.docsForVersion = function (versionId, topCallback) {
     async.waterfall([
         function (callback) {
-            db.image.articleImages(versionId, callback);
+            db.image.docsForVersion(versionId, callback);
         },
-        function (articles, callback) {
-            var newArticles = [];
-            for (var i in Object.keys(articles)) {
-                if(typeof articles[i] != 'function' && typeof articles[i] != 'undefined') {
-                    newArticles.push(articles[i].value);
+        function (docs, callback) {
+            var newDocs = [];
+            for (var i in Object.keys(docs)) {
+                if(typeof docs[i] != 'function' && typeof docs[i] != 'undefined') {
+                    newDocs.push(docs[i].value);
                 }
             }
-            callback(null, newArticles);
+            callback(null, newDocs);
         }],
         topCallback);
 };

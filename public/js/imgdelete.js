@@ -15,7 +15,7 @@ $(document).ready(function(){
         
                 var msg = '<div id="dialog-confirm">This image will be removed from the following articles:<ul>';
                 $.each(data, function(index, value) {
-                    msg += '<li>' + value.title + '</li>';
+                    msg += '<li>' + value.title || 'Non-article object' + '</li>';
                 });
                 msg += '</ul></div>';
             

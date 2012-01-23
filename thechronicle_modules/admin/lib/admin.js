@@ -3,20 +3,20 @@ var db = require('../../db-abstract');
 var log = require('../../log');
 var async = require('async');
 var fs = require('fs');
-var s3 = require('../../api/lib/s3.js');
+var s3 = require('../../api/lib/s3');
 var http = require('http');
-var formidable = require('formidable');
 var k4export = require('./k4export');
 var solr = require('solr');
 var md = require('node-markdown').Markdown;
 var sprintf = require('sprintf').sprintf;
 var config = require("../../config");
-var site = require('../../api/lib/site.js');
+var site = require('../../api/lib/site');
 var globalFunctions = require('../../global-functions');
 
 
-var layoutAdmin = require('./layout.js');
-var imageAdmin = require('./image.js');
+var layoutAdmin = require('./layout');
+var imageAdmin = require('./image');
+var databaseAdmin = require('./database');
 
 var VIDEO_PLAYERS = {
     "youtube": "<iframe width=\"560\" height=\"345\" src=\"http://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>",
@@ -220,8 +220,8 @@ exports.init = function (app, callback) {
                             });
 
                     app.get('/k4export', site.checkAdmin,
-                            function (req, http_res) {
-                                http_res.render('admin/k4export', {
+                            function (req, res) {
+                                res.render('admin/k4export', {
                                     locals:{
                                         groups:[],
                                         failed:null,
@@ -233,36 +233,22 @@ exports.init = function (app, callback) {
                             });
 
                     app.post('/k4export', site.checkAdmin,
-                            function (req, http_res) {
-                                try {
-                                    fs.mkdirSync("./tmp", "0755")
-                                }
-                                catch (err) {
-                                } // directory already exists
-
-                                var form = new formidable.IncomingForm();
-                                form.uploadDir = './tmp';
-                                form.parse(req, function (err, fields, files) {
-                                    if (err)
-                                        http_res.end(err);
-                                    else {
-                                        db.taxonomy.getTaxonomyListing(function (err, taxonomy) {
-                                            k4export.runExporter(files.zip.path,
-                                                    function (failed, success) {
-                                                        http_res.render('admin/k4export', {
-                                                            locals:{
-                                                                groups:[],
-                                                                failed:failed,
-                                                                succeeded:success,
-                                                                taxonomy:taxonomy
-                                                            },
-                                                            layout:"layout-admin.jade"
-                                                        });
-                                                    });
-                                        });
-                                    }
-                                });
-                            });
+                             function (req, res) {
+                                 db.taxonomy.getTaxonomyListing(function (err, taxonomy) {
+                                     k4export.runExporter(req.files.zip.path, function (failed, success) {
+					 fs.unlink(req.files.zip.path);
+                                         res.render('admin/k4export', {
+					     locals:{
+                                                 groups:[],
+                                                 failed:failed,
+                                                 succeeded:success,
+                                                 taxonomy:taxonomy
+					     },
+					     layout:"layout-admin.jade"
+                                         });
+				     });
+                                 });
+                             });
 
                     app.post('/edit', site.checkAdmin,
                             function (req, http_res) {
@@ -371,18 +357,16 @@ exports.init = function (app, callback) {
                             });
 
                     app.delete('/article/:docId', site.checkAdmin, function (req, http_res) {
-                        db.remove(req.params.docId, req.body.rev, function () {
-                            api.search.unindexArticle(req.params.docId, function (err, resp) {
-                            });
+                        api.deleteDoc(req.params.docId, req.body.rev, function () {
                             http_res.send({status:true});
                         });
-
                     });
 
                 });
 
         app.namespace('/admin/layout', layoutAdmin.bindPath(app));
         app.namespace('/admin/image', imageAdmin.bindPath(app));
+        app.namespace('/admin/database', databaseAdmin.bindPath(app));
 
         callback(null);
     });

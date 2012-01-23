@@ -697,6 +697,7 @@ site.init = function (app, callback) {
                                     groups:[],
                                     images:doc.images,
                                     url:url,
+                                    afterAddImageUrl: '/article/' + url + '/edit',
                                     taxonomy:taxonomy
                                 },
                                 layout:"layout-admin.jade"

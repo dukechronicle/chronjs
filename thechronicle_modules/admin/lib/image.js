@@ -41,13 +41,15 @@ exports.bindPath = function (app) {
             var beforeKey = req.query.beforeKey;
             var beforeID = req.query.beforeID;
             var forArticle = req.query.forArticle;
+            var forDocument = req.query.forDocument;
 
             api.image.getAllOriginals(beforeKey, beforeID, function (err, origs) {
                 httpRes.render('admin/articleimage', {
                     filename:'views/admin/articleimage.jade',
                     locals:{
                         origs:origs,
-                        url:forArticle,
+                        articleUrl:forArticle,
+                        docId:forDocument,
                         hasPrevious:(beforeID != null)
                     },
                     layout:'layout-admin.jade'
@@ -115,6 +117,34 @@ exports.bindPath = function (app) {
                                 }
                             });
                 });
+                
+        app.get('/articles', site.checkAdmin,
+                function (req, httpRes) {
+                    var id = req.query.id;
+                    var func = api.image.articlesForVersion;
+                    if(req.query.orig && req.query.orig == '1')
+                        func = api.image.articlesForOriginal;
+                        
+                    func(id, function(err, res) {
+                        globalFunctions.sendJSONResponse(httpRes, res);
+                    });
+                });
+                
+        app.get('/delete', site.checkAdmin,
+                function (req, httpRes) {
+                    var id = req.query.id;
+                    if(req.query.orig && req.query.orig == '1') {
+                        api.image.deleteOriginal(id, function(err, res) {
+                            var ret = (err != null);
+                            globalFunctions.sendJSONResponse(httpRes, {ok: ret});
+                        });
+                    } else {
+                        api.image.deleteVersion(id, true, function(err, res) {
+                            var ret = (err != null);
+                            globalFunctions.sendJSONResponse(httpRes, {ok: ret});
+                        })
+                    }
+                });
 
         app.get('/:imageName', site.checkAdmin,
                 function (req, httpRes) {  //this function either renders image or calls showError if there is an error
@@ -141,6 +171,7 @@ exports.bindPath = function (app) {
                                                             versions:versions,
                                                             imageTypes:Object.keys(imageTypes),
                                                             article:req.query.article,
+                                                            docId:req.query.docId,
                                                             imageDetails:imageTypes
                                                         },
                                                         layout:"layout-admin.jade"
@@ -153,8 +184,11 @@ exports.bindPath = function (app) {
 
         app.post('/info', site.checkAdmin,
                 function (req, httpRes) {
-                    var data = {};
                     var id = req.body.id; //assign id from req
+                    var article = req.body.article;
+                    var docId = req.body.docId;
+
+                    var data = {};
                     data.name = req.body.name; //fills entries of data from req
                     data.caption = req.body.caption;
                     data.photographer = req.body.photographer;
@@ -165,7 +199,10 @@ exports.bindPath = function (app) {
                     if(isNaN(data.date)) data.date = req.body.date;
 
                     api.image.edit(id, data, function () {  //passes the recently create "id" and "data" and an anonymous function to image.edit, which calls another function from db
-                        httpRes.redirect('/admin/image/' + data.name); //redirects image to domain name /admin/image/data.name
+                        if (docId)
+                            if (article) httpRes.redirect('/admin/image/' + data.name + '?article=' + article + '&docId=' + docId);
+                            else httpRes.redirect('/admin/image/' + data.name + '?docId=' + docId);
+                        else httpRes.redirect('/admin/image/' + data.name);                        
                     });
 
                 });
@@ -174,6 +211,7 @@ exports.bindPath = function (app) {
                 function (req, httpRes) {
                     var imageName = req.body.name; // assign "name" and "article" from parameter "req"
                     var article = req.body.article;
+                    var docId = req.body.docId;
                     var geom = _getMagickString( //MagickString takes coordinates and puts that info into a string
                             parseInt(req.body.x1),
                             parseInt(req.body.y1),
@@ -235,8 +273,10 @@ exports.bindPath = function (app) {
                                 if (err) {
                                     globalFunctions.showError(httpRes, err); //check for an error
                                 } else {
-                                    if (article) httpRes.redirect('/admin/image/' + imageName + '?article=' + article); //if there is an article, redirect to this domain
-                                    else httpRes.redirect('/admin/image/' + imageName); // otherwise, redirect to this domain
+                                    if (docId)
+                                        if (article) httpRes.redirect('/admin/image/' + imageName + '?article=' + article + '&docId=' + docId);
+                                        else httpRes.redirect('/admin/image/' + imageName + '?docId=' + docId);
+                                    else httpRes.redirect('/admin/image/' + imageName);
                                 }
                             }
                     );

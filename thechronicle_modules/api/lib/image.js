@@ -1,9 +1,12 @@
 var db = require('../../db-abstract');
+var api = require('./api');
 var async = require('async');
 var fs = require('fs');
 var im = require('imagemagick');
 var _ = require("underscore");
 var s3 = require('./s3.js');
+var urllib = require('url');
+var globalFunctions = require('../../global-functions');
 
 var image = exports;
 
@@ -20,6 +23,20 @@ function _deleteFiles(paths, callback) {
         async.series(result, callback);
     });
 }
+
+image.addVersionToDoc = function(docId, originalImageId, versionImageId, imageType, callback) {
+    api.docsById(docId,
+    function (err, doc) {
+        var images = doc.images;
+        if (!images) images = {};
+        images[imageType] = versionImageId;
+        images["Original"] = originalImageId;
+
+        api.editDoc(doc._id, {
+            images:images
+        }, callback);
+    });
+};
 
 image.getOriginal = function (name, callback) {
     db.image.originalsIndex({
@@ -57,6 +74,115 @@ image.createVersion = function (parentId, url, width, height, callback) {
         height:height
     };
     db.image.createVersion(parentId, options, callback);
+};
+
+// should call with updateOriginal=true unless we are deleting a version in preparation for deleting an original.
+image.deleteVersion = function (versionId, updateOriginal, topCallback) {
+    async.waterfall([
+        function (callback) {
+            image.articlesForVersion(versionId, callback);
+        },
+        function (articles, callback) {
+            async.map(articles, function(article, cbck) {
+                var versions = article.images;
+                for (var i in versions) {
+                    if(versions[i] == versionId)
+                        delete versions[i];
+                }
+                article.images = versions;
+                db.merge(article, function(err, res) {
+                    cbck(err, article);
+                });
+                cbck(null, article);
+            }, function(err, res) {
+                callback(err);
+            });
+        },
+        function (callback) {
+            db.image.deleteVersion(versionId, updateOriginal, callback);
+        },
+        function (version, callback) {
+            var url = urllib.parse(version.url);
+            console.log('deleting version from s3');
+            s3.delete(url.path, callback);
+        }
+    ],
+    topCallback);
+    
+};
+
+image.deleteOriginal = function (originalId, topCallback) {
+    async.waterfall([
+        function (callback) {
+            db.get(originalId, callback);
+        },
+        function (orig, callback) {
+            var versions = orig.imageVersions;
+            async.map(versions, function(version, cbck) {
+                image.deleteVersion(version, false, function(err, res) {
+                    cbck(err, version);
+                });
+            },
+            function(err, versions) {
+                callback(err, orig);
+            });
+        },
+        function (orig, callback) {
+            console.log('deleting original from db');
+            db.remove(originalId, orig._rev, function (err, res) {
+                callback(err, orig);
+            });
+        },
+        function (orig, callback) {
+            var url = urllib.parse(orig.url);
+            console.log('deleting original from s3');
+            s3.delete(url.path, callback);
+        }
+    ], topCallback);
+};
+
+image.articlesForOriginal = function (origId, topCallback) {
+    async.waterfall([
+        function (callback) {
+            db.get(origId, callback);
+        },
+        function (orig, callback) {
+            var versions = orig.imageVersions;
+            async.reduce(versions, {}, function(obj, version, cbck) {
+                image.articlesForVersion(version, function(err, articles) {
+                    if(err) cbck(err);
+                    else {
+                        for (var i in articles) {
+                            if(articles[i]._id && !obj[articles[i]._id]) {
+                                obj[articles[i]._id] = articles[i];
+                            }
+                        }
+                        cbck(null, obj);
+                    }
+                })
+            }, callback);
+        },
+        function (articles, callback) {
+            callback(null, globalFunctions.convertObjectToArray(articles));
+        }
+    ], topCallback);
+}
+
+image.articlesForVersion = function (versionId, topCallback) {
+    async.waterfall([
+        function (callback) {
+            db.image.articleImages(versionId, callback);
+        },
+        function (articles, callback) {
+            var newArticles = [];
+            for (var i in Object.keys(articles)) {
+                if(typeof articles[i] != 'function' && typeof articles[i] != 'undefined') {
+                    newArticles.push(articles[i].value);
+                }
+            }
+            callback(null, newArticles);
+        }],
+        topCallback);
 };
 
 image.originalsForPhotographer = function (photog, callback) {

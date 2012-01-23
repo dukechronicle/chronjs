@@ -252,26 +252,14 @@ exports.init = function (app, callback) {
 
                     app.post('/edit', site.checkAdmin,
                             function (req, http_res) {
-
-                                if (req.body.versionId) {
-                                    //adding image to article
-                                    api.docForUrl(req.body.article,
-                                            function (err, doc) {
-                                                var images = doc.images;
-                                                if (!images) images = {};
-                                                images[req.body.imageType] = req.body.versionId;
-                                                images["Original"] = req.body.original;
-
-                                                api.editDoc(doc._id, {
-                                                            images:images
-                                                        },
-                                                        function (err2, res) {
-                                                            if (err2) globalFunctions.showError(http_res, err2);
-                                                            else http_res.redirect('/article/' + req.body.article + '/edit');
-                                                        })
-                                            });
-                                } else {
-
+                                if (req.body.imageVersionId) {
+                                   api.image.addVersionToDoc(req.body.docId, req.body.original, req.body.imageVersionId, req.body.imageType, function (err, res) {
+                                        if (err) globalFunctions.showError(http_res, err);
+                                        else if(req.body.article) http_res.redirect('/article/' + req.body.article + '/edit');
+                                        else http_res.redirect('/admin');
+                                   });
+                                } 
+                                else {
                                     var id = req.body.doc.id;
                                     /*
                                      var new_groups = req.body.doc.groups;

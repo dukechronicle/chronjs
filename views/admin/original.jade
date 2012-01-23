@@ -1,11 +1,15 @@
 tr
   td #{original.displayName}
   td
-      if (typeof url != 'undefined')
-          a(href='/admin/image/' + original.name + '?article=' + url)
-              img(src=original.thumbUrl)
+      if (typeof docId != 'undefined')
+          if (typeof articleUrl != 'undefined')
+              a(href='/admin/image/' + original.name + '?article=' + articleUrl + '&docId=' + docId)
+                  img(src=original.thumbUrl)
+          else
+              a(href='/admin/image/' + original.name + '?docId=' + docId)
+                  img(src=original.thumbUrl)
       else
           a(href='/admin/image/' + original.name)
               img(src=original.thumbUrl)
    td
-      a.delete(href='#') Delete
+      a.delete(href='#', data-id=original._id, data-orig='1') Delete

@@ -9,7 +9,9 @@ table(border=1)
     td #{version.doc.height}
     td
       img(src=version.doc.url)
-    - if(article)
+    td
+      a.delete(href='#', data-id=version.doc._id, data-orig='0') Delete
+    - if(docId)
       td
         form(action='/admin/edit', method='POST')
           select(name='imageType')
@@ -18,9 +20,11 @@ table(border=1)
                 option(value=type, selected='yes') #{type}
               - else
                 option(value=type) #{type}
-          input(type='hidden', name='versionId', value=version.doc._id)
+          input(type='hidden', name='imageVersionId', value=version.doc._id)
           input(type='hidden', name='original', value=version.doc.original)
-          input(type='hidden', name='article', value=article)
+          input(type='hidden', name='docId', value=docId)
+          - if(article)
+              input(type='hidden', name='article', value=article)
           input(type='submit', value='add')
           &nbsp;
           a(onClick="showDescriptions()") What's This?

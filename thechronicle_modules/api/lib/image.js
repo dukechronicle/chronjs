@@ -1,4 +1,5 @@
 var db = require('../../db-abstract');
+var api = require('./api');
 var async = require('async');
 var fs = require('fs');
 var im = require('imagemagick');
@@ -22,6 +23,20 @@ function _deleteFiles(paths, callback) {
         async.series(result, callback);
     });
 }
+
+image.addVersionToDoc = function(docId, originalImageId, versionImageId, imageType, callback) {
+    api.docsById(docId,
+    function (err, doc) {
+        var images = doc.images;
+        if (!images) images = {};
+        images[imageType] = versionImageId;
+        images["Original"] = originalImageId;
+
+        api.editDoc(doc._id, {
+            images:images
+        }, callback);
+    });
+};
 
 image.getOriginal = function (name, callback) {
     db.image.originalsIndex({

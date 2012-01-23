@@ -23,8 +23,8 @@ table(border=1)
           input(type='hidden', name='imageVersionId', value=version.doc._id)
           input(type='hidden', name='original', value=version.doc.original)
           input(type='hidden', name='docId', value=docId)
-          - if(article)
-              input(type='hidden', name='article', value=article)
+          - if(afterUrl)
+              input(type='hidden', name='afterUrl', value=afterUrl)
           input(type='submit', value='add')
           &nbsp;
           a(onClick="showDescriptions()") What's This?

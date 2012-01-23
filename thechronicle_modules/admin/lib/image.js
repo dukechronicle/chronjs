@@ -40,7 +40,7 @@ exports.bindPath = function (app) {
         app.get('/manage', site.checkAdmin, function (req, httpRes) {
             var beforeKey = req.query.beforeKey;
             var beforeID = req.query.beforeID;
-            var forArticle = req.query.forArticle;
+            var afterUrl = req.query.afterUrl;
             var forDocument = req.query.forDocument;
 
             api.image.getAllOriginals(beforeKey, beforeID, function (err, origs) {
@@ -48,7 +48,7 @@ exports.bindPath = function (app) {
                     filename:'views/admin/articleimage.jade',
                     locals:{
                         origs:origs,
-                        articleUrl:forArticle,
+                        afterUrl:afterUrl,
                         docId:forDocument,
                         hasPrevious:(beforeID != null)
                     },
@@ -170,7 +170,7 @@ exports.bindPath = function (app) {
                                                             date:orig.value.date,
                                                             versions:versions,
                                                             imageTypes:Object.keys(imageTypes),
-                                                            article:req.query.article,
+                                                            afterUrl:req.query.afterUrl,
                                                             docId:req.query.docId,
                                                             imageDetails:imageTypes
                                                         },
@@ -185,7 +185,7 @@ exports.bindPath = function (app) {
         app.post('/info', site.checkAdmin,
                 function (req, httpRes) {
                     var id = req.body.id; //assign id from req
-                    var article = req.body.article;
+                    var afterUrl = req.body.afterUrl;
                     var docId = req.body.docId;
 
                     var data = {};
@@ -200,7 +200,7 @@ exports.bindPath = function (app) {
 
                     api.image.edit(id, data, function () {  //passes the recently create "id" and "data" and an anonymous function to image.edit, which calls another function from db
                         if (docId)
-                            if (article) httpRes.redirect('/admin/image/' + data.name + '?article=' + article + '&docId=' + docId);
+                            if (afterUrl) httpRes.redirect('/admin/image/' + data.name + '?afterUrl=' + afterUrl + '&docId=' + docId);
                             else httpRes.redirect('/admin/image/' + data.name + '?docId=' + docId);
                         else httpRes.redirect('/admin/image/' + data.name);                        
                     });
@@ -210,7 +210,7 @@ exports.bindPath = function (app) {
         app.post('/crop', site.checkAdmin,
                 function (req, httpRes) {
                     var imageName = req.body.name; // assign "name" and "article" from parameter "req"
-                    var article = req.body.article;
+                    var afterUrl = req.body.afterUrl;
                     var docId = req.body.docId;
                     var geom = _getMagickString( //MagickString takes coordinates and puts that info into a string
                             parseInt(req.body.x1),
@@ -274,7 +274,7 @@ exports.bindPath = function (app) {
                                     globalFunctions.showError(httpRes, err); //check for an error
                                 } else {
                                     if (docId)
-                                        if (article) httpRes.redirect('/admin/image/' + imageName + '?article=' + article + '&docId=' + docId);
+                                        if (afterUrl) httpRes.redirect('/admin/image/' + imageName + '?afterUrl=' + afterUrl + '&docId=' + docId);
                                         else httpRes.redirect('/admin/image/' + imageName + '?docId=' + docId);
                                     else httpRes.redirect('/admin/image/' + imageName);
                                 }

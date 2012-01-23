@@ -2,8 +2,8 @@ tr
   td #{original.displayName}
   td
       if (typeof docId != 'undefined')
-          if (typeof articleUrl != 'undefined')
-              a(href='/admin/image/' + original.name + '?article=' + articleUrl + '&docId=' + docId)
+          if (typeof afterUrl != 'undefined')
+              a(href='/admin/image/' + original.name + '?afterUrl=' + afterUrl + '&docId=' + docId)
                   img(src=original.thumbUrl)
           else
               a(href='/admin/image/' + original.name + '?docId=' + docId)

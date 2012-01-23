@@ -1,6 +1,6 @@
 table(border=1)
-    if (typeof url != 'undefined')
-        != partial('original', {collection: origs, locals: {url: url}})
+    if (typeof articleUrl != 'undefined')
+        != partial('original', {collection: origs, locals: {articleUrl: articleUrl, docId: docId}})
     else
         != partial('original', {collection: origs})
 
@@ -12,8 +12,11 @@ if (hasPrevious)
     br
 
 if (origs.length != 0)
-    if (typeof url != 'undefined')
-        a(href='/admin/image/manage?beforeKey=' + origs[origs.length - 1].date + '&beforeID=' + origs[origs.length - 1]._id + '&forArticle=' + url) Next
+    if (typeof docId != 'undefined')
+        if (typeof articleUrl != 'undefined')
+            a(href='/admin/image/manage?beforeKey=' + origs[origs.length - 1].date + '&beforeID=' + origs[origs.length - 1]._id + '&forArticle=' + articleUrl + '&forDocument=' + docId) Next        
+        else
+            a(href='/admin/image/manage?beforeKey=' + origs[origs.length - 1].date + '&beforeID=' + origs[origs.length - 1]._id + '&forDocument=' + docId) Next          
     else
         a(href='/admin/image/manage?beforeKey=' + origs[origs.length - 1].date + '&beforeID=' + origs[origs.length - 1]._id) Next
 script(src='/js/imgdelete.js', type='text/javascript')

@@ -80,27 +80,8 @@ taxonomy.getParentsAndChildren = function(taxonomyPath, callback) {
 };
 
 taxonomy.getTaxonomyListing = function (callback) {
-    db.taxonomy.getHierarchy(function (err, res) {
-        if (err) callback(err);
-        else {
-            var listing = { News:{},
-                Sports:{},
-                Opinion:{},
-                Recess:{},
-                Towerview:{}
-            };
-            async.reduce(res, listing,
-                    function (memo, item, cb) {
-                        var fields = item.key;
-                        var dashes = "";
-                        for (var i = 0; i < fields.length - 1; i++)
-			    dashes += "-";
-                        if (fields[0] in memo)
-                            memo[fields[0]][JSON.stringify(fields)] =
-                                    dashes + " " + fields[fields.length - 1];
-                        cb(undefined, memo);
-                    }, callback);
-	}
+    taxonomy.getTaxonomyTree(function (err, tree) {
+	createTaxonomyListingHelper(tree, [], 0, callback);
     });
 };
 
@@ -119,4 +100,16 @@ function buildTree(taxonomy, callback) {
 		 function (err, tree) {
 		     callback(err, tree);
 		 });
+}
+
+function createTaxonomyListingHelper(tree, listing, depth, callback) {
+    _.forEach(tree, function (value, key) {
+        var prefix = " ";
+        for (var i = 0; i < depth; i++)
+	    prefix = "-" + prefix;
+	var name = depth > 0 ? prefix + key : key;
+	listing.push(name);
+	createTaxonomyListingHelper(value, listing, depth + 1, function(){});
+    });
+    callback(null, listing);
 }

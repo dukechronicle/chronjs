@@ -13,21 +13,18 @@ var FAKE_WORDS = [
 
 var IMAGES = [
     {
-        name: 'Duke.jpg',
         url: 'http://collegesportsnation.com/ipad-wallpapers/duke-university-ipad-wallpapers/duke-university-ipad-wallpaper.jpg',
         type: 'image/jpg',
         width: 1024,
         height: 1024
     },
     {
-        name: 'CoachK.jpg',
         url: 'http://community.statesmanjournal.com/blogs/hoophead/files/2011/03/saldc5-5yre4xzu7s52wfyvj0k_original.jpg',
         type: 'image/jpg',
         width: 4074,
         height: 3096
     },
     {
-        name: 'Twitter.jpg',
         url: 'http://1.bp.blogspot.com/-7T2s2XUD8Ao/TXEjT4v-_gI/AAAAAAAAByo/pkhrzzypUiM/s1600/Twitter-Button.jpg',
         type: 'image/jpg',
         width: 891,
@@ -55,16 +52,15 @@ config.init(function(err) {
     else if(!config.isSetUp()) {
 	    console.log('You must run server.js to set up config options before you can generate an environment');
     }
-    else if(config.get('COUCHDB_URL').indexOf("heroku") != -1 || config.get('COUCHDB_URL').indexOf("cloudant") != -1) {
-        console.log("You can't create an environment using the production config options. Recommend use of db server chrondev.iriscouch.com");
+    else if(config.get('COUCHDB_URL').indexOf("heroku") != -1 || config.get('COUCHDB_URL').indexOf("cloudant") != -1 || config.get('S3_BUCKET').indexOf("production") != -1) {
+        console.log("You can't create an environment using the production config options. Recommend use of db server chrondev.iriscouch.com and S3 bucket chron_dev");
     }
     else {
         TAXONOMY = config.get('TAXONOMY');
         delete(TAXONOMY["has"]); // extra key added to taxonomy that shouldn't be there
 
         console.log('creating environment...this could take a few minutes');
-
-        // TODO: add image code    
+    
         async.waterfall([
             function(callback) {
                 api.init(callback);
@@ -77,6 +73,16 @@ config.init(function(err) {
             
                 // delete old version of db and then create it again to start the db fresh            
                 api.recreateDatabase('dsfvblkjeiofkjd',callback);
+            },
+            function(callback) {
+                console.log("assigning unique image names...");
+                assignImageNames(callback);
+            },
+            function(callback) {
+                console.log("deleting old images for this db from s3...");
+                deleteOldImages(function(err) {
+                    callback(null);
+                });
             },
             function(callback) {
                 console.log("creating search index...");
@@ -122,6 +128,40 @@ function _getCropFunc(img, newImage, imgTypes, key) {
            cb(null);
         });
     };
+}
+
+function _getImageDeleteFunction(imageName) {
+    return function(cb) {
+         console.log('deleting ' + imageName);
+         s3.delete(imageName, function(err) {
+            if(err) console.log(err);
+            cb(null);
+         });
+    };
+}
+
+function assignImageNames(callback) {
+    // assigns each image a unique name based on the db so different dev environments don't have conflicts over images named the same
+    for(var i = 0; i < IMAGES.length; i ++) {
+        IMAGES[i].name = "Picture-"+i+"-"+api.getDatabaseName()+"-"+api.getDatabaseHost()+"."+IMAGES[i].type.split("/")[1];
+        console.log("assigned name " + IMAGES[i].name + " to image " + i);
+    }
+    callback(null);
+}
+
+function deleteOldImages(callback) {
+    var functions = [];
+    for(var i = 0; i < IMAGES.length; i ++) {
+        functions.push(_getImageDeleteFunction(IMAGES[i].name));
+        functions.push(_getImageDeleteFunction("thumb_"+IMAGES[i].name));
+
+        var index = 1;        
+        for(var j in config.get('IMAGE_TYPES')) {
+            functions.push(_getImageDeleteFunction(index+IMAGES[i].name));
+            index ++;            
+        }
+    }
+    async.parallel(functions, callback);
 }
 
 function createImage(img, callback) {

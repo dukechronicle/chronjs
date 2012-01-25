@@ -8,7 +8,6 @@ var s3 = require('./s3.js');
 var urllib = require('url');
 var globalFunctions = require('../../global-functions');
 var log = require('../../log');
-var config = require('../../config');
 
 var image = exports;
 

@@ -8,6 +8,7 @@ var s3 = require('./s3.js');
 var urllib = require('url');
 var globalFunctions = require('../../global-functions');
 var log = require('../../log');
+var config = require('../../config');
 
 var image = exports;
 
@@ -155,9 +156,9 @@ image.deleteVersion = function (versionId, updateOriginal, topCallback) {
             db.image.deleteVersion(versionId, updateOriginal, callback);
         },
         function (version, callback) {
-            var url = urllib.parse(version.url);
-            console.log('deleting version from s3');
-            s3.delete(url.path, callback);
+            var url = urllib.parse(version.url);           
+            console.log('deleting version from s3 ' + url.pathname);
+            s3.delete(url.pathname, callback);
         }
     ],
     topCallback);

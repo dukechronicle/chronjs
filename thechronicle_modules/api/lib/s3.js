@@ -25,6 +25,10 @@ s3.put = function (buf, key, type, callback) {
 };
 
 s3.delete = function (key, callback) {
+    if(key.indexOf(BUCKET_NAME) != -1) {
+         key = key.replace('/'+BUCKET_NAME+'/','');
+    }
+
     _getClientStatic(function(err, client) {
         client.deleteFile(key, callback);
     });

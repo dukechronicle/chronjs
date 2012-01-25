@@ -15,17 +15,23 @@ var IMAGES = [
     {
         name: 'Duke.jpg',
         url: 'http://collegesportsnation.com/ipad-wallpapers/duke-university-ipad-wallpapers/duke-university-ipad-wallpaper.jpg',
-        type: 'image/jpg'
+        type: 'image/jpg',
+        width: 1024,
+        height: 1024
     },
     {
         name: 'CoachK.jpg',
         url: 'http://community.statesmanjournal.com/blogs/hoophead/files/2011/03/saldc5-5yre4xzu7s52wfyvj0k_original.jpg',
-        type: 'image/jpg'
+        type: 'image/jpg',
+        width: 4074,
+        height: 3096
     },
     {
-        name: 'Google.jpg',
-        url: 'http://www.toptechreviews.net/wp-content/uploads/2010/12/google_logo.jpg',
-        type: 'image/jpg'
+        name: 'Twitter.jpg',
+        url: 'http://1.bp.blogspot.com/-7T2s2XUD8Ao/TXEjT4v-_gI/AAAAAAAAByo/pkhrzzypUiM/s1600/Twitter-Button.jpg',
+        type: 'image/jpg',
+        width: 891,
+        height: 891
     }
 ];
 
@@ -67,7 +73,7 @@ config.init(function(err) {
                 s3.init(callback);
             },
             function(callback) {
-    //            console.log("creating database...");
+                console.log("creating database...");
             
                 // delete old version of db and then create it again to start the db fresh            
                 api.recreateDatabase('dsfvblkjeiofkjd',callback);
@@ -105,8 +111,13 @@ config.init(function(err) {
 
 function _getCropFunc(img, newImage, imgTypes, key) {
     return function (cb) {
-        api.image.createCroppedVersion(img.name,imgTypes[key].width,imgTypes[key].height,0,0,imgTypes[key].width,imgTypes[key].height, function(err, result) {
-           console.log(result);
+        var x1 = 0;
+        var y1 = 0;
+        var x2 = img.width;
+        var y2 = (img.width / imgTypes[key].width) * imgTypes[key].height;  
+  
+        api.image.createCroppedVersion(img.name,imgTypes[key].width,imgTypes[key].height,x1,y1,x2,y2, function(err, result) {
+           if(err) cb(err); 
            newImage[key] = result._versionAdded;
            cb(null);
         });
@@ -126,6 +137,7 @@ function createImage(img, callback) {
         },
         function(result, url, callback) {
             var imgTypes = config.get('IMAGE_TYPES');
+            newImage['Original'] = result.id;
 
             var functions = [];
             for(var key in imgTypes) {
@@ -136,7 +148,6 @@ function createImage(img, callback) {
         }
     ],
     function(err, res) {
-        console.log(newImage);
         callback(err, newImage);
     });
 }

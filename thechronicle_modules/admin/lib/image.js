@@ -1,13 +1,10 @@
 var globalFunctions = require('../../global-functions');
 var config = require('../../config');
 var async = require('async');
-var s3 = require('../../api/lib/s3.js');
-var im = require('imagemagick');
 var site = require('../../api/lib/site.js');
 var fs = require('fs');
 var api = require('../../api/lib/api.js');
 var _ = require("underscore");
-var log = require('../../log');
 
 var VALID_EXTENSIONS = {};
 VALID_EXTENSIONS['image/jpeg'] = 'jpg';
@@ -15,24 +12,6 @@ VALID_EXTENSIONS['image/png'] = 'png';
 VALID_EXTENSIONS['image/gif'] = 'gif';
 
 var THUMB_DIMENSIONS = '100x100';
-
-function _deleteFiles(paths, callback) {
-    async.reduce(paths, [], function(memo, item, callback) {
-        memo.push(function(acallback) {
-            fs.unlink(item, acallback);
-        });
-        callback(null, memo);
-    },
-    function(err, result) {
-        async.series(result, callback);
-    });
-}
-
-function _getMagickString(x1, y1, x2, y2) {
-    var w = x2 - x1;
-    var h = y2 - y1;
-    return w.toString() + 'x' + h.toString() + '+' + x1.toString() + '+' + y1.toString();
-}
 
 exports.bindPath = function (app) {
     return function () {
@@ -207,79 +186,24 @@ exports.bindPath = function (app) {
 
                 });
 
-        app.post('/crop', site.checkAdmin,
-                function (req, httpRes) {
-                    var imageName = req.body.name; // assign "name" and "article" from parameter "req"
-                    var afterUrl = req.body.afterUrl;
-                    var docId = req.body.docId;
-                    var geom = _getMagickString( //MagickString takes coordinates and puts that info into a string
-                            parseInt(req.body.x1),
-                            parseInt(req.body.y1),
-                            parseInt(req.body.x2),
-                            parseInt(req.body.y2));
-                    var width = req.body.finalWidth; // assign "width" and "height" from req
-                    var height = req.body.finalHeight;
-                    var croppedName = ''; //initialize croppedName
+        app.post('/crop', site.checkAdmin, function (req, httpRes) {
+            var imageName = req.body.name;
+            var afterUrl = req.body.afterUrl;
+            var docId = req.body.docId;
+            var width = req.body.finalWidth;
+            var height = req.body.finalHeight;
 
-                    async.waterfall([
-                        function (callback) {
-                            api.image.getOriginal(imageName, callback); //getOriginal gets image from the database
-                        },
-                        function (orig, callback) {
-                            croppedName = 'crop_' + orig.value.name; // modify the croppedName
-                            log.info(orig.value.url);
-                            globalFunctions.downloadUrlToPath(orig.value.url, orig.value.name,
-                                    function (err) {
-                                        callback(err, orig);
-                                    });
-                        },
-                        function (orig, callback) {
-                            im.convert([orig.value.name, '-crop', geom,
-                                '-resize', width.toString() + 'x' + height.toString(), croppedName],  //crop image with given specifications
-                                    function (imErr, stdout, stderr) {
-                                        callback(imErr, orig);
-                                    });
-                        },
-                        function (orig, callback) {
-                            fs.readFile(croppedName,
-                                    function (err, buf) {
-                                        callback(err, orig, buf);
-                                    });
-                        },
-                        function (orig, buf, callback) {
-                            var versionNum = orig.value.imageVersions.length + 1; //increments the version number by 1
-                            var type = orig.value.contentType; // takes the type from orig
-                            var s3Name = versionNum + orig.value.name;
-                            s3.put(buf, s3Name, type, //put command from s3 
-                                    function (s3Err, url) {
-                                        callback(s3Err, orig, url);
-                                    });
-                        },
-                        function (orig, url, callback) {
-                            api.image.createVersion(orig.id, url, width, height, //createVersion calls a function from the database that creates an image
-                                    function (err, res) {
-                                        callback(err, orig);
-                                    });
-                        },
-                        function (orig, callback) {
-                            _deleteFiles([orig.value.name, croppedName], //calls a function defined earlier, which passes arguments to async.reduce()
-                                    function (err) {
-                                        callback(err, orig);
-                                    }
-                            );
-                        }
-                    ],
-                            function (err, orig) {
-                                if (err) {
-                                    globalFunctions.showError(httpRes, err); //check for an error
-                                } else {
-                                    if (docId)
-                                        if (afterUrl) httpRes.redirect('/admin/image/' + imageName + '?afterUrl=' + afterUrl + '&docId=' + docId);
-                                        else httpRes.redirect('/admin/image/' + imageName + '?docId=' + docId);
-                                    else httpRes.redirect('/admin/image/' + imageName);
-                                }
-                            }
-                    );
-                });
-    }
+            api.image.createCroppedVersion(imageName, width, height, req.body.x1, req.body.y1, req.body.x2, req.body.y2, function (err, orig) {
+                if (err) {
+                    globalFunctions.showError(httpRes, err); //check for an error
+                }
+                else {
+                    if (docId)
+                        if (afterUrl) httpRes.redirect('/admin/image/' + imageName + '?afterUrl=' + afterUrl + '&docId=' + docId);
+                        else httpRes.redirect('/admin/image/' + imageName + '?docId=' + docId);
+                    else httpRes.redirect('/admin/image/' + imageName);
+                }
+            });
+        });
+    };
 };

@@ -117,7 +117,7 @@ function _getCropFunc(img, newImage, imgTypes, key) {
         var y2 = (img.width / imgTypes[key].width) * imgTypes[key].height;  
   
         api.image.createCroppedVersion(img.name,imgTypes[key].width,imgTypes[key].height,x1,y1,x2,y2, function(err, result) {
-           if(err) cb(err); 
+           if(err) return cb(err); 
            newImage[key] = result._versionAdded;
            cb(null);
         });

@@ -12,24 +12,22 @@ var FAKE_WORDS = [
 ];
 
 var IMAGES = [
-{
-    name: 'PhilipCatterall.jpg',
-    url: 'http://s3.amazonaws.com/chron_bucket1/AlsuBt8I-wbbgamer_PhilipCatterall.jpg',
-    LargeRect: 'http://s3.amazonaws.com/chron_bucket1/1AlsuBt8I-wbbgamer_PhilipCatterall.jpg',
-    ThumbRect: 'http://s3.amazonaws.com/chron_bucket1/2AlsuBt8I-wbbgamer_PhilipCatterall.jpg'
-},
-{
-    name: 'ShayanAsadi.jpg',
-    url: 'http://s3.amazonaws.com/chron_bucket1/a21ubX7T-wsocanalysis_ShayanAsadi.jpg',
-    LargeRect: 'http://s3.amazonaws.com/chron_bucket1/1a21ubX7T-wsocanalysis_ShayanAsadi.jpg',
-    ThumbRect: 'http://s3.amazonaws.com/chron_bucket1/2a21ubX7T-wsocanalysis_ShayanAsadi.jpg'
-},
-{
-    name: 'File.jpg',
-    url: 'http://s3.amazonaws.com/chron_bucket1/4bcnEsiM-paulusandK_File.jpg',
-    LargeRect: 'http://s3.amazonaws.com/chron_bucket1/14bcnEsiM-paulusandK_File.jpg',
-    ThumbRect: 'http://s3.amazonaws.com/chron_bucket1/24bcnEsiM-paulusandK_File.jpg'
-}];
+    {
+        name: 'Duke.jpg',
+        url: 'http://collegesportsnation.com/ipad-wallpapers/duke-university-ipad-wallpapers/duke-university-ipad-wallpaper.jpg',
+        type: 'image/jpg'
+    },
+    {
+        name: 'CoachK.jpg',
+        url: 'http://community.statesmanjournal.com/blogs/hoophead/files/2011/03/saldc5-5yre4xzu7s52wfyvj0k_original.jpg',
+        type: 'image/jpg'
+    },
+    {
+        name: 'Google.jpg',
+        url: 'http://www.toptechreviews.net/wp-content/uploads/2010/12/google_logo.jpg',
+        type: 'image/jpg'
+    }
+];
 
 var WORDS_FOR_BODY = 70;
 var WORDS_FOR_TITLE = 4;
@@ -69,7 +67,7 @@ config.init(function(err) {
                 s3.init(callback);
             },
             function(callback) {
-                console.log("creating database...");
+    //            console.log("creating database...");
             
                 // delete old version of db and then create it again to start the db fresh            
                 api.recreateDatabase('dsfvblkjeiofkjd',callback);
@@ -105,27 +103,40 @@ config.init(function(err) {
     }
 });
 
+function _getCropFunc(img, newImage, imgTypes, key) {
+    return function (cb) {
+        api.image.createCroppedVersion(img.name,imgTypes[key].width,imgTypes[key].height,0,0,imgTypes[key].width,imgTypes[key].height, function(err, result) {
+           console.log(result);
+           newImage[key] = result._versionAdded;
+           cb(null);
+        });
+    };
+}
+
 function createImage(img, callback) {
     var origId;
     var newImage = {};
-    async.waterfall([ 
-    
-    function(callback) {
-        globalFunctions.downloadUrlToPath(img.url, img.name, callback);
-    },
-    function(callback) {
-        api.image.createOriginalFromFile(img.name, 'image/jpg', true, callback);
-    },
-    function(result, url, callback) {
-        origId = result.id;
-        api.image.createVersion(origId, img.LargeRect, 636, 393, callback);
-    },
-    function(result, callback) {
-        newImage.LargeRect = result._versionAdded;
-        api.image.createVersion(origId, img.ThumbRect, 186, 133, callback);
-    }
-    ], function(err, res) {
-        newImage.ThumbRect = res._versionAdded;
+
+    async.waterfall([     
+        function(callback) {
+            globalFunctions.downloadUrlToPath(img.url, img.name, callback);
+        },
+        function(callback) {
+            api.image.createOriginalFromFile(img.name, img.type, true, callback);
+        },
+        function(result, url, callback) {
+            var imgTypes = config.get('IMAGE_TYPES');
+
+            var functions = [];
+            for(var key in imgTypes) {
+                functions.push(_getCropFunc(img, newImage, imgTypes, key));
+            }
+ 
+            async.series(functions, callback);
+        }
+    ],
+    function(err, res) {
+        console.log(newImage);
         callback(err, newImage);
     });
 }

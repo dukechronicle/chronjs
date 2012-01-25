@@ -7,6 +7,7 @@ var _ = require("underscore");
 var s3 = require('./s3.js');
 var urllib = require('url');
 var globalFunctions = require('../../global-functions');
+var log = require('../../log');
 
 var image = exports;
 
@@ -22,6 +23,12 @@ function _deleteFiles(paths, callback) {
     function(err, result) {
         async.series(result, callback);
     });
+}
+
+function _getMagickString(x1, y1, x2, y2) {
+    var w = x2 - x1;
+    var h = y2 - y1;
+    return w.toString() + 'x' + h.toString() + '+' + x1.toString() + '+' + y1.toString();
 }
 
 image.addVersionToDoc = function(docId, originalImageId, versionImageId, imageType, callback) {
@@ -67,13 +74,59 @@ image.edit = function (imageID, data, callback) {
     db.image.edit(imageID, data, callback);
 };
 
-image.createVersion = function (parentId, url, width, height, callback) {
-    var options = {
-        url:url,
-        width:width,
-        height:height
-    };
-    db.image.createVersion(parentId, options, callback);
+image.createCroppedVersion = function(imageName, width, height, x1, y1, x2, y2, cb) {
+    var croppedName = '';
+    var geom = _getMagickString(parseInt(x1),parseInt(y1),parseInt(x2),parseInt(y2));
+    
+    async.waterfall(
+    [
+        function (callback) {
+            image.getOriginal(imageName, callback);
+        },
+        function (orig, callback) {
+            croppedName = 'crop_' + orig.value.name;
+            log.info(orig.value.url);
+            globalFunctions.downloadUrlToPath(orig.value.url, orig.value.name, function (err) {
+                callback(err, orig);
+            });
+        },
+        function (orig, callback) {
+             //crop image with given specifications
+            im.convert([orig.value.name, '-crop', geom,'-resize', width.toString() + 'x' + height.toString(), croppedName], function (imErr, stdout, stderr) {
+                callback(imErr, orig);
+            });
+        },
+        function (orig, callback) {
+            fs.readFile(croppedName, function (err, buf) {
+                callback(err, orig, buf);
+            });
+        },
+        function (orig, buf, callback) {
+            var versionNum = orig.value.imageVersions.length + 1;
+            var type = orig.value.contentType;
+            var s3Name = versionNum + orig.value.name;
+            s3.put(buf, s3Name, type, function (s3Err, url) {
+                callback(s3Err, orig, url);
+            });
+        },
+        function (orig, url, callback) {
+            var options = {
+                url:url,
+                width:width,
+                height:height
+            };
+
+            db.image.createVersion(orig.id, options, function (err, res) {
+                callback(err, orig, res);
+            });            
+        },
+        function (orig, res, callback) {
+            _deleteFiles([orig.value.name, croppedName], function (err) {
+                callback(err, res);
+            });
+        }
+    ],
+    cb);
 };
 
 // should call with updateOriginal=true unless we are deleting a version in preparation for deleting an original.

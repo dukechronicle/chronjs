@@ -102,9 +102,8 @@ image.createCroppedVersion = function(imageName, width, height, x1, y1, x2, y2, 
             });
         },
         function (orig, buf, callback) {
-            var versionNum = orig.value.imageVersions.length + 1;
             var type = orig.value.contentType;
-            var s3Name = versionNum + orig.value.name;
+            var s3Name = width + "x" + height + "-" + orig.value.name;
             s3.put(buf, s3Name, type, function (s3Err, url) {
                 callback(s3Err, orig, url);
             });
@@ -171,9 +170,10 @@ image.deleteOriginal = function (originalId, topCallback) {
         },
         function (orig, callback) {
             var versions = orig.imageVersions;
-            async.map(versions, function(version, cbck) {
+            async.mapSeries(versions, function(version, cbck) {
                 image.deleteVersion(version, false, function(err, res) {
-                    cbck(err, version);
+                    if(err) console.log(err);
+                    cbck(null, version);
                 });
             },
             function(err, versions) {
@@ -189,7 +189,14 @@ image.deleteOriginal = function (originalId, topCallback) {
         function (orig, callback) {
             var url = urllib.parse(orig.url);
             console.log('deleting original from s3');
-            s3.delete(url.path, callback);
+            s3.delete(url.pathname, function(err) {
+                callback(err, orig);
+            });
+        },
+        function (orig, callback) {
+            var url = urllib.parse(orig.thumbUrl);
+            console.log('deleting thumb from s3');
+            s3.delete(url.pathname, callback);
         }
     ], topCallback);
 };

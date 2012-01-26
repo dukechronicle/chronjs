@@ -150,15 +150,14 @@ function assignImageNames(callback) {
 }
 
 function deleteOldImages(callback) {
+    var imgTypes = config.get('IMAGE_TYPES');
     var functions = [];
     for(var i = 0; i < IMAGES.length; i ++) {
         functions.push(_getImageDeleteFunction(IMAGES[i].name));
         functions.push(_getImageDeleteFunction("thumb_"+IMAGES[i].name));
-
-        var index = 1;        
-        for(var j in config.get('IMAGE_TYPES')) {
-            functions.push(_getImageDeleteFunction(index+IMAGES[i].name));
-            index ++;            
+       
+        for(var key in imgTypes) {
+            functions.push(_getImageDeleteFunction(imgTypes[key].width + "x" + imgTypes[key].height + "-" + IMAGES[i].name));         
         }
     }
     async.parallel(functions, callback);

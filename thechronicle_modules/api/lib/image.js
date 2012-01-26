@@ -103,7 +103,7 @@ image.createCroppedVersion = function(imageName, width, height, x1, y1, x2, y2, 
         },
         function (orig, buf, callback) {
             var type = orig.value.contentType;
-            var s3Name = width + "x" + height + "-" + orig.value.name;
+            var s3Name = width + "x" + height + "-" + x1 + "-" + y1 + "-" + orig.value.name;
             s3.put(buf, s3Name, type, function (s3Err, url) {
                 callback(s3Err, orig, url);
             });
@@ -130,8 +130,14 @@ image.createCroppedVersion = function(imageName, width, height, x1, y1, x2, y2, 
 
 // should call with updateOriginal=true unless we are deleting a version in preparation for deleting an original.
 image.deleteVersion = function (versionId, updateOriginal, topCallback) {
+    var isVersion = false;
+    
     async.waterfall([
         function (callback) {
+            db.get(versionId, callback);
+        },
+        function (imageDoc, callback) {
+            isVersion = (imageDoc.type == "imageVersion");
             image.docsForVersion(versionId, callback);
         },
         function (articles, callback) {
@@ -151,12 +157,18 @@ image.deleteVersion = function (versionId, updateOriginal, topCallback) {
             });
         },
         function (callback) {
-            db.image.deleteVersion(versionId, updateOriginal, callback);
+            // only delete this 'version' from the db if it is an imageVersion and not an image attached as an original         
+            if(isVersion) db.image.deleteVersion(versionId, updateOriginal, callback);
+            else callback(null, {});
         },
         function (version, callback) {
-            var url = urllib.parse(version.url);           
-            console.log('deleting version from s3 ' + url.pathname);
-            s3.delete(url.pathname, callback);
+            // only delete this 'version' from s3 if it is an imageVersion and not an image attached as an original        
+            if(isVersion) {
+                var url = urllib.parse(version.url);           
+                log.info('deleting version from s3 ' + url.pathname);
+                s3.delete(url.pathname, callback);
+            }
+            else callback();
         }
     ],
     topCallback);
@@ -172,30 +184,33 @@ image.deleteOriginal = function (originalId, topCallback) {
             var versions = orig.imageVersions;
             async.mapSeries(versions, function(version, cbck) {
                 image.deleteVersion(version, false, function(err, res) {
-                    if(err) console.log(err);
+                    if(err) log.info(err);
                     cbck(null, version);
                 });
             },
             function(err, versions) {
-                callback(err, orig);
+                // also remove any instances where the original image is attached to articles as an 'Original' version
+                image.deleteVersion(originalId, false, function(err2, res) {
+                    callback(err2, orig);
+                });
             });
         },
         function (orig, callback) {
-            console.log('deleting original from db');
+            log.info('deleting original from db');
             db.remove(originalId, orig._rev, function (err, res) {
                 callback(err, orig);
             });
         },
         function (orig, callback) {
             var url = urllib.parse(orig.url);
-            console.log('deleting original from s3');
+            log.info('deleting original from s3');
             s3.delete(url.pathname, function(err) {
                 callback(err, orig);
             });
         },
         function (orig, callback) {
             var url = urllib.parse(orig.thumbUrl);
-            console.log('deleting thumb from s3');
+            log.info('deleting thumb from s3');
             s3.delete(url.pathname, callback);
         }
     ], topCallback);
@@ -253,8 +268,8 @@ image.getAllOriginals = function (beforeKey, beforeID, callback) {
     db.image.listOriginalsByDate(beforeKey, beforeID, function (err, res) {
         res = res.map(function (doc) {
             doc.displayName = doc.name;
-            var nameSplit = doc.name.split("-", 2);
-            if (nameSplit.length > 1) doc.displayName = nameSplit[1];
+            var nameSplit = doc.name.split("-");
+            if (nameSplit.length > 1) doc.displayName = doc.name.replace(nameSplit[0]+"-","");
             return doc;
         });
 

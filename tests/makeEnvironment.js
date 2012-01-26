@@ -143,7 +143,7 @@ function _getImageDeleteFunction(imageName) {
 function assignImageNames(callback) {
     // assigns each image a unique name based on the db so different dev environments don't have conflicts over images named the same
     for(var i = 0; i < IMAGES.length; i ++) {
-        IMAGES[i].name = "Picture-"+i+"-"+api.getDatabaseName()+"-"+api.getDatabaseHost()+"."+IMAGES[i].type.split("/")[1];
+        IMAGES[i].name = "abc-Picture-"+i+"-"+api.getDatabaseName()+"-"+api.getDatabaseHost()+"."+IMAGES[i].type.split("/")[1];
         console.log("assigned name " + IMAGES[i].name + " to image " + i);
     }
     callback(null);
@@ -157,7 +157,7 @@ function deleteOldImages(callback) {
         functions.push(_getImageDeleteFunction("thumb_"+IMAGES[i].name));
        
         for(var key in imgTypes) {
-            functions.push(_getImageDeleteFunction(imgTypes[key].width + "x" + imgTypes[key].height + "-" + IMAGES[i].name));         
+            functions.push(_getImageDeleteFunction(imgTypes[key].width + "x" + imgTypes[key].height + "-0-0-" + IMAGES[i].name));         
         }
     }
     async.parallel(functions, callback);

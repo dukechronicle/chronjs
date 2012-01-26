@@ -69,7 +69,7 @@ exports.capitalizeWords = function(str) {
 exports.convertObjectToArray = function(obj) {
     var array = [];
 
-    for(var key in Object.keys(obj)) {
+    for(var key in obj) {
         if(typeof obj[key] != "function" && typeof obj[key] != "undefined") {
             array.push(obj[key]);
         }

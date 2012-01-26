@@ -23,8 +23,10 @@ p
     input#y1(type='hidden', name='y1')
     input#y2(type='hidden', name='y2')
     input(type='hidden', name='name', value=name)
-    - if(article)
-      input(type='hidden', name='article', value=article)
+    - if(afterUrl)
+      input(type='hidden', name='afterUrl', value=afterUrl)
+    - if(docId)
+      input(type='hidden', name='docId', value=docId)
     input(type='submit')
 p
   br
@@ -45,13 +47,18 @@ p
     input(id='nicedate', type='text', name='nicedate', value=date)
     input(id='date', type='hidden', name='date', value=date)
     input(type='hidden', name='id', value=id)
+    - if(afterUrl)
+      input(type='hidden', name='afterUrl', value=afterUrl)
+    - if(docId)
+      input(type='hidden', name='docId', value=docId)
     br
     input(type='submit')
 
 - if(versions.length > 0)
   hr
-  - if(!article)
-    h1 Existing Versions
+  - if(docId)
+    h1 Existing Versions (click to add to document)
   - else
-    h1 Existing Versions (click to add to article)
-  #versions!= partial('version', {collection: versions, locals: {article: article, imageTypes: imageTypes, cropSizes: imageDetails}})
+    h1 Existing Versions
+  #versions!= partial('version', {collection: versions, locals: {afterUrl: afterUrl, docId: docId, imageTypes: imageTypes, cropSizes: imageDetails}})
+  script(src='/js/imgdelete.js', type='text/javascript')

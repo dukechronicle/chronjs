@@ -24,6 +24,16 @@ s3.put = function (buf, key, type, callback) {
     });
 };
 
+s3.delete = function (key, callback) {
+    if(key.indexOf(BUCKET_NAME) != -1) {
+         key = key.replace('/'+BUCKET_NAME+'/','');
+    }
+
+    _getClientStatic(function(err, client) {
+        client.deleteFile(key, callback);
+    });
+};
+
 s3.init = function (callback) {
     BUCKET_NAME = config.get("S3_BUCKET");
     KEY = config.get("S3_KEY");
@@ -44,10 +54,3 @@ function _getClientStatic(callback) {
      });
      callback(null, client);
 }
-/*
-fs.readFile('README.md', function(err, buf) {
-    s3.put(buf, 'README.md', 'text/plain', function(err, res) {
-        log.debug(res);
-    });
-});
-*/

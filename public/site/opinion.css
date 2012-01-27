@@ -1,5 +1,7 @@
-body section > #opinion .rounded-hover h2{-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear}
-body section > #opinion .rounded-hover :hover h2{color:#36c}
+body section > #opinion img{-webkit-border-radius:4px;-moz-border-radius:4px;-ms-border-radius:4px;-o-border-radius:4px;border-radius:4px;-webkit-box-shadow:0 0 4px #999;-moz-box-shadow:0 0 4px #999;-ms-box-shadow:0 0 4px #999;-o-box-shadow:0 0 4px #999;box-shadow:0 0 4px #999;-webkit-transition:box-shadow .25s linear;-moz-transition:box-shadow .25s linear;-ms-transition:box-shadow .25s linear;-o-transition:box-shadow .25s linear;transition:box-shadow .25s linear}
+body section > #opinion a.hover:hover img{-webkit-box-shadow:0 0 4px #000;-moz-box-shadow:0 0 4px #000;-ms-box-shadow:0 0 4px #000;-o-box-shadow:0 0 4px #000;box-shadow:0 0 4px #000}
+body section > #opinion .rounded-hover h2{-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-ms-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear}
+body section > #opinion .rounded-hover h2:hover{color:#36c}
 body section > #opinion p.teaser{color:#444}
 body section > #opinion .top > .main{width:474px;}
 body section > #opinion .top > .main .columns-today .rounded{width:468px;}

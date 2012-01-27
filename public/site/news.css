@@ -1,3 +1,5 @@
+body section > #news img{-webkit-border-radius:4px;-moz-border-radius:4px;-ms-border-radius:4px;-o-border-radius:4px;border-radius:4px;-webkit-box-shadow:0 0 4px #999;-moz-box-shadow:0 0 4px #999;-ms-box-shadow:0 0 4px #999;-o-box-shadow:0 0 4px #999;box-shadow:0 0 4px #999;-webkit-transition:box-shadow .25s linear;-moz-transition:box-shadow .25s linear;-ms-transition:box-shadow .25s linear;-o-transition:box-shadow .25s linear;transition:box-shadow .25s linear}
+body section > #news a.hover:hover img{-webkit-box-shadow:0 0 4px #000;-moz-box-shadow:0 0 4px #000;-ms-box-shadow:0 0 4px #000;-o-box-shadow:0 0 4px #000;box-shadow:0 0 4px #000}
 body section > #news > .top .sidebar{float:right;width:490px;}
 body section > #news > .top .sidebar > div{clear:both}
 body section > #news > .top .sidebar .top .container{float:left;width:234px;}
@@ -18,8 +20,8 @@ body section > #news > .top .sidebar > .bottom .container .element.right{margin-
 body section > #news > .top .sidebar > .bottom .container .element.bottom{margin-bottom:0}
 body section > #news > .top .main{width:460px;float:left;}
 body section > #news > .top .main a.rounded-hover :hover h1,body section > #news > .top .main a.rounded-hover :hover h2,body section > #news > .top .main a.rounded-hover :hover h3,body section > #news > .top .main a.rounded-hover :hover h4{color:#36c}
-body section > #news > .top .main a.rounded-hover h1,body section > #news > .top .main a.rounded-hover h2,body section > #news > .top .main a.rounded-hover h3,body section > #news > .top .main a.rounded-hover h4{-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear}
-body section > #news > .top .main .row .content-container img.thumb{border-radius:4px}
+body section > #news > .top .main a.rounded-hover h1,body section > #news > .top .main a.rounded-hover h2,body section > #news > .top .main a.rounded-hover h3,body section > #news > .top .main a.rounded-hover h4{-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-ms-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear}
+body section > #news > .top .main .row .content-container img.thumb{-webkit-border-radius:4px;-moz-border-radius:4px;-ms-border-radius:4px;-o-border-radius:4px;border-radius:4px}
 body section > #news > .top .main .content-container h2{color:#000;font-size:1.2em}
 body section > #news > .top .main .content-container p.teaser{color:#444}
 body section > #news > .top .main .featured .content-container h2{color:#000;font-size:1.2em;margin:0 3px}

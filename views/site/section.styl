@@ -1,3 +1,5 @@
+@import '../mixins'
+
 section > .nav
     position relative
     z-index 2
@@ -17,7 +19,7 @@ section > .nav
             //padding-bottom 1px
             margin-bottom 16px
             margin-top -16px
-            transition(color, .25s, linear)
+            transition color .25s linear
         a:hover, a.selected
             color #36c
 

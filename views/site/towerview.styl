@@ -1,22 +1,15 @@
+@import '../mixins'
+
 page-width = 972px
 link-color = #36c
 container-padding = 4px
 top-content-width =  642px
-
 container-vertical-spacing = 23px
+
 body section > #towerview
     rounded-image()
-        img
-            border-radius 4px
-            -webkit-box-shadow 0px 0px 4px #999
-            -webkit-transition box-shadow 0.25s linear
-        a.hover:hover img
-            -webkit-box-shadow 0px 0px 4px black
+    //top-content-full(top-content-width, container-padding)
 
-    top-content-full()
-        width top-content-width
-        .rounded
-            width (top-content-width - (container-padding * 2))
     p.teaser
         color #444
     > .main

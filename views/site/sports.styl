@@ -1,14 +1,9 @@
+@import '../mixins'
+
 page-width = 972px
 link-color = #36c
 container-padding = 4px
 top-content-width =  642px
-
-transition()
-    -webkit-transition arguments
-    -moz-transition arguments
-    -o-transition arguments
-    transition arguments
-
 container-vertical-spacing = 23px
 
 .nav
@@ -24,34 +19,14 @@ container-vertical-spacing = 23px
     h2
         font-size 1.2em
 
-
-
 body section > #sports
     margin-top 1em
     rounded-image()
-        img
-            border-radius 4px
-            -webkit-box-shadow 0px 0px 4px #999
-            -webkit-transition box-shadow 0.25s linear
-        a.hover:hover img
-            -webkit-box-shadow 0px 0px 4px black
+    //top-content-full(top-content-width, container-padding)
 
-    top-content-full()
-        width top-content-width
-        .rounded
-            width (top-content-width - (container-padding * 2))
-
-            
     width = 636px
     right-width = 330px
     height = 393px
-
-    shadow(opacity, height, width, offset)
-        -webkit-box-shadow rgba(0, 0, 0, opacity) height width offset
-        -moz-box-shadow rgba(0, 0, 0, opacity) height width offset
-        box-shadow rgba(0, 0, 0, opacity) height width offset
-
-
 
     .top
         margin-bottom 5px
@@ -136,7 +111,7 @@ body section > #sports
 
                  a.page.rounded
                      box-shadow rgba(0,0,0,0.30) 0 1px 3px
-                     background -webkit-gradient(linear, left bottom, left top, from(#EDEDED), to(white))
+                     background-linear-gradient bottom #EDEDED white
 
 
     .medium-rectangle

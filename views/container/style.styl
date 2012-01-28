@@ -1,61 +1,9 @@
-//link-color = link-color
+@import '../mixins'
+
 link-color = #36c
 corner-radius = 4px
 container-padding = 3px
 border-color-grey = #DDD
-
-shadow(opacity, height, width, offset)
-    -webkit-box-shadow rgba(0, 0, 0, opacity) height width offset
-    -moz-box-shadow rgba(0, 0, 0, opacity) height width offset
-    box-shadow rgba(0, 0, 0, opacity) height width offset
-
-shadowColor(r, g, b, opacity, height, width, offset)
-    -webkit-box-shadow rgba(r, g, b, opacity) height width offset
-    -moz-box-shadow rgba(r, g, b, opacity) height width offset
-    box-shadow rgba(r, g, b, opacity) height width offset
-
-border-radius(corner-radius)
-    -webkit-border-radius corner-radius
-    -moz-border-radius corner-radius
-    -o-border-radius corner-radius
-    -khtml-border-radius corner-radius
-    border-top-left-radius corner-radius corner-radius
-    border-top-right-radius corner-radius corner-radius
-    border-bottom-right-radius corner-radius corner-radius
-    border-bottom-left-radius corner-radius corner-radius
-
-transition-property()
-    -webkit-transition-property arguments
-    -moz-transition-property arguments
-    -o-transition-property arguments
-    
-transition-duration()
-    -webkit-transition-duration arguments
-    -moz-transition-duration arguments
-    -o-transition-duration arguments
-
-transition-timing-function()
-    -webkit-transition-timing-function arguments
-    -moz-transition-timing-function arguments
-    -o-transition-timing-function arguments
-
-transition()
-    -webkit-transition arguments
-    -moz-transition arguments
-    -o-transition arguments
-    transition arguments
-
-rounded-image()
-        img
-            border-radius 4px
-            -webkit-box-shadow 0px 0px 4px #999
-            -moz-box-shadow 0px 0px 4px #999
-            box-shadow 0px 0px 4px #999
-            transition(box-shadow, 0.25s, linear)
-        a.hover:hover img
-            -webkit-box-shadow 0px 0px 4px black
-            -moz-box-shadow 0px 0px 4px black
-            box-shadow 0px 0px 4px black
 
 body
     .container
@@ -70,20 +18,11 @@ body
             display block
             border-right 1px solid transparent
             border-left 1px solid transparent
-            -webkit-transition-property color, border-color
-            -moz-transition-property color, border-color
-            -o-transition-property color, border-color
-
-            -webkit-transition-duration .25s, .25s, .25s
-            -moz-transition-duration .25s, .25s
-            -o-transition-duration .25s, .25s
-
-            -webkit-transition-duration linear, linear, linear
-            -moz-transition-duration linear, linear
-            -o-transition-duration linear, linear
+            transition color .25s linear
+            transition border-color .25s linear
 
             h1, h2, h3, h4, h5, p
-                transition(color, .25s, linear)
+                transition color .25s linear
                 color black
 
             p
@@ -173,7 +112,7 @@ body
 
     .breaking
         .rounded
-            shadowColor(200, 0, 0, 0.6, 0px, 1px, 3px)
+            box-shadow rgba(200,0,0,0.6) 0px 1px 3px
 
     .featured
         h2
@@ -197,6 +136,7 @@ body
 
     .block-row
         rounded-image()
+
         container-padding = 12px
 
         row-width = 980px
@@ -260,11 +200,10 @@ body
                 width full-block-width
                 margin-bottom 0px
     .rounded, .rounded-hover
-        border-radius(corner-radius)
-        shadow(0.398438, 0px, 1px, 3px)
+        border-radius corner-radius
+        black-box-shadow 0.398438 0px 1px 3px
         background-color white
-        background -webkit-gradient(linear,left bottom,left top,color-stop(0, whiteSmoke),color-stop(0.33, white))
-        background -moz-linear-gradient(center bottom,whiteSmoke 0%,white 33%)
+        background-linear-gradient bottom, whiteSmoke 0%, white 33%
         float left
 
     a.rounded-hover
@@ -304,18 +243,13 @@ body
         writing-mode tb-rl
         filter flipv fliph
         
-        -webkit-transform rotate(-90deg)
-        -moz-transform rotate(-90deg)
-        -o-transform rotate(-90deg)
+        transform rotate(-90deg)
         white-space nowrap
         display block
         
         float left
-        
-        -webkit-transform-origin-x 0px
-        -webkit-transform-origin-y 100%
-        
-        -moz-transform-origin 0px 100%
+       
+        transform-origin 0px 100%
         position absolute
         margin-top -14px
         margin-left 1px

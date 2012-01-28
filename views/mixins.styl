@@ -1,0 +1,76 @@
+background-linear-gradient(direction, color1, color2)
+    background-image -webkit-linear-gradient(direction, color1, color2)
+    background-image -moz-linear-gradient(direction, color1, color2)
+    background-image -ms-linear-gradient(direction, color1, color2)
+    background-image -o-linear-gradient(direction, color1, color2)
+
+black-box-shadow(opacity, height, width, offset)
+    box-shadow rgba(0, 0, 0, opacity) height width offset
+
+box-shadow()
+    -webkit-box-shadow arguments
+    -moz-box-shadow arguments
+    -ms-box-shadow arguments
+    -o-box-shadow arguments
+    box-shadow arguments
+
+border-radius()
+    -webkit-border-radius arguments
+    -moz-border-radius arguments
+    -ms-border-radius arguments
+    -o-border-radius arguments
+    border-radius arguments
+
+border-top-left-radius()
+    -webkit-border-top-left-radius arguments
+    -moz-border-radius-topleft arguments
+    border-top-left-radius arguments
+
+border-top-right-radius()
+    -webkit-border-top-right-radius arguments
+    -moz-border-radius-topright arguments
+    border-top-right-radius arguments
+
+border-bottom-left-radius()
+    -webkit-border-bottom-left-radius arguments
+    -moz-border-radius-bottomleft arguments
+    border-bottom-left-radius arguments
+
+border-bottom-right-radius()
+    -webkit-border-bottom-right-radius arguments
+    -moz-border-radius-bottomright arguments
+    border-bottom-right-radius arguments
+
+rounded-image()
+    img
+        border-radius 4px
+        box-shadow 0px 0px 4px #999
+        transition box-shadow 0.25s linear
+    a.hover:hover img
+        box-shadow 0px 0px 4px black
+
+top-content-full(top-content-width, container-padding)
+    width top-content-width
+    .rounded
+        width (top-content-width - (container-padding * 2))
+
+transform()
+    -webkit-transform arguments
+    -moz-transform arguments
+    -ms-transform arguments
+    -o-transform arguments
+    transform arguments
+
+transform-origin()
+    -webkit-transform-origin arguments
+    -moz-transform-origin arguments
+    -ms-transform-origin arguments
+    -o-transform-origin arguments
+    transform-origin arguments
+
+transition()
+    -webkit-transition arguments
+    -moz-transition arguments
+    -ms-transition arguments
+    -o-transition arguments
+    transition arguments

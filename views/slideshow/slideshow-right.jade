@@ -4,7 +4,7 @@
         b.caret-white
     .slides
         .slides-inner
-            for story in stories
+            for story, index in stories
                 a(href=story.url)
                     if (story && story.images && story.images.LargeRect)
                         if (index == 0)

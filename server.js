@@ -19,10 +19,10 @@ var admin = require('./thechronicle_modules/admin/lib/admin');
 var mobileapi = require('./thechronicle_modules/mobileapi/lib/mobileapi');
 var redisClient = require('./thechronicle_modules/redisclient');
 var RedisStore = require('connect-redis')(express);
-
+/*
 net.createServer(function (socket) {
   repl.start("node via TCP socket> ", socket);
-}).listen(5001);
+}).listen(5001);*/
 
 asereje.config({
       active: process.env.NODE_ENV === 'production'        // enable it just for production

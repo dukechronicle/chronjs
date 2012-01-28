@@ -1,22 +1,12 @@
+@import '../mixins'
+
 headlines-height = 50px
 width = 636px
 height = 393px
 textHeight = 80px
 
-transition()
-    -webkit-transition arguments
-    -moz-transition arguments
-    -o-transition arguments
-    transition arguments
-
-shadow(opacity, height, width, offset)
-    -webkit-box-shadow rgba(0, 0, 0, opacity) height width offset
-    -moz-box-shadow rgba(0, 0, 0, opacity) height width offset
-    box-shadow rgba(0, 0, 0, opacity) height width offset
-
 .slideshow.right
-    -webkit-box-shadow none
-    -moz-box-shadow none
+    box-shadow none
     .slides
         height height
         img
@@ -26,7 +16,7 @@ shadow(opacity, height, width, offset)
         a.page
             border-bottom 1px solid transparent
             height 41px
-            transition(border-color,0.25s,linear)
+            transition border-color 0.25s linear
         a.page:hover, a.page.active
             border-bottom-color #4D90F0
 
@@ -34,9 +24,7 @@ shadow(opacity, height, width, offset)
 .slideshow
     width width + 6
     border-radius  4px
-    -webkit-border-radius  4px
-    -moz-border-radius  4px
-    shadow(0.398438, 0px, 1px, 3px)
+    black-box-shadow 0.398438 0px 1px 3px
 
     font-size  0.9em
     font-family  Georgia,"Century Schoolbook","Times New Roman",Times,serif
@@ -46,11 +34,6 @@ shadow(opacity, height, width, offset)
 
     .slides img
         border-bottom 1px solid #ccc
-        
-        //-webkit-border-top-left-radius  4px
-        //-webkit-border-top-right-radius  4px
-        //-moz-border-radius-topleft  4px
-        //-moz-border-radius-topright  4px
         width width
         height height
         position absolute
@@ -60,11 +43,9 @@ shadow(opacity, height, width, offset)
         z-index 5
 
     .slides
-        background -webkit-gradient(linear,left bottom,left top,color-stop(0,whiteSmoke),color-stop(.33,white))
-        -webkit-border-top-left-radius  4px
-        -webkit-border-top-right-radius  4px
-        -moz-border-radius-topleft  4px
-        -moz-border-radius-topright  4px
+        background-linear-gradient bottom, whiteSmoke 0%, white 33%
+        border-top-left-radius  4px
+        border-top-right-radius  4px
         position relative
         width width
         text-align left
@@ -72,7 +53,7 @@ shadow(opacity, height, width, offset)
         height height + textHeight
         border 3px solid white
         //border-color #E5E5E5 #DBDBDB #D2D2D2
-        box-shadow rgba(0,0,0,0.3) 0 1px 3px
+        black-box-shadow 0.3 0 1px 3px
 
         a:hover
             h1
@@ -83,7 +64,7 @@ shadow(opacity, height, width, offset)
             margin-left 10px
             position absolute
             h1
-                transition(color, .25s, linear)
+                transition color .25s linear
                 font-size 1.5em
                 line-height 1.1em
                 margin-bottom 2px
@@ -129,11 +110,8 @@ shadow(opacity, height, width, offset)
         a.page.active:hover
             text-decoration underline
     .caret
-        -webkit-transform: rotate(45deg);
-        -moz-transform: rotate(45deg);
-        -o-transform: rotate(45deg);
-        transform: rotate(45deg);
-        position: absolute;
+        transform rotate(45deg)
+        position absolute
         margin-top 55px
         left 330px
         z-index 5
@@ -144,7 +122,7 @@ shadow(opacity, height, width, offset)
             width 10px
             background white
             height 10px
-            box-shadow rgba(0,0,0,0.3) 0 1px 3px
+            black-box-shadow 0.3 0 1px 3px
             margin 0 0 0 0px
             z-index 0
         b.caret-white

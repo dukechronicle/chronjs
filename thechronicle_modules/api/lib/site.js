@@ -1,5 +1,4 @@
-var site = {};
-var exports = module.exports = site;
+var site = exports;
 
 var api = require('./api');
 var globalFunctions = require('../../global-functions');
@@ -179,11 +178,11 @@ site.init = function (app, callback) {
                             "height":"250px"
                         };
 
-                        api.taxonomy.getParentAndChildren(['News'], function (err, parentAndChildren) {
+                        api.taxonomy.getChildren(['News'], function (err, children) {
                             res.render('site/news', {
                                 css:asereje.css(['container/style', 'site/section', 'site/news']),
                                 layout:'layout-optimized',
-                                subsections:parentAndChildren.children,
+                                subsections:children,
                                 filename:'views/site/news.jade',
                                 model:model
                             });
@@ -215,10 +214,10 @@ site.init = function (app, callback) {
                         });
                     },
                     function (callback) { //1
-                        api.taxonomy.getParentAndChildren(['Sports', 'Men'], callback);
+                        api.taxonomy.getChildren(['Sports', 'Men'], callback);
                     },
                     function (callback) { //2
-                        api.taxonomy.getParentAndChildren(['Sports', 'Women'], callback);
+                        api.taxonomy.getChildren(['Sports', 'Women'], callback);
                     }
                         /*
                     function (callback) { //3
@@ -257,7 +256,7 @@ site.init = function (app, callback) {
                             httpRes.render('site/sports', {
                                 css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
                                 layout:'layout-optimized',
-                                subsections:[results[1].children, results[2].children],
+                                subsections:[results[1], results[2]],
                                 filename:'views/site/sports.jade',
                                 model:model});
                         });
@@ -271,7 +270,7 @@ site.init = function (app, callback) {
                     api.group.docs(LAYOUT_GROUPS.Opinion.namespace, null, callback);
                 },
                 function (callback) { //1
-                    api.taxonomy.getParentAndChildren(['Opinion'], callback);
+                    api.taxonomy.getChildren(['Opinion'], callback);
                 },
                 function (callback) { //2
                     rss.getRSS('blog-opinion', function (err, res) {
@@ -342,7 +341,7 @@ site.init = function (app, callback) {
                 res.render('site/opinion', {
                     css:asereje.css(['container/style', 'site/section', 'site/opinion']),
                     layout:'layout-optimized',
-                    subsections:results[1].children,
+                    subsections:results[1],
                     filename:'views/site/opinion.jade',
                     model:model});
             });
@@ -372,11 +371,11 @@ site.init = function (app, callback) {
                     };
 
 
-                    api.taxonomy.getParentAndChildren(['Recess'], function (err, parentAndChildren) {
+                    api.taxonomy.getChildren(['Recess'], function (err, children) {
                         res.render('site/recess', {
                             css:asereje.css(['container/style', 'site/section', 'site/recess']),
                             layout:'layout-optimized',
-                            subsections:parentAndChildren.children,
+                            subsections:children,
                             filename:'views/site/recess.jade',
                             model:result});
                     });
@@ -395,11 +394,11 @@ site.init = function (app, callback) {
                     "height":"250px"
                 };
 
-                api.taxonomy.getParentAndChildren(['Towerview'], function (err, parentAndChildren) {
+                api.taxonomy.getChildren(['Towerview'], function (err, children) {
                     res.render('site/towerview', {
                         css:asereje.css(['container/style', 'site/section', 'site/towerview']),
                         layout:'layout-optimized',
-                        subsections:parentAndChildren.children,
+                        subsections:children,
                         filename:'views/site/towerview.jade',
                         model:result});
                 });
@@ -417,30 +416,33 @@ site.init = function (app, callback) {
                         title:parts[1]
                     };
                 });
-                api.taxonomy.docs(section, 20,
-                    function (err, docs) {
-                        if (err) globalFunctions.showError(res, err);
-                        else {
-                            docs = docs.map(function (doc) {
-                                if (doc.urls) return doc;
-                            });
-                            docs.forEach(function (doc) {
-                                doc.url = '/article/' + doc.urls[doc.urls.length - 1];
-                                // convert timestamp
-                                if (doc.created) {
-                                    doc.date = _convertTimestamp(doc.created);
-                                }
-                                doc = _parseAuthor(doc);
-                            });
+                api.taxonomy.docs(section, 20, function (err, docs) {
+                    if (err)
+			globalFunctions.showError(res, err);
+                    else {
+                        docs = _.filter(docs, function (doc) {
+			    return doc.urls;
+                        });
+                        docs.forEach(function (doc) {
+                            doc.url = '/article/' + doc.urls[doc.urls.length-1];
+                            // convert timestamp
+                            if (doc.created) {
+                                doc.date = _convertTimestamp(doc.created);
+                            }
+                            doc = _parseAuthor(doc);
+                        });
 
-                            api.taxonomy.getParentAndChildren(params, function (err, parentAndChildren) {
-                                res.render('site/section', {
+                        api.taxonomy.getParentsAndChildren(params, function (err, parents, children) {
+			    if (err)
+				globalFunctions.showError(res, err);
+			    else
+				res.render('site/section', {
                                     locals:{
-                                        docs:docs,
-                                        subsections:parentAndChildren.children,
-                                        parentPaths:parentAndChildren.parentPaths,
-                                        section:section,
-                                        popular: popular
+					docs:docs,
+					subsections:children,
+					parentPaths:parents,
+					section:section,
+					popular: popular
                                     },
                                     layout: "layout-optimized",
                                     css:asereje.css(['container/style', 'site/section'])
@@ -673,19 +675,14 @@ site.init = function (app, callback) {
                     globalFunctions.showError(http_res, err);
                 }
                 else {
-                    if (req.query.deleteImage) {
-                        var newImages = doc.images;
-                        delete newImages[req.query.deleteImage];
-                        api.editDoc(doc._id, newImages, function (editErr) {
-                            if (editErr) globalFunctions.showError(http_res, editErr);
+                    if (req.query.removeImage) {
+                        api.image.removeVersionFromDocument(doc._id, null, req.query.removeImage, function(err, doc) {
+                            if (err) globalFunctions.showError(http_res, err);
                             else http_res.redirect('/article/' + url + '/edit');
                         });
                     }
                     else {
-
-                        var rootSections = config.get("TAXONOMY_MAIN_SECTIONS");
-
-                        db.taxonomy.getTaxonomyListing(function (err, taxonomy) {
+                        api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
                             if (!doc.images) doc.images = {};
                             if (doc.authors) {
                                 doc.authors = doc.authors.join(", ");
@@ -697,6 +694,7 @@ site.init = function (app, callback) {
                                     groups:[],
                                     images:doc.images,
                                     url:url,
+                                    afterAddImageUrl: '/article/' + url + '/edit',
                                     taxonomy:taxonomy
                                 },
                                 layout:"layout-admin.jade"

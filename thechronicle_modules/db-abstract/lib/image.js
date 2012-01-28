@@ -1,5 +1,6 @@
 var db = require('./db-abstract');
 var image = exports;
+var async = require('async');
 
 var RESULTS_PER_PAGE = 25;
 
@@ -64,6 +65,48 @@ image.createVersion = function (parentId, options, callback) {
     });
 };
 
+image.deleteVersion = function (versionId, updateOriginal, topCallback) {
+    async.waterfall([
+        function (callback) {
+            db.get(versionId, callback);
+        },
+        function (version, callback) {
+            if(updateOriginal) {
+                db.get(version.original, function(err, orig) {
+                    callback(err, orig, version);
+                });
+            } else {
+                callback(null, null, version);
+            }
+        },
+        function (orig, version, callback) {
+            if(updateOriginal) {
+                var versions = orig.imageVersions;
+                var i = versions.indexOf(versionId);
+                if(i != -1) {
+                    versions.splice(i, 1);
+                    orig.imageVersions = versions;
+                    console.log('updating original');
+                    db.save(orig, function(err, res) {
+                        callback(err, version);
+                    });
+                } else {
+                    callback(null, version);
+                }
+            } else {
+                callback(null, version);
+            }  
+        },
+        function (version, callback) {
+            console.log('removing version');
+            db.remove(versionId, version._rev, function(err, res) {
+                callback(err, version);
+            });
+        }
+    ],
+    topCallback);
+};
+
 image.edit = function (imageID, data, callback) {
     db.merge(imageID, data, callback);
 };
@@ -71,5 +114,11 @@ image.edit = function (imageID, data, callback) {
 image.originalsForPhotographer = function (photog, callback) {
     db.view('articles/photographers', {
         key:photog
+    }, callback);
+};
+
+image.docsForVersion = function(versionId, callback) {
+    db.view('articles/doc_images', {
+        key: versionId
     }, callback);
 };

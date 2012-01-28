@@ -178,7 +178,7 @@ function ArticleParser(articleCallback) {
 
     function onDate(parser) {
         var date = new Date(parser.textNode);
-        parser.article.publish_time = date.getTime() / 1000;
+        parser.article.created = date.getTime() / 1000;
     }
 
 

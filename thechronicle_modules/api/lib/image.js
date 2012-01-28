@@ -128,6 +128,30 @@ image.createCroppedVersion = function(imageName, width, height, x1, y1, x2, y2, 
     cb);
 };
 
+// you can specify either the documentID, or the document object itself
+image.removeVersionFromDocument = function(documentID, document, versionId, callback) {
+    var afterFunc = function(doc, cbck) {
+        var versions = doc.images;
+        for (var i in versions) {
+            if(versions[i] == versionId) delete versions[i];
+        }
+        doc.images = versions;
+        db.merge(doc, function(err, res) {
+            cbck(err, doc);
+        });
+    };
+
+    if(document == null) {
+        api.docsById(documentID, function (err, doc) {
+            if(err) return callback(err);
+            else afterFunc(doc, callback);
+        });
+    }
+    else {
+        afterFunc(document, callback);
+    }
+};
+
 // should call with updateOriginal=true unless we are deleting a version in preparation for deleting an original.
 image.deleteVersion = function (versionId, updateOriginal, topCallback) {
     var isVersion = false;
@@ -140,18 +164,9 @@ image.deleteVersion = function (versionId, updateOriginal, topCallback) {
             isVersion = (imageDoc.type == "imageVersion");
             image.docsForVersion(versionId, callback);
         },
-        function (articles, callback) {
-            async.map(articles, function(article, cbck) {
-                var versions = article.images;
-                for (var i in versions) {
-                    if(versions[i] == versionId)
-                        delete versions[i];
-                }
-                article.images = versions;
-                db.merge(article, function(err, res) {
-                    cbck(err, article);
-                });
-                cbck(null, article);
+        function (documents, callback) {
+            async.map(documents, function(document, cbck) {
+                image.removeVersionFromDocument(null, document, versionId, cbck);
             }, function(err, res) {
                 callback(err);
             });

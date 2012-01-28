@@ -675,11 +675,9 @@ site.init = function (app, callback) {
                     globalFunctions.showError(http_res, err);
                 }
                 else {
-                    if (req.query.deleteImage) {
-                        var newImages = doc.images;
-                        delete newImages[req.query.deleteImage];
-                        api.editDoc(doc._id, newImages, function (editErr) {
-                            if (editErr) globalFunctions.showError(http_res, editErr);
+                    if (req.query.removeImage) {
+                        api.image.removeVersionFromDocument(doc._id, null, req.query.removeImage, function(err, doc) {
+                            if (err) globalFunctions.showError(http_res, err);
                             else http_res.redirect('/article/' + url + '/edit');
                         });
                     }

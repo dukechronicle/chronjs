@@ -128,7 +128,7 @@ var views = {
             }
         }
     },
-    article_images:{
+    doc_images:{
         map:function (doc) {
             if (doc.images) {
                 for (var type in doc.images) {

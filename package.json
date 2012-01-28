@@ -6,7 +6,7 @@
         "url":"git@github.com:thechronicle/website.git"
     },
     "dependencies":{
-        "express":"2.5.x",
+        "express":"2.5.6",
         "express-namespace":"0.0.x",
         "express-resource":"0.2.x",
         "jade":"0.15.x",

@@ -1,3 +1,5 @@
+@import mixins
+
 link-color = #36c
 text-color = #333
 bg-color = #F5F6F7
@@ -33,12 +35,6 @@ header-height = 70px
         h2
             margin-bottom 0.2em
             margin-top 1em
-
-transition()
-    -webkit-transition arguments
-    -moz-transition arguments
-    -o-transition arguments
-    transition arguments
 
 @font-face
     font-family 'didot'
@@ -147,9 +143,8 @@ body
                 letter-spacing -1px
                 padding-left 0px
                 //text-shadow: 0px 1px 1px white
-                -webkit-transition text-shadow .2s linear
-                -moz-transition text-shadow .2s linear
-                transition(color, .25s, linear)
+                transition text-shadow .2s linear
+                transition color .25s linear
                 text-shadow 0 1px 3px rgba(0,0,0,.4);
         p.date
             font-weight bold
@@ -249,7 +244,7 @@ span.timestamp
     img
         border-radius 5px
         display block
-        -webkit-box-shadow 0px 0px 3px #CCC
+        box-shadow 0px 0px 3px #CCC
         opacity 0.8
         transition opacity 0.25s linear
 

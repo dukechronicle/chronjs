@@ -3,7 +3,7 @@ require.config({
         'galleria': '/js/galleria/galleria-1.2.5.min',
         'underscore': '/js/underscore-min',
         'typekit' : 'http://use.typekit.com/dwv2bjy',
-        'html5ie' : 'http://html5shim.googlecode.com/svn/trunk/html5'
+        //'html5ie' : 'http://html5shim.googlecode.com/svn/trunk/html5'
     }
 });
 

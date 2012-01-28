@@ -37,6 +37,6 @@ form(action='/admin/edit', method='POST')
                     td
                         img(src=image.url)
                     td
-                        a(href='/article/' + url + '/edit/?deleteImage=' + imageType) delete
+                        a(href='/article/' + url + '/edit/?removeImage=' + image._id) Remove
     p
         input(type='submit', value='Submit')

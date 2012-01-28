@@ -7,7 +7,7 @@ require.config({
     }
 });
 
-require(["align", "html5ie"], function(align) {
+require(["align", "site", "html5ie"], function(align) {
     if (Typekit) {
         alignPage(align);
     } else {

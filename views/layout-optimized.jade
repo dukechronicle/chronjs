@@ -9,6 +9,8 @@ html(lang="en")
         -each file in css
             link(rel= 'stylesheet', href= '/' + file + '.css')
 
+        //if lt IE 9
+            script(src="//html5shim.googlecode.com/svn/trunk/html5.js")
     body
         #shell
             header

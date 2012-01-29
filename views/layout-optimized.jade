@@ -6,11 +6,16 @@ html(lang="en")
         // TODO make sure this is in everything
         script try{Typekit.load();}catch(e){}
 
+        // border-radius support in ie
+        script(src="/js/curvycorners.js")
+
         -each file in css
             link(rel= 'stylesheet', href= '/' + file + '.css')
 
         //if lt IE 9
             script(src="//html5shim.googlecode.com/svn/trunk/html5.js")
+        //if lt IE 8
+            link(rel='stylesheet', href='/css/style-ie8.css')
     body
         #shell
             header

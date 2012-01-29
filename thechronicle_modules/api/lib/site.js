@@ -419,38 +419,41 @@ site.init = function (app, callback) {
                 api.taxonomy.docs(section, 20, function (err, docs) {
                     if (err)
 			globalFunctions.showError(res, err);
-                    else {
-                        docs = _.filter(docs, function (doc) {
-			    return doc.urls;
-                        });
-                        docs.forEach(function (doc) {
-                            doc.url = '/article/' + doc.urls[doc.urls.length-1];
-                            // convert timestamp
-                            if (doc.created) {
-                                doc.date = _convertTimestamp(doc.created);
-                            }
-                            doc = _parseAuthor(doc);
-                        });
-
-                        api.taxonomy.getParentsAndChildren(params, function (err, parents, children) {
-			    if (err)
-				globalFunctions.showError(res, err);
-			    else
-				res.render('site/section', {
-                                    locals:{
-					docs:docs,
-					subsections:children,
-					parentPaths:parents,
-					section:section,
-					popular: popular
-                                    },
-                                    layout: "layout-optimized",
-                                    css:asereje.css(['container/style', 'site/section'])
-                                });
-                            });
-                        }
-                    }
-                );
+                    else
+			async.filter(_.map(docs,
+					   function(doc) {
+					       return doc.value;
+					   }),
+				     function (doc, cb) {
+					 if (doc.urls) {
+					     doc.url = '/article/' + doc.urls[doc.urls.length-1];
+					     // convert timestamp
+					     if (doc.created) {
+						 doc.date = _convertTimestamp(doc.created);
+					     }
+					     doc = _parseAuthor(doc);
+					     cb(doc);
+					 } else cb(null);
+				     },
+				     function (docs) {
+					 api.taxonomy.getParentsAndChildren(params, function (err, parents, children) {
+					     if (err)
+						 globalFunctions.showError(res, err);
+					     else
+						 res.render('site/section', {
+						     locals:{
+							 docs:docs,
+							 subsections:children,
+							 parentPaths:parents,
+							 section:section,
+							 popular: popular
+						     },
+						     layout: "layout-optimized",
+						     css:asereje.css(['container/style', 'site/section'])
+						 });
+					 });
+				     });
+                });
             });
         });
         

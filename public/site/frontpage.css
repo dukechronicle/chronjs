@@ -7,7 +7,7 @@ body section > #frontpage #breaking .rounded,body section > #frontpage #top-head
 body section > #frontpage #breaking .rounded .label,body section > #frontpage #top-headline .rounded .label{background-color:#f00;padding-left:3px;padding-right:3px;color:#fff;-webkit-border-radius:4px;-moz-border-radius:4px;-ms-border-radius:4px;-o-border-radius:4px;border-radius:4px;font-size:.6em;position:relative;top:-4px}
 body section > #frontpage #breaking .rounded h1,body section > #frontpage #top-headline .rounded h1{font-size:1.3em}
 body section > #frontpage #slideshow > .slideshow{background-color:#fff;}
-body section > #frontpage #slideshow > .slideshow #slides{width:636px;height:393px;padding:3px;}
+body section > #frontpage #slideshow > .slideshow #slides{width:636px;height:393px;padding:3px;overflow:hidden;}
 body section > #frontpage #slideshow > .slideshow #slides img{-webkit-border-radius:4px;-moz-border-radius:4px;-ms-border-radius:4px;-o-border-radius:4px;border-radius:4px}
 body section > #frontpage #top > .content{float:left;width:642px;}
 body section > #frontpage #top > .content .rounded{padding:4px;}

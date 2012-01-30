@@ -10,6 +10,8 @@ body section > #frontpage #breaking .rounded h1,body section > #frontpage #top-h
 body section > #frontpage #slideshow > .slideshow{background-color:#fff;}
 body section > #frontpage #slideshow > .slideshow #slides{width:636px;height:393px;padding:3px;overflow:hidden;}
 body section > #frontpage #slideshow > .slideshow #slides img{-webkit-border-radius:4px;-moz-border-radius:4px;-ms-border-radius:4px;-o-border-radius:4px;border-radius:4px}
+body section > #frontpage #slideshow > .slideshow #slides .galleria-info-title a{color:#333}
+body section > #frontpage #slideshow > .slideshow #slides .galleria-info-title a:hover{color:#36c}
 body section > #frontpage #top > .content{float:left;width:642px;}
 body section > #frontpage #top > .content .rounded{padding:4px;}
 body section > #frontpage #top > .content .rounded a.hover.highlight-right{margin-right:-7px}

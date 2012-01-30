@@ -69,7 +69,7 @@
     #disqus_thread.rounded
 script(src='/js/disqus.js', type='text/javascript')
 script
-    loadDisqusForArticle('!{doc.nid}');
+    loadDisqusForArticle('!{doc.nid || doc._id}');
 script(src="http://platform.twitter.com/widgets.js", type="text/javascript")
 script(type="text/javascript")
     (function() {

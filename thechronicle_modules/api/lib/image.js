@@ -178,7 +178,7 @@ image.deleteVersion = function (versionId, updateOriginal, topCallback) {
         },
         function (version, callback) {
             // only delete this 'version' from s3 if it is an imageVersion and not an image attached as an original        
-            if(isVersion) {
+            if(isVersion) {               
                 var url = urllib.parse(version.url);           
                 log.info('deleting version from s3 ' + url.pathname);
                 s3.delete(url.pathname, callback);

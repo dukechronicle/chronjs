@@ -34,6 +34,7 @@ columnistsData.forEach(function(columnist) {
 var db = require('../../db-abstract');
 
 var BENCHMARK = false;
+var MOBILE_BROWSER_USER_AGENTS = ["Android", "iPhone", "iPad", "Windows Phone", "Blackberry", "Symbian", "Palm", "webOS"];
 
 function _convertTimestamp(timestamp) {
     var date = new Date(timestamp*1000);
@@ -54,36 +55,76 @@ site.init = function (app, callback) {
             return callback(err2);
         }
 
+        // redirect mobile browsers to the mobile site
+        app.get('/*', function(req, res, next) {
+            var userAgent = req.headers['user-agent'];
+
+            // only run the code below this line if they are not accessing the mobile site            
+            if(req.url.split('/',2)[1] == 'm') return next();
+            
+            for(var i in MOBILE_BROWSER_USER_AGENTS) {
+                if(userAgent.indexOf(MOBILE_BROWSER_USER_AGENTS[i]) != -1) {
+                    res.redirect('/m');
+                    return;
+                }
+            }          
+            next();
+        });
+
         app.get('/about-us', function (req, res) {
-            res.render('pages/about-us', {filename:'pages/about-us'});
+            res.render('pages/about-us', {
+		filename: 'pages/about-us',
+		css: asereje.css()
+	    });
         });
 
         app.get('/privacy-policy', function (req, res) {
-            res.render('pages/privacy-policy', {filename:'pages/privacy-policy'});
+            res.render('pages/privacy-policy', {
+		filename:'pages/privacy-policy',
+		css: asereje.css()
+	    });
         });
 
         app.get('/user-guidelines', function (req, res) {
-            res.render('pages/user-guidelines', {filename:'pages/user-guidelines'});
+            res.render('pages/user-guidelines', {
+		filename:'pages/user-guidelines',
+		css: asereje.css()
+	    });
         });
 
         app.get('/advertising', function (req, res) {
-            res.render('pages/advertising', {filename:'pages/advertising'});
+            res.render('pages/advertising', {
+		filename:'pages/advertising',
+		css: asereje.css()
+	    });
         });
 
         app.get('/subscribe', function (req, res) {
-            res.render('pages/subscribe', {filename:'pages/subscribe'});
+            res.render('pages/subscribe', {
+		filename:'pages/subscribe',
+		css: asereje.css()
+	    });
         });
 
         app.get('/edit-board', function (req, res) {
-            res.render('pages/edit-board', {filename:'pages/edit-board'});
+            res.render('pages/edit-board', {
+		filename:'pages/edit-board',
+		css: asereje.css()
+	    });
         });
 
         app.get('/letters-to-the-editor', function (req, res) {
-            res.render('pages/letters', {filename:'pages/letters'});
+            res.render('pages/letters', {
+		filename:'pages/letters',
+		css: asereje.css()
+	    });
         });
 
         app.get('/contact', function (req, res) {
-            res.render('pages/contact', {filename:'pages/contact'});
+            res.render('pages/contact', {
+		filename:'pages/contact',
+		css: asereje.css()
+	    });
         });
 
 
@@ -138,7 +179,6 @@ site.init = function (app, callback) {
                 model.twitter = results[2];
                 res.render('site/index', {
                     css:asereje.css(['slideshow/style', 'container/style', 'site/frontpage']),
-                    layout:'layout-optimized',
                     filename:'views/site/index.jade',
                     locals:{
                         model:model
@@ -181,7 +221,6 @@ site.init = function (app, callback) {
                         api.taxonomy.getChildren(['News'], function (err, children) {
                             res.render('site/news', {
                                 css:asereje.css(['container/style', 'site/section', 'site/news']),
-                                layout:'layout-optimized',
                                 subsections:children,
                                 filename:'views/site/news.jade',
                                 model:model
@@ -255,7 +294,6 @@ site.init = function (app, callback) {
                             //log.debug(model.WSoccer);
                             httpRes.render('site/sports', {
                                 css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
-                                layout:'layout-optimized',
                                 subsections:[results[1], results[2]],
                                 filename:'views/site/sports.jade',
                                 model:model});
@@ -342,7 +380,6 @@ site.init = function (app, callback) {
 
                 res.render('site/opinion', {
                     css:asereje.css(['container/style', 'site/section', 'site/opinion']),
-                    layout:'layout-optimized',
                     subsections:results[1],
                     filename:'views/site/opinion.jade',
                     model:model});
@@ -376,7 +413,6 @@ site.init = function (app, callback) {
                     api.taxonomy.getChildren(['Recess'], function (err, children) {
                         res.render('site/recess', {
                             css:asereje.css(['container/style', 'site/section', 'site/recess']),
-                            layout:'layout-optimized',
                             subsections:children,
                             filename:'views/site/recess.jade',
                             model:result});
@@ -399,7 +435,6 @@ site.init = function (app, callback) {
                 api.taxonomy.getChildren(['Towerview'], function (err, children) {
                     res.render('site/towerview', {
                         css:asereje.css(['container/style', 'site/section', 'site/towerview']),
-                        layout:'layout-optimized',
                         subsections:children,
                         filename:'views/site/towerview.jade',
                         model:result});
@@ -450,7 +485,6 @@ site.init = function (app, callback) {
 							 section:section,
 							 popular: popular
 						     },
-						     layout: "layout-optimized",
 						     css:asereje.css(['container/style', 'site/section'])
 						 });
 					 });
@@ -501,23 +535,22 @@ site.init = function (app, callback) {
                         docs: docs,
                         name: globalFunctions.capitalizeWords(name)
                     },
-                    layout: "layout-optimized",
                     css:asereje.css(['container/style', 'site/people'])
                 });
             });
         });
 
-        app.get('/page/:url', function (req, http_res) {
+        app.get('/page/:url', function (req, res) {
             var url = req.params.url;
 
             api.nodeForTitle(url, function (err, doc) {
                 if (err) {
-                    globalFunctions.showError(http_res, err);
+                    globalFunctions.showError(res, err);
                 }
                 else {
                     doc.fullUrl = "http://dukechronicle.com/page/" + url;
                     doc.path = "/page/" + url;
-                    http_res.render('page', {
+                    res.render('page', {
                         locals:{
                             doc:doc,
                             model:{
@@ -590,7 +623,6 @@ site.init = function (app, callback) {
                                 },
                                 filename:'views/article.jade',
                                 css:asereje.css(['container/style', 'article']),
-                                layout:'layout-optimized'
                             });
                         });
                     }
@@ -733,12 +765,11 @@ site.init = function (app, callback) {
             site.askForLogin(res, '/');
         });
 
-        app.get('/smtp', function (req, http_res) {
-            http_res.render('smtp', {layout:false, model:[""] });
-        });
-
-        app.get('/newsletter', function (req, http_res) {
-            http_res.render('site/newsletter');
+        app.get('/newsletter', function (req, res) {
+            res.render('site/newsletter', {
+		filename: 'site/newsletter',
+		css: asereje.css()
+	    });
         });
 
         app.post('/newsletter', function (req, http_res) {
@@ -763,11 +794,12 @@ site.init = function (app, callback) {
             }
         });
 
-        app.get('/mu-7843c2b9-3b9490d6-8f535259-e645b756', function (req, http_res) {
-            http_res.send('42');
+	// Webmaster tools stuff -- don't delete
+        app.get('/mu-7843c2b9-3b9490d6-8f535259-e645b756', function (req, res) {
+            res.send('42');
         });
 
-        callback(null);
+        callback();
     });
 };
 
@@ -956,7 +988,6 @@ function _showSearchArticles(err,req,http_res,docs,facets) {
              locals:{
                 docs:docs, currentFacets:currentFacets, facets:facets, query:req.params.query, sort:req.query.sort, order:req.query.order
              },
-             layout: "layout-optimized",
              css:asereje.css(['container/style', 'site/search'])
          }
     );

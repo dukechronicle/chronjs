@@ -3,33 +3,27 @@ var asereje = require('asereje');
 var async = require('async');
 var express = require('express');
 require('express-namespace');
+var RedisStore = require('connect-redis')(express);
 var stylus = require('stylus');
 var sprintf = require('sprintf').sprintf;
-var fs = require('fs');
-var net = require('net');
-var repl = require('repl');
 
 /* require internal modules */
-var globalFunctions = require('./thechronicle_modules/global-functions');
-var config = require('./thechronicle_modules/config');
-var api = require('./thechronicle_modules/api');
-var log = require('./thechronicle_modules/log');
-var site = require('./thechronicle_modules/api/lib/site');
 var admin = require('./thechronicle_modules/admin/lib/admin');
+var api = require('./thechronicle_modules/api');
+var config = require('./thechronicle_modules/config');
+var globalFunctions = require('./thechronicle_modules/global-functions');
+var log = require('./thechronicle_modules/log');
 var mobileapi = require('./thechronicle_modules/mobileapi/lib/mobileapi');
 var redisClient = require('./thechronicle_modules/redisclient');
-var RedisStore = require('connect-redis')(express);
-/*
-net.createServer(function (socket) {
-  repl.start("node via TCP socket> ", socket);
-}).listen(5001);*/
+var site = require('./thechronicle_modules/api/lib/site');
+
 
 asereje.config({
-      active: process.env.NODE_ENV === 'production'        // enable it just for production
-    , js_globals: ['typekit', 'underscore-min', 'jquery']   // js files that will be present always
-    , css_globals: ['css/reset', 'css/search-webkit', 'style']                     // css files that will be present always
-    , js_path: __dirname + '/public/js'           // javascript folder path
-    , css_path: __dirname + '/public'                  // css folder path
+    active: process.env.NODE_ENV === 'production',  // enable it just for production
+    js_globals: ['typekit', 'underscore-min', 'jquery'],  // js files that will be present always
+    css_globals: ['css/reset', 'css/search-webkit', 'style'],  // css files that will be present always
+    js_path: __dirname + '/public/js',  // javascript folder path
+    css_path: __dirname + '/public'  // css folder path
 });
 
 
@@ -49,8 +43,6 @@ function compile(str, path) {
 // add the stylus middleware, which re-compiles when
 // a stylesheet has changed, compiling FROM src,
 // TO dest. dest is optional, defaulting to src
-
-
 app.use(stylus.middleware({
     src: __dirname + '/views'
   , dest: __dirname + '/public'
@@ -76,68 +68,56 @@ app.configure('production', function(){
 app.configure(function() {
     app.set('views', __dirname + '/views');
     app.set('view engine', 'jade');
-    app.use(express.bodyParser({uploadDir: tmpDirectory()}));
+    app.use(express.bodyParser({uploadDir: __dirname + '/uploads'}));
     app.use(express.methodOverride());
-    // set up session
     app.use(express.cookieParser());
     app.use(express.session({ secret: SECRET }));
-    /* set http cache to one minute by default for each response */
+    // set http cache to one minute by default for each response
     app.use(function(req,res,next){
-        if(!api.accounts.isAdmin(req)) {
+        if (api.accounts.isAdmin(req))
             res.header('Cache-Control', 'public, max-age=60');
-        }
         next();
     });
     app.use(app.router);
-
 });
 
-app.error(function(err, req, res) {  	
-    log.error(err);	
+app.error(function(err, req, res) {
+    log.error(err);
     globalFunctions.showError(res, err);
 });
 
-site.assignPreInitFunctionality(app, this);
-
-app.listen(port);
-console.log("Server listening on port %d in %s mode", app.address().port, app.settings.env); 
-
 log.init(function (err) {
-    if (err)
-	console.log("Logger couldn't be initialized: " + err);
-    else
-	config.init(function(err) {
-	    if(err) log.crit(err);
-	    else {
-		if(!config.isSetUp())
-	            app.get('/', function(req, res, next) {
-			if(!config.isSetUp()) res.redirect('/config');
-			else next();
-	            });
-		else
-		    runSite(function() {});
-	    }
-	});
+    if (err) console.err("Logger couldn't be initialized: " + err);
+
+    app.listen(port);
+    log.notice(sprintf("Site configured and listening on port %d in %s mode",
+                       app.address().port, app.settings.env));
+    site.assignPreInitFunctionality(app, runSite);
+    config.init(function(err) {
+	if(err) log.crit(err);
+	else if (!config.isSetUp())
+	    app.get('/', function(req, res, next) {
+		if (!config.isSetUp()) res.redirect('/config');
+		else next();
+	    });
+	else
+	    runSite(function (err) {
+		if (err) log.error(err);
+	    });
+    });
 });
 
-
-exports.runSite = function(callback) {
-	runSite(callback);
-};
-
 function runSite(callback) {
-	log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));
-	
     // use redis as our session store
-    redisClient.init(function (err0) {
-        if(err0) return log.error(err0);
-        app.use(express.session({
-            secret: SECRET,
-            store: new RedisStore({
+    redisClient.init(function (err) {
+        if (err) log.error(err);
+	else app.use(express.session({
+	    secret: SECRET,
+	    store: new RedisStore({
                 host:redisClient.getHostname(),
                 port:redisClient.getPort(),
                 pass:redisClient.getPassword()
-            })
+	    })
         }));
 
         // initialize all routes
@@ -151,20 +131,6 @@ function runSite(callback) {
             function(callback) {
                 mobileapi.init(app, callback);
             }
-        ], function(err) {
-            if (err) return log.crit(err);
-            return callback();
-        })
+        ], callback);
     });
-}
-
-function tmpDirectory() {
-    var tmpDir = __dirname + '/tmp';
-    try {
-	fs.mkdirSync(tmpDir, "0755")
-    }
-    catch (err) {
-	// directory already exists
-    }
-    return tmpDir;
 }

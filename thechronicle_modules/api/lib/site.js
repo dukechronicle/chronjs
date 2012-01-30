@@ -857,54 +857,52 @@ site.askForLogin = function (res, afterLoginPage, username, err) {
     });
 };
 
-// assigns the functionality needed before different modules are ready to be initilized (before config settings have been set)
-site.assignPreInitFunctionality = function (app, server) {
+// assigns the functionality needed before different modules are ready to be
+// initilized (before config settings have been set)
+site.assignPreInitFunctionality = function (app, runSite) {
     app.post('/login', function (req, res) {
-        api.accounts.login(req, req.body.username, req.body.password, function (err) {
-            if (err) site.askForLogin(res, req.body.afterLogin, req.body.username, err);
-            else    res.redirect(req.body.afterLogin);
+	var body = req.body;
+        api.accounts.login(req, body.username, body.password, function (err) {
+            if (err)
+		site.askForLogin(res, body.afterLogin, body.username, err);
+            else
+		res.redirect(req.body.afterLogin);
         });
     });
 
     app.get('/logout', function (req, res) {
-        api.accounts.logOut(req, function (err) {
+        api.accounts.logout(req, function (err) {
             if (err) log.warning(err);
             res.redirect('/');
         });
     });
 
     app.get('/config', function (req, res) {
-        if (api.accounts.isAdmin(req)) {
-            _renderConfigPage(res,null);
-        }
-        else {
+        if (api.accounts.isAdmin(req))
+            _renderConfigPage(res);
+        else
             site.askForLogin(res, '/config');
-        }
     });
 
     app.post('/config', function (req, res) {
-        if (api.accounts.isAdmin(req)) {
+        if (api.accounts.isAdmin(req))
             config.setUp(req.body, function (err) {
-                if (err == null) {
-                    server.runSite(function () {
-                        res.redirect('/config');
+                if (err)
+		    _renderConfigPage(res,err);
+		else 
+                    runSite(function (err) {
+			if (err) log.error(err);
+                        res.redirect('/');
                     });
-                }
-                else {
-                    _renderConfigPage(res,err);
-                }
             });
-        }
-        else {
-            site.askForLogin(res, '/config');
-        }
+        else
+	    site.askForLogin(res, '/config');
     });
 };
 
 function _renderConfigPage(res,err) {
-    if(err != null) {
-        err = err + "<br /><br />The live site was not updated to use the new configuration due to errors."
-    }
+    if (err)
+        err += "<br /><br />The live site was not updated to use the new configuration due to errors."
 
     res.render('config/config', {
         locals:{

@@ -16,7 +16,10 @@ sitemap.latestFullSitemap = function (path, callback) {
     latestFullSitemapHelper(path, 0, null, [], function (err, files) {
 	child_process.exec('gzip ' + files.join(' '), function (err) {
 	    if (err) callback("Couldn't zip sitemap files: " + err);
-	    // else generateSitemapIndex();
+	    else generateSitemapIndex(files, new Date(), function (err, xml) {
+		if (err) callback(err);
+		else fs.writeFile(path + '.xml', xml, callback);
+	    });
 	});
     });
 };
@@ -65,11 +68,30 @@ function latestSitemap(path, query, news, callback) {
     });
 };
 
+function generateSitemapIndex(files, date, callback) {
+   var doc = builder.create();
+    var root = doc.begin("sitemapindex", { version: "1.0", encoding: "UTF-8" }).
+	att("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9");
+    async.forEach(files,
+		  function (path, cb) {
+		      // TODO: extract domain name
+		      var prefix = "http://www.dukechronicle.com/";
+		      root.ele("sitemap").
+			  ele("loc", prefix + path).up().
+			  ele("lastmod", dateFormat(date, "yyyy-mm-dd"));
+		      cb();
+		  },
+		  function (err) {
+		      callback(err, doc.toString());
+		  });
+}
+
 function generateSitemap(docs, news, callback) {
     var doc = builder.create();
     var root = doc.begin("urlset", { version: "1.0", encoding: "UTF-8" }).
-	att("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9").
-	att("xmlns:news", "http://www.google.com/schemas/sitemap-news/0.9");
+	att("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9");
+    if (news)
+	root.att("xmlns:news", "http://www.google.com/schemas/sitemap-news/0.9");
     async.forEach(docs,
 		  function (doc, cb) {
 		      // TODO: extract domain name

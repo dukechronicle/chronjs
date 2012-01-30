@@ -575,7 +575,7 @@ site.init = function (app, callback) {
             var url = req.params.url;
             api.articleForUrl(url, function (err, doc) {
                 if (err) {
-                    return globalFunctions.showError(http_res, err);
+                    _404Route(req, http_res);
                 }
                 else {
                     // convert timestamp
@@ -799,9 +799,14 @@ site.init = function (app, callback) {
             }
         });
 
-	// Webmaster tools stuff -- don't delete
+	    // Webmaster tools stuff -- don't delete
         app.get('/mu-7843c2b9-3b9490d6-8f535259-e645b756', function (req, res) {
             res.send('42');
+        });
+
+        //The 404 Route (ALWAYS Keep this as the last route)
+        app.get('*', function(req, res){
+            _404Route(req,res);
         });
 
         callback();
@@ -972,6 +977,15 @@ function _parseAuthor(doc) {
         }
     }
     return doc;
+}
+
+function _404Route(req, res) {
+    res.render('pages/404', {
+        filename: 'pages/404',
+        css: asereje.css(['pages/style']),
+	    status: 404,
+        url: req.url
+    });
 }
 
 function _showSearchArticles(err,req,http_res,docs,facets) {

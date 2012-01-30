@@ -35,6 +35,11 @@ var configParams = [
         defaultValue: ''
     },
     {
+        name: 'CLOUDFRONT_DISTRIBUTION',
+        description: 'Amazon CloudFront Distribution',
+        defaultValue: 'd164gy67scumxg.cloudfront.net'
+    },
+    {
         name: 'REDIS_URL',
         description: 'Redis Server URL',
         defaultValue: 'redis://jodoglevy:2b258cbdcbbce003452a0ff4279d8701@barreleye.redistogo.com:9148/'

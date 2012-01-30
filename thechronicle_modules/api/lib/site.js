@@ -123,7 +123,7 @@ site.init = function (app, callback) {
         app.get('/contact', function (req, res) {
             res.render('pages/contact', {
 		filename:'pages/contact',
-		css: asereje.css()
+		css: asereje.css(['container/style'])
 	    });
         });
 

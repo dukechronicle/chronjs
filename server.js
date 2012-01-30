@@ -92,15 +92,6 @@ app.configure(function() {
 
 });
 
-app.error(function(err, req, res) {
-	try {
-		res.send(500);
-	}
-	catch(err) {}
-	globalFunctions.log('ERROR: ' + err.stack);
-});
-
-
 site.assignPreInitFunctionality(app, this);
 
 app.listen(port);

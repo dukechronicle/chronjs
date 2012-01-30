@@ -34,6 +34,7 @@ columnistsData.forEach(function(columnist) {
 var db = require('../../db-abstract');
 
 var BENCHMARK = false;
+var MOBILE_BROWSER_USER_AGENTS = ["Android", "iPhone", "iPad", "Windows Phone", "Blackberry", "Symbian", "Palm", "webOS"];
 
 function _convertTimestamp(timestamp) {
     var date = new Date(timestamp*1000);
@@ -53,6 +54,22 @@ site.init = function (app, callback) {
             log.crit("api init failed!");
             return callback(err2);
         }
+
+        // redirect mobile browsers to the mobile site
+        app.get('/*', function(req, res, next) {
+            var userAgent = req.headers['user-agent'];
+
+            // only run the code below this line if they are not accessing the mobile site            
+            if(req.url.split('/',2)[1] == 'm') return next();
+            
+            for(var i in MOBILE_BROWSER_USER_AGENTS) {
+                if(userAgent.indexOf(MOBILE_BROWSER_USER_AGENTS[i]) != -1) {
+                    res.redirect('/m');
+                    return;
+                }
+            }          
+            next();
+        });
 
         app.get('/about-us', function (req, res) {
             res.render('pages/about-us', {filename:'pages/about-us'});

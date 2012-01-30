@@ -939,13 +939,13 @@ site.renderSmtpTest = function (req, http_res, email, num) {
 function generateSitemaps(callback) {
     async.parallel([
 	function (cb) {
-	    sitemap.latestSitemap('public/sitemap.xml', function (err) {
+	    sitemap.latestSitemap('public/sitemaps/sitemap', function (err) {
 		if (err) log.warning("Couldn't build full sitemap: " + err);
 		cb(err);
 	    });
 	},
 	function (cb) {
-	    sitemap.latestNewsSitemap('public/news_sitemap.xml', function (err) {
+	    sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
 		if (err) log.warning("Couldn't build news sitemap: " + err);
 		cb(err);
 	    });

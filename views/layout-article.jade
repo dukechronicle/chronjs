@@ -1,7 +1,10 @@
 !!! 5
 html(lang="en")
     head
-        title The Chronicle | Duke University's Daily Independent Newspaper
+        if (doc.title)
+            title #{doc.title} | The Chronicle
+        else
+            title The Chronicle | Duke University's Daily Independent Newspaper
         link(rel="image_src", href="http://dukechronicle.com/favicon.png")
 
         script(src="http://use.typekit.com/dwv2bjy.js")

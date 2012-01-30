@@ -25,6 +25,11 @@ function loadDisqus()
 
 function appendCommentCount() {
     var count = $("#dsq-num-posts").html();
+
+    if($("#dsq-total-posts").html() != null) {
+        count = $("#dsq-total-posts").html();
+    }
+
     var newText = $("#commentLink").html() + " ("+count+")";
     $("#commentLink").html(newText);
 }

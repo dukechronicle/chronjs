@@ -8,7 +8,26 @@ var log = require('../../log');
 var _ = require('underscore');
 
 
-sitemap.googleNewsSitemap = function (path, docs, callback) {
+sitemap.latestSitemap = function (path, callback) {
+    latestSitemap(path, {}, false, callback);
+};
+
+sitemap.latestNewsSitemap = function (path, callback) {
+    var query = { startkey: (new Date()).getTime() / 1000 - 2 * 24 * 60 * 60 };
+    latestSitemap(path, query, true, callback);
+};
+
+function latestSitemap(path, query, news, callback) {
+    db.view("articles/all_by_date", query, function(err, results) {
+        if (err) callback(err);
+	else {
+	    results = _.map(results, function (doc) { return doc.value; });
+	    generateSitemap(path, results, news, callback);
+	}
+    });
+}
+
+function generateSitemap(path, docs, news, callback) {
     var doc = builder.create();
     var root = doc.begin("urlset", { version: "1.0", encoding: "UTF-8" }).
 	att("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9").
@@ -19,27 +38,23 @@ sitemap.googleNewsSitemap = function (path, docs, callback) {
 		      var prefix = "http://www.dukechronicle.com/article/";
 		      var date = getDate(doc);
 		      if (date === undefined) return cb(err);
-		      root.ele('url').
-			  ele('loc', prefix + _.last(doc.urls)).up().
+		      var url = root.ele('url');
+		      url.ele('loc', prefix + _.last(doc.urls)).up().
 			  ele('lastmod', date).up().
 			  ele('changefreq', 'never').up().
 			  ele('priority', '0.5').up();
+		      if (news)
+			  url.ele('news:news').
+			  ele('news:publication').
+			  ele('news:name', 'The Chronicle').up().
+			  ele('news:language', 'en').up().up().
+			  ele('news:publication_date', date).up().
+			  ele('news:title', doc.title);
 		      cb();
 		  },
 		  function (err) {
-		      log.debug(doc.toString({ pretty: true }));
+		      callback(err, doc);
 		  });
-};
-
-sitemap.latestGoogleSitemap = function (path, callback) {
-    var query = { startkey: (new Date()).getTime() / 1000 - 2 * 24 * 60 * 60 };
-    db.view("articles/all_by_date", query, function(err, results) {
-        if (err) callback(err);
-	else {
-	    results = _.map(results, function (doc) { return doc.value; });
-	    sitemap.googleNewsSitemap(path, results, callback);
-	}
-    });
 };
 
 function getDate(doc) {

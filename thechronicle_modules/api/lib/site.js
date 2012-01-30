@@ -319,6 +319,7 @@ site.init = function (app, callback) {
                                 delete item.link;
                                 return item;
                             });
+			    // TODO fit blog articles to box
                             Blog.splice(5, Blog.length - 5);
                             callback(null, Blog)
                         } else {

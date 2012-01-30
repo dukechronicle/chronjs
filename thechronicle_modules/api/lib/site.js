@@ -34,7 +34,7 @@ columnistsData.forEach(function(columnist) {
 var db = require('../../db-abstract');
 
 var BENCHMARK = false;
-var MOBILE_BROWSER_USER_AGENTS = ["Android", "iPhone", "iPad", "Windows Phone", "Blackberry", "Symbian", "Palm", "webOS"];
+var MOBILE_BROWSER_USER_AGENTS = ["Android", "iPhone", "Windows Phone", "Blackberry", "Symbian", "Palm", "webOS"];
 
 function _convertTimestamp(timestamp) {
     var date = new Date(timestamp*1000);

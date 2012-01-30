@@ -28,11 +28,16 @@ exports.init = function (app, callback) {
 
         app.get('/article/:articleURL', function (req, http_res) {
             var articleURL = req.params.articleURL;
-            api.docForUrl(articleURL, function (err, res) {
+            api.articleForUrl(articleURL, function (err, res) {
                 //console.log(res);
                 if (req.query.callback == null) {
                     http_res.send(res);
                 } else {
+                    var filteredArticle = {};
+                    filteredArticle.title = res.title;
+                    filteredArticle.url = res.url;
+                    filteredArticle.body = res.body;
+                    filteredArticle.author = res.author;
                     http_res.send(req.query.callback + "(" + JSON.stringify(res) + ")");
                 }
             });

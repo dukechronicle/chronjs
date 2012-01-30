@@ -1,7 +1,9 @@
 #article
-    - each parent in parentPaths
-      h2.selected
-          a(href=parent.path) #{parent.name}
+    section
+      .nav.clearfix
+        - each parent in parentPaths
+          h2.selected
+            a(href='../section' + parent.path + '/' + parent.name) #{parent.name}
 
     article
         .content.rounded

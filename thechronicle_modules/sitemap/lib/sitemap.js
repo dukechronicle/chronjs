@@ -9,7 +9,7 @@ var fs = require('fs');
 var log = require('../../log');
 var _ = require('underscore');
 
-var SITEMAP_URL_LIMIT = 50000;
+var SITEMAP_URL_LIMIT = 10000;
 
 
 sitemap.latestFullSitemap = function (path, callback) {
@@ -57,7 +57,10 @@ function latestSitemap(path, query, news, callback) {
         if (err) callback(err);
 	else {
 	    var lastkey = _.last(results).key;
-	    results = _.map(results, function (doc) { return doc.value; });
+	    results = _.map(results, function (doc) {
+		delete doc.body;
+		return doc.value;
+	    });
 	    generateSitemap(results, news, function (err, xml) {
 		if (err) callback(err);
 		else fs.writeFile(path, xml, function (err) {

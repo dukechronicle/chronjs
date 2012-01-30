@@ -46,8 +46,6 @@ search.indexUnindexedArticles = function(count) {
 		// Attempt to index each file in row.
 		response.forEach(function(row) {
 			process.nextTick(function() {
-				log.debug('indexing "' + row.title + '"');
-
 				search.indexArticle(row._id, row.title, row.body, row.taxonomy, row.authors, row.created, function(error2, response2) {
 					if(error2)
 						log.warning(error2);
@@ -56,8 +54,6 @@ search.indexUnindexedArticles = function(count) {
 						db.search.setArticleAsIndexed(row._id, INDEX_VERSION, function(error3, response3) {
 							if(error3)
 								log.warning(error3);
-							else
-								log.debug('indexed "' + row.title + '"');
 						});
 					}
 				});
@@ -138,16 +134,12 @@ search.removeAllDocsFromSearch = function(callback) {
 	api.docsByDate(null, null, function(err, response) {
 		response = response || {};
 		async.forEach(response, function(row, cb) {
-			log.debug('unindexing "' + row.title + '"');
 			client.del(createSolrIDFromDBID(row._id), null, function(err, resp) {
-				log.debug(resp);
 				db.merge(row._id, {
 					indexedBySolr : false
 				}, function(error3, response3) {
 					if(error3)
 						log.warning(error3);
-					else
-						log.debug('unindexed "' + row.title + '"');
 					cb(null);
 				});
 			});
@@ -248,7 +240,6 @@ function querySolr(query, options, callback) {
 		}
 
 		var responseObj = JSON.parse(response);
-		log.debug(responseObj);
 		// put facet into an easily manipulitable form
 		var facets = {};
 		if(responseObj.facet_counts) {

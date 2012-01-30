@@ -319,6 +319,7 @@ site.init = function (app, callback) {
                                 delete item.link;
                                 return item;
                             });
+			    // TODO fit blog articles to box
                             Blog.splice(5, Blog.length - 5);
                             callback(null, Blog)
                         } else {
@@ -925,13 +926,32 @@ site.renderSmtpTest = function (req, http_res, email, num) {
 
             api.docsByDate(null, null, function (err, docs) {
                 smtp.sendNewsletter(docs, function (err2, res2) {
-                    http_res.send(res2);
-                    log.debug("sent email");
+		    http_res.send(res2);
+		    log.notice("Building sitemaps...");
+		    generateSitemaps(function (err) {
+			if (err) log.warning(err);
+		    });
                 });
             });
         });
     }
 };
+
+function generateSitemaps(callback) {
+    async.parallel([
+	function (cb) {
+	    sitemap.latestSitemap('public/sitemaps/sitemap', function (err) {
+		if (err) log.warning("Couldn't build full sitemap: " + err);
+		cb(err);
+	    });
+	},
+	function (cb) {
+	    sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
+		if (err) log.warning("Couldn't build news sitemap: " + err);
+		cb(err);
+	    });
+	}], callback);
+}
 
 function _parseAuthor(doc) {
     doc.authorsArray = _.clone(doc.authors);

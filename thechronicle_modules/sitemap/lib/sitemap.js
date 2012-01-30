@@ -8,24 +8,54 @@ var fs = require('fs');
 var log = require('../../log');
 var _ = require('underscore');
 
+var SITEMAP_URL_LIMIT = 10;
 
-sitemap.latestSitemap = function (path, callback) {
-    latestSitemap(path, {}, false, callback);
+
+sitemap.latestFullSitemap = function (path, callback) {
+    latestFullSitemapHelper(path, 0, null, [], function (err, files) {
+	log.debug(files);
+	//generateSitemapIndex();
+    });
 };
 
 sitemap.latestNewsSitemap = function (path, callback) {
     var query = { startkey: (new Date()).getTime() / 1000 - 2 * 24 * 60 * 60 };
-    latestSitemap(path, query, true, callback);
+    latestSitemap(path + ".xml", query, true, callback);
+};
+
+function latestFullSitemapHelper(path, number, start, files, callback) {
+    var query = { limit: SITEMAP_URL_LIMIT };
+    if (start != null) {
+	query.startkey = start;
+	query.skip = 1;
+    }
+    latestSitemap(path + number + ".xml", query, false,
+		  function (err, numresults, lastkey) {
+		      if (err)
+			  callback(err);
+		      else if (numresults == SITEMAP_URL_LIMIT) {
+			  files.push(__dirname + path + number + ".xml");
+			  latestFullSitemapHelper(path, number+1, lastkey, files, callback);
+		      }
+		      else
+			  callback(null, files);
+		  });
 };
 
 function latestSitemap(path, query, news, callback) {
+    query = query || {};
+    query.limit = query.limit || SITEMAP_URL_LIMIT;	
     db.view("articles/all_by_date", query, function(err, results) {
         if (err) callback(err);
 	else {
+	    var lastkey = _.last(results).key;
 	    results = _.map(results, function (doc) { return doc.value; });
 	    generateSitemap(results, news, function (err, xml) {
 		if (err) callback(err);
-		else fs.writeFile(path, xml, callback);
+		else fs.writeFile(path, xml, function (err) {
+		    log.debug(results.length);
+		    callback(err, results.length, lastkey);
+		});
 	    });
 	}
     });

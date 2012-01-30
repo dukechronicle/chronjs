@@ -128,7 +128,7 @@ site.init = function (app, callback) {
         });
 
 
-        app.get('/', site.restrictToAdmin, function (req, res) {
+        app.get('/', function (req, res) {
             var start = Date.now();
             async.parallel([
                 function (callback) { //0

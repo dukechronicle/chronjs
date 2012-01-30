@@ -4,6 +4,7 @@ var http = require('http');
 var fs = require('fs');
 
 exports.showError = function (res, message) {
+    log.error('ERROR: ' + err.stack);
     res.render('error', {
         locals: {
             message: message

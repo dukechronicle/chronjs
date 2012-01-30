@@ -92,6 +92,11 @@ app.configure(function() {
 
 });
 
+app.error(function(err, req, res) {  	
+    log.error(err);	
+    globalFunctions.showError(res, err);
+});
+
 site.assignPreInitFunctionality(app, this);
 
 app.listen(port);

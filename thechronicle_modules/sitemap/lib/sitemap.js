@@ -2,19 +2,22 @@ var sitemap = exports;
 
 var async = require('async');
 var builder = require('xmlbuilder');
+var child_process = require('child_process');
 var dateFormat = require('dateformat');
 var db = require('../../db-abstract');
 var fs = require('fs');
 var log = require('../../log');
 var _ = require('underscore');
 
-var SITEMAP_URL_LIMIT = 10;
+var SITEMAP_URL_LIMIT = 50000;
 
 
 sitemap.latestFullSitemap = function (path, callback) {
     latestFullSitemapHelper(path, 0, null, [], function (err, files) {
-	log.debug(files);
-	//generateSitemapIndex();
+	child_process.exec('gzip ' + files.join(' '), function (err) {
+	    if (err) callback("Couldn't zip sitemap files: " + err);
+	    // else generateSitemapIndex();
+	});
     });
 };
 
@@ -34,11 +37,13 @@ function latestFullSitemapHelper(path, number, start, files, callback) {
 		      if (err)
 			  callback(err);
 		      else if (numresults == SITEMAP_URL_LIMIT) {
-			  files.push(__dirname + path + number + ".xml");
+			  files.push(path + number + ".xml");
 			  latestFullSitemapHelper(path, number+1, lastkey, files, callback);
 		      }
-		      else
+		      else {
+			  files.push(path + number + ".xml");
 			  callback(null, files);
+		      }
 		  });
 };
 
@@ -53,7 +58,6 @@ function latestSitemap(path, query, news, callback) {
 	    generateSitemap(results, news, function (err, xml) {
 		if (err) callback(err);
 		else fs.writeFile(path, xml, function (err) {
-		    log.debug(results.length);
 		    callback(err, results.length, lastkey);
 		});
 	    });

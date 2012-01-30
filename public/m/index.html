@@ -32,7 +32,7 @@
         </style>
 
         <script type="text/javascript"> 
-        var HOSTNAME = "beta.dukechronicle.com";
+        var HOSTNAME = "dukechronicle.com";
         // Cache the list of articles. Emphemeral.
         var articleListCache = [];
         
@@ -73,7 +73,8 @@
                 var buttonDiv = $('<div />', { "class":"ui-btn-text" });
                 
                 // Hyperlink
-                var hyperlink = $('<a />',{ "href":"javascript:getArticle('" + article.urls+ "')", "class":"ui-link-inherit" });
+                article.url = article.urls[article.urls.length -1];
+                var hyperlink = $('<a />',{ "href":"javascript:getArticle('" + article.url+ "')", "class":"ui-link-inherit" });
                 
                 // Thumbnail
                 //hyperlink.append('<img src="' + 'img/test.png"' + ' "class"="ui-li-thumb" />');

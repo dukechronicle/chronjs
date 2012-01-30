@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin
+Disallow: /css
+Disallow: /slideshow
+Disallow: /mobile-api
+Sitemap: Sitemap: http://dukechronicle.com/sitemaps/sitemap.xml

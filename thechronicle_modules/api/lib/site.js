@@ -34,7 +34,7 @@ columnistsData.forEach(function(columnist) {
 var db = require('../../db-abstract');
 
 var BENCHMARK = false;
-var MOBILE_BROWSER_USER_AGENTS = ["Android", "iPhone", "iPad", "Windows Phone", "Blackberry", "Symbian", "Palm", "webOS"];
+var MOBILE_BROWSER_USER_AGENTS = ["Android", "iPhone", "Windows Phone", "Blackberry", "Symbian", "Palm", "webOS"];
 
 function _convertTimestamp(timestamp) {
     var date = new Date(timestamp*1000);
@@ -57,6 +57,7 @@ site.init = function (app, callback) {
 
         // redirect mobile browsers to the mobile site
         app.get('/*', function(req, res, next) {
+
             var userAgent = req.headers['user-agent'];
 
             // only run the code below this line if they are not accessing the mobile site            
@@ -192,7 +193,7 @@ site.init = function (app, callback) {
         app.get('/news', function (req, res) {
             api.group.docs(LAYOUT_GROUPS.News.namespace, null, function (err, model) {
                 _.defaults(model, newsModel);
-                redis.client.zrevrange(_articleViewsKey(['News']), 0, 4, function (err, popular) {
+                redis.client.zrevrange(_articleViewsKey(['News']), 0, 3, function (err, popular) {
                     model.popular = popular.map(function (str) {
                         var parts = str.split('||');
                         return {
@@ -618,9 +619,6 @@ site.init = function (app, callback) {
                                 "popular": popular
                             };
 			    api.taxonomy.getParents(doc.taxonomy, function (err, parents) {
-                    if (doc.path === "/article/chronicle-gets-facelift") {
-                        doc.embed = '<iframe style="margin-top: 10px" width="580" height="355" src="http://www.youtube.com/embed/O1v4EA3AWaY?rel=0" frameborder="0" allowfullscreen></iframe>';
-                    }
                     http_res.render('article', {
                         locals:{
                             doc:doc,
@@ -628,7 +626,8 @@ site.init = function (app, callback) {
                             model:model,
                             parentPaths:parents
                         },
-                        filename:'views/article.jade',
+                        filename:'views/article',
+                        layout: 'layout-article',
                         css:asereje.css(['container/style', 'article'])
                         });
                     });

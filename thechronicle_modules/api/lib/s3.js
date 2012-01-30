@@ -9,6 +9,8 @@ var log = require('../../log');
 var BUCKET_NAME = null;
 var KEY = null;
 var SECRET = null;
+var S3_URL = "http://s3.amazonaws.com/";
+var CLOUDFRONT_DISTRIBUTION = null;
 
 s3.put = function (buf, key, type, callback) {
     _getClientStatic(function (err, client) {
@@ -38,12 +40,17 @@ s3.init = function (callback) {
     BUCKET_NAME = config.get("S3_BUCKET");
     KEY = config.get("S3_KEY");
     SECRET = config.get("S3_SECRET");
+    CLOUDFRONT_DISTRIBUTION = config.get("CLOUDFRONT_DISTRIBUTION");
 
     callback(null);
 };
 
+s3.getCloudFrontUrl = function(url) {
+    return url.replace(S3_URL + BUCKET_NAME, CLOUDFRONT_DISTRIBUTION);
+};
+
 function _getUrl(key) {
-    return 'http://s3.amazonaws.com/' + BUCKET_NAME + '/' + key;
+    return S3_URL + BUCKET_NAME + '/' + key;
 }
 
 function _getClientStatic(callback) {

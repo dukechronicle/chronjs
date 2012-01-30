@@ -10,12 +10,11 @@ var config = require('../../config');
 var globalFunctions = require('../../global-functions');
 
 var apiKey = null;
-var taxonomyGroups = null;
+var layoutGroups = null;
 var listID = null;
 var templateID = null;
 var mcAPI = null;
 
-var NUM_ARTICLES_IN_EACH_CATEGORY = 3;
 var ARTICLE_IMAGE_WIDTH = 124;
 var ARTICLE_IMAGE_HEIGHT = 89;
 
@@ -24,7 +23,7 @@ var newsletterFromName = "The Chronicle";
 
 newsletter.init = function() {
     apiKey = config.get("MAILCHIMP_API_KEY");
-    taxonomyGroups = config.get("TAXONOMY_MAIN_SECTIONS");
+    layoutGroups = config.get("LAYOUT_GROUPS");
     listID = config.get("MAILCHIMP_LIST_ID");
 
     templateID = config.get("MAILCHIMP_TEMPLATE_ID");
@@ -95,72 +94,54 @@ newsletter.sendNewsletter = function (campaignID, callback) {
 newsletter.createNewsletter = function (callback) {
     var optArray = {"list_id":listID, "subject":getNewsletterSubject(), "from_email":newsletterFromEmail, "from_name":newsletterFromName, "title":getNewsletterSubject(), "template_id":templateID};
     
-    taxonomyGroups = globalFunctions.convertObjectToArray(taxonomyGroups);
+    api.group.docs(layoutGroups.Newsletter.namespace, null, function (err, model) {
+        var newsText = "";
+        var newsHTML = "";
+        var count = 0;
+        
+         config.get('TAXONOMY_MAIN_SECTIONS').forEach(function(section) {
+            if(count > 0) newsHTML += "<br />";
+            count ++;
+            
+            newsHTML += "<h2>" + section + "</h2>";
+            newsText += section+"\n\n";
+            
+            model[section].forEach(function (article) {
+                var url = "http://www.dukechronicle.com/article/"+article.urls[0];                       
 
-    async.map(taxonomyGroups, function (item, callback) {
-        api.taxonomy.docs(item, NUM_ARTICLES_IN_EACH_CATEGORY, function (err, docs) {
-            if (err) return callback(err, null);
-            return callback(err, docs);
-        });
-    },
-    function (err, res) {
-        var imageIDs = [];
-        for (var x = 0; x < taxonomyGroups.length; x++) {
-            for(var i = 0; i < NUM_ARTICLES_IN_EACH_CATEGORY; i ++) {
-                if(res[x][i].value.images != null && res[x][i].value.images.ThumbRect != null) {
-                    imageIDs.push(res[x][i].value.images.ThumbRect);
-                }
-            }
-        }
+                newsHTML += "<br /><div><a href='" + url + "'><h3>" + article.title + "</h3></a><p>";
 
-        api.docsById(imageIDs, function(err, imageResponse) {
-            var newsText = "";
-            var newsHTML = "";
-            var imageCount = 0;
-
-            for (var x = 0; x < taxonomyGroups.length; x++) {
-                if(x > 0) newsHTML += "<br />";
-                newsHTML += "<h2>" + taxonomyGroups[x] + "</h2>";
-
-                newsText += taxonomyGroups[x]+"\n\n";
-
-                for(var i = 0; i < NUM_ARTICLES_IN_EACH_CATEGORY; i ++) {
-                    var url = "http://www.dukechronicle.com/article/"+res[x][i].value.urls[0];                       
-
-                    newsHTML += "<br /><div><a href='" + url + "'><h3>" + res[x][i].value.title + "</h3></a><p>";
-
-                    if(res[x][i].value.images != null && res[x][i].value.images.ThumbRect != null) {
-                        newsHTML += "<a href='" + url + "'><img align='left' src='"+imageResponse[imageCount].doc.url+"' width='"+ARTICLE_IMAGE_WIDTH+"' height='"+ARTICLE_IMAGE_HEIGHT+"' alt='Chronicle image'></img></a>";                 
-                        imageCount ++;
-                    } 
+                if(article.images != null && article.images.ThumbRect != null) {
+                    newsHTML += "<a href='" + url + "'><img align='left' src='"+ article.images.ThumbRect.url +"' width='"+ARTICLE_IMAGE_WIDTH+"' height='"+ARTICLE_IMAGE_HEIGHT+"' alt='Chronicle image'></img></a>";                 
+                } 
                     
-                    newsHTML += res[x][i].value.teaser + "</p></div>";
+                newsHTML += article.teaser + "</p></div>";
 
-                    if(res[x][i].value.images != null && res[x][i].value.images.ThumbRect != null) {
-                        newsHTML += "<br style='clear:both;' />";
-                    }
-
-                    newsText += res[x][i].value.title+"\n";
-                    newsText += res[x][i].value.teaser+"\n";
-                    newsText += url+"\n";
-                    newsText += "\n";
+                if(article.images != null && article.images.ThumbRect != null) {
+                    newsHTML += "<br style='clear:both;' />";
                 }
-                newsHTML += "<br />";
+
+                newsText += article.title+"\n";
+                newsText += article.teaser+"\n";
+                newsText += url+"\n";
                 newsText += "\n";
-            }
-
-            var adHTML = "<a href='www.google.com'><img src='https://www.google.com/help/hc/images/adsense_185666_adformat-display_160x600_en.jpg'></img></a>";
-            var contentArr = {"html_MAIN":newsHTML, "html_ADIMAGE":adHTML, "html_ISSUEDATE":getDate(), "text":newsText};
-
-            var params = {"type":"regular", "options":optArray, "content":contentArr};
-            mcAPI.campaignCreate(params, function (res) {
-                if (res.error) {
-                    log.warning('Error: ' + res.error + ' (' + res.code + ')');
-                    return callback('Error: ' + res.error + ' (' + res.code + ')');
-                }
-                log.info("Campaign ID: " + res);
-                callback(res);
             });
+
+            newsHTML += "<br />";
+            newsText += "\n";
+        });
+
+        var adHTML = "<a href='www.google.com'><img src='https://www.google.com/help/hc/images/adsense_185666_adformat-display_160x600_en.jpg'></img></a>";
+        var contentArr = {"html_MAIN":newsHTML, "html_ADIMAGE":adHTML, "html_ISSUEDATE":getDate(), "text":newsText};
+
+        var params = {"type":"regular", "options":optArray, "content":contentArr};
+        mcAPI.campaignCreate(params, function (res) {
+            if (res.error) {
+                log.warning('Error: ' + res.error + ' (' + res.code + ')');
+                return callback('Error: ' + res.error + ' (' + res.code + ')');
+            }
+            log.info("Campaign ID: " + res);
+            callback(res);
         });
     });         
 };

@@ -17,6 +17,7 @@ api.authors = require("./authors");
 api.newsletter = require("./newsletter");
 api.cron = require("./cron");
 api.database = require("./database");
+api.s3 = require('./s3');
 
 var redis = require('../../redisclient');
 
@@ -251,6 +252,9 @@ api.articleForUrl = function(url, callback) {
                 aggregateDoc = doc;
                 aggregateDoc.images = {};
             } else if (docType === 'images') {
+                if(doc.url) doc.url = api.s3.getCloudFrontUrl(doc.url);
+                else if(doc._id.url) doc._id.url = api.s3.getCloudFrontUrl(doc._id.url);                     
+
                 var imageType = key[docTypeKey+ 1];
                 // TODO this should NEVER happen
 

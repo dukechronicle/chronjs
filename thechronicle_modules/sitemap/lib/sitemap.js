@@ -48,7 +48,7 @@ function latestFullSitemapHelper(path, number, start, files, callback) {
 			  callback(null, files);
 		      }
 		  });
-};
+}
 
 function latestSitemap(path, query, news, callback) {
     query = query || {};
@@ -69,7 +69,7 @@ function latestSitemap(path, query, news, callback) {
 	    });
 	}
     });
-};
+}
 
 function generateSitemapIndex(files, date, callback) {
    var doc = builder.create();

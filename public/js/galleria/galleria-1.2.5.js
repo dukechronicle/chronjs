@@ -1,8 +1,8 @@
 /**
- * @preserve Galleria v 1.2.5 2011-08-03
+ * @preserve Galleria v 1.2.7a2 2012-01-12
  * http://galleria.aino.se
  *
- * Copyright (c) 2011, Aino
+ * Copyright (c) 2012, Aino
  * Licensed under the MIT license.
  */
 
@@ -18,7 +18,7 @@ var undef,
     $win   = $( window ),
 
 // internal constants
-    VERSION = 1.25,
+    VERSION = 1.26,
     DEBUG = true,
     TIMEOUT = 30000,
     DUMMY = false,
@@ -112,6 +112,7 @@ var undef,
         trunk: {},
 
         add: function( id, fn, delay, loop ) {
+            id = id || new Date().getTime();
             loop = loop || false;
             this.clear( id );
             if ( loop ) {
@@ -165,7 +166,9 @@ var undef,
 
         // run the instances we have in the pool
         $.each( _pool, function( i, instance ) {
-            instance._init.call( instance );
+            if ( !instance._initialized ) {
+                instance._init.call( instance );
+            }
         });
     },
 
@@ -734,11 +737,6 @@ var undef,
                 // save the length of stylesheets to check against
                 length = doc.styleSheets.length;
 
-                // add timestamp if DEBUG is true
-                if ( DEBUG ) {
-                    href += '?' + Utils.timestamp();
-                }
-
                 // check for existing id
                 if( $('#'+id).length ) {
                     $('#'+id).attr('href', href);
@@ -831,6 +829,8 @@ var undef,
             if ( fade ) {
                 from.opacity = 0;
                 to.opacity = 1;
+            } else {
+                from.opacity = 1;
             }
 
             $(params.next).css(from);
@@ -878,7 +878,10 @@ var undef,
         return {
 
             fade: function(params, complete) {
-                $(params.next).css('opacity',0).show();
+                $(params.next).css({
+                    opacity: 0,
+                    left: 0
+                }).show();
                 Utils.animate(params.next, {
                     opacity: 1
                 },{
@@ -896,7 +899,10 @@ var undef,
             },
 
             flash: function(params, complete) {
-                $(params.next).css('opacity', 0);
+                $(params.next).css({
+                    opacity: 0,
+                    left: 0
+                });
                 if (params.prev) {
                     Utils.animate( params.prev, {
                         opacity: 0
@@ -925,7 +931,10 @@ var undef,
                 if (params.prev) {
                     $(params.prev).hide();
                 }
-                $(params.next).css('opacity', 0).show();
+                $(params.next).css({
+                    opacity: 0,
+                    left: 0
+                }).show();
                 Utils.animate(params.next, {
                     opacity:1
                 },{
@@ -1419,13 +1428,13 @@ Galleria = function() {
     };
 
     // internal fullscreen control
-    // added in 1.195
-    // still kind of experimental
     var fullscreen = this._fullscreen = {
 
         scrolled: 0,
 
-        crop: self._options.imageCrop,
+        crop: undef,
+
+        transition: undef,
 
         active: false,
 
@@ -1459,7 +1468,9 @@ Galleria = function() {
                     padding:0
                 },
 
-                data = self.getData();
+                data = self.getData(),
+
+                options = self._options;
 
             Utils.forceStyles( DOM().html, htmlbody );
             Utils.forceStyles( DOM().body, htmlbody );
@@ -1474,12 +1485,15 @@ Galleria = function() {
                 left: self.prev
             });
 
-            if ( self._options.fullscreenCrop !== undef ) {
-                self._options.imageCrop = self._options.fullscreenCrop;
+            // temporarily save the crop
+            fullscreen.crop = options.imageCrop;
+
+            // set fullscreen options
+            if ( options.fullscreenCrop != undef ) {
+                options.imageCrop = options.fullscreenCrop;
             }
 
             // swap to big image if it's different from the display image
-
             if ( data && data.big && data.image !== data.big ) {
                 var big    = new Galleria.Picture(),
                     cached = big.isCached( data.big ),
@@ -1561,8 +1575,22 @@ Galleria = function() {
             self.detachKeyboard();
             self.attachKeyboard( fullscreen.keymap );
 
-            if ( self._options.fullscreenCrop !== undef ) {
-                self._options.imageCrop = fullscreen.crop;
+            // bring back cached options
+            self._options.imageCrop = fullscreen.crop;
+            //self._options.transition = fullscreen.transition;
+
+            // return to original image
+            var big = self.getData().big,
+                image = self._controls.getActive().image;
+
+            if ( big && big == image.src ) {
+
+                window.setTimeout(function(src) {
+                    return function() {
+                        image.src = src;
+                    };
+                }( self.getData().image ), 1 );
+
             }
 
             self.rescale(function() {
@@ -1576,9 +1604,9 @@ Galleria = function() {
                     }
 
                 }, 50);
-
                 self.trigger( Galleria.FULLSCREEN_EXIT );
             });
+
 
             $win.unbind('resize', fullscreen.scale);
         }
@@ -1769,7 +1797,7 @@ Galleria = function() {
                 appends = {};
 
             // IE8 fix for IE's transparent background event "feature"
-            if ( IE === 8 ) {
+            if ( IE && IE > 7 ) {
                 cssMap.nextholder += 'background:#000;filter:alpha(opacity=0);';
                 cssMap.prevholder += 'background:#000;filter:alpha(opacity=0);';
             }
@@ -1942,9 +1970,20 @@ Galleria = function() {
             $win.unbind('resize', lightbox.rescale );
 
             var data = self.getData(index),
-                total = self.getDataLength();
+                total = self.getDataLength(),
+                n = self.getNext( index ),
+                ndata, p, i;
 
             Utils.hide( lightbox.elems.info );
+
+            try {
+                for ( i = self._options.preload; i > 0; i-- ) {
+                    p = new Galleria.Picture();
+                    ndata = self.getData( n );
+                    p.preload( 'big' in ndata ? ndata.big : ndata.image );
+                    n = self.getNext( n );
+                }
+            } catch(e) {}
 
             lightbox.image.load( data.big || data.image, function( image ) {
 
@@ -1966,7 +2005,7 @@ Galleria = function() {
                 lightbox.rescale();
             });
 
-            $( lightbox.elems.overlay ).show();
+            $( lightbox.elems.overlay ).show().css( 'visibility', 'visible' );
             $( lightbox.elems.box ).show();
         }
     };
@@ -2029,12 +2068,12 @@ Galleria.prototype = {
             dataSelector: 'img',
             dataSource: this._target,
             debug: undef,
-            dummy: undef, /* 1.2.5 */
+            dummy: undef, // 1.2.5
             easing: 'galleria',
             extend: function(options) {},
             fullscreenCrop: undef, // 1.2.5
             fullscreenDoubleTap: true, // 1.2.4 toggles fullscreen on double-tap for touch devices
-            fullscreenTransition: undef, // 1.2.5
+            fullscreenTransition: undef, // 1.2.6
             height: 'auto',
             idleMode: true, // 1.2.4 toggles idleMode
             idleTime: 3000,
@@ -2071,7 +2110,7 @@ Galleria.prototype = {
             thumbMargin: 0,
             thumbQuality: 'auto',
             thumbnails: true,
-            touchTransition: undef, // 1.2.5
+            touchTransition: undef, // 1.2.6
             transition: 'fade',
             transitionInitial: undef, // legacy, deprecate in 1.3. Use initialTransition instead.
             transitionSpeed: 400,
@@ -2115,7 +2154,10 @@ Galleria.prototype = {
     // for manipulation of data, use the .load method
 
     _init: function() {
-        var self = this;
+
+        var self = this,
+            options = this._options;
+
         if ( this._initialized ) {
             Galleria.raise( 'Init failed: Gallery instance already initialized.' );
             return this;
@@ -2129,7 +2171,7 @@ Galleria.prototype = {
         }
 
         // merge the theme & caller options
-        $.extend( true, this._options, Galleria.theme.defaults, this._original.options );
+        $.extend( true, options, Galleria.theme.defaults, this._original.options );
 
         // check for canvas support
         (function( can ) {
@@ -2150,6 +2192,11 @@ Galleria.prototype = {
 
         // bind the gallery to run when data is ready
         this.bind( Galleria.DATA, function() {
+
+            // Warn for quirks mode
+            if ( Galleria.QUIRK ) {
+                Galleria.raise('Your page is in Quirks mode, Galleria may not render correctly. Please validate your HTML.');
+            }
 
             // save the new data
             this._original.data = this._data;
@@ -2175,8 +2222,8 @@ Galleria.prototype = {
 
                         // first check if options is set
 
-                        if ( self._options[ m ] && typeof self._options[ m ] === 'number' ) {
-                            num[ m ] = self._options[ m ];
+                        if ( options[ m ] && typeof options[ m ] === 'number' ) {
+                            num[ m ] = options[ m ];
                         } else {
 
                             // else extract the measures from different sources and grab the highest value
@@ -2192,6 +2239,7 @@ Galleria.prototype = {
                         $container[ m ]( num[ m ] );
 
                     });
+
                     return testHeight() && num.width && num.height > 10;
 
                 },
@@ -2203,7 +2251,6 @@ Galleria.prototype = {
                             self._run();
                         }, 1);
                     } else {
-
                         self._run();
                     }
                 },
@@ -2217,7 +2264,7 @@ Galleria.prototype = {
                         Galleria.raise('Could not extract a stage height from the CSS. Traced height: ' + testHeight() + 'px.', true);
                     }
                 },
-                timeout: 2000
+                timeout: 10000
             });
         });
 
@@ -2241,7 +2288,7 @@ Galleria.prototype = {
 
         Utils.hide( this.$( 'counter' ).append(
             this.get( 'current' ),
-            ' / ',
+            doc.createTextNode(' / '),
             this.get( 'total' )
         ) );
 
@@ -2295,12 +2342,12 @@ Galleria.prototype = {
         this.$( 'image-nav-right, image-nav-left' ).bind( 'click', function(e) {
 
             // tune the clicknext option
-            if ( self._options.clicknext ) {
+            if ( options.clicknext ) {
                 e.stopPropagation();
             }
 
             // pause if options is set
-            if ( self._options.pauseOnInteraction ) {
+            if ( options.pauseOnInteraction ) {
                 self.pause();
             }
 
@@ -2312,7 +2359,7 @@ Galleria.prototype = {
 
         // hide controls if chosen to
         $.each( ['info','counter','image-nav'], function( i, el ) {
-            if ( self._options[ 'show' + el.substr(0,1).toUpperCase() + el.substr(1).replace(/-/,'') ] === false ) {
+            if ( options[ 'show' + el.substr(0,1).toUpperCase() + el.substr(1).replace(/-/,'') ] === false ) {
                 Utils.moveOut( self.get( el.toLowerCase() ) );
             }
         });
@@ -2322,7 +2369,7 @@ Galleria.prototype = {
 
         // now it's usually safe to remove the content
         // IE will never stop loading if we remove it, so let's keep it hidden for IE (it's usually fast enough anyway)
-        if ( !this._options.keep_source && !IE ) {
+        if ( !options.keepSource && !IE ) {
             this._target.innerHTML = '';
         }
 
@@ -2335,9 +2382,9 @@ Galleria.prototype = {
         this.appendChild( 'target', 'container' );
 
         // parse the carousel on each thumb load
-        if ( this._options.carousel ) {
+        if ( options.carousel ) {
             var count = 0,
-                show = this._options.show;
+                show = options.show;
             this.bind( Galleria.THUMBNAIL, function() {
                 this.updateCarousel();
                 if ( ++count == this.getDataLength() && typeof show == 'number' && show > 0 ) {
@@ -2347,7 +2394,7 @@ Galleria.prototype = {
         }
 
         // bind swipe gesture
-        if ( this._options.swipe ) {
+        if ( options.swipe ) {
 
             (function( images ) {
 
@@ -2421,7 +2468,7 @@ Galleria.prototype = {
 
             // double-tap/click fullscreen toggle
 
-            if ( this._options.fullscreenDoubleTap ) {
+            if ( options.fullscreenDoubleTap ) {
 
                 this.$( 'stage' ).bind( 'touchstart', (function() {
                     var last, cx, cy, lx, ly, now,
@@ -2717,20 +2764,6 @@ Galleria.prototype = {
                 }
 
                 self._firstrun = true;
-
-                // bind clicknext
-                if ( self._options.clicknext && !Galleria.TOUCH ) {
-                    $.each( self._data, function( i, data ) {
-                        delete data.link;
-                    });
-                    self.$( 'stage' ).css({ cursor : 'pointer' }).bind( 'click', function(e) {
-                        // pause if options is set
-                        if ( self._options.pauseOnInteraction ) {
-                            self.pause();
-                        }
-                        self.next();
-                    });
-                }
 
                 // initialize the History plugin
                 if ( Galleria.History ) {
@@ -3470,6 +3503,13 @@ this.prependChild( 'info', 'myElement' );
 
         image = image || this._controls.getActive();
 
+        // janpub (JH) fix:
+        // image might be unselected yet
+        // e.g. when external logics rescales the gallery on window resize events
+        if( !image ) {
+            return;
+        }
+
         var self = this,
 
             complete,
@@ -3565,8 +3605,8 @@ this.prependChild( 'info', 'myElement' );
             }
         };
 
-        if ( Galleria.WEBKIT && !width && !height ) {
-            Utils.addTimer( 'scale', scale, 10 );// webkit is too fast
+        if ( Galleria.WEBKIT && !Galleria.TOUCH && !width && !height ) {
+            Utils.addTimer( false, scale, 10 );// webkit is too fast
         } else {
             scale.call( self );
         }
@@ -3646,7 +3686,10 @@ this.prependChild( 'info', 'myElement' );
             active = this._controls.getActive(),
             next = this._controls.getNext(),
             cached = next.isCached( src ),
-            thumb = this._thumbnails[ queue.index ];
+            thumb = this._thumbnails[ queue.index ],
+            mousetrigger = function() {
+                $( next.image ).trigger( 'mouseup' );
+            };
 
         // to be fired when loading & transition is complete:
         var complete = (function( data, next, active, queue, thumb ) {
@@ -3683,11 +3726,20 @@ this.prependChild( 'info', 'myElement' );
 
                 // make the image link or add lightbox
                 // link takes precedence over lightbox if both are detected
-                if ( data.link || self._options.lightbox ) {
+                if ( data.link || self._options.lightbox || self._options.clicknext ) {
 
                     $( next.image ).css({
                         cursor: 'pointer'
                     }).bind( 'mouseup', function() {
+
+                        // clicknext
+                        if ( self._options.clicknext && !Galleria.TOUCH ) {
+                            if ( self._options.pauseOnInteraction ) {
+                                self.pause();
+                            }
+                            self.next();
+                            return;
+                        }
 
                         // popup link
                         if ( data.link ) {
@@ -3770,7 +3822,7 @@ this.prependChild( 'info', 'myElement' );
         next.load( src, function( next ) {
 
             // add layer HTML
-            $( self._layers[ 1-self._controls.active ] ).html( data.layer || '' ).hide();
+            var layer = $( self._layers[ 1-self._controls.active ] ).html( data.layer || '' ).hide();
 
             self._scaleImage( next, {
 
@@ -3795,7 +3847,11 @@ this.prependChild( 'info', 'myElement' );
 
                     // show the layer now
                     if ( data.layer ) {
-                        $( self._layers[ 1-self._controls.active ] ).show();
+                        layer.show();
+                        // inherit click events set on image
+                        if ( data.link || self._options.lightbox || self._options.clicknext ) {
+                            layer.css( 'cursor', 'pointer' ).unbind( 'mouseup' ).mouseup( mousetrigger );
+                        }
                     }
 
                     // trigger the LOADFINISH event
@@ -4701,6 +4757,8 @@ Galleria.Picture.prototype = {
 
                     var complete = function() {
 
+                        $( this ).unbind( 'load' );
+
                         // save the original size
                         self.original = {
                             height: this.height,
@@ -4749,10 +4807,9 @@ Galleria.Picture.prototype = {
 
         if ( this.cache[ src ] ) {
 
-            // no need to load if the image is cached, just call onload and set source
-            this.image.src = src;
+            // quick load on cache
+            $( this.image ).load( onload ).attr( 'src', src );
 
-            onload.call( this.image );
             return this.container;
         }
 

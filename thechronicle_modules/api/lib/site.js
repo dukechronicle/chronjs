@@ -334,7 +334,7 @@ site.init = function (app, callback) {
                 function (callback) { //4
                     async.map(columnistsData,
                             function(columnist, _callback) {
-                                api.authors.getLatest(columnist.name, "Opinion", 5, function(err, res) {
+                                api.authors.getLatest(columnist.user || columnist.name, "Opinion", 5, function(err, res) {
                                     columnist.stories = res;
                                     _callback(err, columnist);
                                 })

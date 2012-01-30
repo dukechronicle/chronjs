@@ -926,13 +926,31 @@ site.renderSmtpTest = function (req, http_res, email, num) {
 
             api.docsByDate(null, null, function (err, docs) {
                 smtp.sendNewsletter(docs, function (err2, res2) {
-                    http_res.send(res2);
-                    log.debug("sent email");
+		    generateSitemaps(function (err) {
+			http_res.send(res2);
+			log.debug("sent email");
+		    });
                 });
             });
         });
     }
 };
+
+function generateSitemaps(callback) {
+    async.parallel([
+	function (cb) {
+	    sitemap.latestSitemap('public/sitemap.xml', function (err) {
+		if (err) log.warning("Couldn't build full sitemap: " + err);
+		cb(err);
+	    });
+	},
+	function (cb) {
+	    sitemap.latestNewsSitemap('public/news_sitemap.xml', function (err) {
+		if (err) log.warning("Couldn't build news sitemap: " + err);
+		cb(err);
+	    });
+	}], callback);
+}
 
 function _parseAuthor(doc) {
     doc.authorsArray = _.clone(doc.authors);

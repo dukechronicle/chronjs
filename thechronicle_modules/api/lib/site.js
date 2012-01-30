@@ -54,7 +54,9 @@ site.init = function (app, callback) {
             log.crit("api init failed!");
             return callback(err2);
         }
-
+        sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
+            if (err) log.warning("Couldn't build news sitemap: " + err);
+        });
         // redirect mobile browsers to the mobile site
         app.get('/*', function(req, res, next) {
 

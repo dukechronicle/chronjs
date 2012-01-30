@@ -15,7 +15,7 @@ var fs = require('fs');
 var dateFormat = require('dateformat');
 
 var asereje = require('asereje');
-
+var sitemap = require('../../sitemap');
 var LAYOUT_GROUPS = null;
 
 var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));

@@ -1,4 +1,10 @@
 #article
+    section
+      .nav.clearfix
+        - each parent in parentPaths
+          h2.selected
+            a(href='../section' + parent.path + '/' + parent.name) #{parent.name}
+
     article
         .content.rounded
             // edit button
@@ -55,7 +61,7 @@
                 }(document, 'script', 'facebook-jssdk'));
 
              // advertising
-            .image-container.medium-rectangle!=partial('container/image', model.adFullRectangle)
+            .image-container.medium-rectangle!=partial('ad/medium-rect', {title: "Advertisement"})
             - if (model.popular && model.popular.length > 0)
                 .most-popular!=partial('container/most-popular', {title: "Popular", stories: model.popular})
 

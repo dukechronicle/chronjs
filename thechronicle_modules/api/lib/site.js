@@ -305,14 +305,16 @@ site.init = function (app, callback) {
             ],
             function (err, results) {
                 var model = results[0];
-                model.Featured.forEach(function(article) {
-                    article.author = article.authors[0];
-                    var columnistObj = null;
-                    if (columnistObj = columnistsHeadshots[article.author]) {
-                        if (columnistObj.headshot) article.thumb = columnistObj.headshot;
-                        if (columnistObj.tagline) article.tagline = columnistObj.tagline;
-                    }
-                });
+                if (model.Featured) {
+                    model.Featured.forEach(function(article) {
+                        article.author = article.authors[0];
+                        var columnistObj = null;
+                        if (columnistObj = columnistsHeadshots[article.author]) {
+                            if (columnistObj.headshot) article.thumb = columnistObj.headshot;
+                            if (columnistObj.tagline) article.tagline = columnistObj.tagline;
+                        }
+                    });
+                }
                 model.Blog = results[2];
                 model.EditorialBoard = results[3];
                 model.Columnists = {};

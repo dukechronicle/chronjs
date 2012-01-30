@@ -4,8 +4,9 @@ var http = require('http');
 var fs = require('fs');
 
 exports.showError = function (res, message) {
-    log.error('ERROR: ' + err.stack);
     res.render('error', {
+        status: 500,
+        layout: false,
         locals: {
             message: message
         }

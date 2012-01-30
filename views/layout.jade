@@ -9,8 +9,9 @@ html(lang="en")
         // border-radius support in ie
             script(src="/js/curvycorners.js")
 
-        - each file in css
-          link(rel= 'stylesheet', href= '/' + file + '.css')
+        if(typeof css != 'undefined')
+            - each file in css
+              link(rel= 'stylesheet', href= '/' + file + '.css')
 
         //if lt IE 9
             link(rel='stylesheet', href='/style-ie.css')

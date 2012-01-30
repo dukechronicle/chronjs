@@ -4,8 +4,7 @@ var config = require('../../config');
 var CustomConsole = require('./console').CustomConsole;
 
 
-var logger = null;
-if (!logger) {
+exports.init = function (callback) {
     logger = new (winston.Logger)();
 
     logger.setLevels(winston.config.syslog.levels);
@@ -35,6 +34,6 @@ if (!logger) {
     });
 
     logger.info('Logger is up');
-}
-
-logger.extend(exports);
+    logger.extend(exports);
+    callback();
+};

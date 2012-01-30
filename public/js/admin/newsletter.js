@@ -11,6 +11,7 @@ function _sendNewsletter(form,onSentText) {
         data: $(form).serialize()
     }).done(function(msg) {
         if(msg == "sent") {
+            console.log('done');
             $("#message").html(onSentText);
         }
         else {

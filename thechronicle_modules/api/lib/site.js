@@ -616,26 +616,29 @@ site.init = function (app, callback) {
                                 },
                                 "popular": popular
                             };
-                            http_res.render('article', {
-                                locals:{
-                                    doc:doc,
-                                    isAdmin:isAdmin,
-                                    model:model
-
-                                },
-                                filename:'views/article.jade',
-                                css:asereje.css(['container/style', 'article']),
-                            });
+			    api.taxonomy.getParents(doc.taxonomy, function (err, parents) {
+				http_res.render('article', {
+                                    locals:{
+					doc:doc,
+					isAdmin:isAdmin,
+					model:model,
+					parentPaths:parents
+                                    },
+                                    filename:'views/article.jade',
+                                    css:asereje.css(['container/style', 'article']),
+				});
+			    });
                         });
                     }
-
+		    
+		    // Statistics for most read
                     if (doc.taxonomy) {
                         var length = doc.taxonomy.length;
-                        var taxToSend = doc.taxonomy;
+                        var taxToSend = _.clone(doc.taxonomy);
                         var multi = redis.client.multi();
                         for (var i = length; i >= 0; i--) {
                             taxToSend.splice(i, 1);
-                            multi.zincrby(_articleViewsKey(doc.taxonomy), 1, latestUrl + "||" + doc.title);
+                            multi.zincrby(_articleViewsKey(taxToSend), 1, latestUrl + "||" + doc.title);
                         }
                         multi.exec(function (err, res) {
                             if (err) {

@@ -616,19 +616,22 @@ site.init = function (app, callback) {
                                 },
                                 "popular": popular
                             };
-                            http_res.render('article', {
-                                locals:{
-                                    doc:doc,
-                                    isAdmin:isAdmin,
-                                    model:model
-
-                                },
-                                filename:'views/article.jade',
-                                css:asereje.css(['container/style', 'article']),
-                            });
+			    api.taxonomy.getParents(doc.taxonomy, function (err, parents) {
+				http_res.render('article', {
+                                    locals:{
+					doc:doc,
+					isAdmin:isAdmin,
+					model:model,
+					parentPaths:parents
+                                    },
+                                    filename:'views/article.jade',
+                                    css:asereje.css(['container/style', 'article']),
+				});
+			    });
                         });
                     }
 
+		    /*
                     if (doc.taxonomy) {
                         var length = doc.taxonomy.length;
                         var taxToSend = doc.taxonomy;
@@ -644,6 +647,7 @@ site.init = function (app, callback) {
                             }
                         });
                     }
+		    */
                 }
             });
         });

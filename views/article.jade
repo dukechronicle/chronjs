@@ -1,4 +1,8 @@
 #article
+    - each parent in parentPaths
+      h2.selected
+          a(href=parent.path) #{parent.name}
+
     article
         .content.rounded
             // edit button

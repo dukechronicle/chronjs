@@ -74,21 +74,21 @@ site.init = function (app, callback) {
         app.get('/about-us', function (req, res) {
             res.render('pages/about-us', {
 		filename: 'pages/about-us',
-		css: asereje.css()
+		css: asereje.css(['pages/style'])
 	    });
         });
 
         app.get('/privacy-policy', function (req, res) {
             res.render('pages/privacy-policy', {
 		filename:'pages/privacy-policy',
-		css: asereje.css()
+		css: asereje.css(['pages/style'])
 	    });
         });
 
         app.get('/user-guidelines', function (req, res) {
             res.render('pages/user-guidelines', {
 		filename:'pages/user-guidelines',
-		css: asereje.css()
+		css: asereje.css(['pages/style'])
 	    });
         });
 
@@ -128,7 +128,7 @@ site.init = function (app, callback) {
         });
 
 
-        app.get('/', site.restrictToAdmin, function (req, res) {
+        app.get('/', function (req, res) {
             var start = Date.now();
             async.parallel([
                 function (callback) { //0
@@ -177,6 +177,7 @@ site.init = function (app, callback) {
 
                 model.popular = results[1];
                 model.twitter = results[2];
+
                 res.render('site/index', {
                     css:asereje.css(['slideshow/style', 'container/style', 'site/frontpage']),
                     filename:'views/site/index.jade',
@@ -319,6 +320,7 @@ site.init = function (app, callback) {
                                 delete item.link;
                                 return item;
                             });
+			    // TODO fit blog articles to box
                             Blog.splice(5, Blog.length - 5);
                             callback(null, Blog)
                         } else {
@@ -332,7 +334,7 @@ site.init = function (app, callback) {
                 function (callback) { //4
                     async.map(columnistsData,
                             function(columnist, _callback) {
-                                api.authors.getLatest(columnist.name, "Opinion", 5, function(err, res) {
+                                api.authors.getLatest(columnist.user || columnist.name, "Opinion", 5, function(err, res) {
                                     columnist.stories = res;
                                     _callback(err, columnist);
                                 })
@@ -563,6 +565,7 @@ site.init = function (app, callback) {
                                 }
                             }
                         },
+			css: asereje.css(),
                         filename:'views/page.jade'
                     });
                 }
@@ -573,7 +576,7 @@ site.init = function (app, callback) {
             var url = req.params.url;
             api.articleForUrl(url, function (err, doc) {
                 if (err) {
-                    return globalFunctions.showError(http_res, err);
+                    _404Route(req, http_res);
                 }
                 else {
                     // convert timestamp
@@ -614,26 +617,29 @@ site.init = function (app, callback) {
                                 },
                                 "popular": popular
                             };
-                            http_res.render('article', {
-                                locals:{
-                                    doc:doc,
-                                    isAdmin:isAdmin,
-                                    model:model
-
-                                },
-                                filename:'views/article.jade',
-                                css:asereje.css(['container/style', 'article']),
-                            });
+			    api.taxonomy.getParents(doc.taxonomy, function (err, parents) {
+				http_res.render('article', {
+                                    locals:{
+					doc:doc,
+					isAdmin:isAdmin,
+					model:model,
+					parentPaths:parents
+                                    },
+                                    filename:'views/article.jade',
+                                    css:asereje.css(['container/style', 'article']),
+				});
+			    });
                         });
                     }
-
+		    
+		    // Statistics for most read
                     if (doc.taxonomy) {
                         var length = doc.taxonomy.length;
-                        var taxToSend = doc.taxonomy;
+                        var taxToSend = _.clone(doc.taxonomy);
                         var multi = redis.client.multi();
                         for (var i = length; i >= 0; i--) {
                             taxToSend.splice(i, 1);
-                            multi.zincrby(_articleViewsKey(doc.taxonomy), 1, latestUrl + "||" + doc.title);
+                            multi.zincrby(_articleViewsKey(taxToSend), 1, latestUrl + "||" + doc.title);
                         }
                         multi.exec(function (err, res) {
                             if (err) {
@@ -662,7 +668,8 @@ site.init = function (app, callback) {
                             locals:{
                                 doc:doc
                             },
-                            filename:'views/page.jade'
+                            filename:'views/page.jade',
+			    css: asereje.css()
                         });
                     }
                 }
@@ -695,6 +702,7 @@ site.init = function (app, callback) {
                             locals:{
                                 doc:doc
                             },
+			    css: asereje.css(),
                             filename:'views/article-print.jade',
                             layout:"layout-print.jade"
                         });
@@ -779,7 +787,8 @@ site.init = function (app, callback) {
             var afterFunc = function() {
                 http_res.render('site/newsletter', {
                     email: email,
-                    action: action
+                    action: action,
+		    css: asereje.css()
                 });
             };
 
@@ -794,9 +803,14 @@ site.init = function (app, callback) {
             }
         });
 
-	// Webmaster tools stuff -- don't delete
+	    // Webmaster tools stuff -- don't delete
         app.get('/mu-7843c2b9-3b9490d6-8f535259-e645b756', function (req, res) {
             res.send('42');
+        });
+
+        //The 404 Route (ALWAYS Keep this as the last route)
+        app.get('*', function(req, res){
+            _404Route(req,res);
         });
 
         callback();
@@ -925,13 +939,32 @@ site.renderSmtpTest = function (req, http_res, email, num) {
 
             api.docsByDate(null, null, function (err, docs) {
                 smtp.sendNewsletter(docs, function (err2, res2) {
-                    http_res.send(res2);
-                    log.debug("sent email");
+		    http_res.send(res2);
+		    log.notice("Building sitemaps...");
+		    generateSitemaps(function (err) {
+			if (err) log.warning(err);
+		    });
                 });
             });
         });
     }
 };
+
+function generateSitemaps(callback) {
+    async.parallel([
+	function (cb) {
+	    sitemap.latestSitemap('public/sitemaps/sitemap', function (err) {
+		if (err) log.warning("Couldn't build full sitemap: " + err);
+		cb(err);
+	    });
+	},
+	function (cb) {
+	    sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
+		if (err) log.warning("Couldn't build news sitemap: " + err);
+		cb(err);
+	    });
+	}], callback);
+}
 
 function _parseAuthor(doc) {
     doc.authorsArray = _.clone(doc.authors);
@@ -948,6 +981,15 @@ function _parseAuthor(doc) {
         }
     }
     return doc;
+}
+
+function _404Route(req, res) {
+    res.render('pages/404', {
+        filename: 'pages/404',
+        css: asereje.css(['pages/style']),
+	    status: 404,
+        url: req.url
+    });
 }
 
 function _showSearchArticles(err,req,http_res,docs,facets) {

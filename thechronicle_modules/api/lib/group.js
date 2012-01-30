@@ -4,6 +4,7 @@ var db = require('../../db-abstract');
 var log = require('../../log');
 var redis = require('../../redisclient');
 var config = require('../../config');
+var s3 = require('./s3');
 
 var group = exports;
 var BENCHMARK = false;
@@ -108,6 +109,10 @@ function groupDocs(namespace, group, callback) {
                 }
 		else if (docType === "image") {
                     var imageType = key[4];
+                    
+                    if(doc.url) doc.url = s3.getCloudFrontUrl(doc.url);
+                    else if(doc._id.url) doc._id.url = s3.getCloudFrontUrl(doc._id.url);                   
+
                     currentArticle.images[imageType] = doc;
                 }
             });

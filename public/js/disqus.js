@@ -22,3 +22,16 @@ function loadDisqus()
 	    (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
 	}());
 }
+
+function appendCommentCount() {
+    var count = $("#dsq-num-posts").html();
+    var newText = $("#commentLink").html() + " ("+count+")";
+    $("#commentLink").html(newText);
+}
+
+function disqus_config() {
+    this.callbacks.afterRender = [function() {
+        appendCommentCount();
+    }];
+}
+

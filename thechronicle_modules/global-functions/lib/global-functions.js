@@ -5,6 +5,8 @@ var fs = require('fs');
 
 exports.showError = function (res, message) {
     res.render('error', {
+        status: 500,
+        layout: false,
         locals: {
             message: message
         }

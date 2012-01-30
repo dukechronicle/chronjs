@@ -4225,6 +4225,10 @@ this.prependChild( 'info', 'myElement' );
 
             var elem = self.$( 'info-' + type );
 
+            if (type === 'title') {
+                data[type] = "<a href='" + data.link + "'>" + data[type] + "</a>";
+            }
+
             if ( !!data[type] ) {
                 elem[ data[ type ].length ? 'show' : 'hide' ]().html( data[ type ] );
             } else {

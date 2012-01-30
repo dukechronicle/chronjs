@@ -1,8 +1,8 @@
 !!! 5
 html(lang="en")
     head
-        if (typeof(articleName)!='undefined')
-            title #{articleName} | The Chronicle
+        if (doc.title)
+            title #{doc.title} | The Chronicle
         else
             title The Chronicle | Duke University's Daily Independent Newspaper
         link(rel="image_src", href="http://dukechronicle.com/favicon.png")

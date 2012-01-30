@@ -618,17 +618,20 @@ site.init = function (app, callback) {
                                 "popular": popular
                             };
 			    api.taxonomy.getParents(doc.taxonomy, function (err, parents) {
-				http_res.render('article', {
-                                    locals:{
-					doc:doc,
-					isAdmin:isAdmin,
-					model:model,
-					parentPaths:parents
-                                    },
-                                    filename:'views/article.jade',
-                                    css:asereje.css(['container/style', 'article']),
-				});
-			    });
+                    if (doc.path === "/article/chronicle-gets-facelift") {
+                        doc.embed = '<iframe style="margin-top: 10px" width="580" height="355" src="http://www.youtube.com/embed/O1v4EA3AWaY?rel=0" frameborder="0" allowfullscreen></iframe>';
+                    }
+                    http_res.render('article', {
+                        locals:{
+                            doc:doc,
+                            isAdmin:isAdmin,
+                            model:model,
+                            parentPaths:parents
+                        },
+                        filename:'views/article.jade',
+                        css:asereje.css(['container/style', 'article'])
+                        });
+                    });
                         });
                     }
 		    

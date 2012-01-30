@@ -40,7 +40,7 @@ s3.init = function (callback) {
     BUCKET_NAME = config.get("S3_BUCKET");
     KEY = config.get("S3_KEY");
     SECRET = config.get("S3_SECRET");
-    CLOUDFRONT_DISTRIBUTION = "http://"+config.get("CLOUDFRONT_DISTRIBUTION");
+    CLOUDFRONT_DISTRIBUTION = config.get("CLOUDFRONT_DISTRIBUTION");
 
     callback(null);
 };

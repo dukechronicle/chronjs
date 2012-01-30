@@ -55,7 +55,7 @@
                 }(document, 'script', 'facebook-jssdk'));
 
              // advertising
-            .image-container.medium-rectangle!=partial('container/image', model.adFullRectangle)
+            .image-container.medium-rectangle!=partial('ad/medium-rect', {title: "Advertisement"})
             - if (model.popular && model.popular.length > 0)
                 .most-popular!=partial('container/most-popular', {title: "Popular", stories: model.popular})
 

@@ -178,8 +178,7 @@ image.deleteVersion = function (versionId, updateOriginal, topCallback) {
         },
         function (version, callback) {
             // only delete this 'version' from s3 if it is an imageVersion and not an image attached as an original        
-            if(isVersion) {
-                //TODO: when changing image urls to keys, this must be changed                
+            if(isVersion) {               
                 var url = urllib.parse(version.url);           
                 log.info('deleting version from s3 ' + url.pathname);
                 s3.delete(url.pathname, callback);
@@ -218,7 +217,6 @@ image.deleteOriginal = function (originalId, topCallback) {
             });
         },
         function (orig, callback) {
-            //TODO: when changing image urls to keys, this must be changed           
             var url = urllib.parse(orig.url);
             log.info('deleting original from s3');
             s3.delete(url.pathname, function(err) {
@@ -226,7 +224,6 @@ image.deleteOriginal = function (originalId, topCallback) {
             });
         },
         function (orig, callback) {
-            //TODO: when changing image urls to keys, this must be changed           
             var url = urllib.parse(orig.thumbUrl);
             log.info('deleting thumb from s3');
             s3.delete(url.pathname, callback);

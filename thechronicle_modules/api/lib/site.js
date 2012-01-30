@@ -74,21 +74,21 @@ site.init = function (app, callback) {
         app.get('/about-us', function (req, res) {
             res.render('pages/about-us', {
 		filename: 'pages/about-us',
-		css: asereje.css(['pages/style'])
+		css: asereje.css(['container/style', 'pages/style'])
 	    });
         });
 
         app.get('/privacy-policy', function (req, res) {
             res.render('pages/privacy-policy', {
 		filename:'pages/privacy-policy',
-		css: asereje.css(['pages/style'])
+		css: asereje.css(['container/style'])
 	    });
         });
 
         app.get('/user-guidelines', function (req, res) {
             res.render('pages/user-guidelines', {
 		filename:'pages/user-guidelines',
-		css: asereje.css(['pages/style'])
+		css: asereje.css(['container/style'])
 	    });
         });
 

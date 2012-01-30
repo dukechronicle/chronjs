@@ -2,6 +2,7 @@ section > .nav{position:relative;z-index:2;clear:both;}
 section > .nav h2,section > .nav h3{float:left;}
 section > .nav h2 a,section > .nav h3 a{letter-spacing:1px;text-shadow:0 1px 0 #fff;font-size:.7em;text-transform:uppercase;color:#333;display:block;padding-left:15px;padding-right:11px;padding-bottom:1px;margin-bottom:10px;margin-top:-16px;-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-ms-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear}
 section > .nav h2 a:hover,section > .nav h3 a:hover,section > .nav h2 a.selected,section > .nav h3 a.selected{color:#36c}
+#article .medium-rectangle .rounded-hover{padding:3px}
 #article a.edit{float:right}
 #article h1{font-size:1.7em;text-shadow:0 1px 1px #fff;line-height:1.3em}
 #article img.article{width:580px;-webkit-border-radius:4px;-moz-border-radius:4px;-ms-border-radius:4px;-o-border-radius:4px;border-radius:4px;margin-top:15px;-webkit-box-shadow:0 0 4px #999;-moz-box-shadow:0 0 4px #999;-ms-box-shadow:0 0 4px #999;-o-box-shadow:0 0 4px #999;box-shadow:0 0 4px #999}

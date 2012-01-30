@@ -12,6 +12,8 @@
                 a.edit(href=doc.url + "/edit") Edit
             h1 #{doc.title}
             // article image
+            if (doc.embed)
+                .embed!=doc.embed
             if (doc.images && doc.images.LargeRect && doc.images.LargeRect.url)
                 if (typeof isAdmin != 'undefined' && isAdmin && doc.images.Original)
                     a(href="/admin/image/"+doc.images.Original.name)

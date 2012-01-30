@@ -12,6 +12,22 @@ var _ = require('underscore');
 var SITEMAP_URL_LIMIT = 10000;
 
 
+sitemap.generateAllSitemaps = function (callback) {
+    async.parallel([
+	function (cb) {
+	    sitemap.latestFullSitemap('public/sitemaps/sitemap', function (err) {
+		if (err) log.warning("Couldn't build full sitemap: " + err);
+		cb(err);
+	    });
+	},
+	function (cb) {
+	    sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
+		if (err) log.warning("Couldn't build news sitemap: " + err);
+		cb(err);
+	    });
+	}], callback);
+};
+
 sitemap.latestFullSitemap = function (path, callback) {
     latestFullSitemapHelper(path, 0, null, [], function (err, files) {
 	child_process.exec('gzip ' + files.join(' '), function (err) {

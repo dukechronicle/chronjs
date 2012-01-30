@@ -13,9 +13,9 @@
             if (model.Popular)
                 .popular!=partial('container/story-list', {title: "Popular", stories: model.Popular})
             if (model.adFullRectangle)
-                .image-container.medium-rectangle.lighten!=partial('container/image', model.adFullRectangle)
+                .image-container.medium-rectangle.lighten!=partial('ad/medium-rect', {title: "Advertisement"})
             if (model.adFullBanner)
-                .image-container.full-banner.lighten!=partial('container/image', model.adFullBanner)
+                .image-container.full-banner.lighten!=partial('ad/full-banner', {title: "AD"})
             if (model.Columnists)
                 #columnists
                     #columnist-list

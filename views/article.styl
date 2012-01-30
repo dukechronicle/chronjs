@@ -1,6 +1,32 @@
 @import mixins
 
+section > .nav
+    position relative
+    z-index 2
+    clear both
+    h2, h3
+        float left
+        a
+            letter-spacing 1px
+            text-shadow 0px 1px 0px white
+            //border-bottom 1px solid transparent
+            font-size 0.7em
+            text-transform uppercase
+            color #333
+            display block
+            padding-left 15px
+            padding-right 11px
+            padding-bottom 1px
+            margin-bottom 10px
+            margin-top -16px
+            transition color .25s linear
+        a:hover, a.selected
+            color #36c
+
 #article
+    .medium-rectangle .rounded-hover
+        padding 3px
+
     a.edit
         float right
 

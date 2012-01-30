@@ -335,7 +335,20 @@ var configParams = [
                         "Editors Note",
                         "Prefix"
                     ]
-                }
+                },
+                "Newsletter": {
+		            "namespace": [
+			            "Layouts",
+			            "Newsletter"
+		            ],
+		            "groups": [
+			            "News",
+			            "Sports",
+			            "Opinion",
+			            "Recess",
+			            "Towerview"
+		            ]
+	            }
         }
     },
     {

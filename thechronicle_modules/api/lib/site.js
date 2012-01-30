@@ -193,7 +193,7 @@ site.init = function (app, callback) {
         app.get('/news', function (req, res) {
             api.group.docs(LAYOUT_GROUPS.News.namespace, null, function (err, model) {
                 _.defaults(model, newsModel);
-                redis.client.zrevrange(_articleViewsKey(['News']), 0, 4, function (err, popular) {
+                redis.client.zrevrange(_articleViewsKey(['News']), 0, 3, function (err, popular) {
                     model.popular = popular.map(function (str) {
                         var parts = str.split('||');
                         return {

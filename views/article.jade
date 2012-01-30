@@ -14,12 +14,13 @@
             // article image
             if (doc.embed)
                 .embed!=doc.embed
-            if (doc.images && doc.images.LargeRect && doc.images.LargeRect.url)
-                if (typeof isAdmin != 'undefined' && isAdmin && doc.images.Original)
-                    a(href="/admin/image/"+doc.images.Original.name)
+            else
+                if (doc.images && doc.images.LargeRect && doc.images.LargeRect.url)
+                    if (typeof isAdmin != 'undefined' && isAdmin && doc.images.Original)
+                        a(href="/admin/image/"+doc.images.Original.name)
+                            img.article(src=doc.images.LargeRect.url)
+                    else
                         img.article(src=doc.images.LargeRect.url)
-                else
-                    img.article(src=doc.images.LargeRect.url)
 
             // caption
             if (doc.images && doc.images.Original)

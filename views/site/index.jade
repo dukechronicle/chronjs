@@ -24,7 +24,7 @@
             if (model.Opinion)
                 .opinion!=partial('container/opinion', {title: "Opinion", stories: model.Opinion})
             if (model.adFullRectangle)
-                .image-container.medium-rectangle.lighten!=partial('container/image', model.adFullRectangle)
+                .image-container.medium-rectangle.lighten!=partial('ad/medium-rect', {title: "Advertisement"})
 
     #middle
         #news-sports.clearfix.align-group

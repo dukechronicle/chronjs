@@ -74,7 +74,7 @@ site.init = function (app, callback) {
         app.get('/about-us', function (req, res) {
             res.render('pages/about-us', {
 		filename: 'pages/about-us',
-		css: asereje.css(['container/style', 'pages/style'])
+		css: asereje.css(['container/style'])
 	    });
         });
 

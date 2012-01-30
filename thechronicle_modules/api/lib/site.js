@@ -956,7 +956,7 @@ site.renderSmtpTest = function (req, http_res, email, num) {
 function generateSitemaps(callback) {
     async.parallel([
 	function (cb) {
-	    sitemap.latestSitemap('public/sitemaps/sitemap', function (err) {
+	    sitemap.latestFullSitemap('public/sitemaps/sitemap', function (err) {
 		if (err) log.warning("Couldn't build full sitemap: " + err);
 		cb(err);
 	    });

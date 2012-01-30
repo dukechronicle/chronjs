@@ -4,6 +4,7 @@ var async = require('async');
 var builder = require('xmlbuilder');
 var dateFormat = require('dateformat');
 var db = require('../../db-abstract');
+var fs = require('fs');
 var log = require('../../log');
 var _ = require('underscore');
 
@@ -22,12 +23,15 @@ function latestSitemap(path, query, news, callback) {
         if (err) callback(err);
 	else {
 	    results = _.map(results, function (doc) { return doc.value; });
-	    generateSitemap(path, results, news, callback);
+	    generateSitemap(results, news, function (err, xml) {
+		if (err) callback(err);
+		else fs.writeFile(path, xml, callback);
+	    });
 	}
     });
-}
+};
 
-function generateSitemap(path, docs, news, callback) {
+function generateSitemap(docs, news, callback) {
     var doc = builder.create();
     var root = doc.begin("urlset", { version: "1.0", encoding: "UTF-8" }).
 	att("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9").
@@ -53,9 +57,9 @@ function generateSitemap(path, docs, news, callback) {
 		      cb();
 		  },
 		  function (err) {
-		      callback(err, doc);
+		      callback(err, doc.toString());
 		  });
-};
+}
 
 function getDate(doc) {
     var date = doc.updated || doc.created;

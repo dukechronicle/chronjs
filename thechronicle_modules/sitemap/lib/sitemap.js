@@ -80,8 +80,8 @@ function generateSitemapIndex(files, date, callback) {
 		      // TODO: extract domain name
 		      var prefix = "http://www.dukechronicle.com/";
 		      root.ele("sitemap").
-			  ele("loc", prefix + path).up().
-			  ele("lastmod", dateFormat(date, "yyyy-mm-dd"));
+			    ele("loc", prefix + path + ".gz").up().
+			    ele("lastmod", dateFormat(date, "yyyy-mm-dd"));
 		      cb();
 		  },
 		  function (err) {

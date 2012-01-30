@@ -36,7 +36,7 @@ var configParams = [
     },
     {
         name: 'CLOUDFRONT_DISTRIBUTION',
-        description: 'Amazon CloudFront Distribution',
+        description: 'Amazon CloudFront Domain Name',
         defaultValue: 'http://d164gy67scumxg.cloudfront.net'
     },
     {

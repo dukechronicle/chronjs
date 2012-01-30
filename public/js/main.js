@@ -1,8 +1,8 @@
 require.config({
     paths: {
-        'galleria': '/js/galleria/galleria-1.2.5.min',
+        'galleria': '/js/galleria/galleria-1.2.5',
         'underscore': '/js/underscore-min',
-        'typekit' : 'http://use.typekit.com/dwv2bjy',
+        'typekit' : 'http://use.typekit.com/dwv2bjy'
     }
 });
 

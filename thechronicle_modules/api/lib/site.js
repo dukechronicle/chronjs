@@ -943,7 +943,7 @@ site.renderSmtpTest = function (req, http_res, email, num) {
                 smtp.sendNewsletter(docs, function (err2, res2) {
 		    http_res.send(res2);
 		    log.notice("Building sitemaps...");
-		    generateSitemaps(function (err) {
+		    sitemap.generateAllSitemaps(function (err) {
 			if (err) log.warning(err);
 		    });
                 });
@@ -951,22 +951,6 @@ site.renderSmtpTest = function (req, http_res, email, num) {
         });
     }
 };
-
-function generateSitemaps(callback) {
-    async.parallel([
-	function (cb) {
-	    sitemap.latestFullSitemap('public/sitemaps/sitemap', function (err) {
-		if (err) log.warning("Couldn't build full sitemap: " + err);
-		cb(err);
-	    });
-	},
-	function (cb) {
-	    sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
-		if (err) log.warning("Couldn't build news sitemap: " + err);
-		cb(err);
-	    });
-	}], callback);
-}
 
 function _parseAuthor(doc) {
     doc.authorsArray = _.clone(doc.authors);

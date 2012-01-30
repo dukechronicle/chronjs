@@ -628,7 +628,8 @@ site.init = function (app, callback) {
                             model:model,
                             parentPaths:parents
                         },
-                        filename:'views/article.jade',
+                        filename:'views/article',
+                        layout: 'layout-article',
                         css:asereje.css(['container/style', 'article'])
                         });
                     });

@@ -177,6 +177,7 @@ site.init = function (app, callback) {
 
                 model.popular = results[1];
                 model.twitter = results[2];
+
                 res.render('site/index', {
                     css:asereje.css(['slideshow/style', 'container/style', 'site/frontpage']),
                     filename:'views/site/index.jade',

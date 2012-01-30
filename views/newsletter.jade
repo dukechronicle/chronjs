@@ -1,0 +1,10 @@
+- each section in taxonomy
+  h2 #{section}
+  - each article in model[section]
+    a(href="http://www.dukechronicle.com/article/"+article.urls[0])
+      h3 #{article.title}
+    .article
+      - if (article.images && article.images.ThumbRect)
+        a(href="http://www.dukechronicle.com/article/"+article.urls[0])
+          img(align="left", src=article.images.ThumbRect.url, width=124, height=89, alt="Chronicle image")
+      p #{article.teaser}

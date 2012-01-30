@@ -52,7 +52,7 @@ body a.list-story{color:#000;display:block;padding:4px 0 4px 2px}
 body a.list-story.first{padding-top:2px}
 body a.list-story.last{padding-bottom:2px}
 body a.hover:hover,body a.hover.selected{color:#36c;border-bottom-color:#4d90f0}
-body .vertical-container{visibility:hidden;font-size:1em;writing-mode:tb-rl;filter:flipv fliph;-webkit-transform:rotate(-90deg);-moz-transform:rotate(-90deg);-ms-transform:rotate(-90deg);-o-transform:rotate(-90deg);transform:rotate(-90deg);white-space:nowrap;display:block;float:left;-webkit-transform-origin:0 100%;-moz-transform-origin:0 100%;-ms-transform-origin:0 100%;-o-transform-origin:0 100%;transform-origin:0 100%;position:absolute;margin-top:-14px;margin-left:1px;}
+body .vertical-container{visibility:hidden;font-size:1em;-webkit-transform:rotate(-90deg);-moz-transform:rotate(-90deg);-ms-transform:rotate(-90deg);-o-transform:rotate(-90deg);transform:rotate(-90deg);white-space:nowrap;display:block;float:left;-webkit-transform-origin:0 100%;-moz-transform-origin:0 100%;-ms-transform-origin:0 100%;-o-transform-origin:0 100%;transform-origin:0 100%;position:absolute;margin-top:-14px;margin-left:1px;}
 body .vertical-container .vertical{font-size:.9em;color:#444;letter-spacing:1px;text-shadow:0 1px 1px #fff;text-transform:uppercase;margin-bottom:-2px}
 body .most-popular ol li{list-style:decimal outside}
 body .most-popular ol li h2{margin-left:-9px}

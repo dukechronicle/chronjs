@@ -1,3 +1,4 @@
+body section > #opinion .full-banner .rounded-hover{padding:3px}
 body section > #opinion .rounded-hover h2{-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-ms-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear}
 body section > #opinion .rounded-hover h2:hover{color:#36c}
 body section > #opinion p.teaser{color:#444}

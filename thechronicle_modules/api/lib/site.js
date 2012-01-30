@@ -74,21 +74,21 @@ site.init = function (app, callback) {
         app.get('/about-us', function (req, res) {
             res.render('pages/about-us', {
 		filename: 'pages/about-us',
-		css: asereje.css()
+		css: asereje.css(['pages/style'])
 	    });
         });
 
         app.get('/privacy-policy', function (req, res) {
             res.render('pages/privacy-policy', {
 		filename:'pages/privacy-policy',
-		css: asereje.css()
+		css: asereje.css(['pages/style'])
 	    });
         });
 
         app.get('/user-guidelines', function (req, res) {
             res.render('pages/user-guidelines', {
 		filename:'pages/user-guidelines',
-		css: asereje.css()
+		css: asereje.css(['pages/style'])
 	    });
         });
 
@@ -564,6 +564,7 @@ site.init = function (app, callback) {
                                 }
                             }
                         },
+			css: asereje.css(),
                         filename:'views/page.jade'
                     });
                 }
@@ -663,7 +664,8 @@ site.init = function (app, callback) {
                             locals:{
                                 doc:doc
                             },
-                            filename:'views/page.jade'
+                            filename:'views/page.jade',
+			    css: asereje.css()
                         });
                     }
                 }
@@ -696,6 +698,7 @@ site.init = function (app, callback) {
                             locals:{
                                 doc:doc
                             },
+			    css: asereje.css(),
                             filename:'views/article-print.jade',
                             layout:"layout-print.jade"
                         });
@@ -780,7 +783,8 @@ site.init = function (app, callback) {
             var afterFunc = function() {
                 http_res.render('site/newsletter', {
                     email: email,
-                    action: action
+                    action: action,
+		    css: asereje.css()
                 });
             };
 

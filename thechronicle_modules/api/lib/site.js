@@ -926,9 +926,10 @@ site.renderSmtpTest = function (req, http_res, email, num) {
 
             api.docsByDate(null, null, function (err, docs) {
                 smtp.sendNewsletter(docs, function (err2, res2) {
+		    http_res.send(res2);
+		    log.notice("Building sitemaps...");
 		    generateSitemaps(function (err) {
-			http_res.send(res2);
-			log.debug("sent email");
+			if (err) log.warning(err);
 		    });
                 });
             });

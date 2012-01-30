@@ -630,15 +630,15 @@ site.init = function (app, callback) {
 			    });
                         });
                     }
-
-		    /*
+		    
+		    // Statistics for most read
                     if (doc.taxonomy) {
                         var length = doc.taxonomy.length;
-                        var taxToSend = doc.taxonomy;
+                        var taxToSend = _.clone(doc.taxonomy);
                         var multi = redis.client.multi();
                         for (var i = length; i >= 0; i--) {
                             taxToSend.splice(i, 1);
-                            multi.zincrby(_articleViewsKey(doc.taxonomy), 1, latestUrl + "||" + doc.title);
+                            multi.zincrby(_articleViewsKey(taxToSend), 1, latestUrl + "||" + doc.title);
                         }
                         multi.exec(function (err, res) {
                             if (err) {
@@ -647,7 +647,6 @@ site.init = function (app, callback) {
                             }
                         });
                     }
-		    */
                 }
             });
         });

@@ -37,7 +37,7 @@ var configParams = [
     {
         name: 'CLOUDFRONT_DISTRIBUTION',
         description: 'Amazon CloudFront Distribution',
-        defaultValue: 'd164gy67scumxg.cloudfront.net'
+        defaultValue: 'http://d164gy67scumxg.cloudfront.net'
     },
     {
         name: 'REDIS_URL',

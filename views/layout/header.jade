@@ -8,9 +8,27 @@
     .content
         h1
             a(href='/') The Chronicle
+        p.tagline The Daily Independent at Duke University
+    .social-media
+        .inner
+            .icons
+                a(href='http://www.facebook.com/dukechronicle')
+                    img.first(src='/images/icons/facebook.png')
+                a(href='http://twitter.com/dukechronicle')
+                    img(src='/images/icons/twitter.png')
+                a(href='http://youtube.com/user/DukeChronicle')
+                    img(src='/images/icons/youtube.png')
+                a(href='http://foursquare.com/dukechronicle')
+                    img(src='/images/icons/foursquare.png')
+                a(href='http://fusion.google.com/add?source=atgs&feedurl=http%3A//dukechronicle.com/feed/all')
+                    img(src='/images/icons/rss.png')
+                a(href='/newsletter')
+                    img.last(src='/images/icons/email.png')
 
     .leaderboard
        !=partial('ad/full-banner-raw')
+
+
 
 
 #header-bottom
@@ -35,22 +53,8 @@
         a(href='/advertising') Advertising &nbsp;
         a(href='http://dukechronicle.campusave.com/') Classifieds &nbsp;
         a(href='http://chroniclehousing.com/') Housing
-    //
-        .social-media
-            .inner
-                .icons
-                    a(href='http://www.facebook.com/dukechronicle')
-                        img.first(src='/images/icons/facebook.png')
-                    a(href='http://twitter.com/dukechronicle')
-                        img(src='/images/icons/twitter.png')
-                    a(href='http://youtube.com/user/DukeChronicle')
-                        img(src='/images/icons/youtube.png')
-                    a(href='http://foursquare.com/dukechronicle')
-                        img(src='/images/icons/foursquare.png')
-                    a(href='http://fusion.google.com/add?source=atgs&feedurl=http%3A//dukechronicle.com/feed/all')
-                        img(src='/images/icons/rss.png')
-                    a(href='/newsletter')
-                        img.last(src='/images/icons/email.png')
+
+
 
 
     form#search-box(action='/search/', method='GET')

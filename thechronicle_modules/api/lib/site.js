@@ -1,21 +1,18 @@
 var site = exports;
 
 var api = require('./api');
+var config = require('../../config');
 var globalFunctions = require('../../global-functions');
 var log = require('../../log');
-var smtp = require('./smtp');
 var redis = require('../../redisclient');
-var config = require('../../config');
 var rss = require('./rss');
 
 var _ = require("underscore");
-var async = require('async');
-var nimble = require('nimble');
-var fs = require('fs');
-var dateFormat = require('dateformat');
-
 var asereje = require('asereje');
-var sitemap = require('../../sitemap');
+var async = require('async');
+var fs = require('fs');
+var nimble = require('nimble');
+
 var LAYOUT_GROUPS = null;
 
 var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
@@ -30,20 +27,9 @@ columnistsData.forEach(function(columnist) {
     };
 });
 
-// TODO remove and put in to api
-var db = require('../../db-abstract');
-
 var BENCHMARK = false;
 var MOBILE_BROWSER_USER_AGENTS = ["Android", "iPhone", "Windows Phone", "Blackberry", "Symbian", "Palm", "webOS"];
 
-function _convertTimestamp(timestamp) {
-    var date = new Date(timestamp*1000);
-    return dateFormat(date,"mmmm d, yyyy");
-}
-
-function _articleViewsKey(taxonomy) {
-    return "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE") + ":" + JSON.stringify(taxonomy);
-}
 
 site.init = function (app, callback) {
     var twitterFeeds = ["DukeChronicle", "ChronicleRecess", "TowerviewMag", "DukeBasketball", "ChronPhoto", "ChronicleSports"];
@@ -469,7 +455,7 @@ site.init = function (app, callback) {
 					     doc.url = '/article/' + doc.urls[doc.urls.length-1];
 					     // convert timestamp
 					     if (doc.created) {
-						 doc.date = _convertTimestamp(doc.created);
+						 doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
 					     }
 					     doc = _parseAuthor(doc);
 					     cb(doc);
@@ -527,7 +513,7 @@ site.init = function (app, callback) {
 
                     // convert timestamp
                     if (doc.created) {
-                        doc.date = _convertTimestamp(doc.created);
+                        doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
                     }
                     doc = _parseAuthor(doc);
                 });
@@ -582,7 +568,7 @@ site.init = function (app, callback) {
                 else {
                     // convert timestamp
                     if (doc.created) {
-                        doc.date = _convertTimestamp(doc.created);
+                        doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
                     }
 
                     doc = _parseAuthor(doc);
@@ -688,7 +674,7 @@ site.init = function (app, callback) {
                 else {
                     // convert timestamp
                     if (doc.created) {
-                        doc.date = _convertTimestamp(doc.created);
+                        doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
                     }
 
                     doc = _parseAuthor(doc);
@@ -900,6 +886,7 @@ site.assignPreInitFunctionality = function (app, runSite) {
     });
 };
 
+
 function _renderConfigPage(res,err) {
     if (err)
         err += "<br /><br />The live site was not updated to use the new configuration due to errors."
@@ -917,38 +904,9 @@ function _renderConfigPage(res,err) {
     });
 }
 
-site.renderSmtpTest = function (req, http_res, email, num) {
-    log.debug("rendersmtptest");
-    if (num == 1)
-        smtp.addSubscriber(email, function (err, docs) {
-            if (err)
-                globalFunctions.showError(http_res, err);
-            http_res.render('mobile', {layout:false, model:[""] });
-            log.debug("added");
-        });
-    else if (num == 2)
-        smtp.removeSubscriber(email, function (err, docs) {
-            if (err)
-                globalFunctions.showError(http_res, err);
-            http_res.render('mobile', {layout:false, model:[""] });
-            log.debug("removed");
-        });
-    else if (num == 3) {
-        api.group.docs(LAYOUT_GROUPS.Frontpage.namespace, null, function (err, result) {
-            _.defaults(result, homeModel);
-
-            api.docsByDate(null, null, function (err, docs) {
-                smtp.sendNewsletter(docs, function (err2, res2) {
-		    http_res.send(res2);
-		    log.notice("Building sitemaps...");
-		    sitemap.generateAllSitemaps(function (err) {
-			if (err) log.warning(err);
-		    });
-                });
-            });
-        });
-    }
-};
+function _articleViewsKey(taxonomy) {
+    return "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE") + ":" + JSON.stringify(taxonomy);
+}
 
 function _parseAuthor(doc) {
     doc.authorsArray = _.clone(doc.authors);
@@ -985,7 +943,7 @@ function _showSearchArticles(err,req,http_res,docs,facets) {
 
         // convert timestamp
         if (doc.created) {
-            doc.date = _convertTimestamp(doc.created);
+            doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
         }
 
         doc.authorsHtml = "";

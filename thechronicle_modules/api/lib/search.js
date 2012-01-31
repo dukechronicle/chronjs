@@ -11,7 +11,7 @@ var db = require("../../db-abstract");
 
 // whenever the way an article should be indexed by solr is changed, this number should be incremented
 // so the server knows it has to reindex all articles not using the newest indexing version. Keep the number numeric!
-var INDEX_VERSION = 0.5010;
+var INDEX_VERSION = 0.5011;
 var RESULTS_PER_PAGE = 25;
 
 var client = null;
@@ -109,8 +109,8 @@ search.indexArticle = function(id, title, body, taxonomy, authors, createdDate, 
 		id : createSolrIDFromDBID(id),
 		type : 'article',
 		author_sm : authors,
-		title_text : title.toLowerCase(),
-		body_text : body.toLowerCase(),
+		title_textv : title.toLowerCase(),
+		body_textv : body.toLowerCase(),
 		section_s : section,
 		database_s : db.getDatabaseName(),
 		database_host_s : db.getDatabaseHost(),
@@ -212,7 +212,7 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 
 	var fullQuery = 'author_sm:"' + wordsQuery.replace(/"/g, '') + '"';
 	for(var index = 0; index < words.length; index++) {
-		fullQuery = fullQuery + " OR title_text:" + words[index] + " OR body_text:" + words[index];
+		fullQuery = fullQuery + " OR title_textv:" + words[index] + " OR body_textv:" + words[index];
 	}
 
 	querySolr(fullQuery, {

@@ -12,7 +12,7 @@
 {"name":"Amanda Garfinkel", "year":"Trinity 2013", "tagline":"the devil doesn't wear prada", "day": "Tuesday", "headshot":"/images/columnist-headshots/GarfinkelAmanda.jpg"},
 {"name":"Roshni Jain", "year":"Trinity 2015", "tagline":"muddled and befuddled", "day": "Thursday", "headshot":"/images/columnist-headshots/JainRoshni.jpg"},
 {"name":"Ahmad Jitan", "year":"Trinity 2013", "tagline":"indecent family man", "day": "Thursday", "headshot":"/images/columnist-headshots/JitanAhmad.jpg"},
-{"name":"Sam Lachman", "year":"Trinity 2013", "tagline":"what's our age again?", "day": "Thursday", "twitter":"SamLachman", "headshot":"/images/columnist-headshots/LachmanSamantha.jpg"},
+{"name":"Sam Lachman", "user": "Samantha Lachman", "year":"Trinity 2013", "tagline":"what's our age again?", "day": "Thursday", "twitter":"SamLachman", "headshot":"/images/columnist-headshots/LachmanSamantha.jpg"},
 {"name":"Kristen Lee", "year":"Trinity 2013", "tagline":"between worlds", "day": "Monday", "headshot":"/images/columnist-headshots/LeeKristen.jpg"},
 {"name":"Mia Lehrer", "year":"Trinity 2012", "tagline":"but actually", "day": "Thursday", "headshot":"/images/columnist-headshots/LehrerMia.jpg"},
 {"name":"Harry Liberman", "year":"Trinity 2013", "tagline":"", "day": "Friday", "headshot":"/images/columnist-headshots/LibermanHarry.jpg"},

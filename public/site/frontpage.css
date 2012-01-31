@@ -1,6 +1,8 @@
 body section > #frontpage .sidebar{float:right;}
 body section > #frontpage .sidebar .container{width:306px;}
 body section > #frontpage .sidebar .container .rounded{width:300px}
+body section > #frontpage .sidebar .most-commented ul.dsq-widget-list{margin-top:-10px;}
+body section > #frontpage .sidebar .most-commented ul.dsq-widget-list a{color:#000;font-weight:normal}
 body section > #frontpage .full-banner{float:right}
 body section > #frontpage .medium-rectangle .rounded-hover{padding:3px}
 body section > #frontpage .print-edition{float:left;width:140px}

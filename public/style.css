@@ -26,13 +26,13 @@ body header,body section,body footer{width:972px}
 body header{position:relative;background-color:#069;color:#fff;padding-bottom:2px;-webkit-border-bottom-right-radius:4px;-moz-border-radius-bottomright:4px;border-bottom-right-radius:4px;-webkit-border-bottom-left-radius:4px;-moz-border-radius-bottomleft:4px;border-bottom-left-radius:4px;-webkit-box-shadow:rgba(0,0,0,0.40) 0 1px 3px;-moz-box-shadow:rgba(0,0,0,0.40) 0 1px 3px;-ms-box-shadow:rgba(0,0,0,0.40) 0 1px 3px;-o-box-shadow:rgba(0,0,0,0.40) 0 1px 3px;box-shadow:rgba(0,0,0,0.40) 0 1px 3px}
 body #header-overlay{position:absolute;z-index:0;left:50px;top:-28px}
 body #header-top{height:70px;}
-body #header-top p.tagline{position:absolute;font-style:italic;letter-spacing:1px;line-height:1.2em;left:340px;top:33px;text-shadow:0 1px 2px rgba(0,0,0,0.40);font-size:.75em;color:#fff;float:left;margin-right:10px}
+body #header-top p.tagline{position:absolute;line-height:1.2em;left:340px;top:34px;text-shadow:0 1px 2px rgba(0,0,0,0.40);font-size:.75em;color:#fff;float:left;margin-right:10px}
 body #header-top h1{position:relative;z-index:2;margin-top:11px;font-weight:bold;float:left;font-size:1.2em;line-height:2em;margin-bottom:-3px;}
 body #header-top h1 a{color:#eee;font-family:didot;font-size:2.5em;font-weight:normal;letter-spacing:-1px;padding-left:0;-webkit-transition:text-shadow .2s linear;-moz-transition:text-shadow .2s linear;-ms-transition:text-shadow .2s linear;-o-transition:text-shadow .2s linear;transition:text-shadow .2s linear;-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-ms-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear;text-shadow:0 1px 3px rgba(0,0,0,0.40)}
 body #header-top p.date{font-weight:bold;text-shadow:0 1px 2px rgba(0,0,0,0.40);letter-spacing:1px;font-size:.8em;margin-top:42px;color:#eee;margin-left:348px}
 body #header-top .social-media{position:absolute;top:6px;left:340px;}
 body #header-top .social-media .inner .icons{text-align:left;}
-body #header-top .social-media .inner .icons img{opacity:.7;padding-right:10px;width:15px;height:15px;-webkit-transition:opacity,.25s linear;-moz-transition:opacity,.25s linear;-ms-transition:opacity,.25s linear;-o-transition:opacity,.25s linear;transition:opacity,.25s linear}
+body #header-top .social-media .inner .icons img{opacity:.7;padding-right:9px;width:15px;height:15px;-webkit-transition:opacity,.25s linear;-moz-transition:opacity,.25s linear;-ms-transition:opacity,.25s linear;-o-transition:opacity,.25s linear;transition:opacity,.25s linear}
 body #header-top .social-media .inner .icons a:hover img{opacity:1}
 body #header-top .social-media .inner .icons img.last{padding-right:0}
 body #header-bottom nav{position:relative;z-index:2;clear:both;width:636px;padding-left:7px;padding-top:3px;}
@@ -58,7 +58,7 @@ header .content .announcements{display:none;color:#666;position:absolute;text-sh
 header .content .announcements a{text-align:left;margin-bottom:3px;font-size:.7em;text-transform:uppercase;letter-spacing:1px;padding-top:4px;color:#333}
 header .content .announcements a:hover{color:#36c}
 header .content .announcements p{font-size:.7em}
-header #header-bottom .advertising-links{margin-top:-3px;position:relative;top:-18px;left:-150px;z-index:6;}
+header #header-bottom .advertising-links{margin-top:-2px;position:relative;top:-18px;left:-150px;z-index:6;}
 header #header-bottom .advertising-links a{text-shadow:0 1px 2px rgba(0,0,0,0.40);font-size:.75em;color:#fff;float:left;margin-right:10px}
 footer{margin-top:30px;clear:both;color:#888;font-variant:small-caps;text-shadow:0 1px 1px #fff;font-size:.85em;padding-bottom:1.5em;}
 footer p.copyright{display:block;float:left;margin-right:20px;}

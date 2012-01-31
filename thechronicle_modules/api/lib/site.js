@@ -6,6 +6,7 @@ var globalFunctions = require('../../global-functions');
 var log = require('../../log');
 var redis = require('../../redisclient');
 var rss = require('./rss');
+var sitemap = require('../../sitemap');
 
 var _ = require("underscore");
 var asereje = require('asereje');
@@ -200,51 +201,30 @@ site.init = function (app, callback) {
 		});
             });
         });
-
         
-        /**
-            Site Search. Pretties up URL
-        */
-        app.get('/search', function (req, http_res) {
+        // Makes search url more readable
+        app.get('/search', function (req, res) {
             var query = "--";            
-            if (req.param('search') != null) query = req.param('search').replace(/ /g, '-'); // replace spaces with dashes for readibility
-
-            http_res.redirect('/search/' + query + '?sort=relevance&order=desc'); 
+            if (req.param('search') != null)
+                query = req.param('search').replace(/ /g, '-');
+            res.redirect('/search/' + query + '?sort=relevance&order=desc'); 
         });
 
-        /**
-            Calls Search Functionality
-        */
         app.get('/search/:query', function (req, http_res) {
             api.search.docsBySearchQuery(req.params.query.replace(/-/g, ' '), req.query.sort, req.query.order, req.query.facets, 1, function (err, docs, facets) {
                 _showSearchArticles(err, req, http_res, docs, facets);
             });
         });
 
-        app.get('/staff/:query', function (req, http_res) {
+        app.get('/staff/:query', function (req, res) {
             var name = req.params.query.replace(/-/g, ' ');
-
-            api.search.docsByAuthor(name, 'desc', '', 1, function (err, docs) {
-                if (err) return globalFunctions.showError(http_res, err);
-
-                docs.forEach(function (doc) {
-                    if (doc.urls != null) doc.url = '/article/' + doc.urls[doc.urls.length - 1];
-                    else doc.url = '/';
-
-                    // convert timestamp
-                    if (doc.created) {
-                        doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
-                    }
-                    doc = _parseAuthor(doc);
-                });
-
-			    http_res.render('site/people',
-                {
+            getAuthorContent(name, function (err, docs) {
+	        res.render('site/people', {
+                    css:asereje.css(['container/style', 'site/people']),
                     locals:{
                         docs: docs,
                         name: globalFunctions.capitalizeWords(name)
-                    },
-                    css:asereje.css(['container/style', 'site/people'])
+                    }
                 });
             });
         });
@@ -1020,20 +1000,20 @@ function getSectionContent(params, callback) {
         function (cb) {
             api.taxonomy.docs(section, 20, function (err, docs) {
                 if (err) cb(err)
-                else async.filter(_.map(docs, function(doc){return doc.value}),
-				 function (doc, cb) {
-				     if (doc.urls) {
-					 doc.url = '/article/' + doc.urls[doc.urls.length-1];
-					 // convert timestamp
-					 if (doc.created)
-					     doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
-					 doc = _parseAuthor(doc);
-					 cb(doc);
-				     } else cb(null);
-				 },
-                                 function (results) {
-                                     cb(null, results);
-                                 });
+                else async.filter(docs,
+				  function (doc, cb) {
+				      if (doc.urls) {
+					  doc.url = '/article/' + doc.urls[doc.urls.length-1];
+					  // convert timestamp
+					  if (doc.created)
+					      doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
+					  doc = _parseAuthor(doc);
+					  cb(doc);
+				      } else cb(null);
+				  },
+                                  function (results) {
+                                      cb(null, results);
+                                  });
             });
         },
         function (cb) {
@@ -1052,4 +1032,26 @@ function getSectionContent(params, callback) {
                 callback(null, section, docs, children, parents, popular);
             }
         });
+}
+
+function getAuthorContent(name, callback) {
+    api.search.docsByAuthor(name, 'desc', '', 1, function (err, docs) {
+        if (err)
+            callback(err);
+        else
+            async.filter(docs,
+			 function (doc, cb) {
+			     if (doc.urls) {
+				 doc.url = '/article/' + _.last(doc.urls);
+				 // convert timestamp
+				 if (doc.created)
+				     doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
+				 doc = _parseAuthor(doc);
+				 cb(doc);
+			     } else cb(null);
+			 },
+                         function (results) {
+                             callback(null, results);
+                         });
+    });
 }

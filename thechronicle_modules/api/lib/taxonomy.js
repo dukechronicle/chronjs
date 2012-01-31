@@ -10,7 +10,10 @@ var log = require('../../log');
 
 // get all document under given taxonomy path ex. ["News", "University"]
 taxonomy.docs = function (taxonomyPath, limit, callback) {
-    db.taxonomy.docs(taxonomyPath, limit, callback);
+    db.taxonomy.docs(taxonomyPath, limit, function (err, docs) {
+        if (err) callback(err);
+        else callback(null, _.map(docs, function(doc){return doc.value}));
+    });
 };
 
 taxonomy.getTaxonomyTree = function(callback) {

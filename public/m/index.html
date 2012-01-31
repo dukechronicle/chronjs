@@ -25,6 +25,8 @@
         </script> 
 
         <style>
+
+
             .ui-li-heading  {
                 white-space: normal;
                 font-weight: 600;
@@ -32,6 +34,7 @@
             }
             .ui-li-desc {
                 white-space: normal;
+                line-height: 1.2em;
             }
 
             .ui-li-divider {
@@ -42,7 +45,20 @@
             }
             
             #ArticleContent p {
-                line-height: 1.5em;
+                line-height: 1.4em;
+            }
+
+            #ArticleContent h2 {
+                font-size: 1.2em;
+                line-height: 1.3em;
+                font-weight: 600;
+                margin-top: 0px;
+                margin-bottom: 0px;
+            }
+
+            #ArticleContent .author {
+                margin-top: 0px;
+                font-size: 0.8em;
             }
 
         </style>
@@ -134,7 +150,7 @@
             
             for(author in article.authors)
             {
-                var authorString = '<p><i>By ' + article.authors[author] + '</i></p>';
+                var authorString = '<p class="author">By ' + article.authors[author] + '</p>';
                 $(containerId).append(authorString);
             }
             

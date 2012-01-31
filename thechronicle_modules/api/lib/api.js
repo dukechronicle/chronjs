@@ -171,21 +171,11 @@ api.docsById = function(id, callback) {
 
 api.docsByAuthor = function(author, callback) {
     var decodeAuthor = decodeURIComponent(author);
-
     var query = {descending: true, startkey:decodeAuthor, endkey: decodeAuthor};
-
-    db.view("articles/authors", query, function(err, results) {
-        if (err)
-        {
-            callback(err);
-        }
-
-        // return only the array of the result values
-        callback(null, results.map(function(result) {
-            return result;
-        }));
+    db.view("articles/authors", query, function(err, docs) {
+        if (err) callback(err);
+        else callback(null, _.map(docs, function(doc){return doc.value}));
     });
-
 };
 
 api.addDoc = function(fields, callback) {

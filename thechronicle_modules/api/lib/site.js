@@ -229,42 +229,30 @@ site.init = function (app, callback) {
             });
         });
 
-        app.get('/page/:url', function (req, res) {
+        app.get('/page/:url', function (req, res, next) {
             var url = req.params.url;
-
-            api.nodeForTitle(url, function (err, doc) {
-                if (err) {
-                    globalFunctions.showError(res, err);
-                }
-                else {
-                    doc.fullUrl = "http://dukechronicle.com/page/" + url;
-                    doc.path = "/page/" + url;
-                    res.render('page', {
-                        locals:{
-                            doc:doc,
-                            model:{
-                                "adFullRectangle":{
-                                    "title":"Advertisement",
-                                    "imageUrl":"/images/ads/monster.png",
-                                    "url":"http://google.com",
-                                    "width":"300px",
-                                    "height":"250px"
-                                }
-                            }
-                        },
-			css: asereje.css(),
-                        filename:'views/page.jade'
-                    });
-                }
-            })
+            getPageContent(url, function (err, doc, model) {
+                if (err)
+                    next();
+                else if ('/page/' + url != doc.path)
+                    res.redirect(doc.url);
+                else res.render('page', {
+		    css: asereje.css(),
+                    filename:'views/page.jade',
+                    locals: {
+                        doc:doc,
+                        model: model
+                    }
+                });
+            });
         });
 
-        app.get('/article/:url', function (req, res) {
+        app.get('/article/:url', function (req, res, next) {
             var url = req.params.url;
             var isAdmin = api.accounts.isAdmin(req);
             getArticleContent(url, function (err, doc, model, parents) {
                 if (err)
-                    _404Route(req, res);
+                    next();
                 else if ('/article/' + url != doc.url)
                     res.redirect(doc.url);
                 else res.render('article', {
@@ -281,62 +269,24 @@ site.init = function (app, callback) {
             });
         });
 
-
-        app.get('/page/:url', function (req, http_res) {
+        app.get('/article/:url/print', function (req, res, next) {
             var url = req.params.url;
-
-            api.docForUrl(url, function (err, doc) {
-                if (err) return globalFunctions.showError(http_res, err);
+            getArticleContent(url, function (err, doc, model, parents) {
+                if (err)
+                    next();
+                else if ('/article/' + url != doc.url)
+                    res.redirect(doc.url + '/print');
                 else {
-                    var latestUrl = doc.urls[doc.urls.length - 1];
-
-                    if (url !== latestUrl) {
-                        http_res.redirect('/page/' + latestUrl);
-                    }
-                    else {
-                        http_res.render('page', {
-                            locals:{
-                                doc:doc
-                            },
-                            filename:'views/page.jade',
-			    css: asereje.css()
-                        });
-                    }
-                }
-            });
-        });
-
-        app.get('/article/:url/print', function (req, http_res) {
-            var url = req.params.url;
-
-            api.articleForUrl(url, function (err, doc) {
-                if (err) {
-                    globalFunctions.showError(http_res, err);
-                }
-                else {
-                    // convert timestamp
-                    if (doc.created) {
-                        doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
-                    }
-
-                    doc = _parseAuthor(doc);
-
-                    var latestUrl = doc.urls[doc.urls.length - 1];
-
-                    if (url !== latestUrl) {
-                        http_res.redirect('/article/' + latestUrl + '/print');
-                    }
-                    else {
-                        doc.fullUrl = "http://dukechronicle.com/article/" + latestUrl;
-                        http_res.render('article-print', {
-                            locals:{
-                                doc:doc
-                            },
-			    css: asereje.css(),
-                            filename:'views/article-print.jade',
-                            layout:"layout-print.jade"
-                        });
-                    }
+                    doc.url += '/print';
+                    doc.fullUrl += '/print';
+                    res.render('article-print', {
+			css: asereje.css(),
+                        filename:'views/article-print.jade',
+                        layout:"layout-print.jade",
+                        locals: {
+                            doc:doc
+                        }
+                    });
                 }
             });
         });
@@ -422,25 +372,27 @@ site.init = function (app, callback) {
                 });
             };
 
-            if(action == "subscribe") {
+            if (action == "subscribe")
                 api.newsletter.addSubscriber(email, afterFunc);
-            }
-            else if(action == "unsubscribe") {
+            else if(action == "unsubscribe")
                 api.newsletter.removeSubscriber(email, afterFunc);
-            }
-            else {
+            else
                 afterFunc();
-            }
         });
 
-	    // Webmaster tools stuff -- don't delete
+	// Webmaster tools stuff -- don't delete
         app.get('/mu-7843c2b9-3b9490d6-8f535259-e645b756', function (req, res) {
             res.send('42');
         });
 
         //The 404 Route (ALWAYS Keep this as the last route)
-        app.get('*', function(req, res){
-            _404Route(req,res);
+        app.get('*', function(req, res) {
+            res.render('pages/404', {
+                filename: 'pages/404',
+                css: asereje.css(['pages/style']),
+	        status: 404,
+                url: req.url
+            });
         });
 
         callback();
@@ -472,14 +424,11 @@ site.restrictToAdmin = function (req, res, next) {
 
 // redirects to login page
 site.askForLogin = function (res, afterLoginPage, username, err) {
-    if (err == null) err = '';
-    if (username == null) username = '';
-
     res.render('login', {
         locals:{
             afterLogin:afterLoginPage,
-            username:username,
-            error:err
+            username:username || '',
+            error:err || ''
         },
         layout:'layout-admin.jade'
     });
@@ -548,15 +497,6 @@ function _renderConfigPage(res,err) {
 
 function _articleViewsKey(taxonomy) {
     return "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE") + ":" + JSON.stringify(taxonomy);
-}
-
-function _404Route(req, res) {
-    res.render('pages/404', {
-        filename: 'pages/404',
-        css: asereje.css(['pages/style']),
-	    status: 404,
-        url: req.url
-    });
 }
 
 function _showSearchArticles(err,req,http_res,docs,facets) {
@@ -1009,6 +949,24 @@ function getArticleContent(url, callback) {
                 }
             }
         });
+}
+
+function getPageContent(url, callback) {
+    api.nodeForTitle(url, function (err, doc) {
+        if (err) callback(err);
+        else {
+            doc.path = "/page/" + url;
+            doc.fullUrl = "http://dukechronicle.com/page/" + url;
+            var model = { adFullRectangle: {
+                "title":"Advertisement",
+                "imageUrl":"/images/ads/monster.png",
+                "url":"http://google.com",
+                "width":"300px",
+                "height":"250px"
+            }};
+            callback(null, doc, model);
+        }
+    });
 }
 
 function modifyArticlesForDisplay(docs, callback) {

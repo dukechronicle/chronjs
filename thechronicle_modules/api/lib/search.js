@@ -229,22 +229,31 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 	}, callback);
 };
 
+search.relatedArticles = function(id, count, callback) {
+	
+	var fullQuery = 'id:' + createSolrIDFromDBID(id);
+	
+	querySolr(fullQuery, {
+		mlt : true,
+		'mlt.count': count,
+		'mlt.fl': "body_textv,title_textv" 
+	}, callback);
+	
+}
+
+
 function querySolr(query, options, callback) {
 	if(query.length > 0) {
 		query = "database_host_s:" + db.getDatabaseHost() + " AND database_s:" + db.getDatabaseName() + " AND (" + query + ")";
 	}
-	
-	options['mlt'] = true;
-	options['mlt.fl'] = 'body_t';
 		
-	//console.log(options);
 	client.query(query, options, function(err, response) {
 		if(err) {
 			return callback(err);
 		}
 
 		var responseObj = JSON.parse(response);
-		//console.log(responseObj);
+
 		// put facet into an easily manipulitable form
 		var facets = {};
 		if(responseObj.facet_counts) {

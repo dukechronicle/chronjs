@@ -1,17 +1,19 @@
-var api = require('../../api');
-var db = require('../../db-abstract');
-var log = require('../../log');
 var async = require('async');
 var fs = require('fs');
-var s3 = require('../../api/lib/s3');
 var http = require('http');
-var k4export = require('./k4export');
-var solr = require('solr');
 var md = require('node-markdown').Markdown;
+var solr = require('solr');
 var sprintf = require('sprintf').sprintf;
+
+var api = require('../../api');
 var config = require("../../config");
-var site = require('../../api/lib/site');
+var db = require('../../db-abstract');
 var globalFunctions = require('../../global-functions');
+var k4export = require('./k4export');
+var log = require('../../log');
+var site = require('../../api/lib/site');
+var s3 = require('../../api/lib/s3');
+var sitemap = require('../../sitemap');
 
 
 var layoutAdmin = require('./layout');
@@ -91,6 +93,10 @@ exports.init = function (app, callback) {
                         else {
                             api.newsletter.sendNewsletter(campaignID, function(err) {
                                 res.send("sent");
+		                log.notice("Building sitemaps...");
+		                sitemap.generateAllSitemaps(function (err) {
+			            if (err) log.warning(err);
+		                });
                             });
                         }
                     });

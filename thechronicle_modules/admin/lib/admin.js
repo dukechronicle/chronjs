@@ -67,15 +67,12 @@ exports.init = function (app, callback) {
         app.namespace('/admin',
                 function () {
                     app.get('/', site.checkAdmin, function (req, res) {
-                        res.render('admin/index', {
-                            layout:"layout-admin.jade"
-                        });
+                        res.render('admin/index');
                     });
 
                     app.get('/newsletter', site.checkAdmin, function (req, res) {
                        api.newsletter.createNewsletter(function(campaignID) {
                             res.render('admin/newsletter', {
-                                layout: "layout-admin.jade",
                                 locals: {campaignID: campaignID}
                             });
                         });
@@ -152,8 +149,7 @@ exports.init = function (app, callback) {
                                         locals:{
                                             groups:[],
                                             taxonomy:taxonomy
-                                        },
-                                        layout:"layout-admin.jade"
+                                        }
                                     });
                                 });
                             });
@@ -164,8 +160,7 @@ exports.init = function (app, callback) {
                                     //locals: {groups: groups},
                                     locals:{
                                         groups:[]
-                                    },
-                                    layout:"layout-admin.jade"
+                                    }
                                 });
                             });
 
@@ -191,8 +186,7 @@ exports.init = function (app, callback) {
                                                         db:db,
                                                         host:host,
                                                         port:port
-                                                    },
-                                                    layout:"layout-admin.jade"
+                                                    }
                                                 });
                                             }
                                         });
@@ -206,8 +200,7 @@ exports.init = function (app, callback) {
                                         failed:null,
                                         succeeded:null,
                                         taxonomy:null
-                                    },
-                                    layout:"layout-admin.jade"
+                                    }
                                 });
                             });
 
@@ -222,8 +215,7 @@ exports.init = function (app, callback) {
                                                  failed:failed,
                                                  succeeded:success,
                                                  taxonomy:taxonomy
-					     },
-					     layout:"layout-admin.jade"
+					     }
                                          });
 				     });
                                  });

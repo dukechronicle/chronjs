@@ -1,10 +1,12 @@
-var disqus_developer = 1; // developer mode is on. REMOVE THIS IN PRODUCTION SET UP
+var disqus_developer = 0; // developer mode is on. REMOVE THIS IN PRODUCTION SET UP
 var disqus_shortname = 'dukechronicle';
 var disqus_identifier;
+var disqus_title;
 
-function loadDisqusForArticle(articleID)
+function loadDisqusForArticle(articleID, title)
 {
 	disqus_identifier = articleID;
+    disqus_title = title;
 	
 	(function() {
 	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

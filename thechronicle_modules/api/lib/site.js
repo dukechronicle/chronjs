@@ -259,86 +259,28 @@ site.init = function (app, callback) {
             })
         });
 
-        app.get('/article/:url', function (req, http_res) {
+        app.get('/article/:url', function (req, res) {
             var url = req.params.url;
-            api.articleForUrl(url, function (err, doc) {
-                if (err) {
-                    _404Route(req, http_res);
-                }
-                else {
-                    // convert timestamp
-                    if (doc.created) {
-                        doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
-                    }
-
-                    doc = _parseAuthor(doc);
-
-                    var latestUrl = doc.urls[doc.urls.length - 1];
-
-                    if (url !== latestUrl) {
-                        http_res.redirect('/article/' + latestUrl);
-                    }
-                    else {
-                        doc.fullUrl = "http://dukechronicle.com/article/" + latestUrl;
-                        doc.url = latestUrl;
-
-                        doc.path = "/article/" + latestUrl;
-
-                        var isAdmin = api.accounts.isAdmin(req);
-                        redis.client.zrevrange(_articleViewsKey([]), 0, 4, function (err, popular) {
-                                                if (err) return callback(err);
-                                                popular = popular.map(function (str) {
-                                                    var parts = str.split('||');
-                                                    return {
-                                                        url:'/article/' + parts[0],
-                                                        title:parts[1]
-                                                    };
-                                                });
-                            var model = {
-                                "adFullRectangle":{
-                                    "title":"Advertisement",
-                                    "imageUrl":"/images/ads/monster.png",
-                                    "url":"http://google.com",
-                                    "width":"300px",
-                                    "height":"250px"
-                                },
-                                "popular": popular
-                            };
-			    api.taxonomy.getParents(doc.taxonomy, function (err, parents) {
-                    http_res.render('article', {
-                        locals:{
-                            doc:doc,
-                            isAdmin:isAdmin,
-                            model:model,
-                            parentPaths:parents
-                        },
-                        filename:'views/article',
-                        layout: 'layout-article',
-                        css:asereje.css(['container/style', 'article'])
-                        });
-                    });
-                        });
-                    }
-		    
-		    // Statistics for most read
-                    if (doc.taxonomy) {
-                        var length = doc.taxonomy.length;
-                        var taxToSend = _.clone(doc.taxonomy);
-                        var multi = redis.client.multi();
-                        for (var i = length; i >= 0; i--) {
-                            taxToSend.splice(i, 1);
-                            multi.zincrby(_articleViewsKey(taxToSend), 1, latestUrl + "||" + doc.title);
-                        }
-                        multi.exec(function (err, res) {
-                            if (err) {
-                                log.warning("Failed to register article view: " + latestUrl);
-                                log.warning(err);
-                            }
-                        });
-                    }
-                }
+            var isAdmin = api.accounts.isAdmin(req);
+            getArticleContent(url, function (err, doc, model, parents) {
+                if (err)
+                    _404Route(req, res);
+                else if ('/article/' + url != doc.url)
+                    res.redirect(doc.url);
+                else res.render('article', {
+                    locals: {
+                        doc:doc,
+                        isAdmin:isAdmin,
+                        model:model,
+                        parentPaths:parents
+                    },
+                    filename:'views/article',
+                    layout: 'layout-article',
+                    css:asereje.css(['container/style', 'article'])
+                });
             });
         });
+
 
         app.get('/page/:url', function (req, http_res) {
             var url = req.params.url;
@@ -606,23 +548,6 @@ function _renderConfigPage(res,err) {
 
 function _articleViewsKey(taxonomy) {
     return "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE") + ":" + JSON.stringify(taxonomy);
-}
-
-function _parseAuthor(doc) {
-    doc.authorsArray = _.clone(doc.authors);
-    doc.authors = "";
-    doc.authorsHtml = "";
-    if (doc.authorsArray && doc.authorsArray.length > 0) {
-        for(var i = 0; i < doc.authorsArray.length; i ++) {
-            doc.authorsHtml += "<a href='/staff/"+doc.authorsArray[i].replace(/ /g,'-')+"'>"+doc.authorsArray[i]+"</a>";
-            doc.authors += doc.authorsArray[i];
-            if(i < (doc.authorsArray.length-1)) {
-                doc.authors += ", ";
-                doc.authorsHtml += ", ";
-            }
-        }
-    }
-    return doc;
 }
 
 function _404Route(req, res) {
@@ -1028,18 +953,95 @@ function getAuthorContent(name, callback) {
     });
 }
 
+function getArticleContent(url, callback) {
+    async.parallel([
+        function (cb) {
+            api.articleForUrl(url, function (err, doc) {
+                if (err) cb(err);
+                else cb(null, modifyArticleForDisplay(doc));
+            });
+        },
+        function (cb) {
+            redis.client.zrevrange(_articleViewsKey([]), 0, 4,
+                                   function (err, popular) {
+                                       if (err) cb(err);
+                                       else cb(null, popular.map(function (str) {
+                                           var parts = str.split('||');
+                                           return {
+                                               url:'/article/' + parts[0],
+                                               title:parts[1]
+                                           };
+                                       }));
+                                   });
+        }], function (err, results) {
+            if (err) callback(err);
+            else {
+                var doc = results[0];
+                var model = { adFullRectangle: {
+                    "title":"Advertisement",
+                    "imageUrl":"/images/ads/monster.png",
+                    "url":"http://google.com",
+                    "width":"300px",
+                    "height":"250px"
+                }};
+                model.popular = results[1];
+
+	        api.taxonomy.getParents(doc.taxonomy, function (err, parents) {
+                    if (err) callback(err);
+                    else callback(null, doc, model, parents);
+                });
+		    
+	        // Statistics for most read
+                if (doc.taxonomy) {
+                    var length = doc.taxonomy.length;
+                    var taxToSend = _.clone(doc.taxonomy);
+                    var multi = redis.client.multi();
+                    for (var i = length; i >= 0; i--) {
+                        taxToSend.splice(i, 1);
+                        multi.zincrby(_articleViewsKey(taxToSend), 1, _.last(doc.urls) + "||" + doc.title);
+                    }
+                    multi.exec(function (err, res) {
+                        if (err) {
+                            log.warning("Failed to register article view: " + _.last(doc.urls));
+                            log.warning(err);
+                        }
+                    });
+                }
+            }
+        });
+}
+
 function modifyArticlesForDisplay(docs, callback) {
     async.filter(docs, function (doc, cb) {
-	if (doc.urls) {
-	    doc.url = '/article/' + _.last(doc.urls);
-	    // convert timestamp
-	    if (doc.created)
-                doc.date = globalFunctions.formatTimestamp(doc.created, 
-                                                           "mmmm d, yyyy");
-	    doc = _parseAuthor(doc);
-	    cb(doc);
-	} else cb(null);
+        modifyArticleForDisplay(doc);
+        if (doc.url === undefined) cb(null);
+        else cb(doc);
     }, function (results) {
         callback(null, results);
     });
+}
+
+function modifyArticleForDisplay(doc, callback) {
+    if (doc.urls) {
+        doc.url = '/article/' + _.last(doc.urls);
+        doc.fullUrl = 'http://dukechronicle.com' + doc.url;
+    }
+    if (doc.created)
+        doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
+
+    doc.authorsArray = _.clone(doc.authors);
+    doc.authors = "";
+    doc.authorsHtml = "";
+    if (doc.authorsArray && doc.authorsArray.length > 0) {
+        for(var i = 0; i < doc.authorsArray.length; i ++) {
+            doc.authorsHtml += "<a href='/staff/"+doc.authorsArray[i].replace(/ /g,'-')+"'>"+doc.authorsArray[i]+"</a>";
+            doc.authors += doc.authorsArray[i];
+            if(i < (doc.authorsArray.length-1)) {
+                doc.authors += ", ";
+                doc.authorsHtml += ", ";
+            }
+        }
+    }
+
+    return doc;
 }

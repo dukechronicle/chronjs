@@ -37,14 +37,16 @@ var twitterFeeds = ["DukeChronicle", "ChronicleRecess", "TowerviewMag", "DukeBas
 site.init = function (app, callback) {
     LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
 
-    api.init(function (err2) {
-        if (err2) {
+    api.init(function (err) {
+        if (err) {
             log.crit("api init failed!");
-            return callback(err2);
+            return callback(err);
         }
+
         sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
             if (err) log.warning("Couldn't build news sitemap: " + err);
         });
+
         // redirect mobile browsers to the mobile site
         app.get('/*', function(req, res, next) {
 
@@ -117,7 +119,6 @@ site.init = function (app, callback) {
 		css: asereje.css(['container/style'])
 	    });
         });
-
 
         app.get('/', function (req, res) {
             getFrontPageContent(function (err, model) {
@@ -210,9 +211,21 @@ site.init = function (app, callback) {
             res.redirect('/search/' + query + '?sort=relevance&order=desc'); 
         });
 
-        app.get('/search/:query', function (req, http_res) {
-            api.search.docsBySearchQuery(req.params.query.replace(/-/g, ' '), req.query.sort, req.query.order, req.query.facets, 1, function (err, docs, facets) {
-                _showSearchArticles(err, req, http_res, docs, facets);
+        app.get('/search/:query', function (req, res) {
+            var query = req.params.query.replace(/-/g, ' ');
+            getSearchContent(query, req.query, function (err, docs, facets) {
+                if (err) globalFunctions.showError(res, err);
+                else res.render('site/search', {
+                    css:asereje.css(['container/style', 'site/search']),
+                    locals: {
+                        docs: docs,
+                        currentFacets: req.query.facets || '',
+                        facets: facets,
+                        query: req.params.query,
+                        sort: req.query.sort,
+                        order: req.query.order
+                    }
+                });
             });
         });
 
@@ -291,61 +304,44 @@ site.init = function (app, callback) {
             });
         });
 
-        app.get('/article/:url/edit', site.checkAdmin, site.renderArticleEdit = function (req, http_res) {
-
+        app.get('/article/:url/edit', site.checkAdmin, site.renderArticleEdit = function (req, res) {
             var url = req.params.url;
-
             api.articleForUrl(url, function (err, doc) {
-                if (err) {
+                if (err)
                     globalFunctions.showError(http_res, err);
-                }
-                else {
-                    if (req.query.removeImage) {
-                        api.image.removeVersionFromDocument(doc._id, null, req.query.removeImage, function(err, doc) {
-                            if (err) globalFunctions.showError(http_res, err);
-                            else http_res.redirect('/article/' + url + '/edit');
-                        });
-                    }
-                    else {
-                        api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
-                            if (!doc.images) doc.images = {};
-                            if (doc.authors) {
-                                doc.authors = doc.authors.join(", ");
+                else if (req.query.removeImage)
+                    api.image.removeVersionFromDocument(doc._id, null, req.query.removeImage, function(err, doc) {
+                        if (err) globalFunctions.showError(res, err);
+                        else res.redirect('/article/' + url + '/edit');
+                    });
+                else
+                    api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
+                        if (doc.authors)
+                            doc.authors = doc.authors.join(", ");
+
+                        res.render('admin/edit', {
+                            locals:{
+                                doc:doc,
+                                groups:[],
+                                images:doc.images || {},
+                                url:url,
+                                afterAddImageUrl: '/article/' + url + '/edit',
+                                taxonomy:taxonomy
                             }
-
-                            http_res.render('admin/edit', {
-                                locals:{
-                                    doc:doc,
-                                    groups:[],
-                                    images:doc.images,
-                                    url:url,
-                                    afterAddImageUrl: '/article/' + url + '/edit',
-                                    taxonomy:taxonomy
-                                },
-                                layout:"admin/layout"
-                            });
-
                         });
-                    }
-                }
+                    });
             });
         });
 
-        app.get('/page/:url/edit', site.checkAdmin, site.renderPageEdit = function (req, http_res) {
+        app.get('/page/:url/edit', site.checkAdmin, site.renderPageEdit = function (req, res) {
             var url = req.params.url;
-
             api.docForUrl(url, function (err, doc) {
-                if (err) {
-                    globalFunctions.showError(http_res, err);
-                }
-                else {
-                    http_res.render('admin/editPage', {
-                        locals:{
-                            doc:doc
-                        },
-                        layout:"admin/layout"
-                    });
-                }
+                if (err) globalFunctions.showError(res, err);
+                else res.render('admin/editPage', {
+                    locals: {
+                        doc:doc
+                    }
+                });
             });
         });
 
@@ -497,51 +493,6 @@ function _renderConfigPage(res,err) {
 
 function _articleViewsKey(taxonomy) {
     return "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE") + ":" + JSON.stringify(taxonomy);
-}
-
-function _showSearchArticles(err,req,http_res,docs,facets) {
-    if (err) return globalFunctions.showError(http_res, err);
-                    
-    docs.forEach(function(doc) {
-        if(doc.urls != null) doc.url = '/article/' + doc.urls[doc.urls.length - 1];
-        else doc.url = '/';
-
-        // convert timestamp
-        if (doc.created) {
-            doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
-        }
-
-        doc.authorsHtml = "";
-        if (doc.authors && doc.authors.length > 0) {
-            for(var i = 0; i < doc.authors.length; i ++) {
-                doc.authorsHtml += "&nbsp;<a href= '/author/"+doc.authors[i].replace(/ /g,'-')+"?sort=date&order=desc'>"+doc.authors[i]+"</a>";
-                if(i < (doc.authors.length-1)) doc.authorsHtml += ",";
-            }
-        }
-    });
-
-    var currentFacets = req.query.facets;
-    if(!currentFacets) currentFacets = '';
-
-    var validSections = globalFunctions.convertObjectToArray(config.get("TAXONOMY_MAIN_SECTIONS"));
-    // filter out all sections other than main sections
-    Object.keys(facets.Section).forEach(function(key) {
-        if (!_.include(validSections, key)) {
-            delete facets.Section[key];
-         }
-    });
-                    
-    http_res.render(
-        'site/search',
-         {
-             locals:{
-                docs:docs, currentFacets:currentFacets, facets:facets, query:req.params.query, sort:req.query.sort, order:req.query.order
-             },
-             css:asereje.css(['container/style', 'site/search'])
-         }
-    );
-
-    return null;
 }
 
 function getFrontPageContent(callback) {
@@ -893,6 +844,25 @@ function getAuthorContent(name, callback) {
     });
 }
 
+function getSearchContent(wordsQuery, query, callback) {
+    api.search.docsBySearchQuery(wordsQuery, query.sort, query.order, query.facets, 1, function (err, docs, facets) {
+        if (err) callback(err);
+        else
+            modifyArticlesForDisplay(docs, function (err, docs) {
+                if (err) callback(err);
+                else {
+                    var validSections = globalFunctions.convertObjectToArray(config.get("TAXONOMY_MAIN_SECTIONS"));
+                    // filter out all sections other than main sections
+                    Object.keys(facets.Section).forEach(function(key) {
+                        if (!_.include(validSections, key))
+                            delete facets.Section[key];
+                    });
+                    callback(null, docs, facets);
+                }
+            });
+    });
+}
+
 function getArticleContent(url, callback) {
     async.parallel([
         function (cb) {
@@ -1000,6 +970,5 @@ function modifyArticleForDisplay(doc, callback) {
             }
         }
     }
-
     return doc;
 }

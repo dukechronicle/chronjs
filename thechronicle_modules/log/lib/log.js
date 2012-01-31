@@ -2,6 +2,7 @@ var util = require('util');
 var winston = require('winston');
 var config = require('../../config');
 var CustomConsole = require('./console').CustomConsole;
+var CustomLoggly = require('./loggly').CustomLoggly;
 
 
 exports.init = function (callback) {
@@ -15,7 +16,7 @@ exports.init = function (callback) {
     });
 
     if (process.env.NODE_ENV === 'production' && process.env.CHRONICLE_LOGGLY_SUBDOMAIN && process.env.CHRONICLE_LOGGLY_TOKEN)
-        logger.add(winston.transports.Loggly,
+        logger.add(CustomLoggly,
             {
                 subdomain: process.env.CHRONICLE_LOGGLY_SUBDOMAIN,
                 inputToken: process.env.CHRONICLE_LOGGLY_TOKEN,

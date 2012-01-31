@@ -185,54 +185,20 @@ site.init = function (app, callback) {
 
         app.get('/section/*', function (req, res) {
             var params = req.params.toString().split('/');
-            var section = params[params.length - 1];
-            redis.client.zrevrange(_articleViewsKey(params), 0, 4, function (err, popular) {
-                popular = popular.map(function (str) {
-                    var parts = str.split('||');
-                    return {
-                        url:'/article/' + parts[0],
-                        title:parts[1]
-                    };
-                });
-                api.taxonomy.docs(section, 20, function (err, docs) {
-                    if (err)
-			globalFunctions.showError(res, err);
-                    else
-			async.filter(_.map(docs,
-					   function(doc) {
-					       return doc.value;
-					   }),
-				     function (doc, cb) {
-					 if (doc.urls) {
-					     doc.url = '/article/' + doc.urls[doc.urls.length-1];
-					     // convert timestamp
-					     if (doc.created) {
-						 doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
-					     }
-					     doc = _parseAuthor(doc);
-					     cb(doc);
-					 } else cb(null);
-				     },
-				     function (docs) {
-					 api.taxonomy.getParentsAndChildren(params, function (err, parents, children) {
-					     if (err)
-						 globalFunctions.showError(res, err);
-					     else
-						 res.render('site/section', {
-						     locals:{
-							 docs:docs,
-							 subsections:children,
-							 parentPaths:parents,
-							 section:section,
-							 popular: popular
-						     },
-						     css:asereje.css(['container/style', 'site/section'])
-						 });
-					 });
-				     });
-                });
+            getSectionContent(params, function (err, section, docs, children, parents, popular) {
+		res.render('site/section', {
+		    css:asereje.css(['container/style', 'site/section']),
+		    locals: {
+                        docs:docs,
+			subsections:children,
+			parentPaths:parents,
+			section:section,
+			popular: popular
+		    }
+		});
             });
         });
+
         
         /**
             Site Search. Pretties up URL
@@ -1033,6 +999,55 @@ function getTowerviewPageContent(callback) {
                 };
                 var children = results[1];
                 callback(null, model, children);
+            }
+        });
+}
+
+function getSectionContent(params, callback) {
+    var section = _.last(params);
+    async.parallel([
+        function (cb) {
+            redis.client.zrevrange(_articleViewsKey(params), 0, 4, function (err, popular) {
+                if (err) cb(err)
+                else cb(null, popular.map(function (str) {
+                    var parts = str.split('||');
+                    return { url:'/article/' + parts[0], title:parts[1] };
+                }));
+            });
+        },
+        function (cb) {
+            api.taxonomy.docs(section, 20, function (err, docs) {
+                if (err) cb(err)
+                else async.filter(_.map(docs, function(doc){return doc.value}),
+				 function (doc, cb) {
+				     if (doc.urls) {
+					 doc.url = '/article/' + doc.urls[doc.urls.length-1];
+					 // convert timestamp
+					 if (doc.created)
+					     doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
+					 doc = _parseAuthor(doc);
+					 cb(doc);
+				     } else cb(null);
+				 },
+                                 function (results) {
+                                     cb(null, results);
+                                 });
+            });
+        },
+        function (cb) {
+	    api.taxonomy.getParents(params, cb);
+        },
+        function (cb) {
+            api.taxonomy.getChildren(params, cb);
+        }], function (err, results) {
+            if (err)
+                callback(err);
+            else {
+                var popular = results[0];
+                var docs = results[1];
+                var parents = results[2]
+                var children = results[3];
+                callback(null, section, docs, children, parents, popular);
             }
         });
 }

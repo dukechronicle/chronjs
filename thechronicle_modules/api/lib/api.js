@@ -1,5 +1,4 @@
-var api = {};
-var exports = module.exports = api;
+var api = exports;
 
 var nimble = require("nimble");
 var async = require("async");

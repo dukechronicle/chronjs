@@ -124,7 +124,16 @@ body
 
         //box-shadow 0 1px 3px rgba(0,0,0,.4);
         //border-bottom 2px solid white
-
+        p.tagline
+            position absolute
+            top 35px
+            line-height 1.15em
+            left 324px
+            text-shadow 0 1px 2px rgba(0,0,0,.4);
+            font-size 0.75em
+            color white
+            float left
+            margin-right 10px
         h1
             position relative
             z-index 2
@@ -157,6 +166,26 @@ body
             margin-left 348px
 
 
+        .social-media
+
+            position absolute
+            top header-height - 67
+            left 322px
+            .inner
+                .icons
+                    text-align left
+                    img
+                        opacity .7
+                        padding-right 7px
+                        width 17px
+                        height 17px
+                        transition opacity, .25s linear
+                    a:hover img
+                        opacity 1
+
+                    img.last
+                        padding-right 0px
+
     #header-bottom
         nav
             position relative
@@ -170,7 +199,7 @@ body
                 float left
 
                 a
-                    font-weight bold
+                    font-weight 600
                     text-shadow 0 1px 2px rgba(0,0,0,.4);
                     letter-spacing 1px
                     border-bottom 1px solid transparent
@@ -221,7 +250,7 @@ span.timestamp
 #search-box
     position absolute
     padding-right 7px
-    top header-height - 2
+    top header-height - 4
     right 0px
     input
         background #fff url('/images/search-button.png') no-repeat
@@ -252,7 +281,7 @@ span.timestamp
         opacity 1
 header
     .content
-        width 470px
+        width 480px
         float left
         position relative
         z-index 2
@@ -289,25 +318,7 @@ header
                 color white
                 float left
                 margin-right 10px
-        .social-media
 
-            position absolute
-            top header-height + 2px + 2px
-            right 158px
-            .inner
-                .icons
-                    text-align left
-                    img
-                        opacity .7
-                        padding-right 7px
-                        width 17px
-                        height 17px
-                        transition opacity, .25s linear
-                    a:hover img
-                        opacity 1
-
-                    img.last
-                        padding-right 0px
 
 
 footer

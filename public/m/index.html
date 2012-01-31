@@ -5,6 +5,12 @@
         <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1"> 
         <link rel="stylesheet" href="themes/chronicle.min.css" />
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0.1/jquery.mobile.structure-1.0.1.min.css" />
+
+        <script src="http://use.typekit.com/dwv2bjy.js"></script>
+        <script>
+            try{Typekit.load();}catch(e){}
+        </script>
+
         <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js"></script>
     
@@ -19,16 +25,42 @@
         </script> 
 
         <style>
+
+
             .ui-li-heading  {
                 white-space: normal;
+                font-weight: 600;
+                font-size: 14px;
             }
             .ui-li-desc {
                 white-space: normal;
+                line-height: 1.2em;
             }
 
             .ui-li-divider {
                 font-size: 1.2em;
             }
+            .ui-li .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li {
+                padding: .1em 15px .1em 15px;
+            }
+            
+            #ArticleContent p {
+                line-height: 1.4em;
+            }
+
+            #ArticleContent h2 {
+                font-size: 1.2em;
+                line-height: 1.3em;
+                font-weight: 600;
+                margin-top: 0px;
+                margin-bottom: 0px;
+            }
+
+            #ArticleContent .author {
+                margin-top: 0px;
+                font-size: 0.8em;
+            }
+
         </style>
 
         <script type="text/javascript"> 
@@ -118,7 +150,7 @@
             
             for(author in article.authors)
             {
-                var authorString = '<p><i>By: ' + article.authors[author] + '</i></p>';
+                var authorString = '<p class="author">By ' + article.authors[author] + '</p>';
                 $(containerId).append(authorString);
             }
             
@@ -240,7 +272,7 @@
                 </div><!-- /navbar --> 
             </div> 
         </div> 
-    
+
         <div id="Article" data-role="page" articleContainer="true" url="Article" data-add-back-btn="true" data-back-btn-text="Back"> 
             <div data-role="header"> 
                 <h1>The Chronicle</h1>

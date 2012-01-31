@@ -106,6 +106,7 @@ function _editDocument(docid, fields, callback) {
         if(geterr)
             return callback(geterr, null, null);
 
+        fields.created = res.created;
         if(fields.title && (_URLify(fields.title, MAX_URL_LENGTH) !== _URLify(res.title, MAX_URL_LENGTH))) {
             getAvailableUrl(_URLify(fields.title, MAX_URL_LENGTH), 0, function(err, url) {
                 if(err) {

@@ -121,7 +121,7 @@ site.init = function (app, callback) {
         });
 
         app.get('/', function (req, res) {
-            getFrontPageContent(function (err, model) {
+            site.getFrontPageContent(function (err, model) {
                 res.render('site/index', {
                     css:asereje.css(['slideshow/style', 'container/style', 'site/frontpage']),
                     filename:'views/site/index.jade',
@@ -133,7 +133,7 @@ site.init = function (app, callback) {
         });
 
         app.get('/news', function (req, res) {
-            getNewsPageContent(function (err, model, children) {
+            site.getNewsPageContent(function (err, model, children) {
                 res.render('site/news', {
                     css:asereje.css(['container/style', 'site/section', 'site/news']),
                     subsections:children,
@@ -144,7 +144,7 @@ site.init = function (app, callback) {
         });
 
         app.get('/sports', function (req, res) {
-            getSportsPageContent(function (err, model, children) {
+            site.getSportsPageContent(function (err, model, children) {
                 res.render('site/sports', {
                     css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
                     subsections:[children.men, children.women],
@@ -155,7 +155,7 @@ site.init = function (app, callback) {
         });
 
         app.get('/opinion', function (req, res) {
-            getOpinionPageContent(function (err, model, children) {
+            site.getOpinionPageContent(function (err, model, children) {
                 res.render('site/opinion', {
                     css:asereje.css(['container/style', 'site/section', 'site/opinion']),
                     subsections:children,
@@ -166,7 +166,7 @@ site.init = function (app, callback) {
         });
 
         app.get('/recess', function (req, res) {
-            getRecessPageContent(function (err, model, children) {
+            site.getRecessPageContent(function (err, model, children) {
                 res.render('site/recess', {
                     css:asereje.css(['container/style', 'site/section', 'site/recess']),
                     subsections:children,
@@ -177,7 +177,7 @@ site.init = function (app, callback) {
         });
 
         app.get('/towerview', function (req, res) {
-            getTowerviewPageContent(function (err, model, children) {
+            site.getTowerviewPageContent(function (err, model, children) {
                 res.render('site/towerview', {
                     css:asereje.css(['container/style', 'site/section', 'site/towerview']),
                     subsections:children,
@@ -189,7 +189,7 @@ site.init = function (app, callback) {
 
         app.get('/section/*', function (req, res) {
             var params = req.params.toString().split('/');
-            getSectionContent(params, function (err, section, docs, children, parents, popular) {
+            site.getSectionContent(params, function (err, section, docs, children, parents, popular) {
 		res.render('site/section', {
 		    css:asereje.css(['container/style', 'site/section']),
 		    locals: {
@@ -213,7 +213,7 @@ site.init = function (app, callback) {
 
         app.get('/search/:query', function (req, res) {
             var query = req.params.query.replace(/-/g, ' ');
-            getSearchContent(query, req.query, function (err, docs, facets) {
+            site.getSearchContent(query, req.query, function (err, docs, facets) {
                 if (err) globalFunctions.showError(res, err);
                 else res.render('site/search', {
                     css:asereje.css(['container/style', 'site/search']),
@@ -231,7 +231,7 @@ site.init = function (app, callback) {
 
         app.get('/staff/:query', function (req, res) {
             var name = req.params.query.replace(/-/g, ' ');
-            getAuthorContent(name, function (err, docs) {
+            site.getAuthorContent(name, function (err, docs) {
 	        res.render('site/people', {
                     css:asereje.css(['container/style', 'site/people']),
                     locals:{
@@ -244,7 +244,7 @@ site.init = function (app, callback) {
 
         app.get('/page/:url', function (req, res, next) {
             var url = req.params.url;
-            getPageContent(url, function (err, doc, model) {
+            site.getPageContent(url, function (err, doc, model) {
                 if (err)
                     next();
                 else if ('/page/' + url != doc.path)
@@ -263,7 +263,7 @@ site.init = function (app, callback) {
         app.get('/article/:url', function (req, res, next) {
             var url = req.params.url;
             var isAdmin = api.accounts.isAdmin(req);
-            getArticleContent(url, function (err, doc, model, parents) {
+            site.getArticleContent(url, function (err, doc, model, parents) {
                 if (err)
                     next();
                 else if ('/article/' + url != doc.url)
@@ -284,7 +284,7 @@ site.init = function (app, callback) {
 
         app.get('/article/:url/print', function (req, res, next) {
             var url = req.params.url;
-            getArticleContent(url, function (err, doc, model, parents) {
+            site.getArticleContent(url, function (err, doc, model, parents) {
                 if (err)
                     next();
                 else if ('/article/' + url != doc.url)
@@ -304,7 +304,7 @@ site.init = function (app, callback) {
             });
         });
 
-        app.get('/article/:url/edit', site.checkAdmin, site.renderArticleEdit = function (req, res) {
+        app.get('/article/:url/edit', site.checkAdmin, function (req, res) {
             var url = req.params.url;
             api.articleForUrl(url, function (err, doc) {
                 if (err)
@@ -473,29 +473,7 @@ site.assignPreInitFunctionality = function (app, runSite) {
     });
 };
 
-
-function _renderConfigPage(res,err) {
-    if (err)
-        err += "<br /><br />The live site was not updated to use the new configuration due to errors."
-
-    res.render('config/config', {
-        locals:{
-            configParams:config.getParameters(),
-            profileName:config.getProfileNameKey(),
-            profileValue:config.getActiveProfileName(),
-            revisionName:config.getRevisionKey(),
-            revisionValue:config.getConfigRevision(),
-            error: err
-        },
-        layout:'admin/layout'
-    });
-}
-
-function _articleViewsKey(taxonomy) {
-    return "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE") + ":" + JSON.stringify(taxonomy);
-}
-
-function getFrontPageContent(callback) {
+site.getFrontPageContent = function (callback) {
     var start = Date.now();
     async.parallel([
         function (cb) { //0
@@ -552,7 +530,7 @@ function getFrontPageContent(callback) {
     });
 }
 
-function getNewsPageContent(callback) {
+site.getNewsPageContent = function (callback) {
     async.parallel([
         function (cb) {
             api.group.docs(LAYOUT_GROUPS.News.namespace, null, cb);
@@ -610,7 +588,7 @@ function getNewsPageContent(callback) {
     });
 }
 
-function getSportsPageContent(callback) {
+site.getSportsPageContent = function (callback) {
     async.parallel([
         function (cb) { //0
             api.group.docs(LAYOUT_GROUPS.Sports.namespace, null, cb);
@@ -656,7 +634,7 @@ function getSportsPageContent(callback) {
         });
 }
 
-function getOpinionPageContent(callback) {
+site.getOpinionPageContent = function (callback) {
     async.parallel([
         function (cb) { //0
             api.group.docs(LAYOUT_GROUPS.Opinion.namespace, null, cb);
@@ -735,7 +713,7 @@ function getOpinionPageContent(callback) {
         });
 }
 
-function getRecessPageContent(callback) {
+site.getRecessPageContent = function (callback) {
     async.parallel([
         function (cb) {
             api.group.docs(LAYOUT_GROUPS.Recess.namespace, null, cb);
@@ -776,7 +754,7 @@ function getRecessPageContent(callback) {
         });
 }
 
-function getTowerviewPageContent(callback) {
+site.getTowerviewPageContent = function (callback) {
     async.parallel([
         function (cb) {
             api.group.docs(LAYOUT_GROUPS.Towerview.namespace, null, cb);
@@ -801,7 +779,7 @@ function getTowerviewPageContent(callback) {
         });
 }
 
-function getSectionContent(params, callback) {
+site.getSectionContent = function (params, callback) {
     var section = _.last(params);
     async.parallel([
         function (cb) {
@@ -837,14 +815,14 @@ function getSectionContent(params, callback) {
         });
 }
 
-function getAuthorContent(name, callback) {
+site.getAuthorContent = function (name, callback) {
     api.search.docsByAuthor(name, 'desc', '', 1, function (err, docs) {
         if (err) callback(err);
         else modifyArticlesForDisplay(docs, callback);
     });
 }
 
-function getSearchContent(wordsQuery, query, callback) {
+site.getSearchContent = function (wordsQuery, query, callback) {
     api.search.docsBySearchQuery(wordsQuery, query.sort, query.order, query.facets, 1, function (err, docs, facets) {
         if (err) callback(err);
         else
@@ -863,7 +841,7 @@ function getSearchContent(wordsQuery, query, callback) {
     });
 }
 
-function getArticleContent(url, callback) {
+site.getArticleContent = function (url, callback) {
     async.parallel([
         function (cb) {
             api.articleForUrl(url, function (err, doc) {
@@ -921,7 +899,7 @@ function getArticleContent(url, callback) {
         });
 }
 
-function getPageContent(url, callback) {
+site.getPageContent = function (url, callback) {
     api.nodeForTitle(url, function (err, doc) {
         if (err) callback(err);
         else {
@@ -971,4 +949,25 @@ function modifyArticleForDisplay(doc, callback) {
         }
     }
     return doc;
+}
+
+function _renderConfigPage(res,err) {
+    if (err)
+        err += "<br /><br />The live site was not updated to use the new configuration due to errors."
+
+    res.render('config/config', {
+        locals:{
+            configParams:config.getParameters(),
+            profileName:config.getProfileNameKey(),
+            profileValue:config.getActiveProfileName(),
+            revisionName:config.getRevisionKey(),
+            revisionValue:config.getConfigRevision(),
+            error: err
+        },
+        layout:'admin/layout'
+    });
+}
+
+function _articleViewsKey(taxonomy) {
+    return "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE") + ":" + JSON.stringify(taxonomy);
 }

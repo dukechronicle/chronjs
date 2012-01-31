@@ -55,6 +55,12 @@ site.init = function (app, callback) {
             return callback(err2);
         }
 
+        if(process.env.NODE_ENV === 'production') {
+            sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
+                if (err) log.warning("Couldn't build news sitemap: " + err);
+            });
+        }
+
         // redirect mobile browsers to the mobile site
         app.get('/*', function(req, res, next) {
 
@@ -616,7 +622,8 @@ site.init = function (app, callback) {
                                     "width":"300px",
                                     "height":"250px"
                                 },
-                                "popular": popular
+                                "popular": popular,
+				"related": popular
                             };
 			    api.taxonomy.getParents(doc.taxonomy, function (err, parents) {
                     http_res.render('article', {
@@ -941,11 +948,7 @@ site.renderSmtpTest = function (req, http_res, email, num) {
 
             api.docsByDate(null, null, function (err, docs) {
                 smtp.sendNewsletter(docs, function (err2, res2) {
-		    http_res.send(res2);
-		    log.notice("Building sitemaps...");
-		    sitemap.generateAllSitemaps(function (err) {
-			if (err) log.warning(err);
-		    });
+		            http_res.send(res2);
                 });
             });
         });

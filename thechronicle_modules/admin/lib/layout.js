@@ -47,9 +47,8 @@ function renderPage(req,res,section_docs) {
     
     // get and show the current groupings
     api.group.docs(layoutConfig[group].namespace, null, function (err, group_docs) {
-        res.render("admin/layout",
+        res.render("admin/page-layout",
         {
-            layout:"layout-admin.jade",
             locals:{
                 page: group,
                 groups: layoutConfig[group].groups,

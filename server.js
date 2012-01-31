@@ -15,6 +15,7 @@ var globalFunctions = require('./thechronicle_modules/global-functions');
 var log = require('./thechronicle_modules/log');
 var mobileapi = require('./thechronicle_modules/mobileapi/lib/mobileapi');
 var redisClient = require('./thechronicle_modules/redisclient');
+var route = require('./thechronicle_modules/route');
 var site = require('./thechronicle_modules/api/lib/site');
 
 
@@ -92,7 +93,7 @@ log.init(function (err) {
     app.listen(port);
     log.notice(sprintf("Site configured and listening on port %d in %s mode",
                        app.address().port, app.settings.env));
-    site.assignPreInitFunctionality(app, runSite);
+    route.assignPreInitFunctionality(app, runSite);
     config.init(function(err) {
 	if(err) log.crit(err);
 	else if (!config.isSetUp())

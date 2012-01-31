@@ -1,4 +1,4 @@
-var disqus_developer = 1; // developer mode is on. REMOVE THIS IN PRODUCTION SET UP
+var disqus_developer = 0; // developer mode is on. REMOVE THIS IN PRODUCTION SET UP
 var disqus_shortname = 'dukechronicle';
 var disqus_identifier;
 var disqus_title;

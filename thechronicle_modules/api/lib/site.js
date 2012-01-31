@@ -30,9 +30,10 @@ columnistsData.forEach(function(columnist) {
 var BENCHMARK = false;
 var MOBILE_BROWSER_USER_AGENTS = ["Android", "iPhone", "Windows Phone", "Blackberry", "Symbian", "Palm", "webOS"];
 
+var twitterFeeds = ["DukeChronicle", "ChronicleRecess", "TowerviewMag", "DukeBasketball", "ChronPhoto", "ChronicleSports"];
+
 
 site.init = function (app, callback) {
-    var twitterFeeds = ["DukeChronicle", "ChronicleRecess", "TowerviewMag", "DukeBasketball", "ChronPhoto", "ChronicleSports"];
     LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
 
     api.init(function (err2) {
@@ -116,317 +117,68 @@ site.init = function (app, callback) {
 
 
         app.get('/', function (req, res) {
-            var start = Date.now();
-            async.parallel([
-                function (callback) { //0
-                    api.group.docs(LAYOUT_GROUPS.Frontpage.namespace, null, function (err, result) {
-                        if (err) return callback(err);
-                        if (BENCHMARK) log.info("API TIME %d", Date.now() - start);
-                        return callback(null, result);
-                    });
-                },
-                function (callback) { //1
-                    var popularArticles = 7;
-                    redis.client.zrevrange(_articleViewsKey([]), 0, popularArticles - 1, function (err, popular) {
-                        if (err) return callback(err);
-                        popular = popular.map(function (str) {
-                            var parts = str.split('||');
-                            return {
-                                url:'/article/' + parts[0],
-                                title:parts[1]
-                            };
-                        });
-                        if (BENCHMARK) log.info("REDIS TIME %d", Date.now() - start);
-                        callback(null, popular);
-                    });
-                },
-                function (callback) { //2
-                    var twitter = {};
-                    var selectedFeed = twitterFeeds[Math.floor(Math.random() * twitterFeeds.length)];
-                    twitter.user = selectedFeed;
-                    twitter.title = 'Twitter';
-                    twitter.imageUrl = "/images/twitter-dukechronicle.png";
-                    rss.getRSS('twitter-' + selectedFeed, function (err, tweets) {
-                        if (tweets && tweets.items && tweets.items.length > 0) {
-                            twitter.tweet = tweets.items[0].title;
-                        } else {
-                            twitter.tweet = 'No tweets available.';
-                        }
-                        if (BENCHMARK) log.info("RSS TIME %d", Date.now() - start);
-                        return callback(err, twitter);
-                    });
-                }
-            ],
-            function (err, results) {
-                if (BENCHMARK) log.info("TOTAL TIME %d", Date.now() - start);
-                var model = results[0];
-                _.defaults(model, homeModel);
-
-                model.popular = results[1];
-                model.twitter = results[2];
-
+            getFrontPageContent(function (err, model) {
                 res.render('site/index', {
                     css:asereje.css(['slideshow/style', 'container/style', 'site/frontpage']),
                     filename:'views/site/index.jade',
-                    locals:{
+                    locals: {
                         model:model
                     }
                 });
-
             });
         });
 
         app.get('/news', function (req, res) {
-            api.group.docs(LAYOUT_GROUPS.News.namespace, null, function (err, model) {
-                _.defaults(model, newsModel);
-                redis.client.zrevrange(_articleViewsKey(['News']), 0, 3, function (err, popular) {
-                    model.popular = popular.map(function (str) {
-                        var parts = str.split('||');
-                        return {
-                            url:'/article/' + parts[0],
-                            title:parts[1]
-                        };
-                    });
-                    rss.getRSS('newsblog', function (err, rss) {
-                        if (rss && rss.items && rss.items.length > 0) {
-                            model.Blog = rss.items.map(function (item) {
-                                item.url = item.link;
-                                item.title = item.title.replace(/\&#8217;/g, '’');
-                                delete item.link;
-                                return item;
-                            });
-                            model.Blog.splice(6, model.Blog.length - 6);
-                        }
-
-                        model.adFullRectangle = {
-                            "title":"Advertisement",
-                            "imageUrl":"/images/ads/monster.png",
-                            "url":"http://google.com",
-                            "width":"300px",
-                            "height":"250px"
-                        };
-
-                        api.taxonomy.getChildren(['News'], function (err, children) {
-                            res.render('site/news', {
-                                css:asereje.css(['container/style', 'site/section', 'site/news']),
-                                subsections:children,
-                                filename:'views/site/news.jade',
-                                model:model
-                            });
-                        });
-                    });
+            getNewsPageContent(function (err, model, children) {
+                res.render('site/news', {
+                    css:asereje.css(['container/style', 'site/section', 'site/news']),
+                    subsections:children,
+                    filename:'views/site/news.jade',
+                    model:model
                 });
             });
         });
 
-        app.get('/sports', function (req, httpRes) {
-            api.group.docs(LAYOUT_GROUPS.Sports.namespace, null, function (err, model) {
-                _.defaults(model, sportsModel);
-
-                async.parallel([
-                    function (callback) { //0
-                        rss.getRSS('sportsblog', function (err, res) {
-                            if (res && res.items && res.items.length > 0) {
-                                var Blog = res.items.map(function (item) {
-                                    item.url = item.link;
-                                    item.title = item.title.replace(/\&#8217;/g, '’');
-                                    delete item.link;
-                                    return item;
-                                });
-                                Blog.splice(5, Blog.length - 5);
-                                callback(null, Blog)
-                            } else {
-                                callback(null, []);
-                            }
-                        });
-                    },
-                    function (callback) { //1
-                        api.taxonomy.getChildren(['Sports', 'Men'], callback);
-                    },
-                    function (callback) { //2
-                        api.taxonomy.getChildren(['Sports', 'Women'], callback);
-                    }
-                        /*
-                    function (callback) { //3
-                        api.taxonomy.docs("Football", 4, callback);
-                    },
-                    function (callback) { //4
-                        api.taxonomy.docs("M Basketball", 4, callback);
-                    },
-                    function (callback) { //5
-                        api.taxonomy.docs("M Soccer", 4, callback);
-                    },
-                    function (callback) { //6
-                        api.taxonomy.docs("W Soccer", 4, callback);
-                    }*/
-                ],
-                        // optional callback
-                        function (err, results) {
-                            if (err) return log.warning(err);
-                            model.Blog = results[0];
-                            /*
-                             model.Football = _.pluck(results[3], 'value');
-                             model.Mbball = _.pluck(results[4], 'value');
-                             model.MSoccer = _.pluck(results[5], 'value');
-                             model.WSoccer = _.pluck(results[6], 'value');*/
-
-                            model.adFullRectangle = {
-                                "title":"Advertisement",
-                                "imageUrl":"/images/ads/monster.png",
-                                "url":"http://google.com",
-                                "width":"300px",
-                                "height":"250px"
-                            };
-
-
-                            //log.debug(model.WSoccer);
-                            httpRes.render('site/sports', {
-                                css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
-                                subsections:[results[1], results[2]],
-                                filename:'views/site/sports.jade',
-                                model:model});
-                        });
-
+        app.get('/sports', function (req, res) {
+            getSportsPageContent(function (err, model, children) {
+                res.render('site/sports', {
+                    css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
+                    subsections:[children.men, children.women],
+                    filename:'views/site/sports.jade',
+                    model:model
+                });
             });
         });
 
         app.get('/opinion', function (req, res) {
-            async.parallel([
-                function (callback) { //0
-                    api.group.docs(LAYOUT_GROUPS.Opinion.namespace, null, callback);
-                },
-                function (callback) { //1
-                    api.taxonomy.getChildren(['Opinion'], callback);
-                },
-                function (callback) { //2
-                    rss.getRSS('blog-opinion', function (err, res) {
-                        if (res && res.items && res.items.length > 0) {
-                            var Blog = res.items.map(function (item) {
-                                item.url = item.link;
-                                item.title = item.title.replace(/\&#8217;/g, '’');
-                                delete item.link;
-                                return item;
-                            });
-			    // TODO fit blog articles to box
-                            Blog.splice(5, Blog.length - 5);
-                            callback(null, Blog)
-                        } else {
-                            callback(null, []);
-                        }
-                    });
-                },
-                function (callback) { // 3
-                    api.authors.getLatest("Editorial Board", "Opinion", 5, callback);
-                },
-                function (callback) { //4
-                    async.map(columnistsData,
-                            function(columnist, _callback) {
-                                api.authors.getLatest(columnist.user || columnist.name, "Opinion", 5, function(err, res) {
-                                    columnist.stories = res;
-                                    _callback(err, columnist);
-                                })
-                            },
-                            callback
-                    );
-                }
-            ],
-            function (err, results) {
-                var model = results[0];
-                if (model.Featured) {
-                    model.Featured.forEach(function(article) {
-                        article.author = article.authors[0];
-                        var columnistObj = null;
-                        if (columnistObj = columnistsHeadshots[article.author]) {
-                            if (columnistObj.headshot) article.thumb = columnistObj.headshot;
-                            if (columnistObj.tagline) article.tagline = columnistObj.tagline;
-                        }
-                    });
-                }
-                model.Blog = results[2];
-                model.EditorialBoard = results[3];
-                model.Columnists = {};
-                // assign each columnist an object containing name and stories to make output jade easier
-                results[4].forEach(function(columnist, index) {
-                        model.Columnists[index] = columnist;
-                });
-                // need to call compact to remove undefined entries in array
-                _.compact(model.Columnists);
-                model.adFullRectangle = {
-                    "title":"Advertisement",
-                    "imageUrl":"/images/ads/monster.png",
-                    "url":"http://google.com",
-                    "width":"300px",
-                    "height":"250px"
-                };
-
-                model.adFullBanner = {
-                    "title":"Ad",
-                    "imageUrl":"/images/ads/full-banner.jpg",
-                    "url":"http://google.com",
-                    "width":"468px",
-                    "height":"60px"
-                };
-
+            getOpinionPageContent(function (err, model, children) {
                 res.render('site/opinion', {
                     css:asereje.css(['container/style', 'site/section', 'site/opinion']),
-                    subsections:results[1],
+                    subsections:children,
                     filename:'views/site/opinion.jade',
-                    model:model});
+                    model:model
+                });
             });
-
         });
 
         app.get('/recess', function (req, res) {
-            api.group.docs(LAYOUT_GROUPS.Recess.namespace, null, function (err, result) {
-
-                rss.getRSS('recessblog', function (err, rss) {
-                    if (rss && rss.items && rss.items.length > 0) {
-                        result.Blog = rss.items.map(function (item) {
-                            item.url = item.link;
-                            item.title = item.title.replace(/\&#8217;/g, '’');
-                            delete item.link;
-                            return item;
-                        });
-                        result.Blog.splice(3, result.Blog.length - 3);
-                    }
-
-                    result.adMedRectangle = {
-                        "title":"Advertisement",
-                        "imageUrl":"https://www.google.com/help/hc/images/adsense_185665_adformat-text_250x250.png",
-                        "url":"http://google.com",
-                        "width":"250px",
-                        "height":"250px"
-                    };
-
-
-                    api.taxonomy.getChildren(['Recess'], function (err, children) {
-                        res.render('site/recess', {
-                            css:asereje.css(['container/style', 'site/section', 'site/recess']),
-                            subsections:children,
-                            filename:'views/site/recess.jade',
-                            model:result});
-                    });
-                })
+            getRecessPageContent(function (err, model, children) {
+                res.render('site/recess', {
+                    css:asereje.css(['container/style', 'site/section', 'site/recess']),
+                    subsections:children,
+                    filename:'views/site/recess.jade',
+                    model:model
+                });
             });
         });
 
         app.get('/towerview', function (req, res) {
-            api.group.docs(LAYOUT_GROUPS.Towerview.namespace, null, function (err, result) {
-
-                result.adFullRectangle = {
-                    "title":"Advertisement",
-                    "imageUrl":"/images/ads/monster.png",
-                    "url":"http://google.com",
-                    "width":"300px",
-                    "height":"250px"
-                };
-
-                api.taxonomy.getChildren(['Towerview'], function (err, children) {
-                    res.render('site/towerview', {
-                        css:asereje.css(['container/style', 'site/section', 'site/towerview']),
-                        subsections:children,
-                        filename:'views/site/towerview.jade',
-                        model:result});
+            getTowerviewPageContent(function (err, model, children) {
+                res.render('site/towerview', {
+                    css:asereje.css(['container/style', 'site/section', 'site/towerview']),
+                    subsections:children,
+                    filename:'views/site/towerview.jade',
+                    model:model
                 });
             });
         });
@@ -979,3 +731,308 @@ function _showSearchArticles(err,req,http_res,docs,facets) {
     return null;
 }
 
+function getFrontPageContent(callback) {
+    var start = Date.now();
+    async.parallel([
+        function (cb) { //0
+            api.group.docs(LAYOUT_GROUPS.Frontpage.namespace, null, function (err, result) {
+                if (err) return cb(err);
+                if (BENCHMARK) log.info("API TIME %d", Date.now() - start);
+                return cb(null, result);
+            });
+        },
+        function (cb) { //1
+            var popularArticles = 7;
+            redis.client.zrevrange(_articleViewsKey([]), 0, popularArticles - 1, function (err, popular) {
+                if (err) return cb(err);
+                popular = popular.map(function (str) {
+                    var parts = str.split('||');
+                    return {
+                        url:'/article/' + parts[0],
+                        title:parts[1]
+                    };
+                });
+                if (BENCHMARK) log.info("REDIS TIME %d", Date.now() - start);
+                cb(null, popular);
+            });
+        },
+        function (cb) { //2
+            var twitter = {};
+            var selectedFeed = twitterFeeds[Math.floor(Math.random() * twitterFeeds.length)];
+            twitter.user = selectedFeed;
+            twitter.title = 'Twitter';
+            twitter.imageUrl = "/images/twitter-dukechronicle.png";
+            rss.getRSS('twitter-' + selectedFeed, function (err, tweets) {
+                if (tweets && tweets.items && tweets.items.length > 0) {
+                    twitter.tweet = tweets.items[0].title;
+                } else {
+                    twitter.tweet = 'No tweets available.';
+                }
+                if (BENCHMARK) log.info("RSS TIME %d", Date.now() - start);
+                return cb(err, twitter);
+            });
+        }
+    ], function (err, results) {
+        if (err) {
+            log.warning(err);
+            callback(err);
+        }
+        else {
+            if (BENCHMARK) log.info("TOTAL TIME %d", Date.now() - start);
+            var model = results[0];
+            _.defaults(model, homeModel);
+            model.popular = results[1];
+            model.twitter = results[2];
+            callback(null, model);
+        }
+    });
+}
+
+function getNewsPageContent(callback) {
+    async.parallel([
+        function (cb) {
+            api.group.docs(LAYOUT_GROUPS.News.namespace, null, cb);
+        },
+        function (cb) {
+            redis.client.zrevrange(_articleViewsKey(['News']), 0, 3, function (err, popular) {
+                if (err) cb (err);
+                else cb(null, popular.map(function (str) {
+                    var parts = str.split('||');
+                    return {
+                        url:'/article/' + parts[0],
+                        title:parts[1]
+                    };
+                }));
+            });
+        },
+        function (cb) {
+            rss.getRSS('newsblog', function (err, rss) {
+                if (!err && rss && rss.items && rss.items.length > 0) {
+                    var Blog = rss.items.map(function (item) {
+                        item.url = item.link;
+                        item.title = item.title.replace(/\&#8217;/g, '’');
+                        delete item.link;
+                        return item;
+                    });
+                    Blog.splice(6, Blog.length - 6);
+                    cb(null, Blog);
+                }
+                else cb(err, []);
+            });
+        },
+        function (cb) {
+            api.taxonomy.getChildren(['News'], cb);
+        }
+    ], function (err, results) {
+        if (err) {
+            log.warning(err);
+            callback(err);
+        }
+        else {
+            var model = results[0];
+            _.defaults(model, newsModel);            
+            model.popular = results[1];
+            model.Blog = results[2]
+            model.adFullRectangle = {
+                "title":"Advertisement",
+                "imageUrl":"/images/ads/monster.png",
+                "url":"http://google.com",
+                "width":"300px",
+                "height":"250px"
+            };
+            var children = results[3];
+            callback(null, model, children);
+        }
+    });
+}
+
+function getSportsPageContent(callback) {
+    async.parallel([
+        function (cb) { //0
+            api.group.docs(LAYOUT_GROUPS.Sports.namespace, null, cb);
+        },
+        function (cb) { //1
+            rss.getRSS('sportsblog', function (err, res) {
+                if (!err && res && res.items && res.items.length > 0) {
+                    var Blog = res.items.map(function (item) {
+                        item.url = item.link;
+                        item.title = item.title.replace(/\&#8217;/g, '’');
+                        delete item.link;
+                        return item;
+                    });
+                    Blog.splice(5, Blog.length - 5);
+                    cb(null, Blog)
+                } else cb(err, []);
+            });
+        },
+        function (cb) { //2
+            api.taxonomy.getChildren(['Sports', 'Men'], cb);
+        },
+        function (cb) { //3
+            api.taxonomy.getChildren(['Sports', 'Women'], cb);
+        }], function (err, results) {
+            if (err) {
+                log.warning(err);
+                callback(err);
+            }
+            else {
+                var model = results[0];
+                _.defaults(model, sportsModel);
+                model.Blog = results[1];
+                model.adFullRectangle = {
+                    "title":"Advertisement",
+                    "imageUrl":"/images/ads/monster.png",
+                    "url":"http://google.com",
+                    "width":"300px",
+                    "height":"250px"
+                };
+                var children = { men: results[2], women: results[3] };
+                callback(null, model, children);
+            }
+        });
+}
+
+function getOpinionPageContent(callback) {
+    async.parallel([
+        function (cb) { //0
+            api.group.docs(LAYOUT_GROUPS.Opinion.namespace, null, cb);
+        },
+        function (cb) { //1
+            api.taxonomy.getChildren(['Opinion'], cb);
+        },
+        function (cb) { //2
+            rss.getRSS('blog-opinion', function (err, res) {
+                if (!err && res && res.items && res.items.length > 0) {
+                    var Blog = res.items.map(function (item) {
+                        item.url = item.link;
+                        item.title = item.title.replace(/\&#8217;/g, '’');
+                        delete item.link;
+                        return item;
+                    });
+                    Blog.splice(5, Blog.length - 5);
+                    cb(null, Blog)
+                } else cb(err, []);
+            });
+        },
+        function (cb) { // 3
+            api.authors.getLatest("Editorial Board", "Opinion", 5, cb);
+        },
+        function (cb) { //4
+            async.map(columnistsData,
+                      function(columnist, _callback) {
+                          api.authors.getLatest(columnist.user || columnist.name, "Opinion", 5, function(err, res) {
+                              columnist.stories = res;
+                              _callback(err, columnist);
+                          })
+                      }, cb);
+        }], function (err, results) {
+            if (err)
+                callback(err);
+            else {
+                var model = results[0];
+                if (model.Featured) {
+                    model.Featured.forEach(function(article) {
+                        article.author = article.authors[0];
+                        var columnistObj = null;
+                        if (columnistObj = columnistsHeadshots[article.author]) {
+                            if (columnistObj.headshot) article.thumb = columnistObj.headshot;
+                            if (columnistObj.tagline) article.tagline = columnistObj.tagline;
+                        }
+                    });
+                }
+                model.Blog = results[2];
+                model.EditorialBoard = results[3];
+                model.Columnists = {};
+                // assign each columnist an object containing name and stories to make output jade easier
+                results[4].forEach(function(columnist, index) {
+                    model.Columnists[index] = columnist;
+                });
+                // need to call compact to remove undefined entries in array
+                _.compact(model.Columnists);
+                model.adFullRectangle = {
+                    "title":"Advertisement",
+                    "imageUrl":"/images/ads/monster.png",
+                    "url":"http://google.com",
+                    "width":"300px",
+                    "height":"250px"
+                };
+            
+                model.adFullBanner = {
+                    "title":"Ad",
+                    "imageUrl":"/images/ads/full-banner.jpg",
+                    "url":"http://google.com",
+                    "width":"468px",
+                    "height":"60px"
+                };
+
+                var children = results[1];
+                callback(null, model, children);
+            }
+        });
+}
+
+function getRecessPageContent(callback) {
+    async.parallel([
+        function (cb) {
+            api.group.docs(LAYOUT_GROUPS.Recess.namespace, null, cb);
+        },
+        function (cb) {
+            api.taxonomy.getChildren(['Recess'], cb);
+        },
+        function (cb) {
+            rss.getRSS('recessblog', function (err, rss) {
+                if (!err && rss && rss.items && rss.items.length > 0) {
+                    var Blog = rss.items.map(function (item) {
+                        item.url = item.link;
+                        item.title = item.title.replace(/\&#8217;/g, '’');
+                        delete item.link;
+                        return item;
+                    });
+                    Blog.splice(3, Blog.length - 3);
+                    cb(null, Blog);
+                } else cb(err, []);
+            });
+        }], function (err, results) {
+            if (err)
+                callback(err);
+            else {
+                var model = results[0];
+                model.Blog = results[2];
+                model.adMedRectangle = {
+                    "title":"Advertisement",
+                    "imageUrl":"https://www.google.com/help/hc/images/adsense_185665_adformat-text_250x250.png",
+                    "url":"http://google.com",
+                    "width":"250px",
+                    "height":"250px"
+                };
+                var children = results[1];
+                
+                callback(null, model, children);
+            }
+        });
+}
+
+function getTowerviewPageContent(callback) {
+    async.parallel([
+        function (cb) {
+            api.group.docs(LAYOUT_GROUPS.Towerview.namespace, null, cb);
+        },
+        function (cb) {
+            api.taxonomy.getChildren(['Towerview'], cb);
+        }], function (err, results) {
+            if (err)
+                callback(err);
+            else {
+                var model = results[0];
+                model.adFullRectangle = {
+                    "title":"Advertisement",
+                    "imageUrl":"/images/ads/monster.png",
+                    "url":"http://google.com",
+                    "width":"300px",
+                    "height":"250px"
+                };
+                var children = results[1];
+                callback(null, model, children);
+            }
+        });
+}

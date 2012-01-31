@@ -101,61 +101,42 @@ api.getArticles= function(parent_node, count, callback) {
     callback);
 };
 
-function _editDocument(docid, fields, callback) {
+api.editDoc = function(docid, fields, callback) {
+    var indexFunc = function(err, res, url) {
+ 	     if(err) return callback(err, res, url);	
+       
+         // only reindex the article if they edited the search fields            
+         if(fields.title && fields.body) {
+             api.search.indexArticle(docid, fields.title, fields.body, fields.taxonomy, fields.authors, fields.created, function(err2) {
+                 callback(err2, res, url);
+             });
+         }
+         else callback(err, res, url);	
+    };
+
     api.docsById(docid, function(geterr, res) {
-        if(geterr)
-            return callback(geterr, null, null);
+        if(geterr) return callback(geterr, null, null);
 
         fields.created = res.created;
         if(fields.title && (_URLify(fields.title, MAX_URL_LENGTH) !== _URLify(res.title, MAX_URL_LENGTH))) {
             getAvailableUrl(_URLify(fields.title, MAX_URL_LENGTH), 0, function(err, url) {
-                if(err) {
-                    callback(err, null, null);
-                }
-                else {
-                    fields.updated = Math.round(new Date().getTime() / 1000);
-                        fields.urls = res.urls;
-                        fields.urls.push(url);
-                    db.merge(docid, fields, function(db_err, db_res) {
-                        callback(db_err, db_res, url);
-                    });
-                }
+                if(err) return callback(err, null, null);
+               
+                fields.updated = Math.round(new Date().getTime() / 1000);
+                fields.urls = res.urls;
+                fields.urls.push(url);
+                db.merge(docid, fields, function(db_err, db_res) {
+                    indexFunc(db_err, db_res, url);
+                });
             });
-        } else {
+        }
+        else {
             db.merge(docid, fields, function(db_err, db_res) {
                 if (db_err) return callback(db_err);
-                else {
-                    return callback(db_err, db_res, res.urls[res.urls.length - 1]);
-                }
+                
+                indexFunc(db_err, db_res, res.urls[res.urls.length - 1]);
             });
-        }
-            
-    });
-}
-
-api.editDoc = function(docid, fields, callback) {
-    /*
-    var groups = fields.groups;
-    if(fields.groups) {
-        fcns["groups"] = function(acallback) {
-            _edit_group(docid, groups, acallback);
-        };
-        delete fields.groups; //we will edit this field in group.edit
-    }*/
-
-    _editDocument(docid, fields, function(err, res, url) {
- 	    if(err) callback(err, res, url);	
-        else {
-            // only reindex the article if they edited the search fields            
-            if(fields.title && fields.body) {
-                api.search.indexArticle(docid, fields.title, fields.body, fields.taxonomy, fields.authors, fields.created, function(err2) {
-                    callback(err2, res, url);
-                });
-            }
-            else {
-                callback(err, res, url);
-            }	
-        }
+        }    
     });
 };
 

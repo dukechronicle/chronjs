@@ -10,10 +10,7 @@ form(action='/admin/add', method='POST')
           option Select a section
            - each subsections, section in taxonomy
               - each key, value in subsections
-                - if (JSON.stringify(doc.taxonomy) == value)
-                    option(value=value, selected='selected') #{key}
-                - else
-                    option(value=value) #{key}
+                  option(value=value) #{key}
     p(style="margin-bottom: 2em")
         label(for='author') Authors&nbsp;
         input#author(type='text', name='doc[authors]', style='width:600px')

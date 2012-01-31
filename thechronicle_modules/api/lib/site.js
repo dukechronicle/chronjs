@@ -322,7 +322,7 @@ site.init = function (app, callback) {
                                     afterAddImageUrl: '/article/' + url + '/edit',
                                     taxonomy:taxonomy
                                 },
-                                layout:"layout-admin.jade"
+                                layout:"admin/layout"
                             });
 
                         });
@@ -343,7 +343,7 @@ site.init = function (app, callback) {
                         locals:{
                             doc:doc
                         },
-                        layout:"layout-admin.jade"
+                        layout:"admin/layout"
                     });
                 }
             });
@@ -430,7 +430,7 @@ site.askForLogin = function (res, afterLoginPage, username, err) {
             username:username || '',
             error:err || ''
         },
-        layout:'layout-admin.jade'
+        layout:'admin/layout'
     });
 };
 
@@ -491,7 +491,7 @@ function _renderConfigPage(res,err) {
             revisionValue:config.getConfigRevision(),
             error: err
         },
-        layout:'layout-admin.jade'
+        layout:'admin/layout'
     });
 }
 

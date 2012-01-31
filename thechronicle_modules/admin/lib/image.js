@@ -30,17 +30,14 @@ exports.bindPath = function (app) {
                         afterUrl:afterUrl,
                         docId:forDocument,
                         hasPrevious:(beforeID != null)
-                    },
-                    layout:'layout-admin.jade'
+                    }
                 });
             });
         });
 
         app.get('/upload', site.checkAdmin,
                 function (req, httpRes) {
-                    httpRes.render('upload', {
-                        layout:"layout-admin.jade"
-                    });
+                    httpRes.render('admin/upload')
                 });
 
         app.post('/upload', site.checkAdmin,
@@ -152,8 +149,7 @@ exports.bindPath = function (app) {
                                                             afterUrl:req.query.afterUrl,
                                                             docId:req.query.docId,
                                                             imageDetails:imageTypes
-                                                        },
-                                                        layout:"layout-admin.jade"
+                                                        }
                                                     });
                                                 }
                                             })

@@ -102,20 +102,22 @@ site.assignPreInitFunctionality(app, this);
 app.listen(port);
 console.log("Server listening on port %d in %s mode", app.address().port, app.settings.env); 
 
-config.init(function(err) {
-    if(err) log.crit(err);
-    else {
-        if(!config.isSetUp()) {
-	        app.get('/', function(req, res, next) {
-		        if(!config.isSetUp()) {
-			        res.redirect('/config');
-		        }		
-		        else next();
-	        });
-        } else {
-            runSite(function() {});
-        }
-    }
+log.init(function (err) {
+    if (err)
+	console.log("Logger couldn't be initialized: " + err);
+    else
+	config.init(function(err) {
+	    if(err) log.crit(err);
+	    else {
+		if(!config.isSetUp())
+	            app.get('/', function(req, res, next) {
+			if(!config.isSetUp()) res.redirect('/config');
+			else next();
+	            });
+		else
+		    runSite(function() {});
+	    }
+	});
 });
 
 

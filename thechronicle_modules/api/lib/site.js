@@ -1000,20 +1000,7 @@ function getSectionContent(params, callback) {
         function (cb) {
             api.taxonomy.docs(section, 20, function (err, docs) {
                 if (err) cb(err)
-                else async.filter(docs,
-				  function (doc, cb) {
-				      if (doc.urls) {
-					  doc.url = '/article/' + doc.urls[doc.urls.length-1];
-					  // convert timestamp
-					  if (doc.created)
-					      doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
-					  doc = _parseAuthor(doc);
-					  cb(doc);
-				      } else cb(null);
-				  },
-                                  function (results) {
-                                      cb(null, results);
-                                  });
+                else modifyArticlesForDisplay(docs, cb);
             });
         },
         function (cb) {
@@ -1036,22 +1023,23 @@ function getSectionContent(params, callback) {
 
 function getAuthorContent(name, callback) {
     api.search.docsByAuthor(name, 'desc', '', 1, function (err, docs) {
-        if (err)
-            callback(err);
-        else
-            async.filter(docs,
-			 function (doc, cb) {
-			     if (doc.urls) {
-				 doc.url = '/article/' + _.last(doc.urls);
-				 // convert timestamp
-				 if (doc.created)
-				     doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
-				 doc = _parseAuthor(doc);
-				 cb(doc);
-			     } else cb(null);
-			 },
-                         function (results) {
-                             callback(null, results);
-                         });
+        if (err) callback(err);
+        else modifyArticlesForDisplay(docs, callback);
+    });
+}
+
+function modifyArticlesForDisplay(docs, callback) {
+    async.filter(docs, function (doc, cb) {
+	if (doc.urls) {
+	    doc.url = '/article/' + _.last(doc.urls);
+	    // convert timestamp
+	    if (doc.created)
+                doc.date = globalFunctions.formatTimestamp(doc.created, 
+                                                           "mmmm d, yyyy");
+	    doc = _parseAuthor(doc);
+	    cb(doc);
+	} else cb(null);
+    }, function (results) {
+        callback(null, results);
     });
 }

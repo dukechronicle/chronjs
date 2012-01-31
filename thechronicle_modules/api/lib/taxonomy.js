@@ -63,22 +63,6 @@ taxonomy.getChildren = function(taxonomyPath, callback) {
     });
 };
 
-taxonomy.getParentsAndChildren = function(taxonomyPath, callback) {
-    async.series([
-	function (cb) {
-	    taxonomy.getParents(taxonomyPath, cb);
-	},
-	function (cb) {
-	    taxonomy.getChildren(taxonomyPath, cb);
-	}
-    ], function (err, results) {
-	if (err)
-	    callback(err);
-	else
-	    callback(null, results[0], results[1]);
-    });
-};
-
 taxonomy.getTaxonomyListing = function (callback) {
     taxonomy.getTaxonomyTree(function (err, tree) {
 	var taxonomy = {};

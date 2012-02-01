@@ -6,7 +6,7 @@ var CustomLoggly = require('./loggly').CustomLoggly;
 
 
 exports.init = function (callback) {
-    logger = new (winston.Logger)();
+    var logger = new (winston.Logger)();
 
     logger.setLevels(winston.config.syslog.levels);
     logger.add(CustomConsole, {
@@ -15,16 +15,15 @@ exports.init = function (callback) {
 	handleExceptions: true
     });
 
-    if (process.env.NODE_ENV === 'production' && process.env.CHRONICLE_LOGGLY_SUBDOMAIN && process.env.CHRONICLE_LOGGLY_TOKEN)
-        logger.add(CustomLoggly,
-            {
+    if (process.env.NODE_ENV === 'production' && process.env.CHRONICLE_LOGGLY_SUBDOMAIN && process.env.CHRONICLE_LOGGLY_TOKEN) {
+        logger.add(CustomLoggly, {
                 subdomain: process.env.CHRONICLE_LOGGLY_SUBDOMAIN,
                 inputToken: process.env.CHRONICLE_LOGGLY_TOKEN,
                 level: 'warning',
                 json: true,
                 handleExceptions: true
-            }
-        );
+        });
+    }
 
     logger.handleExceptions();
 
@@ -34,7 +33,7 @@ exports.init = function (callback) {
         console.error("Logging error: " + JSON.stringify(err));
     });
 
-    logger.info('Logger is up on heroku');
+    logger.info('Logger is up');
     logger.extend(exports);
     callback();
 };

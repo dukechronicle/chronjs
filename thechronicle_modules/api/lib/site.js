@@ -64,7 +64,7 @@ site.init = function (app, callback) {
         // redirect mobile browsers to the mobile site
         app.get('/*', function(req, res, next) {
 
-            var userAgent = req.headers['user-agent'];
+            var userAgent = req.headers['user-agent'] || '';
 
             // only run the code below this line if they are not accessing the mobile site            
             if(req.url.split('/',2)[1] == 'm') return next();

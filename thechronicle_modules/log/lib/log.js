@@ -16,17 +16,15 @@ exports.init = function (callback) {
     });
 
     if (process.env.NODE_ENV === 'production' && process.env.CHRONICLE_LOGGLY_SUBDOMAIN && process.env.CHRONICLE_LOGGLY_TOKEN) {
-        console.log("Adding Loggly");
-        logger.add(CustomLoggly,
-            {
+        logger.add(CustomLoggly, {
                 subdomain: process.env.CHRONICLE_LOGGLY_SUBDOMAIN,
                 inputToken: process.env.CHRONICLE_LOGGLY_TOKEN,
                 level: 'warning',
                 json: true,
                 handleExceptions: true
-            }
-        );
+        });
     }
+
     logger.handleExceptions();
 
 

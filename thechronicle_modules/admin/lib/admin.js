@@ -12,7 +12,7 @@ var sprintf = require('sprintf').sprintf;
 var config = require("../../config");
 var site = require('../../api/lib/site');
 var globalFunctions = require('../../global-functions');
-
+var sitemap = require('../../sitemap');
 
 var layoutAdmin = require('./layout');
 var imageAdmin = require('./image');
@@ -91,6 +91,13 @@ exports.init = function (app, callback) {
                         else {
                             api.newsletter.sendNewsletter(campaignID, function(err) {
                                 res.send("sent");
+                                
+                                if(process.env.NODE_ENV === 'production') {
+                                    log.notice("Building sitemaps...");
+		                            sitemap.generateAllSitemaps(function (err2) {
+			                            if (err2) log.warning(err2);
+		                            });
+                                }
                             });
                         }
                     });

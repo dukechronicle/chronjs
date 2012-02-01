@@ -73,7 +73,7 @@ app.configure(function() {
     app.use(express.session({ secret: SECRET }));
     // set http cache to one minute by default for each response
     app.use(function(req,res,next){
-        if (api.accounts.isAdmin(req))
+        if(!api.accounts.isAdmin(req))
             res.header('Cache-Control', 'public, max-age=60');
         next();
     });

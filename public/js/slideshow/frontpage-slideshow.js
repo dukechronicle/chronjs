@@ -6,7 +6,8 @@ define(["jquery", "galleria"], function($) {
                 transition: "fade",
                 autoplay: 9000,
                 width: 636,
-                height: 393
+                height: 393,
+                preload: 0
             });
         }
     }

@@ -630,7 +630,8 @@ site.init = function (app, callback) {
                             doc:doc,
                             isAdmin:isAdmin,
                             model:model,
-                            parentPaths:parents
+                            parentPaths:parents,
+                            isProduction: (process.env.NODE_ENV === 'production')
                         },
                         filename:'views/article',
                         layout: 'layout-article',

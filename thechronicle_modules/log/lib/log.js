@@ -34,7 +34,7 @@ exports.init = function (callback) {
         console.error("Logging error: " + JSON.stringify(err));
     });
 
-    logger.warning('Logger is up');
+    logger.info('Logger is up');
     logger.extend(exports);
     callback();
 };

@@ -38,7 +38,6 @@ search.getIndexVersion = function() {
 search.init = function() {
 	client = solr.createClient(config.get('SOLR_HOST'), config.get('SOLR_PORT'), config.get('SOLR_CORE'), config.get('SOLR_PATH'));
 };
-
 // check for unindexed articles, or articles with index versioning below the current version, and index them in solr.
 search.indexUnindexedArticles = function(count) {
 	log.notice('looking for articles to index...');
@@ -49,12 +48,12 @@ search.indexUnindexedArticles = function(count) {
 				search.indexArticle(row._id, row.title, row.body, row.taxonomy, row.authors, row.created, function(error2, response2) {
 					if(error2)
 						log.warning(error2);
-					else {    
+					else {
 						db.search.setArticleAsIndexed(row._id, INDEX_VERSION, function(error3, response3) {
 							if(error3)
 								log.warning(error3);
-                            else
-                                log.info('indexed ' + row.title);
+							else
+								log.info('indexed ' + row.title);
 						});
 					}
 				});
@@ -85,7 +84,7 @@ search.indexArticle = function(id, title, body, taxonomy, authors, createdDate, 
 	if(taxonomy && taxonomy[0])
 		section = taxonomy[0];
 
-    var date = new Date(createdDate * 1000);
+	var date = new Date(createdDate * 1000);
 	// turn seconds into milliseconds
 
 	var solrDate;
@@ -93,13 +92,13 @@ search.indexArticle = function(id, title, body, taxonomy, authors, createdDate, 
 	var solrMonth;
 	var solrDay;
 	try {
-        solrDate = dateFormat(date, "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'");
+		solrDate = dateFormat(date, "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'");
 		// turns date into solr's date format: 1995-12-31T23:59:59Z
 		solrYear = dateFormat(date, "yyyy");
 		solrMonth = dateFormat(date, "mm");
 		solrDay = dateFormat(date, "dd");
 	} catch (err) {// if date is invalid use today's date
-        solrDate = dateFormat(new Date(), "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'");
+		solrDate = dateFormat(new Date(), "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'");
 		solrYear = dateFormat(new Date(), "yyyy");
 		solrMonth = dateFormat(new Date(), "mm");
 		solrDay = dateFormat(new Date(), "dd");
@@ -122,8 +121,8 @@ search.indexArticle = function(id, title, body, taxonomy, authors, createdDate, 
 	};
 
 	client.add(solrDoc, {
-    	commit : true
-    }, callback);
+		commit : true
+	}, callback);
 };
 
 search.unindexArticle = function(id, callback) {
@@ -173,7 +172,6 @@ search.docsByAuthor = function(authorName, sortOrder, facets, page, callback) {
 		sort : 'created_date_d' + " " + sortOrder
 	}, callback);
 };
-
 // Function for searching by query
 search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page, callback) {
 	wordsQuery = globalFunctions.trim(wordsQuery);
@@ -198,19 +196,17 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 		facetFields = facetFieldsTemp;
 		facetQueries = facetQueriesTemp;
 	});
-
 	wordsQuery = wordsQuery.toLowerCase();
 	var words = wordsQuery.split(" ");
-
 	words = words.map(function(word) {
-		var newString = solr.valueEscape(word.replace(/"/g, '')); //remove "s from the query
+		var newString = solr.valueEscape(word.replace(/"/g, ''));
+		//remove "s from the query
 
-        if(newString.length == 0)
+		if(newString.length == 0)
 			return '""';
 		else
 			return newString;
 	});
-
 	var fullQuery = 'author_sm:"' + wordsQuery.replace(/"/g, '') + '"';
 	for(var index = 0; index < words.length; index++) {
 		fullQuery = fullQuery + " OR title_textv:" + words[index] + " OR body_textv:" + words[index];
@@ -231,30 +227,28 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 };
 
 search.relatedArticles = function(id, count, callback) {
-	
+
 	var fullQuery = 'id:' + createSolrIDFromDBID(id);
-	
+
 	querySolr(fullQuery, {
 		mlt : true,
-		'mlt.count': count,
-		'mlt.fl': "body_textv,title_textv" 
+		'mlt.count' : count,
+		'mlt.fl' : "body_textv,title_textv"
 	}, callback);
-	
+
 }
-
-
 function querySolr(query, options, callback) {
 	if(query.length > 0) {
+		var idString = query.substring(3, query.length);
 		query = "database_host_s:" + db.getDatabaseHost() + " AND database_s:" + db.getDatabaseName() + " AND (" + query + ")";
 	}
-		
+
 	client.query(query, options, function(err, response) {
 		if(err) {
 			return callback(err);
 		}
 
 		var responseObj = JSON.parse(response);
-
 		// put facet into an easily manipulitable form
 		var facets = {};
 		if(responseObj.facet_counts) {
@@ -279,10 +273,10 @@ function querySolr(query, options, callback) {
 							field[i] = globalFunctions.capitalizeWords(field[i]);
 						}
 						facets[niceName][field[i]] = field[i + 1];
-                    }
+					}
 				}
 
-                // sort authors alphabetically
+				// sort authors alphabetically
 				if(niceName == "Author") {
 					facets[niceName] = _sortObjByKeys(facets[niceName]);
 				}
@@ -291,26 +285,55 @@ function querySolr(query, options, callback) {
 
 		var ids = [];
 		var tempid;
-		var docs = responseObj.response.docs;
+		
+		if(responseObj.moreLikeThis) {
+			var docs = responseObj.moreLikeThis[idString].docs;
+		} else {
+			var docs = responseObj.response.docs;
+		}
 
 		for(var docNum = 0; docNum < docs.length; docNum++) {
 			var tempid = getDBIDFromSolrID(docs[docNum].id);
 			ids.push(tempid);
 		}
 
-		api.docsById(ids, function(err, docs) {
-			if(err)
-				return callback(err);
+		if(responseObj.moreLikeThis) {
+			api.docsById(ids, function(err, docs) {
+				if(err)
+					return callback(err);
 
-			// replace each array element with the actual document data for that element
-			docs = _.map(docs, function(doc) {
-				return doc.doc;
+				// replace each array element with the actual document data for that element
+				docs = _.map(docs, function(doc) {
+					return doc.doc;
+				});
+				// remove any null array elements.
+				docs = _.compact(docs);
+				var related = [];
+				for(var docNum = 0; docNum < docs.length; docNum++) {
+					var tempDoc = {};
+					tempDoc.id = docs[docNum]._id;
+					tempDoc.title = docs[docNum].title;
+					tempDoc.url = docs[docNum].urls;
+					related[docNum] = tempDoc;
+				}
+
+				callback(null, related);
 			});
-			// remove any null array elements.
-			docs = _.compact(docs);
+		} else {
+			api.docsById(ids, function(err, docs) {
+				if(err)
+					return callback(err);
 
-			callback(null, docs, facets);
-		});
+				// replace each array element with the actual document data for that element
+				docs = _.map(docs, function(doc) {
+					return doc.doc;
+				});
+				// remove any null array elements.
+				docs = _.compact(docs);
+
+				callback(null, docs, facets);
+			});
+		}
 	});
 }
 
@@ -327,9 +350,10 @@ function _makeFacets(facets, callback) {
 			if(parts[0] == 'Section')
 				parts[0] = "section_s";
 			
-            else if(parts[0] == 'Author') {
+else if(parts[0] == 'Author') {
 				parts[0] = "author_sm";
-				parts[1] = parts[1].toLowerCase(); // do a case-insensitive author search
+				parts[1] = parts[1].toLowerCase();
+				// do a case-insensitive author search
 			} else if(parts[0] == 'Year') {
 				parts[0] = "created_year_i";
 				facetFields.push("created_month_i");
@@ -349,13 +373,13 @@ function _makeFacets(facets, callback) {
 	callback(facetFields, facetQueries);
 }
 
-function _sortObjByKeys(arr){
+function _sortObjByKeys(arr) {
 	// Setup Arrays
 	var sortedKeys = Object.keys(arr).sort();
 	var sortedObj = {};
 
 	// Reconstruct sorted obj based on keys
-	for (var i = 0; i < sortedKeys.length; i ++){
+	for(var i = 0; i < sortedKeys.length; i++) {
 		sortedObj[sortedKeys[i]] = arr[sortedKeys[i]];
 	}
 	return sortedObj;

@@ -15,7 +15,7 @@ var SITEMAP_URL_LIMIT = 10000;
 sitemap.generateAllSitemaps = function (callback) {
     async.parallel([
 	function (cb) {
-	    sitemap.latestFullSitemap('public/sitemaps/sitemap', function (err) {
+	    sitemap.latestFullSitemap('sitemaps/sitemap', function (err) {
 		if (err) log.warning("Couldn't build full sitemap: " + err);
 		cb(err);
 	    });

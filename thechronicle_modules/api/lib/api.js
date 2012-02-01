@@ -18,7 +18,7 @@ api.newsletter = require("./newsletter");
 api.cron = require("./cron");
 api.database = require("./database");
 api.s3 = require('./s3');
-
+var sitemap = require("../../sitemap");
 var redis = require('../../redisclient');
 
 var MAX_URL_LENGTH = 50;
@@ -75,7 +75,7 @@ api.init = function(callback) {
       	api.cron.init();
         api.search.init();
         api.newsletter.init();
-
+        //.generateAllSitemaps(function(){console.log("success")});
         //api.database.findDuplicateUrls(100);
         //api.search.indexUnindexedArticles(1);
         /** Chron Jobs! **/

@@ -1,6 +1,5 @@
 var async = require('async');
 var fs = require('fs');
-var http = require('http');
 var md = require('node-markdown').Markdown;
 var solr = require('solr');
 var sprintf = require('sprintf').sprintf;
@@ -8,11 +7,9 @@ var sprintf = require('sprintf').sprintf;
 var api = require('../../api');
 var config = require("../../config");
 var db = require('../../db-abstract');
-var globalFunctions = require('../../global-functions');
 var k4export = require('./k4export');
 var log = require('../../log');
 var site = require('../../api/lib/site');
-var s3 = require('../../api/lib/s3');
 var sitemap = require('../../sitemap');
 
 var layoutAdmin = require('./layout');
@@ -161,33 +158,27 @@ exports.init = function (app, callback) {
                                   });
                               });
 
-                      app.get('/manage', site.checkAdmin,
-                              function (req, http_res) {
-                                  var db = api.getDatabaseName();
-                                  var host = api.getDatabaseHost();
-                                  var port = api.getDatabasePort() || "80";
+                      app.get('/manage', site.checkAdmin, function (req, res, next) {
+                          var db = api.getDatabaseName();
+                          var host = api.getDatabaseHost();
+                          var port = api.getDatabasePort() || "80";
 
-                                  var beforeKey = req.query.beforeKey;
-                                  var beforeID = req.query.beforeID;
+                          var beforeKey = req.query.beforeKey;
+                          var beforeID = req.query.beforeID;
 
-                                  api.docsByDate(beforeKey, beforeID,
-                                                 function (err, res) {
-                                                     if (err) {
-                                                         log.error(err);
-                                                         globalFunctions.showError(http_res, err);
-                                                     } else {
-                                                         http_res.render('admin/manage', {
-                                                             locals:{
-                                                                 docs:res,
-                                                                 hasPrevious:(beforeID != null),
-                                                                 db:db,
-                                                                 host:host,
-                                                                 port:port
-                                                             }
-                                                         });
-                                                     }
-                                                 });
+                          api.docsByDate(beforeKey, beforeID, function (err, docs) {
+                              if (err) next(err);
+                              else res.render('admin/manage', {
+                                  locals:{
+                                      docs:docs,
+                                      hasPrevious:(beforeID != null),
+                                      db:db,
+                                      host:host,
+                                      port:port
+                                  }
                               });
+                          });
+                      });
 
                       app.get('/k4export', site.checkAdmin,
                               function (req, res) {
@@ -218,111 +209,91 @@ exports.init = function (app, callback) {
                                    });
                                });
 
-                      app.post('/edit', site.checkAdmin,
-                               function (req, http_res) {
-                                   if (req.body.imageVersionId) {
-                                       api.image.addVersionToDoc(req.body.docId, req.body.original, req.body.imageVersionId, req.body.imageType, function (err, res) {
-                                           if (err) globalFunctions.showError(http_res, err);
-                                           else if(req.body.afterUrl) http_res.redirect(req.body.afterUrl);
-                                           else http_res.redirect('/admin');
-                                       });
-                                   } 
-                                   else {
-                                       var id = req.body.doc.id;
-                                       /*
-                                         var new_groups = req.body.doc.groups;
-                                         if(!(new_groups instanceof Array)) { //we will get a string if only one box is checked
-                                         new_groups = [new_groups];
-                                         }*/
-                                       var fields = {
-                                           title:req.body.doc.title,
-                                           body:req.body.doc.body,
-                                           teaser:req.body.doc.teaser,
-                                           authors:req.body.doc.authors.split(", "),
-                                           taxonomy:JSON.parse(req.body.doc.taxonomy)
-                                           //groups: new_groups
-                                       };
-                                       _renderBody(req.body.doc.body, function (err, rendered) {
-                                           fields.renderedBody = rendered;
-                                           api.editDoc(id, fields,
-                                                       function (err, res, url) {
-                                                           if (err) {
-                                                               globalFunctions.showError(http_res, err);
-                                                           } else {
-                                                               http_res.redirect('/article/' + url + '/edit');
-                                                           }
-                                                       });
-                                       });
-                                   }
-                               });
+                      app.post('/edit', site.checkAdmin, function (req, http_res, next) {
+                          if (req.body.imageVersionId) {
+                              api.image.addVersionToDoc(req.body.docId, req.body.original, req.body.imageVersionId, req.body.imageType, function (err, res) {
+                                  if (err) next(http_res);
+                                  else if(req.body.afterUrl) http_res.redirect(req.body.afterUrl);
+                                  else http_res.redirect('/admin');
+                              });
+                          } 
+                          else {
+                              var id = req.body.doc.id;
+                              /*
+                                var new_groups = req.body.doc.groups;
+                                if(!(new_groups instanceof Array)) { //we will get a string if only one box is checked
+                                new_groups = [new_groups];
+                                }*/
+                              var fields = {
+                                  title:req.body.doc.title,
+                                  body:req.body.doc.body,
+                                  teaser:req.body.doc.teaser,
+                                  authors:req.body.doc.authors.split(", "),
+                                  taxonomy:JSON.parse(req.body.doc.taxonomy)
+                                  //groups: new_groups
+                              };
+                              _renderBody(req.body.doc.body, function (err, rendered) {
+                                  fields.renderedBody = rendered;
+                                  api.editDoc(id, fields,
+                                              function (err, res, url) {
+                                                  if (err) next(err);
+                                                  else http_res.redirect('/article/' + url + '/edit');
+                                              });
+                              });
+                          }
+                      });
 
-                      app.post('/add', site.checkAdmin,
-                               function (req, http_res) {
-                                   var form = req.body.doc;
+                      app.post('/add', site.checkAdmin, function (req, http_res, next) {
+                          var form = req.body.doc;
 
-                                   var fields = {
-                                       body:form.body,
-                                       authors:form.authors.split(" ,"),
-                                       title:form.title,
-                                       teaser:form.teaser,
-                                       type:form.type,
-                                       taxonomy:JSON.parse(form.taxonomy)
-                                   };
+                          var fields = {
+                              body:form.body,
+                              authors:form.authors.split(" ,"),
+                              title:form.title,
+                              teaser:form.teaser,
+                              type:form.type,
+                              taxonomy:JSON.parse(form.taxonomy)
+                          };
 
-                                   async.waterfall([
-                                       function (callback) {
-                                           _renderBody(form.body, function (err, rendered) {
-                                               fields.renderedBody = rendered;
-                                               callback(null);
-                                           });
-                                       },
-                                       function (callback) {
-                                           api.addDoc(fields, callback);
-                                       }
-                                   ],
-                                                   function (err, url) {
-                                                       if (err) {
-                                                           globalFunctions.showError(http_res, err);
-                                                       }
-                                                       else {
-
-                                                           http_res.redirect('/article/' + url);
-                                                       }
-                                                   }
-                                                  );
-                               });
+                          async.waterfall([
+                              function (callback) {
+                                  _renderBody(form.body, function (err, rendered) {
+                                      fields.renderedBody = rendered;
+                                      callback(null);
+                                  });
+                              },
+                              function (callback) {
+                                  api.addDoc(fields, callback);
+                              }
+                          ], function (err, url) {
+                              if (err) next(err);
+                              else http_res.redirect('/article/' + url);
+                          });
+                      });
 
 
-                      app.post('/addPage', site.checkAdmin,
-                               function (req, http_res) {
-                                   var form = req.body.doc;
-                                   var fields = {
-                                       body:form.body,
-                                       title:form.title
-                                   };
+                      app.post('/addPage', site.checkAdmin, function (req, http_res, next) {
+                          var form = req.body.doc;
+                          var fields = {
+                              body:form.body,
+                              title:form.title
+                          };
 
-                                   async.waterfall([
-                                       function (callback) {
-                                           _renderBody(form.body, function (err, rendered) {
-                                               fields.renderedBody = rendered;
-                                               callback(null);
-                                           });
-                                       },
-                                       function (callback) {
-                                           api.addDoc(fields, callback);
-                                       }
-                                   ],
-                                                   function (err, url) {
-                                                       if (err) {
-                                                           globalFunctions.showError(http_res, err);
-                                                           log.warning(err);
-                                                       }
-                                                       else {
-                                                           http_res.redirect('page/' + url);
-                                                       }
-                                                   }
-                                                  );
-                               });
+                          async.waterfall([
+                              function (callback) {
+                                  _renderBody(form.body, function (err, rendered) {
+                                      fields.renderedBody = rendered;
+                                      callback(null);
+                                  });
+                              },
+                              function (callback) {
+                                  api.addDoc(fields, callback);
+                              }
+                          ], function (err, url) {
+                              if (err) next(err);
+                              else http_res.redirect('page/' + url);
+                          });
+                      });
 
                       app.delete('/article/:docId', site.checkAdmin, function (req, http_res) {
                           api.deleteDoc(req.params.docId, req.body.rev, function () {

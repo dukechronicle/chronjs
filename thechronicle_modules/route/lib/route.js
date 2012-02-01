@@ -221,10 +221,10 @@ exports.init = function (app, callback) {
         res.redirect('/search/' + query + '?sort=relevance&order=desc'); 
     });
 
-    app.get('/search/:query', function (req, res) {
+    app.get('/search/:query', function (req, res, next) {
         var query = req.params.query.replace(/-/g, ' ');
         site.getSearchContent(query, req.query, function (err, docs, facets) {
-            if (err) globalFunctions.showError(res, err);
+            if (err) next(err);
             else res.render('site/search', {
                 css:asereje.css(['container/style', 'site/search']),
                 locals: {
@@ -314,14 +314,14 @@ exports.init = function (app, callback) {
         });
     });
 
-    app.get('/article/:url/edit', site.checkAdmin, function (req, res) {
+    app.get('/article/:url/edit', site.checkAdmin, function (req, res, next) {
         var url = req.params.url;
         api.articleForUrl(url, function (err, doc) {
             if (err)
-                globalFunctions.showError(http_res, err);
+                next(err);
             else if (req.query.removeImage)
                 api.image.removeVersionFromDocument(doc._id, null, req.query.removeImage, function(err, doc) {
-                    if (err) globalFunctions.showError(res, err);
+                    if (err) next(err);
                     else res.redirect('/article/' + url + '/edit');
                 });
             else
@@ -343,10 +343,10 @@ exports.init = function (app, callback) {
         });
     });
 
-    app.get('/page/:url/edit', site.checkAdmin, site.renderPageEdit = function (req, res) {
+    app.get('/page/:url/edit', site.checkAdmin, function (req, res, next) {
         var url = req.params.url;
         api.docForUrl(url, function (err, doc) {
-            if (err) globalFunctions.showError(res, err);
+            if (err) next(err);
             else res.render('admin/editPage', {
                 locals: {
                     doc:doc

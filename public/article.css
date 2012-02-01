@@ -9,8 +9,8 @@ section > .nav h2 a:hover,section > .nav h3 a:hover,section > .nav h2 a.selected
 #article .metadata{color:#777;font-size:.8em;margin:1em 0}
 #article .social-media{font-size:.8em;float:right;margin-left:1.5em;margin-top:0;height:121px;}
 #article .social-media > div{margin-bottom:.3em}
-#article .social-media .comments a{background-image:url("/images/icons/article_comment.gif");background-repeat:no-repeat;background-position:0 2px;padding:0 0 3px 20px;color:#000}
-#article .social-media .print a{background-image:url("/images/icons/article_print.gif");background-repeat:no-repeat;background-position:0 2px;padding:0 0 3px 20px;color:#000}
+#article .social-media .comments a{background-image:url("http://d2sug25c5hnh7r.cloudfront.net/images/icons/article_comment.gif");background-repeat:no-repeat;background-position:0 2px;padding:0 0 3px 20px;color:#000}
+#article .social-media .print a{background-image:url("http://d2sug25c5hnh7r.cloudfront.net/images/icons/article_print.gif");background-repeat:no-repeat;background-position:0 2px;padding:0 0 3px 20px;color:#000}
 #article .social-media .print{padding-bottom:3px}
 #article .content{width:580px;float:left;padding:.7em 1.5em .6em 1.5em;background:#fff;}
 #article .content .photo-credit{float:right;color:#777;font-size:.8em}

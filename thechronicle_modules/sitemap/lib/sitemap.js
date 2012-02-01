@@ -30,13 +30,15 @@ sitemap.generateAllSitemaps = function (callback) {
 
 sitemap.latestFullSitemap = function (path, callback) {
     latestFullSitemapHelper(path, 0, null, [], function (err, files) {
-	child_process.exec('gzip ' + files.join(' '), function (err) {
-	    if (err) callback("Couldn't zip sitemap files: " + err);
-	    else generateSitemapIndex(files, new Date(), function (err, xml) {
-		if (err) callback(err);
-		else fs.writeFile(path + '.xml', xml, callback);
-	    });
-	});
+        if (files) {
+            child_process.exec('gzip ' + files.join(' '), function (err) {
+                if (err) callback("Couldn't zip sitemap files: " + err);
+                else generateSitemapIndex(files, new Date(), function (err, xml) {
+                if (err) callback(err);
+                else fs.writeFile(path + '.xml', xml, callback);
+                });
+            });
+        }
     });
 };
 

@@ -216,7 +216,10 @@ exports.init = function (app, callback) {
                                   else if(req.body.afterUrl) http_res.redirect(req.body.afterUrl);
                                   else http_res.redirect('/admin');
                               });
-                          } 
+                          }
+                          else if (req.body.doc.taxonomy == '') {
+                              next('No section selected for article');
+                          }
                           else {
                               var id = req.body.doc.id;
                               /*
@@ -224,6 +227,7 @@ exports.init = function (app, callback) {
                                 if(!(new_groups instanceof Array)) { //we will get a string if only one box is checked
                                 new_groups = [new_groups];
                                 }*/
+
                               var fields = {
                                   title:req.body.doc.title,
                                   body:req.body.doc.body,
@@ -237,38 +241,43 @@ exports.init = function (app, callback) {
                                   api.editDoc(id, fields,
                                               function (err, res, url) {
                                                   if (err) next(err);
-                                                  else http_res.redirect('/article/' + url + '/edit');
+                                                  else http_res.redirect('/article/' + url);
                                               });
                               });
                           }
                       });
 
                       app.post('/add', site.checkAdmin, function (req, http_res, next) {
-                          var form = req.body.doc;
+                          if (req.body.doc.taxonomy == '') {
+                              next('No section selected for article');
+                          }
+                          else {
+                              var form = req.body.doc;
 
-                          var fields = {
-                              body:form.body,
-                              authors:form.authors.split(" ,"),
-                              title:form.title,
-                              teaser:form.teaser,
-                              type:form.type,
-                              taxonomy:JSON.parse(form.taxonomy)
-                          };
+                              var fields = {
+                                  body:form.body,
+                                  authors:form.authors.split(" ,"),
+                                  title:form.title,
+                                  teaser:form.teaser,
+                                  type:form.type,
+                                  taxonomy:JSON.parse(form.taxonomy)
+                              };
 
-                          async.waterfall([
-                              function (callback) {
-                                  _renderBody(form.body, function (err, rendered) {
-                                      fields.renderedBody = rendered;
-                                      callback(null);
-                                  });
-                              },
-                              function (callback) {
-                                  api.addDoc(fields, callback);
-                              }
-                          ], function (err, url) {
-                              if (err) next(err);
-                              else http_res.redirect('/article/' + url);
-                          });
+                              async.waterfall([
+                                  function (callback) {
+                                      _renderBody(form.body, function (err, rendered) {
+                                          fields.renderedBody = rendered;
+                                          callback(null);
+                                      });
+                                  },
+                                  function (callback) {
+                                      api.addDoc(fields, callback);
+                                  }
+                              ], function (err, url) {
+                                  if (err) next(err);
+                                  else http_res.redirect('/article/' + url);
+                              });
+                          }
                       });
 
 

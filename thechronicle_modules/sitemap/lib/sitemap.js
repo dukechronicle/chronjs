@@ -31,7 +31,7 @@ sitemap.generateAllSitemaps = function (callback) {
 sitemap.latestFullSitemap = function (path, callback) {
     latestFullSitemapHelper(path, 0, null, [], function (err, files) {
         if (files) {
-            child_process.exec('gzip ' + files.join(' '), function (err) {
+            child_process.exec('gzip -f ' + files.join(' '), function (err) {
                 if (err) callback("Couldn't zip sitemap files: " + err);
                 else generateSitemapIndex(files, new Date(), function (err, xml) {
                 if (err) callback(err);
@@ -94,7 +94,7 @@ function generateSitemapIndex(files, date, callback) {
     async.forEach(files,
 		  function (path, cb) {
 		      // TODO: extract domain name
-		      var prefix = "http://dukechronicle.com/";
+		      var prefix = "http://www.dukechronicle.com/";
 		      root.ele("sitemap").
 			    ele("loc", prefix + path.replace(/public\//g,"") + ".gz").up().
 			    ele("lastmod", dateFormat(date, "yyyy-mm-dd"));
@@ -114,7 +114,7 @@ function generateSitemap(docs, news, callback) {
     async.forEach(docs,
 		  function (doc, cb) {
 		      // TODO: extract domain name
-		      var prefix = "http://dukechronicle.com/article/";
+		      var prefix = "http://www.dukechronicle.com/article/";
 		      var date = getDate(doc);
 		      if (date === undefined) return cb(err);
 		      var url = root.ele('url');

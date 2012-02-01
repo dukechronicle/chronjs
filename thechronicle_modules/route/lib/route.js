@@ -1,9 +1,14 @@
 var api = require('../../api');
-var asereje = require('asereje');
+var admin = require('../../admin');
+var log = require('../../log');
+var mobileapi = require('../../mobileapi/lib/mobileapi');
 var site = require('../../api/lib/site');
 
+var asereje = require('asereje');
+var async = require('async');
 
 var MOBILE_BROWSER_USER_AGENTS = ["Android", "iPhone", "Windows Phone", "Blackberry", "Symbian", "Palm", "webOS"];
+
 
 // assigns the functionality needed before different modules are ready to be
 // initilized (before config settings have been set)
@@ -48,7 +53,7 @@ exports.assignPreInitFunctionality = function (app, runSite) {
     });
 };
 
-exports.init = function (app) {
+exports.init = function (app, callback) {
 
     // redirect mobile browsers to the mobile site
     app.get('/*', function(req, res, next) {
@@ -384,6 +389,15 @@ exports.init = function (app) {
         res.send('42');
     });
 
+    async.parallel([
+        function(cb) {
+            admin.init(app, cb);
+        },
+        function(cb) {
+            mobileapi.init(app, cb);
+        }
+    ], callback);
+
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', function(req, res) {
         res.render('pages/404', {
@@ -393,4 +407,5 @@ exports.init = function (app) {
             url: req.url
         });
     });
+
 };

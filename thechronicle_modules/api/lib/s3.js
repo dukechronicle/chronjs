@@ -41,8 +41,6 @@ s3.init = function (callback) {
     KEY = config.get("S3_KEY");
     SECRET = config.get("S3_SECRET");
     CLOUDFRONT_DISTRIBUTION = config.get("CLOUDFRONT_DISTRIBUTION");
-
-    callback(null);
 };
 
 s3.getCloudFrontUrl = function(url) {

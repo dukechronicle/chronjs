@@ -7,7 +7,6 @@ var log = require('../../log');
 var redis = require('../../redisclient');
 var route = require('../../route');
 var rss = require('./rss');
-var sitemap = require('../../sitemap');
 
 var _ = require("underscore");
 var async = require('async');
@@ -34,23 +33,8 @@ var BENCHMARK = false;
 var twitterFeeds = ["DukeChronicle", "ChronicleRecess", "TowerviewMag", "DukeBasketball", "ChronPhoto", "ChronicleSports"];
 
 
-site.init = function (app, callback) {
+site.init = function (callback) {
     LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
-
-    api.init(function (err) {
-        if (err) {
-            log.crit("api init failed!");
-            return callback(err);
-        }
-
-        sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
-            if (err) log.warning("Couldn't build news sitemap: " + err);
-        });
-
-        route.init(app);
-
-        callback();
-    });
 };
 
 // Checks if you are an admin with browser check

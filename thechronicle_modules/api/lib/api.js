@@ -64,9 +64,8 @@ function _URLify(s, maxChars) {
 }
 
 api.init = function(callback) {
-    db.init(function(error) {
-        if(error)
-        {
+    db.init(function (err) {
+        if(err) {
             log.error("db init failed!");
             return callback(error);
         }
@@ -74,6 +73,7 @@ api.init = function(callback) {
       	api.cron.init();
         api.search.init();
         api.newsletter.init();
+        api.s3.init();
 
         //api.database.findDuplicateUrls(100);
         //api.search.indexUnindexedArticles(1);

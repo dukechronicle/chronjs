@@ -13,13 +13,13 @@ exports.bindPath = function (app) {
     }
 };
 
-function _getDocsInSection(req,res) {
+function _getDocsInSection(req,res,next) {
     var section = req.query.section;
     
     if (section) {
         api.taxonomy.docs(section, 30,
         function (err, docs) {
-            if (err) globalFunctions.showError(res, err);
+            if (err) next(err);
             else {
                 docs = docs.map(function (doc) {
                     return doc;
@@ -31,7 +31,7 @@ function _getDocsInSection(req,res) {
     else {
         api.docsByDate(null, null,
         function (err, docs) {
-            if (err) globalFunctions.showError(res, err);
+            if (err) next(err);
             else renderPage(req,res,docs);
         });
     }

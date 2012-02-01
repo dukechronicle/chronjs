@@ -6,7 +6,7 @@ var CustomLoggly = require('./loggly').CustomLoggly;
 
 
 exports.init = function (callback) {
-    logger = new (winston.Logger)();
+    var logger = new (winston.Logger)();
 
     logger.setLevels(winston.config.syslog.levels);
     logger.add(CustomConsole, {
@@ -15,7 +15,8 @@ exports.init = function (callback) {
 	handleExceptions: true
     });
 
-    if (process.env.NODE_ENV === 'production' && process.env.CHRONICLE_LOGGLY_SUBDOMAIN && process.env.CHRONICLE_LOGGLY_TOKEN)
+    if (process.env.NODE_ENV === 'production' && process.env.CHRONICLE_LOGGLY_SUBDOMAIN && process.env.CHRONICLE_LOGGLY_TOKEN) {
+        console.log("Adding Loggly");
         logger.add(CustomLoggly,
             {
                 subdomain: process.env.CHRONICLE_LOGGLY_SUBDOMAIN,
@@ -25,7 +26,7 @@ exports.init = function (callback) {
                 handleExceptions: true
             }
         );
-
+    }
     logger.handleExceptions();
 
 

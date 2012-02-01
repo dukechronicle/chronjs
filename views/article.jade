@@ -19,7 +19,7 @@
                     if (typeof isAdmin != 'undefined' && isAdmin && doc.images.Original)
                         a(href="/admin/image/"+doc.images.Original.name)
                             img.article(src=doc.images.LargeRect.url)
-                    else
+                    elsepopular
                         img.article(src=doc.images.LargeRect.url)
 
             // caption
@@ -67,6 +67,9 @@
             .image-container.medium-rectangle!=partial('ad/medium-rect', {title: "Advertisement"})
             - if (model.popular && model.popular.length > 0)
                 .most-popular!=partial('container/most-popular', {title: "Popular", stories: model.popular})
+
+            - if (model.related && model.related.length > 0)
+                .related!=partial('container/most-popular', {title: "Related", stories: model.related})
 
     // comments
     #disqus_thread.rounded

@@ -1,5 +1,6 @@
 var api = require('../../api');
 var admin = require('../../admin');
+var globalFunctions = require('../../global-functions');
 var log = require('../../log');
 var mobileapi = require('../../mobileapi/lib/mobileapi');
 var site = require('../../api/lib/site');
@@ -7,7 +8,8 @@ var site = require('../../api/lib/site');
 var asereje = require('asereje');
 var async = require('async');
 
-var MOBILE_BROWSER_USER_AGENTS = ["Android", "iPhone", "Windows Phone", "Blackberry", "Symbian", "Palm", "webOS"];
+var MOBILE_BROWSER_USER_AGENTS = ["Android", "iPhone", "Windows Phone",
+                                  "Blackberry", "Symbian", "Palm", "webOS"];
 
 
 // assigns the functionality needed before different modules are ready to be

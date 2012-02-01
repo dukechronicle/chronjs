@@ -29,7 +29,7 @@ body section > #frontpage #top > .content .top-news .rounded a.hover.first{margi
 body section > #frontpage #top > .content .top-news .rounded a.hover h3{margin-top:0}
 body section > #frontpage #top > .content .top-news .rounded a.hover.teaser{padding-bottom:.3em}
 body section > #frontpage #top > .content .top-news .rounded p{font-size:1em;margin-top:5px}
-body section > #frontpage #top > .content .top-news .rounded ul li h3{background:url("/images/bullet.gif") no-repeat left 7px}
+body section > #frontpage #top > .content .top-news .rounded ul li h3{background:url("http://d2sug25c5hnh7r.cloudfront.net/images/bullet.gif") no-repeat left 7px}
 body section > #frontpage #news,body section > #frontpage #sports{width:474.5px;}
 body section > #frontpage #news .rounded,body section > #frontpage #sports .rounded{padding:10px;width:454px}
 body section > #frontpage #news .content-container a.hover.highlight-right,body section > #frontpage #sports .content-container a.hover.highlight-right,body section > #frontpage #news .content-container a.hover.highlight-left,body section > #frontpage #sports .content-container a.hover.highlight-left{margin:0}
@@ -49,7 +49,7 @@ body section > #frontpage #news .content-container .bottom .left a.hover,body se
 body section > #frontpage #news .content-container .bottom .left a.hover.first,body section > #frontpage #sports .content-container .bottom .left a.hover.first{padding-top:6px}
 body section > #frontpage #news .content-container .bottom .left a.hover.last,body section > #frontpage #sports .content-container .bottom .left a.hover.last{padding-bottom:0}
 body section > #frontpage #news .content-container .bottom .right,body section > #frontpage #sports .content-container .bottom .right{width:190px;}
-body section > #frontpage #news .content-container .bottom .right ul li,body section > #frontpage #sports .content-container .bottom .right ul li{padding-left:11px;background:url("/images/bullet.gif") no-repeat left 1em;}
+body section > #frontpage #news .content-container .bottom .right ul li,body section > #frontpage #sports .content-container .bottom .right ul li{padding-left:11px;background:url("http://d2sug25c5hnh7r.cloudfront.net/images/bullet.gif") no-repeat left 1em;}
 body section > #frontpage #news .content-container .bottom .right ul li a.hover,body section > #frontpage #sports .content-container .bottom .right ul li a.hover{padding-top:6px;margin-right:-13px;padding-right:13px;padding-bottom:6px}
 body section > #frontpage #news{float:left;}
 body section > #frontpage #news .content-container h2{margin-top:-4px}

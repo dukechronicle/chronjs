@@ -630,7 +630,8 @@ site.init = function (app, callback) {
                             doc:doc,
                             isAdmin:isAdmin,
                             model:model,
-                            parentPaths:parents
+                            parentPaths:parents,
+                            isProduction: (process.env.NODE_ENV === 'production')
                         },
                         filename:'views/article',
                         layout: 'layout-article',
@@ -974,7 +975,7 @@ function _parseAuthor(doc) {
 function _404Route(req, res) {
     res.render('pages/404', {
         filename: 'pages/404',
-        css: asereje.css(['pages/style']),
+        css: asereje.css([]),
 	    status: 404,
         url: req.url
     });

@@ -41,7 +41,7 @@ define(["jquery", "underscore"], function($) {
 
             var extraHeight = $('#top > .sidebar').height() - $('#top > .content').height() + 3;
             var contentContainer = $('#top > .content .top-news .content-container');
-            var popularContainer = $('#top > .sidebar .most-popular .content-container');
+            var popularContainer = $('#top > .sidebar .numbered-articles .content-container');
 
             //console.log(extraHeight);
             if (extraHeight > 0) {

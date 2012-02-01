@@ -586,6 +586,11 @@ site.init = function (app, callback) {
                     _404Route(req, http_res);
                 }
                 else {
+                	
+                	//api.search.relatedArticles(doc._id, 5, function(err, related) {
+                		
+                	//});
+                	
                     // convert timestamp
                     if (doc.created) {
                         doc.date = _convertTimestamp(doc.created);
@@ -614,6 +619,7 @@ site.init = function (app, callback) {
                                                         title:parts[1]
                                                     };
                                                 });
+                                                api.search.relatedArticles(doc._id, 5, function(err, related) {
                             var model = {
                                 "adFullRectangle":{
                                     "title":"Advertisement",
@@ -623,7 +629,7 @@ site.init = function (app, callback) {
                                     "height":"250px"
                                 },
                                 "popular": popular,
-				"related": popular
+								"related": related
                             };
 			    api.taxonomy.getParents(doc.taxonomy, function (err, parents) {
                     http_res.render('article', {
@@ -638,6 +644,7 @@ site.init = function (app, callback) {
                         css:asereje.css(['container/style', 'article'])
                         });
                     });
+                        });
                         });
                     }
 		    

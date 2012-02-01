@@ -622,7 +622,8 @@ site.init = function (app, callback) {
                                     "width":"300px",
                                     "height":"250px"
                                 },
-                                "popular": popular
+                                "popular": popular,
+				"related": popular
                             };
 			    api.taxonomy.getParents(doc.taxonomy, function (err, parents) {
                     http_res.render('article', {

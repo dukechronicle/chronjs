@@ -15,7 +15,7 @@ var SITEMAP_URL_LIMIT = 10000;
 sitemap.generateAllSitemaps = function (callback) {
     async.parallel([
 	function (cb) {
-	    sitemap.latestFullSitemap('sitemaps/sitemap', function (err) {
+	    sitemap.latestFullSitemap('public/sitemaps/sitemap', function (err) {
 		if (err) log.warning("Couldn't build full sitemap: " + err);
 		cb(err);
 	    });
@@ -54,18 +54,16 @@ function latestFullSitemapHelper(path, number, start, files, callback) {
 	query.skip = 1;
     }
     latestSitemap(path + number + ".xml", query, false,
-		  function (err, numresults, lastkey) {
-		      if (err)
-			  callback(err);
-		      else if (numresults == SITEMAP_URL_LIMIT) {
-			  files.push(path + number + ".xml");
-			  latestFullSitemapHelper(path, number+1, lastkey, files, callback);
-		      }
-		      else {
-			  files.push(path + number + ".xml");
-			  callback(null, files);
-		      }
-		  });
+      function (err, numresults, lastkey) {
+          if (err) callback(err);
+          else if (numresults == SITEMAP_URL_LIMIT) {
+              files.push(path + number + ".xml");
+              latestFullSitemapHelper(path, number+1, lastkey, files, callback);
+          } else {
+              files.push(path + number + ".xml");
+              callback(null, files);
+          }
+      });
 }
 
 function latestSitemap(path, query, news, callback) {
@@ -96,9 +94,9 @@ function generateSitemapIndex(files, date, callback) {
     async.forEach(files,
 		  function (path, cb) {
 		      // TODO: extract domain name
-		      var prefix = "http://www.dukechronicle.com/";
+		      var prefix = "http://dukechronicle.com/";
 		      root.ele("sitemap").
-			    ele("loc", prefix + path + ".gz").up().
+			    ele("loc", prefix + path.replace(/public\//g,"") + ".gz").up().
 			    ele("lastmod", dateFormat(date, "yyyy-mm-dd"));
 		      cb();
 		  },
@@ -116,7 +114,7 @@ function generateSitemap(docs, news, callback) {
     async.forEach(docs,
 		  function (doc, cb) {
 		      // TODO: extract domain name
-		      var prefix = "http://www.dukechronicle.com/article/";
+		      var prefix = "http://dukechronicle.com/article/";
 		      var date = getDate(doc);
 		      if (date === undefined) return cb(err);
 		      var url = root.ele('url');

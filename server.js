@@ -8,15 +8,14 @@ var stylus = require('stylus');
 var sprintf = require('sprintf').sprintf;
 
 /* require internal modules */
-var admin = require('./thechronicle_modules/admin/lib/admin');
 var api = require('./thechronicle_modules/api');
 var config = require('./thechronicle_modules/config');
 var globalFunctions = require('./thechronicle_modules/global-functions');
 var log = require('./thechronicle_modules/log');
-var mobileapi = require('./thechronicle_modules/mobileapi/lib/mobileapi');
 var redisClient = require('./thechronicle_modules/redisclient');
 var route = require('./thechronicle_modules/route');
 var site = require('./thechronicle_modules/api/lib/site');
+var sitemap = require('./thechronicle_modules/sitemap');
 
 
 asereje.config({
@@ -120,18 +119,18 @@ function runSite(callback) {
                 pass:redisClient.getPassword()
 	    })
         }));
+        
+        api.init(function (err) {
+            if (err) log.crit("api init failed!");
+            else {
+                sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
+                    if (err) log.warning("Couldn't build news sitemap: " + err);
+                });
+                site.init();
 
-        // initialize all routes
-        async.parallel([
-            function(callback) {
-                site.init(app, callback);
-            },
-            function(callback) {
-                admin.init(app, callback);
-            },
-            function(callback) {
-                mobileapi.init(app, callback);
+                // initialize all routes
+                route.init(app, callback);
             }
-        ], callback);
+        });
     });
 }

@@ -40,11 +40,6 @@ function _renderBody(body, callback) {
 }
 
 exports.init = function (app, callback) {
-    s3.init(function (err) {
-        if (err) {
-            log.error("S3 init failed!");
-            return callback(err);
-        }
 
         //Run this to render bodies for all articles
         /*

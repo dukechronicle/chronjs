@@ -84,7 +84,7 @@ app.configure(function() {
     /* set http cache to one minute by default for each response */
     app.use(function(req,res,next){
         if(!api.accounts.isAdmin(req)) {
-            res.header('Cache-Control', 'public, max-age=60');
+            res.header('Cache-Control', 'public, max-age=300');
         }
         next();
     });

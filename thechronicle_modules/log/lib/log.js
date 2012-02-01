@@ -35,7 +35,7 @@ exports.init = function (callback) {
         console.error("Logging error: " + JSON.stringify(err));
     });
 
-    logger.warning('Logger is up on heroku');
+    logger.info('Logger is up on heroku');
     logger.extend(exports);
     callback();
 };

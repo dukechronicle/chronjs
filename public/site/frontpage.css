@@ -41,7 +41,7 @@ body section > #frontpage #news .content-container .top p.teaser,body section > 
 body section > #frontpage #news .content-container .top a.hover,body section > #frontpage #sports .content-container .top a.hover{margin-left:-13px;padding-left:13px}
 body section > #frontpage #news .content-container .top img,body section > #frontpage #sports .content-container .top img{-webkit-border-radius:4px;-moz-border-radius:4px;-ms-border-radius:4px;-o-border-radius:4px;border-radius:4px;-webkit-box-shadow:0 0 4px #999;-moz-box-shadow:0 0 4px #999;-ms-box-shadow:0 0 4px #999;-o-box-shadow:0 0 4px #999;box-shadow:0 0 4px #999;-webkit-transition:box-shadow .25s linear;-moz-transition:box-shadow .25s linear;-ms-transition:box-shadow .25s linear;-o-transition:box-shadow .25s linear;transition:box-shadow .25s linear}
 body section > #frontpage #news .content-container .top a.hover:hover img,body section > #frontpage #sports .content-container .top a.hover:hover img{-webkit-box-shadow:0 0 4px #000;-moz-box-shadow:0 0 4px #000;-ms-box-shadow:0 0 4px #000;-o-box-shadow:0 0 4px #000;box-shadow:0 0 4px #000}
-body section > #frontpage #news .content-container .top img,body section > #frontpage #sports .content-container .top img{float:right}
+body section > #frontpage #news .content-container .top img,body section > #frontpage #sports .content-container .top img{float:right;width:186px;height:133px}
 body section > #frontpage #news .content-container .top .text,body section > #frontpage #sports .content-container .top .text{float:left;width:240px;height:115px}
 body section > #frontpage #news .content-container .bottom,body section > #frontpage #sports .content-container .bottom{padding-top:10px;clear:both;}
 body section > #frontpage #news .content-container .bottom .left,body section > #frontpage #sports .content-container .bottom .left{width:240px;}
@@ -55,3 +55,6 @@ body section > #frontpage #news{float:left;}
 body section > #frontpage #news .content-container h2{margin-top:-4px}
 body section > #frontpage #sports{float:right;}
 body section > #frontpage #sports .content-container h2{margin-top:-4px}
+body section > #frontpage #sports img{width:186px;height:133px}
+body section > #frontpage #recess .block-row.large-first a.hover.first img,body section > #frontpage #towerview .block-row.large-first a.hover.first img{width:292px;height:174px}
+body section > #frontpage #recess .block-row a.hover img,body section > #frontpage #towerview .block-row a.hover img{width:133px;height:95px}

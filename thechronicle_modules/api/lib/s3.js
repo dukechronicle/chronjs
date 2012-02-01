@@ -16,7 +16,8 @@ s3.put = function (buf, key, type, callback) {
     _getClientStatic(function (err, client) {
         var req = client.put(key, {
             'Content-Length':buf.length,
-            'Content-Type':type
+            'Content-Type':type,
+            'Cache-Control': 'public, max-age=86400'
         });
         req.on('response', function (res) {
             if (200 == res.statusCode) callback(null, _getUrl(key));

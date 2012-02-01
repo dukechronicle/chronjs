@@ -49,11 +49,12 @@ search.indexUnindexedArticles = function(count) {
 				search.indexArticle(row._id, row.title, row.body, row.taxonomy, row.authors, row.created, function(error2, response2) {
 					if(error2)
 						log.warning(error2);
-					else {
-
+					else {    
 						db.search.setArticleAsIndexed(row._id, INDEX_VERSION, function(error3, response3) {
 							if(error3)
 								log.warning(error3);
+                            else
+                                log.info('indexed ' + row.title);
 						});
 					}
 				});

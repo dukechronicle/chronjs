@@ -1,11 +1,14 @@
-var disqus_developer = 1; // developer mode is on. REMOVE THIS IN PRODUCTION SET UP
+var disqus_developer = 0; // developer mode is on. REMOVE THIS IN PRODUCTION SET UP
 var disqus_shortname = 'dukechronicle';
+var disqus_url;
 var disqus_identifier;
+var disqus_title;
 
-function loadDisqusForArticle(articleID)
+function loadDisqusForArticle(articleID, title, url)
 {
 	disqus_identifier = articleID;
-	
+    disqus_title = title;
+    disqus_url = "http://dukechronicle.com/article/" + url;
 	(function() {
 	    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
 	    dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';

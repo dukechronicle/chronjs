@@ -10,7 +10,6 @@ var sprintf = require('sprintf').sprintf;
 /* require internal modules */
 var api = require('./thechronicle_modules/api');
 var config = require('./thechronicle_modules/config');
-var globalFunctions = require('./thechronicle_modules/global-functions');
 var log = require('./thechronicle_modules/log');
 var redisClient = require('./thechronicle_modules/redisclient');
 var route = require('./thechronicle_modules/route');
@@ -81,9 +80,9 @@ app.configure(function() {
     app.use(app.router);
 });
 
-app.error(function(err, req, res) {
+app.error(function(err, req, res, next) {
     log.error(err);
-    globalFunctions.showError(res, err);
+    next(err);
 });
 
 log.init(function (err) {

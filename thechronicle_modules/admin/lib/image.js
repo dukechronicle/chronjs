@@ -1,5 +1,6 @@
 var globalFunctions = require('../../global-functions');
 var config = require('../../config');
+var log = require('../../log');
 var async = require('async');
 var site = require('../../api/lib/site.js');
 var fs = require('fs');
@@ -73,7 +74,7 @@ exports.bindPath = function (app) {
                     ],
                             function (err, result, url) {
                                 if (err) {
-                                    globalFunctions.log(err);
+                                    log.error(err);
 
                                     if (typeof(err) == "object") {
                                         err = "Error";
@@ -85,7 +86,7 @@ exports.bindPath = function (app) {
                                     });
                                 }
                                 else {
-                                    globalFunctions.log('Image uploaded: ' + url + ' and stored in DB: ' + result);
+                                    log.info('Image uploaded: ' + url + ' and stored in DB: ' + result);
                                     globalFunctions.sendJSONResponse(httpRes, {
                                         imageID:imageID,
                                         imageName:imageName
@@ -123,15 +124,15 @@ exports.bindPath = function (app) {
                 });
 
         app.get('/:imageName', site.checkAdmin,
-                function (req, httpRes) {  //this function either renders image or calls showError if there is an error
+                function (req, httpRes, next) {  //this function either renders image or calls showError if there is an error
                     var imageName = req.params.imageName; //get image name from req
                     api.image.getOriginal(imageName,
                             function (err, orig) { //anonymous function checks for an error
-                                if (err) globalFunctions.showError(httpRes, err); //show this message if there is an error
+                                if (err) next(err);
                                 else {
                                     api.docsById(orig.value.imageVersions,
                                             function (err2, versions) {
-                                                if (err2) globalFunctions.showError(httpRes, err2); // if an error is found, 
+                                                if (err2) next(err2);
                                                 else {
                                                     var imageTypes = config.get('IMAGE_TYPES');
 
@@ -182,7 +183,7 @@ exports.bindPath = function (app) {
 
                 });
 
-        app.post('/crop', site.checkAdmin, function (req, httpRes) {
+        app.post('/crop', site.checkAdmin, function (req, httpRes, next) {
             var imageName = req.body.name;
             var afterUrl = req.body.afterUrl;
             var docId = req.body.docId;
@@ -190,9 +191,7 @@ exports.bindPath = function (app) {
             var height = req.body.finalHeight;
 
             api.image.createCroppedVersion(imageName, width, height, req.body.x1, req.body.y1, req.body.x2, req.body.y2, function (err, orig) {
-                if (err) {
-                    globalFunctions.showError(httpRes, err); //check for an error
-                }
+                if (err) next(err);
                 else {
                     if (docId)
                         if (afterUrl) httpRes.redirect('/admin/image/' + imageName + '?afterUrl=' + afterUrl + '&docId=' + docId);

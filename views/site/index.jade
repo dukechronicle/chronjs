@@ -20,7 +20,7 @@
             if (model.twitter)
                 .twitter!=partial('container/twitter', model.twitter)
             if (model.popular)
-                .most-popular!=partial('container/numbered-articles', {title: "Popular", stories: model.popular})
+                .numbered-articles.most-popular!=partial('container/numbered-articles', {title: "Popular", stories: model.popular})
             if (model.Opinion)
                 .opinion!=partial('container/opinion', {title: "Opinion", stories: model.Opinion})
             if (model.adFullRectangle)

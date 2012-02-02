@@ -587,10 +587,6 @@ site.init = function (app, callback) {
                 }
                 else {
                 	
-                	//api.search.relatedArticles(doc._id, 5, function(err, related) {
-                		
-                	//});
-                	
                     // convert timestamp
                     if (doc.created) {
                         doc.date = _convertTimestamp(doc.created);
@@ -620,6 +616,7 @@ site.init = function (app, callback) {
                                                     };
                                                 });
                                                 api.search.relatedArticles(doc._id, 5, function(err, related) {
+                           
                             var model = {
                                 "adFullRectangle":{
                                     "title":"Advertisement",

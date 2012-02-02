@@ -3,7 +3,6 @@ var asereje = require('asereje');
 var async = require('async');
 var express = require('express');
 require('express-namespace');
-require('express-configure');
 var stylus = require('stylus');
 var sprintf = require('sprintf').sprintf;
 var fs = require('fs');

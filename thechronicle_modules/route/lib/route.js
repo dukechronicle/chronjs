@@ -3,7 +3,6 @@ var admin = require('../../admin');
 var globalFunctions = require('../../global-functions');
 var log = require('../../log');
 var mobileapi = require('../../mobileapi/lib/mobileapi');
-var site = require('../../api/lib/site');
 
 var asereje = require('asereje');
 var async = require('async');
@@ -19,7 +18,7 @@ exports.assignPreInitFunctionality = function (app, runSite) {
 	var body = req.body;
         api.accounts.login(req, body.username, body.password, function (err) {
             if (err)
-		site.askForLogin(res, body.afterLogin, body.username, err);
+		api.site.askForLogin(res, body.afterLogin, body.username, err);
             else
 		res.redirect(req.body.afterLogin);
         });
@@ -34,16 +33,16 @@ exports.assignPreInitFunctionality = function (app, runSite) {
 
     app.get('/config', function (req, res) {
         if (api.accounts.isAdmin(req))
-            site.renderConfigPage(res);
+            api.site.renderConfigPage(res);
         else
-            site.askForLogin(res, '/config');
+            api.site.askForLogin(res, '/config');
     });
 
     app.post('/config', function (req, res) {
         if (api.accounts.isAdmin(req))
             config.setUp(req.body, function (err) {
                 if (err)
-		    site.renderConfigPage(res,err);
+		    api.site.renderConfigPage(res,err);
 		else 
                     runSite(function (err) {
 			if (err) log.error(err);
@@ -51,7 +50,7 @@ exports.assignPreInitFunctionality = function (app, runSite) {
                     });
             });
         else
-	    site.askForLogin(res, '/config');
+	    api.site.askForLogin(res, '/config');
     });
 };
 
@@ -131,7 +130,7 @@ exports.init = function (app, callback) {
     });
 
     app.get('/', function (req, res) {
-        site.getFrontPageContent(function (err, model) {
+        api.site.getFrontPageContent(function (err, model) {
             res.render('site/index', {
                 css:asereje.css(['slideshow/style', 'container/style', 'site/frontpage']),
                 filename:'views/site/index.jade',
@@ -143,7 +142,7 @@ exports.init = function (app, callback) {
     });
 
     app.get('/news', function (req, res) {
-        site.getNewsPageContent(function (err, model, children) {
+        api.site.getNewsPageContent(function (err, model, children) {
             res.render('site/news', {
                 css:asereje.css(['container/style', 'site/section', 'site/news']),
                 subsections:children,
@@ -154,7 +153,7 @@ exports.init = function (app, callback) {
     });
 
     app.get('/sports', function (req, res) {
-        site.getSportsPageContent(function (err, model, children) {
+        api.site.getSportsPageContent(function (err, model, children) {
             res.render('site/sports', {
                 css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
                 subsections:[children.men, children.women],
@@ -165,7 +164,7 @@ exports.init = function (app, callback) {
     });
 
     app.get('/opinion', function (req, res) {
-        site.getOpinionPageContent(function (err, model, children) {
+        api.site.getOpinionPageContent(function (err, model, children) {
             res.render('site/opinion', {
                 css:asereje.css(['container/style', 'site/section', 'site/opinion']),
                 subsections:children,
@@ -176,7 +175,7 @@ exports.init = function (app, callback) {
     });
 
     app.get('/recess', function (req, res) {
-        site.getRecessPageContent(function (err, model, children) {
+        api.site.getRecessPageContent(function (err, model, children) {
             res.render('site/recess', {
                 css:asereje.css(['container/style', 'site/section', 'site/recess']),
                 subsections:children,
@@ -187,7 +186,7 @@ exports.init = function (app, callback) {
     });
 
     app.get('/towerview', function (req, res) {
-        site.getTowerviewPageContent(function (err, model, children) {
+        api.site.getTowerviewPageContent(function (err, model, children) {
             res.render('site/towerview', {
                 css:asereje.css(['container/style', 'site/section', 'site/towerview']),
                 subsections:children,
@@ -199,7 +198,7 @@ exports.init = function (app, callback) {
 
     app.get('/section/*', function (req, res) {
         var params = req.params.toString().split('/');
-        site.getSectionContent(params, function (err, section, docs, children, parents, popular) {
+        api.site.getSectionContent(params, function (err, section, docs, children, parents, popular) {
 	    res.render('site/section', {
 		css:asereje.css(['container/style', 'site/section']),
 		locals: {
@@ -223,7 +222,7 @@ exports.init = function (app, callback) {
 
     app.get('/search/:query', function (req, res, next) {
         var query = req.params.query.replace(/-/g, ' ');
-        site.getSearchContent(query, req.query, function (err, docs, facets) {
+        api.site.getSearchContent(query, req.query, function (err, docs, facets) {
             if (err) next(err);
             else res.render('site/search', {
                 css:asereje.css(['container/style', 'site/search']),
@@ -241,7 +240,7 @@ exports.init = function (app, callback) {
 
     app.get('/staff/:query', function (req, res) {
         var name = req.params.query.replace(/-/g, ' ');
-        site.getAuthorContent(name, function (err, docs) {
+        api.site.getAuthorContent(name, function (err, docs) {
 	    res.render('site/people', {
                 css:asereje.css(['container/style', 'site/people']),
                 locals:{
@@ -254,7 +253,7 @@ exports.init = function (app, callback) {
 
     app.get('/page/:url', function (req, res, next) {
         var url = req.params.url;
-        site.getPageContent(url, function (err, doc, model) {
+        api.site.getPageContent(url, function (err, doc, model) {
             if (err)
                 next();
             else if ('/page/' + url != doc.path)
@@ -273,7 +272,7 @@ exports.init = function (app, callback) {
     app.get('/article/:url', function (req, res, next) {
         var url = req.params.url;
         var isAdmin = api.accounts.isAdmin(req);
-        site.getArticleContent(url, function (err, doc, model, parents) {
+        api.site.getArticleContent(url, function (err, doc, model, parents) {
             if (err)
                 next();
             else if ('/article/' + url != doc.url)
@@ -294,7 +293,7 @@ exports.init = function (app, callback) {
 
     app.get('/article/:url/print', function (req, res, next) {
         var url = req.params.url;
-        site.getArticleContent(url, function (err, doc, model, parents) {
+        api.site.getArticleContent(url, function (err, doc, model, parents) {
             if (err)
                 next();
             else if ('/article/' + url != doc.url)
@@ -314,7 +313,7 @@ exports.init = function (app, callback) {
         });
     });
 
-    app.get('/article/:url/edit', site.checkAdmin, function (req, res, next) {
+    app.get('/article/:url/edit', api.site.checkAdmin, function (req, res, next) {
         var url = req.params.url;
         api.articleForUrl(url, function (err, doc) {
             if (err)
@@ -343,7 +342,7 @@ exports.init = function (app, callback) {
         });
     });
 
-    app.get('/page/:url/edit', site.checkAdmin, function (req, res, next) {
+    app.get('/page/:url/edit', api.site.checkAdmin, function (req, res, next) {
         var url = req.params.url;
         api.docForUrl(url, function (err, doc) {
             if (err) next(err);
@@ -356,7 +355,7 @@ exports.init = function (app, callback) {
     });
 
     app.get('/login', function (req, res) {
-        site.askForLogin(res, '/');
+        api.site.askForLogin(res, '/');
     });
 
     app.get('/newsletter', function (req, res) {

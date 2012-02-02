@@ -38,6 +38,7 @@ search.getIndexVersion = function() {
 search.init = function() {
 	client = solr.createClient(config.get('SOLR_HOST'), config.get('SOLR_PORT'), config.get('SOLR_CORE'), config.get('SOLR_PATH'));
 };
+
 // check for unindexed articles, or articles with index versioning below the current version, and index them in solr.
 search.indexUnindexedArticles = function(count) {
 	log.notice('looking for articles to index...');
@@ -128,6 +129,7 @@ search.indexArticle = function(id, title, body, taxonomy, authors, createdDate, 
 search.unindexArticle = function(id, callback) {
 	client.del(createSolrIDFromDBID(id), null, callback);
 };
+
 // don't call this. only used by environment maker
 // removes all indexes from solr for the db we are using and sets all documents in the db we are using to not being indexed by solr
 search.removeAllDocsFromSearch = function(callback) {
@@ -172,6 +174,7 @@ search.docsByAuthor = function(authorName, sortOrder, facets, page, callback) {
 		sort : 'created_date_d' + " " + sortOrder
 	}, callback);
 };
+
 // Function for searching by query
 search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page, callback) {
 	wordsQuery = globalFunctions.trim(wordsQuery);
@@ -239,6 +242,7 @@ search.relatedArticles = function(id, count, callback) {
 	});
 
 }
+
 function querySolr(query, options, callback) {
 	if(query.length > 0) {
 		query = "database_host_s:" + db.getDatabaseHost() + " AND database_s:" + db.getDatabaseName() + " AND (" + query + ")";
@@ -357,7 +361,7 @@ function _makeFacets(facets, callback) {
 			if(parts[0] == 'Section')
 				parts[0] = "section_s";
 			
-else if(parts[0] == 'Author') {
+            else if(parts[0] == 'Author') {
 				parts[0] = "author_sm";
 				parts[1] = parts[1].toLowerCase();
 				// do a case-insensitive author search

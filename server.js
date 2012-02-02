@@ -32,30 +32,33 @@ asereje.config({
     , css_path: __dirname + '/public'                  // css folder path
 });
 
+var app = null;
 log.init(function (err) {
             console.log("log init");
             if (err) console.log("Logger couldn't be initialized: " + err);
             else {
                 config.init(function(err) {
-                    console.log("config initialized")
+                    log.info("config initialized")
                     if(err) return log.crit(err);
 
-                    if(!config.isSetUp()) app.get('/', function(req, res, next) {
-                        if(!config.isSetUp()) res.redirect('/config');
-                        else next();
-                            });
-                    else {
-                        redisClient.init(function(err) {
-                            console.log("redis initialized");
-                            if (err) {
-                                console.log("redis init error");
-                                throw "Redis connection error";
-                            }
-                            var app = configureApp();
-                            runSite(app, function() {});
+                    if(!config.isSetUp()) {
+                        configureApp();
+                        app.get('/', function(req, res, next) {
+                            if(!config.isSetUp()) res.redirect('/config');
+                            else next();
                         });
                     }
-
+                    else {
+                        redisClient.init(function(err) {
+                            log.info("redis initialized");
+                            if (err) {
+                                log.error("redis init error");
+                                throw "Redis connection error";
+                            }
+                            configureApp();
+                            runSite(function() {});
+                        });
+                    }
                 });
             }
          });
@@ -73,7 +76,8 @@ function compile(str, path) {
 
 function configureApp() {
     /* express configuration */
-    var app = express.createServer();
+    app = express.createServer();
+
     // add the stylus middleware, which re-compiles when
     // a stylesheet has changed, compiling FROM src,
     // TO dest. dest is optional, defaulting to src
@@ -107,13 +111,21 @@ function configureApp() {
         // set up session
         app.use(express.cookieParser());
 
-        app.use(express.session({
+        var sessionInfo = {
             secret: SECRET,
-            store: new RedisStore({
+        };
+
+        if(redisClient.client) {
+            sessionInfo.store = new RedisStore({
                 client: redisClient.client
-            })
-        }));
-        //app.use(express.session({ secret: "keyboard cat" }));
+            });
+        }
+        else {
+            log.warning('Redis server not defined. Using memory store for sessions instead.'); 
+            log.warning('After defining the configuration info for redis, please restart the server so it will be used as the session store.');
+        }
+        app.use(express.session(sessionInfo));
+
         /* set http cache to one minute by default for each response */
         app.use(function(req,res,next){
             if(!api.accounts.isAdmin(req)) {
@@ -122,7 +134,6 @@ function configureApp() {
             next();
         });
         app.use(app.router);
-
     });
 
     app.error(function(err, req, res) {
@@ -133,20 +144,18 @@ function configureApp() {
     site.assignPreInitFunctionality(app, this);
 
     app.listen(port);
-    return app;
 }
 
 exports.runSite = function(callback) {
 	runSite(callback);
 };
 
-function runSite(app, callback) {
+function runSite(callback) {
 	log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));
 
     // use redis as our session store
     redisClient.init(function (err0) {
         if(err0) return log.error(err0);
-
 
         // initialize all routes
         async.parallel([

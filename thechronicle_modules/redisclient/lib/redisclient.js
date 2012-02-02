@@ -8,8 +8,6 @@ var client;
 var redisUrl;
 
 exports.init = function (callback) {
-    // only initialize and authenticate on first run
-    if (!client) {
         // Grab redis URL from config settings.
         redisUrl = config.get("REDIS_URL");
         console.log(redisUrl);
@@ -32,18 +30,13 @@ exports.init = function (callback) {
                     log.error("Error connecting to redis: " + err);
                     return callback(err);
                 }
-
-                //log.debug(client);
-
             });
         }
         exports.client = client;
         return callback(null);
-
-    } else {
-        return callback(null);
-    }
 };
+
+exports.client = client;
 
 exports.getHostname = function () {
     return redisUrl.hostname;

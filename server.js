@@ -13,7 +13,6 @@ var config = require('./thechronicle_modules/config');
 var log = require('./thechronicle_modules/log');
 var redisClient = require('./thechronicle_modules/redisclient');
 var route = require('./thechronicle_modules/route');
-var site = require('./thechronicle_modules/api/lib/site');
 var sitemap = require('./thechronicle_modules/sitemap');
 
 
@@ -125,7 +124,6 @@ function runSite(callback) {
                 sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
                     if (err) log.warning("Couldn't build news sitemap: " + err);
                 });
-                site.init();
 
                 // initialize all routes
                 route.init(app, callback);

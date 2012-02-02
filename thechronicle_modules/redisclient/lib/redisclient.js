@@ -10,7 +10,8 @@ var redisUrl;
 exports.init = function (callback) {
         // Grab redis URL from config settings.
         redisUrl = config.get("REDIS_URL");
-        console.log(redisUrl);
+
+        if(!redisUrl) return callback("redis server not defined");
         redisUrl = url.parse(redisUrl);
 
         // create redis client and authenticate
@@ -20,12 +21,9 @@ exports.init = function (callback) {
             log.error(err);
         });
 
-        log.notice("connecting to redis " + redisUrl.hostname + ":" + redisUrl.port);
-
         if (redisUrl.auth) {
             redisUrl.auth = redisUrl.auth.split(":");
             client.auth(redisUrl.auth[1], function (err, reply) {
-                log.notice("authenticating to redis");
                 if (err) {
                     log.error("Error connecting to redis: " + err);
                     return callback(err);
@@ -35,8 +33,6 @@ exports.init = function (callback) {
         exports.client = client;
         return callback(null);
 };
-
-exports.client = client;
 
 exports.getHostname = function () {
     return redisUrl.hostname;

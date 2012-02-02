@@ -19,6 +19,14 @@ var admin = require('./thechronicle_modules/admin/lib/admin');
 var mobileapi = require('./thechronicle_modules/mobileapi/lib/mobileapi');
 var redisClient = require('./thechronicle_modules/redisclient');
 var RedisStore = require('connect-redis')(express);
+
+// Heroku requires the use of process.env.PORT to dynamically configure port
+var port = process.env.PORT || process.env.CHRONICLE_PORT || 4000;
+
+var SECRET = "i'll make you my dirty little secret";
+var app = null;
+var SERVER = this;
+
 /*
 net.createServer(function (socket) {
   repl.start("node via TCP socket> ", socket);
@@ -32,41 +40,25 @@ asereje.config({
     , css_path: __dirname + '/public'                  // css folder path
 });
 
-var app = null;
 log.init(function (err) {
-            console.log("log init");
-            if (err) console.log("Logger couldn't be initialized: " + err);
-            else {
-                config.init(function(err) {
-                    log.info("config initialized")
-                    if(err) return log.crit(err);
+    if (err) return console.log("Logger couldn't be initialized: " + err);
+    
+    config.init(function(err) {
+        if(err) return log.crit(err);
 
-                    if(!config.isSetUp()) {
-                        configureApp();
-                        app.get('/', function(req, res, next) {
-                            if(!config.isSetUp()) res.redirect('/config');
-                            else next();
-                        });
-                    }
-                    else {
-                        redisClient.init(function(err) {
-                            log.info("redis initialized");
-                            if (err) {
-                                log.error("redis init error");
-                                throw "Redis connection error";
-                            }
-                            configureApp();
-                            runSite(function() {});
-                        });
-                    }
-                });
-            }
-         });
+        configureApp();
 
-
-// Heroku requires the use of process.env.PORT to dynamically configure port
-var port = process.env.PORT || process.env.CHRONICLE_PORT || 4000;
-var SECRET = "i'll make you my dirty little secret";
+        if(!config.isSetUp()) {
+            app.get('/', function(req, res, next) {
+                if(!config.isSetUp()) res.redirect('/config');
+                else next();
+            });
+        }
+        else {
+            runSite(function() {});
+        }
+    });
+});
 
 function compile(str, path) {
   return stylus(str)
@@ -87,6 +79,11 @@ function configureApp() {
       , compile: compile
       , firebug: true
     }));
+
+    app.error(function(err, req, res) {
+        log.error(err);
+        globalFunctions.showError(res, err);
+    });
 
     // the middleware itself does not serve the static
     // css files, so we need to expose them with staticProvider
@@ -115,35 +112,33 @@ function configureApp() {
             secret: SECRET,
         };
 
-        if(redisClient.client) {
-            sessionInfo.store = new RedisStore({
-                client: redisClient.client
-            });
-        }
-        else {
-            log.warning('Redis server not defined. Using memory store for sessions instead.'); 
-            log.warning('After defining the configuration info for redis, please restart the server so it will be used as the session store.');
-        }
-        app.use(express.session(sessionInfo));
-
-        /* set http cache to one minute by default for each response */
-        app.use(function(req,res,next){
-            if(!api.accounts.isAdmin(req)) {
-                res.header('Cache-Control', 'public, max-age=300');
+        redisClient.init(function(err) {
+            if (err) {
+                log.warning('Redis server not defined. Using memory store for sessions instead.'); 
+                log.warning('After defining the configuration info for redis, please restart the server so redis will be used as the session store.');
             }
-            next();
+            else {
+                sessionInfo.store = new RedisStore({
+                    client: redisClient.client
+                });
+            }
+
+            app.use(express.session(sessionInfo));
+
+            /* set http cache to one minute by default for each response */
+            app.use(function(req,res,next) {
+                if(!api.accounts.isAdmin(req)) {
+                    res.header('Cache-Control', 'public, max-age=300');
+                }
+                next();
+            });
+            app.use(app.router);
+
+            app.listen(port);
         });
-        app.use(app.router);
     });
 
-    app.error(function(err, req, res) {
-        log.error(err);
-        globalFunctions.showError(res, err);
-    });
-
-    site.assignPreInitFunctionality(app, this);
-
-    app.listen(port);
+    site.assignPreInitFunctionality(app, SERVER);
 }
 
 exports.runSite = function(callback) {

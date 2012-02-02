@@ -12,7 +12,7 @@ exports.init = function (callback) {
     if (!client) {
         // Grab redis URL from config settings.
         redisUrl = config.get("REDIS_URL");
-
+        console.log(redisUrl);
         redisUrl = url.parse(redisUrl);
 
         // create redis client and authenticate

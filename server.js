@@ -90,7 +90,7 @@ log.init(function (err) {
     app.listen(port);
     log.notice(sprintf("Site configured and listening on port %d in %s mode",
                        app.address().port, app.settings.env));
-    route.assignPreInitFunctionality(app, runSite);
+    route.preinit(app, runSite);
     config.init(function(err) {
 	if(err) log.crit(err);
 	else if (!config.isSetUp())

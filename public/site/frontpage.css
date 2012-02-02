@@ -12,6 +12,8 @@ body section > #frontpage #slideshow > .slideshow #slides{width:636px;height:393
 body section > #frontpage #slideshow > .slideshow #slides img{-webkit-border-radius:4px;-moz-border-radius:4px;-ms-border-radius:4px;-o-border-radius:4px;border-radius:4px}
 body section > #frontpage #slideshow > .slideshow #slides .galleria-info-title a{color:#000}
 body section > #frontpage #slideshow > .slideshow #slides .galleria-info-title a:hover{color:#36c}
+body section > #frontpage #top > .sidebar .opinion .list-story{padding:2px 0 2px 2px}
+body section > #frontpage #top > .sidebar .opinion .list-story.last{padding:2px 0 0 2px}
 body section > #frontpage #top > .content{float:left;width:642px;}
 body section > #frontpage #top > .content .rounded{padding:4px;}
 body section > #frontpage #top > .content .rounded a.hover.highlight-right{margin-right:-7px}

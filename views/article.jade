@@ -66,10 +66,10 @@
              // advertising
             .image-container.medium-rectangle!=partial('ad/medium-rect', {title: "Advertisement"})
             - if (model.popular && model.popular.length > 0)
-                .numbered-articles!=partial('container/numbered-articles', {title: "Popular", stories: model.popular})
+                .numbered-articles.most-popular!=partial('container/numbered-articles', {title: "Popular", stories: model.popular})
 
             - if (model.related && model.related.length > 0)
-                .related!=partial('container/numbered-articles', {title: "Related", stories: model.related})
+                .numbered-articles.related!=partial('container/numbered-articles', {title: "Related", stories: model.related})
 
     // comments
     #disqus_thread.rounded

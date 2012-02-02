@@ -152,7 +152,7 @@ site.init = function (app, callback) {
                         popular = popular.map(function (str) {
                             var parts = str.split('||');
                             return {
-                                url:'/article/' + parts[0],
+                                urls:['/article/' + parts[0]],
                                 title:parts[1]
                             };
                         });
@@ -203,7 +203,7 @@ site.init = function (app, callback) {
                     model.popular = popular.map(function (str) {
                         var parts = str.split('||');
                         return {
-                            url:'/article/' + parts[0],
+                            urls:['/article/' + parts[0]],
                             title:parts[1]
                         };
                     });
@@ -458,7 +458,7 @@ site.init = function (app, callback) {
                 popular = popular.map(function (str) {
                     var parts = str.split('||');
                     return {
-                        url:'/article/' + parts[0],
+                        urls:['/article/' + parts[0]],
                         title:parts[1]
                     };
                 });
@@ -611,7 +611,7 @@ site.init = function (app, callback) {
                                                 popular = popular.map(function (str) {
                                                     var parts = str.split('||');
                                                     return {
-                                                        url:'/article/' + parts[0],
+                                                        urls:['/article/' + parts[0]],
                                                         title:parts[1]
                                                     };
                                                 });
@@ -628,6 +628,7 @@ site.init = function (app, callback) {
                                 "popular": popular,
 								"related": related
                             };
+
 			    api.taxonomy.getParents(doc.taxonomy, function (err, parents) {
                     http_res.render('article', {
                         locals:{

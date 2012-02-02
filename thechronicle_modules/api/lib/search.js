@@ -234,12 +234,13 @@ search.relatedArticles = function(id, count, callback) {
 		mlt : true,
 		'mlt.count' : count,
 		'mlt.fl' : "body_textv,title_textv"
-	}, callback);
+	}, function(err, docs, facets, relatedArticles) {
+		callback(err, relatedArticles);
+	});
 
 }
 function querySolr(query, options, callback) {
 	if(query.length > 0) {
-		var idString = query.substring(3, query.length);
 		query = "database_host_s:" + db.getDatabaseHost() + " AND database_s:" + db.getDatabaseName() + " AND (" + query + ")";
 	}
 
@@ -284,56 +285,62 @@ function querySolr(query, options, callback) {
 		}
 
 		var ids = [];
-		var tempid;
+		var docs = responseObj.response.docs;
 		
+		var relatedIds = [];
+		var relatedDocs = [];
 		if(responseObj.moreLikeThis) {
-			var docs = responseObj.moreLikeThis[idString].docs;
-		} else {
-			var docs = responseObj.response.docs;
-		}
+			var key = Object.keys(responseObj.moreLikeThis)[0];
+			relatedDocs = responseObj.moreLikeThis[key].docs;
+		} 
 
 		for(var docNum = 0; docNum < docs.length; docNum++) {
 			var tempid = getDBIDFromSolrID(docs[docNum].id);
 			ids.push(tempid);
 		}
-
-		if(responseObj.moreLikeThis) {
-			api.docsById(ids, function(err, docs) {
-				if(err)
-					return callback(err);
-
-				// replace each array element with the actual document data for that element
-				docs = _.map(docs, function(doc) {
-					return doc.doc;
-				});
-				// remove any null array elements.
-				docs = _.compact(docs);
-				var related = [];
-				for(var docNum = 0; docNum < docs.length; docNum++) {
-					var tempDoc = {};
-					tempDoc.id = docs[docNum]._id;
-					tempDoc.title = docs[docNum].title;
-					tempDoc.url = docs[docNum].urls;
-					related[docNum] = tempDoc;
-				}
-
-				callback(null, related);
-			});
-		} else {
-			api.docsById(ids, function(err, docs) {
-				if(err)
-					return callback(err);
-
-				// replace each array element with the actual document data for that element
-				docs = _.map(docs, function(doc) {
-					return doc.doc;
-				});
-				// remove any null array elements.
-				docs = _.compact(docs);
-
-				callback(null, docs, facets);
-			});
+		
+		for(var docNum = 0; docNum < relatedDocs.length; docNum++) {
+			var tempid = getDBIDFromSolrID(relatedDocs[docNum].id);
+			relatedIds.push(tempid);
 		}
+
+		async.parallel({
+			queriedDocs: function(cb) {
+				api.docsById(ids, function(err, docs) {
+					if(err)
+						return cb(err);
+	
+					// replace each array element with the actual document data for that element
+					docs = _.map(docs, function(doc) {
+						return doc.doc;
+					});
+					// remove any null array elements.
+					docs = _.compact(docs);
+					
+					cb(null, docs);
+				});
+			},
+			relatedDocs: function(cb) {
+				api.docsById(relatedIds, function(err, docs) {
+					if(err)
+						return cb(err);
+	
+					// replace each array element with the actual document data for that element
+					docs = _.map(docs, function(doc) {
+						return doc.doc;
+					});
+					// remove any null array elements.
+					docs = _.compact(docs);
+					
+					cb(null, docs);
+				});
+			}},
+			function(err, results) {
+				if(err) return callback(err);
+				
+				callback(null, results.queriedDocs, facets, results.relatedDocs);
+			}
+		);
 	});
 }
 

@@ -70,7 +70,7 @@ site.init = function (app, callback) {
             if(req.url.split('/',2)[1] == 'm') return next();
 
 
-            for(var i in MOBILE_BROWSER_USER_AGENTS) {
+            for(var i = 0;  i < MOBILE_BROWSER_USER_AGENTS.length; i++) {
                 if(userAgent.indexOf(MOBILE_BROWSER_USER_AGENTS[i]) != -1) {
                     res.redirect('/m');
                     return;

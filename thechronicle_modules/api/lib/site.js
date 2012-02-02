@@ -69,12 +69,13 @@ site.init = function (app, callback) {
             // only run the code below this line if they are not accessing the mobile site            
             if(req.url.split('/',2)[1] == 'm') return next();
 
-            Object.keys(MOBILE_BROWSER_USER_AGENTS).forEach(function(key) {
-                if(userAgent.indexOf(MOBILE_BROWSER_USER_AGENTS[key]) != -1) {
-                    res.redirect('/m');
-                }
-            });
 
+            for(var i in MOBILE_BROWSER_USER_AGENTS) {
+                if(userAgent.indexOf(MOBILE_BROWSER_USER_AGENTS[i]) != -1) {
+                    res.redirect('/m');
+                    return;
+                }
+            }
             next();
         });
 

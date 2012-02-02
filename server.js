@@ -3,6 +3,7 @@ var asereje = require('asereje');
 var async = require('async');
 var express = require('express');
 require('express-namespace');
+require('express-configure');
 var stylus = require('stylus');
 var sprintf = require('sprintf').sprintf;
 var fs = require('fs');
@@ -32,9 +33,34 @@ asereje.config({
     , css_path: __dirname + '/public'                  // css folder path
 });
 
+log.init(function (err) {
+            console.log("log init");
+            if (err) console.log("Logger couldn't be initialized: " + err);
+            else {
+                config.init(function(err) {
+                    console.log("config initialized")
+                    if(err) return log.crit(err);
 
-/* express configuration */
-var app = express.createServer();
+                    if(!config.isSetUp()) app.get('/', function(req, res, next) {
+                        if(!config.isSetUp()) res.redirect('/config');
+                        else next();
+                            });
+                    else {
+                        redisClient.init(function(err) {
+                            console.log("redis initialized");
+                            if (err) {
+                                console.log("redis init error");
+                                throw "Redis connection error";
+                            }
+                            var app = configureApp();
+                            runSite(app, function() {});
+                        });
+                    }
+
+                });
+            }
+         });
+
 
 // Heroku requires the use of process.env.PORT to dynamically configure port
 var port = process.env.PORT || process.env.CHRONICLE_PORT || 4000;
@@ -46,99 +72,82 @@ function compile(str, path) {
 	.set('compress', true);
 }
 
-// add the stylus middleware, which re-compiles when
-// a stylesheet has changed, compiling FROM src,
-// TO dest. dest is optional, defaulting to src
+function configureApp() {
+    /* express configuration */
+    var app = express.createServer();
+    // add the stylus middleware, which re-compiles when
+    // a stylesheet has changed, compiling FROM src,
+    // TO dest. dest is optional, defaulting to src
+    app.use(stylus.middleware({
+        src: __dirname + '/views'
+      , dest: __dirname + '/public'
+      , compile: compile
+      , firebug: true
+    }));
 
+    // the middleware itself does not serve the static
+    // css files, so we need to expose them with staticProvider
+    // these app.configure calls need to come before app.use(app.router)!
 
-app.use(stylus.middleware({
-    src: __dirname + '/views'
-  , dest: __dirname + '/public'
-  , compile: compile
-  , firebug: true
-}));
-
-// the middleware itself does not serve the static
-// css files, so we need to expose them with staticProvider
-// these app.configure calls need to come before app.use(app.router)!
-
-app.configure('development', function() {
-    app.use(express.static(__dirname + '/public'));
-    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-});
-
-app.configure('production', function(){
-    var oneYear = 31557600000;
-    app.use(express.static(__dirname + '/public', {maxAge: oneYear}));
-    app.use(express.errorHandler());
-});
-
-app.configure(function() {
-    app.set('views', __dirname + '/views');
-    app.set('view engine', 'jade');
-    app.use(express.bodyParser({uploadDir: tmpDirectory()}));
-    app.use(express.methodOverride());
-    // set up session
-    app.use(express.cookieParser());
-    app.use(express.session({ secret: SECRET }));
-    /* set http cache to one minute by default for each response */
-    app.use(function(req,res,next){
-        if(!api.accounts.isAdmin(req)) {
-            res.header('Cache-Control', 'public, max-age=300');
-        }
-        next();
+    app.configure('development', function() {
+        app.use(express.static(__dirname + '/public'));
+        app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
     });
-    app.use(app.router);
 
-});
+    app.configure('production', function(){
+        var oneYear = 31557600000;
+        app.use(express.static(__dirname + '/public', {maxAge: oneYear}));
+        app.use(express.errorHandler());
+    });
 
-app.error(function(err, req, res) {  	
-    log.error(err);	
-    globalFunctions.showError(res, err);
-});
+    app.configure(function() {
+        app.set('views', __dirname + '/views');
+        app.set('view engine', 'jade');
+        app.use(express.bodyParser({uploadDir: tmpDirectory()}));
+        app.use(express.methodOverride());
+        // set up session
+        app.use(express.cookieParser());
 
-site.assignPreInitFunctionality(app, this);
+        app.use(express.session({
+            secret: SECRET,
+            store: new RedisStore({
+                client: redisClient.client
+            })
+        }));
+        //app.use(express.session({ secret: "keyboard cat" }));
+        /* set http cache to one minute by default for each response */
+        app.use(function(req,res,next){
+            if(!api.accounts.isAdmin(req)) {
+                res.header('Cache-Control', 'public, max-age=300');
+            }
+            next();
+        });
+        app.use(app.router);
 
-app.listen(port);
-console.log("Server listening on port %d in %s mode", app.address().port, app.settings.env); 
+    });
 
-log.init(function (err) {
-    if (err)
-	console.log("Logger couldn't be initialized: " + err);
-    else
-	config.init(function(err) {
-	    if(err) log.crit(err);
-	    else {
-		if(!config.isSetUp())
-	            app.get('/', function(req, res, next) {
-			if(!config.isSetUp()) res.redirect('/config');
-			else next();
-	            });
-		else
-		    runSite(function() {});
-	    }
-	});
-});
+    app.error(function(err, req, res) {
+        log.error(err);
+        globalFunctions.showError(res, err);
+    });
 
+    site.assignPreInitFunctionality(app, this);
+
+    app.listen(port);
+    return app;
+}
 
 exports.runSite = function(callback) {
 	runSite(callback);
 };
 
-function runSite(callback) {
+function runSite(app, callback) {
 	log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));
-	
+
     // use redis as our session store
     redisClient.init(function (err0) {
         if(err0) return log.error(err0);
-        app.use(express.session({
-            secret: SECRET,
-            store: new RedisStore({
-                host:redisClient.getHostname(),
-                port:redisClient.getPort(),
-                pass:redisClient.getPassword()
-            })
-        }));
+
 
         // initialize all routes
         async.parallel([

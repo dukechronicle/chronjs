@@ -4,33 +4,36 @@ var config = require('../../config');
 var log = require('../../log');
 var _ = require("underscore");
 
-var client;
+var client = null;
 var redisUrl;
 
 exports.init = function (callback) {
+        if (!client) {
+            redis.debug_mode = false;
         // Grab redis URL from config settings.
-        redisUrl = config.get("REDIS_URL");
+            redisUrl = config.get("REDIS_URL");
 
-        if(!redisUrl) return callback("redis server not defined");
-        redisUrl = url.parse(redisUrl);
+            if(!redisUrl) return callback("redis server not defined");
+            redisUrl = url.parse(redisUrl);
 
-        // create redis client and authenticate
-        client = redis.createClient(redisUrl.port, redisUrl.hostname);
+            // create redis client and authenticate
+            client = redis.createClient(redisUrl.port, redisUrl.hostname);
 
-        client.on("error", function (err) {
-            log.error(err);
-        });
-
-        if (redisUrl.auth) {
-            redisUrl.auth = redisUrl.auth.split(":");
-            client.auth(redisUrl.auth[1], function (err, reply) {
-                if (err) {
-                    log.error("Error connecting to redis: " + err);
-                    return callback(err);
-                }
+            client.on("error", function (err) {
+                log.error(err);
             });
+
+            if (redisUrl.auth) {
+                redisUrl.auth = redisUrl.auth.split(":");
+                client.auth(redisUrl.auth[1], function (err, reply) {
+                    if (err) {
+                        log.error("Error connecting to redis: " + err);
+                        return callback(err);
+                    }
+                });
+            }
+            exports.client = client;
         }
-        exports.client = client;
         return callback(null);
 };
 

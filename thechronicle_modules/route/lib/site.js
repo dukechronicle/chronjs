@@ -226,7 +226,9 @@ site.article = function (req, res, next) {
                 doc:doc,
                 isAdmin:isAdmin,
                 model:model,
-                parentPaths:parents
+                parentPaths:parents,
+                isProduction: (process.env.NODE_ENV === 'production'),
+                disqusShortname: config.get('DISQUS_SHORTNAME')
             },
             filename:'views/article',
             layout: 'layout-article',

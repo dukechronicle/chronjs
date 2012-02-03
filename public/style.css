@@ -37,7 +37,7 @@ body #header-top .social-media .inner .icons a:hover img{opacity:1}
 body #header-top .social-media .inner .icons img.last{padding-right:0}
 body #header-bottom nav{position:relative;z-index:2;clear:both;width:636px;padding-left:7px;padding-top:3px;}
 body #header-bottom nav h2{float:left;}
-body #header-bottom nav h2 a{font-weight:600;text-shadow:0 1px 2px rgba(0,0,0,0.40);letter-spacing:1px;border-bottom:1px solid transparent;font-size:.8em;text-transform:uppercase;color:#eee;display:block;padding-left:15px;padding-right:11px;padding-bottom:2px;margin-bottom:-2px;-webkit-transition:border-bottom-color .25s linear;-moz-transition:border-bottom-color .25s linear;-ms-transition:border-bottom-color .25s linear;-o-transition:border-bottom-color .25s linear;transition:border-bottom-color .25s linear}
+body #header-bottom nav h2 a{font-weight:600;text-shadow:0 1px 2px rgba(0,0,0,0.40);letter-spacing:1px;border-bottom:1px solid transparent;font-size:.8em;text-transform:uppercase;color:#eee;display:block;padding-left:12px;padding-right:8px;padding-bottom:2px;margin-bottom:-2px;-webkit-transition:border-bottom-color .25s linear;-moz-transition:border-bottom-color .25s linear;-ms-transition:border-bottom-color .25s linear;-o-transition:border-bottom-color .25s linear;transition:border-bottom-color .25s linear}
 body #header-bottom nav h2 a:hover,body #header-bottom nav h2 a.active{border-bottom-color:#fff}
 body #header-bottom nav h2.first a{padding-left:3px}
 body #header-bottom nav a{color:#333}
@@ -58,8 +58,8 @@ header .content .announcements{display:none;color:#666;position:absolute;text-sh
 header .content .announcements a{text-align:left;margin-bottom:3px;font-size:.7em;text-transform:uppercase;letter-spacing:1px;padding-top:4px;color:#333}
 header .content .announcements a:hover{color:#36c}
 header .content .announcements p{font-size:.7em}
-header #header-bottom .advertising-links{margin-top:-2px;position:relative;top:-18px;left:-150px;z-index:6;}
-header #header-bottom .advertising-links a{text-shadow:0 1px 2px rgba(0,0,0,0.40);font-size:.75em;color:#fff;float:left;margin-right:10px}
+header #header-bottom .advertising-links{margin-top:-2px;position:relative;top:-18px;left:-145px;z-index:6;}
+header #header-bottom .advertising-links a{text-shadow:0 1px 2px rgba(0,0,0,0.40);font-size:.75em;color:#fff;float:left;margin-right:8px}
 footer{margin-top:30px;clear:both;color:#888;font-variant:small-caps;text-shadow:0 1px 1px #fff;font-size:.85em;padding-bottom:1.5em;}
 footer p.copyright{display:block;float:left;margin-right:20px;}
 footer p.copyright a{margin-right:20px}

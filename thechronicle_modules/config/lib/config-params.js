@@ -315,9 +315,6 @@ var configParams = [
                     ],
                     "groups": [
                         "Featured",
-                        "Columnists",
-                        "Edit Board",
-                        "More Columnists"
                     ]
                 },
                 "Recess": {

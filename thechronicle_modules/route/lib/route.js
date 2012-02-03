@@ -10,10 +10,10 @@ var async = require('async');
 // assigns the functionality needed before different modules are ready to be
 // initilized (before config settings have been set)
 exports.preinit = function (app, runSite) {
-    app.post('/login', site.loginPost);
+    app.post('/login', site.loginData);
     app.get('/logout', site.logout);
     app.get('/config', site.config);
-    app.post('/config', site.configPost);
+    app.post('/config', site.configData);
 };
 
 exports.init = function (app, callback) {
@@ -53,7 +53,7 @@ exports.init = function (app, callback) {
     app.get('/page/:url/edit', api.site.checkAdmin, site.editPage);
     app.get('/login', site.login);
     app.get('/newsletter', site.newsletter);
-    app.post('/newsletter', site.newsletterPost);
+    app.post('/newsletter', site.newsletterData);
 
     // Webmaster tools stuff -- don't delete
     app.get('/mu-7843c2b9-3b9490d6-8f535259-e645b756', function (req, res) {

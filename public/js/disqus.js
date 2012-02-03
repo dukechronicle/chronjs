@@ -1,14 +1,15 @@
 // sets whether developer mode is on. should be off (0) in production set up 
 var disqus_developer = 0;
 
-var disqus_shortname = 'dukechronicle';
+var disqus_shortname;
 var disqus_url;
 var disqus_identifier;
 var disqus_title;
 
-function loadDisqusForArticle(isProduction, articleID, title, url)
+function loadDisqusForArticle(isProduction, disqusShortName, articleID, title, url)
 {
-	disqus_identifier = articleID;
+    disqus_shortname = disqusShortName;
+    disqus_identifier = articleID;
     disqus_title = title;
     disqus_url = "http://dukechronicle.com/article/" + url;
     
@@ -21,8 +22,10 @@ function loadDisqusForArticle(isProduction, articleID, title, url)
 	})();
 }
 
-function loadDisqus(isProduction)
+function loadDisqus(isProduction, disqusShortName)
 {
+    disqus_shortname = disqusShortName;
+    
     if(!isProduction) disqus_developer = 1;	
 
     (function () {

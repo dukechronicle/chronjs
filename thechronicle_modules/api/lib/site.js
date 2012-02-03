@@ -632,7 +632,8 @@ site.init = function (app, callback) {
                             isAdmin:isAdmin,
                             model:model,
                             parentPaths:parents,
-                            isProduction: (process.env.NODE_ENV === 'production')
+                            isProduction: (process.env.NODE_ENV === 'production'),
+                            disqusShortname: config.get('DISQUS_SHORTNAME')
                         },
                         filename:'views/article',
                         layout: 'layout-article',

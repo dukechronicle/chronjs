@@ -134,6 +134,10 @@ function runSite(callback) {
     api.init(function (err) {
         if (err) log.crit("api initialization failed");
         else {
+	    sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
+		if (err) log.error("Couldn't build news sitemap: " + err);
+	    });
+
             route.init(app, function (err) {
                 log.notice(sprintf("Site configured and listening on port %d in %s mode",
                                    app.address().port, app.settings.env));

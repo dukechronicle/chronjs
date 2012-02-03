@@ -32,21 +32,16 @@ exports.parseRSS = function (feed, callback) {
 };
 
 exports.storeRSS = function (dom, title, callback) {
-    redis.init(function (err) {
-        var json = JSON.stringify(dom);
-        redis.client.set(title, json, callback);
-    });
-
+    var json = JSON.stringify(dom);
+    redis.client.set(title, json, callback);
 };
 
 exports.getRSS = function (title, callback) {
-    redis.init(function (err) {
-        redis.client.get(title, function (err, res) {
-            if (err) callback(err, null);
-            else {
-                var obj = eval('(' + res + ')');
-                callback(null, obj);
-            }
-        });
+    redis.client.get(title, function (err, res) {
+        if (err) callback(err, null);
+        else {
+            var obj = eval('(' + res + ')');
+            callback(null, obj);
+        }
     });
 };

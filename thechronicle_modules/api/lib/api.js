@@ -1,5 +1,4 @@
-var api = {};
-var exports = module.exports = api;
+var api = exports;
 
 var nimble = require("nimble");
 var async = require("async");
@@ -18,7 +17,8 @@ api.newsletter = require("./newsletter");
 api.cron = require("./cron");
 api.database = require("./database");
 api.s3 = require('./s3');
-var sitemap = require("../../sitemap");
+api.site = require('./site');
+
 var redis = require('../../redisclient');
 
 var MAX_URL_LENGTH = 50;
@@ -65,9 +65,8 @@ function _URLify(s, maxChars) {
 }
 
 api.init = function(callback) {
-    db.init(function(error) {
-        if(error)
-        {
+    db.init(function (err) {
+        if(err) {
             log.error("db init failed!");
             return callback(error);
         }
@@ -75,7 +74,9 @@ api.init = function(callback) {
       	api.cron.init();
         api.search.init();
         api.newsletter.init();
-        //.generateAllSitemaps(function(){console.log("success")});
+        api.s3.init();
+        api.site.init();
+
         //api.database.findDuplicateUrls(100);
         //api.search.indexUnindexedArticles(1);
         /** Chron Jobs! **/
@@ -154,21 +155,11 @@ api.docsById = function(id, callback) {
 
 api.docsByAuthor = function(author, callback) {
     var decodeAuthor = decodeURIComponent(author);
-
     var query = {descending: true, startkey:decodeAuthor, endkey: decodeAuthor};
-
-    db.view("articles/authors", query, function(err, results) {
-        if (err)
-        {
-            callback(err);
-        }
-
-        // return only the array of the result values
-        callback(null, results.map(function(result) {
-            return result;
-        }));
+    db.view("articles/authors", query, function(err, docs) {
+        if (err) callback(err);
+        else callback(null, _.map(docs, function(doc){return doc.value}));
     });
-
 };
 
 api.addDoc = function(fields, callback) {
@@ -269,17 +260,10 @@ api.docForUrl = function(url, callback) {
 };
 
 api.nodeForTitle = function(url, callback) {
-    db.view("articles/nodes", {
-        key: url
-    },
-    function(err, res) {
-        // look for
-        if (res.length > 0) {
-            return api.docsById(res[0].id, callback);
-        } else {
-            return callback("Not found", null);
-        }
-
+    db.view("articles/nodes", { key: url }, function(err, res) {
+        if (err) callback(err);
+        else if (res.length == 0) callback("Node not found: " + url);
+        else api.docsById(res[0].id, callback);
     });
 };
 

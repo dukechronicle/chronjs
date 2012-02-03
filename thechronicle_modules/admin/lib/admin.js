@@ -9,7 +9,6 @@ var config = require("../../config");
 var db = require('../../db-abstract');
 var k4export = require('./k4export');
 var log = require('../../log');
-var site = require('../../api/lib/site');
 var sitemap = require('../../sitemap');
 
 var layoutAdmin = require('./layout');
@@ -57,11 +56,11 @@ exports.init = function (app, callback) {
 
     app.namespace('/admin',
                   function () {
-                      app.get('/', site.checkAdmin, function (req, res) {
+                      app.get('/', api.site.checkAdmin, function (req, res) {
                           res.render('admin/index');
                       });
 
-                      app.get('/newsletter', site.checkAdmin, function (req, res) {
+                      app.get('/newsletter', api.site.checkAdmin, function (req, res) {
                           api.newsletter.createNewsletter(function(campaignID) {
                               res.render('admin/newsletter', {
                                   locals: {campaignID: campaignID}
@@ -69,7 +68,7 @@ exports.init = function (app, callback) {
                           });
                       });
 
-                      app.post('/newsletter', site.checkAdmin, function(req,res) {
+                      app.post('/newsletter', api.site.checkAdmin, function(req,res) {
                           var testEmailToSendTo = req.body.testEmail;
                           var campaignID = req.body.campaignID;
 
@@ -92,7 +91,7 @@ exports.init = function (app, callback) {
                           }
                       });
 
-                      app.post('/group/add', site.checkAdmin,
+                      app.post('/group/add', api.site.checkAdmin,
                                function (req, res) {
                                    var _res = res;
 
@@ -112,7 +111,7 @@ exports.init = function (app, callback) {
                                                  })
                                });
 
-                      app.post('/group/remove', site.checkAdmin,
+                      app.post('/group/remove', api.site.checkAdmin,
                                function (req, res) {
                                    var _res = res;
 
@@ -130,13 +129,13 @@ exports.init = function (app, callback) {
                                                     })
                                });
 
-                      app.get('/index-articles', site.checkAdmin,
+                      app.get('/index-articles', api.site.checkAdmin,
                               function (req, http_res) {
                                   api.search.indexUnindexedArticles();
                                   http_res.redirect('/');
                               });
 
-                      app.get('/add', site.checkAdmin,
+                      app.get('/add', api.site.checkAdmin,
                               function (req, http_res) {
                                   api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
                                       http_res.render('admin/add', {
@@ -148,7 +147,7 @@ exports.init = function (app, callback) {
                                   });
                               });
 
-                      app.get('/addPage', site.checkAdmin,
+                      app.get('/addPage', api.site.checkAdmin,
                               function (req, http_res) {
                                   http_res.render('admin/addPage', {
                                       //locals: {groups: groups},
@@ -158,7 +157,7 @@ exports.init = function (app, callback) {
                                   });
                               });
 
-                      app.get('/manage', site.checkAdmin, function (req, res, next) {
+                      app.get('/manage', api.site.checkAdmin, function (req, res, next) {
                           var db = api.getDatabaseName();
                           var host = api.getDatabaseHost();
                           var port = api.getDatabasePort() || "80";
@@ -180,7 +179,7 @@ exports.init = function (app, callback) {
                           });
                       });
 
-                      app.get('/k4export', site.checkAdmin,
+                      app.get('/k4export', api.site.checkAdmin,
                               function (req, res) {
                                   res.render('admin/k4export', {
                                       locals:{
@@ -192,7 +191,7 @@ exports.init = function (app, callback) {
                                   });
                               });
 
-                      app.post('/k4export', site.checkAdmin,
+                      app.post('/k4export', api.site.checkAdmin,
                                function (req, res) {
                                    api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
                                        k4export.runExporter(req.files.zip.path, function (failed, success) {
@@ -209,7 +208,7 @@ exports.init = function (app, callback) {
                                    });
                                });
 
-                      app.post('/edit', site.checkAdmin, function (req, http_res, next) {
+                      app.post('/edit', api.site.checkAdmin, function (req, http_res, next) {
                           if (req.body.imageVersionId) {
                               api.image.addVersionToDoc(req.body.docId, req.body.original, req.body.imageVersionId, req.body.imageType, function (err, res) {
                                   if (err) next(http_res);
@@ -247,7 +246,7 @@ exports.init = function (app, callback) {
                           }
                       });
 
-                      app.post('/add', site.checkAdmin, function (req, http_res, next) {
+                      app.post('/add', api.site.checkAdmin, function (req, http_res, next) {
                           if (req.body.doc.taxonomy == '') {
                               next('No section selected for article');
                           }
@@ -281,7 +280,7 @@ exports.init = function (app, callback) {
                       });
 
 
-                      app.post('/addPage', site.checkAdmin, function (req, http_res, next) {
+                      app.post('/addPage', api.site.checkAdmin, function (req, http_res, next) {
                           var form = req.body.doc;
                           var fields = {
                               body:form.body,
@@ -304,7 +303,7 @@ exports.init = function (app, callback) {
                           });
                       });
 
-                      app.delete('/article/:docId', site.checkAdmin, function (req, http_res) {
+                      app.delete('/article/:docId', api.site.checkAdmin, function (req, http_res) {
                           api.deleteDoc(req.params.docId, req.body.rev, function () {
                               http_res.send({status:true});
                           });

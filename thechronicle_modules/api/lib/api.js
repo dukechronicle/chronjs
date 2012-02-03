@@ -17,6 +17,7 @@ api.newsletter = require("./newsletter");
 api.cron = require("./cron");
 api.database = require("./database");
 api.s3 = require('./s3');
+api.site = require('./site');
 
 var redis = require('../../redisclient');
 
@@ -74,6 +75,7 @@ api.init = function(callback) {
         api.search.init();
         api.newsletter.init();
         api.s3.init();
+        api.site.init();
 
         //api.database.findDuplicateUrls(100);
         //api.search.indexUnindexedArticles(1);
@@ -268,7 +270,7 @@ api.nodeForTitle = function(url, callback) {
 api.docsByDate = function(beforeKey, beforeID, callback) {
     var query = {
         descending:true,
-        limit: RESULTS_PER_PAGE,
+        limit: RESULTS_PER_PAGE
     };
 
     if(beforeKey) query.startkey = parseInt(beforeKey);

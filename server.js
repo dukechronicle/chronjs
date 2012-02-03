@@ -120,7 +120,7 @@ function configureApp() {
             else {
                 sessionInfo.store = new RedisStore({
                     client: redisClient.client,
-                    cookie: { maxAge: 60000 }
+                    cookie: { maxAge: 3600}
                 });
             }
 

@@ -4,6 +4,8 @@ var http = require('http');
 var fs = require('fs');
 
 exports.showError = function (res, message) {
+    if(typeof message == 'object') message = JSON.stringify(message);
+
     res.render('error', {
         status: 500,
         layout: false,

@@ -1,28 +1,16 @@
-link(rel='stylesheet', href='/admin/layout/styles.css')
-script(src='/js/admin/layout.js')
-script
-    nameSpace = !{JSON.stringify(nameSpace)};
+!!! 5
+html
+  head
+    script(src='/js/jquery.js', type='text/javascript')
+    script(src='/js/jquery-ui.js', type='text/javascript')
+    script(src='/js/jquery.Jcrop.js', type='text/javascript')
+    link(rel='stylesheet', href='/css/jquery.Jcrop.css')
+    link(rel='stylesheet', href='/css/smoothness/jquery-ui.css')
+    link(rel='stylesheet', href='/css/bootstrap-1.2.0.min.css')
 
-h2 !{page} Layout
+    title The Chronicle
+    !=partial("code/google-analytics")
+  body
 
-#layout
-    - each group in groups
-        br
-        <h2>!{group}</h2>
-        #slideshow.container(data-groupName=group)
-            - if (groupDocs[group])
-                - each story, id in groupDocs[group]
-                    .story(draggable='true', id='#{story._id}')
-                        #{story.title}
-
-#sidebar
-    .fixed-container
-        select(id="taxonomy")
-                option(value="All") All
-                - each section in mainSections            
-                    option(value=section) !{section}
-        #stories-container
-            #stories
-                - each story, id in sectionDocs
-                    .story(draggable="true", id="#{story._id}")
-                        #{story.title}
+    #main
+      #container!= body

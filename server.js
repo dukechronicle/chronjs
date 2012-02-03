@@ -19,6 +19,14 @@ var admin = require('./thechronicle_modules/admin/lib/admin');
 var mobileapi = require('./thechronicle_modules/mobileapi/lib/mobileapi');
 var redisClient = require('./thechronicle_modules/redisclient');
 var RedisStore = require('connect-redis')(express);
+
+// Heroku requires the use of process.env.PORT to dynamically configure port
+var port = process.env.PORT || process.env.CHRONICLE_PORT || 4000;
+
+var SECRET = "i'll make you my dirty little secret";
+var app = null;
+var SERVER = this;
+
 /*
 net.createServer(function (socket) {
   repl.start("node via TCP socket> ", socket);
@@ -33,37 +41,24 @@ asereje.config({
 });
 
 log.init(function (err) {
-            console.log("log init");
-            if (err) console.log("Logger couldn't be initialized: " + err);
-            else {
-                config.init(function(err) {
-                    console.log("config initialized")
-                    if(err) return log.crit(err);
+    if (err) return console.log("Logger couldn't be initialized: " + err);
+    
+    config.init(function(err) {
+        if(err) return log.crit(err);
 
-                    if(!config.isSetUp()) app.get('/', function(req, res, next) {
-                        if(!config.isSetUp()) res.redirect('/config');
-                        else next();
-                            });
-                    else {
-                        redisClient.init(function(err) {
-                            console.log("redis initialized");
-                            if (err) {
-                                console.log("redis init error");
-                                throw "Redis connection error";
-                            }
-                            var app = configureApp();
-                            runSite(app, function() {});
-                        });
-                    }
+        configureApp();
 
-                });
-            }
-         });
-
-
-// Heroku requires the use of process.env.PORT to dynamically configure port
-var port = process.env.PORT || process.env.CHRONICLE_PORT || 4000;
-var SECRET = "i'll make you my dirty little secret";
+        if(!config.isSetUp()) {
+            app.get('/', function(req, res, next) {
+                if(!config.isSetUp()) res.redirect('/config');
+                else next();
+            });
+        }
+        else {
+            runSite(function() {});
+        }
+    });
+});
 
 function compile(str, path) {
   return stylus(str)
@@ -73,7 +68,8 @@ function compile(str, path) {
 
 function configureApp() {
     /* express configuration */
-    var app = express.createServer();
+    app = express.createServer();
+
     // add the stylus middleware, which re-compiles when
     // a stylesheet has changed, compiling FROM src,
     // TO dest. dest is optional, defaulting to src
@@ -83,6 +79,11 @@ function configureApp() {
       , compile: compile
       , firebug: true
     }));
+
+    app.error(function(err, req, res) {
+        log.error(err);
+        globalFunctions.showError(res, err);
+    });
 
     // the middleware itself does not serve the static
     // css files, so we need to expose them with staticProvider
@@ -107,47 +108,50 @@ function configureApp() {
         // set up session
         app.use(express.cookieParser());
 
-        app.use(express.session({
-            secret: SECRET,
-            store: new RedisStore({
-                client: redisClient.client
-            }),
-            cookie: { maxAge: 60000 }
-        }));
-        //app.use(express.session({ secret: "keyboard cat" }));
-        /* set http cache to one minute by default for each response */
-        app.use(function(req,res,next){
-            if(!api.accounts.isAdmin(req)) {
-                res.header('Cache-Control', 'public, max-age=300');
+        var sessionInfo = {
+            secret: SECRET
+        };
+
+        redisClient.init(function(err) {
+            if (err) {
+                log.warning('Redis server not defined. Using memory store for sessions instead.');
+                log.warning('After defining the configuration info for redis, please restart the server so redis will be used as the session store.');
             }
-            next();
+            else {
+                sessionInfo.store = new RedisStore({
+                    client: redisClient.client,
+                    cookie: { maxAge: 60000 }
+                });
+            }
+
+            app.use(express.session(sessionInfo));
+
+            /* set http cache to one minute by default for each response */
+            app.use(function(req,res,next) {
+                if(!api.accounts.isAdmin(req)) {
+                    res.header('Cache-Control', 'public, max-age=300');
+                }
+                next();
+            });
+            app.use(app.router);
+
+            app.listen(port);
         });
-        app.use(app.router);
-
     });
 
-    app.error(function(err, req, res) {
-        log.error(err);
-        globalFunctions.showError(res, err);
-    });
-
-    site.assignPreInitFunctionality(app, this);
-
-    app.listen(port);
-    return app;
+    site.assignPreInitFunctionality(app, SERVER);
 }
 
 exports.runSite = function(callback) {
 	runSite(callback);
 };
 
-function runSite(app, callback) {
+function runSite(callback) {
 	log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));
 
     // use redis as our session store
     redisClient.init(function (err0) {
         if(err0) return log.error(err0);
-
 
         // initialize all routes
         async.parallel([

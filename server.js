@@ -47,7 +47,8 @@ log.init(function (err) {
             }
             else {
                 sessionInfo.store = new RedisStore({
-                    client: redisClient.client
+                    client: redisClient.client,
+                    cookie: { maxAge: 3600}
                 });
             }
 

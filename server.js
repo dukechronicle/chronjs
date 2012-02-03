@@ -119,7 +119,9 @@ function configureApp() {
             }
             else {
                 sessionInfo.store = new RedisStore({
-                    client: redisClient.client,
+                    host: redisClient.getHostname(),
+                    port: redisClient.getPort(),
+                    pass: redisClient.getPassword(),
                     cookie: { maxAge: 3600}
                 });
             }

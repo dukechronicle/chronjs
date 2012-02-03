@@ -12,6 +12,8 @@ exports.formatTimestamp = function (timestamp, format) {
 };
 
 exports.showError = function (res, message) {
+    if(typeof message == 'object') message = JSON.stringify(message);
+
     res.render('error', {
         status: 500,
         layout: false,

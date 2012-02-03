@@ -40,14 +40,16 @@ log.init(function (err) {
         var sessionInfo = {
             secret: SECRET,
         };
-        redisClient.init(function(err) {
+        redisClient.init(false, function(err) {
             if (err) {
                 log.warning('Redis server not defined. Using memory store for sessions instead.'); 
                 log.warning('After defining the configuration info for redis, please restart the server so redis will be used as the session store.');
             }
             else {
                 sessionInfo.store = new RedisStore({
-                    client: redisClient.client,
+                    host: redisClient.getHostname(),
+                    port: redisClient.getPort(),
+                    pass: redisClient.getPassword(),
                     cookie: { maxAge: 3600}
                 });
             }
@@ -126,7 +128,6 @@ function configureApp(sessionInfo, port) {
         });
         app.use(app.router);
     });
-
     app.listen(port);
 }
 
@@ -137,10 +138,11 @@ function runSite(callback) {
 	    sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
 		if (err) log.error("Couldn't build news sitemap: " + err);
 	    });
-
-            route.init(app, function (err) {
-                log.notice(sprintf("Site configured and listening on port %d in %s mode",
-                                   app.address().port, app.settings.env));
+            redisClient.init(true, function(err) {
+                route.init(app, function (err) {
+                    log.notice(sprintf("Site configured and listening on port %d in %s mode",
+                                       app.address().port, app.settings.env));
+                });
             });
         }
     });

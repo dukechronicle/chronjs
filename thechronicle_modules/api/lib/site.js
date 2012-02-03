@@ -73,8 +73,11 @@ site.askForLogin = function (res, afterLoginPage, username, err) {
 };
 
 site.renderConfigPage = function (res, err) {
-    if (err)
+    if (err) {
+        if (typeof err === 'object')
+            err = JSON.stringify(err);
         err += "<br /><br />The live site was not updated to use the new configuration due to errors."
+    }
 
     res.render('config/config', {
         locals:{

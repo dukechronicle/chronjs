@@ -1,4 +1,3 @@
-var site = require('../../api/lib/site.js');
 var taxonomy = require('../../api/lib/taxonomy.js');
 var groups = require('../../api/lib/group.js');
 var api = require('../../api');
@@ -9,17 +8,17 @@ var _ = require("underscore");
 
 exports.bindPath = function (app) {
     return function() {
-        app.get('/group/:group', site.checkAdmin, _getDocsInSection);
+        app.get('/group/:group', api.site.checkAdmin, _getDocsInSection);
     }
 };
 
-function _getDocsInSection(req,res) {
+function _getDocsInSection(req,res,next) {
     var section = req.query.section;
     
     if (section) {
         api.taxonomy.docs(section, 30,
         function (err, docs) {
-            if (err) globalFunctions.showError(res, err);
+            if (err) next(err);
             else {
                 docs = docs.map(function (doc) {
                     return doc;
@@ -31,7 +30,7 @@ function _getDocsInSection(req,res) {
     else {
         api.docsByDate(null, null,
         function (err, docs) {
-            if (err) globalFunctions.showError(res, err);
+            if (err) next(err);
             else renderPage(req,res,docs);
         });
     }
@@ -47,9 +46,8 @@ function renderPage(req,res,section_docs) {
     
     // get and show the current groupings
     api.group.docs(layoutConfig[group].namespace, null, function (err, group_docs) {
-        res.render("admin/layout",
+        res.render("admin/page-layout",
         {
-            layout:"layout-admin.jade",
             locals:{
                 page: group,
                 groups: layoutConfig[group].groups,

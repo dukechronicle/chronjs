@@ -7,10 +7,11 @@ var _ = require("underscore");
 var client = null;
 var redisUrl;
 
-exports.init = function (callback) {
-        if (!client) {
+exports.init = function (forceReinit, callback) {
+        if (!client || forceReinit) {
             redis.debug_mode = false;
-        // Grab redis URL from config settings.
+            
+            // Grab redis URL from config settings.
             redisUrl = config.get("REDIS_URL");
 
             if(!redisUrl) return callback("redis server not defined");
@@ -25,16 +26,18 @@ exports.init = function (callback) {
 
             if (redisUrl.auth) {
                 redisUrl.auth = redisUrl.auth.split(":");
+
                 client.auth(redisUrl.auth[1], function (err, reply) {
                     if (err) {
                         log.error("Error connecting to redis: " + err);
                         return callback(err);
                     }
+                    callback(null);
                 });
             }
             exports.client = client;
         }
-        return callback(null);
+        else return callback(null);
 };
 
 exports.getHostname = function () {

@@ -46,17 +46,17 @@ log.init(function (err) {
     config.init(function(err) {
         if(err) return log.crit(err);
 
-        configureApp();
-
-        if(!config.isSetUp()) {
-            app.get('/', function(req, res, next) {
-                if(!config.isSetUp()) res.redirect('/config');
-                else next();
-            });
-        }
-        else {
-            runSite(function() {});
-        }
+        configureApp(function() {
+            if(!config.isSetUp()) {
+                app.get('/', function(req, res, next) {
+                    if(!config.isSetUp()) res.redirect('/config');
+                    else next();
+                });
+            }
+            else {
+                runSite(function() {});
+            }
+        });
     });
 });
 
@@ -66,7 +66,7 @@ function compile(str, path) {
 	.set('compress', true);
 }
 
-function configureApp() {
+function configureApp(callback) {
     /* express configuration */
     app = express.createServer();
 
@@ -112,7 +112,7 @@ function configureApp() {
             secret: SECRET
         };
 
-        redisClient.init(function(err) {
+        redisClient.init(false, function(err) {
             if (err) {
                 log.warning('Redis server not defined. Using memory store for sessions instead.');
                 log.warning('After defining the configuration info for redis, please restart the server so redis will be used as the session store.');
@@ -136,10 +136,12 @@ function configureApp() {
             app.use(app.router);
 
             app.listen(port);
+
+            site.assignPreInitFunctionality(app, SERVER);
+
+            callback();
         });
     });
-
-    site.assignPreInitFunctionality(app, SERVER);
 }
 
 exports.runSite = function(callback) {
@@ -150,7 +152,7 @@ function runSite(callback) {
 	log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));
 
     // use redis as our session store
-    redisClient.init(function (err0) {
+    redisClient.init(true, function (err0) {
         if(err0) return log.error(err0);
 
         // initialize all routes

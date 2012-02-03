@@ -16,6 +16,14 @@ var route = require('./thechronicle_modules/route');
 var sitemap = require('./thechronicle_modules/sitemap');
 
 
+// Heroku requires the use of process.env.PORT to dynamically configure port
+var PORT = process.env.PORT || process.env.CHRONICLE_PORT || 4000;
+var SECRET = "i'll make you my dirty little secret";
+var SERVER = this;
+
+var app = null;
+
+
 asereje.config({
     active: process.env.NODE_ENV === 'production',  // enable it just for production
     js_globals: ['typekit', 'underscore-min', 'jquery'],  // js files that will be present always
@@ -24,13 +32,41 @@ asereje.config({
     css_path: __dirname + '/public'  // css folder path
 });
 
+log.init(function (err) {
+    if (err) console.err("Logger couldn't be initialized: " + err);
+    config.init(function(err) {
+	if (err) log.crit(err);
 
-/* express configuration */
-var app = express.createServer();
+        var sessionInfo = {
+            secret: SECRET,
+        };
+        redisClient.init(function(err) {
+            if (err) {
+                log.warning('Redis server not defined. Using memory store for sessions instead.'); 
+                log.warning('After defining the configuration info for redis, please restart the server so redis will be used as the session store.');
+            }
+            else {
+                sessionInfo.store = new RedisStore({
+                    client: redisClient.client
+                });
+            }
 
-// Heroku requires the use of process.env.PORT to dynamically configure port
-var port = process.env.PORT || process.env.CHRONICLE_PORT || 4000;
-var SECRET = "i'll make you my dirty little secret";
+            configureApp(sessionInfo, PORT);
+            route.preinit(app, runSite);
+	    if (!config.isSetUp()) {
+	        app.get('/', function(req, res, next) {
+		    if (!config.isSetUp()) res.redirect('/config');
+		    else next();
+	        });
+            }
+	    else {
+	        runSite(function (err) {
+		    if (err) log.error(err);
+	        });
+            }
+        });
+    });
+});
 
 function compile(str, path) {
   return stylus(str)
@@ -38,96 +74,64 @@ function compile(str, path) {
 	.set('compress', true);
 }
 
-// add the stylus middleware, which re-compiles when
-// a stylesheet has changed, compiling FROM src,
-// TO dest. dest is optional, defaulting to src
-app.use(stylus.middleware({
-    src: __dirname + '/views'
-  , dest: __dirname + '/public'
-  , compile: compile
-  , firebug: true
-}));
+function configureApp(sessionInfo, port) {
+    /* express configuration */
+    app = express.createServer();
 
-// the middleware itself does not serve the static
-// css files, so we need to expose them with staticProvider
-// these app.configure calls need to come before app.use(app.router)!
+    // add the stylus middleware, which re-compiles when
+    // a stylesheet has changed, compiling FROM src,
+    // TO dest. dest is optional, defaulting to src
+    app.use(stylus.middleware({
+        src: __dirname + '/views'
+      , dest: __dirname + '/public'
+      , compile: compile
+      , firebug: true
+    }));
 
-app.configure('development', function() {
-    app.use(express.static(__dirname + '/public'));
-    app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-});
-
-app.configure('production', function(){
-    var oneYear = 31557600000;
-    app.use(express.static(__dirname + '/public', {maxAge: oneYear}));
-    app.use(express.errorHandler());
-});
-
-app.configure(function() {
-    app.set('views', __dirname + '/views');
-    app.set('view engine', 'jade');
-    app.use(express.bodyParser({uploadDir: __dirname + '/uploads'}));
-    app.use(express.methodOverride());
-    app.use(express.cookieParser());
-    app.use(express.session({ secret: SECRET }));
-    // set http cache to one minute by default for each response
-    app.use(function(req,res,next){
-        if (api.accounts.isAdmin(req))
-            res.header('Cache-Control', 'public, max-age=60');
-        next();
+    app.error(function(err, req, res, next) {
+        log.error(err);
+        next(err);
     });
-    app.use(app.router);
-});
 
-app.error(function(err, req, res, next) {
-    log.error(err);
-    next(err);
-});
+    // the middleware itself does not serve the static
+    // css files, so we need to expose them with staticProvider
+    // these app.configure calls need to come before app.use(app.router)!
 
-log.init(function (err) {
-    if (err) console.err("Logger couldn't be initialized: " + err);
+    app.configure('development', function() {
+        app.use(express.static(__dirname + '/public'));
+        app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+    });
+
+    app.configure('production', function(){
+        var oneYear = 31557600000;
+        app.use(express.static(__dirname + '/public', {maxAge: oneYear}));
+        app.use(express.errorHandler());
+    });
+
+    app.configure(function() {
+        app.set('views', __dirname + '/views');
+        app.set('view engine', 'jade');
+        app.use(express.bodyParser({uploadDir: __dirname + '/uploads'}));
+        app.use(express.methodOverride());
+        // set up session
+        app.use(express.cookieParser());
+        app.use(express.session(sessionInfo));
+        /* set http cache to one minute by default for each response */
+        app.use(function(req,res,next) {
+            if(!api.accounts.isAdmin(req)) {
+                res.header('Cache-Control', 'public, max-age=300');
+            }
+            next();
+        });
+        app.use(app.router);
+    });
 
     app.listen(port);
-    log.notice(sprintf("Site configured and listening on port %d in %s mode",
-                       app.address().port, app.settings.env));
-    route.preinit(app, runSite);
-    config.init(function(err) {
-	if(err) log.crit(err);
-	else if (!config.isSetUp())
-	    app.get('/', function(req, res, next) {
-		if (!config.isSetUp()) res.redirect('/config');
-		else next();
-	    });
-	else
-	    runSite(function (err) {
-		if (err) log.error(err);
-	    });
-    });
-});
+}
 
 function runSite(callback) {
-    // use redis as our session store
-    redisClient.init(function (err) {
-        if (err) log.error(err);
-	else app.use(express.session({
-	    secret: SECRET,
-	    store: new RedisStore({
-                host:redisClient.getHostname(),
-                port:redisClient.getPort(),
-                pass:redisClient.getPassword()
-	    })
-        }));
-        
-        api.init(function (err) {
-            if (err) log.crit("api init failed!");
-            else {
-                sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
-                    if (err) log.warning("Couldn't build news sitemap: " + err);
-                });
-
-                // initialize all routes
-                route.init(app, callback);
-            }
-        });
+    route.init(app, function (err) {
+        log.notice(sprintf("Site configured and listening on port %d in %s mode",
+                           app.address().port, app.settings.env));
     });
 }

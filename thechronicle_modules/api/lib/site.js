@@ -900,6 +900,7 @@ site.assignPreInitFunctionality = function (app, server) {
                     });
                 }
                 else {
+                    if(typeof err == "object") err = JSON.stringify(err);
                     _renderConfigPage(res,err);
                 }
             });

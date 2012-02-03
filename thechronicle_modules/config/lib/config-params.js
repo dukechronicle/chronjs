@@ -10,6 +10,11 @@ var configParams = [
         defaultValue: 'chronicle'
     },
     {
+        name: 'DISQUS_SHORTNAME',
+        description: 'Disqus Shortname',
+        defaultValue: 'chronicletest'
+    },
+    {
         name: 'COUCHDB_URL',
         description: 'CouchDB Server URL',
         defaultValue: 'http://chrondev:pikachu@chrondev.iriscouch.com'

@@ -1,4 +1,3 @@
-var site = require('../../api/lib/site.js');
 var taxonomy = require('../../api/lib/taxonomy.js');
 var groups = require('../../api/lib/group.js');
 var api = require('../../api');
@@ -9,7 +8,7 @@ var _ = require("underscore");
 
 exports.bindPath = function (app) {
     return function() {
-        app.get('/group/:group', site.checkAdmin, _getDocsInSection);
+        app.get('/group/:group', api.site.checkAdmin, _getDocsInSection);
     }
 };
 

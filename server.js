@@ -111,7 +111,8 @@ function configureApp() {
             secret: SECRET,
             store: new RedisStore({
                 client: redisClient.client
-            })
+            }),
+            cookie: { maxAge: 60000 }
         }));
         //app.use(express.session({ secret: "keyboard cat" }));
         /* set http cache to one minute by default for each response */

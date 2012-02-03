@@ -54,11 +54,17 @@ body section > #frontpage
                     border-radius 4px
 
                 .galleria-info-title a
-                    color #333
+                    color black
                 .galleria-info-title a:hover
                     color #36C
 
     #top
+        > .sidebar
+            .opinion
+                .list-story
+                    padding 2px 0px 2px 2px
+                .list-story.last
+                    padding 2px 0px 0px 2px
         > .content
             float left
             width top-content-width
@@ -113,7 +119,7 @@ body section > #frontpage
                         margin-top 5px
 
                     ul li h3
-                        background url('/images/bullet.gif') no-repeat left 7px
+                        background url('http://d2sug25c5hnh7r.cloudfront.net/images/bullet.gif') no-repeat left 7px
 
     #news, #sports
         container-width = (page-width/2 - container-vertical-spacing/2)
@@ -151,6 +157,8 @@ body section > #frontpage
 
                 img
                     float right
+                    width 186px
+                    height 133px
 
                 .text
                     float left
@@ -180,7 +188,7 @@ body section > #frontpage
 
                     ul li
                         padding-left 11px
-                        background url('/images/bullet.gif') no-repeat left 1em
+                        background url('http://d2sug25c5hnh7r.cloudfront.net/images/bullet.gif') no-repeat left 1em
 
                         a.hover
                             padding-top bottom-padding-top
@@ -194,7 +202,19 @@ body section > #frontpage
         float left
         .content-container h2
             margin-top -4px
+
     #sports
         float right
         .content-container h2
             margin-top -4px
+        img
+            width 186px
+            height 133px
+
+    #recess, #towerview
+        .block-row.large-first a.hover.first img
+            width 292px
+            height 174px
+        .block-row a.hover img
+            width 133px
+            height 95px

@@ -72,7 +72,7 @@ site.askForLogin = function (res, afterLoginPage, username, err) {
     });
 };
 
-site.renderConfigPage = function (res,err) {
+site.renderConfigPage = function (res, err) {
     if (err)
         err += "<br /><br />The live site was not updated to use the new configuration due to errors."
 
@@ -119,7 +119,7 @@ site.getFrontPageContent = function (callback) {
             var selectedFeed = twitterFeeds[Math.floor(Math.random() * twitterFeeds.length)];
             twitter.user = selectedFeed;
             twitter.title = 'Twitter';
-            twitter.imageUrl = "/images/twitter-dukechronicle.png";
+            twitter.imageUrl = "http://d2sug25c5hnh7r.cloudfront.net/images/twitter-dukechronicle.png";
             rss.getRSS('twitter-' + selectedFeed, function (err, tweets) {
                 if (tweets && tweets.items && tweets.items.length > 0) {
                     twitter.tweet = tweets.items[0].title;
@@ -541,7 +541,7 @@ function modifyArticlesForDisplay(docs, callback) {
     }, function (results) {
         callback(null, results);
     });
-};
+}
 
 function modifyArticleForDisplay(doc, callback) {
     if (doc.urls) {
@@ -565,7 +565,7 @@ function modifyArticleForDisplay(doc, callback) {
         }
     }
     return doc;
-};
+}
 
 function _articleViewsKey(taxonomy) {
     return "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE") + ":" + JSON.stringify(taxonomy);

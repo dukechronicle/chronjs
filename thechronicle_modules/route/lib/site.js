@@ -1,6 +1,7 @@
 var site = exports;
 
 var api = require('../../api');
+var config = require('../../config');
 var globalFunctions = require('../../global-functions');
 
 var asereje = require('asereje');
@@ -10,7 +11,7 @@ var MOBILE_BROWSER_USER_AGENTS = ["Android", "iPhone", "Windows Phone",
 
 
 site.redirectMobile = function(req, res, next) {
-    var userAgent = req.headers['user-agent'];
+    var userAgent = req.headers['user-agent'] || '';
         
     // only run the code below this line if they are not accessing the
     // mobile site            

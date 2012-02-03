@@ -305,7 +305,7 @@ site.login = function (req, res) {
     api.site.askForLogin(res, '/');
 };
 
-site.loginPost = function (req, res) {
+site.loginData = function (req, res) {
     var body = req.body;
     api.accounts.login(req, body.username, body.password, function (err) {
         if (err)
@@ -329,7 +329,7 @@ site.config = function (req, res) {
         api.site.askForLogin(res, '/config');
 };
 
-site.configPost = function (req, res) {
+site.configData = function (req, res) {
     if (api.accounts.isAdmin(req))
         config.setUp(req.body, function (err) {
             if (err)
@@ -351,7 +351,7 @@ site.newsletter = function (req, res) {
     });
 };
 
-site.newsletterPost = function (req, res) {
+site.newsletterData = function (req, res) {
     var email = req.body.email;
     var action = req.body.action;
 

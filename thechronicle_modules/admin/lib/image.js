@@ -2,7 +2,6 @@ var globalFunctions = require('../../global-functions');
 var config = require('../../config');
 var log = require('../../log');
 var async = require('async');
-var site = require('../../api/lib/site.js');
 var fs = require('fs');
 var api = require('../../api/lib/api.js');
 var _ = require("underscore");
@@ -17,7 +16,7 @@ var THUMB_DIMENSIONS = '100x100';
 exports.bindPath = function (app) {
     return function () {
 
-        app.get('/manage', site.checkAdmin, function (req, httpRes) {
+        app.get('/manage', api.site.checkAdmin, function (req, httpRes) {
             var beforeKey = req.query.beforeKey;
             var beforeID = req.query.beforeID;
             var afterUrl = req.query.afterUrl;
@@ -36,12 +35,12 @@ exports.bindPath = function (app) {
             });
         });
 
-        app.get('/upload', site.checkAdmin,
+        app.get('/upload', api.site.checkAdmin,
                 function (req, httpRes) {
                     httpRes.render('admin/upload')
                 });
 
-        app.post('/upload', site.checkAdmin,
+        app.post('/upload', api.site.checkAdmin,
                 function (req, httpRes) {
                     var imageData = req.body.imageData;
                     var imageName = req.body.imageName;
@@ -95,7 +94,7 @@ exports.bindPath = function (app) {
                             });
                 });
                 
-        app.get('/articles', site.checkAdmin,
+        app.get('/articles', api.site.checkAdmin,
                 function (req, httpRes) {
                     var id = req.query.id;
                     var func = api.image.docsForVersion;
@@ -107,7 +106,7 @@ exports.bindPath = function (app) {
                     });
                 });
                 
-        app.get('/delete', site.checkAdmin,
+        app.get('/delete', api.site.checkAdmin,
                 function (req, httpRes) {
                     var id = req.query.id;
                     if(req.query.orig && req.query.orig == '1') {
@@ -123,7 +122,7 @@ exports.bindPath = function (app) {
                     }
                 });
 
-        app.get('/:imageName', site.checkAdmin,
+        app.get('/:imageName', api.site.checkAdmin,
                 function (req, httpRes, next) {  //this function either renders image or calls showError if there is an error
                     var imageName = req.params.imageName; //get image name from req
                     api.image.getOriginal(imageName,
@@ -158,7 +157,7 @@ exports.bindPath = function (app) {
                             });
                 });
 
-        app.post('/info', site.checkAdmin,
+        app.post('/info', api.site.checkAdmin,
                 function (req, httpRes) {
                     var id = req.body.id; //assign id from req
                     var afterUrl = req.body.afterUrl;
@@ -183,7 +182,7 @@ exports.bindPath = function (app) {
 
                 });
 
-        app.post('/crop', site.checkAdmin, function (req, httpRes, next) {
+        app.post('/crop', api.site.checkAdmin, function (req, httpRes, next) {
             var imageName = req.body.name;
             var afterUrl = req.body.afterUrl;
             var docId = req.body.docId;

@@ -17,7 +17,10 @@ exports.init = function (forceReinit, callback) {
             if(!redisUrl) return callback("redis server not defined");
             redisUrl = url.parse(redisUrl);
 
-            // create redis client and authenticate
+            // close old connection if it exists            
+            if(client) client.end();
+            
+            // create redis client and authenticate            
             client = redis.createClient(redisUrl.port, redisUrl.hostname);
 
             client.on("error", function (err) {

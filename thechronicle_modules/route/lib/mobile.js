@@ -35,13 +35,12 @@ mobile.article = function (req, res, next) {
 
 mobile.search = function (req, res, next) {
     var wordsQuery = req.params.query.replace('-', ' ');
-    var callback = req.query.callback;
     api.search.docsBySearchQuery(wordsQuery, req.query.sort, req.query.order, req.query.facets, req.query.page, function (err, docs, facets) {
         if (err) next(err);
-
-        var result = { docs: docs, facets: facets };
-
-        sendResponse(res, req.query.callback, result);
+        else {
+            var result = { docs: docs, facets: facets };
+            sendResponse(res, req.query.callback, result);
+        }
     });
 };
 
@@ -49,16 +48,16 @@ mobile.staff = function (req, res, next) {
     var nameQuery = req.params.query.replace('-', ' ');
     api.search.docsByAuthor(nameQuery, 'desc', '', req.query.page, function (err, docs, facets) {
         if (err) next(err);
-
-        var result = { docs: docs, facets: facets };
-
-        sendResponse(res, req.query.callback, result);
+        else {
+            var result = { docs: docs, facets: facets };
+            sendResponse(res, req.query.callback, result);
+        }
     });
 };
 
 function sendResponse(res, callback, result) {
     if (callback == null)
-        res.send(doc);
+        res.send(result);
     else
         res.send(callback + "(" + JSON.stringify(result) + ")");
 }

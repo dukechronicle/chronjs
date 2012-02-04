@@ -143,6 +143,7 @@ function runSite(callback) {
                 route.init(app, function (err) {
                     log.notice(sprintf("Site configured and listening on port %d in %s mode",
                         app.address().port, app.settings.env));
+                    callback();
                 });
             });
         }

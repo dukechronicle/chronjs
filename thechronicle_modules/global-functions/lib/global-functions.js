@@ -1,9 +1,19 @@
-var urlModule = require('url');
-var log = require('../../log');
-var http = require('http');
+var dateFormat = require('dateformat');
 var fs = require('fs');
+var http = require('http');
+var urlModule = require('url');
+
+var log = require('../../log');
+
+
+exports.formatTimestamp = function (timestamp, format) {
+    var date = new Date(timestamp*1000);
+    return format ? dateFormat(date, format) : date;
+};
 
 exports.showError = function (res, message) {
+    if(typeof message == 'object') message = JSON.stringify(message);
+
     res.render('error', {
         status: 500,
         layout: false,
@@ -11,10 +21,6 @@ exports.showError = function (res, message) {
             message: message
         }
     });
-};
-
-exports.log = function (message){
-    console.log(message);
 };
 
 exports.randomString = function (length) {

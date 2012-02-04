@@ -149,19 +149,22 @@ site.towerview = function (req, res) {
     });
 };
 
-site.section = function (req, res) {
+site.section = function (req, res, next) {
     var params = req.params.toString().split('/');
     api.site.getSectionContent(params, function (err, section, docs, children, parents, popular) {
-	res.render('site/section', {
-	    css:asereje.css(['container/style', 'site/section']),
-	    locals: {
-                docs:docs,
-		subsections:children,
-		parentPaths:parents,
-		section:section,
-		popular: popular
-	    }
-	});
+        if (err) next();
+        else {
+	    res.render('site/section', {
+	        css:asereje.css(['container/style', 'site/section']),
+	        locals: {
+                    docs:docs,
+		    subsections:children,
+		    parentPaths:parents,
+		    section:section,
+		    popular: popular
+	        }
+	    });
+        }
     });
 };
 

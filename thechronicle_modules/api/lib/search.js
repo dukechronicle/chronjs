@@ -213,7 +213,7 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 
 	var fullQuery = 'author_sm:"' + wordsQuery.replace(/"/g, '') + '"';
 	for(var index = 0; index < words.length; index++) {
-		fullQuery = fullQuery + " OR title_textv:" + words[index] + " OR body_textv:" + words[index];
+		fullQuery = fullQuery + " OR title_text:" + words[index] + " OR body_text:" + words[index];
 	}
 
 	querySolr(fullQuery, {

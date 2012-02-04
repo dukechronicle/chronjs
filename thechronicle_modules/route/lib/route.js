@@ -1,7 +1,7 @@
 var api = require('../../api');
 var admin = require('../../admin');
 var log = require('../../log');
-var mobileapi = require('../../mobileapi/lib/mobileapi');
+var mobile = require('./mobile');
 var site = require('./site');
 
 var async = require('async');
@@ -60,14 +60,14 @@ exports.init = function (app, callback) {
         res.send('42');
     });
 
-    async.parallel([
-        function(cb) {
-            admin.init(app, cb);
-        },
-        function(cb) {
-            mobileapi.init(app, cb);
-        }
-    ], callback);
+    app.namespace('/mobile-api', function () {
+        app.get('/:groupname', mobile.section);
+        app.get('/article/:url', mobile.article);
+        app.get('/search/:query', mobile.search);
+        app.get('/staff/:query', mobile.staff);
+    });
+
+    admin.init(app, callback);
 
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);

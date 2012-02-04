@@ -35,10 +35,11 @@ asereje.config({
 log.init(function (err) {
     if (err) console.err("Logger couldn't be initialized: " + err);
     config.init(function(err) {
-	if (err) log.crit(err);
+	    if (err) log.crit(err);
 
         var sessionInfo = {
             secret: SECRET,
+            cookie: { maxAge:  1800000} // 30 minutes
         };
         redisClient.init(false, function(err) {
             if (err) {
@@ -50,22 +51,22 @@ log.init(function (err) {
                     host: redisClient.getHostname(),
                     port: redisClient.getPort(),
                     pass: redisClient.getPassword(),
-                    cookie: { maxAge: 3600}
                 });
             }
 
             configureApp(sessionInfo, PORT);
             route.preinit(app, runSite);
-	    if (!config.isSetUp()) {
-	        app.get('/', function(req, res, next) {
-		    if (!config.isSetUp()) res.redirect('/config');
-		    else next();
-	        });
+
+	        if (!config.isSetUp()) {
+	            app.get('/', function(req, res, next) {
+		            if (!config.isSetUp()) res.redirect('/config');
+		            else next();
+	            });
             }
-	    else {
-	        runSite(function (err) {
-		    if (err) log.error(err);
-	        });
+	        else {
+	            runSite(function (err) {
+		            if (err) log.error(err);
+	            });
             }
         });
     });
@@ -135,13 +136,13 @@ function runSite(callback) {
     api.init(function (err) {
         if (err) log.crit("api initialization failed");
         else {
-	    sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
-		if (err) log.error("Couldn't build news sitemap: " + err);
-	    });
+	        sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
+		        if (err) log.error("Couldn't build news sitemap: " + err);
+	        });
             redisClient.init(true, function(err) {
                 route.init(app, function (err) {
                     log.notice(sprintf("Site configured and listening on port %d in %s mode",
-                                       app.address().port, app.settings.env));
+                        app.address().port, app.settings.env));
                 });
             });
         }

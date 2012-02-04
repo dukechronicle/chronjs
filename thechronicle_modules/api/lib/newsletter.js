@@ -35,14 +35,13 @@ newsletter.init = function() {
     } catch (error) {
         log.warning(error);
     }
-}
+};
 
 function getNewsletterSubject() {
     return "Duke Chronicle Daily Newsletter " + getDate();
-};
+}
 
-function getDate()
-{
+function getDate() {
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth()+1;//January is 0!
@@ -54,7 +53,7 @@ function getDate()
         mm='0'+mm;
     }  
     return mm+'/'+dd+'/'+yyyy;
-};
+}
 
 newsletter.sendTestNewsletter = function(campaignID, emailToSendTo, callback) {
     var params = {"test_emails":[emailToSendTo], "cid":campaignID};
@@ -103,6 +102,10 @@ newsletter.createNewsletter = function (callback) {
 		model: model
 	    });
             var adHTML = "<a href='www.google.com'><img src='https://www.google.com/help/hc/images/adsense_185666_adformat-display_160x600_en.jpg'></img></a>";
+
+            // disable test ad
+            adHTML = "";
+
             var contentArr = {"html_MAIN":newsHTML, "html_ADIMAGE":adHTML, "html_ISSUEDATE":getDate()};
             var params = {"type":"regular", "options":optArray, "content":contentArr};
 

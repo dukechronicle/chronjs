@@ -9,6 +9,11 @@ var asereje = require('asereje');
 var MOBILE_BROWSER_USER_AGENTS = ["Android", "iPhone", "Windows Phone",
                                   "Blackberry", "Symbian", "Palm", "webOS"];
 
+var afterConfigChangeFunction = function(callback) { callback(); };
+
+site.setAfterConfigChangeFunction = function(func) {
+    afterConfigChangeFunction = func;
+};
 
 site.redirectMobile = function(req, res, next) {
     var userAgent = req.headers['user-agent'] || '';
@@ -336,15 +341,15 @@ site.configData = function (req, res) {
     if (api.accounts.isAdmin(req))
         config.setUp(req.body, function (err) {
             if (err)
-		api.site.renderConfigPage(res,err);
-	    else 
-                runSite(function (err) {
-		    if (err) log.error(err);
+		        api.site.renderConfigPage(res,err);
+	        else 
+                afterConfigChangeFunction(function (err) {
+		            if (err) log.error(err);
                     res.redirect('/');
                 });
         });
     else
-	api.site.askForLogin(res, '/config');
+	    api.site.askForLogin(res, '/config');
 };
 
 site.newsletter = function (req, res) {

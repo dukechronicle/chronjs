@@ -207,7 +207,7 @@ site.page = function (req, res, next) {
         else if ('/page/' + url != doc.path)
             res.redirect(doc.url);
         else res.render('page', {
-	    css: asereje.css(),
+	    css: asereje.css(['container/style']),
             filename:'views/page.jade',
             locals: {
                 doc:doc,

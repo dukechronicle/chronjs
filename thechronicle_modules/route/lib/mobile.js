@@ -10,26 +10,28 @@ mobile.section = function (req, res, next) {
     var groupName = req.params.groupname;
     api.taxonomy.docs(groupName, 10, function (err, docs) {
         if (err) next(err);
+        else {
+            var result = _.map(docs, function (doc) {
+                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls};
+            });
 
-        var result = _.map(docs, function (doc) {
-            return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls};
-        });
-
-        sendResponse(res, req.query.callback, result);
+            sendResponse(res, req.query.callback, result);
+        }
     });
 };
 
 mobile.article = function (req, res, next) {
     api.articleForUrl(req.params.url, function (err, doc) {
         if (err) next(err);
+        else {
+            var result = { title: doc.title,
+                url: doc.url,
+                body: doc.body,
+                author: doc.author
+            };
 
-        var result = { title: doc.title,
-                       url: doc.url,
-                       body: doc.body,
-                       author: doc.author
-                     };
-
-        sendResponse(res, req.query.callback, result);
+            sendResponse(res, req.query.callback, result);
+        }
     });
 };
 

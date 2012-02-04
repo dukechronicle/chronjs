@@ -30,13 +30,15 @@ sitemap.generateAllSitemaps = function (callback) {
 
 sitemap.latestFullSitemap = function (path, callback) {
     latestFullSitemapHelper(path, 0, null, [], function (err, files) {
-	child_process.exec('gzip ' + files.join(' '), function (err) {
-	    if (err) callback("Couldn't zip sitemap files: " + err);
-	    else generateSitemapIndex(files, new Date(), function (err, xml) {
-		if (err) callback(err);
-		else fs.writeFile(path + '.xml', xml, callback);
-	    });
-	});
+        if (files) {
+            child_process.exec('gzip -f ' + files.join(' '), function (err) {
+                if (err) callback("Couldn't zip sitemap files: " + err);
+                else generateSitemapIndex(files, new Date(), function (err, xml) {
+                if (err) callback(err);
+                else fs.writeFile(path + '.xml', xml, callback);
+                });
+            });
+        }
     });
 };
 
@@ -52,18 +54,16 @@ function latestFullSitemapHelper(path, number, start, files, callback) {
 	query.skip = 1;
     }
     latestSitemap(path + number + ".xml", query, false,
-		  function (err, numresults, lastkey) {
-		      if (err)
-			  callback(err);
-		      else if (numresults == SITEMAP_URL_LIMIT) {
-			  files.push(path + number + ".xml");
-			  latestFullSitemapHelper(path, number+1, lastkey, files, callback);
-		      }
-		      else {
-			  files.push(path + number + ".xml");
-			  callback(null, files);
-		      }
-		  });
+      function (err, numresults, lastkey) {
+          if (err) callback(err);
+          else if (numresults == SITEMAP_URL_LIMIT) {
+              files.push(path + number + ".xml");
+              latestFullSitemapHelper(path, number+1, lastkey, files, callback);
+          } else {
+              files.push(path + number + ".xml");
+              callback(null, files);
+          }
+      });
 }
 
 function latestSitemap(path, query, news, callback) {
@@ -71,6 +71,7 @@ function latestSitemap(path, query, news, callback) {
     query.limit = query.limit || SITEMAP_URL_LIMIT;	
     db.view("articles/all_by_date", query, function(err, results) {
         if (err) callback(err);
+        else if (results.length == 0) callback("No new articles for sitemap");
 	else {
 	    var lastkey = _.last(results).key;
 	    results = _.map(results, function (doc) {
@@ -96,7 +97,7 @@ function generateSitemapIndex(files, date, callback) {
 		      // TODO: extract domain name
 		      var prefix = "http://www.dukechronicle.com/";
 		      root.ele("sitemap").
-			    ele("loc", prefix + path + ".gz").up().
+			    ele("loc", prefix + path.replace(/public\//g,"") + ".gz").up().
 			    ele("lastmod", dateFormat(date, "yyyy-mm-dd"));
 		      cb();
 		  },

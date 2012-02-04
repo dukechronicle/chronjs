@@ -19,7 +19,7 @@
                     if (typeof isAdmin != 'undefined' && isAdmin && doc.images.Original)
                         a(href="/admin/image/"+doc.images.Original.name)
                             img.article(src=doc.images.LargeRect.url)
-                    elsepopular
+                    else
                         img.article(src=doc.images.LargeRect.url)
 
             // caption
@@ -73,9 +73,9 @@
 
     // comments
     #disqus_thread.rounded
-script(src='/js/disqus.js', type='text/javascript')
+script(src='/js/disqus.js?v=3', type='text/javascript')
 script
-    loadDisqusForArticle('!{doc.nid || doc._id}', '!{doc.title}', '!{doc.url}');
+    loadDisqusForArticle(!{isProduction}, '!{disqusShortname}', '!{doc.nid || doc._id}', '!{doc.title.replace(/'/g,"\\'")}', '!{doc.url}');
 
 script(src="http://platform.twitter.com/widgets.js", type="text/javascript")
 script(type="text/javascript")

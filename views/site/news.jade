@@ -17,7 +17,7 @@
                     .right-headlines!=partial('container/story-list-featured', {title: "Headlines", stories: model["Right Headlines"]})
                 if (model.Blog)
                     .blog.last
-                        !=partial('container/story-list-image', {title: "News Blog", stories: model.Blog, image:'/images/blogs/newsblog.jpg', imageHref:'http://bigblog.chronicleblogs.com/news'})
+                        !=partial('container/story-list-image', {title: "News Blog", stories: model.Blog, image:'http://d2sug25c5hnh7r.cloudfront.net/images/blogs/newsblog.jpg', imageHref:'http://bigblog.chronicleblogs.com/news'})
 
             .middle
                 if (model.popular)

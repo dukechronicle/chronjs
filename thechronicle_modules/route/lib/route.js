@@ -43,9 +43,13 @@ exports.init = function (app, callback) {
             query = req.param('search').replace(/ /g, '-');
         res.redirect('/search/' + query + '?sort=relevance&order=desc'); 
     });
-
     app.get('/search/:query', site.search);
+
+    app.get('/users/:query', function (req, res) {
+        res.redirect('/staff/' + req.params.query);
+    });
     app.get('/staff/:query', site.staff);
+
     app.get('/page/:url', site.page);
     app.get('/article/:url', site.article);
     app.get('/article/:url/print', site.articlePrint);

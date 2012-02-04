@@ -3,6 +3,7 @@ var site = exports;
 var api = require('../../api');
 var config = require('../../config');
 var globalFunctions = require('../../global-functions');
+var log = require('../../log');
 
 var asereje = require('asereje');
 
@@ -17,10 +18,12 @@ site.setAfterConfigChangeFunction = function(func) {
 
 site.redirectMobile = function(req, res, next) {
     var userAgent = req.headers['user-agent'] || '';
-        
+    var path = req.url.split('/');
+
     // only run the code below this line if they are not accessing the
     // mobile site            
-    if(req.url.split('/',2)[1] == 'm') return next();
+    if (path[1] == 'm' || path[1] == 'mobile-api')
+        return next();
         
     for(var i in MOBILE_BROWSER_USER_AGENTS) {
         if(userAgent.indexOf(MOBILE_BROWSER_USER_AGENTS[i]) != -1) {

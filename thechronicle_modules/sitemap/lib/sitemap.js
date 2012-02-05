@@ -71,6 +71,7 @@ function latestSitemap(path, query, news, callback) {
     query.limit = query.limit || SITEMAP_URL_LIMIT;	
     db.view("articles/all_by_date", query, function(err, results) {
         if (err) callback(err);
+        else if (results.length == 0) callback("No new articles for sitemap");
 	else {
 	    var lastkey = _.last(results).key;
 	    results = _.map(results, function (doc) {

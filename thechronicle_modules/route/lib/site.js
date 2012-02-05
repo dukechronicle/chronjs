@@ -385,7 +385,7 @@ site.newsletterData = function (req, res) {
 site.pageNotFound = function(req, res) {
     res.render('pages/404', {
         filename: 'pages/404',
-        css: asereje.css(['pages/style']),
+        css: asereje.css([]),
 	status: 404,
         url: req.url
     });

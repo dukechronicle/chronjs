@@ -83,6 +83,18 @@ exports.init = function (app, callback) {
         app.post('/group/add', api.site.checkAdmin, admin.addGroup);
         app.post('/group/remove', api.site.checkAdmin, admin.removeGroup);
         app.delete('/article/:docId', api.site.checkAdmin, admin.deleteArticle);
+        app.get('/layout/group/:group', api.site.checkAdmin, admin.layout);
+    });
+    
+    app.namespace('/admin/image', function () {
+        app.get('/manage', api.site.checkAdmin, admin.image.manage);
+        app.get('/upload', api.site.checkAdmin, admin.image.upload);
+        app.post('/upload', api.site.checkAdmin, admin.image.uploadData);
+        app.get('/articles', api.site.checkAdmin, admin.image.articles);
+        app.get('/delete', api.site.checkAdmin, admin.image.deleteImage);
+        app.get('/:imageName', api.site.checkAdmin, admin.image.renderImage);
+        app.post('/info', api.site.checkAdmin, admin.image.info);
+        app.post('/crop', api.site.checkAdmin, admin.image.crop);
     });
 
     app.namespace('/mobile-api', function () {
@@ -95,5 +107,4 @@ exports.init = function (app, callback) {
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);
 
-    callback();
 };

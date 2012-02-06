@@ -32,3 +32,9 @@ externalAPI.removeGroup = function (req, res, next) {
         res.send(_res);
     });
 };
+
+externalAPI.deleteDocument =  function (req, res, next) {
+    api.deleteDoc(req.params.docId, req.body.rev, function (err) {
+        res.send({status: (err == null)});
+    });
+};

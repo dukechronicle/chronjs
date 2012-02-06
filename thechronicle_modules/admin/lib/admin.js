@@ -234,9 +234,3 @@ admin.addPageData = function (req, http_res, next) {
         else http_res.redirect('page/' + url);
     });
 };
-
-admin.deleteArticle =  function (req, res) {
-    api.deleteDoc(req.params.docId, req.body.rev, function () {
-        res.send({status:true});
-    });
-};

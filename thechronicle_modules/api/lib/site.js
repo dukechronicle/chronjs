@@ -411,7 +411,7 @@ site.getSectionContent = function (params, callback) {
             });
         },
         function (cb) {
-            api.taxonomy.docs(section, 20, function (err, docs) {
+            api.taxonomy.docs(params, 20, function (err, docs) {
                 if (err) cb(err)
                 else modifyArticlesForDisplay(docs, cb);
             });

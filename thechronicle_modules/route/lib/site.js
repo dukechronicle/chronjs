@@ -124,9 +124,9 @@ site.sports = function (req, res) {
 site.opinion = function (req, res) {
     api.site.getOpinionPageContent(function (err, model, children) {
         res.render('site/opinion', {
-            css:asereje.css(['container/style', 'site/section', 'site/opinion']),
+            css:asereje.css(['container/style', 'site/section', 'site/opinion', 'site/articles-with-author']),
             subsections:children,
-            filename:'views/site/opinion.jade',
+            filename:'views/site/articles-with-author.jade',
             model:model
         });
     });

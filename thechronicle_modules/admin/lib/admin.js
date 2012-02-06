@@ -70,41 +70,6 @@ admin.newsletterData = function(req, res, next) {
     }
 };
 
-admin.addGroup = function (req, res, next) {
-    var _res = res;
-
-    var docId = req.body.docId;
-    var nameSpace = req.body.nameSpace;
-    var groupName = req.body.groupName;
-    var weight = req.body.weight;
-
-    api.group.add(nameSpace, groupName, docId, weight, function (err, res) {
-        if (err) {
-            log.warning(err);
-            _res.send("false");
-        } else {
-            _res.send("true");
-        }
-    });
-};
-
-admin.removeGroup = function (req, res, next) {
-    var _res = res;
-    
-    var docId = req.body.docId;
-    var nameSpace = req.body.nameSpace;
-    var groupName = req.body.groupName;
-
-    api.group.remove(nameSpace, groupName, docId, function (err, res) {
-        if (err) {
-            log.warning(err);
-            _res.send("false");
-        } else {
-            _res.send("true");
-        }
-    })
-};
-
 admin.indexArticles = function (req, res, next) {
     api.search.indexUnindexedArticles();
     res.redirect('/');
@@ -270,8 +235,8 @@ admin.addPageData = function (req, http_res, next) {
     });
 };
 
-admin.deleteArticle =  function (req, http_res) {
+admin.deleteArticle =  function (req, res) {
     api.deleteDoc(req.params.docId, req.body.rev, function () {
-        http_res.send({status:true});
+        res.send({status:true});
     });
 };

@@ -81,7 +81,6 @@ exports.init = function (app, callback) {
         app.post('/add', api.site.checkAdmin, admin.addArticleData);
         app.post('/addPage', api.site.checkAdmin, admin.addPageData);
         app.post('/newsletter', api.site.checkAdmin, admin.newsletterData);
-        app.delete('/article/:docId', api.site.checkAdmin, admin.deleteArticle);
         app.get('/layout/group/:group', api.site.checkAdmin, admin.layout);
     });
     
@@ -99,6 +98,7 @@ exports.init = function (app, callback) {
     app.namespace('/api', function () {
         app.post('/group/add', api.site.checkAdmin, externalAPI.addGroup);
         app.post('/group/remove', api.site.checkAdmin, externalAPI.removeGroup);
+        app.del('/:docId', api.site.checkAdmin, externalAPI.deleteDocument);
     });
 
     app.namespace('/mobile-api', function () {

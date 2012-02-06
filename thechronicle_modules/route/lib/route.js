@@ -67,6 +67,24 @@ exports.init = function (app, callback) {
         res.send('42');
     });
 
+    app.namespace('/admin', function () {
+        app.get('/', api.site.checkAdmin, admin.index);
+        app.get('/newsletter', api.site.checkAdmin, admin.newsletter);
+        app.get('/index-articles', api.site.checkAdmin, admin.indexArticles);
+        app.get('/add', api.site.checkAdmin, admin.addArticle);
+        app.get('/add-page', api.site.checkAdmin, admin.addPage);
+        app.get('/manage', api.site.checkAdmin, admin.manage);
+        app.get('/k4export', api.site.checkAdmin, admin.k4export);
+        app.post('/k4export', api.site.checkAdmin, admin.k4exportData);
+        app.post('/edit', api.site.checkAdmin, admin.editArticleData);
+        app.post('/add', api.site.checkAdmin, admin.addArticleData);
+        app.post('/addPage', api.site.checkAdmin, admin.addPageData);
+        app.post('/newsletter', api.site.checkAdmin, admin.newsletterData);
+        app.post('/group/add', api.site.checkAdmin, admin.addGroup);
+        app.post('/group/remove', api.site.checkAdmin, admin.removeGroup);
+        app.delete('/article/:docId', api.site.checkAdmin, admin.deleteArticle);
+    });
+
     app.namespace('/mobile-api', function () {
         app.get('/:groupname', mobile.section);
         app.get('/article/:url', mobile.article);
@@ -74,9 +92,8 @@ exports.init = function (app, callback) {
         app.get('/staff/:query', mobile.staff);
     });
 
-    admin.init(app, callback);
-
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);
 
+    callback();
 };

@@ -63,7 +63,7 @@ db.connect = function (host, database) {
     }
 
     var conn = new (cradle.Connection)(couchdbUrl.protocol + '//' + couchdbUrl.hostname, couchdbUrl.port, {
-        cache: false,
+        //cache: false,
         auth:{username:couchdbUrl.auth[0], password:couchdbUrl.auth[1]}
     });
 

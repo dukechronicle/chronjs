@@ -213,7 +213,7 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 
 	var fullQuery = 'author_sm:"' + wordsQuery.replace(/"/g, '') + '"';
 	for(var index = 0; index < words.length; index++) {
-		fullQuery = fullQuery + " OR title_text:" + words[index] + " OR body_text:" + words[index];
+		fullQuery = fullQuery + " OR title_textv:" + words[index] + " OR body_textv:" + words[index];
 	}
 
 	querySolr(fullQuery, {
@@ -227,7 +227,34 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 		"f.created_year_i.facet.sort" : "index",
 		"f.created_month_i.facet.sort" : "index",
 		"f.created_day_i.facet.sort" : "index"
-	}, callback);
+	}, 
+    function(err, docs, facets) {
+        if(err) return callback(err);
+
+        // bold all matched words
+        words.forEach(function(word) {
+            var regex = new RegExp("\\b"+word+"\\b","gi");
+            docs.forEach(function(doc) {
+                doc.teaser = doc.teaser.replace(regex, "<b>"+word+"</b>");
+                doc.title = doc.title.replace(regex, "<b>"+word+"</b>");
+            });            
+        });
+
+        //also we need to have a parameter passed in to say whether to embolden or not
+        docs.forEach(function(doc) {
+            doc.authors = _.map(doc.authors, function(author) {
+                if(author == wordsQuery) {              
+                    return "<b>"+author+"</b>";
+                }
+                else {
+                    return author;
+                }
+            });
+            console.log(doc.authors);
+        });
+
+        callback(err, docs, facets);
+    });
 };
 
 function querySolr(query, options, callback) {

@@ -1,5 +1,6 @@
 var api = require('../../api');
 var admin = require('../../admin');
+var externalAPI = require('./api');
 var log = require('../../log');
 var mobile = require('./mobile');
 var site = require('./site');
@@ -80,8 +81,6 @@ exports.init = function (app, callback) {
         app.post('/add', api.site.checkAdmin, admin.addArticleData);
         app.post('/addPage', api.site.checkAdmin, admin.addPageData);
         app.post('/newsletter', api.site.checkAdmin, admin.newsletterData);
-        app.post('/group/add', api.site.checkAdmin, admin.addGroup);
-        app.post('/group/remove', api.site.checkAdmin, admin.removeGroup);
         app.delete('/article/:docId', api.site.checkAdmin, admin.deleteArticle);
         app.get('/layout/group/:group', api.site.checkAdmin, admin.layout);
     });
@@ -95,6 +94,11 @@ exports.init = function (app, callback) {
         app.get('/:imageName', api.site.checkAdmin, admin.image.renderImage);
         app.post('/info', api.site.checkAdmin, admin.image.info);
         app.post('/crop', api.site.checkAdmin, admin.image.crop);
+    });
+
+    app.namespace('/api', function () {
+        app.post('/group/add', api.site.checkAdmin, externalAPI.addGroup);
+        app.post('/group/remove', api.site.checkAdmin, externalAPI.removeGroup);
     });
 
     app.namespace('/mobile-api', function () {

@@ -136,9 +136,12 @@ function runSite(callback) {
     api.init(function (err) {
         if (err) log.crit("api initialization failed");
         else {
-	        sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
-		        if (err) log.error("Couldn't build news sitemap: " + err);
-	        });
+	        if(process.env.NODE_ENV === 'production') {
+                sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
+		            if (err) log.error("Couldn't build news sitemap: " + err);
+	            });
+            }
+            
             redisClient.init(true, function(err) {
                 route.init(app, function (err) {
                     log.notice(sprintf("Site configured and listening on port %d in %s mode",

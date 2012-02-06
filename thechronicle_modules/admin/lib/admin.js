@@ -13,9 +13,8 @@ var k4export = require('./k4export');
 var log = require('../../log');
 var sitemap = require('../../sitemap');
 
-var layoutAdmin = require('./layout');
-var imageAdmin = require('./image');
-var databaseAdmin = require('./database');
+admin.image = require('./image');
+admin.layout = require('./layout').renderLayout;
 
 var VIDEO_PLAYERS = {
     "youtube": "<iframe width=\"560\" height=\"345\" src=\"http://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>",
@@ -276,7 +275,3 @@ admin.deleteArticle =  function (req, http_res) {
         http_res.send({status:true});
     });
 };
-
-//app.namespace('/admin/layout', layoutAdmin.bindPath(app));
-//app.namespace('/admin/image', imageAdmin.bindPath(app));
-//app.namespace('/admin/database', databaseAdmin.bindPath(app));

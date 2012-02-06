@@ -16,7 +16,7 @@ function _getDocsInSection(req,res,next) {
     var section = req.query.section;
     
     if (section) {
-        api.taxonomy.docs(section, 30,
+        api.taxonomy.docs([section], 30,
         function (err, docs) {
             if (err) next(err);
             else {

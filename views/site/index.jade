@@ -22,7 +22,7 @@
             if (model.popular)
                 .numbered-articles.most-popular!=partial('container/numbered-articles', {title: "Popular", stories: model.popular})
             if (model.Opinion)
-                .opinion!=partial('container/opinion', {title: "Opinion", stories: model.Opinion})
+                .articles-with-author.opinion!=partial('container/articles-with-author', {title: "Opinion", stories: model.Opinion})
             if (model.adFullRectangle)
                 .image-container.medium-rectangle.lighten!=partial('ad/medium-rect', {title: "Advertisement"})
 

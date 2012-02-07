@@ -1,3 +1,5 @@
+var admin = exports;
+
 var async = require('async');
 var fs = require('fs');
 var md = require('node-markdown').Markdown;
@@ -11,9 +13,8 @@ var k4export = require('./k4export');
 var log = require('../../log');
 var sitemap = require('../../sitemap');
 
-var layoutAdmin = require('./layout');
-var imageAdmin = require('./image');
-var databaseAdmin = require('./database');
+admin.image = require('./image');
+admin.layout = require('./layout').renderLayout;
 
 var VIDEO_PLAYERS = {
     "youtube": "<iframe width=\"560\" height=\"345\" src=\"http://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>",
@@ -34,286 +35,202 @@ function _renderBody(body, callback) {
 
 }
 
-exports.init = function (app, callback) {
+admin.index = function (req, res, next) {
+    res.render('admin/index');
+};
 
-    //Run this to render bodies for all articles
-    /*
-      api.docsByDate(null, null, function(err, docs) {
-      log.debug("Got docs");
-      docs.forEach(function(doc, index) {
-      _renderBody(doc.body, function(err, rendered) {
-      api.editDoc(doc._id, {
-      renderedBody: rendered
-      },
-      function(err) {
-      log.info("Updating " + index + " of " + docs.length);
-      });
-      });
-      });
-      });
-    */
+admin.newsletter = function (req, res, next) {
+    api.newsletter.createNewsletter(function(campaignID) {
+        res.render('admin/newsletter', {
+            locals: {campaignID: campaignID}
+        });
+    });
+};
 
+admin.newsletterData = function(req, res, next) {
+    var testEmailToSendTo = req.body.testEmail;
+    var campaignID = req.body.campaignID;
 
-    app.namespace('/admin',
-                  function () {
-                      app.get('/', api.site.checkAdmin, function (req, res) {
-                          res.render('admin/index');
-                      });
-
-                      app.get('/newsletter', api.site.checkAdmin, function (req, res) {
-                          api.newsletter.createNewsletter(function(campaignID) {
-                              res.render('admin/newsletter', {
-                                  locals: {campaignID: campaignID}
-                              });
-                          });
-                      });
-
-                      app.post('/newsletter', api.site.checkAdmin, function(req,res) {
-                          var testEmailToSendTo = req.body.testEmail;
-                          var campaignID = req.body.campaignID;
-
-                          if(testEmailToSendTo != null) {
-                              api.newsletter.sendTestNewsletter(campaignID, testEmailToSendTo, function(err) {
-                                  res.send("sent");
-                              });
-                          }
-                          else {
-                              api.newsletter.sendNewsletter(campaignID, function(err) {
-                                  res.send("sent");
+    if(testEmailToSendTo != null) {
+        api.newsletter.sendTestNewsletter(campaignID, testEmailToSendTo, function(err) {
+            res.send("sent");
+        });
+    }
+    else {
+        api.newsletter.sendNewsletter(campaignID, function(err) {
+            res.send("sent");
                                   
-                                  if(process.env.NODE_ENV === 'production') {
-                                      log.notice("Building sitemaps...");
-		                      sitemap.generateAllSitemaps(function (err) {
-			                  if (err) log.warning(err);
-		                      });
-                                  }
-                              });
-                          }
-                      });
+            if(process.env.NODE_ENV === 'production') {
+                log.notice("Building sitemaps...");
+		sitemap.generateAllSitemaps(function (err) {
+		    if (err) log.warning(err);
+		});
+            }
+        });
+    }
+};
 
-                      app.post('/group/add', api.site.checkAdmin,
-                               function (req, res) {
-                                   var _res = res;
+admin.indexArticles = function (req, res, next) {
+    api.search.indexUnindexedArticles();
+    res.redirect('/');
+};
 
-                                   var docId = req.body.docId;
-                                   var nameSpace = req.body.nameSpace;
-                                   var groupName = req.body.groupName;
-                                   var weight = req.body.weight;
+admin.addArticle = function (req, res, next) {
+    api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
+        res.render('admin/add', {
+            locals:{
+                groups:[],
+                taxonomy:taxonomy
+            }
+        });
+    });
+};
 
-                                   api.group.add(nameSpace, groupName, docId, weight,
-                                                 function (err, res) {
-                                                     if (err) {
-                                                         log.warning(err);
-                                                         _res.send("false");
-                                                     } else {
-                                                         _res.send("true");
-                                                     }
-                                                 })
-                               });
+admin.addPage = function (req, res, next) {
+    res.render('admin/addPage', {
+        locals: {
+            groups:[]
+        }
+    });
+};
 
-                      app.post('/group/remove', api.site.checkAdmin,
-                               function (req, res) {
-                                   var _res = res;
+admin.manage = function (req, res, next) {
+    var db = api.getDatabaseName();
+    var host = api.getDatabaseHost();
+    var port = api.getDatabasePort() || "80";
 
-                                   var docId = req.body.docId;
-                                   var nameSpace = req.body.nameSpace;
-                                   var groupName = req.body.groupName;
+    var beforeKey = req.query.beforeKey;
+    var beforeID = req.query.beforeID;
 
-                                   api.group.remove(nameSpace, groupName, docId,
-                                                    function (err, res) {
-                                                        if (err) {
-                                                            _res.send("false");
-                                                        } else {
-                                                            _res.send("true");
-                                                        }
-                                                    })
-                               });
+    api.docsByDate(beforeKey, beforeID, function (err, docs) {
+        if (err) next(err);
+        else res.render('admin/manage', {
+            locals:{
+                docs:docs,
+                hasPrevious:(beforeID != null),
+                db:db,
+                host:host,
+                port:port
+            }
+        });
+    });
+};
 
-                      app.get('/index-articles', api.site.checkAdmin,
-                              function (req, http_res) {
-                                  api.search.indexUnindexedArticles();
-                                  http_res.redirect('/');
-                              });
+admin.k4export = function (req, res, next) {
+    res.render('admin/k4export', {
+        locals:{
+            failed:null,
+            succeeded:null,
+            taxonomy:null
+        }
+    });
+};
 
-                      app.get('/add', api.site.checkAdmin,
-                              function (req, http_res) {
-                                  api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
-                                      http_res.render('admin/add', {
-                                          locals:{
-                                              groups:[],
-                                              taxonomy:taxonomy
-                                          }
-                                      });
-                                  });
-                              });
+admin.k4exportData = function (req, res, next) {
+    api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
+        k4export.runExporter(req.files.zip.path, function (failed, success) {
+	    fs.unlink(req.files.zip.path);
+            res.render('admin/k4export', {
+		locals:{
+                    failed:failed,
+                    succeeded:success,
+                    taxonomy:taxonomy
+		}
+            });
+	});
+    });
+};
 
-                      app.get('/addPage', api.site.checkAdmin,
-                              function (req, http_res) {
-                                  http_res.render('admin/addPage', {
-                                      //locals: {groups: groups},
-                                      locals:{
-                                          groups:[]
-                                      }
-                                  });
-                              });
+admin.editArticleData = function (req, http_res, next) {
+    if (req.body.imageVersionId) {
+        api.image.addVersionToDoc(req.body.docId, req.body.original, req.body.imageVersionId, req.body.imageType, function (err, res) {
+            if (err) next(http_res);
+            else if(req.body.afterUrl) http_res.redirect(req.body.afterUrl);
+            else http_res.redirect('/admin');
+        });
+    }
+    else if (req.body.doc.taxonomy == '') {
+        next('No section selected for article');
+    }
+    else {
+        var id = req.body.doc.id;
+        /*
+          var new_groups = req.body.doc.groups;
+          if(!(new_groups instanceof Array)) { //we will get a string if only one box is checked
+          new_groups = [new_groups];
+          }*/
 
-                      app.get('/manage', api.site.checkAdmin, function (req, res, next) {
-                          var db = api.getDatabaseName();
-                          var host = api.getDatabaseHost();
-                          var port = api.getDatabasePort() || "80";
+        var fields = {
+            title:req.body.doc.title,
+            body:req.body.doc.body,
+            teaser:req.body.doc.teaser,
+            authors:req.body.doc.authors.split(", "),
+            taxonomy:JSON.parse(req.body.doc.taxonomy)
+            //groups: new_groups
+        };
+        _renderBody(req.body.doc.body, function (err, rendered) {
+            fields.renderedBody = rendered;
+            api.editDoc(id, fields,
+                        function (err, res, url) {
+                            if (err) next(err);
+                            else http_res.redirect('/article/' + url);
+                        });
+        });
+    }
+};
 
-                          var beforeKey = req.query.beforeKey;
-                          var beforeID = req.query.beforeID;
+admin.addArticleData = function (req, http_res, next) {
+    if (req.body.doc.taxonomy == '') {
+        next('No section selected for article');
+    }
+    else {
+        var form = req.body.doc;
 
-                          api.docsByDate(beforeKey, beforeID, function (err, docs) {
-                              if (err) next(err);
-                              else res.render('admin/manage', {
-                                  locals:{
-                                      docs:docs,
-                                      hasPrevious:(beforeID != null),
-                                      db:db,
-                                      host:host,
-                                      port:port
-                                  }
-                              });
-                          });
-                      });
+        var fields = {
+            body:form.body,
+            authors:form.authors.split(" ,"),
+            title:form.title,
+            teaser:form.teaser,
+            type:form.type,
+            taxonomy:JSON.parse(form.taxonomy)
+        };
 
-                      app.get('/k4export', api.site.checkAdmin,
-                              function (req, res) {
-                                  res.render('admin/k4export', {
-                                      locals:{
-                                          groups:[],
-                                          failed:null,
-                                          succeeded:null,
-                                          taxonomy:null
-                                      }
-                                  });
-                              });
+        async.waterfall([
+            function (callback) {
+                _renderBody(form.body, function (err, rendered) {
+                    fields.renderedBody = rendered;
+                    callback(null);
+                });
+            },
+            function (callback) {
+                api.addDoc(fields, callback);
+            }
+        ], function (err, url) {
+            if (err) next(err);
+            else http_res.redirect('/article/' + url);
+        });
+    }
+};
 
-                      app.post('/k4export', api.site.checkAdmin,
-                               function (req, res) {
-                                   api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
-                                       k4export.runExporter(req.files.zip.path, function (failed, success) {
-					   fs.unlink(req.files.zip.path);
-                                           res.render('admin/k4export', {
-					       locals:{
-                                                   groups:[],
-                                                   failed:failed,
-                                                   succeeded:success,
-                                                   taxonomy:taxonomy
-					       }
-                                           });
-				       });
-                                   });
-                               });
+admin.addPageData = function (req, http_res, next) {
+    var form = req.body.doc;
+    var fields = {
+        body:form.body,
+        title:form.title
+    };
 
-                      app.post('/edit', api.site.checkAdmin, function (req, http_res, next) {
-                          if (req.body.imageVersionId) {
-                              api.image.addVersionToDoc(req.body.docId, req.body.original, req.body.imageVersionId, req.body.imageType, function (err, res) {
-                                  if (err) next(http_res);
-                                  else if(req.body.afterUrl) http_res.redirect(req.body.afterUrl);
-                                  else http_res.redirect('/admin');
-                              });
-                          }
-                          else if (req.body.doc.taxonomy == '') {
-                              next('No section selected for article');
-                          }
-                          else {
-                              var id = req.body.doc.id;
-                              /*
-                                var new_groups = req.body.doc.groups;
-                                if(!(new_groups instanceof Array)) { //we will get a string if only one box is checked
-                                new_groups = [new_groups];
-                                }*/
-
-                              var fields = {
-                                  title:req.body.doc.title,
-                                  body:req.body.doc.body,
-                                  teaser:req.body.doc.teaser,
-                                  authors:req.body.doc.authors.split(", "),
-                                  taxonomy:JSON.parse(req.body.doc.taxonomy)
-                                  //groups: new_groups
-                              };
-                              _renderBody(req.body.doc.body, function (err, rendered) {
-                                  fields.renderedBody = rendered;
-                                  api.editDoc(id, fields,
-                                              function (err, res, url) {
-                                                  if (err) next(err);
-                                                  else http_res.redirect('/article/' + url);
-                                              });
-                              });
-                          }
-                      });
-
-                      app.post('/add', api.site.checkAdmin, function (req, http_res, next) {
-                          if (req.body.doc.taxonomy == '') {
-                              next('No section selected for article');
-                          }
-                          else {
-                              var form = req.body.doc;
-
-                              var fields = {
-                                  body:form.body,
-                                  authors:form.authors.split(" ,"),
-                                  title:form.title,
-                                  teaser:form.teaser,
-                                  type:form.type,
-                                  taxonomy:JSON.parse(form.taxonomy)
-                              };
-
-                              async.waterfall([
-                                  function (callback) {
-                                      _renderBody(form.body, function (err, rendered) {
-                                          fields.renderedBody = rendered;
-                                          callback(null);
-                                      });
-                                  },
-                                  function (callback) {
-                                      api.addDoc(fields, callback);
-                                  }
-                              ], function (err, url) {
-                                  if (err) next(err);
-                                  else http_res.redirect('/article/' + url);
-                              });
-                          }
-                      });
-
-
-                      app.post('/addPage', api.site.checkAdmin, function (req, http_res, next) {
-                          var form = req.body.doc;
-                          var fields = {
-                              body:form.body,
-                              title:form.title
-                          };
-
-                          async.waterfall([
-                              function (callback) {
-                                  _renderBody(form.body, function (err, rendered) {
-                                      fields.renderedBody = rendered;
-                                      callback(null);
-                                  });
-                              },
-                              function (callback) {
-                                  api.addDoc(fields, callback);
-                              }
-                          ], function (err, url) {
-                              if (err) next(err);
-                              else http_res.redirect('page/' + url);
-                          });
-                      });
-
-                      app.delete('/article/:docId', api.site.checkAdmin, function (req, http_res) {
-                          api.deleteDoc(req.params.docId, req.body.rev, function () {
-                              http_res.send({status:true});
-                          });
-                      });
-
-                  });
-
-    app.namespace('/admin/layout', layoutAdmin.bindPath(app));
-    app.namespace('/admin/image', imageAdmin.bindPath(app));
-    app.namespace('/admin/database', databaseAdmin.bindPath(app));
-
-    callback(null);
+    async.waterfall([
+        function (callback) {
+            _renderBody(form.body, function (err, rendered) {
+                fields.renderedBody = rendered;
+                callback(null);
+            });
+        },
+        function (callback) {
+            api.addDoc(fields, callback);
+        }
+    ], function (err, url) {
+        if (err) next(err);
+        else http_res.redirect('page/' + url);
+    });
 };

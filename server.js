@@ -136,18 +136,15 @@ function runSite(callback) {
     api.init(function (err) {
         if (err) log.crit("api initialization failed");
         else {
-	        if(process.env.NODE_ENV === 'production') {
+	    if (process.env.NODE_ENV === 'production') {
                 sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
-		            if (err) log.error("Couldn't build news sitemap: " + err);
-	            });
+		    if (err) log.error("Couldn't build news sitemap: " + err);
+	        });
             }
             
             redisClient.init(true, function(err) {
-                route.init(app, function (err) {
-                    log.notice(sprintf("Site configured and listening on port %d in %s mode",
-                        app.address().port, app.settings.env));
-                    callback();
-                });
+                route.init(app);
+                log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));
             });
         }
     });

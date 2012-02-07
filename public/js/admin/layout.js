@@ -32,7 +32,7 @@ $(function() {
 
     // remove on double click
     $("#layout").delegate(".story", "dblclick", function() {
-        $.post("/admin/group/remove", {
+        $.post("/api/group/remove", {
             docId: $(this).attr("id"),
             groupName: $(this).parent().data("groupname"),
             nameSpace: nameSpace
@@ -60,7 +60,7 @@ $(function() {
         if (element.parent().data("groupname") && (element.parent().data("groupname") !== $(this).data("groupname"))) {
             removeFromPrevious(docId, element, $(this).data("groupname"), containerElement);
         } else {
-            $.post("/admin/group/add", {
+            $.post("/api/group/add", {
                 docId: docId,
                 groupName: $(this).data("groupname"),
                 nameSpace: nameSpace,
@@ -86,7 +86,7 @@ $(function() {
             removeFromPrevious(docId, element, $(_this).parent().data("groupname"), newElement);
         } else {
             element.remove();
-            $.post("/admin/group/add", {
+            $.post("/api/group/add", {
                 docId: docId,
                 groupName: $(this).parent().data("groupname"),
                 nameSpace: nameSpace,
@@ -97,7 +97,7 @@ $(function() {
         nextSibling = newElement;
         while ((nextSibling = nextSibling.next()) && (nextSibling.length > 0)) {
 
-            $.post("/admin/group/add", {
+            $.post("/api/group/add", {
                 docId: nextSibling.attr("id"),
                 groupName: $(this).parent().data("groupname"),
                 nameSpace: nameSpace,
@@ -116,12 +116,12 @@ $(function() {
         var oldElementParent = element.parent();
             nextSibling = element.next();
 
-            $.post("/admin/group/remove", {
+            $.post("/api/group/remove", {
                 docId: element.attr("id"),
                 groupName: oldElementParent.data("groupname"),
                 nameSpace: nameSpace
             }, function() {
-                $.post("/admin/group/add", {
+                $.post("/api/group/add", {
                 docId: docId,
                 groupName: newGroupName,
                 nameSpace: nameSpace,
@@ -132,7 +132,7 @@ $(function() {
 
             if (nextSibling.length>0) {
                 do {
-                    $.post("/admin/group/add", {
+                    $.post("/api/group/add", {
                         docId: nextSibling.attr("id"),
                         groupName: oldElementParent.data("groupname"),
                         nameSpace: nameSpace,

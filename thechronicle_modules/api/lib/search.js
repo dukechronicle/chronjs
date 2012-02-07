@@ -199,17 +199,19 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 		facetQueries = facetQueriesTemp;
 	});
 
+    wordsQuery = wordsQuery.toLowerCase();
 	var words = wordsQuery.split(" ");
-	words = words.map(function(word) {
+	
+    words = words.map(function(word) {
 		var newString = solr.valueEscape(word.replace(/"/g, '')); //remove "s from the query
 
         if(newString.length == 0)
 			return '""';
 		else
-			return newString.toLowerCase();
+			return newString;
 	});
 
-	var fullQuery = 'author_sm:"' + wordsQuery.toLowerCase().replace(/"/g, '') + '"';
+	var fullQuery = 'author_sm:"' + wordsQuery.replace(/"/g, '') + '"';
 	for(var index = 0; index < words.length; index++) {
 		fullQuery = fullQuery + " OR title_text:" + words[index] + " OR body_text:" + words[index];
 	}
@@ -232,7 +234,8 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
         if(emboldenMatchedTerms) {
             var regexString = "";
             words.forEach(function(word) {
-                regexString += "\\b"+word+"\\b|";
+                if(regexString.length > 0) regexString += "|";
+                regexString += "\\b"+word+"\\b";
             });
             var regex = new RegExp(regexString,"gi");
 
@@ -240,19 +243,11 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
             docs.forEach(function(doc) {
                 if(doc.teaser) doc.teaser = doc.teaser.replace(regex, function(m){return _embolden(m)});
                 if(doc.title) doc.title = doc.title.replace(regex, function(m){return _embolden(m)});
-            });  
-
-            // bold any authors that match
-            docs.forEach(function(doc) {
+                
                 doc.authors = _.map(doc.authors, function(author) {
-                    if(author.toLowerCase() == wordsQuery.toLowerCase()) {              
-                        return _embolden(author);
-                    }
-                    else {
-                        return author;
-                    }
+                    return author.replace(regex, function(m){return _embolden(m)});                    
                 });
-            });
+            });  
         }
 
         callback(err, docs, facets);

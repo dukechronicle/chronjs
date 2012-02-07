@@ -58,28 +58,28 @@ site.userGuidelines = function (req, res) {
 site.advertising = function (req, res) {
     res.render('pages/advertising', {
 	filename:'pages/advertising',
-	css: asereje.css()
+	css: asereje.css(['container/style'])
     });
 };
 
 site.subscribe = function (req, res) {
     res.render('pages/subscribe', {
 	filename:'pages/subscribe',
-	css: asereje.css()
+	css: asereje.css(['container/style'])
     });
 };
 
 site.editBoard = function (req, res) {
     res.render('pages/edit-board', {
 	filename:'pages/edit-board',
-	css: asereje.css()
+	css: asereje.css(['container/style'])
     });
 };
 
 site.lettersToEditor = function (req, res) {
     res.render('pages/letters', {
 	filename:'pages/letters',
-	css: asereje.css()
+	css: asereje.css(['container/style'])
     });
 };
 
@@ -356,9 +356,9 @@ site.configData = function (req, res) {
 };
 
 site.newsletter = function (req, res) {
-    res.render('site/newsletter', {
-	filename: 'site/newsletter',
-	css: asereje.css()
+    res.render('pages/newsletter', {
+	filename: 'pages/newsletter',
+	css: asereje.css(['container/style'])
     });
 };
 
@@ -367,10 +367,11 @@ site.newsletterData = function (req, res) {
     var action = req.body.action;
 
     var afterFunc = function() {
-        res.render('site/newsletter', {
+        res.render('pages/newsletter', {
+	    filename: 'pages/newsletter',
             email: email,
             action: action,
-	    css: asereje.css()
+	    css: asereje.css(['container/style'])
         });
     };
     

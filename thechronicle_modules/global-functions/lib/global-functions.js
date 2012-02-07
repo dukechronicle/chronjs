@@ -11,18 +11,6 @@ exports.formatTimestamp = function (timestamp, format) {
     return format ? dateFormat(date, format) : date;
 };
 
-exports.showError = function (res, message) {
-    if(typeof message == 'object') message = JSON.stringify(message);
-
-    res.render('error', {
-        status: 500,
-        layout: false,
-        locals: {
-            message: message
-        }
-    });
-};
-
 exports.randomString = function (length) {
     var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
     var randomstring = '';

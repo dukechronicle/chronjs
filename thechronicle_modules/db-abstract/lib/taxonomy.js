@@ -5,12 +5,9 @@ var _ = require('underscore');
 
 var taxonomy = exports;
 taxonomy.docs = function(taxonomy, limit, callback) {
-    var end = _.clone(taxonomy);
-    end.push({});
-
     var query = {
-        startkey: taxonomy,
-        endkey: end,
+        startkey: [taxonomy],
+        endkey: [taxonomy, {}],
     };
     if (limit) query.limit = limit;
 

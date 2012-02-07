@@ -242,7 +242,7 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
             // bold all matched words
             docs.forEach(function(doc) {
                 if(doc.teaser) doc.teaser = doc.teaser.replace(regex, function(m){return _embolden(m)});
-                if(doc.title) doc.title = doc.title.replace(regex, function(m){return _embolden(m)});
+                //if(doc.title) doc.title = doc.title.replace(regex, function(m){return _embolden(m)});
                 
                 doc.authors = _.map(doc.authors, function(author) {
                     return author.replace(regex, function(m){return _embolden(m)});                    

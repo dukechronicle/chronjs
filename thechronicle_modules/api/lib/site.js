@@ -495,33 +495,33 @@ site.getArticleContent = function(url, callback) {
 	api.articleForUrl(url, function(err, doc) {
 		doc = modifyArticleForDisplay(doc);
 		async.parallel([
-		function(cb) {
-			redis.client.zrevrange(_articleViewsKey([]), 0, 4, function(err, popular) {
-				if(err)
-					cb(err);
-				else
-					cb(null, popular.map(function(str) {
-						var parts = str.split('||');
-						return {
-							urls : ['/article/' + parts[0]],
-							title : parts[1]
-						};
-					}));
-			});
-		},
-		function(cb) {
-			api.search.relatedArticles(doc._id, 5, function(err, relatedArticles) {
-				cb(null, relatedArticles);
-			});
-		},
-		function(cb) {
-			api.taxonomy.getParents(doc.taxonomy, function(err, parents) {
-				if(err)
-					cb(err);
-				else
-					cb(null, parents);
-			});
-		}
+		    function(cb) {
+			    redis.client.zrevrange(_articleViewsKey([]), 0, 4, function(err, popular) {
+				    if(err)
+					    cb(err);
+				    else
+					    cb(null, popular.map(function(str) {
+						    var parts = str.split('||');
+						    return {
+							    urls : ['/article/' + parts[0]],
+							    title : parts[1]
+						    };
+					    }));
+			    });
+		    },
+		    function(cb) {
+			    api.search.relatedArticles(doc._id, 5, function(err, relatedArticles) {
+				    cb(null, relatedArticles);
+			    });
+		    },
+		    function(cb) {
+			    api.taxonomy.getParents(doc.taxonomy, function(err, parents) {
+				    if(err)
+					    cb(err);
+				    else
+					    cb(null, parents);
+			    });
+		    }
 		], function(err, results) {
 			if(err)
 				callback(err);
@@ -533,13 +533,16 @@ site.getArticleContent = function(url, callback) {
 						"url" : "http://google.com",
 						"width" : "300px",
 						"height" : "250px"
-					}
+					},
+                    popular: results[0],
+				    related: results[1],
 				};
-				model.popular = results[0];
-				model.related = results[1];
-				var parents = results[2];
-			
-				// Statistics for most read
+                var parents = results[2];
+
+                // put callback before statistics so the user doesn't have to wait for statistics to run to see the page			
+				callback(null, doc, model, parents);
+
+                // Statistics for most read
 				if(doc.taxonomy) {
 					var length = doc.taxonomy.length;
 					var taxToSend = _.clone(doc.taxonomy);
@@ -555,7 +558,6 @@ site.getArticleContent = function(url, callback) {
 						}
 					});
 				}
-			callback(null, doc, model, parents);
 			}
 		});
 	});

@@ -175,7 +175,7 @@ search.docsByAuthor = function(authorName, sortOrder, facets, page, callback) {
 };
 
 // Function for searching by query
-search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page, callback) {
+search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page, emboldenMatchedTerms, callback) {
 	wordsQuery = globalFunctions.trim(wordsQuery);
 	if(wordsQuery.length == 0)
 		wordsQuery = "--";
@@ -199,21 +199,19 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 		facetQueries = facetQueriesTemp;
 	});
 
-	wordsQuery = wordsQuery.toLowerCase();
 	var words = wordsQuery.split(" ");
-
 	words = words.map(function(word) {
 		var newString = solr.valueEscape(word.replace(/"/g, '')); //remove "s from the query
 
         if(newString.length == 0)
 			return '""';
 		else
-			return newString;
+			return newString.toLowerCase();
 	});
 
-	var fullQuery = 'author_sm:"' + wordsQuery.replace(/"/g, '') + '"';
+	var fullQuery = 'author_sm:"' + wordsQuery.toLowerCase().replace(/"/g, '') + '"';
 	for(var index = 0; index < words.length; index++) {
-		fullQuery = fullQuery + " OR title_textv:" + words[index] + " OR body_textv:" + words[index];
+		fullQuery = fullQuery + " OR title_text:" + words[index] + " OR body_text:" + words[index];
 	}
 
 	querySolr(fullQuery, {
@@ -231,27 +229,31 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
     function(err, docs, facets) {
         if(err) return callback(err);
 
-        // bold all matched words
-        words.forEach(function(word) {
-            var regex = new RegExp("\\b"+word+"\\b","gi");
-            docs.forEach(function(doc) {
-                doc.teaser = doc.teaser.replace(regex, "<b>"+word+"</b>");
-                doc.title = doc.title.replace(regex, "<b>"+word+"</b>");
-            });            
-        });
-
-        //also we need to have a parameter passed in to say whether to embolden or not
-        docs.forEach(function(doc) {
-            doc.authors = _.map(doc.authors, function(author) {
-                if(author == wordsQuery) {              
-                    return "<b>"+author+"</b>";
-                }
-                else {
-                    return author;
-                }
+        if(emboldenMatchedTerms) {
+            var regexString = "";
+            words.forEach(function(word) {
+                regexString += "\\b"+word+"\\b|";
             });
-            console.log(doc.authors);
-        });
+            var regex = new RegExp(regexString,"gi");
+
+            // bold all matched words
+            docs.forEach(function(doc) {
+                if(doc.teaser) doc.teaser = doc.teaser.replace(regex, function(m){return _embolden(m)});
+                if(doc.title) doc.title = doc.title.replace(regex, function(m){return _embolden(m)});
+            });  
+
+            // bold any authors that match
+            docs.forEach(function(doc) {
+                doc.authors = _.map(doc.authors, function(author) {
+                    if(author.toLowerCase() == wordsQuery.toLowerCase()) {              
+                        return _embolden(author);
+                    }
+                    else {
+                        return author;
+                    }
+                });
+            });
+        }
 
         callback(err, docs, facets);
     });
@@ -373,3 +375,7 @@ function _sortObjByKeys(arr){
 	}
 	return sortedObj;
 }
+
+function _embolden(match) {
+    return "<b>"+match+"</b>";
+};  

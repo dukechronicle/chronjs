@@ -43,7 +43,7 @@ define(["jquery", "underscore"], function($) {
             var contentContainer = $('#top > .content .top-news .content-container');
             var popularContainer = $('#top > .sidebar .most-popular .content-container');
 
-            if (popularContainer) {
+            if (popularContainer.length > 0) {
                 //console.log(extraHeight);
                 if (extraHeight > 0) {
                     var lisToRemove = Math.floor(extraHeight / popularLiHeight);

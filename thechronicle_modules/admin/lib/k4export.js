@@ -163,6 +163,7 @@ function ArticleParser(articleCallback) {
                         callback(err);
                     else {
                         article.body = result;
+                        article.renderedBody = article.body;
                         callback(undefined, article);
                     }
                 });
@@ -237,7 +238,6 @@ function runExporter(zipPath, callback) {
             else {
                 article.url = url;
                 article.id = id;
-                article.renderedBody = article.body;
                 callback(undefined, article);
             }
         });

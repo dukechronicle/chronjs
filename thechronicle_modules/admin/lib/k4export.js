@@ -237,6 +237,7 @@ function runExporter(zipPath, callback) {
             else {
                 article.url = url;
                 article.id = id;
+                article.renderedBody = article.body;
                 callback(undefined, article);
             }
         });

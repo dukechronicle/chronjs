@@ -32,7 +32,6 @@ function _renderBody(body, callback) {
     }
 
     callback(null, md(body));
-
 }
 
 admin.index = function (req, res, next) {
@@ -236,3 +235,11 @@ admin.addPageData = function (req, http_res, next) {
         else http_res.redirect('page/' + url);
     });
 };
+
+
+function insertParagraphTags(text) {
+    if (text.search(/<p>/) === -1) {
+        text = "<p>" + text.replace(/\r\n|\n/g, "</p><p>") + "</p>";
+    }
+    return text;
+}

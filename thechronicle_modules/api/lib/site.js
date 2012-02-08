@@ -452,7 +452,6 @@ site.getSectionContent = function (params, callback) {
                 callback(null, section, docs, children, parents, popular);
             }
         });
->>>>>>> master
 };
 
 site.getAuthorContent = function(name, callback) {

@@ -142,7 +142,8 @@ site.getFrontPageContent = function (callback) {
             if (BENCHMARK) log.info("TOTAL TIME %d", Date.now() - start);
             var model = results[0];
             _.defaults(model, homeModel);
-            model.popular = results[1];
+            //model.popular = results[1];
+            model.popular = null;
             model.twitter = results[2];
             callback(null, model);
         }
@@ -193,7 +194,7 @@ site.getNewsPageContent = function (callback) {
             var model = results[0];
             _.defaults(model, newsModel);            
             model.popular = results[1];
-            model.Blog = results[2]
+            model.Blog = results[2];
             model.adFullRectangle = {
                 "title":"Advertisement",
                 "imageUrl":"/images/ads/monster.png",
@@ -442,7 +443,7 @@ site.getAuthorContent = function (name, callback) {
 };
 
 site.getSearchContent = function (wordsQuery, query, callback) {
-    api.search.docsBySearchQuery(wordsQuery, query.sort, query.order, query.facets, 1, function (err, docs, facets) {
+    api.search.docsBySearchQuery(wordsQuery, query.sort, query.order, query.facets, 1, true, function (err, docs, facets) {
         if (err) callback(err);
         else
             modifyArticlesForDisplay(docs, function (err, docs) {

@@ -37,7 +37,7 @@ mobile.article = function (req, res, next) {
 
 mobile.search = function (req, res, next) {
     var wordsQuery = req.params.query.replace('-', ' ');
-    api.search.docsBySearchQuery(wordsQuery, req.query.sort, req.query.order, req.query.facets, req.query.page, function (err, docs, facets) {
+    api.search.docsBySearchQuery(wordsQuery, req.query.sort, req.query.order, req.query.facets, req.query.page, true, function (err, docs, facets) {
         if (err) next(err);
         else {
             var result = { docs: docs, facets: facets };

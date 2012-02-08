@@ -163,6 +163,7 @@ function ArticleParser(articleCallback) {
                         callback(err);
                     else {
                         article.body = result;
+                        article.renderedBody = article.body;
                         callback(undefined, article);
                     }
                 });

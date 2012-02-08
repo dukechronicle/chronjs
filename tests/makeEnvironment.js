@@ -202,6 +202,7 @@ function addFakeArticles(images, callback) {
         var article = {};
         article.title = generateSentence(WORDS_FOR_TITLE);
         article.body = generateSentence(WORDS_FOR_BODY);
+        article.renderedBody = article.body;
         article.authors = [generateSentence(WORDS_FOR_AUTHOR)];
         article.teaser = generateSentence(WORDS_FOR_TEASER);
         article.type = "article";

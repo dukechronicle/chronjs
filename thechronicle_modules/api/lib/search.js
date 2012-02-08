@@ -176,7 +176,7 @@ search.docsByAuthor = function(authorName, sortOrder, facets, page, callback) {
 };
 
 // Function for searching by query
-search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page, callback) {
+search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page, emboldenMatchedTerms, callback) {
 	wordsQuery = globalFunctions.trim(wordsQuery);
 	if(wordsQuery.length == 0)
 		wordsQuery = "--";
@@ -199,17 +199,19 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 		facetFields = facetFieldsTemp;
 		facetQueries = facetQueriesTemp;
 	});
-	wordsQuery = wordsQuery.toLowerCase();
+
+    wordsQuery = wordsQuery.toLowerCase();
 	var words = wordsQuery.split(" ");
-	words = words.map(function(word) {
-		var newString = solr.valueEscape(word.replace(/"/g, ''));
-		//remove "s from the query
+	
+    words = words.map(function(word) {
+		var newString = solr.valueEscape(word.replace(/"/g, '')); //remove "s from the query
 
 		if(newString.length == 0)
 			return '""';
 		else
 			return newString;
 	});
+
 	var fullQuery = 'author_sm:"' + wordsQuery.replace(/"/g, '') + '"';
 	for(var index = 0; index < words.length; index++) {
 		fullQuery = fullQuery + " OR title_textv:" + words[index] + " OR body_textv:" + words[index];
@@ -226,7 +228,31 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 		"f.created_year_i.facet.sort" : "index",
 		"f.created_month_i.facet.sort" : "index",
 		"f.created_day_i.facet.sort" : "index"
-	}, callback);
+	}, 
+    function(err, docs, facets) {
+        if(err) return callback(err);
+
+        if(emboldenMatchedTerms) {
+            var regexString = "";
+            words.forEach(function(word) {
+                if(regexString.length > 0) regexString += "|";
+                regexString += "\\b"+word+"\\b";
+            });
+            var regex = new RegExp(regexString,"gi");
+
+            // bold all matched words
+            docs.forEach(function(doc) {
+                if(doc.teaser) doc.teaser = doc.teaser.replace(regex, function(m){return _embolden(m)});
+                //if(doc.title) doc.title = doc.title.replace(regex, function(m){return _embolden(m)});
+                
+                doc.authors = _.map(doc.authors, function(author) {
+                    return author.replace(regex, function(m){return _embolden(m)});                    
+                });
+            });  
+        }
+
+        callback(err, docs, facets);
+    });
 };
 
 search.relatedArticles = function(id, count, callback) {
@@ -395,3 +421,7 @@ function _sortObjByKeys(arr) {
 	}
 	return sortedObj;
 }
+
+function _embolden(match) {
+    return "<b>"+match+"</b>";
+};  

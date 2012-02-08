@@ -256,7 +256,6 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 };
 
 search.relatedArticles = function(id, count, callback) {
-
 	var fullQuery = 'id:' + createSolrIDFromDBID(id);
 
 	querySolr(fullQuery, {
@@ -336,7 +335,9 @@ function querySolr(query, options, callback) {
 
 		async.parallel({
 			queriedDocs: function(cb) {
-				api.docsById(ids, function(err, docs) {
+                if(ids.length == 0) return cb(null, []);
+
+                api.docsById(ids, function(err, docs) {
 					if(err)
 						return cb(err);
 	
@@ -351,7 +352,9 @@ function querySolr(query, options, callback) {
 				});
 			},
 			relatedDocs: function(cb) {
-				api.docsById(relatedIds, function(err, docs) {
+				if(relatedIds.length == 0) return cb(null, []);
+
+                api.docsById(relatedIds, function(err, docs) {
 					if(err)
 						return cb(err);
 	

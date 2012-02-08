@@ -33,7 +33,7 @@ var BENCHMARK = false;
 var twitterFeeds = ["DukeChronicle", "ChronicleRecess", "TowerviewMag", "DukeBasketball", "ChronPhoto", "ChronicleSports"];
 
 
-site.init = function (callback) {
+site.init = function () {
     LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
 };
 

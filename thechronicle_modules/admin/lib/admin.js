@@ -163,6 +163,7 @@ admin.editArticleData = function (req, http_res, next) {
         var fields = {
             title:req.body.doc.title,
             body:req.body.doc.body,
+            subhead:req.body.doc.subhead,
             teaser:req.body.doc.teaser,
             authors:req.body.doc.authors.split(", "),
             taxonomy:JSON.parse(req.body.doc.taxonomy)
@@ -190,6 +191,7 @@ admin.addArticleData = function (req, http_res, next) {
             body:form.body,
             authors:form.authors.split(" ,"),
             title:form.title,
+            subhead:form.subhead,
             teaser:form.teaser,
             type:form.type,
             taxonomy:JSON.parse(form.taxonomy)

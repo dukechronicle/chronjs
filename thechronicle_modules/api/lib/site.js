@@ -415,50 +415,44 @@ site.getTowerviewPageContent = function(callback) {
 	});
 };
 
-site.getSectionContent = function(params, callback) {
-	var section = _.last(params);
-	async.parallel([
-	function(cb) {
-		redis.client.zrevrange(_articleViewsKey(params), 0, 4, function(err, popular) {
-			if(err)
-				cb(err)
-			else
-				cb(null, popular.map(function(str) {
-					var parts = str.split('||');
-					return {
-						urls : ['/article/' + parts[0]],
-						title : parts[1]
-					};
-				}));
-		});
-	},
-
-	function(cb) {
-		api.taxonomy.docs(section, 20, function(err, docs) {
-			if(err)
-				cb(err)
-			else
-				modifyArticlesForDisplay(docs, cb);
-		});
-	},
-
-	function(cb) {
-		api.taxonomy.getParents(params, cb);
-	},
-
-	function(cb) {
-		api.taxonomy.getChildren(params, cb);
-	}], function(err, results) {
-		if(err)
-			callback(err);
-		else {
-			var popular = results[0];
-			var docs = results[1];
-			var parents = results[2]
-			var children = results[3];
-			callback(null, section, docs, children, parents, popular);
-		}
-	});
+site.getSectionContent = function (params, callback) {
+    var section = _.last(params);
+    async.parallel([
+        function (cb) {
+            redis.client.zrevrange(_articleViewsKey(params), 0, 4, function (err, popular) {
+                if (err) cb(err)
+                else cb(null, popular.map(function (str) {
+                    var parts = str.split('||');
+                    return { urls:['/article/' + parts[0]], title:parts[1] };
+                }));
+            });
+        },
+        function (cb) {
+            api.taxonomy.docs(section, 20, function (err, docs) {
+                if (err) cb(err)
+                else modifyArticlesForDisplay(docs, cb);
+            });
+        },
+        function (cb) {
+	    api.taxonomy.getParents(params, cb);
+        },
+        function (cb) {
+            api.taxonomy.getChildren(params, function (err, children) {
+                if (err) cb(null, {});
+                else cb(null, children);
+            });
+        }], function (err, results) {
+            if (err)
+                callback(err);
+            else {
+                var popular = results[0];
+                var docs = results[1];
+                var parents = results[2]
+                var children = results[3];
+                callback(null, section, docs, children, parents, popular);
+            }
+        });
+>>>>>>> master
 };
 
 site.getAuthorContent = function(name, callback) {

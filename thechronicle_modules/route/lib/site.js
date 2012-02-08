@@ -3,6 +3,7 @@ var site = exports;
 var api = require('../../api');
 var config = require('../../config');
 var globalFunctions = require('../../global-functions');
+var log = require('../../log');
 
 var asereje = require('asereje');
 
@@ -17,10 +18,12 @@ site.setAfterConfigChangeFunction = function(func) {
 
 site.redirectMobile = function(req, res, next) {
     var userAgent = req.headers['user-agent'] || '';
-        
+    var path = req.url.split('/');
+
     // only run the code below this line if they are not accessing the
     // mobile site            
-    if(req.url.split('/',2)[1] == 'm') return next();
+    if (path[1] == 'm' || path[1] == 'mobile-api')
+        return next();
         
     for(var i in MOBILE_BROWSER_USER_AGENTS) {
         if(userAgent.indexOf(MOBILE_BROWSER_USER_AGENTS[i]) != -1) {
@@ -55,28 +58,28 @@ site.userGuidelines = function (req, res) {
 site.advertising = function (req, res) {
     res.render('pages/advertising', {
 	filename:'pages/advertising',
-	css: asereje.css()
+	css: asereje.css(['container/style'])
     });
 };
 
 site.subscribe = function (req, res) {
     res.render('pages/subscribe', {
 	filename:'pages/subscribe',
-	css: asereje.css()
+	css: asereje.css(['container/style'])
     });
 };
 
 site.editBoard = function (req, res) {
     res.render('pages/edit-board', {
 	filename:'pages/edit-board',
-	css: asereje.css()
+	css: asereje.css(['container/style'])
     });
 };
 
 site.lettersToEditor = function (req, res) {
     res.render('pages/letters', {
 	filename:'pages/letters',
-	css: asereje.css()
+	css: asereje.css(['container/style'])
     });
 };
 
@@ -353,9 +356,9 @@ site.configData = function (req, res) {
 };
 
 site.newsletter = function (req, res) {
-    res.render('site/newsletter', {
-	filename: 'site/newsletter',
-	css: asereje.css()
+    res.render('pages/newsletter', {
+	filename: 'pages/newsletter',
+	css: asereje.css(['container/style'])
     });
 };
 
@@ -364,10 +367,11 @@ site.newsletterData = function (req, res) {
     var action = req.body.action;
 
     var afterFunc = function() {
-        res.render('site/newsletter', {
+        res.render('pages/newsletter', {
+	    filename: 'pages/newsletter',
             email: email,
             action: action,
-	    css: asereje.css()
+	    css: asereje.css(['container/style'])
         });
     };
     
@@ -382,7 +386,7 @@ site.newsletterData = function (req, res) {
 site.pageNotFound = function(req, res) {
     res.render('pages/404', {
         filename: 'pages/404',
-        css: asereje.css(['pages/style']),
+        css: asereje.css([]),
 	status: 404,
         url: req.url
     });

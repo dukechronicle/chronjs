@@ -468,27 +468,24 @@ site.getAuthorContent = function(name, callback) {
 		else
 			modifyArticlesForDisplay(docs, callback);
 	});
-};
 
-site.getSearchContent = function(wordsQuery, query, callback) {
-	api.search.docsBySearchQuery(wordsQuery, query.sort, query.order, query.facets, 1, function(err, docs, facets) {
-		if(err)
-			callback(err);
-		else
-			modifyArticlesForDisplay(docs, function(err, docs) {
-				if(err)
-					callback(err);
-				else {
-					var validSections = globalFunctions.convertObjectToArray(config.get("TAXONOMY_MAIN_SECTIONS"));
-					// filter out all sections other than main sections
-					Object.keys(facets.Section).forEach(function(key) {
-						if(!_.include(validSections, key))
-							delete facets.Section[key];
-					});
-					callback(null, docs, facets);
-				}
-			});
-	});
+site.getSearchContent = function (wordsQuery, query, callback) {
+    api.search.docsBySearchQuery(wordsQuery, query.sort, query.order, query.facets, 1, true, function (err, docs, facets) {
+        if (err) callback(err);
+        else
+            modifyArticlesForDisplay(docs, function (err, docs) {
+                if (err) callback(err);
+                else {
+                    var validSections = globalFunctions.convertObjectToArray(config.get("TAXONOMY_MAIN_SECTIONS"));
+                    // filter out all sections other than main sections
+                    Object.keys(facets.Section).forEach(function(key) {
+                        if (!_.include(validSections, key))
+                            delete facets.Section[key];
+                    });
+                    callback(null, docs, facets);
+                }
+            });
+    });
 };
 
 site.getArticleContent = function(url, callback) {

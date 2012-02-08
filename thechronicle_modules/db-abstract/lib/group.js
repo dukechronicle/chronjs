@@ -6,15 +6,6 @@ var util = require('util');
 var BENCHMARK = false;
 var group = exports;
 
-// create a new entry for group
-group.create = function (namespace, name, callback) {
-    db.save({
-        type:'group',
-        namespace:namespace,
-        name:name,
-        docs:[]
-    }, callback);
-};
 
 // lists all groups with given query options
 group.list = function(options, callback) {

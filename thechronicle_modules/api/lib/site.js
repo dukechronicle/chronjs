@@ -468,6 +468,7 @@ site.getAuthorContent = function(name, callback) {
 		else
 			modifyArticlesForDisplay(docs, callback);
 	});
+};
 
 site.getSearchContent = function (wordsQuery, query, callback) {
     api.search.docsBySearchQuery(wordsQuery, query.sort, query.order, query.facets, 1, true, function (err, docs, facets) {

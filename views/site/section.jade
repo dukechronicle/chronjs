@@ -1,7 +1,7 @@
 .nav.clearfix
     for parent in parentPaths
         h2.selected
-            a(href=parent.path) #{parent.name} |
+            a(href='/section' + parent.path) #{parent.name} |
     for subsection in subsections
         for subsectionName,subsectionPath in subsection
             h2

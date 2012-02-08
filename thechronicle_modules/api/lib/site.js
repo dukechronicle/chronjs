@@ -491,7 +491,9 @@ site.getSearchContent = function (wordsQuery, query, callback) {
 
 site.getArticleContent = function(url, callback) {
 	api.articleForUrl(url, function(err, doc) {
-		doc = modifyArticleForDisplay(doc);
+		if(err) return callback(err);
+
+        doc = modifyArticleForDisplay(doc);
 		async.parallel([
 		    function(cb) {
 			    redis.client.zrevrange(_articleViewsKey([]), 0, 4, function(err, popular) {

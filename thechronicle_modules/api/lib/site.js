@@ -30,9 +30,10 @@ var BENCHMARK = false;
 
 var twitterFeeds = ["DukeChronicle", "ChronicleRecess", "TowerviewMag", "DukeBasketball", "ChronPhoto", "ChronicleSports"];
 
-site.init = function(callback) {
-	LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
+site.init = function () {
+    LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
 };
+
 // Checks if you are an admin with browser check
 site.checkAdmin = function(req, res, next) {
 	site.restrictToAdmin(req, res, function() {

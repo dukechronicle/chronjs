@@ -68,7 +68,8 @@ log.init(function (err) {
                     api.init(callback);
                 },
                 function(callback) {
-                    s3.init(callback);
+                    s3.init();
+                    callback();
                 },
                 function(callback) {
                     console.log("creating database...");

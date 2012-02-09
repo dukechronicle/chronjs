@@ -19,7 +19,7 @@ exports.preinit = function (app, afterConfigChangeFunction) {
     site.setAfterConfigChangeFunction(afterConfigChangeFunction);
 };
 
-exports.init = function (app, callback) {
+exports.init = function (app) {
 
     // redirect mobile browsers to the mobile site
     app.get('/*', site.redirectMobile);

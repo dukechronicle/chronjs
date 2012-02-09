@@ -145,6 +145,7 @@ function runSite(callback) {
             redisClient.init(true, function(err) {
                 route.init(app);
                 log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));
+                callback();
             });
         }
     });

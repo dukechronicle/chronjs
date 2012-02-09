@@ -33,7 +33,7 @@ var BENCHMARK = false;
 var twitterFeeds = ["DukeChronicle", "ChronicleRecess", "TowerviewMag", "DukeBasketball", "ChronPhoto", "ChronicleSports"];
 
 
-site.init = function (callback) {
+site.init = function () {
     LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
 };
 
@@ -421,7 +421,10 @@ site.getSectionContent = function (params, callback) {
 	    api.taxonomy.getParents(params, cb);
         },
         function (cb) {
-            api.taxonomy.getChildren(params, cb);
+            api.taxonomy.getChildren(params, function (err, children) {
+                if (err) cb(null, {});
+                else cb(null, children);
+            });
         }], function (err, results) {
             if (err)
                 callback(err);

@@ -6,6 +6,8 @@ var api = require('./api');
 var _ = require('underscore');
 var async = require('async');
 var log = require('../../log');
+var jade = require('jade');
+var fs = require('fs');
 var config = require('../../config');
 var globalFunctions = require('../../global-functions');
 
@@ -33,14 +35,13 @@ newsletter.init = function() {
     } catch (error) {
         log.warning(error);
     }
-}
+};
 
 function getNewsletterSubject() {
     return "Duke Chronicle Daily Newsletter " + getDate();
-};
+}
 
-function getDate()
-{
+function getDate() {
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth()+1;//January is 0!
@@ -52,7 +53,7 @@ function getDate()
         mm='0'+mm;
     }  
     return mm+'/'+dd+'/'+yyyy;
-};
+}
 
 newsletter.sendTestNewsletter = function(campaignID, emailToSendTo, callback) {
     var params = {"test_emails":[emailToSendTo], "cid":campaignID};
@@ -95,54 +96,29 @@ newsletter.createNewsletter = function (callback) {
     var optArray = {"list_id":listID, "subject":getNewsletterSubject(), "from_email":newsletterFromEmail, "from_name":newsletterFromName, "title":getNewsletterSubject(), "template_id":templateID};
     
     api.group.docs(layoutGroups.Newsletter.namespace, null, function (err, model) {
-        var newsText = "";
-        var newsHTML = "";
-        var count = 0;
-        
-         config.get('TAXONOMY_MAIN_SECTIONS').forEach(function(section) {
-            if(count > 0) newsHTML += "<br />";
-            count ++;
-            
-            newsHTML += "<h2>" + section + "</h2>";
-            newsText += section+"\n\n";
-            
-            model[section].forEach(function (article) {
-                var url = "http://www.dukechronicle.com/article/"+article.urls[0];                       
+	fs.readFile('views/newsletter.jade', function (err, data) {
+	    var newsHTML = jade.compile(data)({
+		taxonomy: config.get('TAXONOMY_MAIN_SECTIONS'),
+		model: model
+	    });
+            var adHTML = "<a href='www.google.com'><img src='https://www.google.com/help/hc/images/adsense_185666_adformat-display_160x600_en.jpg'></img></a>";
 
-                newsHTML += "<br /><div><a href='" + url + "'><h3>" + article.title + "</h3></a><p>";
+            // disable test ad
+            adHTML = "";
 
-                if(article.images != null && article.images.ThumbRect != null) {
-                    newsHTML += "<a href='" + url + "'><img align='left' src='"+ article.images.ThumbRect.url +"' width='"+ARTICLE_IMAGE_WIDTH+"' height='"+ARTICLE_IMAGE_HEIGHT+"' alt='Chronicle image'></img></a>";                 
-                } 
-                    
-                newsHTML += article.teaser + "</p></div>";
+            var contentArr = {"html_MAIN":newsHTML, "html_ADIMAGE":adHTML, "html_ISSUEDATE":getDate()};
+            var params = {"type":"regular", "options":optArray, "content":contentArr};
 
-                if(article.images != null && article.images.ThumbRect != null) {
-                    newsHTML += "<br style='clear:both;' />";
-                }
-
-                newsText += article.title+"\n";
-                newsText += article.teaser+"\n";
-                newsText += url+"\n";
-                newsText += "\n";
+            mcAPI.campaignCreate(params, function (res) {
+		if (res.error) {
+                    log.warning('Error: ' + res.error + ' (' + res.code + ')');
+                    callback('Error: ' + res.error + ' (' + res.code + ')');
+		}
+		else {
+		    log.info("Campaign ID: " + res);
+		    callback(res);
+		}
             });
-
-            newsHTML += "<br />";
-            newsText += "\n";
-        });
-
-        var adHTML = "<a href='www.google.com'><img src='https://www.google.com/help/hc/images/adsense_185666_adformat-display_160x600_en.jpg'></img></a>";
-        var contentArr = {"html_MAIN":newsHTML, "html_ADIMAGE":adHTML, "html_ISSUEDATE":getDate(), "text":newsText};
-
-        var params = {"type":"regular", "options":optArray, "content":contentArr};
-        mcAPI.campaignCreate(params, function (res) {
-            if (res.error) {
-                log.warning('Error: ' + res.error + ' (' + res.code + ')');
-                return callback('Error: ' + res.error + ' (' + res.code + ')');
-            }
-            log.info("Campaign ID: " + res);
-            callback(res);
-        });
+	});
     });         
 };
-

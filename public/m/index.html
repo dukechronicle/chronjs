@@ -5,6 +5,12 @@
         <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1"> 
         <link rel="stylesheet" href="themes/chronicle.min.css" />
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0.1/jquery.mobile.structure-1.0.1.min.css" />
+
+        <script src="http://use.typekit.com/dwv2bjy.js"></script>
+        <script>
+            try{Typekit.load();}catch(e){}
+        </script>
+
         <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js"></script>
     
@@ -19,20 +25,46 @@
         </script> 
 
         <style>
+
+
             .ui-li-heading  {
                 white-space: normal;
+                font-weight: 600;
+                font-size: 14px;
             }
             .ui-li-desc {
                 white-space: normal;
+                line-height: 1.2em;
             }
 
             .ui-li-divider {
                 font-size: 1.2em;
             }
+            .ui-li .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li {
+                padding: .1em 15px .1em 15px;
+            }
+            
+            #ArticleContent p {
+                line-height: 1.4em;
+            }
+
+            #ArticleContent h2 {
+                font-size: 1.2em;
+                line-height: 1.3em;
+                font-weight: 600;
+                margin-top: 0px;
+                margin-bottom: 0px;
+            }
+
+            #ArticleContent .author {
+                margin-top: 0px;
+                font-size: 0.8em;
+            }
+
         </style>
 
         <script type="text/javascript"> 
-        var HOSTNAME = "beta.dukechronicle.com";
+        var HOSTNAME = "dukechronicle.com";
         // Cache the list of articles. Emphemeral.
         var articleListCache = [];
         
@@ -73,7 +105,8 @@
                 var buttonDiv = $('<div />', { "class":"ui-btn-text" });
                 
                 // Hyperlink
-                var hyperlink = $('<a />',{ "href":"javascript:getArticle('" + article.urls+ "')", "class":"ui-link-inherit" });
+                article.url = article.urls[article.urls.length -1];
+                var hyperlink = $('<a />',{ "href":"javascript:getArticle('" + article.url+ "')", "class":"ui-link-inherit" });
                 
                 // Thumbnail
                 //hyperlink.append('<img src="' + 'img/test.png"' + ' "class"="ui-li-thumb" />');
@@ -117,7 +150,7 @@
             
             for(author in article.authors)
             {
-                var authorString = '<p><i>By: ' + article.authors[author] + '</i></p>';
+                var authorString = '<p class="author">By ' + article.authors[author] + '</p>';
                 $(containerId).append(authorString);
             }
             
@@ -189,24 +222,35 @@
             
 
         }
-        
         </script>
 
-        <script type="text/javascript">
+        <script>
+                    var _gaq = _gaq || [];
+                    _gaq.push(['_setAccount', 'UA-5900287-12']);
 
-            var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', 'UA-5900287-12']);
-            _gaq.push(['_trackPageview']);
+                    (function() {
+                      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+                    })();
 
-            (function() {
-                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-            })();
+                $('[data-role=page]').live('pageshow', function (event, ui) {
+                    try {
 
-        </script>
+                        hash = location.hash;
 
-    </head> 
+                        if (hash && hash.length > 1) {
+                            _gaq.push(['_trackPageview', hash.substr(1)]);
+                        } else {
+                            _gaq.push(['_trackPageview']);
+                        }
+                    } catch(err) {
+
+                    }
+
+                });
+                </script>
+    </head>
     
     <body onload="getArticleList('News')"> 
  
@@ -228,7 +272,7 @@
                 </div><!-- /navbar --> 
             </div> 
         </div> 
-    
+
         <div id="Article" data-role="page" articleContainer="true" url="Article" data-add-back-btn="true" data-back-btn-text="Back"> 
             <div data-role="header"> 
                 <h1>The Chronicle</h1>

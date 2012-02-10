@@ -1,4 +1,4 @@
-define(["jquery", "/js/galleria/galleria-1.2.5.min.js"], function($) {
+define(["jquery", "galleria"], function($) {
     return {
         init: function() {
             Galleria.loadTheme('/js/galleria/themes/frontpage-slideshow/galleria.frontpage-slideshow.js');

@@ -2,20 +2,35 @@
 - query = query.replace(/-/g, ' ');
 
 .div
-    img(src='/images/header-overlay.png', id='header-overlay', width='100px', height='122px')
+    img(src='https://d2sug25c5hnh7r.cloudfront.net/images/header-overlay.png', id='header-overlay', width='100px', height='122px')
 
 #header-top
-    .advertising.advertising-links
-        a(href='/subscribe') Print Subscription
-        a(href='/advertising') Advertising &nbsp;
-        a(href='http://dukechronicle.campusave.com/') Classifieds &nbsp;
-        a(href='http://chroniclehousing.com/') Housing
     .content
+
         h1
-            a(href='/') The Chronicle
+            a(href='/') The Chronicle |
+        p.tagline The Independent Daily at<br /> Duke University
+
+    .social-media
+        .inner
+            .icons
+                a(href='http://www.facebook.com/dukechronicle')
+                    img.first(src='https://d2sug25c5hnh7r.cloudfront.net/images/icons/facebook.png')
+                a(href='http://twitter.com/dukechronicle')
+                    img(src='https://d2sug25c5hnh7r.cloudfront.net/images/icons/twitter.png')
+                a(href='http://youtube.com/user/DukeChronicle')
+                    img(src='https://d2sug25c5hnh7r.cloudfront.net/images/icons/youtube.png')
+                a(href='http://foursquare.com/dukechronicle')
+                    img(src='https://d2sug25c5hnh7r.cloudfront.net/images/icons/foursquare.png')
+                a(href='http://fusion.google.com/add?source=atgs&feedurl=http%3A//dukechronicle.com/feed/all')
+                    img(src='https://d2sug25c5hnh7r.cloudfront.net/images/icons/rss.png')
+                a(href='/newsletter')
+                    img.last(src='https://d2sug25c5hnh7r.cloudfront.net/images/icons/email.png')
 
     .leaderboard
        !=partial('ad/full-banner-raw')
+
+
 
 
 #header-bottom
@@ -32,24 +47,18 @@
             a(href='/towerview') Towerview
         //h2
         //    a(href='/multimedia') Multimedia
-        h2.last
+        h2
             a(href='http://chronicleblogs.com') Blogs
+        h2.last
+            a(href='http://shutter.dukechronicle.com/') Photos
 
-    .social-media
-        .inner
-            .icons
-                a(href='http://www.facebook.com/dukechronicle')
-                    img.first(src='/images/icons/facebook.png')
-                a(href='http://twitter.com/dukechronicle')
-                    img(src='/images/icons/twitter.png')
-                a(href='http://youtube.com/user/DukeChronicle')
-                    img(src='/images/icons/youtube.png')
-                a(href='http://foursquare.com/dukechronicle')
-                    img(src='/images/icons/foursquare.png')
-                a(href='http://fusion.google.com/add?source=atgs&feedurl=http%3A//dukechronicle.com/feed/all')
-                    img(src='/images/icons/rss.png')
-                a(href='/newsletter')
-                    img.last(src='/images/icons/email.png')
+    .advertising.advertising-links(style='float: right')
+        a(href='/subscribe') Print Sub
+        a(href='/advertising') Advertising
+        a(href='http://dukechronicle.campusave.com/') Classifieds
+        a(href='http://chroniclehousing.com/') Housing
+
+
 
 
     form#search-box(action='/search/', method='GET')

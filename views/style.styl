@@ -5,6 +5,12 @@ text-color = #333
 bg-color = #F5F6F7
 header-height = 70px
 
+em
+    font-style italic
+
+strong
+    font-weight bold
+
 #page
     .rounded
         padding 20px
@@ -95,8 +101,6 @@ body
     h1, h2, h3, h4, h5, h6
         font-family skolar, Georgia,"Century Schoolbook","Times New Roman",Times,serif
             
-
-    
     #shell
         margin 0px auto
         width 972px
@@ -124,21 +128,20 @@ body
 
         //box-shadow 0 1px 3px rgba(0,0,0,.4);
         //border-bottom 2px solid white
-        .advertising-links
-            margin-left 10px
-            margin-top -3px
+        p.tagline
             position absolute
-            z-index 6
-            a
-                text-shadow 0 1px 2px rgba(0,0,0,.4);
-                font-size 0.8em
-                color white
-                float left
-                margin-right 10px
+            line-height 1.2em
+            left 340px
+            top 34px
+            text-shadow 0 1px 2px rgba(0,0,0,.4);
+            font-size 0.75em
+            color white
+            float left
+            margin-right 10px
         h1
             position relative
             z-index 2
-            margin-top 24px
+            margin-top 11px
             font-weight bold
             float left
             font-size 1.2em
@@ -148,7 +151,7 @@ body
                 //color #111
                 color #EEE
                 font-family didot
-                font-size 2.7em
+                font-size 2.5em
                 font-weight normal
                 letter-spacing -1px
                 padding-left 0px
@@ -167,6 +170,26 @@ body
             margin-left 348px
 
 
+        .social-media
+
+            position absolute
+            top 6px
+            left 340px
+            .inner
+                .icons
+                    text-align left
+                    img
+                        opacity .7
+                        padding-right 9px
+                        width 15px
+                        height 15px
+                        transition opacity, .25s linear
+                    a:hover img
+                        opacity 1
+
+                    img.last
+                        padding-right 0px
+
     #header-bottom
         nav
             position relative
@@ -180,7 +203,7 @@ body
                 float left
 
                 a
-                    font-weight bold
+                    font-weight 600
                     text-shadow 0 1px 2px rgba(0,0,0,.4);
                     letter-spacing 1px
                     border-bottom 1px solid transparent
@@ -189,8 +212,8 @@ body
                     //color #333
                     color #EEE
                     display block
-                    padding-left 15px
-                    padding-right 11px
+                    padding-left 12px
+                    padding-right 8px
                     padding-bottom 2px
                     margin-bottom -2px
                     transition(border-bottom-color, .25s, linear)
@@ -231,7 +254,7 @@ span.timestamp
 #search-box
     position absolute
     padding-right 7px
-    top header-height
+    top header-height - 4
     right 0px
     input
         background #fff url('/images/search-button.png') no-repeat
@@ -245,7 +268,7 @@ span.timestamp
 
 .leaderboard
     float right
-    margin-top 3px
+    margin-top 1px
     margin-bottom 3px
     padding-right 7px
     //border-left 1px solid #ddd
@@ -262,10 +285,10 @@ span.timestamp
         opacity 1
 header
     .content
-        width 470px
+        width 490px
         float left
         position relative
-        z-index 2
+        z-index 0
         padding-left 7px
         
         .announcements
@@ -287,25 +310,19 @@ header
             p
                 font-size 0.7em
     #header-bottom
-        .social-media
+        .advertising-links
+            margin-top -2px
+            position relative
+            top -18px
+            left -145px
+            z-index 6
+            a
+                text-shadow 0 1px 2px rgba(0,0,0,.4);
+                font-size 0.75em
+                color white
+                float left
+                margin-right 8px
 
-            position absolute
-            top header-height + 2px + 2px
-            right 158px
-            .inner
-                .icons
-                    text-align left
-                    img
-                        opacity .7
-                        padding-right 7px
-                        width 17px
-                        height 17px
-                        transition opacity, .25s linear
-                    a:hover img
-                        opacity 1
-
-                    img.last
-                        padding-right 0px
 
 
 footer

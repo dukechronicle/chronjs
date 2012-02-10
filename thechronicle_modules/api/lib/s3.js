@@ -16,7 +16,8 @@ s3.put = function (buf, key, type, callback) {
     _getClientStatic(function (err, client) {
         var req = client.put(key, {
             'Content-Length':buf.length,
-            'Content-Type':type
+            'Content-Type':type,
+            'Cache-Control': 'public, max-age=86400'
         });
         req.on('response', function (res) {
             if (200 == res.statusCode) callback(null, _getUrl(key));
@@ -36,13 +37,11 @@ s3.delete = function (key, callback) {
     });
 };
 
-s3.init = function (callback) {
+s3.init = function () {
     BUCKET_NAME = config.get("S3_BUCKET");
     KEY = config.get("S3_KEY");
     SECRET = config.get("S3_SECRET");
     CLOUDFRONT_DISTRIBUTION = config.get("CLOUDFRONT_DISTRIBUTION");
-
-    callback(null);
 };
 
 s3.getCloudFrontUrl = function(url) {

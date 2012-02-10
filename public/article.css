@@ -20,7 +20,7 @@ section > .nav h2 a:hover,section > .nav h3 a:hover,section > .nav h2 a.selected
 #article .content .article-body p object.no-float,#article .content .article-body p img.no-float{float:none;margin-right:0}
 #article .sidebar{float:right;}
 #article .sidebar .rounded{width:300px}
-#article #disqus_thread{float:left;margin-top:2em;width:580px;padding:.3em 1.5em 0 1.5em;clear:both;}
+#article #disqus_thread{float:left;margin-top:2em;width:580px;padding:.3em 1.5em 0 1.5em;}
 #article #disqus_thread #dsq-global-toolbar{position:relative;z-index:3}
 #article #disqus_thread #dsq-content{font-size:.9em;}
 #article #disqus_thread #dsq-content #dsq-new-post{margin-top:-40px;margin-bottom:10px;}

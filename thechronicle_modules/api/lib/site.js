@@ -85,67 +85,61 @@ site.renderConfigPage = function(res, err) {
 	});
 };
 
-site.getFrontPageContent = function(callback) {
-	var start = Date.now();
-	async.parallel([
-	function(cb) {//0
-		api.group.docs(LAYOUT_GROUPS.Frontpage.namespace, null, function(err, result) {
-			if(err)
-				return cb(err);
-			if(BENCHMARK)
-				log.info("API TIME %d", Date.now() - start);
-			return cb(null, result);
-		});
-	},
-
-	function(cb) {//1
-		var popularArticles = 7;
-		redis.client.zrevrange(_articleViewsKey([]), 0, popularArticles - 1, function(err, popular) {
-			if(err)
-				return cb(err);
-			popular = popular.map(function(str) {
-				var parts = str.split('||');
-				return {
-					urls : ['/article/' + parts[0]],
-					title : parts[1]
-				};
-			});
-			if(BENCHMARK)
-				log.info("REDIS TIME %d", Date.now() - start);
-			cb(null, popular);
-		});
-	},
-
-	function(cb) {//2
-		var twitter = {};
-		var selectedFeed = twitterFeeds[Math.floor(Math.random() * twitterFeeds.length)];
-		twitter.user = selectedFeed;
-		twitter.title = 'Twitter';
-		twitter.imageUrl = "http://d2sug25c5hnh7r.cloudfront.net/images/twitter-dukechronicle.png";
-		rss.getRSS('twitter-' + selectedFeed, function(err, tweets) {
-			if(tweets && tweets.items && tweets.items.length > 0) {
-				twitter.tweet = tweets.items[0].title;
-			} else {
-				twitter.tweet = 'No tweets available.';
-			}
-			if(BENCHMARK)
-				log.info("RSS TIME %d", Date.now() - start);
-			return cb(err, twitter);
-		});
-	}], function(err, results) {
-		if(err) {
-			log.warning(err);
-			callback(err);
-		} else {
-			if(BENCHMARK)
-				log.info("TOTAL TIME %d", Date.now() - start);
-			var model = results[0];
-			_.defaults(model, homeModel);
-			model.popular = results[1];
-			model.twitter = results[2];
-			callback(null, model);
-		}
-	});
+site.getFrontPageContent = function (callback) {
+    var start = Date.now();
+    async.parallel([
+        function (cb) { //0
+            api.group.docs(LAYOUT_GROUPS.Frontpage.namespace, null, function (err, result) {
+                if (err) return cb(err);
+                if (BENCHMARK) log.info("API TIME %d", Date.now() - start);
+                return cb(null, result);
+            });
+        },
+        function (cb) { //1
+            var popularArticles = 7;
+            redis.client.zrevrange(_articleViewsKey([]), 0, popularArticles - 1, function (err, popular) {
+                if (err) return cb(err);
+                popular = popular.map(function (str) {
+                    var parts = str.split('||');
+                    return {
+                        urls:['/article/' + parts[0]],
+                        title:parts[1]
+                    };
+                });
+                if (BENCHMARK) log.info("REDIS TIME %d", Date.now() - start);
+                cb(null, popular);
+            });
+        },
+        function (cb) { //2
+            var twitter = {};
+            var selectedFeed = twitterFeeds[Math.floor(Math.random() * twitterFeeds.length)];
+            twitter.user = selectedFeed;
+            twitter.title = 'Twitter';
+            twitter.imageUrl = "http://d2sug25c5hnh7r.cloudfront.net/images/twitter-dukechronicle.png";
+            rss.getRSS('twitter-' + selectedFeed, function (err, tweets) {
+                if (tweets && tweets.items && tweets.items.length > 0) {
+                    twitter.tweet = tweets.items[0].title;
+                } else {
+                    twitter.tweet = 'No tweets available.';
+                }
+                if (BENCHMARK) log.info("RSS TIME %d", Date.now() - start);
+                return cb(err, twitter);
+            });
+        }
+    ], function (err, results) {
+        if (err) {
+            log.warning(err);
+            callback(err);
+        }
+        else {
+            if (BENCHMARK) log.info("TOTAL TIME %d", Date.now() - start);
+            var model = results[0];
+            _.defaults(model, homeModel);
+            model.popular = results[1];
+            model.twitter = results[2];
+            callback(null, model);
+        }
+    });
 };
 
 site.getNewsPageContent = function(callback) {

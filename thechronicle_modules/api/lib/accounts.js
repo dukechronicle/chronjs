@@ -8,7 +8,7 @@ var accounts = exports;
 
 function login(req,accountType,callback) {
     // prevent session fixation by doing a logout    
-    accounts.logOut(req, function(err) {
+    accounts.logout(req, function(err) {
         if(err) return callback(err);
         
         req.session.account.isLoggedIn = true;
@@ -27,16 +27,13 @@ accounts.login = function (req, username, password, callback) {
     var adminUsername = config.get('ADMIN_USERNAME') || DEFAULT_USERNAME;
     var adminPassword = config.get('ADMIN_PASSWORD') || DEFAULT_PASSWORD;
 
-    if (adminUsername == username && adminPassword == password) {
+    if (adminUsername == username && adminPassword == password)
         login(req, ADMIN_ACCOUNT_TYPE, callback);
-    }
-    else {
-        var err = 'Invalid Username / Password Combination';
-        return callback(err);
-    }
+    else
+        callback('Invalid Username / Password Combination');
 };
 
-accounts.logOut = function (req, callback) {
+accounts.logout = function (req, callback) {
     req.session.regenerate(function (err) {
         req.session.account = {};
         return callback(err);

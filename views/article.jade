@@ -12,12 +12,15 @@
                 a.edit(href=doc.url + "/edit") Edit
             h1 #{doc.title}
             // article image
-            if (doc.images && doc.images.LargeRect && doc.images.LargeRect.url)
-                if (typeof isAdmin != 'undefined' && isAdmin && doc.images.Original)
-                    a(href="/admin/image/"+doc.images.Original.name)
+            if (doc.embed)
+                .embed!=doc.embed
+            else
+                if (doc.images && doc.images.LargeRect && doc.images.LargeRect.url)
+                    if (typeof isAdmin != 'undefined' && isAdmin && doc.images.Original)
+                        a(href="/admin/image/"+doc.images.Original.name)
+                            img.article(src=doc.images.LargeRect.url)
+                    else
                         img.article(src=doc.images.LargeRect.url)
-                else
-                    img.article(src=doc.images.LargeRect.url)
 
             // caption
             if (doc.images && doc.images.Original)
@@ -32,9 +35,9 @@
             // social media, print and comments
             .social-media
                 .comments
-                    a(href='#dsq-content') Comments
+                    a(id='commentLink', href='#dsq-content') Comments
                 .print
-                    a(href=doc.path + '/print') Print
+                    a(href=doc.url + '/print') Print
                 .facebook
                     iframe(src='http://www.facebook.com/plugins/like.php?app_id=176268009080455&amp;href=' + encodeURIComponent(doc.fullUrl) + '&amp;send=false&amp;layout=button_count&amp;width=121&amp;show_faces=false&amp;action=recommend&amp;colorscheme=light&amp;font=lucida+grande&amp;height=20', scrolling='no', frameborder='0', style='border:none; overflow:hidden; width:121px; height:20px;', allowTransparency='true')
                 .twitter
@@ -42,7 +45,7 @@
                         | Tweet
                 .google
                     g:plusone(size="medium")
-            .article-body!=doc.body
+            .article-body!=doc.renderedBody
 
         .sidebar
             // facebook recommend
@@ -67,9 +70,10 @@
 
     // comments
     #disqus_thread.rounded
-script(src='/js/disqus.js', type='text/javascript')
+script(src='/js/disqus.js?v=4', type='text/javascript')
 script
-    loadDisqusForArticle('!{doc.nid}');
+    loadDisqusForArticle(!{isProduction}, '!{disqusShortname}', '!{doc.nid || doc._id}', '!{doc.title.replace(/'/g,"\\'")}', '!{doc.url}');
+
 script(src="http://platform.twitter.com/widgets.js", type="text/javascript")
 script(type="text/javascript")
     (function() {

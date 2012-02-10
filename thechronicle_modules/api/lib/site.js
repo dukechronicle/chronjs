@@ -143,7 +143,6 @@ site.getFrontPageContent = function (callback) {
             var model = results[0];
             _.defaults(model, homeModel);
             model.popular = results[1];
-            model.popular = null;
             model.twitter = results[2];
             callback(null, model);
         }

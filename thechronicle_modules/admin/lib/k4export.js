@@ -145,7 +145,7 @@ function ArticleParser(articleCallback) {
         }
         try {
             if (article.taxonomy[0] == "Editorial")
-		article.taxonomy = [ "Opinion", "Editorial" ];
+		article.taxonomy = [ "Opinion" ];
             if (article.body[0].match(/^by [^\.]*$/i)) article.body.shift();
             if (article.body[0].match(/^from [^\.]*$/i)) article.body.shift();
             if (article.body[0].match(/^THE CHRONICLE$/)) article.body.shift();

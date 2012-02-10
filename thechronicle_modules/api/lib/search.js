@@ -11,7 +11,7 @@ var db = require("../../db-abstract");
 
 // whenever the way an article should be indexed by solr is changed, this number should be incremented
 // so the server knows it has to reindex all articles not using the newest indexing version. Keep the number numeric!
-var INDEX_VERSION = 0.5009;
+var INDEX_VERSION = 0.5010;
 var RESULTS_PER_PAGE = 25;
 
 var client = null;
@@ -49,11 +49,12 @@ search.indexUnindexedArticles = function(count) {
 				search.indexArticle(row._id, row.title, row.body, row.taxonomy, row.authors, row.created, function(error2, response2) {
 					if(error2)
 						log.warning(error2);
-					else {
-
+					else {    
 						db.search.setArticleAsIndexed(row._id, INDEX_VERSION, function(error3, response3) {
 							if(error3)
 								log.warning(error3);
+                            else
+                                log.info('indexed ' + row.title);
 						});
 					}
 				});
@@ -84,7 +85,7 @@ search.indexArticle = function(id, title, body, taxonomy, authors, createdDate, 
 	if(taxonomy && taxonomy[0])
 		section = taxonomy[0];
 
-	var date = new Date(createdDate * 1000);
+    var date = new Date(createdDate * 1000);
 	// turn seconds into milliseconds
 
 	var solrDate;
@@ -92,13 +93,13 @@ search.indexArticle = function(id, title, body, taxonomy, authors, createdDate, 
 	var solrMonth;
 	var solrDay;
 	try {
-		solrDate = dateFormat(date, "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'");
+        solrDate = dateFormat(date, "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'");
 		// turns date into solr's date format: 1995-12-31T23:59:59Z
 		solrYear = dateFormat(date, "yyyy");
 		solrMonth = dateFormat(date, "mm");
 		solrDay = dateFormat(date, "dd");
 	} catch (err) {// if date is invalid use today's date
-		solrDate = dateFormat(new Date(), "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'");
+        solrDate = dateFormat(new Date(), "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'");
 		solrYear = dateFormat(new Date(), "yyyy");
 		solrMonth = dateFormat(new Date(), "mm");
 		solrDay = dateFormat(new Date(), "dd");
@@ -174,7 +175,7 @@ search.docsByAuthor = function(authorName, sortOrder, facets, page, callback) {
 };
 
 // Function for searching by query
-search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page, callback) {
+search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page, emboldenMatchedTerms, callback) {
 	wordsQuery = globalFunctions.trim(wordsQuery);
 	if(wordsQuery.length == 0)
 		wordsQuery = "--";
@@ -198,10 +199,10 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 		facetQueries = facetQueriesTemp;
 	});
 
-	wordsQuery = wordsQuery.toLowerCase();
+    wordsQuery = wordsQuery.toLowerCase();
 	var words = wordsQuery.split(" ");
-
-	words = words.map(function(word) {
+	
+    words = words.map(function(word) {
 		var newString = solr.valueEscape(word.replace(/"/g, '')); //remove "s from the query
 
         if(newString.length == 0)
@@ -226,7 +227,31 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 		"f.created_year_i.facet.sort" : "index",
 		"f.created_month_i.facet.sort" : "index",
 		"f.created_day_i.facet.sort" : "index"
-	}, callback);
+	}, 
+    function(err, docs, facets) {
+        if(err) return callback(err);
+
+        if(emboldenMatchedTerms) {
+            var regexString = "";
+            words.forEach(function(word) {
+                if(regexString.length > 0) regexString += "|";
+                regexString += "\\b"+word+"\\b";
+            });
+            var regex = new RegExp(regexString,"gi");
+
+            // bold all matched words
+            docs.forEach(function(doc) {
+                if(doc.teaser) doc.teaser = doc.teaser.replace(regex, function(m){return _embolden(m)});
+                //if(doc.title) doc.title = doc.title.replace(regex, function(m){return _embolden(m)});
+                
+                doc.authors = _.map(doc.authors, function(author) {
+                    return author.replace(regex, function(m){return _embolden(m)});                    
+                });
+            });  
+        }
+
+        callback(err, docs, facets);
+    });
 };
 
 function querySolr(query, options, callback) {
@@ -345,3 +370,7 @@ function _sortObjByKeys(arr){
 	}
 	return sortedObj;
 }
+
+function _embolden(match) {
+    return "<b>"+match+"</b>";
+};  

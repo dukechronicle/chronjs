@@ -1,18 +1,14 @@
-var urlModule = require('url');
-var log = require('../../log');
-var http = require('http');
+var dateFormat = require('dateformat');
 var fs = require('fs');
+var http = require('http');
+var urlModule = require('url');
 
-exports.showError = function (res, message) {
-    res.render('error', {
-        locals: {
-            message: message
-        }
-    });
-};
+var log = require('../../log');
 
-exports.log = function (message){
-    console.log(message);
+
+exports.formatTimestamp = function (timestamp, format) {
+    var date = new Date(timestamp*1000);
+    return format ? dateFormat(date, format) : date;
 };
 
 exports.randomString = function (length) {

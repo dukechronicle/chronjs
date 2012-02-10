@@ -90,6 +90,14 @@ site.contact = function (req, res) {
     });
 };
 
+site.yt2012 = function (req, res) {
+    var viewLocation = "pages/young-trustee-2012";
+    res.render(viewLocation, {
+        filename:viewLocation,
+        css: asereje.css(['container/style'])
+    });
+};
+
 site.frontpage = function (req, res) {
     api.site.getFrontPageContent(function (err, model) {
         res.render('site/index', {

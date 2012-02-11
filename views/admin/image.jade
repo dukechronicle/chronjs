@@ -60,5 +60,9 @@ p
     h1 Existing Versions (click to add to document)
   - else
     h1 Existing Versions
-  #versions!= partial('version', {collection: versions, locals: {afterUrl: afterUrl, docId: docId, imageTypes: imageTypes, cropSizes: imageDetails}})
+
+  #versions!= partial('version', {locals: {afterUrl: afterUrl, docId: docId, imageTypes: imageTypes, cropSizes: imageDetails, allVersions: versions}})
+  - each version in versions
+    #versions!= partial('version', {locals: {afterUrl: afterUrl, docId: docId, imageTypes: imageTypes, cropSizes: imageDetails, version: version}})
+  
   script(src='/js/imgdelete.js', type='text/javascript')

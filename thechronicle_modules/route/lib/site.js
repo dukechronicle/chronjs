@@ -34,62 +34,6 @@ site.redirectMobile = function(req, res, next) {
     next();
 };
 
-site.aboutUs = function (req, res) {
-    res.render('pages/about-us', {
-	filename: 'pages/about-us',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.privacyPolicy = function (req, res) {
-    res.render('pages/privacy-policy', {
-	filename:'pages/privacy-policy',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.userGuidelines = function (req, res) {
-    res.render('pages/user-guidelines', {
-	filename:'pages/user-guidelines',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.advertising = function (req, res) {
-    res.render('pages/advertising', {
-	filename:'pages/advertising',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.subscribe = function (req, res) {
-    res.render('pages/subscribe', {
-	filename:'pages/subscribe',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.editBoard = function (req, res) {
-    res.render('pages/edit-board', {
-	filename:'pages/edit-board',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.lettersToEditor = function (req, res) {
-    res.render('pages/letters', {
-	filename:'pages/letters',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.contact = function (req, res) {
-    res.render('pages/contact', {
-	filename:'pages/contact',
-	css: asereje.css(['container/style'])
-    });
-};
-
 site.frontpage = function (req, res) {
     api.site.getFrontPageContent(function (err, model) {
         res.render('site/index', {

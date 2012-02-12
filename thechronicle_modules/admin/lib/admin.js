@@ -126,18 +126,69 @@ admin.k4export = function (req, res, next) {
 };
 
 admin.k4exportData = function (req, res, next) {
-    api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
-        k4export.runExporter(req.files.zip.path, function (failed, success) {
-	    fs.unlink(req.files.zip.path);
-            res.render('admin/k4export', {
-		locals:{
-                    failed:failed,
-                    succeeded:success,
-                    taxonomy:taxonomy
-		}
+    async.parallel({
+        k4: function(callback) {
+            k4export.runExporter(req.files.zip.path, function (failed, success) {
+	            fs.unlink(req.files.zip.path);
+                callback(null, {failed: failed, success: success});
             });
+        },
+        images: function(callback) {
+            var imageTypes = config.get('IMAGE_TYPES');
+
+            api.image.getAllOriginals(null, null, function (err, origs) {
+                var imageVersionIds = [];
+                origs.forEach(function(image) {
+                    image.imageVersions.forEach(function(versionId) {
+                        imageVersionIds.push(versionId);
+                    });
+                });
+
+                api.docsById(imageVersionIds, function(err, versions) {
+                    var toReturn = [];
+                    var i = 0;
+
+                    origs.forEach(function(image) {
+                        var temp = {    
+                            originalId: image._id,
+                            displayName: image.displayName,
+                            thumbUrl: image.thumbUrl,
+                            imageVersions: image.imageVersions,
+                            imageVersionTypes: []
+                        };
+
+                        temp.imageVersions.forEach(function(imageVersion) {
+                            Object.keys(imageTypes).forEach(function(type) {
+                                if(imageTypes[type].width == versions[i].doc.width && imageTypes[type].height == versions[i].doc.height) {
+                                    temp.imageVersionTypes.push(type);
+                                }
+                            });
+                            i ++;
+                        });
+                        toReturn.push(temp);
+                    });
+                                
+                    callback(err, toReturn);
+                });
+            });
+        },
+        taxonomy: function(callback) {
+            api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
+                callback(err, taxonomy);
+            });
+        }
+    },
+    function(err, results) {
+        console.log(results.images);
+        res.render('admin/k4export', {
+	        locals:{
+                failed: results.k4.failed,
+                succeeded: results.k4.success,
+                taxonomy: results.taxonomy,
+                imageData: results.images
+	        }
+        });
 	});
-    });
 };
 
 admin.editArticleData = function (req, http_res, next) {

@@ -69,7 +69,7 @@
                 .numbered-articles.most-popular!=partial('container/numbered-articles', {title: "Popular", stories: model.popular})
 
             - if (model.related && model.related.length > 0)
-                .numbered-articles.related!=partial('container/numbered-articles', {title: "Related", stories: model.related})
+                .articles-with-author.related!=partial('container/articles-with-author', {title: "Related", stories: model.related})
 
     // comments
     #disqus_thread.rounded

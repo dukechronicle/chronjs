@@ -10,6 +10,9 @@ var asereje = require('asereje');
 var MOBILE_BROWSER_USER_AGENTS = ["Android", "iPhone", "Windows Phone",
                                   "Blackberry", "Symbian", "Palm", "webOS"];
 
+var fs = require('fs');
+var yt2012Data = JSON.parse(fs.readFileSync("sample-data/young-trustee-2012.json"));
+
 var afterConfigChangeFunction = function(callback) { callback(); };
 
 site.setAfterConfigChangeFunction = function(func) {
@@ -87,6 +90,18 @@ site.contact = function (req, res) {
     res.render('pages/contact', {
 	filename:'pages/contact',
 	css: asereje.css(['container/style'])
+    });
+};
+
+site.yt2012 = function (req, res) {
+    var viewLocation = "pages/young-trustee-2012";
+    res.render(viewLocation, {
+        filename:viewLocation,
+        css: asereje.css(['container/style', 'pages/young-trustee-2012']),
+        locals: {
+            endorsements: yt2012Data[0],
+            pastYts: yt2012Data[1]
+        }
     });
 };
 

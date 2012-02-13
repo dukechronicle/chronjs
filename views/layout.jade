@@ -4,15 +4,15 @@ html(lang="en")
         title The Chronicle | Duke University's Daily Independent Newspaper
         link(rel="image_src", href="http://dukechronicle.com/favicon.png")
 
-        script(src="http://use.typekit.com/dwv2bjy.js")
-        script try{Typekit.load();}catch(e){}
-
         // border-radius support in ie
             script(src="/js/curvycorners.js")
 
-        if(typeof css != 'undefined')
+        - if (typeof js != 'undefined')
+            script var scripts = '#{js}'
+
+        - if (typeof css != 'undefined')
             - each file in css
-              link(rel= 'stylesheet', href= '/' + file + '.css')
+                link(rel= 'stylesheet', href= '/' + file + '.css')
 
         //if lt IE 9
             link(rel='stylesheet', href='/style-ie.css')
@@ -28,6 +28,4 @@ html(lang="en")
             footer
                 include /layout/footer
 
-    script(data-main="/js/main", src="/js/require-jquery.js")
-
-
+        script(data-main="/js/main", src="/js/require-jquery.js")

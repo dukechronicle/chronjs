@@ -8,5 +8,5 @@
                 - each story, id in stories
                     li
                         h2
-                            a.list-story.hover.highlight-right(href='#{story.urls[0]}')
+                            a.list-story.hover.highlight-right(href='#{story.url || story.urls[0]}')
                                 #{'&nbsp;' + story.title}

@@ -16,8 +16,8 @@ body section > #frontpage #top > .sidebar .opinion .list-story{padding:2px 0 2px
 body section > #frontpage #top > .sidebar .opinion .list-story.last{padding:2px 0 0 2px}
 body section > #frontpage #top > .content{float:left;width:642px;}
 body section > #frontpage #top > .content .rounded{padding:4px;}
-body section > #frontpage #top > .content .rounded a.hover.highlight-right{margin-right:-7px}
-body section > #frontpage #top > .content .rounded a.hover.highlight-left{margin-left:-7px}
+body section > #frontpage #top > .content .rounded a.hover.highlight-right{margin-right:-8px}
+body section > #frontpage #top > .content .rounded a.hover.highlight-left{margin-left:-8px}
 body section > #frontpage #top > .content .top-news .container{width:642px;}
 body section > #frontpage #top > .content .top-news .container .rounded{width:634px}
 body section > #frontpage #top > .content .top-news .rounded .content-container{padding-bottom:.3em;}
@@ -40,19 +40,19 @@ body section > #frontpage #news .content-container h4,body section > #frontpage 
 body section > #frontpage #news .content-container p.teaser,body section > #frontpage #sports .content-container p.teaser{margin-top:5px}
 body section > #frontpage #news .content-container .top,body section > #frontpage #sports .content-container .top{margin-bottom:1em;}
 body section > #frontpage #news .content-container .top p.teaser,body section > #frontpage #sports .content-container .top p.teaser{vertical-align:text-bottom}
-body section > #frontpage #news .content-container .top a.hover,body section > #frontpage #sports .content-container .top a.hover{margin-left:-13px;padding-left:13px}
+body section > #frontpage #news .content-container .top a.hover,body section > #frontpage #sports .content-container .top a.hover{margin-left:-14px;padding-left:14px}
 body section > #frontpage #news .content-container .top img,body section > #frontpage #sports .content-container .top img{-webkit-border-radius:4px;-moz-border-radius:4px;-ms-border-radius:4px;-o-border-radius:4px;border-radius:4px;-webkit-box-shadow:0 0 4px #999;-moz-box-shadow:0 0 4px #999;-ms-box-shadow:0 0 4px #999;-o-box-shadow:0 0 4px #999;box-shadow:0 0 4px #999;-webkit-transition:box-shadow .25s linear;-moz-transition:box-shadow .25s linear;-ms-transition:box-shadow .25s linear;-o-transition:box-shadow .25s linear;transition:box-shadow .25s linear}
 body section > #frontpage #news .content-container .top a.hover:hover img,body section > #frontpage #sports .content-container .top a.hover:hover img{-webkit-box-shadow:0 0 4px #000;-moz-box-shadow:0 0 4px #000;-ms-box-shadow:0 0 4px #000;-o-box-shadow:0 0 4px #000;box-shadow:0 0 4px #000}
 body section > #frontpage #news .content-container .top img,body section > #frontpage #sports .content-container .top img{float:right;width:186px;height:133px}
 body section > #frontpage #news .content-container .top .text,body section > #frontpage #sports .content-container .top .text{float:left;width:240px;height:115px}
 body section > #frontpage #news .content-container .bottom,body section > #frontpage #sports .content-container .bottom{padding-top:10px;clear:both;}
 body section > #frontpage #news .content-container .bottom .left,body section > #frontpage #sports .content-container .bottom .left{width:240px;}
-body section > #frontpage #news .content-container .bottom .left a.hover,body section > #frontpage #sports .content-container .bottom .left a.hover{padding-top:8px;padding-bottom:8px;margin-left:-13px;padding-left:13px}
+body section > #frontpage #news .content-container .bottom .left a.hover,body section > #frontpage #sports .content-container .bottom .left a.hover{padding-top:8px;padding-bottom:8px;margin-left:-14px;padding-left:14px}
 body section > #frontpage #news .content-container .bottom .left a.hover.first,body section > #frontpage #sports .content-container .bottom .left a.hover.first{padding-top:6px}
 body section > #frontpage #news .content-container .bottom .left a.hover.last,body section > #frontpage #sports .content-container .bottom .left a.hover.last{padding-bottom:0}
 body section > #frontpage #news .content-container .bottom .right,body section > #frontpage #sports .content-container .bottom .right{width:190px;}
 body section > #frontpage #news .content-container .bottom .right ul li,body section > #frontpage #sports .content-container .bottom .right ul li{padding-left:11px;background:url("http://d2sug25c5hnh7r.cloudfront.net/images/bullet.gif") no-repeat left 1em;}
-body section > #frontpage #news .content-container .bottom .right ul li a.hover,body section > #frontpage #sports .content-container .bottom .right ul li a.hover{padding-top:6px;margin-right:-13px;padding-right:13px;padding-bottom:6px}
+body section > #frontpage #news .content-container .bottom .right ul li a.hover,body section > #frontpage #sports .content-container .bottom .right ul li a.hover{padding-top:6px;margin-right:-14px;padding-right:14px;padding-bottom:6px}
 body section > #frontpage #news{float:left;}
 body section > #frontpage #news .content-container h2{margin-top:-4px}
 body section > #frontpage #sports{float:right;}

@@ -142,7 +142,7 @@ admin.k4exportData = function (req, res, next) {
 
 admin.editArticleData = function (req, http_res, next) {
     if (req.body.imageVersionId) {
-        api.image.addVersionToDoc(req.body.docId, req.body.original, req.body.imageVersionId, req.body.imageType, function (err, res) {
+        api.image.addVersionsToDoc(req.body.docId, req.body.original, req.body.imageVersionId, req.body.imageType, function (err, res) {
             if (err) next(http_res);
             else if(req.body.afterUrl) http_res.redirect(req.body.afterUrl);
             else http_res.redirect('/admin');

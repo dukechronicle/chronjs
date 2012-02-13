@@ -142,8 +142,7 @@ site.getFrontPageContent = function (callback) {
             if (BENCHMARK) log.info("TOTAL TIME %d", Date.now() - start);
             var model = results[0];
             _.defaults(model, homeModel);
-            //model.popular = results[1];
-            model.popular = null;
+            model.popular = results[1];
             model.twitter = results[2];
             callback(null, model);
         }

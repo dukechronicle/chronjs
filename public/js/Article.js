@@ -1,8 +1,11 @@
-(function ($) {
+define(["order!jquery", "order!underscore", "order!Backbone"], function ($) {
     
-    $.fn.Article = Backbone.Model.extend({
-        
+    return Backbone.Model.extend({
+
+        defaults: {
+            type: "article"
+        }
 
     });
 
-})(jQuery);
+});

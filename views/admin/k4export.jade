@@ -1,4 +1,4 @@
-script(src='/js/admin/k4export.js')
+script(src='/js/admin/k4export.js?v=2')
 h1 K4 Exporter
 form(action='/admin/k4export', method='post', enctype='multipart/form-data')
   label(for='zip') XML Zip:
@@ -30,6 +30,7 @@ a(href='/admin/manage') Manage and edit uploaded articles
                     option(value=value) #{key}
         td
           select(id='img'+article.id, style='width: 300px')
+            option(value='') Select an image
             - each image in imageData
               option(value=JSON.stringify(image)) #{image.displayName}
         td

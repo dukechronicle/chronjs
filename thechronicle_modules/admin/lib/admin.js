@@ -179,7 +179,6 @@ admin.k4exportData = function (req, res, next) {
         }
     },
     function(err, results) {
-        console.log(results.images);
         res.render('admin/k4export', {
 	        locals:{
                 failed: results.k4.failed,

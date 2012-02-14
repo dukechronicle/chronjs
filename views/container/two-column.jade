@@ -1,0 +1,17 @@
+.container.clearfix
+    .vertical-container
+        h2.vertical #{title}
+
+    .rounded
+        .content-container.align-group.clearfix
+            - each story, index in stories
+                - if (index % 2 === 0)
+                    a.hover.highlight-left(href='#{story.url}')
+                        h3 #{story.title}
+                        p.teaser #{story.teaser}
+                - else
+                    a.hover.highlight-right(href='#{story.url}')
+                        h3 #{story.title}
+                        p.teaser #{story.teaser}
+                    div(style='clear:both; height: 25px')
+

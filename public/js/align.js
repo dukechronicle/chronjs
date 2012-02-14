@@ -37,25 +37,27 @@ define(["jquery", "underscore"], function($) {
         },
         frontpageAlign: function() {
             // align main and sidebar height
-            var popularLiHeight = 30;
+            var popularLiHeight = 24;
 
             var extraHeight = $('#top > .sidebar').height() - $('#top > .content').height() + 3;
             var contentContainer = $('#top > .content .top-news .content-container');
             var popularContainer = $('#top > .sidebar .most-popular .content-container');
 
-            //console.log(extraHeight);
-            if (extraHeight > 0) {
-                var lisToRemove = Math.floor(extraHeight / popularLiHeight);
-                //console.log(lisToRemove);
+            if (popularContainer.length > 0) {
+                //console.log(extraHeight);
+                if (extraHeight > 0) {
+                    var lisToRemove = Math.floor(extraHeight / popularLiHeight);
+                    //console.log(lisToRemove);
 
-                var removeIndex = $("li", popularContainer).size() - lisToRemove - 1;
-                if (removeIndex < 2) {
-                    removeIndex = 2;
-                    lisToRemove = $("li", popularContainer).size() - removeIndex - 1;
+                    var removeIndex = $("li", popularContainer).size() - lisToRemove - 1;
+                    if (removeIndex < 2) {
+                        removeIndex = 2;
+                        lisToRemove = $("li", popularContainer).size() - removeIndex - 1;
+                    }
+                    //console.log(removeIndex);
+                    $("li:gt(" + removeIndex + ")", popularContainer).hide();
+                    extraHeight -= lisToRemove * popularLiHeight;
                 }
-                //console.log(removeIndex);
-                $("li:gt(" + removeIndex + ")", popularContainer).hide();
-                extraHeight -= lisToRemove * popularLiHeight;
             }
             //console.log("extra height: " + extraHeight);
             contentContainer.css('padding-bottom', extraHeight);

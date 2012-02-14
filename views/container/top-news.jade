@@ -6,21 +6,21 @@
         .content-container.align-group.clearfix
         
             .left.align-element(data-alignTarget='a.first')
-                a.hover.highlight-left.first.teaser(href='#{news[0].url}')
-                    h2 #{news[0].title}
-                    p #{news[0].teaser}
+                a.hover.highlight-left.first.teaser(href='#{left[0].url}')
+                    h2 #{left[0].title}
+                    p #{left[0].teaser}
 
-                - each story, index in news
+                - each story, index in left
                     - if (index > 0)
                         a.hover.highlight-left(href='#{story.url}')
                             h3 #{story.title}
 
             .right.align-element(data-alignTarget='a.first')
-                a.hover.highlight-right.first.teaser(href='#{sports[0].url}')
-                    h2 #{sports[0].title}
-                    p #{sports[0].teaser}
+                a.hover.highlight-right.first.teaser(href='#{right[0].url}')
+                    h2 #{right[0].title}
+                    p #{right[0].teaser}
 
-                - each story, index in sports
+                - each story, index in right
                     - if (index > 0)
                         a.hover.highlight-right(href='#{story.url}')
                             h3 #{story.title}

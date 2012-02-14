@@ -14,7 +14,7 @@ function editDocument(article) {
 	if (status != 'success')
 	    alert("Taxonomy change for article '" + article.title + "' failed");
 	if (imageData != null) {
-	  $.post('/admin/edit', {imageVersionId: imageData.imageVersions})
+	  $.post('/admin/edit', {imageVersionId: imageData.imageVersions, docId: article.id, original: imageData.original, imageType: imageData.imageTypes});
 	}
 	else
 		$("#sub"+article.id).removeAttr('disabled');

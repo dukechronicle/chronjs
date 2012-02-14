@@ -22,6 +22,7 @@ exports.manage = function (req, httpRes) {
     api.image.getAllOriginals(beforeKey, beforeID, function (err, origs) {
         httpRes.render('admin/articleimage', {
             filename:'views/admin/articleimage.jade',
+            js:['imgdelete'],
             locals:{
                 origs:origs,
                 afterUrl:afterUrl,

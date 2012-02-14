@@ -11,13 +11,20 @@ function editDocument(article) {
     }
     
     $.post('/admin/edit', { doc: article }, function(data, status) {
-	if (status != 'success')
-	    alert("Taxonomy change for article '" + article.title + "' failed");
-	if (imageData != null) {
-	  $.post('/admin/edit', {imageVersionId: imageData.imageVersions, docId: article.id, original: imageData.original, imageType: imageData.imageTypes});
-	}
-	else
-		$("#sub"+article.id).removeAttr('disabled');
+	    if (status != 'success')
+	        alert("Taxonomy change for article '" + article.title + "' failed");
+	    
+        if (imageData != null) {
+	        $.post('/admin/edit', {imageVersionId: imageData.imageVersions, docId: article.id, original: imageData.originalId, imageType: imageData.imageVersionTypes},
+            function(data, status) {
+                if (status != 'success')
+	                alert("Adding image for article '" + article.title + "' failed");
+
+                $("#sub"+article.id).removeAttr('disabled');
+            });
+	    }
+	    else
+		    $("#sub"+article.id).removeAttr('disabled');
     });
 }
 

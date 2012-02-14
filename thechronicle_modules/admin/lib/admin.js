@@ -108,6 +108,7 @@ admin.manage = function (req, res, next) {
     api.docsByDate(beforeKey, beforeID, function (err, docs) {
         if (err) next(err);
         else res.render('admin/manage', {
+            js: ['admin/manage'],
             locals:{
                 docs:docs,
                 hasPrevious:(beforeID != null),

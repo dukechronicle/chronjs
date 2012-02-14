@@ -126,6 +126,7 @@ exports.renderImage = function (req, httpRes, next) {
                              else {
                                  var imageTypes = config.get('IMAGE_TYPES');
                                  httpRes.render('admin/image', { //no errors have been found, render image
+                                     js:['admin/imgdelete', 'crop', 'nicedate'],
                                      locals:{ //specifies/assigns variables to pass into function
                                          url:orig.value.url,
                                          name:imageName,

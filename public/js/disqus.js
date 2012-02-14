@@ -11,7 +11,7 @@ function loadDisqusForArticle(isProduction, disqusShortName, articleID, title, u
     disqus_shortname = disqusShortName;
     disqus_identifier = articleID;
     disqus_title = title;
-    disqus_url = "http://dukechronicle.com/article/" + url;
+    disqus_url = "http://dukechronicle.com" + url;
     
     if(!isProduction) disqus_developer = 1;
 	

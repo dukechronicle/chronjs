@@ -37,7 +37,7 @@
                 .comments
                     a(id='commentLink', href='#dsq-content') Comments
                 .print
-                    a(href=doc.path + '/print') Print
+                    a(href=doc.url + '/print') Print
                 .facebook
                     iframe(src='http://www.facebook.com/plugins/like.php?app_id=176268009080455&amp;href=' + encodeURIComponent(doc.fullUrl) + '&amp;send=false&amp;layout=button_count&amp;width=121&amp;show_faces=false&amp;action=recommend&amp;colorscheme=light&amp;font=lucida+grande&amp;height=20', scrolling='no', frameborder='0', style='border:none; overflow:hidden; width:121px; height:20px;', allowTransparency='true')
                 .twitter
@@ -45,7 +45,7 @@
                         | Tweet
                 .google
                     g:plusone(size="medium")
-            .article-body!=doc.body
+            .article-body!=doc.renderedBody
 
         .sidebar
             // facebook recommend
@@ -66,11 +66,14 @@
              // advertising
             .image-container.medium-rectangle!=partial('ad/medium-rect', {title: "Advertisement"})
             - if (model.popular && model.popular.length > 0)
-                .most-popular!=partial('container/most-popular', {title: "Popular", stories: model.popular})
+                .numbered-articles.most-popular!=partial('container/numbered-articles', {title: "Popular", stories: model.popular})
+
+            - if (model.related && model.related.length > 0)
+                .articles-with-author.related!=partial('container/articles-with-author', {title: "Related", stories: model.related})
 
     // comments
     #disqus_thread.rounded
-script(src='/js/disqus.js?v=3', type='text/javascript')
+script(src='/js/disqus.js?v=4', type='text/javascript')
 script
     loadDisqusForArticle(!{isProduction}, '!{disqusShortname}', '!{doc.nid || doc._id}', '!{doc.title.replace(/'/g,"\\'")}', '!{doc.url}');
 

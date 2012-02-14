@@ -22,7 +22,7 @@ exports.manage = function (req, httpRes) {
     api.image.getAllOriginals(beforeKey, beforeID, function (err, origs) {
         httpRes.render('admin/articleimage', {
             filename:'views/admin/articleimage.jade',
-            js:['imgdelete'],
+            js:['admin/imgdelete'],
             locals:{
                 origs:origs,
                 afterUrl:afterUrl,
@@ -34,7 +34,11 @@ exports.manage = function (req, httpRes) {
 };
 
 exports.upload = function (req, res) {
-    res.render('admin/upload')
+    res.render('admin/upload', {
+        filename:'admin/upload',
+        css:['css/html5upload'],
+        js:['async', 'html5upload']
+    });
 };
 
 exports.uploadData = function (req, httpRes) {

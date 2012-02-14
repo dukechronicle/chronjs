@@ -43,6 +43,7 @@ function renderPage(req,res,section_docs) {
     api.group.docs(layoutConfig[group].namespace, null, function (err, group_docs) {
         res.render("admin/page-layout",
         {
+            css:['admin/layout/styles'],
             js:['admin/layout'],
             locals:{
                 page: group,

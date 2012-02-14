@@ -20,9 +20,9 @@
             if (model.twitter)
                 .twitter!=partial('container/twitter', model.twitter)
             if (model.popular)
-                .most-popular!=partial('container/most-popular', {title: "Popular", stories: model.popular})
+                .numbered-articles.most-popular!=partial('container/numbered-articles', {title: "Popular", stories: model.popular})
             if (model.Opinion)
-                .opinion!=partial('container/opinion', {title: "Opinion", stories: model.Opinion})
+                .opinion!=partial('container/articles-with-author', {title: "Opinion", stories: model.Opinion})
             if (model.adFullRectangle)
                 .image-container.medium-rectangle.lighten!=partial('ad/medium-rect', {title: "Advertisement"})
 

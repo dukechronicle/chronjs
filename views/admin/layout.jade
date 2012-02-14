@@ -2,7 +2,7 @@
 html
   head
     - if (typeof js != 'undefined')
-        script var scripts = '#{js}'
+        script var scripts = !{JSON.stringify(js)}
 
     link(rel='stylesheet', href='/css/jquery.Jcrop.css')
     link(rel='stylesheet', href='/css/smoothness/jquery-ui.css')

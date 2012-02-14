@@ -39,10 +39,13 @@ admin.index = function (req, res, next) {
 };
 
 admin.newsletter = function (req, res, next) {
-    api.newsletter.createNewsletter(function(campaignID) {
-        res.render('admin/newsletter', {
-            locals: {campaignID: campaignID}
-        });
+    api.newsletter.createNewsletter(function(err, campaignID) {
+        if (err) next(err);
+        else {
+            res.render('admin/newsletter', {
+                locals: {campaignID: campaignID}
+            });
+        }
     });
 };
 

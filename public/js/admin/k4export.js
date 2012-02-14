@@ -8,14 +8,29 @@ function editDocument(article) {
     var imageData;
     if (imageString.length > 0) {
     	imageData = JSON.parse(imageString);
-    } else {imageData.imageVersions = false;}
-    // change data
-    $.post('/admin/edit', { doc: article, imageVersionId: imageData.imageVersions }, function(data, status) {
+    }
+    
+    $.post('/admin/edit', { doc: article }, function(data, status) {
 	if (status != 'success')
-	    alert("Change for article '" + article.title + "' failed");
-        else{
-            $("#sub"+article.id).removeAttr('disabled');
-            alert("Change success!");	
+	    alert("Taxonomy change for article '" + article.title + "' failed");
+	if (imageData != null) {
+	  $.post('/admin/edit', {imageVersionId: imageData.imageVersions})
 	}
+	else
+		$("#sub"+article.id).removeAttr('disabled');
     });
+}
+
+function showImage(articleId) {
+    var imageString = $("#img"+articleId).val();
+    var imageData;
+
+    if (imageString.length > 0) {
+    	imageData = JSON.parse(imageString);
+        $("#img-preview"+articleId).attr('src', imageData.thumbUrl);
+        $("#img-preview"+articleId).fadeIn();
+    }
+    else {
+        $("#img-preview"+articleId).fadeOut();
+    }
 }

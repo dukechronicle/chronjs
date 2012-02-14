@@ -21,7 +21,7 @@
 
             .middle
                 if (model.popular)
-                    .most-popular!=partial('container/most-popular', {title: "Popular", stories: model.popular})
+                    .numbered-articles.most-popular!=partial('container/numbered-articles', {title: "Popular", stories: model.popular})
                 if (model.adFullRectangle)
                     .image-container.medium-rectangle.lighten!=partial('ad/medium-rect', {title: "Advertisement"})
 

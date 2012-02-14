@@ -20,3 +20,17 @@ function editDocument(article) {
 		$("#sub"+article.id).removeAttr('disabled');
     });
 }
+
+function showImage(articleId) {
+    var imageString = $("#img"+articleId).val();
+    var imageData;
+
+    if (imageString.length > 0) {
+    	imageData = JSON.parse(imageString);
+        $("#img-preview"+articleId).attr('src', imageData.thumbUrl);
+        $("#img-preview"+articleId).fadeIn();
+    }
+    else {
+        $("#img-preview"+articleId).fadeOut();
+    }
+}

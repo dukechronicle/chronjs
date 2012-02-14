@@ -8,7 +8,7 @@ html(lang="en")
             script(src="/js/curvycorners.js")
 
         - if (typeof js != 'undefined')
-            script var scripts = '#{js}'
+            script var scripts = !{JSON.stringify(js)}
 
         - if (typeof css != 'undefined')
             - each file in css

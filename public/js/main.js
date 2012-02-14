@@ -17,7 +17,6 @@ require(["align", "typekit", "site"], function (align) {
 });
 
 if (typeof scripts != 'undefined') {
-    scripts = scripts.split(',')
     for (var i in scripts) {
         require([scripts[i]], function (module) {
             if (module && typeof module.init == 'function')

@@ -1,5 +1,6 @@
 var api = require('../../api');
 var admin = require('../../admin');
+var externalAPI = require('./api');
 var log = require('../../log');
 var mobile = require('./mobile');
 var site = require('./site');
@@ -18,10 +19,11 @@ exports.preinit = function (app, afterConfigChangeFunction) {
     site.setAfterConfigChangeFunction(afterConfigChangeFunction);
 };
 
-exports.init = function (app, callback) {
+exports.init = function (app) {
 
     // redirect mobile browsers to the mobile site
     app.get('/*', site.redirectMobile);
+
     app.get('/about-us', site.aboutUs);
     app.get('/privacy-policy', site.privacyPolicy);
     app.get('/user-guidelines', site.userGuidelines);
@@ -30,6 +32,9 @@ exports.init = function (app, callback) {
     app.get('/edit-board', site.editBoard);
     app.get('/letters-to-the-editor', site.lettersToEditor);
     app.get('/contact', site.contact);
+
+    app.get('/page/young-trustee-2012', site.yt2012);
+
     app.get('/', site.frontpage);
     app.get('/news', site.news);
     app.get('/sports', site.sports);
@@ -66,6 +71,39 @@ exports.init = function (app, callback) {
         res.send('42');
     });
 
+    app.namespace('/admin', function () {
+        app.get('/', api.site.checkAdmin, admin.index);
+        app.get('/newsletter', api.site.checkAdmin, admin.newsletter);
+        app.get('/index-articles', api.site.checkAdmin, admin.indexArticles);
+        app.get('/add', api.site.checkAdmin, admin.addArticle);
+        app.get('/add-page', api.site.checkAdmin, admin.addPage);
+        app.get('/manage', api.site.checkAdmin, admin.manage);
+        app.get('/k4export', api.site.checkAdmin, admin.k4export);
+        app.post('/k4export', api.site.checkAdmin, admin.k4exportData);
+        app.post('/edit', api.site.checkAdmin, admin.editArticleData);
+        app.post('/add', api.site.checkAdmin, admin.addArticleData);
+        app.post('/addPage', api.site.checkAdmin, admin.addPageData);
+        app.post('/newsletter', api.site.checkAdmin, admin.newsletterData);
+        app.get('/layout/group/:group', api.site.checkAdmin, admin.layout);
+    });
+    
+    app.namespace('/admin/image', function () {
+        app.get('/manage', api.site.checkAdmin, admin.image.manage);
+        app.get('/upload', api.site.checkAdmin, admin.image.upload);
+        app.post('/upload', api.site.checkAdmin, admin.image.uploadData);
+        app.get('/articles', api.site.checkAdmin, admin.image.articles);
+        app.get('/delete', api.site.checkAdmin, admin.image.deleteImage);
+        app.get('/:imageName', api.site.checkAdmin, admin.image.renderImage);
+        app.post('/info', api.site.checkAdmin, admin.image.info);
+        app.post('/crop', api.site.checkAdmin, admin.image.crop);
+    });
+
+    app.namespace('/api', function () {
+        app.post('/group/add', api.site.checkAdmin, externalAPI.addGroup);
+        app.post('/group/remove', api.site.checkAdmin, externalAPI.removeGroup);
+        app.del('/:docId', api.site.checkAdmin, externalAPI.deleteDocument);
+    });
+
     app.namespace('/mobile-api', function () {
         app.get('/All', mobile.listAll);
         app.get('/:groupname', mobile.section);
@@ -73,8 +111,6 @@ exports.init = function (app, callback) {
         app.get('/search/:query', mobile.search);
         app.get('/staff/:query', mobile.staff);
     });
-
-    admin.init(app, callback);
 
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);

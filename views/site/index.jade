@@ -8,7 +8,7 @@
             if (model.Slideshow)
                 #slideshow!=partial('slideshow', {stories: model.Slideshow})
             if (model["Left Headlines"] && model["Right Headlines"])
-                .top-news.align-group!=partial('container/top-news', {title: "Top Stories", news: model["Left Headlines"], sports: model["Right Headlines"]})
+                .top-news.align-group!=partial('container/top-news', {title: "Top Stories", left: model["Left Headlines"], right: model["Right Headlines"]})
 
             .ads-row.clearfix
                 if (model.printEdition)
@@ -20,9 +20,9 @@
             if (model.twitter)
                 .twitter!=partial('container/twitter', model.twitter)
             if (model.popular)
-                .most-popular!=partial('container/most-popular', {title: "Popular", stories: model.popular})
+                .numbered-articles.most-popular!=partial('container/numbered-articles', {title: "Popular", stories: model.popular})
             if (model.Opinion)
-                .opinion!=partial('container/opinion', {title: "Opinion", stories: model.Opinion})
+                .opinion!=partial('container/articles-with-author', {title: "Opinion", stories: model.Opinion})
             if (model.adFullRectangle)
                 .image-container.medium-rectangle.lighten!=partial('ad/medium-rect', {title: "Advertisement"})
 

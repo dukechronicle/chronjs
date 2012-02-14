@@ -45,7 +45,7 @@ script
 
                         $.ajax({
                             type: 'DELETE',
-                            url: '/admin/article/' + docId,
+                            url: '/api/' + docId,
                             data: 'rev=' + docRev,
                             success: function() {
                                 $(this).remove();

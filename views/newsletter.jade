@@ -1,6 +1,6 @@
-- each section in taxonomy
-  h2 #{section}
-  - each article in model[section]
+- each section, name in model
+  h2 #{name}
+  - each article in section
     a(href="http://www.dukechronicle.com/article/"+article.urls[0])
       h3 #{article.title}
     .article
@@ -8,4 +8,5 @@
         a(href="http://www.dukechronicle.com/article/"+article.urls[0])
           img(align="left", src=article.images.ThumbRect.url, width=124, height=89, alt="Chronicle image")
       p #{article.teaser}
+    br
   br

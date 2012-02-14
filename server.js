@@ -3,58 +3,70 @@ var asereje = require('asereje');
 var async = require('async');
 var express = require('express');
 require('express-namespace');
+var RedisStore = require('connect-redis')(express);
 var stylus = require('stylus');
 var sprintf = require('sprintf').sprintf;
-var fs = require('fs');
-var net = require('net');
-var repl = require('repl');
 
 /* require internal modules */
-var globalFunctions = require('./thechronicle_modules/global-functions');
-var config = require('./thechronicle_modules/config');
 var api = require('./thechronicle_modules/api');
+var config = require('./thechronicle_modules/config');
 var log = require('./thechronicle_modules/log');
-var site = require('./thechronicle_modules/api/lib/site');
-var admin = require('./thechronicle_modules/admin/lib/admin');
-var mobileapi = require('./thechronicle_modules/mobileapi/lib/mobileapi');
 var redisClient = require('./thechronicle_modules/redisclient');
-var RedisStore = require('connect-redis')(express);
+var route = require('./thechronicle_modules/route');
+var sitemap = require('./thechronicle_modules/sitemap');
+
 
 // Heroku requires the use of process.env.PORT to dynamically configure port
-var port = process.env.PORT || process.env.CHRONICLE_PORT || 4000;
-
+var PORT = process.env.PORT || process.env.CHRONICLE_PORT || 4000;
 var SECRET = "i'll make you my dirty little secret";
-var app = null;
 var SERVER = this;
 
-/*
-net.createServer(function (socket) {
-  repl.start("node via TCP socket> ", socket);
-}).listen(5001);*/
+var app = null;
+
 
 asereje.config({
-      active: process.env.NODE_ENV === 'production'        // enable it just for production
-    , js_globals: ['typekit', 'underscore-min', 'jquery']   // js files that will be present always
-    , css_globals: ['css/reset', 'css/search-webkit', 'style']                     // css files that will be present always
-    , js_path: __dirname + '/public/js'           // javascript folder path
-    , css_path: __dirname + '/public'                  // css folder path
+    active: process.env.NODE_ENV === 'production',  // enable it just for production
+    js_globals: ['typekit', 'underscore-min', 'jquery'],  // js files that will be present always
+    css_globals: ['css/reset', 'css/search-webkit', 'style'],  // css files that will be present always
+    js_path: __dirname + '/public/js',  // javascript folder path
+    css_path: __dirname + '/public'  // css folder path
 });
 
 log.init(function (err) {
-    if (err) return console.log("Logger couldn't be initialized: " + err);
-    
+    if (err) console.err("Logger couldn't be initialized: " + err);
     config.init(function(err) {
-        if(err) return log.crit(err);
+	    if (err) log.crit(err);
 
-        configureApp(function() {
-            if(!config.isSetUp()) {
-                app.get('/', function(req, res, next) {
-                    if(!config.isSetUp()) res.redirect('/config');
-                    else next();
-                });
+        var sessionInfo = {
+            secret: SECRET,
+            cookie: { maxAge:  1800000} // 30 minutes
+        };
+        redisClient.init(false, function(err) {
+            if (err) {
+                log.warning('Redis server not defined. Using memory store for sessions instead.'); 
+                log.warning('After defining the configuration info for redis, please restart the server so redis will be used as the session store.');
             }
             else {
-                runSite(function() {});
+                sessionInfo.store = new RedisStore({
+                    host: redisClient.getHostname(),
+                    port: redisClient.getPort(),
+                    pass: redisClient.getPassword(),
+                });
+            }
+
+            configureApp(sessionInfo, PORT);
+            route.preinit(app, runSite);
+
+	        if (!config.isSetUp()) {
+	            app.get('/', function(req, res, next) {
+		            if (!config.isSetUp()) res.redirect('/config');
+		            else next();
+	            });
+            }
+	        else {
+	            runSite(function (err) {
+		            if (err) log.error(err);
+	            });
             }
         });
     });
@@ -66,7 +78,7 @@ function compile(str, path) {
 	.set('compress', true);
 }
 
-function configureApp(callback) {
+function configureApp(sessionInfo, port) {
     /* express configuration */
     app = express.createServer();
 
@@ -80,9 +92,9 @@ function configureApp(callback) {
       , firebug: true
     }));
 
-    app.error(function(err, req, res) {
+    app.error(function(err, req, res, next) {
         log.error(err);
-        globalFunctions.showError(res, err);
+        next(err);
     });
 
     // the middleware itself does not serve the static
@@ -103,85 +115,37 @@ function configureApp(callback) {
     app.configure(function() {
         app.set('views', __dirname + '/views');
         app.set('view engine', 'jade');
-        app.use(express.bodyParser({uploadDir: tmpDirectory()}));
+        app.use(express.bodyParser({uploadDir: __dirname + '/uploads'}));
         app.use(express.methodOverride());
         // set up session
         app.use(express.cookieParser());
-
-        var sessionInfo = {
-            secret: SECRET
-        };
-
-        redisClient.init(false, function(err) {
-            if (err) {
-                log.warning('Redis server not defined. Using memory store for sessions instead.');
-                log.warning('After defining the configuration info for redis, please restart the server so redis will be used as the session store.');
+        app.use(express.session(sessionInfo));
+        /* set http cache to one minute by default for each response */
+        app.use(function(req,res,next) {
+            if(!api.accounts.isAdmin(req)) {
+                res.header('Cache-Control', 'public, max-age=300');
             }
-            else {
-                sessionInfo.store = new RedisStore({
-                    host: redisClient.getHostname(),
-                    port: redisClient.getPort(),
-                    pass: redisClient.getPassword(),
-                    cookie: { maxAge: 3600}
-                });
-            }
-
-            app.use(express.session(sessionInfo));
-
-            /* set http cache to one minute by default for each response */
-            app.use(function(req,res,next) {
-                if(!api.accounts.isAdmin(req)) {
-                    res.header('Cache-Control', 'public, max-age=300');
-                }
-                next();
-            });
-            app.use(app.router);
-
-            app.listen(port);
-
-            site.assignPreInitFunctionality(app, SERVER);
-
-            callback();
+            next();
         });
+        app.use(app.router);
     });
+    app.listen(port);
 }
-
-exports.runSite = function(callback) {
-	runSite(callback);
-};
 
 function runSite(callback) {
-	log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));
-
-    // use redis as our session store
-    redisClient.init(true, function (err0) {
-        if(err0) return log.error(err0);
-
-        // initialize all routes
-        async.parallel([
-            function(callback) {
-                site.init(app, callback);
-            },
-            function(callback) {
-                admin.init(app, callback);
-            },
-            function(callback) {
-                mobileapi.init(app, callback);
-            }
-        ], function(err) {
-            if (err) return log.crit(err);
-            return callback();
-        })
+    api.init(function (err) {
+        if (err) log.crit("api initialization failed");
+        else {
+	        sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
+		        if (err) log.error("Couldn't build news sitemap: " + err);
+	        });
+            redisClient.init(true, function(err) {
+                route.init(app, function (err) {
+                    log.notice(sprintf("Site configured and listening on port %d in %s mode",
+                        app.address().port, app.settings.env));
+                    callback();
+                });
+            });
+        }
     });
-}
-
-function tmpDirectory() {
-    var tmpDir = __dirname + '/tmp';
-    try {
-	fs.mkdirSync(tmpDir, "0755")
-    }
-    catch (err) {
-	// directory already exists
-    }
-    return tmpDir;
 }

@@ -25,7 +25,7 @@ a(href='/admin/manage') Manage and edit uploaded articles
               - each key, value in taxonomy[article.taxonomy[0]]
                   option(value=value) #{key}
             - else
-              option Select a section
+              option(value='') Select a section
               - each subsections, section in taxonomy
                 - each key, value in subsections
                     option(value=value) #{key}

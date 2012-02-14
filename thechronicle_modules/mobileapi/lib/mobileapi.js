@@ -1,4 +1,5 @@
 var api = require('../../api/lib/api');
+var log = require('../../log');
 var taxonomyGroups = ["News","Sports","Opinion","Recess","Towerview"];
 var _ = require('underscore');
 
@@ -10,13 +11,13 @@ exports.init = function (app, callback) {
             getGroup(groupName, 10, function (err, res) {
                 if (err) http_res.send(err);
                 if (res == null) {
-                    console.log("mobileapi: res is null");
+                    log.warning("mobileapi: res is null");
                     http_res.send(err, res);
                     return;
                 }
                 var result = [];
                 result = _.map(res, function (doc) {
-                    return {"title":doc.value.title, "teaser":doc.value.teaser, "urls":doc.value.urls};
+                    return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls};
                 });
                 if (req.query.callback == null) {
                     http_res.send(result);
@@ -82,7 +83,6 @@ function capitalizeName(str) {
 }
 
 function getGroup(groupName,n,callback){
-    console.log(groupName);
     if(taxonomyGroups.indexOf(groupName) !== -1){
         return grabArticles([groupName],0,n,callback);
     } else {

@@ -15,7 +15,6 @@ var redisClient = require('./thechronicle_modules/redisclient');
 var route = require('./thechronicle_modules/route');
 var sitemap = require('./thechronicle_modules/sitemap');
 
-
 // Heroku requires the use of process.env.PORT to dynamically configure port
 var PORT = process.env.PORT || process.env.CHRONICLE_PORT || 4000;
 var SECRET = "i'll make you my dirty little secret";
@@ -136,15 +135,16 @@ function runSite(callback) {
     api.init(function (err) {
         if (err) log.crit("api initialization failed");
         else {
-	        sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
-		        if (err) log.error("Couldn't build news sitemap: " + err);
+	    if (process.env.NODE_ENV === 'production') {
+                sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
+		    if (err) log.error("Couldn't build news sitemap: " + err);
 	        });
+            }
+            
             redisClient.init(true, function(err) {
-                route.init(app, function (err) {
-                    log.notice(sprintf("Site configured and listening on port %d in %s mode",
-                        app.address().port, app.settings.env));
-                    callback();
-                });
+                route.init(app);
+                log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));
+                callback();
             });
         }
     });

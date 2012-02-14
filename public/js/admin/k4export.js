@@ -8,16 +8,15 @@ function editDocument(article) {
     var imageData;
     if (imageString.length > 0) {
     	imageData = JSON.parse(imageString);
-    }
-    
-    $.post('/admin/edit', { doc: article }, function(data, status) {
+    } else {imageData.imageVersions = false;}
+    // change data
+    $.post('/admin/edit', { doc: article, imageVersionId: imageData.imageVersions }, function(data, status) {
 	if (status != 'success')
-	    alert("Taxonomy change for article '" + article.title + "' failed");
-	if (imageData != null) {
-	  $.post('/admin/edit', {imageVersionId: imageData.imageVersions})
+	    alert("Change for article '" + article.title + "' failed");
+        else{
+            $("#sub"+article.id).removeAttr('disabled');
+            alert("Change success!");	
 	}
-	else
-		$("#sub"+article.id).removeAttr('disabled');
     });
 }
 

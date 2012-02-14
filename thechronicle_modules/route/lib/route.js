@@ -105,6 +105,7 @@ exports.init = function (app) {
     });
 
     app.namespace('/mobile-api', function () {
+        app.get('/All', mobile.listAll);
         app.get('/:groupname', mobile.section);
         app.get('/article/:url', mobile.article);
         app.get('/search/:query', mobile.search);

@@ -1,6 +1,6 @@
-- each section in taxonomy
-  h2 #{section}
-  - each article in model[section]
+- each section, name in model
+  h2 #{name}
+  - each article in section
     a(href="http://www.dukechronicle.com/article/"+article.urls[0])
       h3 #{article.title}
     .article

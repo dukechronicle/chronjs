@@ -34,6 +34,7 @@ body section > #opinion #columnists{width:474px;float:right;}
 body section > #opinion #columnists #columnist-list{float:left;}
 body section > #opinion #columnists #columnist-list .rounded{height:680px;}
 body section > #opinion #columnists #columnist-list .rounded h2 a{padding-left:7px}
+body section > #opinion #columnists #columnist-articles{float:left;}
 body section > #opinion #columnists #columnist-articles .rounded{height:680px;width:326px}
 body section > #opinion #columnists #columnist-articles .columnist-stories{display:none;position:absolute;}
 body section > #opinion #columnists #columnist-articles .columnist-stories .content-container{width:323px}

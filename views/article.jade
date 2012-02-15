@@ -23,7 +23,7 @@
                         img.article(src=doc.images.LargeRect.url)
 
             // caption
-            if (doc.images && doc.images.Original)
+            if (doc.images && doc.images.Original && doc.images.LargeRect)
                 p.photo-credit #{doc.images.Original.photographer}
                 p.photo-caption #{doc.images.Original.caption}
 

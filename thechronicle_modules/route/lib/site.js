@@ -19,7 +19,7 @@ site.setAfterConfigChangeFunction = function(func) {
     afterConfigChangeFunction = func;
 };
 
-site.redirectMobile = function(req, res, next) {
+site.redirectMobile = function (req, res, next) {
     var userAgent = req.headers['user-agent'] || '';
     var path = req.url.split('/');
 
@@ -30,11 +30,15 @@ site.redirectMobile = function(req, res, next) {
         
     for(var i in MOBILE_BROWSER_USER_AGENTS) {
         if(userAgent.indexOf(MOBILE_BROWSER_USER_AGENTS[i]) != -1) {
-            res.redirect('/m');
+            res.redirect('/m' + req.url);
             return;
         }
     }          
     next();
+};
+
+site.mobile = function (req, res, next) {
+    res.sendfile('public/m/index.html');
 };
 
 site.aboutUs = function (req, res) {

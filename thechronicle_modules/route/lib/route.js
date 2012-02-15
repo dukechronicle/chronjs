@@ -23,6 +23,7 @@ exports.init = function (app) {
 
     // redirect mobile browsers to the mobile site
     app.get('/*', site.redirectMobile);
+    app.get('/m/*', site.mobile);
 
     app.get('/about-us', site.aboutUs);
     app.get('/privacy-policy', site.privacyPolicy);

@@ -6,7 +6,6 @@ var log = require('../../log');
 var _ = require('underscore');
 
 mobile.listAll = function (req, res, next) {
-	console.log("HERE?");
 	api.docsByDate(false,false,function(err,docs){
 		if (err) next(err);
 

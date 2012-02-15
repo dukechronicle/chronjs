@@ -6,37 +6,30 @@ require.config({
     }
 });
 
-require(["align", "site"], function(align) {
-    if (Typekit) {
-        alignPage(align);
-    } else {
-        require(["typekit"], function(Typekit) {
-            try{Typekit.load(alignPage(align));}catch(e){}
-        })
-    }
-
-    if (page() === 'front') {
-        require(["slideshow/frontpage-slideshow"], function(slideshow) {
-            slideshow.init();
-        });
-    } else if (page() === 'sports') {
-        require(["slideshow/slideshow"], function(slideshow) {
-        });
-    } else if (page() === 'opinion') {
-        require(["opinion"]);
-    } else if (page() === 'staff' || page() === 'search') {
-        require(['scrollLoad'], function() {
-            var scrollLoadUrl = "staff/#{name}?";
-            var searchboxHTML =
-                    '<h3><a href="/article/URL_REPLACE" class="addedArticle">HEADER_REPLACE</a></h3><div class="date">DATE_REPLACE</div>';
-        });
-    }
+require(["align", "site"], function (align) {
+    loadAfterTypekit(function() {
+        align.pageAlign();
+        if (page() === 'front') align.frontpageAlign();
+        align.verticalAlign();
+    })
 });
 
-function alignPage(align) {
-    align.pageAlign();
-    if (page() === 'front') align.frontpageAlign();
-    align.verticalAlign();
+function loadAfterTypekit(callback) {
+    if ($('html').hasClass("wf-active") || $('html').hasClass("wf-inactive")) {
+        callback();
+    } else {
+        var retry = function() {loadAfterTypekit(callback)};
+        setTimeout(retry, 300)
+    }
+}
+
+
+if (typeof window.THE_CHRONICLE != 'undefined' && typeof window.THE_CHRONICLE.scripts != 'undefined') {
+    window.THE_CHRONICLE.scripts.forEach(function(script) {
+        require([script], function (module) {
+            if (module && typeof module.init == 'function') module.init();
+        });
+    })
 }
 
 function page() {

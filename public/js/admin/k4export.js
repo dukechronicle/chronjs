@@ -14,7 +14,7 @@ function editDocument(article) {
 	    if (status != 'success')
 	        alert("Taxonomy change for article '" + article.title + "' failed");
 	    
-        if (imageData != null) {
+        if (imageData != null && imageData.imageVersions != null) {
 	        $.post('/admin/edit', {imageVersionId: imageData.imageVersions, docId: article.id, original: imageData.originalId, imageType: imageData.imageVersionTypes},
             function(data, status) {
                 if (status != 'success')

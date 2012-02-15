@@ -43,6 +43,7 @@ admin.newsletter = function (req, res, next) {
         if (err) next(err);
         else {
             res.render('admin/newsletter', {
+                js: ['admin/newsletter'],
                 locals: {campaignID: campaignID}
             });
         }
@@ -107,6 +108,7 @@ admin.manage = function (req, res, next) {
     api.docsByDate(beforeKey, beforeID, function (err, docs) {
         if (err) next(err);
         else res.render('admin/manage', {
+            js: ['admin/manage'],
             locals:{
                 docs:docs,
                 hasPrevious:(beforeID != null),
@@ -183,7 +185,8 @@ admin.k4exportData = function (req, res, next) {
     },
     function(err, results) {
         res.render('admin/k4export', {
-	        locals:{
+	        js: ['admin/k4export'],
+            locals:{
                 failed: results.k4.failed,
                 succeeded: results.k4.success,
                 taxonomy: results.taxonomy,

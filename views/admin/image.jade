@@ -1,19 +1,13 @@
+script var SIZES = '!{JSON.stringify(imageDetails)}'
 h1 Crop
 - if(url)
   img#toCrop(src=url)
 p
-  select#sizes(onchange="updateCropSize()")
+  select#sizes
     - each name in imageTypes
       option(value=name) #{name}
   &nbsp;
-  a(onClick="showDescriptions()") What's This?
-- var json = JSON.stringify(imageDetails);
-script(src='/js/crop.js', type='text/javascript')
-script(src='/js/nicedate.js', type='text/javascript')
-script
-  setSizes('!{json}');
-  updateCropSize();
-  setDateStuff("#nicedate","#date","#infoform");
+  a.help What's This?
 p
   form#coords(action='/admin/image/crop', method='POST')
     input#fWidth(type='hidden', name='finalWidth')
@@ -65,5 +59,3 @@ p
     #versions!= partial('version', {locals: {afterUrl: afterUrl, docId: docId, imageTypes: imageTypes, cropSizes: imageDetails, allVersions: versions}})
   - each version in versions
     #versions!= partial('version', {locals: {afterUrl: afterUrl, docId: docId, imageTypes: imageTypes, cropSizes: imageDetails, version: version}})
-  
-  script(src='/js/imgdelete.js', type='text/javascript')

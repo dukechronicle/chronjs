@@ -59,7 +59,7 @@ define(['jquery'], function($) {
             //element.attr("draggable", false);
             //$(this).append(element.get(0));
 
-            if (false && element.parent().data("groupname") && (element.parent().data("groupname") !== $(this).data("groupname"))) {
+            if (element.parent().data("groupname") && (element.parent().data("groupname") !== $(this).data("groupname"))) {
                 removeFromPrevious(docId, element, $(this).data("groupname"), containerElement);
             } else {
                 $.post("/api/group/add", {

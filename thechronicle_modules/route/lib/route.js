@@ -21,9 +21,18 @@ exports.preinit = function (app, afterConfigChangeFunction) {
 
 exports.init = function (app) {
 
+    app.get('/m/*', site.mobile);
+
+    app.namespace('/mobile-api', function () {
+        app.get('/All', mobile.listAll);
+        app.get('/:groupname', mobile.section);
+        app.get('/article/:url', mobile.article);
+        app.get('/search/:query', mobile.search);
+        app.get('/staff/:query', mobile.staff);
+    });
+
     // redirect mobile browsers to the mobile site
     app.get('/*', site.redirectMobile);
-    app.get('/m/*', site.mobile);
 
     app.get('/about-us', site.aboutUs);
     app.get('/privacy-policy', site.privacyPolicy);
@@ -103,14 +112,6 @@ exports.init = function (app) {
         app.post('/group/add', api.site.checkAdmin, externalAPI.addGroup);
         app.post('/group/remove', api.site.checkAdmin, externalAPI.removeGroup);
         app.del('/:docId', api.site.checkAdmin, externalAPI.deleteDocument);
-    });
-
-    app.namespace('/mobile-api', function () {
-        app.get('/All', mobile.listAll);
-        app.get('/:groupname', mobile.section);
-        app.get('/article/:url', mobile.article);
-        app.get('/search/:query', mobile.search);
-        app.get('/staff/:query', mobile.staff);
     });
 
     //The 404 Route (ALWAYS Keep this as the last route)

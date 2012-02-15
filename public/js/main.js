@@ -26,7 +26,9 @@ function loadAfterTypekit(callback) {
 
 if (typeof window.THE_CHRONICLE != 'undefined' && typeof window.THE_CHRONICLE.scripts != 'undefined') {
     window.THE_CHRONICLE.scripts.forEach(function(script) {
-        require([script], function (module) {
+        var scriptParts = script.split("?");
+    
+        require({ urlArgs: scriptParts[1] }, [scriptParts[0]], function (module) {
             if (module && typeof module.init == 'function') module.init();
         });
     })

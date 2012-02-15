@@ -57,6 +57,8 @@ body .vertical-container .vertical{font-size:.9em;color:#444;letter-spacing:1px;
 body .numbered-articles ol li{list-style:decimal outside}
 body .numbered-articles ol li h2{margin-left:-9px}
 body .numbered-articles ol{margin-left:18px;font-family:Georgia,"Century Schoolbook","Times New Roman",Times,serif}
+body .container.image img{display:block}
+body .container.image .caption{float:right;padding-top:3px;color:#444}
 .lighten img{opacity:.8;-webkit-transition:opacity .25s linear;-moz-transition:opacity .25s linear;-ms-transition:opacity .25s linear;-o-transition:opacity .25s linear;transition:opacity .25s linear}
 .lighten a.hover :hover img,.lighten a.rounded-hover :hover img{opacity:1}
 .lighten a.hover :hover h3,.lighten a.rounded-hover :hover h3{color:#36c}

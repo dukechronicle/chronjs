@@ -7,14 +7,22 @@ require.config({
 });
 
 require(["align", "site"], function (align) {
-    Typekit.load({
-        active: function () {
-            align.pageAlign();
-            if (page() === 'front') align.frontpageAlign();
-            align.verticalAlign();        
-        }
-    });
+    loadAfterTypekit(function() {
+        align.pageAlign();
+        if (page() === 'front') align.frontpageAlign();
+        align.verticalAlign();
+    })
 });
+
+function loadAfterTypekit(callback) {
+    if ($('html').hasClass("wf-active") || $('html').hasClass("wf-inactive")) {
+        callback();
+    } else {
+        var retry = function() {loadAfterTypekit(callback)};
+        setTimeout(retry, 300)
+    }
+}
+
 
 if (typeof window.THE_CHRONICLE != 'undefined' && typeof window.THE_CHRONICLE.scripts != 'undefined') {
     window.THE_CHRONICLE.scripts.forEach(function(script) {

@@ -6,7 +6,7 @@ require.config({
     }
 });
 
-require(["align", "typekit", "site"], function (align) {
+require(["align", "site"], function (align) {
     Typekit.load({
         active: function () {
             align.pageAlign();
@@ -16,13 +16,12 @@ require(["align", "typekit", "site"], function (align) {
     });
 });
 
-if (typeof scripts != 'undefined') {
-    for (var i in scripts) {
-        require([scripts[i]], function (module) {
-            if (module && typeof module.init == 'function')
-                module.init();
+if (typeof window.THE_CHRONICLE != 'undefined' && typeof window.THE_CHRONICLE.scripts != 'undefined') {
+    window.THE_CHRONICLE.scripts.forEach(function(script) {
+        require([script], function (module) {
+            if (module && typeof module.init == 'function') module.init();
         });
-    }
+    })
 }
 
 function page() {

@@ -6,9 +6,14 @@ html(lang="en")
 
         // border-radius support in ie
             script(src="/js/curvycorners.js")
+        // typekitload code should always load first because it will cause a relayout of dom
+        script(src="http://use.typekit.com/dwv2bjy.js")
+        script try{Typekit.load();}catch(e){}
 
+        script
+            var THE_CHRONICLE = {};
         - if (typeof js != 'undefined')
-            script var scripts = !{JSON.stringify(js)}
+            script THE_CHRONICLE.scripts = !{JSON.stringify(js)}
 
         - if (typeof css != 'undefined')
             - each file in css

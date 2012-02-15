@@ -21,19 +21,14 @@ site.setAfterConfigChangeFunction = function(func) {
 
 site.redirectMobile = function (req, res, next) {
     var userAgent = req.headers['user-agent'] || '';
-    var path = req.url.split('/');
 
-    // only run the code below this line if they are not accessing the
-    // mobile site            
-    if (path[1] == 'm' || path[1] == 'mobile-api')
-        return next();
-        
     for(var i in MOBILE_BROWSER_USER_AGENTS) {
         if(userAgent.indexOf(MOBILE_BROWSER_USER_AGENTS[i]) != -1) {
             res.redirect('/m' + req.url);
             return;
         }
-    }          
+    }
+
     next();
 };
 

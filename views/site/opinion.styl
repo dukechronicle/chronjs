@@ -9,7 +9,8 @@ container-vertical-spacing = 23px
 body section > #opinion
     .full-banner .rounded-hover
         padding 3px
-
+    .full-banner
+        clear both
     .rounded-hover
         h2
             transition(color, 0.25s, linear)
@@ -105,8 +106,10 @@ body section > #opinion
     column-height = 680px
     column-width = 326px
     #columnists
+        width 474px
         float right
         #columnist-list
+            float left
             .rounded
                 height column-height
                 h2 a
@@ -151,7 +154,7 @@ body section > #opinion
                     padding-top 18px
                     h2
                         font-size 1.3em
-    div
+    > div
         > div
             float left
             .container.block
@@ -175,3 +178,6 @@ body section > #opinion
                         float right
         > .last > .container.block
                 margin-right 0px
+
+    .blog
+        float left

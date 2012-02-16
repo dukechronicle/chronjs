@@ -19,7 +19,7 @@ exports.manage = function (req, httpRes) {
     var afterUrl = req.query.afterUrl;
     var forDocument = req.query.forDocument;
 
-    api.image.getAllOriginals(beforeKey, beforeID, function (err, origs) {
+    api.image.getOriginals(25, beforeKey, beforeID, function (err, origs) {
         httpRes.render('admin/articleimage', {
             filename:'views/admin/articleimage.jade',
             js:['admin/imgdelete'],

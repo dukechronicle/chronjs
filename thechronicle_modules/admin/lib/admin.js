@@ -144,7 +144,7 @@ admin.k4exportData = function (req, res, next) {
 
             api.image.getOriginals(50, null, null, function (err, origs) {
                 origs = _.sortBy(origs, function (image) {
-                    return image.displayName;
+                    return image.displayName.toLowerCase();
                 });
 
                 

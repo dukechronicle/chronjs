@@ -5,6 +5,10 @@ var urlModule = require('url');
 
 var log = require('../../log');
 
+exports.getTimestamp = function (date) {
+    date = date || new Date();
+    return date.getTime() / 1000;
+};
 
 exports.formatTimestamp = function (timestamp, format) {
     var date = new Date(timestamp*1000);

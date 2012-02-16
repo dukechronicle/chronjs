@@ -320,7 +320,9 @@ function querySolr(query, options, callback) {
 		var relatedDocs = [];
 		if(responseObj.moreLikeThis) {
 			var key = Object.keys(responseObj.moreLikeThis)[0];
-			relatedDocs = responseObj.moreLikeThis[key].docs;
+			if(responseObj.moreLikeThis[key] != null) {
+        	    relatedDocs = responseObj.moreLikeThis[key].docs;
+            }
 		} 
 
 		for(var docNum = 0; docNum < docs.length; docNum++) {

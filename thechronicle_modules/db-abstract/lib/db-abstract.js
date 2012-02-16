@@ -32,12 +32,13 @@ function updateViews(callback)
 
 var db = exports;
 
-db.group = require('./group.js');
-db.image = require('./image.js');
-db.taxonomy = require('./taxonomy.js');
-db.search = require('./search.js');
-db.authors = require('./authors.js');
-db.database = require('./database.js');
+db.group = require('./group');
+db.image = require('./image');
+db.taxonomy = require('./taxonomy');
+db.search = require('./search');
+db.authors = require('./authors');
+db.database = require('./database');
+db.survey = require('./survey');
 
 db.getDatabaseName = function() {
     return DATABASE;

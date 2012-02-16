@@ -5,6 +5,9 @@ form(action='/admin/add', method='POST')
         label(for='title') Title&nbsp;
         input#title(type='text', name='doc[title]', style='width:600px')
     p(style="margin-bottom: 2em")
+        label(for='title') Subhead&nbsp;
+        input#title(type='text', name='doc[subhead]', style='width:600px')
+    p(style="margin-bottom: 2em")
         label(for='section') Section&nbsp;
         select(name='doc[taxonomy]', style='width: 600px')
           option(value='') Select a section

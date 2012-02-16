@@ -38,6 +38,7 @@ site.frontpage = function (req, res) {
     api.site.getFrontPageContent(function (err, model) {
         res.render('site/index', {
             css:asereje.css(['slideshow/style', 'container/style', 'site/frontpage']),
+            js:['slideshow/frontpage-slideshow'],
             filename:'views/site/index.jade',
             locals: {
                 model:model
@@ -61,6 +62,7 @@ site.sports = function (req, res) {
     api.site.getSportsPageContent(function (err, model, children) {
         res.render('site/sports', {
             css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
+            js:['slideshow/slideshow'],
             subsections:[children.men, children.women],
             filename:'views/site/sports.jade',
             model:model
@@ -72,6 +74,7 @@ site.opinion = function (req, res) {
     api.site.getOpinionPageContent(function (err, model, children) {
         res.render('site/opinion', {
             css:asereje.css(['container/style', 'site/section', 'site/opinion']),
+            js:['opinion'],
             subsections:children,
             filename:'views/site/opinion.jade',
             model:model
@@ -126,6 +129,7 @@ site.search = function (req, res, next) {
         if (err) next(err);
         else res.render('site/search', {
             css:asereje.css(['container/style', 'site/search']),
+            js:['scrollLoad'],
             locals: {
                 docs: docs,
                 currentFacets: req.query.facets || '',
@@ -143,6 +147,7 @@ site.staff = function (req, res) {
     api.site.getAuthorContent(name, function (err, docs) {
 	res.render('site/people', {
             css:asereje.css(['container/style', 'site/people']),
+            js:['scrollLoad'],
             locals:{
                 docs: docs,
                 name: globalFunctions.capitalizeWords(name)

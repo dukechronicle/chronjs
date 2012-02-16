@@ -143,8 +143,9 @@ api.editDoc = function(docid, fields, callback) {
 };
 
 api.deleteDoc = function(docId, rev, callback) {
-    db.remove(docId, rev, function () {
-        api.search.unindexArticle(docId, callback);
+    db.remove(docId, rev, function (err) {
+        if (err) callback(err);
+        else api.search.unindexArticle(docId, callback);
     });
 };
 

@@ -199,7 +199,7 @@ site.search = function (req, res, next) {
         if (err) next(err);
         else res.render('site/search', {
             css:asereje.css(['container/style', 'site/search']),
-            js:['scrollLoad'],
+            js:['scrollLoad?v=2'],
             locals: {
                 docs: docs,
                 currentFacets: req.query.facets || '',
@@ -217,7 +217,7 @@ site.staff = function (req, res) {
     api.site.getAuthorContent(name, function (err, docs) {
 	res.render('site/people', {
             css:asereje.css(['container/style', 'site/people']),
-            js:['scrollLoad'],
+            js:['scrollLoad?v=2'],
             locals:{
                 docs: docs,
                 name: globalFunctions.capitalizeWords(name)

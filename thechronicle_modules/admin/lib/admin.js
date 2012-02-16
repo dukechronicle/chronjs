@@ -5,6 +5,7 @@ var fs = require('fs');
 var md = require('node-markdown').Markdown;
 var solr = require('solr');
 var sprintf = require('sprintf').sprintf;
+var _ = require("underscore");
 
 var api = require('../../api');
 var config = require("../../config");
@@ -141,7 +142,12 @@ admin.k4exportData = function (req, res, next) {
         images: function(callback) {
             var imageTypes = config.get('IMAGE_TYPES');
 
-            api.image.getAllOriginals(null, null, function (err, origs) {
+            api.image.getOriginals(50, null, null, function (err, origs) {
+                origs = _.sortBy(origs, function (image) {
+                    return image.displayName;
+                });
+
+                
                 var imageVersionIds = [];
                 origs.forEach(function(image) {
                     image.imageVersions.forEach(function(versionId) {

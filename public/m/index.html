@@ -90,7 +90,7 @@
             if(articleListCache[category] == null || forced || new Date().getTime() - articleListCache[category].timestamp > ARTICLE_LIST_CACHE_TIMEOUT)
             {
                 console.log("article list : cachemiss");
-                var url = "/mobile-api/" + category;
+                var url = "/api/" + category;
                 //console.log(url);
                 $.ajax({
                   url: url,
@@ -144,7 +144,7 @@
             {
                //console.log("article cache: cachemiss");
                $.ajax({
-                   url: "/mobile-api/article/" + articleURL,
+                   url: "/api/article/" + articleURL,
                    dataType: "jsonp",
                    cache: false,
                    success: function(data){

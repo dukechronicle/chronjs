@@ -2,6 +2,7 @@ var survey = exports;
 
 var db = require('./db-abstract');
 var globalFunctions = require('../../global-functions');
+var log = require('../../log');
 
 var _ = require('underscore');
 
@@ -12,21 +13,15 @@ survey.add = function (title, answers, taxonomy, callback) {
         taxonomy: taxonomy,
         created: globalFunctions.getTimestamp(),
         type: 'survey',
-        results: _.reduce(answers,
+        answers: _.reduce(answers,
                           function (memo, answer) { memo[answer] = 0 },
-                          {});
+                          {})
     };        
     db.save(survey, callback);
 };
 
-survey.edit = function (id, rev, fields, callback) {
-    if (rev)
-        db.merge(id, rev, fields, callback);
-    else
-        db.get(id, function (err, doc) {
-            if (err) callback(err);
-            else db.merge(doc._id, doc._rev, fields, callback);
-        });
+survey.edit = function (id, fields, callback) {
+    db.merge(id, fields, callback);
 };
 
 survey.getSurvey = function (id, callback) {
@@ -36,28 +31,28 @@ survey.getSurvey = function (id, callback) {
 survey.getBySection = function (taxonomy, query, callback) {
     query = query || {};
     if (query.descending) {
-        query.startkey = [taxonomy];
-        query.endkey = [taxonomy, {}];
-    }
-    else {
         query.startkey = [taxonomy, {}];
         query.endkey = [taxonomy];
     }
-    db.view('survey/taxonomy', query, callback);
+    else {
+        query.startkey = [taxonomy];
+        query.endkey = [taxonomy, {}];
+    }
+    db.view('surveys/taxonomy', query, callback);
 };
 
 survey.getByTitle = function (title, query, callback) {
     query = query || {};
     query.key = title;
-    db.view('survey/title', query, callback);
+    db.view('surveys/title', query, callback);
 };
 
 survey.getByVotes = function (query, callback) {
     query = query || {};
-    db.view('survey/votes', query, callback);
+    db.view('surveys/votes', query, callback);
 };
 
 survey.getByDate = function (query, callback) {
     query = query || {};
-    db.view('survey/date', query, callback);
+    db.view('surveys/date', query, callback);
 };

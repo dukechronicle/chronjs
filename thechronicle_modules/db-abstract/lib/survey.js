@@ -19,11 +19,14 @@ survey.add = function (title, answers, taxonomy, callback) {
     db.save(survey, callback);
 };
 
-survey.edit = function (id, fields, callback) {
-    db.get(id, function (err, doc) {
-        if (err) callback(err);
-        else db.merge(id, doc._rev, fields, callback);
-    });
+survey.edit = function (id, rev, fields, callback) {
+    if (rev)
+        db.merge(id, rev, fields, callback);
+    else
+        db.get(id, function (err, doc) {
+            if (err) callback(err);
+            else db.merge(doc._id, doc._rev, fields, callback);
+        });
 };
 
 survey.getSurvey = function (id, callback) {

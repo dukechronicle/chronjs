@@ -6,13 +6,8 @@ var globalFunctions = require('../../global-functions');
 
 var _ = require("underscore");
 
-exports.bindPath = function (app) {
-    return function() {
-        app.get('/group/:group', api.site.checkAdmin, _getDocsInSection);
-    }
-};
 
-function _getDocsInSection(req,res,next) {
+exports.renderLayout = function (req,res,next) {
     var section = req.query.section;
     
     if (section) {
@@ -48,6 +43,8 @@ function renderPage(req,res,section_docs) {
     api.group.docs(layoutConfig[group].namespace, null, function (err, group_docs) {
         res.render("admin/page-layout",
         {
+            css:['admin/layout/styles'],
+            js:['admin/layout'],
             locals:{
                 page: group,
                 groups: layoutConfig[group].groups,

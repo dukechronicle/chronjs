@@ -54,9 +54,11 @@ body a.list-story.last{padding-bottom:2px}
 body a.hover:hover,body a.hover.selected{color:#36c;border-bottom-color:#4d90f0}
 body .vertical-container{visibility:hidden;font-size:1em;-webkit-transform:rotate(-90deg);-moz-transform:rotate(-90deg);-ms-transform:rotate(-90deg);-o-transform:rotate(-90deg);transform:rotate(-90deg);white-space:nowrap;display:block;float:left;-webkit-transform-origin:0 100%;-moz-transform-origin:0 100%;-ms-transform-origin:0 100%;-o-transform-origin:0 100%;transform-origin:0 100%;position:absolute;margin-top:-14px;margin-left:1px;}
 body .vertical-container .vertical{font-size:.9em;color:#444;letter-spacing:1px;text-shadow:0 1px 1px #fff;text-transform:uppercase;margin-bottom:-2px}
-body .most-popular ol li{list-style:decimal outside}
-body .most-popular ol li h2{margin-left:-9px}
-body .most-popular ol{margin-left:18px;font-family:Georgia,"Century Schoolbook","Times New Roman",Times,serif}
+body .numbered-articles ol li{list-style:decimal outside}
+body .numbered-articles ol li h2{margin-left:-9px}
+body .numbered-articles ol{margin-left:18px;font-family:Georgia,"Century Schoolbook","Times New Roman",Times,serif}
+body .container.image img{display:block}
+body .container.image .caption{float:right;padding-top:3px;color:#444}
 .lighten img{opacity:.8;-webkit-transition:opacity .25s linear;-moz-transition:opacity .25s linear;-ms-transition:opacity .25s linear;-o-transition:opacity .25s linear;transition:opacity .25s linear}
 .lighten a.hover :hover img,.lighten a.rounded-hover :hover img{opacity:1}
 .lighten a.hover :hover h3,.lighten a.rounded-hover :hover h3{color:#36c}

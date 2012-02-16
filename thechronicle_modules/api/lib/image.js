@@ -31,12 +31,19 @@ function _getMagickString(x1, y1, x2, y2) {
     return w.toString() + 'x' + h.toString() + '+' + x1.toString() + '+' + y1.toString();
 }
 
-image.addVersionToDoc = function(docId, originalImageId, versionImageId, imageType, callback) {
+image.addVersionsToDoc = function(docId, originalImageId, versionImageIds, imageTypes, callback) {
+    // make singular arguments into an array if needed    
+    if(!Array.isArray(versionImageIds)) versionImageIds = [versionImageIds];
+    if(!Array.isArray(imageTypes)) imageTypes = [imageTypes];
+    
     api.docsById(docId,
     function (err, doc) {
         var images = doc.images;
         if (!images) images = {};
-        images[imageType] = versionImageId;
+
+        for(var i = 0; i < versionImageIds.length; i ++) {        
+            images[imageTypes[i]] = versionImageIds[i];
+        }
         images["Original"] = originalImageId;
 
         api.editDoc(doc._id, {

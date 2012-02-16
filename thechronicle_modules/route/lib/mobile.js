@@ -5,10 +5,21 @@ var log = require('../../log');
 
 var _ = require('underscore');
 
+mobile.listAll = function (req, res, next) {
+	console.log("HERE?");
+	api.docsByDate(false,false,function(err,docs){
+		if (err) next(err);
+
+        var result = _.map(docs, function (doc) {
+            return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls};
+        });
+        sendResponse(res, req.query.callback, result);
+	});
+};
 
 mobile.section = function (req, res, next) {
     var groupName = req.params.groupname;
-    api.taxonomy.docs(groupName, 10, function (err, docs) {
+	api.taxonomy.docs(groupName, 10, function (err, docs) {
         if (err) next(err);
         else {
             var result = _.map(docs, function (doc) {
@@ -37,7 +48,7 @@ mobile.article = function (req, res, next) {
 
 mobile.search = function (req, res, next) {
     var wordsQuery = req.params.query.replace('-', ' ');
-    api.search.docsBySearchQuery(wordsQuery, req.query.sort, req.query.order, req.query.facets, req.query.page, function (err, docs, facets) {
+    api.search.docsBySearchQuery(wordsQuery, req.query.sort, req.query.order, req.query.facets, req.query.page, true, function (err, docs, facets) {
         if (err) next(err);
         else {
             var result = { docs: docs, facets: facets };

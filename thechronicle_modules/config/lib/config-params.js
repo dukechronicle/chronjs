@@ -84,278 +84,298 @@ var configParams = [
         name: 'TAXONOMY',
         description: 'Taxonomy tree for the site, used for categorizing articles and navigation',
         defaultValue: [
-                {
-                    "News": [
-                        {
-                            "University": [
-                                {
-                                    "Residence Life": []
-                                },
-                                {
-                                    "Dining": []
-                                },
-                                {
-                                    "DSG": []
-                                },
-                                {
-                                    "Graduate and Professional Schools": []
-                                },
-                                {
-                                    "Student Life": []
-                                },
-                                {
-                                    "Campus Crime": []
-                                },
-                                {
-                                    "Academics": []
-                                },
-                                {
-                                    "Board of Trustees": []
-                                }
-                            ]
-                        },
-                        {
-                            "Local & National": [
-                                {
-                                    "City of Durham": []
-                                },
-                                {
-                                    "Higher Education": []
-                                },
-                                {
-                                    "Durham Crime": []
-                                },
-                                {
-                                    "North Carolina": []
-                                },
-                                {
-                                    "National News and Politics": []
-                                }
-                            ]
-                        },
-                        {
-                            "Health & Science": [
-                                {
-                                    "Research": []
-                                },
-                                {
-                                    "Pratt": []
-                                },
-                                {
-                                    "DUHS": []
-                                },
-                                {
-                                    "Environment & Sustainability": []
-                                },
-                                {
-                                    "Student Health": []
-                                },
-                                {
-                                    "School of Medicine": []
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "Sports": [
-                        {
-                            "Men": [
-                                {
-                                    "Baseball": []
-                                },
-                                {
-                                    "Basketball": []
-                                },
-                                {
-                                    "Cross country": []
-                                },
-                                {
-                                    "Fencing": []
-                                },
-                                {
-                                    "Football": []
-                                },
-                                {
-                                    "Golf": []
-                                },
-                                {
-                                    "Lacrosse": []
-                                },
-                                {
-                                    "Soccer": []
-                                },
-                                {
-                                    "Swimming and diving": []
-                                },
-                                {
-                                    "Tennis": []
-                                },
-                                {
-                                    "Track and field": []
-                                },
-                                {
-                                    "Wrestling": []
-                                }
-                            ]
-                        },
-                        {
-                            "Women": [
-                                {
-                                    "Basketball": []
-                                },
-                                {
-                                    "Cross country": []
-                                },
-                                {
-                                    "Fencing": []
-                                },
-                                {
-                                    "Field hockey": []
-                                },
-                                {
-                                    "Golf": []
-                                },
-                                {
-                                    "Lacrosse": []
-                                },
-                                {
-                                    "Rowing": []
-                                },
-                                {
-                                    "Soccer": []
-                                },
-                                {
-                                    "Swimming and diving": []
-                                },
-                                {
-                                    "Tennis": []
-                                },
-                                {
-                                    "Track and field": []
-                                },
-                                {
-                                    "Volleyball": []
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "Opinion": []
-                },
-                {
-                    "Recess": [
-                        {
-                            "Page Two": []
-                        },
-                        {
-                            "Arts": []
-                        },
-                        {
-                            "Music": []
-                        },
-                        {
-                            "Film and Literature": []
-                        }
-                    ]
-                },
-                {
-                    "Towerview": []
-                }
-            ]
+	        {
+		        "News": [
+			        {
+				        "University": [
+					        {
+						        "Academics": []
+					        },
+					        {
+						        "Board of Trustees": []
+					        },
+					        {
+						        "Campus Crime": []
+					        },
+					        {
+						        "Dining": []
+					        },
+					        {
+						        "DSG": []
+					        },
+					        {
+						        "Graduate and Professional Schools": []
+					        },
+					        {
+						        "Residence Life": []
+					        },
+					        {
+						        "Student Life": []
+					        }
+				        ]
+			        },
+			        {
+				        "Local & National": [
+					        {
+						        "City of Durham": []
+					        },
+					        {
+						        "Durham Crime": []
+					        },
+					        {
+						        "Higher Education": []
+					        },
+					        {
+						        "National News and Politics": []
+					        },
+					        {
+						        "North Carolina": []
+					        }
+				        ]
+			        },
+			        {
+				        "Health & Science": [
+					        {
+						        "DUHS": []
+					        },
+					        {
+						        "Environment & Sustainability": []
+					        },
+					        {
+						        "Pratt": []
+					        },
+					        {
+						        "Research": []
+					        },
+					        {
+						        "School of Medicine": []
+					        },
+					        {
+						        "Student Health": []
+					        }
+				        ]
+			        }
+		        ]
+	        },
+	        {
+		        "Sports": [
+			        {
+				        "Men": [
+					        {
+						        "Baseball": []
+					        },
+					        {
+						        "Basketball": []
+					        },
+					        {
+						        "Cross country": []
+					        },
+					        {
+						        "Fencing": []
+					        },
+					        {
+						        "Football": []
+					        },
+					        {
+						        "Golf": []
+					        },
+					        {
+						        "Lacrosse": []
+					        },
+					        {
+						        "Soccer": []
+					        },
+					        {
+						        "Swimming and diving": []
+					        },
+					        {
+						        "Tennis": []
+					        },
+					        {
+						        "Track and field": []
+					        },
+					        {
+						        "Wrestling": []
+					        }
+				        ]
+			        },
+			        {
+				        "Women": [
+					        {
+						        "Basketball": []
+					        },
+					        {
+						        "Cross country": []
+					        },
+					        {
+						        "Fencing": []
+					        },
+					        {
+						        "Field hockey": []
+					        },
+					        {
+						        "Golf": []
+					        },
+					        {
+						        "Lacrosse": []
+					        },
+					        {
+						        "Rowing": []
+					        },
+					        {
+						        "Soccer": []
+					        },
+					        {
+						        "Swimming and diving": []
+					        },
+					        {
+						        "Tennis": []
+					        },
+					        {
+						        "Track and field": []
+					        },
+					        {
+						        "Volleyball": []
+					        }
+				        ]
+			        }
+		        ]
+	        },
+	        {
+		        "Opinion": [
+			        {
+				        "Letter to the Editor": []
+			        },
+			        {
+				        "Editorial Board": []
+			        },
+			        {
+				        "Column": []
+			        },
+			        {
+				        "Guest Commentary": []
+			        },
+			        {
+				        "Editor's Note": []
+			        }
+		        ]
+	        },
+	        {
+		        "Recess": [
+			        {
+				        "Page Two": []
+			        },
+			        {
+				        "Arts": []
+			        },
+			        {
+				        "Music": []
+			        },
+			        {
+				        "Film": []
+			        },
+			        {
+				        "Literature": []
+			        }
+		        ]
+	        },
+	        {
+		        "Towerview": []
+	        }
+        ]
     },
     {
         name: 'LAYOUT_GROUPS',
         description: 'Groups used for layouts',
         defaultValue: {
-                "Frontpage": {
-                    "namespace": [
-                        "Layouts",
-                        "Frontpage"
-                    ],
-                    "groups": [
-                        "Breaking",
-                        "Slideshow",
-                        "Left Headlines",
-                        "Right Headlines",
-                        "Opinion",
-                        "News",
-                        "Sports",
-                        "Recess",
-                        "Towerview"
-                    ]
-                },
-                "News": {
-                    "namespace": [
-                        "Layouts",
-                        "News"
-                    ],
-                    "groups": [
-                        "Featured",
-                        "Right Headlines",
-                        "Headlines",
-                        "Stories"
-                    ]
-                },
-                "Sports": {
-                    "namespace": [
-                        "Layouts",
-                        "Sports"
-                    ],
-                    "groups": [
-                        "Slideshow",
-                        "Stories"
-                    ]
-                },
-                "Opinion": {
-                    "namespace": [
-                        "Layouts",
-                        "Opinion"
-                    ],
-                    "groups": [
-                        "Featured",
-                    ]
-                },
-                "Recess": {
-                    "namespace": [
-                        "Layouts",
-                        "Recess"
-                    ],
-                    "groups": [
-                        "Featured",
-                        "Sandbox",
-                        "Interviews",
-                        "Reviews",
-                        "Stories"
-                    ]
-                },
-                "Towerview": {
-                    "namespace": [
-                        "Layouts",
-                        "Towerview"
-                    ],
-                    "groups": [
-                        "Featured",
-                        "Savvy",
-                        "Wisdom",
-                        "Editors Note",
-                        "Prefix"
-                    ]
-                },
-                "Newsletter": {
-		            "namespace": [
-			            "Layouts",
-			            "Newsletter"
-		            ],
-		            "groups": [
-			            "News",
-			            "Sports",
-			            "Opinion",
-			            "Recess",
-			            "Towerview"
-		            ]
-	            }
+	        "Frontpage": {
+		        "namespace": [
+			        "Layouts",
+			        "Frontpage"
+		        ],
+		        "groups": [
+			        "Top Headline",
+			        "Breaking",
+			        "Slideshow",
+			        "Left Headlines",
+			        "Right Headlines",
+			        "Opinion",
+			        "News",
+			        "Sports",
+			        "Recess",
+			        "Towerview"
+		        ]
+	        },
+	        "News": {
+		        "namespace": [
+			        "Layouts",
+			        "News"
+		        ],
+		        "groups": [
+			        "Featured",
+			        "Right Headlines",
+			        "Headlines",
+			        "Stories"
+		        ]
+	        },
+	        "Sports": {
+		        "namespace": [
+			        "Layouts",
+			        "Sports"
+		        ],
+		        "groups": [
+			        "Slideshow",
+			        "Stories"
+		        ]
+	        },
+	        "Opinion": {
+		        "namespace": [
+			        "Layouts",
+			        "Opinion"
+		        ],
+		        "groups": [
+			        "Featured"
+		        ]
+	        },
+	        "Recess": {
+		        "namespace": [
+			        "Layouts",
+			        "Recess"
+		        ],
+		        "groups": [
+			        "Featured",
+			        "Music",
+			        "Film",
+			        "Art",
+			        "Stories"
+		        ]
+	        },
+	        "Towerview": {
+		        "namespace": [
+			        "Layouts",
+			        "Towerview"
+		        ],
+		        "groups": [
+			        "Featured",
+			        "Savvy",
+			        "Wisdom",
+			        "Editors Note",
+			        "Prefix"
+		        ]
+	        },
+	        "Newsletter": {
+		        "namespace": [
+			        "Layouts",
+			        "Newsletter"
+		        ],
+		        "groups": [
+			        "News",
+			        "Sports",
+			        "Opinion",
+			        "Recess",
+			        "Towerview"
+		        ]
+	        }
         }
     },
     {

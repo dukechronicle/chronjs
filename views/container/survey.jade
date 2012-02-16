@@ -1,0 +1,10 @@
+.container.clearfix
+    .vertical-container
+        h2.vertical Survey
+
+    .rounded
+        .content-container
+            h1 #{survey.title}
+              - each votes, choice in survey.answers
+                a.hover(href="#")
+                  h2 #{choice}

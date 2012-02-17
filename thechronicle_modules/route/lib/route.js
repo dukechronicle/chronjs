@@ -27,6 +27,7 @@ exports.init = function (app) {
         app.get('/search/:query', siteApi.search);
         app.get('/staff/:query', siteApi.staff);
 
+        app.post('/survey/vote', siteApi.voteSurvey);
         app.post('/group/add', api.site.checkAdmin, siteApi.addGroup);
         app.post('/group/remove', api.site.checkAdmin, siteApi.removeGroup);
         app.del('/:docId', api.site.checkAdmin, siteApi.deleteDocument);
@@ -36,6 +37,8 @@ exports.init = function (app) {
 
     // redirect mobile browsers to the mobile site
     app.get('/*', site.redirectMobile);
+
+    app.get('/survey', site.survey);
 
     app.get('/about-us', site.aboutUs);
     app.get('/privacy-policy', site.privacyPolicy);

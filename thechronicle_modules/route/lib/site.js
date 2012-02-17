@@ -36,6 +36,16 @@ site.mobile = function (req, res, next) {
     res.sendfile('public/m/index.html');
 };
 
+site.survey = function (req, res, next) {
+    api.survey.getSurvey('8f094837374829e664dc4ea896015695', function (err, doc) {
+        res.render('container/survey', {
+            js: ['survey'],
+            css: asereje.css(['container/style', 'container/survey']),
+            locals: { survey: doc }
+        });
+    }); 
+};
+
 site.aboutUs = function (req, res) {
     res.render('pages/about-us', {
 	filename: 'pages/about-us',

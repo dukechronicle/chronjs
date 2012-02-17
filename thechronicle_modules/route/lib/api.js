@@ -105,6 +105,16 @@ siteApi.deleteDocument =  function (req, res, next) {
     });
 };
 
+siteApi.voteSurvey = function (req, res, next) {
+    api.survey.vote(req.body.id, req.body.answer, function (err, _res) {
+        if (err) {
+            log.warning(err);
+            _res.err = err;
+        }
+        res.send(_res);
+    });
+};
+
 function sendResponseJSONP(res, callback, result) {
     if (callback == null)
         res.send(result);

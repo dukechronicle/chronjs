@@ -27,6 +27,7 @@ define(['jquery'], function ($) {
 
                 $(".choice").each(function () {
                     var percent = parseInt($(this).attr("votes")) / total;
+                    $(this).append("<p>"+Math.round(percent * 100) + "%</p>");
                     $(this).append("<div>");
                     $(this).children(":last")
                         .addClass("bar")

@@ -355,7 +355,7 @@ site.logout = function (req, res) {
 
 site.config = function (req, res) {
     if (api.accounts.isAdmin(req))
-        api.site.renderConfigPage(res);
+        api.site.renderConfigPage(req, res);
     else
         api.site.askForLogin(res, '/config');
 };
@@ -364,7 +364,7 @@ site.configData = function (req, res) {
     if (api.accounts.isAdmin(req))
         config.setUp(req.body, function (err) {
             if (err)
-		        api.site.renderConfigPage(res,err);
+		        api.site.renderConfigPage(req, res, err);
 	        else 
                 afterConfigChangeFunction(function (err) {
 		            if (err) log.error(err);

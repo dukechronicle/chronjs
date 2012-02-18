@@ -140,7 +140,7 @@ admin.k4exportData = function (req, res, next) {
             });
         },
         images: function(callback) {
-            var imageTypes = config.get('IMAGE_TYPES');
+            var imageTypes = api.image.IMAGE_TYPES;
 
             api.image.getOriginals(50, null, null, function (err, origs) {
                 origs = _.sortBy(origs, function (image) {

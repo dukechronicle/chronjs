@@ -13,6 +13,34 @@ var image = exports;
 
 var THUMB_DIMENSIONS = '100x100';
 
+image.IMAGE_TYPES = {
+    LargeRect: {
+        width: 636,
+        height: 393,
+        description: "Used as the image on the article page, as well as for slideshows and featured article positions on the layouts. All article images should have it."
+    },
+    ThumbRect: {
+        width: 186,
+        height: 133,
+        description: "Used as the thumbnail for articles on all layout pages, and in the newsletter. Any image for an article that will be on the layout should have it."
+    },
+    ThumbRectL: {
+        width: 276,
+        height: 165,
+        description: "Used for the first article in each of the following layout groups: the Frontpage layout page for the Recess and Towerview groups, the Towerview layout page for the Savvy and Wisdom groups, and the Recess layout page for the Music, Film, and Art groups."
+    },
+    ThumbSquareM: {
+        width: 183,
+        height: 183,
+        description: "Used for articles on the towerview layout that are in the featured group in position 2 or 3, and for articles in the sports layout in the stories group"
+    },
+    ThumbWide: {
+        width: 300,
+        height: 120,
+        description: "Used for articles on the towerview layout that are in the prefix group."
+    }
+};
+
 function _deleteFiles(paths, callback) {
     async.reduce(paths, [], function(memo, item, callback) {
         memo.push(function(acallback) {

@@ -13,8 +13,8 @@ var db = require("../../db-abstract");
 // so the server knows it has to reindex all articles not using the newest indexing version. Keep the number numeric!
 var INDEX_VERSION = 0.5011;
 var RESULTS_PER_PAGE = 25;
-
 var MAX_MATCHED_PHRASES_PER_ARTICLE = 4;
+var COMMON_WORDS = ["the","be","to","of","and","a","in","that","have","it","for","not","on","with","he","as","you","do","at", "I"];
 
 var client = null;
 
@@ -236,10 +236,12 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 
         // replace teaser with text around matched terms
         var regexString = "";
-            words.forEach(function(word) {
+        words.forEach(function(word) {
+            if(COMMON_WORDS.indexOf(word) == -1) {
                 if(regexString.length > 0) regexString += "|";
                 regexString += "\\b"+word+"\\b";
-            });
+            }     
+        });
         var regex = new RegExp(regexString,"gi");
         
         docs.forEach(function(doc) {

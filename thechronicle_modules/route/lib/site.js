@@ -19,22 +19,21 @@ site.setAfterConfigChangeFunction = function(func) {
     afterConfigChangeFunction = func;
 };
 
-site.redirectMobile = function(req, res, next) {
+site.redirectMobile = function (req, res, next) {
     var userAgent = req.headers['user-agent'] || '';
-    var path = req.url.split('/');
 
-    // only run the code below this line if they are not accessing the
-    // mobile site            
-    if (path[1] == 'm' || path[1] == 'mobile-api')
-        return next();
-        
     for(var i in MOBILE_BROWSER_USER_AGENTS) {
         if(userAgent.indexOf(MOBILE_BROWSER_USER_AGENTS[i]) != -1) {
-            res.redirect('/m');
+            res.redirect('/m' + req.url);
             return;
         }
-    }          
+    }
+
     next();
+};
+
+site.mobile = function (req, res, next) {
+    res.sendfile('public/m/index.html');
 };
 
 site.aboutUs = function (req, res) {
@@ -200,7 +199,7 @@ site.search = function (req, res, next) {
         if (err) next(err);
         else res.render('site/search', {
             css:asereje.css(['container/style', 'site/search']),
-            js:['scrollLoad'],
+            js:['scrollLoad?v=2'],
             locals: {
                 docs: docs,
                 currentFacets: req.query.facets || '',
@@ -218,7 +217,7 @@ site.staff = function (req, res) {
     api.site.getAuthorContent(name, function (err, docs) {
 	res.render('site/people', {
             css:asereje.css(['container/style', 'site/people']),
-            js:['scrollLoad'],
+            js:['scrollLoad?v=2'],
             locals:{
                 docs: docs,
                 name: globalFunctions.capitalizeWords(name)

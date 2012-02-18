@@ -14,6 +14,8 @@ var db = require("../../db-abstract");
 var INDEX_VERSION = 0.5011;
 var RESULTS_PER_PAGE = 25;
 
+var MAX_MATCHED_PHRASES_PER_ARTICLE = 4;
+
 var client = null;
 
 var search = {};
@@ -232,14 +234,56 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
     function(err, docs, facets) {
         if(err) return callback(err);
 
-        if(emboldenMatchedTerms) {
-            var regexString = "";
+        // replace teaser with text around matched terms
+        var regexString = "";
             words.forEach(function(word) {
                 if(regexString.length > 0) regexString += "|";
                 regexString += "\\b"+word+"\\b";
             });
-            var regex = new RegExp(regexString,"gi");
+        var regex = new RegExp(regexString,"gi");
+        
+        docs.forEach(function(doc) {
+            var foundIndexes = [];
+            var startPos = 0;  
+            
+            doc.body = doc.body.replace(/<[^>]*>/gm,"");
+            while(startPos != -1) {
+                startPos = doc.body.regexIndexOf(regex,startPos);
+                if(startPos != -1) {
+                    foundIndexes.push(startPos);
+                    startPos ++;
+                }
+            }              
 
+            var newTeaser = "...";
+            var usedIndexes = [];
+            for(var i = 0; i < foundIndexes.length; i ++) {
+                if(usedIndexes.length >= MAX_MATCHED_PHRASES_PER_ARTICLE) break;
+
+                var indexIsWithinOtherMatchedPhrase = false;
+                for(var i2 = 0; i2 < usedIndexes.length; i2 ++) {
+                    if(foundIndexes[i] >= usedIndexes[i2].start && foundIndexes[i] <= usedIndexes[i2].end) {
+                        indexIsWithinOtherMatchedPhrase = true;
+                        break;
+                    }
+                }
+                
+                if(!indexIsWithinOtherMatchedPhrase) {
+                    var start = foundIndexes[i];
+                    var end = foundIndexes[i];
+
+                    end = doc.body.indexOf(". ", start);
+                    if(end - start > 100 || end == -1) end = doc.body.indexOf(".", start);
+
+                    var newText = doc.body.substring(start, end);
+                    if(newText.split(" ").length > 3) newTeaser = newTeaser + doc.body.substring(start, end) + "...";
+                    usedIndexes.push({start: start, end:end});
+                }
+            }
+            if(newTeaser != "...") doc.teaser = newTeaser;
+        });
+
+        if(emboldenMatchedTerms) {
             // bold all matched words
             docs.forEach(function(doc) {
                 if(doc.teaser) doc.teaser = doc.teaser.replace(regex, function(m){return _embolden(m)});
@@ -429,4 +473,9 @@ function _sortObjByKeys(arr) {
 
 function _embolden(match) {
     return "<b>"+match+"</b>";
-};  
+};
+
+String.prototype.regexIndexOf = function(regex, startpos) {
+    var indexOf = this.substring(startpos || 0).search(regex);
+    return (indexOf >= 0) ? (indexOf + (startpos || 0)) : indexOf;
+};

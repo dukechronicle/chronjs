@@ -275,11 +275,25 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
                     end = doc.body.indexOf(". ", start);
                     if(end - start > 100 || end == -1) end = doc.body.indexOf(".", start);
 
-                    var newText = doc.body.substring(start, end);
-                    if(newText.split(" ").length > 3) newTeaser = newTeaser + doc.body.substring(start, end) + "...";
-                    usedIndexes.push({start: start, end:end});
+                    var okToAdd = true;
+                    for(var i2 = 0; i2 < usedIndexes.length; i2 ++) {
+                        if(usedIndexes[i2].end == end && usedIndexes[i2].start > start) {
+                            usedIndexes[i2].start = start;
+                            okToAdd = false;
+                            break;
+                        }
+                    }
+                    
+                    if(okToAdd) {
+                        usedIndexes.push({start: start, end:end});
+                    }
                 }
             }
+
+            usedIndexes.forEach(function(index) {
+                var newText = doc.body.substring(index.start, index.end);
+                if(newText.split(" ").length > 3) newTeaser = newTeaser + newText + "...";
+            });
             if(newTeaser != "...") doc.teaser = newTeaser;
         });
 

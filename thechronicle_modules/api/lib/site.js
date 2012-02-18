@@ -73,7 +73,8 @@ site.renderConfigPage = function(req, res, err) {
 	}
 
 	res.render('config/config', {
-		locals : {
+		js: ['jquery.textarea-expander?v=2'],
+        locals : {
 			configParams : config.getParameters(),
 			profileName : config.getProfileNameKey(),
 			profileValue : config.getActiveProfileName(),

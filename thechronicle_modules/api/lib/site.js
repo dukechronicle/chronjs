@@ -65,7 +65,7 @@ site.askForLogin = function(res, afterLoginPage, username, err) {
 	});
 };
 
-site.renderConfigPage = function(res, err) {
+site.renderConfigPage = function(req, res, err) {
 	if(err) {
 		if( typeof err === 'object')
 			err = JSON.stringify(err);
@@ -79,7 +79,8 @@ site.renderConfigPage = function(res, err) {
 			profileValue : config.getActiveProfileName(),
 			revisionName : config.getRevisionKey(),
 			revisionValue : config.getConfigRevision(),
-			error : err
+			error : err,
+            showOnly : req.query.showOnly
 		},
 		layout : 'admin/layout'
 	});

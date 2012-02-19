@@ -1,8 +1,7 @@
 var api = require('../../api');
 var admin = require('../../admin');
-var externalAPI = require('./api');
+var siteApi = require('./api');
 var log = require('../../log');
-var mobile = require('./mobile');
 var site = require('./site');
 
 var async = require('async');
@@ -10,19 +9,28 @@ var async = require('async');
 
 // assigns the functionality needed before different modules are ready to be
 // initilized (before config settings have been set)
-exports.preinit = function (app, afterConfigChangeFunction) {
+exports.preinit = function (app) {
     app.post('/login', site.loginData);
     app.get('/logout', site.logout);
     app.get('/config', site.config);
     app.post('/config', site.configData);
-
-    site.setAfterConfigChangeFunction(afterConfigChangeFunction);
 };
 
 exports.init = function (app) {
 
-    // redirect mobile browsers to the mobile site
-    app.get('/*', site.redirectMobile);
+    app.namespace('/api', function () {
+        app.get('/All', siteApi.listAll);
+        app.get('/:groupname', siteApi.section);
+        app.get('/article/:url', siteApi.article);
+        app.get('/search/:query', siteApi.search);
+        app.get('/staff/:query', siteApi.staff);
+
+        app.post('/group/add', api.site.checkAdmin, siteApi.addGroup);
+        app.post('/group/remove', api.site.checkAdmin, siteApi.removeGroup);
+        app.del('/:docId', api.site.checkAdmin, siteApi.deleteDocument);
+    });
+
+    app.get('/m/*', site.mobile);
 
     app.get('/about-us', site.aboutUs);
     app.get('/privacy-policy', site.privacyPolicy);
@@ -96,20 +104,6 @@ exports.init = function (app) {
         app.get('/:imageName', api.site.checkAdmin, admin.image.renderImage);
         app.post('/info', api.site.checkAdmin, admin.image.info);
         app.post('/crop', api.site.checkAdmin, admin.image.crop);
-    });
-
-    app.namespace('/api', function () {
-        app.post('/group/add', api.site.checkAdmin, externalAPI.addGroup);
-        app.post('/group/remove', api.site.checkAdmin, externalAPI.removeGroup);
-        app.del('/:docId', api.site.checkAdmin, externalAPI.deleteDocument);
-    });
-
-    app.namespace('/mobile-api', function () {
-        app.get('/All', mobile.listAll);
-        app.get('/:groupname', mobile.section);
-        app.get('/article/:url', mobile.article);
-        app.get('/search/:query', mobile.search);
-        app.get('/staff/:query', mobile.staff);
     });
 
     //The 404 Route (ALWAYS Keep this as the last route)

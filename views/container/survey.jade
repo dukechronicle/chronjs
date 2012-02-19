@@ -6,7 +6,8 @@
       .rounded
           .content-container
               h1 #{survey.title}
+              ul.choices
               - each votes, choice in survey.answers
-                  .choice(id=choice, votes=votes)
+                  il.choice(id=choice, votes=votes)
                       a.hover(href="#")
                           h2 #{choice}

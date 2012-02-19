@@ -7,81 +7,9 @@ var log = require('../../log');
 
 var asereje = require('asereje');
 
-var fs = require('fs');
-var yt2012Data = JSON.parse(fs.readFileSync("sample-data/young-trustee-2012.json"));
-
-
 
 site.mobile = function (req, res, next) {
     res.sendfile('public/m/index.html');
-};
-
-site.aboutUs = function (req, res) {
-    res.render('pages/about-us', {
-	filename: 'pages/about-us',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.privacyPolicy = function (req, res) {
-    res.render('pages/privacy-policy', {
-	filename:'pages/privacy-policy',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.userGuidelines = function (req, res) {
-    res.render('pages/user-guidelines', {
-	filename:'pages/user-guidelines',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.advertising = function (req, res) {
-    res.render('pages/advertising', {
-	filename:'pages/advertising',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.subscribe = function (req, res) {
-    res.render('pages/subscribe', {
-	filename:'pages/subscribe',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.editBoard = function (req, res) {
-    res.render('pages/edit-board', {
-	filename:'pages/edit-board',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.lettersToEditor = function (req, res) {
-    res.render('pages/letters', {
-	filename:'pages/letters',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.contact = function (req, res) {
-    res.render('pages/contact', {
-	filename:'pages/contact',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.yt2012 = function (req, res) {
-    var viewLocation = "pages/young-trustee-2012";
-    res.render(viewLocation, {
-        filename:viewLocation,
-        css: asereje.css(['container/style', 'pages/young-trustee-2012']),
-        locals: {
-            endorsements: yt2012Data[0],
-            pastYts: yt2012Data[1]
-        }
-    });
 };
 
 site.frontpage = function (req, res) {

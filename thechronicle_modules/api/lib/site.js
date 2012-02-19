@@ -191,7 +191,8 @@ site.getNewsPageContent = function(callback) {
 			var model = results[0];
 			_.defaults(model, newsModel);
 			model.popular = results[1];
-			model.Blog = results[2]
+			model.Blog = results[2];
+            model.multimedia = config.get('MULTIMEDIA_HTML');
 			model.adFullRectangle = {
 				"title" : "Advertisement",
 				"imageUrl" : "/images/ads/monster.png",
@@ -241,6 +242,7 @@ site.getSportsPageContent = function(callback) {
 			var model = results[0];
 			_.defaults(model, sportsModel);
 			model.Blog = results[1];
+            model.multimedia = config.get('MULTIMEDIA_HTML');
 			model.adFullRectangle = {
 				"title" : "Advertisement",
 				"imageUrl" : "/images/ads/monster.png",
@@ -372,6 +374,7 @@ site.getRecessPageContent = function(callback) {
 		else {
 			var model = results[0];
 			model.Blog = results[2];
+            model.multimedia = config.get('MULTIMEDIA_HTML');
 			model.adMedRectangle = {
 				"title" : "Advertisement",
 				"imageUrl" : "https://www.google.com/help/hc/images/adsense_185665_adformat-text_250x250.png",

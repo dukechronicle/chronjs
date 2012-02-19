@@ -32,17 +32,6 @@ exports.init = function (app) {
 
     app.get('/m/*', site.mobile);
 
-    app.get('/about-us', site.aboutUs);
-    app.get('/privacy-policy', site.privacyPolicy);
-    app.get('/user-guidelines', site.userGuidelines);
-    app.get('/advertising', site.advertising);
-    app.get('/subscribe', site.subscribe);
-    app.get('/edit-board', site.editBoard);
-    app.get('/letters-to-the-editor', site.lettersToEditor);
-    app.get('/contact', site.contact);
-
-    app.get('/page/young-trustee-2012', site.yt2012);
-
     app.get('/', site.frontpage);
     app.get('/news', site.news);
     app.get('/sports', site.sports);

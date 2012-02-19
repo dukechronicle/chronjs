@@ -358,12 +358,13 @@ site.configData = function (req, res) {
         config.setUp(req.body, function (err) {
             if (err)
 		        api.site.renderConfigPage(req, res, err);
-	        else 
+	        else {
                 log.notice("Config updated to use revision " + config.getConfigRevision());
                 config.runAfterConfigChangeFunction(function (err) {
 		            if (err) log.error(err);
                     res.redirect('/');
                 });
+            }   
         });
     else
 	    api.site.askForLogin(res, '/config');

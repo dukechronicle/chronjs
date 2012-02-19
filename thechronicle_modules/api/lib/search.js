@@ -13,6 +13,8 @@ var db = require("../../db-abstract");
 // so the server knows it has to reindex all articles not using the newest indexing version. Keep the number numeric!
 var INDEX_VERSION = 0.5011;
 var RESULTS_PER_PAGE = 25;
+var MAX_MATCHED_PHRASES_PER_ARTICLE = 4;
+var COMMON_WORDS = ["the","be","to","of","and","a","in","that","have","it","for","not","on","with","he","as","you","do","at", "I"];
 
 var client = null;
 
@@ -232,14 +234,72 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
     function(err, docs, facets) {
         if(err) return callback(err);
 
-        if(emboldenMatchedTerms) {
-            var regexString = "";
-            words.forEach(function(word) {
+        // replace teaser with text around matched terms
+        var regexString = "";
+        words.forEach(function(word) {
+            if(COMMON_WORDS.indexOf(word) == -1) {
                 if(regexString.length > 0) regexString += "|";
                 regexString += "\\b"+word+"\\b";
-            });
-            var regex = new RegExp(regexString,"gi");
+            }     
+        });
+        var regex = new RegExp(regexString,"gi");
+        
+        docs.forEach(function(doc) {
+            var foundIndexes = [];
+            var startPos = 0;  
+            
+            doc.body = doc.body.replace(/<[^>]*>/gm,"");
+            while(startPos != -1) {
+                startPos = doc.body.regexIndexOf(regex,startPos);
+                if(startPos != -1) {
+                    foundIndexes.push(startPos);
+                    startPos ++;
+                }
+            }              
 
+            var newTeaser = "...";
+            var usedIndexes = [];
+            for(var i = 0; i < foundIndexes.length; i ++) {
+                if(usedIndexes.length >= MAX_MATCHED_PHRASES_PER_ARTICLE) break;
+
+                var indexIsWithinOtherMatchedPhrase = false;
+                for(var i2 = 0; i2 < usedIndexes.length; i2 ++) {
+                    if(foundIndexes[i] >= usedIndexes[i2].start && foundIndexes[i] <= usedIndexes[i2].end) {
+                        indexIsWithinOtherMatchedPhrase = true;
+                        break;
+                    }
+                }
+                
+                if(!indexIsWithinOtherMatchedPhrase) {
+                    var start = foundIndexes[i];
+                    var end = foundIndexes[i];
+
+                    end = doc.body.indexOf(". ", start);
+                    if(end - start > 100 || end == -1) end = doc.body.indexOf(".", start);
+
+                    var okToAdd = true;
+                    for(var i2 = 0; i2 < usedIndexes.length; i2 ++) {
+                        if(usedIndexes[i2].end == end && usedIndexes[i2].start > start) {
+                            usedIndexes[i2].start = start;
+                            okToAdd = false;
+                            break;
+                        }
+                    }
+                    
+                    if(okToAdd) {
+                        usedIndexes.push({start: start, end:end});
+                    }
+                }
+            }
+
+            usedIndexes.forEach(function(index) {
+                var newText = doc.body.substring(index.start, index.end);
+                if(newText.split(" ").length > 3) newTeaser = newTeaser + newText + "...";
+            });
+            if(newTeaser != "...") doc.teaser = newTeaser;
+        });
+
+        if(emboldenMatchedTerms) {
             // bold all matched words
             docs.forEach(function(doc) {
                 if(doc.teaser) doc.teaser = doc.teaser.replace(regex, function(m){return _embolden(m)});
@@ -320,7 +380,9 @@ function querySolr(query, options, callback) {
 		var relatedDocs = [];
 		if(responseObj.moreLikeThis) {
 			var key = Object.keys(responseObj.moreLikeThis)[0];
-			relatedDocs = responseObj.moreLikeThis[key].docs;
+			if(responseObj.moreLikeThis[key] != null) {
+        	    relatedDocs = responseObj.moreLikeThis[key].docs;
+            }
 		} 
 
 		for(var docNum = 0; docNum < docs.length; docNum++) {
@@ -427,4 +489,9 @@ function _sortObjByKeys(arr) {
 
 function _embolden(match) {
     return "<b>"+match+"</b>";
-};  
+};
+
+String.prototype.regexIndexOf = function(regex, startpos) {
+    var indexOf = this.substring(startpos || 0).search(regex);
+    return (indexOf >= 0) ? (indexOf + (startpos || 0)) : indexOf;
+};

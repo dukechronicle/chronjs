@@ -10,6 +10,17 @@ exports.init = function () {
         madeInitialCronJobs = true;
 
         new cron.CronJob('0 */30 * * * *', function () { //every 30 minutes
+            
+            // in a multi-instance setup, it may be possible that the config was changed on 1 instance, and those changes should replicate to all instances            
+            config.checkForUpdatedConfig(function(updated) {
+                 if(updated) {
+                    log.notice("Config updated to use revision " + config.getConfigRevision());
+                    config.runAfterConfigChangeFunction(function (err) {
+		                if (err) log.error(err);
+                    });
+                }
+            });            
+
             if(process.env.NODE_ENV === 'production') {
                 config.get('RSS_FEEDS').forEach(function (feed) {
                     rss.parseRSS(feed.url, function (err, dom) {

@@ -3,7 +3,7 @@
     <head> 
         <meta charset="utf-8"> 
         <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1"> 
-        <link rel="stylesheet" href="themes/chronicle.min.css" />
+        <link rel="stylesheet" href="/m/themes/chronicle.min.css" />
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0.1/jquery.mobile.structure-1.0.1.min.css" />
 
         <!--<script src="http://use.typekit.com/dwv2bjy.js"></script>
@@ -24,12 +24,14 @@
             });        
         </script> 
 
-		<link rel="stylesheet" href="css/chronmobile.css" />
+		<link rel="stylesheet" href="/m/css/chronmobile.css" />
         
 		<script type="text/javascript"> 
 		var ARTICLE_LIST = "#ARTICLE_LIST";
 		var ARTICLE_CONTENT = "#ARTICLE_CONTENT";
 		var HEADER_TITLE = "#HEADER_TITLE";
+        var UNKNOWN_ERROR = "An unknown error has occured, click back to return to the previous page.";
+        var ARTICLE_NOT_FOUND = "The article cannot be found. Hit back to return to the previous page.";
 
         // Cache the list of articles. Emphemeral.
         var articleListCache = [];
@@ -90,13 +92,13 @@
             if(articleListCache[category] == null || forced || new Date().getTime() - articleListCache[category].timestamp > ARTICLE_LIST_CACHE_TIMEOUT)
             {
                 console.log("article list : cachemiss");
-                var url = "/mobile-api/" + category;
+                var url = "/api/" + category;
                 //console.log(url);
                 $.ajax({
-                  url: url,
-                  cache: false,
-                  dataType: "jsonp",
-                  success: function(data){
+                    url: url,
+                    cache: false,
+                    dataType: "jsonp",
+                    success: function(data){
                         //console.log(category);
                         if(!data) {
                             $.mobile.changePage('#error', 'none');
@@ -105,7 +107,11 @@
                         // Insert into cache
                         articleListCache[category] = {timestamp: new Date().getTime(), data: data};
                         updateArticleList(articleListCache[category].data, $(this), title);
-                    }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        handleAJAXError(jqXHR);
+                    } 
+
                 });
             } 
 			else {
@@ -137,33 +143,50 @@
 			return totalString;
         }
         
+        function handleAJAXError(jqXHR)
+        {
+            if(jqXHR.status == 500)
+            {
+                $(ERROR_MESSAGE).text(ARTICLE_NOT_FOUND);
+            }
+            else
+            {
+                $(ERROR_MESSAGE).text(UNKNOWN_ERROR);
+            }
+            $.mobile.changePage('#error', 'slide');
+        }
+
         function getArticle(articleURL)
         {
             // Retrieve if cache miss, forced reload, or if cache is too old:
             if(articleCache[articleURL] == null)
             {
-               //console.log("article cache: cachemiss");
-               $.ajax({
-                   url: "/mobile-api/article/" + articleURL,
-                   dataType: "jsonp",
-                   cache: false,
-                   success: function(data){
-                   if(!data) {
-                       //console.log("get article failed");
-                       $.mobile.changePage('#error', 'slide');
-                       return;
-                   }
-
-                   // Insert into cache
-                   articleCache[articleURL] = {data: data};
-
-                   $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL].data));
-					$.mobile.changePage("#Article","slide");
-                  }
-               });
+                //console.log("article cache: cachemiss");
+                $.ajax({
+                    url: "/api/article/" + articleURL,
+                    dataType: "jsonp",
+                    cache: false,
+                    success: function(data){
+                        if(!data) {
+                            //console.log("get article failed");
+                            $.mobile.changePage('#error', 'slide');
+                            return;
+                        }
+     
+                        // Insert into cache
+                        articleCache[articleURL] = {data: data};
+     
+                        $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL].data));
+	     				$.mobile.changePage("#Article","slide");
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        handleAJAXError(jqXHR);
+                    }  
+                });
             }
 			else {
-                updateArticleContainer(articleCache[articleURL].data);
+                $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL].data));
+   				$.mobile.changePage("#Article","slide");
             } 
         }
              
@@ -188,6 +211,25 @@
         }
 
 
+        function parseURL()
+        {
+            // m/asdlfjsladkd
+            var relativeURL = window.location.pathname;
+
+            // " ", "m", "article", articleName
+            var splitString = relativeURL.split("/");
+
+            // TODO: malformed input?
+            if(splitString[2] == "article" && splitString[3] != null && splitString[3] != "")
+            {
+                getArticle(splitString[3]);
+            }
+            else
+            {
+                getArticleList('All', 'The Chronicle', true);
+            }
+        }
+    
         </script>
 
 		<!-- Google Analytics Code-->
@@ -220,7 +262,7 @@
     </head>
     
 	<!--<body>-->
-    <body onload="getArticleList('All', 'The Chronicle', true)">
+    <body onload="parseURL()">
  
         <div id="ArticleList" data-role="page" articleListContainer="true" url="news" data-add-back-btn="false"> 
             <div data-role="header" data-position="fixed"> 
@@ -249,11 +291,11 @@
 		<div data-role="footer" data-position="fixed"></div> 
 	</div> 
 
-	<div id="error" data-role="page"> 
+	<div id="error" data-role="page" articleContainer="true" url="Article" data-add-back-btn="true" data-back-btn-text="Back"> 
 		<div data-role="header"> 
 			<h1>Error</h1> 
 		</div> 
-		<div data-role="content">    
+		<div id="ERROR_MESSAGE" data-role="content">    
 			An error has occured, click back to return to the previous page.
 		</div> 
 	</div> 

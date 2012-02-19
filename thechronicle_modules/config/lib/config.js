@@ -20,8 +20,16 @@ var configDB = null;
 var documentExistsInDB = false;
 var configRevision = null;
 
-exports.init = function(callback)
+var afterConfigChangeFunction = function(callback) { callback(); };
+
+exports.runAfterConfigChangeFunction = function(callback) {
+    afterConfigChangeFunction(callback);
+};
+
+exports.init = function(func, callback)
 {
+    afterConfigChangeFunction = func;
+
     if(!COUCHDB_CONFIG_HOST) return callback('No config database defined! Please set your CHRONICLE_CONFIG_DB environment var to the CouchDB host that stores site config info');
     
     log.info("Connecting to config database '" + PROFILE_NAME + "'");
@@ -64,6 +72,13 @@ function getConfigParamObjectWithName(name) {
     }
 
     return null;
+}
+
+exports.checkForUpdatedConfig = function(callback) {
+    var prevRev = configRevision;
+    getConfig(function() {
+        callback(prevRev != configRevision);
+    });
 }
 
 exports.get = function(variable) {

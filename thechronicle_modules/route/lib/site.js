@@ -7,24 +7,10 @@ var log = require('../../log');
 
 var asereje = require('asereje');
 
-var MOBILE_BROWSER_USER_AGENTS = ["Android", "iPhone", "Windows Phone",
-                                  "Blackberry", "Symbian", "Palm", "webOS"];
-
 var fs = require('fs');
 var yt2012Data = JSON.parse(fs.readFileSync("sample-data/young-trustee-2012.json"));
 
-site.redirectMobile = function (req, res, next) {
-    var userAgent = req.headers['user-agent'] || '';
 
-    for(var i in MOBILE_BROWSER_USER_AGENTS) {
-        if(userAgent.indexOf(MOBILE_BROWSER_USER_AGENTS[i]) != -1) {
-            res.redirect('/m' + req.url);
-            return;
-        }
-    }
-
-    next();
-};
 
 site.mobile = function (req, res, next) {
     res.sendfile('public/m/index.html');

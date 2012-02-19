@@ -15,7 +15,6 @@ var nimble = require('nimble');
 
 var LAYOUT_GROUPS = null;
 
-var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
 var columnistsData = JSON.parse(fs.readFileSync("sample-data/columnists.json"));
 var columnistsHeadshots = {};
 columnistsData.forEach(function(columnist) {
@@ -134,9 +133,15 @@ site.getFrontPageContent = function (callback) {
         else {
             if (BENCHMARK) log.info("TOTAL TIME %d", Date.now() - start);
             var model = results[0];
-            _.defaults(model, homeModel);
             model.popular = results[1];
             model.twitter = results[2];
+            model.printEdition = {
+                title: "Print",
+                imageUrl: "http://d2sug25c5hnh7r.cloudfront.net/images/issuu-thumb.png",
+                url: "http://issuu.com/dukechronicle/docs/100130news",
+                width: "134px",
+                height: "60px"
+            };
             callback(null, model);
         }
     });

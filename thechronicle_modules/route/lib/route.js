@@ -9,13 +9,11 @@ var async = require('async');
 
 // assigns the functionality needed before different modules are ready to be
 // initilized (before config settings have been set)
-exports.preinit = function (app, afterConfigChangeFunction) {
+exports.preinit = function (app) {
     app.post('/login', site.loginData);
     app.get('/logout', site.logout);
     app.get('/config', site.config);
     app.post('/config', site.configData);
-
-    site.setAfterConfigChangeFunction(afterConfigChangeFunction);
 };
 
 exports.init = function (app) {

@@ -13,12 +13,6 @@ var MOBILE_BROWSER_USER_AGENTS = ["Android", "iPhone", "Windows Phone",
 var fs = require('fs');
 var yt2012Data = JSON.parse(fs.readFileSync("sample-data/young-trustee-2012.json"));
 
-var afterConfigChangeFunction = function(callback) { callback(); };
-
-site.setAfterConfigChangeFunction = function(func) {
-    afterConfigChangeFunction = func;
-};
-
 site.redirectMobile = function (req, res, next) {
     var userAgent = req.headers['user-agent'] || '';
 
@@ -365,7 +359,8 @@ site.configData = function (req, res) {
             if (err)
 		        api.site.renderConfigPage(req, res, err);
 	        else 
-                afterConfigChangeFunction(function (err) {
+                log.notice("Config updated to use revision " + config.getConfigRevision());
+                config.runAfterConfigChangeFunction(function (err) {
 		            if (err) log.error(err);
                     res.redirect('/');
                 });

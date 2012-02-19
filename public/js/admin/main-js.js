@@ -4,7 +4,9 @@ require.config({
 
 if (typeof scripts != 'undefined') {
     for (var i in scripts) {
-        require([scripts[i]], function (module) {
+        var scriptParts = scripts[i].split("?");
+
+        require({ urlArgs: scriptParts[1] }, [scriptParts[0]], function (module) {
             if (module && typeof module.init == 'function')
                 module.init();
         });

@@ -16,8 +16,6 @@ var nimble = require('nimble');
 var LAYOUT_GROUPS = null;
 
 var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
-var newsModel = JSON.parse(fs.readFileSync("sample-data/news.json"));
-var sportsModel = JSON.parse(fs.readFileSync("sample-data/sports.json"));
 var columnistsData = JSON.parse(fs.readFileSync("sample-data/columnists.json"));
 var columnistsHeadshots = {};
 columnistsData.forEach(function(columnist) {
@@ -189,7 +187,6 @@ site.getNewsPageContent = function(callback) {
 			callback(err);
 		} else {
 			var model = results[0];
-			_.defaults(model, newsModel);
 			model.popular = results[1];
 			model.Blog = results[2];
             model.multimedia = config.get('MULTIMEDIA_HTML');
@@ -240,7 +237,6 @@ site.getSportsPageContent = function(callback) {
 			callback(err);
 		} else {
 			var model = results[0];
-			_.defaults(model, sportsModel);
 			model.Blog = results[1];
             model.multimedia = config.get('MULTIMEDIA_HTML');
 			model.adFullRectangle = {

@@ -1,5 +1,5 @@
 // for JSON schema design, see http://tools.ietf.org/html/draft-zyp-json-schema-03
-// after designing a schema, you can test it here: http://james.newtonking.com/projects/json/schema.aspx
+// after designing a schema, you can somewhat test it here: http://james.newtonking.com/projects/json/schema.aspx
 
 var configParams = [
     {
@@ -8,6 +8,7 @@ var configParams = [
         defaultValue: 'admin',
         schema: {
           type: "string",
+          required: true
         }
     },
     {
@@ -16,6 +17,7 @@ var configParams = [
         defaultValue: 'chronicle',
         schema: {
           type: "string",
+          required: true
         }
     },
     {
@@ -24,6 +26,7 @@ var configParams = [
         defaultValue: 'chronicletest',
         schema: {
           type: "string",
+          required: true
         }
     },
     {
@@ -32,6 +35,7 @@ var configParams = [
         defaultValue: 'http://chrondev:pikachu@chrondev.iriscouch.com',
         schema: {
           type: "string",
+          required: true
         }
     },
     {
@@ -40,6 +44,7 @@ var configParams = [
         defaultValue: 'dev',
         schema: {
           type: "string",
+          required: true
         }
     },
     {
@@ -48,6 +53,7 @@ var configParams = [
         defaultValue: 'chron_dev',
         schema: {
           type: "string",
+          required: true
         }
     },
     {
@@ -56,6 +62,7 @@ var configParams = [
         defaultValue: '',
         schema: {
           type : "string",
+          required: true
         }
     },
     {
@@ -64,6 +71,7 @@ var configParams = [
         defaultValue: '',
         schema: {
           type: "string",
+          required: true
         }
     },
     {
@@ -72,6 +80,7 @@ var configParams = [
         defaultValue: 'http://d164gy67scumxg.cloudfront.net',
         schema: {
           type: "string",
+          required: true
         }
     },
     {
@@ -80,6 +89,7 @@ var configParams = [
         defaultValue: 'redis://jodoglevy:2b258cbdcbbce003452a0ff4279d8701@barreleye.redistogo.com:9148/',
         schema: {
           type: "string",
+          required: true
         }
     },
     {
@@ -88,6 +98,7 @@ var configParams = [
         defaultValue: 'index.websolr.com',
         schema: {
           type: "string",
+          required: true
         }
     },
     {
@@ -96,6 +107,7 @@ var configParams = [
         defaultValue: '80',
         schema: {
           type: "string",
+          required: true
         }
     },
     {
@@ -104,6 +116,7 @@ var configParams = [
         defaultValue: '/3f534ff3ff0',
         schema: {
           type: "string",
+          required: true
         }
     },
     {
@@ -112,6 +125,7 @@ var configParams = [
         defaultValue: '/solr',
         schema: {
           type: "string",
+          required: true
         }
     },
     {
@@ -126,6 +140,7 @@ var configParams = [
         ],
         schema: {
             type: "array",
+            required: true,
             items: {type: "string"}
         }
     },
@@ -333,7 +348,7 @@ var configParams = [
 	        }
         ],
         schema: {
-            type: "array"
+            type: "array",
             id: "taxonomyLevel",
             items: {
                 type: "object",
@@ -443,10 +458,12 @@ var configParams = [
                 properties: {
                     namespace: {
                         type:"array",
+                        required: true,
                         items: {type: "string"}
                     },
                     groups: {
                         type: "array",
+                        required: true,
                         items: {type: "string"}
                     }
                 }
@@ -503,8 +520,8 @@ var configParams = [
           items: {
             type: "object",
             properties: {
-                title: {type: "string"},
-                url: {type: "string"}
+                title: {type: "string", required: true},
+                url: {type: "string", required: true}
             }
           }          
        }
@@ -515,6 +532,7 @@ var configParams = [
         defaultValue: '',
         schema: {
           type: "string",
+          required: true
         }
     },
     {
@@ -523,6 +541,7 @@ var configParams = [
         defaultValue: '21f5467afc',
         schema: {
           type: "string",
+          required: true
         }
     },
     {
@@ -531,6 +550,7 @@ var configParams = [
         defaultValue: '429',
         schema: {
           type: "string",
+          required: true
         }
     },
     {

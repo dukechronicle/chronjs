@@ -1,6 +1,7 @@
 var configParams = require('./config-params.js');
 
 var _ = require('underscore');
+var jsonSchemaValidator = require("JSV").JSV.createEnvironment();
 var db = require('../../db-abstract');
 var url = require('url');
 var log = require('../../log');
@@ -115,9 +116,11 @@ exports.setUp = function (params, callback) {
 
     Object.keys(params).forEach(function (key) {
         if (params[key].length > 0) {
-            if(typeof getConfigParamObjectWithName(key).defaultValue == "object") {
+            var configParamObj = getConfigParamObjectWithName(key);
+            
+            if(typeof configParamObj.defaultValue == "object") {
                 try {
-                    configProfile[key] = JSON.parse(params[key]);
+                        params[key] = JSON.parse(params[key]);
                 }
                 catch(err) {
                     if(jsonError == null) jsonError = "";
@@ -126,8 +129,18 @@ exports.setUp = function (params, callback) {
                     jsonError += 'Config param ' + key + ' defined as improper JSON. Ignoring changes to ' + key + '.';
                 }
             }
-            else {
+
+            var report = jsonSchemaValidator.validate(params[key], configParamObj.schema);            
+            if (report.errors.length === 0) {
+                //JSON is valid against the schema
                 configProfile[key] = params[key];
+            }
+            else {
+                if(jsonError == null) jsonError = "";
+                else jsonError += "<br />";
+
+                jsonError += 'Config param ' + key + ' defined incorrectly according to schema. Ignoring changes to ' + key + '.';
+                jsonError += '<br />' + key + ' errors:<br />' + JSON.stringify(report.errors) + '<br />';
             }
         }
     });

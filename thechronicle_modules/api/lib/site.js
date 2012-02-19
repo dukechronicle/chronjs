@@ -10,25 +10,25 @@ var rss = require('./rss');
 
 var _ = require("underscore");
 var async = require('async');
-var fs = require('fs');
 var nimble = require('nimble');
 
-var LAYOUT_GROUPS = null;
+var LAYOUT_GROUPS, COLUMNISTS_DATA, COLUMNIST_HEADSHOTS;
 
-var columnistsData = JSON.parse(fs.readFileSync("sample-data/columnists.json"));
-var columnistsHeadshots = {};
-columnistsData.forEach(function(columnist) {
-	columnistsHeadshots[columnist.name] = {
-		headshot : columnist.headshot,
-		tagline : columnist.tagline
-	};
-});
 var BENCHMARK = false;
 
 var twitterFeeds = ["DukeChronicle", "ChronicleRecess", "TowerviewMag", "DukeBasketball", "ChronPhoto", "ChronicleSports"];
 
 site.init = function () {
     LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
+
+    COLUMNISTS_DATA = config.get("COLUMNISTS_DATA");
+    COLUMNIST_HEADSHOTS = {};
+    COLUMNISTS_DATA.forEach(function(columnist) {
+	COLUMNIST_HEADSHOTS[columnist.name] = {
+	    headshot : columnist.headshot,
+	    tagline : columnist.tagline
+	};
+    });
 };
 
 // Checks if you are an admin with browser check
@@ -261,88 +261,88 @@ site.getSportsPageContent = function(callback) {
 };
 
 site.getOpinionPageContent = function(callback) {
-	async.parallel([
+    async.parallel([
 	function(cb) {//0
-		api.group.docs(LAYOUT_GROUPS.Opinion.namespace, null, cb);
+	    api.group.docs(LAYOUT_GROUPS.Opinion.namespace, null, cb);
 	},
 
 	function(cb) {//1
-		api.taxonomy.getChildren(['Opinion'], cb);
+	    api.taxonomy.getChildren(['Opinion'], cb);
 	},
 
 	function(cb) {//2
-		rss.getRSS('blog-opinion', function(err, res) {
-			if(!err && res && res.items && res.items.length > 0) {
-				var Blog = res.items.map(function(item) {
-					item.url = item.link;
-					item.title = item.title.replace(/\&#8217;/g, '’');
-					delete item.link;
-					return item;
-				});
-				Blog.splice(5, Blog.length - 5);
-				cb(null, Blog)
-			} else
-				cb(err, []);
-		});
+	    rss.getRSS('blog-opinion', function(err, res) {
+		if(!err && res && res.items && res.items.length > 0) {
+		    var Blog = res.items.map(function(item) {
+			item.url = item.link;
+			item.title = item.title.replace(/\&#8217;/g, '’');
+			delete item.link;
+			return item;
+		    });
+		    Blog.splice(5, Blog.length - 5);
+		    cb(null, Blog)
+		} else
+		    cb(err, []);
+	    });
 	},
 
 	function(cb) {// 3
-		api.authors.getLatest("Editorial Board", "Opinion", 5, cb);
+	    api.authors.getLatest("Editorial Board", "Opinion", 5, cb);
 	},
 
 	function(cb) {//4
-		async.map(columnistsData, function(columnist, _callback) {
-			api.authors.getLatest(columnist.user || columnist.name, "Opinion", 5, function(err, res) {
-				columnist.stories = res;
-				_callback(err, columnist);
-			})
-		}, cb);
+	    async.map(COLUMNISTS_DATA, function(columnist, _callback) {
+		api.authors.getLatest(columnist.user || columnist.name, "Opinion", 5, function(err, res) {
+		    columnist.stories = res;
+		    _callback(err, columnist);
+		})
+	    }, cb);
 	}], function(err, results) {
-		if(err)
-			callback(err);
-		else {
-			var model = results[0];
-			if(model.Featured) {
-				model.Featured.forEach(function(article) {
-					article.author = article.authors[0];
-					var columnistObj = null;
-					if( columnistObj = columnistsHeadshots[article.author]) {
-						if(columnistObj.headshot)
-							article.thumb = columnistObj.headshot;
-						if(columnistObj.tagline)
-							article.tagline = columnistObj.tagline;
-					}
-				});
+	    if(err)
+		callback(err);
+	    else {
+		var model = results[0];
+		if (model.Featured) {
+		    model.Featured.forEach(function(article) {
+			article.author = article.authors[0];
+			var columnistObj = null;
+			if( columnistObj = COLUMNIST_HEADSHOTS[article.author]) {
+			    if(columnistObj.headshot)
+				article.thumb = columnistObj.headshot;
+			    if(columnistObj.tagline)
+				article.tagline = columnistObj.tagline;
 			}
-			model.Blog = results[2];
-			model.EditorialBoard = results[3];
-			model.Columnists = {};
-			// assign each columnist an object containing name and stories to make output jade easier
-			results[4].forEach(function(columnist, index) {
-				model.Columnists[index] = columnist;
-			});
-			// need to call compact to remove undefined entries in array
-			_.compact(model.Columnists);
-			model.adFullRectangle = {
-				"title" : "Advertisement",
-				"imageUrl" : "/images/ads/monster.png",
-				"url" : "http://google.com",
-				"width" : "300px",
-				"height" : "250px"
-			};
-
-			model.adFullBanner = {
-				"title" : "Ad",
-				"imageUrl" : "/images/ads/full-banner.jpg",
-				"url" : "http://google.com",
-				"width" : "468px",
-				"height" : "60px"
-			};
-
-			var children = results[1];
-			callback(null, model, children);
+		    });
 		}
-	});
+		model.Blog = results[2];
+		model.EditorialBoard = results[3];
+		model.Columnists = {};
+		// assign each columnist an object containing name and stories to make output jade easier
+		results[4].forEach(function(columnist, index) {
+		    model.Columnists[index] = columnist;
+		});
+		// need to call compact to remove undefined entries in array
+		_.compact(model.Columnists);
+		model.adFullRectangle = {
+		    "title" : "Advertisement",
+		    "imageUrl" : "/images/ads/monster.png",
+		    "url" : "http://google.com",
+		    "width" : "300px",
+		    "height" : "250px"
+		};
+
+		model.adFullBanner = {
+		    "title" : "Ad",
+		    "imageUrl" : "/images/ads/full-banner.jpg",
+		    "url" : "http://google.com",
+		    "width" : "468px",
+		    "height" : "60px"
+		};
+
+		var children = results[1];
+		callback(null, model, children);
+	    }
+        });
 };
 
 site.getRecessPageContent = function(callback) {

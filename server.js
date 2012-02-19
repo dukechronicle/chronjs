@@ -33,7 +33,7 @@ asereje.config({
 
 log.init(function (err) {
     if (err) console.err("Logger couldn't be initialized: " + err);
-    config.init(function(err) {
+    config.init(runSite, function(err) {
 	    if (err) log.crit(err);
 
         var sessionInfo = {
@@ -54,7 +54,7 @@ log.init(function (err) {
             }
 
             configureApp(sessionInfo, PORT);
-            route.preinit(app, runSite);
+            route.preinit(app);
 
 	        if (!config.isSetUp()) {
 	            app.get('/', function(req, res, next) {

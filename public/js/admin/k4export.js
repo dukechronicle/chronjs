@@ -1,43 +1,64 @@
-function editDocument(article) {
-    $("#sub"+article.id).attr('disabled', 'disabled');
+define(['jquery'], function ($) {
+
+    $(function () {
+
+        $("button").click(function () {
+            $(this).attr('disabled', 'disabled');
+            var article = JSON.parse($(this).attr('value'));
+            var $row = $(this).parent().parent();
+            editDocument(article, $row, function (err) {
+	        if (err) alert(err);
+		$(this).removeAttr('disabled');
+            });
+        });
+
+        $("select.image").change(function () {
+            showImage($(this));
+        });
+
+    });
+
+    function editDocument(article, $row, callback) {
+        article.taxonomy = $row.children(".taxonomy").val();
+        if (!article.taxonomy)
+            return callback("Must select a section for article "+article.title);
+
+        article.authors = article.authors.toString();
     
-    article.taxonomy = $("#tax"+article.id).val();
-    article.authors = article.authors.toString();
-    
-    var imageString = $("#img"+article.id).val();
-    var imageData;
-    if (imageString.length > 0) {
-    	imageData = JSON.parse(imageString);
-    }
-    
-    $.post('/admin/edit', { doc: article }, function(data, status) {
+        var imageString = $row.children(".image").val();
+        var imageData;
+        if (imageString.length > 0) {
+    	    imageData = JSON.parse(imageString);
+        }
+
+       
+        $.post('/admin/edit', { doc: article }, function(data, status) {
 	    if (status != 'success')
 	        alert("Taxonomy change for article '" + article.title + "' failed");
 	    
-        if (imageData != null && imageData.imageVersions != null && imageData.imageVersions.length > 0) {
+            if (imageData != null && imageData.imageVersions != null && imageData.imageVersions.length > 0) {
 	        $.post('/admin/edit', {imageVersionId: imageData.imageVersions, docId: article.id, original: imageData.originalId, imageType: imageData.imageVersionTypes},
-            function(data, status) {
-                if (status != 'success')
-	                alert("Adding image for article '" + article.title + "' failed");
-
-                $("#sub"+article.id).removeAttr('disabled');
-            });
+                       function(data, status) {
+                           if (status != 'success')
+	                       alert("Adding image for article '" + article.title + "' failed");
+                           
+                           callback();
+                       });
 	    }
-	    else
-		    $("#sub"+article.id).removeAttr('disabled');
-    });
-}
-
-function showImage(articleId) {
-    var imageString = $("#img"+articleId).val();
-    var imageData;
-
-    if (imageString.length > 0) {
-    	imageData = JSON.parse(imageString);
-        $("#img-preview"+articleId).attr('src', imageData.thumbUrl);
-        $("#img-preview"+articleId).fadeIn();
+            else callback();
+        });
     }
-    else {
-        $("#img-preview"+articleId).fadeOut();
+
+    function showImage($image) {
+        var $preview = $image.parent().parent().find("td > img.preview");
+        try {
+    	    var imageData = JSON.parse($image.val());
+            $preview.attr('src', imageData.thumbUrl);
+            $preview.fadeIn();
+        }
+        catch (e) {
+            $preview.fadeOut();
+        }
     }
-}
+
+});

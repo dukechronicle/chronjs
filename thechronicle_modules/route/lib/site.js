@@ -163,6 +163,7 @@ site.article = function (req, res, next) {
         else res.render('article', {
             locals: {
                 doc:doc,
+                title:doc.title,
                 isAdmin:isAdmin,
                 model:model,
                 parentPaths:parents,

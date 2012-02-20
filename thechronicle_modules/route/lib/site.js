@@ -170,7 +170,6 @@ site.article = function (req, res, next) {
                 disqusShortname: config.get('DISQUS_SHORTNAME')
             },
             filename:'views/article',
-            layout: 'layout-article',
             css:asereje.css(['container/style', 'article'])
         });
     });

@@ -40,6 +40,8 @@ exports.init = function (app) {
     app.get('/towerview', site.towerview);
     app.get('/section/*', site.section);
 
+	app.get('/rss/*', site.rss);
+
     // Makes search url more readable
     app.get('/search', function (req, res) {
         var query = "--";            
@@ -94,7 +96,7 @@ exports.init = function (app) {
         app.post('/info', api.site.checkAdmin, admin.image.info);
         app.post('/crop', api.site.checkAdmin, admin.image.crop);
     });
-
+    
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);
 

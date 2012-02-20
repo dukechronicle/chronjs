@@ -199,20 +199,28 @@ admin.k4exportData = function (req, res, next) {
                 imageData: results.images
 	        }
         });
-    });
+	});
 };
 
 admin.editArticleData = function (req, http_res, next) {
     if (req.body.imageVersionId) {
-        api.image.addVersionsToDoc(req.body.doc.id, req.body.original, req.body.imageVersionId, req.body.imageType, function (err, res) {
+        api.image.addVersionsToDoc(req.body.docId, req.body.original, req.body.imageVersionId, req.body.imageType, function (err, res) {
             if (err) next(http_res);
             else if(req.body.afterUrl) http_res.redirect(req.body.afterUrl);
             else http_res.redirect('/admin');
         });
     }
+    else if (req.body.doc.taxonomy == '') {
+        next('No section selected for article');
+    }
     else {
         var id = req.body.doc.id;
-    
+        /*
+          var new_groups = req.body.doc.groups;
+          if(!(new_groups instanceof Array)) { //we will get a string if only one box is checked
+          new_groups = [new_groups];
+          }*/
+
         var fields = {
             title:req.body.doc.title,
             body:req.body.doc.body,
@@ -220,6 +228,7 @@ admin.editArticleData = function (req, http_res, next) {
             teaser:req.body.doc.teaser,
             authors:req.body.doc.authors.split(", "),
             taxonomy:JSON.parse(req.body.doc.taxonomy)
+            //groups: new_groups
         };
         _renderBody(req.body.doc.body, function (err, rendered) {
             fields.renderedBody = rendered;

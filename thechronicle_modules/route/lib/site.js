@@ -313,9 +313,15 @@ site.newsletterData = function (req, res) {
 };
 
 site.rss = function (req, res) {
-    res.render('rss', {
-        layout: false,
-        filename: 'rss'
+    api.docsByDate(null, null, function (err, doc) {
+        if (err)
+            next();
+        else
+            res.render('rss', {
+                doc: doc,
+                layout: false,
+                filename: 'rss'
+            });
     });
 };
 

@@ -1,4 +1,4 @@
-define(["order!jquery", "order!underscore", "order!Backbone"], function ($) {
+define(["order!jquery", "order!underscore", "order!backbone"], function ($) {
     
     return Backbone.Model.extend({
 

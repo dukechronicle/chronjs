@@ -6,6 +6,11 @@ var urlModule = require('url');
 var log = require('../../log');
 
 
+exports.unixTimestamp = function (date) {
+    date = date || new Date();
+    return Math.round(new Date().getTime() / 1000);
+};
+
 exports.formatTimestamp = function (timestamp, format) {
     var date = new Date(timestamp*1000);
     return format ? dateFormat(date, format) : date;

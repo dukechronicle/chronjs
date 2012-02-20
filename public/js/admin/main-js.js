@@ -1,5 +1,9 @@
 require.config({
-    baseUrl: '/js'
+    baseUrl: '/js',
+    paths: {
+        'backbone': '/js/libs/backbone-min',
+        'underscore': '/js/libs/underscore-min'
+    }
 });
 
 if (typeof scripts != 'undefined') {

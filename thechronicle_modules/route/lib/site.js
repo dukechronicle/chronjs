@@ -7,93 +7,16 @@ var log = require('../../log');
 
 var asereje = require('asereje');
 
-var MOBILE_BROWSER_USER_AGENTS = ["Android", "iPhone", "Windows Phone",
-                                  "Blackberry", "Symbian", "Palm", "webOS"];
 
-var afterConfigChangeFunction = function(callback) { callback(); };
-
-site.setAfterConfigChangeFunction = function(func) {
-    afterConfigChangeFunction = func;
-};
-
-site.redirectMobile = function(req, res, next) {
-    var userAgent = req.headers['user-agent'] || '';
-    var path = req.url.split('/');
-
-    // only run the code below this line if they are not accessing the
-    // mobile site            
-    if (path[1] == 'm' || path[1] == 'mobile-api')
-        return next();
-        
-    for(var i in MOBILE_BROWSER_USER_AGENTS) {
-        if(userAgent.indexOf(MOBILE_BROWSER_USER_AGENTS[i]) != -1) {
-            res.redirect('/m');
-            return;
-        }
-    }          
-    next();
-};
-
-site.aboutUs = function (req, res) {
-    res.render('pages/about-us', {
-	filename: 'pages/about-us',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.privacyPolicy = function (req, res) {
-    res.render('pages/privacy-policy', {
-	filename:'pages/privacy-policy',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.userGuidelines = function (req, res) {
-    res.render('pages/user-guidelines', {
-	filename:'pages/user-guidelines',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.advertising = function (req, res) {
-    res.render('pages/advertising', {
-	filename:'pages/advertising',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.subscribe = function (req, res) {
-    res.render('pages/subscribe', {
-	filename:'pages/subscribe',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.editBoard = function (req, res) {
-    res.render('pages/edit-board', {
-	filename:'pages/edit-board',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.lettersToEditor = function (req, res) {
-    res.render('pages/letters', {
-	filename:'pages/letters',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.contact = function (req, res) {
-    res.render('pages/contact', {
-	filename:'pages/contact',
-	css: asereje.css(['container/style'])
-    });
+site.mobile = function (req, res, next) {
+    res.sendfile('public/m/index.html');
 };
 
 site.frontpage = function (req, res) {
     api.site.getFrontPageContent(function (err, model) {
         res.render('site/index', {
             css:asereje.css(['slideshow/style', 'container/style', 'site/frontpage']),
+            js:['slideshow/frontpage-slideshow'],
             filename:'views/site/index.jade',
             locals: {
                 model:model
@@ -117,6 +40,7 @@ site.sports = function (req, res) {
     api.site.getSportsPageContent(function (err, model, children) {
         res.render('site/sports', {
             css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
+            js:['slideshow/slideshow'],
             subsections:[children.men, children.women],
             filename:'views/site/sports.jade',
             model:model
@@ -128,6 +52,7 @@ site.opinion = function (req, res) {
     api.site.getOpinionPageContent(function (err, model, children) {
         res.render('site/opinion', {
             css:asereje.css(['container/style', 'site/section', 'site/opinion']),
+            js:['opinion'],
             subsections:children,
             filename:'views/site/opinion.jade',
             model:model
@@ -182,6 +107,7 @@ site.search = function (req, res, next) {
         if (err) next(err);
         else res.render('site/search', {
             css:asereje.css(['container/style', 'site/search']),
+            js:['scrollLoad?v=2'],
             locals: {
                 docs: docs,
                 currentFacets: req.query.facets || '',
@@ -199,6 +125,7 @@ site.staff = function (req, res) {
     api.site.getAuthorContent(name, function (err, docs) {
 	res.render('site/people', {
             css:asereje.css(['container/style', 'site/people']),
+            js:['scrollLoad?v=2'],
             locals:{
                 docs: docs,
                 name: globalFunctions.capitalizeWords(name)
@@ -335,7 +262,7 @@ site.logout = function (req, res) {
 
 site.config = function (req, res) {
     if (api.accounts.isAdmin(req))
-        api.site.renderConfigPage(res);
+        api.site.renderConfigPage(req, res);
     else
         api.site.askForLogin(res, '/config');
 };
@@ -344,12 +271,14 @@ site.configData = function (req, res) {
     if (api.accounts.isAdmin(req))
         config.setUp(req.body, function (err) {
             if (err)
-		        api.site.renderConfigPage(res,err);
-	        else 
-                afterConfigChangeFunction(function (err) {
+		        api.site.renderConfigPage(req, res, err);
+	        else {
+                log.notice("Config updated to use revision " + config.getConfigRevision());
+                config.runAfterConfigChangeFunction(function (err) {
 		            if (err) log.error(err);
                     res.redirect('/');
                 });
+            }   
         });
     else
 	    api.site.askForLogin(res, '/config');

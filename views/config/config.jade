@@ -1,8 +1,12 @@
-script(src='/js/jquery.textarea-expander.js', type='text/javascript')
+- if(showOnly == null)
+    - var action = '/config';
+- else
+    - var action = '/config?showOnly=' + showOnly;
+
 h1 Chronicle Configuration
 div(style="color:red")
     !{error}
-form(action='/config', method='POST')
+form(action=action, method='POST')
   input(type='hidden', name=revisionName, value=revisionValue)
   label='Config Profile Name:'
   br
@@ -10,17 +14,23 @@ form(action='/config', method='POST')
   br
   br
   - each param in configParams    
-    div
-        label=param.description+':'
-        br
+    if(showOnly == null || showOnly == param.name)
+        div
+            label=param.description+':'
+            br
+            - if(typeof param.defaultValue == "object") 
+                textarea(name=param.name, class="expand", style="width:75%")
+                    !{JSON.stringify(param.defaultValue,null,"\t")}
+            - else
+                input(type='text', name=param.name, value=param.defaultValue, style="width:75%")
+            br
+            br
+            br
+            br
+            br
+    else
         - if(typeof param.defaultValue == "object") 
-            textarea(name=param.name, class="expand", style="width:75%")
-                !{JSON.stringify(param.defaultValue,null,"\t")}
+                input(type='hidden', name=param.name, value=JSON.stringify(param.defaultValue,null,"\t"))            
         - else
-            input(type='text', name=param.name, value=param.defaultValue, style="width:75%")
-        br
-        br
-        br
-        br
-        br
+                input(type='hidden', name=param.name, value=param.defaultValue)   
   input(type='submit')

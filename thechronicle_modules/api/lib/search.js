@@ -203,8 +203,8 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 	});
 
     wordsQuery = wordsQuery.toLowerCase();
+
 	var words = wordsQuery.split(" ");
-	
     words = words.map(function(word) {
 		var newString = solr.valueEscape(word.replace(/"/g, '')); //remove "s from the query
 
@@ -214,10 +214,17 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 			return newString;
 	});
 
-	var fullQuery = 'author_sm:"' + wordsQuery.replace(/"/g, '') + '"';
-	for(var index = 0; index < words.length; index++) {
-		fullQuery = fullQuery + " OR title_textv:" + words[index] + " OR body_textv:" + words[index];
-	}
+	var fullQuery = "";
+    if(wordsQuery.indexOf('"') === 0 && wordsQuery.indexOf('"',1) === wordsQuery.length-1) {
+        // user searched for exact match
+        fullQuery = 'title_textv:' + wordsQuery + ' OR body_textv:' + wordsQuery + ' OR author_sm:' + wordsQuery;
+    }
+    else {
+        fullQuery = 'author_sm:"' + wordsQuery.replace(/"/g, '') + '"';
+	    for(var index = 0; index < words.length; index++) {
+	    	fullQuery = fullQuery + " OR title_textv:" + words[index] + " OR body_textv:" + words[index];
+	    }
+    }
 
 	querySolr(fullQuery, {
 		facet : true,

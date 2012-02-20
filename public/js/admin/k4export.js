@@ -6,9 +6,10 @@ define(['jquery'], function ($) {
             $(this).attr('disabled', 'disabled');
             var article = JSON.parse($(this).attr('value'));
             var $row = $(this).parent().parent();
+            var $button = $(this);
             editDocument(article, $row, function (err) {
 	        if (err) alert(err);
-		$(this).removeAttr('disabled');
+		$button.removeAttr('disabled');
             });
         });
 
@@ -19,34 +20,42 @@ define(['jquery'], function ($) {
     });
 
     function editDocument(article, $row, callback) {
-        article.taxonomy = $row.children(".taxonomy").val();
+        article.taxonomy = $row.find("td > .taxonomy").val();
         if (!article.taxonomy)
             return callback("Must select a section for article "+article.title);
+        article.taxonomy = JSON.parse(article.taxonomy);
 
-        article.authors = article.authors.toString();
-    
-        var imageString = $row.children(".image").val();
-        var imageData;
-        if (imageString.length > 0) {
-    	    imageData = JSON.parse(imageString);
-        }
+        var fields = { doc: { id: article.id, taxonomy: article.taxonomy } };
 
-       
-        $.post('/admin/edit', { doc: article }, function(data, status) {
+        $.post('/api/article/edit', fields, function(data, status) {
 	    if (status != 'success')
-	        alert("Taxonomy change for article '" + article.title + "' failed");
-	    
-            if (imageData != null && imageData.imageVersions != null && imageData.imageVersions.length > 0) {
-	        $.post('/admin/edit', {imageVersionId: imageData.imageVersions, docId: article.id, original: imageData.originalId, imageType: imageData.imageVersionTypes},
-                       function(data, status) {
-                           if (status != 'success')
-	                       alert("Adding image for article '" + article.title + "' failed");
-                           
-                           callback();
-                       });
-	    }
-            else callback();
+	        callback("Taxonomy change for article '" + article.title + "' failed");
+            else
+                addImageVersions(article.id, $row.find("td > .image"), callback);
         });
+    }
+
+    function addImageVersions(docId, $image, callback) {
+        try {
+            var imageData = JSON.parse($image.val());
+
+            var fields = {
+                docId: docId,
+                versionId: imageData.imageVersions,
+                original: imageData.originalId,
+                imageType: imageData.imageVersionTypes
+            };
+
+            $.post('/api/article/version/add', fields, function (data, status) {
+                if (status != 'success')
+	            callback("Adding image to article '" + article.title + "' failed");
+                else
+                    callback();
+            });
+        }
+        catch (e) {
+            callback();
+        }
     }
 
     function showImage($image) {

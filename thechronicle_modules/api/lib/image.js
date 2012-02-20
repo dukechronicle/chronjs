@@ -66,17 +66,14 @@ image.addVersionsToDoc = function(docId, originalImageId, versionImageIds, image
     
     api.docsById(docId,
     function (err, doc) {
-        var images = doc.images;
-        if (!images) images = {};
+        var images = doc.images || {};
 
         for(var i = 0; i < versionImageIds.length; i ++) {        
             images[imageTypes[i]] = versionImageIds[i];
         }
         images["Original"] = originalImageId;
 
-        api.editDoc(doc._id, {
-            images:images
-        }, callback);
+        api.editDoc(doc._id, { images:images }, callback);
     });
 };
 

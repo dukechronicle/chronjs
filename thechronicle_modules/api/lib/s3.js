@@ -37,7 +37,7 @@ s3.delete = function (key, callback) {
     });
 };
 
-s3.init = function (callback) {
+s3.init = function () {
     BUCKET_NAME = config.get("S3_BUCKET");
     KEY = config.get("S3_KEY");
     SECRET = config.get("S3_SECRET");

@@ -15,8 +15,8 @@ define(["jquery", "libs/dateFormat"], function($, dateFormat) {
             loadImage.fadeIn('slow');
             isLoadingPage = true;
 
-            // use our mobile api to load the next search page for this set of params
-            $.get("/mobile-api/"+scrollLoadUrl+"&page="+nextPageToLoad, function(returnedData) {
+            // use our api to load the next search page for this set of params
+            $.get("/api/"+scrollLoadUrl+"&page="+nextPageToLoad, function(returnedData) {
                 if(returnedData.docs.length === 0) {
                     noPagesLeftToLoad = true;
                     loadImage.fadeOut();

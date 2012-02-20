@@ -203,8 +203,8 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 	});
 
     wordsQuery = wordsQuery.toLowerCase();
+
 	var words = wordsQuery.split(" ");
-	
     words = words.map(function(word) {
 		var newString = solr.valueEscape(word.replace(/"/g, '')); //remove "s from the query
 
@@ -214,10 +214,17 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 			return newString;
 	});
 
-	var fullQuery = 'author_sm:"' + wordsQuery.replace(/"/g, '') + '"';
-	for(var index = 0; index < words.length; index++) {
-		fullQuery = fullQuery + " OR title_textv:" + words[index] + " OR body_textv:" + words[index];
-	}
+	var fullQuery = "";
+    if(wordsQuery.indexOf('"') === 0 && wordsQuery.indexOf('"',1) === wordsQuery.length-1) {
+        // user searched for exact match
+        fullQuery = 'title_textv:' + wordsQuery + ' OR body_textv:' + wordsQuery + ' OR author_sm:' + wordsQuery;
+    }
+    else {
+        fullQuery = 'author_sm:"' + wordsQuery.replace(/"/g, '') + '"';
+	    for(var index = 0; index < words.length; index++) {
+	    	fullQuery = fullQuery + " OR title_textv:" + words[index] + " OR body_textv:" + words[index];
+	    }
+    }
 
 	querySolr(fullQuery, {
 		facet : true,
@@ -245,57 +252,38 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
         var regex = new RegExp(regexString,"gi");
         
         docs.forEach(function(doc) {
-            var foundIndexes = [];
-            var startPos = 0;  
-            
-            doc.body = doc.body.replace(/<[^>]*>/gm,"");
-            while(startPos != -1) {
-                startPos = doc.body.regexIndexOf(regex,startPos);
-                if(startPos != -1) {
-                    foundIndexes.push(startPos);
-                    startPos ++;
-                }
-            }              
+            var sentenceFinds = {};
+            var sentences = doc.body.replace(/<[^>]*>/gm," ").split(".");
 
-            var newTeaser = "...";
-            var usedIndexes = [];
-            for(var i = 0; i < foundIndexes.length; i ++) {
-                if(usedIndexes.length >= MAX_MATCHED_PHRASES_PER_ARTICLE) break;
-
-                var indexIsWithinOtherMatchedPhrase = false;
-                for(var i2 = 0; i2 < usedIndexes.length; i2 ++) {
-                    if(foundIndexes[i] >= usedIndexes[i2].start && foundIndexes[i] <= usedIndexes[i2].end) {
-                        indexIsWithinOtherMatchedPhrase = true;
-                        break;
+            for(var i = 0; i < sentences.length; i ++) {
+                var startPos = 0;  
+                while(startPos != -1) {
+                    startPos = sentences[i].regexIndexOf(regex,startPos);
+                    if(startPos != -1) {
+                        if(!sentenceFinds[i]) sentenceFinds[i] = 0;
+                        sentenceFinds[i] ++;
+                        startPos ++;
                     }
-                }
-                
-                if(!indexIsWithinOtherMatchedPhrase) {
-                    var start = foundIndexes[i];
-                    var end = foundIndexes[i];
-
-                    end = doc.body.indexOf(". ", start);
-                    if(end - start > 100 || end == -1) end = doc.body.indexOf(".", start);
-
-                    var okToAdd = true;
-                    for(var i2 = 0; i2 < usedIndexes.length; i2 ++) {
-                        if(usedIndexes[i2].end == end && usedIndexes[i2].start > start) {
-                            usedIndexes[i2].start = start;
-                            okToAdd = false;
-                            break;
-                        }
-                    }
-                    
-                    if(okToAdd) {
-                        usedIndexes.push({start: start, end:end});
-                    }
-                }
+                }           
             }
 
-            usedIndexes.forEach(function(index) {
-                var newText = doc.body.substring(index.start, index.end);
-                if(newText.split(" ").length > 3) newTeaser = newTeaser + newText + "...";
-            });
+            var numPhrases = MAX_MATCHED_PHRASES_PER_ARTICLE;
+            if(sentences.length < numPhrases) numPhrases = sentences.length;
+            
+            var sentencesToUse = [];
+            for(var j = 0; j < numPhrases; j ++) {
+                var use = 0;
+                for(var k = 0; k < sentences.length; k ++) {
+                    if(sentenceFinds[use] < sentenceFinds[k]) use = k;
+                }
+                if(sentenceFinds[use] > 0) sentencesToUse.push(use);
+                sentenceFinds[use] = 0;
+            }
+
+            var newTeaser = "...";
+            for(var l = 0; l < sentencesToUse.length; l ++) {
+                newTeaser += globalFunctions.trim(sentences[sentencesToUse[l]]) + "...";
+            }
             if(newTeaser != "...") doc.teaser = newTeaser;
         });
 

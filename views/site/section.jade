@@ -15,7 +15,7 @@
                 .teaser #{doc.teaser}
     .sidebar
         - if (typeof popular != 'undefined' && popular.length > 0)
-            .most-popular!=partial('container/most-popular', {title: "Popular", stories: popular})
+            .numbered-articles.most-popular!=partial('container/numbered-articles', {title: "Popular", stories: popular})
         // facebook recommend
         .container.clearfix.facebook-recommendations(style="margin-bottom: 20px")
             .vertical-container

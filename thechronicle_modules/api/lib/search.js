@@ -248,7 +248,7 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
             var foundIndexes = [];
             var startPos = 0;  
             
-            doc.body = doc.body.replace(/<[^>]*>/gm,"");
+            doc.body = doc.body.replace(/<[^>]*>/gm," ");
             while(startPos != -1) {
                 startPos = doc.body.regexIndexOf(regex,startPos);
                 if(startPos != -1) {

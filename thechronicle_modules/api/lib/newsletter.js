@@ -98,7 +98,6 @@ newsletter.createNewsletter = function (callback) {
     api.group.docs(layoutGroups.Newsletter.namespace, null, function (err, model) {
 	fs.readFile('views/newsletter.jade', function (err, data) {
 	    var newsHTML = jade.compile(data)({
-		taxonomy: config.get('TAXONOMY_MAIN_SECTIONS'),
 		model: model
 	    });
             var adHTML = "<a href='www.google.com'><img src='https://www.google.com/help/hc/images/adsense_185666_adformat-display_160x600_en.jpg'></img></a>";
@@ -116,7 +115,7 @@ newsletter.createNewsletter = function (callback) {
 		}
 		else {
 		    log.info("Campaign ID: " + res);
-		    callback(res);
+		    callback(null, res);
 		}
             });
 	});

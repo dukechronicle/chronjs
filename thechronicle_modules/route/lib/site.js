@@ -313,7 +313,6 @@ site.newsletterData = function (req, res) {
 };
 
 site.rss = function (req, res) {
-    log.debug('yayyyyyyyyyy');
     res.render('rss', {
         layout: false,
         filename: 'rss'
@@ -321,7 +320,6 @@ site.rss = function (req, res) {
 };
 
 site.pageNotFound = function(req, res) {
-    log.debug(req.params);
     res.render('pages/404', {
         filename: 'pages/404',
         css: asereje.css([]),

@@ -1,0 +1,34 @@
+    .ui-li-heading  {
+        white-space: normal;
+        font-weight: 600;
+        font-size: 14px;
+    }
+    .ui-li-desc {
+        white-space: normal;
+        line-height: 1.2em;
+    }
+
+    .ui-li-divider {
+        font-size: 1.2em;
+    }
+    .ui-li .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li {
+        padding: .1em 15px .1em 15px;
+    }
+    
+    #ArticleContent p {
+        line-height: 1.4em;
+    }
+
+    #ArticleContent h2 {
+        font-size: 1.2em;
+        line-height: 1.3em;
+        font-weight: 600;
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+
+    #ArticleContent .author {
+        margin-top: 0px;
+        font-size: 0.8em;
+    }
+

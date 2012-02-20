@@ -5,8 +5,20 @@ text-color = #333
 bg-color = #F5F6F7
 header-height = 70px
 
+html
+    visibility hidden
+
+html.wf-active
+    visibility visible
+
+em
+    font-style italic
+
+strong
+    font-weight bold
+
 #page
-    .rounded
+    > .rounded
         padding 20px
         padding-top 10px
         width 930px
@@ -95,8 +107,6 @@ body
     h1, h2, h3, h4, h5, h6
         font-family skolar, Georgia,"Century Schoolbook","Times New Roman",Times,serif
             
-
-    
     #shell
         margin 0px auto
         width 972px
@@ -214,8 +224,8 @@ body
                     margin-bottom -2px
                     transition(border-bottom-color, .25s, linear)
                 a:hover, a.active
-                    border-bottom-color white
-            h2.first a
+                    border-bottom-color #DDD
+            h2:first-child a
                 padding-left 3px
             
             a

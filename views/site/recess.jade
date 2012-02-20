@@ -43,5 +43,5 @@
         // sandbox
         if (model.Art)
             .sandbox!=partial('container/block-row.jade', {title: 'Art', stories: model.Art})
-        .multimedia!=partial('container/multimedia-recess', {title: "multimedia"})
+        .multimedia!=partial('container/multimedia', {title: "Multimedia", multimedia: model.multimedia.Recess})
 

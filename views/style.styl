@@ -5,6 +5,12 @@ text-color = #333
 bg-color = #F5F6F7
 header-height = 70px
 
+html
+    visibility hidden
+
+html.wf-active
+    visibility visible
+
 em
     font-style italic
 
@@ -219,7 +225,7 @@ body
                     transition(border-bottom-color, .25s, linear)
                 a:hover, a.active
                     border-bottom-color #DDD
-            h2.first a
+            h2:first-child a
                 padding-left 3px
             
             a

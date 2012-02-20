@@ -398,6 +398,10 @@ site.newsletterData = function (req, res) {
         afterFunc();
 };
 
+site.rss = function (req, res) {
+	res.render('rss');
+}
+
 site.pageNotFound = function(req, res) {
     res.render('pages/404', {
         filename: 'pages/404',

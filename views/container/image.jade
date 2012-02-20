@@ -1,7 +1,18 @@
-.container.clearfix
+.container.clearfix.image
     .vertical-container
         h2.vertical #{title}
-    
-    a.rounded-hover(href='#{url}')
-        .content-container
-            img(src='#{imageUrl}', width='#{width}', height='#{height}')
+
+    - if (typeof url !='undefined')
+        a.rounded-hover(href='#{url}')
+            .content-container
+                img(src='#{imageUrl}', width='#{width}', height='#{height}')
+                - if (typeof caption != 'undefined')
+                    .caption #{caption}
+    - else
+        .rounded-hover
+            .content-container
+                img(src='#{imageUrl}', width='#{width}', height='#{height}')
+                - if (typeof caption != 'undefined')
+                    .caption #{caption}
+
+

@@ -31,7 +31,7 @@
  *     The textarea will use an appropriate height between 50 and 200 pixels.
  */
 
-(function($) {
+define(["jquery"], function($) {
 
 	// jQuery plugin definition
 	$.fn.TextAreaExpander = function(minHeight, maxHeight) {
@@ -86,10 +86,8 @@
 		return this;
 	};
 
-})(jQuery);
-
-
-// initialize all expanding textareas
-jQuery(document).ready(function() {
-	jQuery("textarea[class*=expand]").TextAreaExpander();
+    // initialize all expanding textareas
+    $(document).ready(function() {
+	    $("textarea[class*=expand]").TextAreaExpander();
+    });
 });

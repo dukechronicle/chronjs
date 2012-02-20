@@ -5,6 +5,7 @@ var async = require("async");
 var db = require("../../db-abstract");
 var log = require('../../log');
 var config = require("../../config");
+var globalFunctions = require("../../global-functions");
 var _ = require("underscore");
 
 api.group = require("./group");
@@ -124,7 +125,7 @@ api.editDoc = function(docid, fields, callback) {
             getAvailableUrl(_URLify(fields.title, MAX_URL_LENGTH), 0, function(err, url) {
                 if(err) return callback(err, null, null);
                
-                fields.updated = Math.round(new Date().getTime() / 1000);
+                fields.updated = globalFunctions.unixTimestamp();
                 fields.urls = res.urls;
                 fields.urls.push(url);
                 db.merge(docid, fields, function(db_err, db_res) {
@@ -170,7 +171,7 @@ api.addDoc = function(fields, callback) {
                 return callback(err, null, null);
             }
             else {
-                var unix_timestamp = Math.round(new Date().getTime() / 1000);
+                var unix_timestamp = globalFunctions.unixTimestamp();
                 fields.created = fields.created || unix_timestamp;
                 fields.updated = fields.created || unix_timestamp;
                 fields.urls = [url];

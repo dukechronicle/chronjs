@@ -313,10 +313,15 @@ site.newsletterData = function (req, res) {
 };
 
 site.rss = function (req, res) {
-	res.render('rss');
-}
+    log.debug('yayyyyyyyyyy');
+    res.render('rss', {
+        layout: false,
+        filename: 'rss'
+    });
+};
 
 site.pageNotFound = function(req, res) {
+    log.debug(req.params);
     res.render('pages/404', {
         filename: 'pages/404',
         css: asereje.css([]),

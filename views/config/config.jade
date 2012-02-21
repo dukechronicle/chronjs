@@ -18,22 +18,17 @@ form
 - each param in configParams    
     if(showOnly == null || showOnly == param.name)
         h4 !{param.description+":"}
-        form(id=param.name)
-            div(class="onde-panel")
         - if(typeof param.defaultValue == "object") 
             a(id=param.name+"-rawSwitch", class="rawSwitch") !{"Show Raw"}
             textarea(id=param.name+"-val", name=param.name, class="expand", style="width:75%")
                 !{JSON.stringify(param.defaultValue,null,"\t")}
         - else
             input(id=param.name+"-val", type='text', name=param.name, value=param.defaultValue, style="width:75%")
+        form(id=param.name)
+            div(class="onde-panel")
         br
         br
         br
-    else
-        - if(typeof param.defaultValue == "object") 
-                input(type='hidden', name=param.name, value=JSON.stringify(param.defaultValue,null,"\t"))            
-        - else
-                input(type='hidden', name=param.name, value=param.defaultValue)   
 div
 form(id="configForm", action=action, method='POST')
   input(type='hidden', name=revisionName, value=revisionValue)

@@ -238,22 +238,15 @@ api.nodeForTitle = function(url, callback) {
     });
 };
 
-api.docsByDate = function(beforeKey, beforeID, callback) {
-    var query = {
-        descending:true,
-        limit: RESULTS_PER_PAGE
-    };
-
-    if(beforeKey) query.startkey = parseInt(beforeKey);
-    if(beforeID) query.startkey_docid = beforeID;
+api.docsByDate = function(limit, query, callback) {
+    query = _.defaults(query || {}, {
+        descending: true,
+        limit: limit || RESULTS_PER_PAGE
+    });
 
     db.view("articles/all_by_date", query, function(err, results) {
         if (err) callback(err);
-
-        // return only the array of the result values
-        callback(null, results.map(function(result) {
-            return result;
-        }));
+        else callback(null, _.map(results, function(doc){return doc.value}));
     });
 };
 

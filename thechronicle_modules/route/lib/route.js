@@ -40,7 +40,7 @@ exports.init = function (app) {
     app.get('/towerview', site.towerview);
     app.get('/section/*', site.section);
 
-    app.get('/rss/*', site.rss);
+    app.get('/rss', site.rss);
 
     // Makes search url more readable
     app.get('/search', function (req, res) {

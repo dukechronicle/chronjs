@@ -323,6 +323,35 @@ site.newsletterData = function (req, res) {
         afterFunc();
 };
 
+site.rss = function (req, res, next) {
+    api.docsByDate(50, null, function (err, docs) {
+        if (err) next(err);
+        else {
+            res.render('rss', {
+                docs: docs,
+                section: [],
+                layout: false,
+                filename: 'rss'
+            });
+        }
+    });
+};
+
+site.rssSection = function (req, res, next) {
+    var taxonomy = req.params.toString().split('/');
+    api.taxonomy.docs(taxonomy, 50, function (err, docs) {
+        if (err) next(err);
+        else {
+            res.render('rss', {
+                docs: docs,
+                section: taxonomy,
+                layout: false,
+                filename: 'rss'
+            });
+        }
+    });
+};
+
 site.pageNotFound = function(req, res) {
     res.render('pages/404', {
         filename: 'pages/404',

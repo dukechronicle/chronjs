@@ -4,7 +4,6 @@ var async = require('async');
 var builder = require('xmlbuilder');
 var child_process = require('child_process');
 var dateFormat = require('dateformat');
-var db = require('../../db-abstract');
 var fs = require('fs');
 var log = require('../../log');
 var _ = require('underscore');
@@ -48,7 +47,7 @@ sitemap.latestNewsSitemap = function (path, callback) {
 };
 
 function latestFullSitemapHelper(path, number, start, files, callback) {
-    var query = { limit: SITEMAP_URL_LIMIT };
+    var query = {};
     if (start != null) {
 	query.startkey = start;
 	query.skip = 1;
@@ -67,9 +66,7 @@ function latestFullSitemapHelper(path, number, start, files, callback) {
 }
 
 function latestSitemap(path, query, news, callback) {
-    query = query || {};
-    query.limit = query.limit || SITEMAP_URL_LIMIT;	
-    db.view("articles/all_by_date", query, function(err, results) {
+    api.docsByDate(SITEMAP_URL_LIMIT, query, function(err, results) {
         if (err) callback(err);
         else if (results.length == 0) callback("No new articles for sitemap");
 	else {

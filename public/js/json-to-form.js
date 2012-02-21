@@ -1,6 +1,6 @@
-var ondeSessions = {};
-
 define(["jquery", "onde"], function($) {
+    var ondeSessions = {};
+
     for(var i in JSON_TO_FORM_ELEMENTS) {
         var obj = JSON_TO_FORM_ELEMENTS[i];
         var element = $("#"+obj.name);
@@ -24,36 +24,40 @@ define(["jquery", "onde"], function($) {
             };
             
             ondeSessions[obj.name].render(obj.schema, obj.defaultValue, { collapsedCollapsibles: false });
+        }
+    }
 
-            // Bind our form's submit event. We use this to get the data out from Onde
-            $('#configForm').submit(function (evt) {
-                changeRaw();
-                return false;
-            });
+    $('#configForm').submit(function (evt) {
+        changeRaw();
+        return false;
+    });
+
+    $(".rawSwitch").click(function(evt) {
+        showJSON($(this).attr("id").split("-")[0]);
+    });
+
+    function changeRaw() {
+        // NOT WORKING!
+        for(var id in ondeSessions) {
+            var outData = ondeSessions[id].getData();
+            console.log(outData);
+            $("#"+id+"-val").val(outData.data.value);
+        }
+    }
+
+    function showJSON(id) {
+        var rawSwitch = $("#"+id+"-rawSwitch");
+
+        if(rawSwitch.html() == "Show Form") {        
+            $("#"+id+"-val").hide();
+            $("#"+id).show();
+            rawSwitch.html("Show Raw");
+        }
+        else {
+            changeRaw();
+            $("#"+id+"-val").show();
+            $("#"+id).hide();
+            rawSwitch.html("Show Form");
         }
     }
 });
-
-function changeRaw() {
-    for(var id in ondeSessions) {
-        var outData = ondeSessions[id].getData();
-        console.log(outData);
-        $("#"+id+"-val").val(outData.data.value);
-    }
-}
-
-function showJSON(id) {
-    var rawSwitch = $("#"+id+"-rawSwitch");
-
-    if(rawSwitch.html() == "Show Form") {        
-        $("#"+id+"-val").hide();
-        $("#"+id).show();
-        rawSwitch.html("Show Raw");
-    }
-    else {
-        changeRaw();
-        $("#"+id+"-val").show();
-        $("#"+id).hide();
-        rawSwitch.html("Show Form");
-    }
-}

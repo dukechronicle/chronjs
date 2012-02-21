@@ -77,29 +77,8 @@ api.init = function(callback) {
         api.s3.init();
         api.site.init();
 
-        //api.database.findDuplicateUrls(100);
-        //api.search.indexUnindexedArticles(1);
-        /** Chron Jobs! **/
-        /*
-        new api.cron.CronJob('0 * * * * *', function() {
-            process.nextTick(function() {
-                api.search.indexUnindexedArticles(300);
-            });
-        });*/
-
         callback(null);
     });
-};
-
-api.getArticles= function(parent_node, count, callback) {
-    var start = [parent_node];
-    var end = [parent_node, {}];
-    db.view("articles/descendants", {
-        startkey: start,
-        endkey: end,
-        limit: count
-    },
-    callback);
 };
 
 api.editDoc = function(docid, fields, callback) {

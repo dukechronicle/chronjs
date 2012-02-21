@@ -1,36 +1,51 @@
+- var configTitle = 'Chronicle Configuration';
 - if(showOnly == null)
     - var action = '/config';
 - else
     - var action = '/config?showOnly=' + showOnly;
+    - configTitle += ' for ' + showOnly;
 
-h1 Chronicle Configuration
+h1 !{configTitle}
 div(style="color:red")
     !{error}
-form(action=action, method='POST')
+form(id="configForm", action=action, method='POST')
   input(type='hidden', name=revisionName, value=revisionValue)
-  label='Config Profile Name:'
-  br
+  h4 Config Profile Name:
   input(type='text', name=profileName, value=profileValue, readonly="true")
+  br
+  br
   br
   br
   - each param in configParams    
     if(showOnly == null || showOnly == param.name)
-        div
-            label=param.description+':'
+        h4 !{param.description+":"}
+        div(id=param.name)
+            div(class="onde-panel")
+        - if(typeof param.defaultValue == "object") 
+            textarea(id=param.name+"-val", name=param.name, class="expand", style="width:75%")
+                !{JSON.stringify(param.defaultValue,null,"\t")}
+        - else
+            input(id=param.name+"-val", type='text', name=param.name, value=param.defaultValue, style="width:75%")
+        - if(typeof param.defaultValue == "object")
             br
-            - if(typeof param.defaultValue == "object") 
-                textarea(name=param.name, class="expand", style="width:75%")
-                    !{JSON.stringify(param.defaultValue,null,"\t")}
-            - else
-                input(type='text', name=param.name, value=param.defaultValue, style="width:75%")
-            br
-            br
-            br
-            br
-            br
+            a(id=param.name+"-rawSwitch", onclick="showJSON('"+param.name+"')") !{"Show Raw"}        
+        br
+        br
+        br
     else
         - if(typeof param.defaultValue == "object") 
                 input(type='hidden', name=param.name, value=JSON.stringify(param.defaultValue,null,"\t"))            
         - else
                 input(type='hidden', name=param.name, value=param.defaultValue)   
-  input(type='submit')
+  div
+    br
+    br
+    br
+    input(type='submit')
+
+if(showOnly != null)
+  script
+    var JSON_TO_FORM_ELEMENTS = !{JSON.stringify(configParams)};
+else
+  script
+    var JSON_TO_FORM_ELEMENTS = !{JSON.stringify(configParams)};

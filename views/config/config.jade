@@ -28,7 +28,7 @@ form(id="configForm", action=action, method='POST')
             input(id=param.name+"-val", type='text', name=param.name, value=param.defaultValue, style="width:75%")
         - if(typeof param.defaultValue == "object")
             br
-            a(id=param.name+"-rawSwitch", onclick="showJSON('"+param.name+"')") !{"Show Raw"}        
+            a(id=param.name+"-rawSwitch", class="rawSwitch") !{"Show Raw"}        
         br
         br
         br

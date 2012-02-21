@@ -58,10 +58,10 @@ exports.init = function (app) {
     app.get('/staff/:query', site.staff);
 
     app.get('/page/:url', site.page);
+    app.get('/page/:url/edit', api.site.checkAdmin, site.editPage);
     app.get('/article/:url', site.article);
     app.get('/article/:url/print', site.articlePrint);
     app.get('/article/:url/edit', api.site.checkAdmin, site.editArticle);
-    app.get('/page/:url/edit', api.site.checkAdmin, site.editPage);
     app.get('/login', site.login);
     app.get('/newsletter', site.newsletter);
     app.post('/newsletter', site.newsletterData);

@@ -173,16 +173,6 @@ api.addDoc = function(fields, callback) {
     }
 };
 
-api.addNode = function(parent_path, name, callback) {
-    parent_path.push(name);
-    db.save({
-        type: "node",
-        path: parent_path
-    }, 
-    callback);
-};
-
-
 api.articleForUrl = function(url, callback) {
     var query = {
         startkey: [url],

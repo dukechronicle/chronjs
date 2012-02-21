@@ -70,7 +70,8 @@ site.renderConfigPage = function(req, res, err) {
 	}
 
 	res.render('config/config', {
-		js: ['jquery.textarea-expander?v=2'],
+		js: ['json-to-form','jquery.textarea-expander?v=2'],
+        css: ['css/onde'],
         locals : {
 			configParams : config.getParameters(),
 			profileName : config.getProfileNameKey(),

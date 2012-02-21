@@ -7,7 +7,7 @@ var _ = require('underscore');
 
 
 siteApi.listAll = function (req, res, next) {
-    api.docsByDate(false,false,function(err,docs){
+    api.docsByDate(null, null, function(err,docs) {
 	if (err) next(err);
         else {
             var result = _.map(docs, function (doc) {

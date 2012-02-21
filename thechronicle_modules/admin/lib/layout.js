@@ -23,8 +23,7 @@ exports.renderLayout = function (req,res,next) {
         });
     }
     else {
-        api.docsByDate(null, null,
-        function (err, docs) {
+        api.docsByDate(null, null, function (err, docs) {
             if (err) next(err);
             else renderPage(req,res,docs);
         });

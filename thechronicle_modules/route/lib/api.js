@@ -20,8 +20,8 @@ siteApi.listAll = function (req, res, next) {
 };
 
 siteApi.section = function (req, res, next) {
-    var groupName = req.params.groupname;
-    api.taxonomy.docs(groupName, 10, function (err, docs) {
+    var section = req.params.section;
+    api.taxonomy.docs([section], 10, function (err, docs) {
         if (err) next(err);
         else {
             var result = _.map(docs, function (doc) {

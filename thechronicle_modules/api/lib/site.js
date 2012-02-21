@@ -429,7 +429,7 @@ site.getSectionContent = function (params, callback) {
             });
         },
         function (cb) {
-            api.taxonomy.docs(section, 20, function (err, docs) {
+            api.taxonomy.docs(params, 20, function (err, docs) {
                 if (err) cb(err)
                 else modifyArticlesForDisplay(docs, cb);
             });
@@ -484,6 +484,27 @@ site.getSearchContent = function (wordsQuery, query, callback) {
 };
 
 site.getArticleContent = function(url, callback) {
+    var redisKey = "article:" + url;
+
+    redis.client.get(redisKey, function(err, res) {
+        if (res) {
+            var data = JSON.parse(res);
+            callback(null, data[0], data[1], data[2]);
+        } else {
+            site.getArticleContentUncached(url, function(err, doc, model, parents) {
+                if (err)
+                    callback(err);
+                else {
+                    redis.client.set(redisKey, JSON.stringify([doc, model, parents]));
+                    redis.client.expire(redisKey, 600);
+                    callback(null, doc, model, parents);
+                }
+            });
+        }
+    });
+};
+
+site.getArticleContentUncached = function(url, callback) {
 	api.articleForUrl(url, function(err, doc) {
 		if(err) return callback(err);
 

@@ -324,7 +324,7 @@ site.newsletterData = function (req, res) {
 };
 
 site.rss = function (req, res, next) {
-    api.docsByDate(null, null, function (err, docs) {
+    api.docsByDate(50, null, function (err, docs) {
         if (err) next(err);
         else {
             res.render('rss', {

@@ -4,8 +4,8 @@ rss(version="2.0")
         title The Chronicle
         link http://www.dukechronicle.com
         description The Independent Daily at Duke University
-        each article in doc
-                item
-                        title #{article.title}
-                        link http://dukechronicle.com/article/#{article.url || article.urls[0]}
-                        description #{article.renderedBody}
+        - each article in doc
+            item
+                title #{article.title}
+                link http://dukechronicle.com/article/#{article.urls[article.urls.length - 1]}
+                description #{article.renderedBody}

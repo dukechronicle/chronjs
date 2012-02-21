@@ -1,5 +1,3 @@
-html{visibility:hidden}
-html.wf-active{visibility:visible}
 em{font-style:italic}
 strong{font-weight:bold}
 #page > .rounded{padding:20px;padding-top:10px;width:930px;margin-bottom:20px;}
@@ -9,7 +7,7 @@ strong{font-weight:bold}
 #page > .rounded ol{list-style-type:square;margin-left:30px}
 #page > .rounded li{list-style:circle;margin-bottom:10px}
 #page .rounded.subscribe h2{margin-bottom:.2em;margin-top:1em}
-@font-face{font-family:'didot';src:url("css/fonts/didot.eot");src:local('☺'),url("css/fonts/didot.woff") format('woff'),url("css/fonts/didot.ttf") format('truetype'),url("css/fonts/didot.svg") format('svg');font-weight:normal;font-style:normal}
+@font-face{font-family:'didot';src:url("/css/fonts/didot.eot");src:local('☺'),url("/css/fonts/didot.woff") format('woff'),url("/css/fonts/didot.ttf") format('truetype'),url("/css/fonts/didot.svg") format('svg');font-weight:normal;font-style:normal}
 .clearfix:before,.clearfix:after{content:"";display:table}
 .clearfix:after{clear:both}
 .clearfix{zoom:1}
@@ -43,7 +41,7 @@ body #header-bottom nav{position:relative;z-index:2;clear:both;width:636px;paddi
 body #header-bottom nav h2{float:left;}
 body #header-bottom nav h2 a{font-weight:600;text-shadow:0 1px 2px rgba(0,0,0,0.40);letter-spacing:1px;border-bottom:1px solid transparent;font-size:.8em;text-transform:uppercase;color:#eee;display:block;padding-left:12px;padding-right:8px;padding-bottom:2px;margin-bottom:-2px;-webkit-transition:border-bottom-color .25s linear;-moz-transition:border-bottom-color .25s linear;-ms-transition:border-bottom-color .25s linear;-o-transition:border-bottom-color .25s linear;transition:border-bottom-color .25s linear}
 body #header-bottom nav h2 a:hover,body #header-bottom nav h2 a.active{border-bottom-color:#ddd}
-body #header-bottom nav h2.first a{padding-left:3px}
+body #header-bottom nav h2:first-child a{padding-left:3px}
 body #header-bottom nav a{color:#333}
 body section{margin-top:20px}
 .container{margin-bottom:20px}

@@ -47,7 +47,7 @@ var TAXONOMY = null;
 var articleIDs = [];
 
 log.init(function (err) {
-    config.init(function(err) {
+    config.init(function(){}, function(err) {
         if(err) {
             console.log(err);
         }

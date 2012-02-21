@@ -41,6 +41,7 @@ exports.init = function (app) {
     app.get('/section/*', site.section);
 
     app.get('/rss', site.rss);
+    app.get('/rss/*', site.rssSection);
 
     // Makes search url more readable
     app.get('/search', function (req, res) {

@@ -23,6 +23,27 @@
                 //$.mobile.touchOverflowEnabled = true;
             });        
         </script> 
+        
+        <script type="text/javascript"> 
+            // onLoad parse URL
+            $(function() {
+                // m/asdlfjsladkd
+                var relativeURL = window.location.pathname;
+
+                // " ", "m", "article", articleName
+                var splitString = relativeURL.split("/");
+
+                // TODO: malformed input?
+                if(splitString[2] == "article" && splitString[3] != null && splitString[3] != "")
+                {
+                    getArticle(splitString[3]);
+                }
+                else
+                {
+                    getArticleList('All', 'The Chronicle', true);
+                }
+            });        
+        </script> 
 
 		<link rel="stylesheet" href="/m/css/chronmobile.css" />
         
@@ -210,25 +231,6 @@
 			$(ARTICLE_LIST).listview('refresh');
         }
 
-
-        function parseURL()
-        {
-            // m/asdlfjsladkd
-            var relativeURL = window.location.pathname;
-
-            // " ", "m", "article", articleName
-            var splitString = relativeURL.split("/");
-
-            // TODO: malformed input?
-            if(splitString[2] == "article" && splitString[3] != null && splitString[3] != "")
-            {
-                getArticle(splitString[3]);
-            }
-            else
-            {
-                getArticleList('All', 'The Chronicle', true);
-            }
-        }
     
         </script>
 

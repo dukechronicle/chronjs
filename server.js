@@ -119,10 +119,10 @@ function configureApp(sessionInfo, port) {
         // set up session
         app.use(express.cookieParser());
         app.use(express.session(sessionInfo));
-        /* set http cache to one minute by default for each response */
+        /* set http cache to 30 minutes by default for each response */
         app.use(function(req,res,next) {
             if(!api.accounts.isAdmin(req)) {
-                res.header('Cache-Control', 'public, max-age=300');
+                res.header('Cache-Control', 'public, max-age=1800');
             }
             next();
         });

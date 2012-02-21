@@ -114,6 +114,7 @@ function configureApp(sessionInfo, port) {
     app.configure(function() {
         app.set('views', __dirname + '/views');
         app.set('view engine', 'jade');
+        app.enable('jsonp callback');
         app.use(express.bodyParser({uploadDir: __dirname + '/uploads'}));
         app.use(express.methodOverride());
         // set up session

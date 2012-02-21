@@ -29,7 +29,13 @@ define(["jquery", "onde"], function($) {
 
     $('#configForm').submit(function (evt) {
         changeRaw();
-        return false;
+        
+        for(var id in ondeSessions) {
+            var value = $("#"+id+"-val").val();
+            $("<input type='hidden' name='"+id+"'/>").val(value).appendTo($('#configForm'));
+        }
+
+        return true;
     });
 
     $(".rawSwitch").click(function(evt) {
@@ -37,11 +43,12 @@ define(["jquery", "onde"], function($) {
     });
 
     function changeRaw() {
-        // NOT WORKING!
         for(var id in ondeSessions) {
             var outData = ondeSessions[id].getData();
-            console.log(outData);
-            $("#"+id+"-val").val(outData.data.value);
+            if(!outData.noData) {
+                if(typeof outData.data.value == "object") $("#"+id+"-val").val(JSON.stringify(outData.data.value,null,'\t'));
+                else $("#"+id+"-val").val(outData.data.value);
+            }
         }
     }
 

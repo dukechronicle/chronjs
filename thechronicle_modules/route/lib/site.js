@@ -324,11 +324,27 @@ site.newsletterData = function (req, res) {
 };
 
 site.rss = function (req, res, next) {
-    api.docsByDate(null, null, function (err, doc) {
-        if (err) next();
+    api.docsByDate(null, null, function (err, docs) {
+        if (err) next(err);
         else {
             res.render('rss', {
-                doc: doc,
+                docs: docs,
+                section: [],
+                layout: false,
+                filename: 'rss'
+            });
+        }
+    });
+};
+
+site.rssSection = function (req, res, next) {
+    var taxonomy = req.params.toString().split('/');
+    api.taxonomy.docs(taxonomy, 50, function (err, docs) {
+        if (err) next(err);
+        else {
+            res.render('rss', {
+                docs: docs,
+                section: taxonomy,
                 layout: false,
                 filename: 'rss'
             });

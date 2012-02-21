@@ -155,6 +155,9 @@ site.page = function (req, res, next) {
 site.article = function (req, res, next) {
     var url = req.params.url;
     var isAdmin = api.accounts.isAdmin(req);
+    // cache article pages for an hour
+    if (!isAdmin) res.header('Cache-Control', 'public, max-age=3600');
+
     api.site.getArticleContent(url, function (err, doc, model, parents) {
         if (err)
             next();

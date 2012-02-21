@@ -7,6 +7,7 @@ var dateFormat = require('dateformat');
 var fs = require('fs');
 var log = require('../../log');
 var _ = require('underscore');
+var api = require('../../api');
 
 var SITEMAP_URL_LIMIT = 10000;
 

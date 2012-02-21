@@ -43,9 +43,5 @@ form(id="configForm", action=action, method='POST')
     br
     input(type='submit')
 
-if(showOnly != null)
-  script
-    var JSON_TO_FORM_ELEMENTS = !{JSON.stringify(configParams)};
-else
-  script
+script
     var JSON_TO_FORM_ELEMENTS = !{JSON.stringify(configParams)};

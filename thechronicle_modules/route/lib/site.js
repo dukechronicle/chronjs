@@ -312,16 +312,16 @@ site.newsletterData = function (req, res) {
         afterFunc();
 };
 
-site.rss = function (req, res) {
+site.rss = function (req, res, next) {
     api.docsByDate(null, null, function (err, doc) {
-        if (err)
-            next();
-        else
+        if (err) next();
+        else {
             res.render('rss', {
                 doc: doc,
                 layout: false,
                 filename: 'rss'
             });
+        }
     });
 };
 

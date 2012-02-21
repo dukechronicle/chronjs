@@ -7,14 +7,13 @@ var _ = require('underscore');
 
 
 siteApi.listAll = function (req, res, next) {
-    api.docsByDate(false,false,function(err,docs){
+    api.docsByDate(null, null, function(err,docs) {
 	if (err) next(err);
         else {
             var result = _.map(docs, function (doc) {
                 return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls};
             });
-            
-            sendResponseJSONP(res, req.query.callback, result);
+            res.json(result);
         }
     });
 };
@@ -27,8 +26,7 @@ siteApi.section = function (req, res, next) {
             var result = _.map(docs, function (doc) {
                 return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls};
             });
-
-            sendResponseJSONP(res, req.query.callback, result);
+            res.json(result);
         }
     });
 };
@@ -42,8 +40,7 @@ siteApi.article = function (req, res, next) {
                 body: doc.body,
                 author: doc.author
             };
-
-            sendResponseJSONP(res, req.query.callback, result);
+            res.json(result);
         }
     });
 };
@@ -54,7 +51,7 @@ siteApi.search = function (req, res, next) {
         if (err) next(err);
         else {
             var result = { docs: docs, facets: facets };
-            sendResponseJSONP(res, req.query.callback, result);
+            res.json(result);
         }
     });
 };
@@ -65,7 +62,7 @@ siteApi.staff = function (req, res, next) {
         if (err) next(err);
         else {
             var result = { docs: docs, facets: facets };
-            sendResponseJSONP(res, req.query.callback, result);
+            res.json(result);
         }
     });
 };
@@ -104,10 +101,3 @@ siteApi.deleteDocument =  function (req, res, next) {
         res.send({status: (err == null)});
     });
 };
-
-function sendResponseJSONP(res, callback, result) {
-    if (callback == null)
-        res.send(result);
-    else
-        res.send(callback + "(" + JSON.stringify(result) + ")");
-}

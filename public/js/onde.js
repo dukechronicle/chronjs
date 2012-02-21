@@ -1178,7 +1178,6 @@ onde.Onde.prototype._buildObject = function (schema, path, formData) {
 };
 
 onde.Onde.prototype.getData = function (opts) {
-    console.log(this);
     var formData = {};
     var fields = this.formElement.serializeArray();
     for (var i = 0; i < fields.length; i++) {

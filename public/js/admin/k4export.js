@@ -42,29 +42,6 @@ define(['jquery', 'Article'], function ($, Article) {
         });
     }
 
-    function addImageVersions(docId, $image, callback) {
-        try {
-            var imageData = JSON.parse($image.val());
-
-            var fields = {
-                docId: docId,
-                versionId: imageData.imageVersions,
-                original: imageData.originalId,
-                imageType: imageData.imageVersionTypes
-            };
-
-            $.post('/api/article/version/add', fields, function (data, status) {
-                if (status != 'success')
-	            callback("Adding image to article '" + article.title + "' failed");
-                else
-                    callback();
-            });
-        }
-        catch (e) {
-            callback();
-        }
-    }
-
     function showImage($image) {
         var $preview = $image.parent().parent().find("td > img.preview");
         try {

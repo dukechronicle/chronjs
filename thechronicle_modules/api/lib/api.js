@@ -119,6 +119,7 @@ api.editDoc = function(docid, fields, callback) {
     api.docsById(docid, function(geterr, res) {
         if(geterr) return callback(geterr, null, null);
 
+
         if(res.created) fields.created = res.created;
 
         if(fields.title && (_URLify(fields.title, MAX_URL_LENGTH) !== _URLify(res.title, MAX_URL_LENGTH))) {

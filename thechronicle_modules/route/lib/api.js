@@ -71,7 +71,7 @@ siteApi.staff = function (req, res, next) {
 };
 
 siteApi.editDocument = function (req, res, next) {
-    api.editDoc(req.body.doc.id, req.body.doc, function (err, _res) {
+    api.editDoc(req.body.id, req.body, function (err, _res) {
         if (err) {
             log.warning(err);
             _res.err = err;

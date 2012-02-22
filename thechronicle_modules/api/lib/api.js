@@ -119,7 +119,7 @@ api.addDoc = function(fields, callback) {
                                         fields.taxonomy, fields.authors,
                                         fields.created, function (err) {
                                             if (err) callback(err);
-                                            else callback(null, url);
+                                            else callback(null, url, res.id);
                                         });
             });
         });

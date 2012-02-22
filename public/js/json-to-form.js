@@ -36,13 +36,13 @@ define(["jquery", "onde"], function($) {
 
     // on form submit, add the json values of all forms as inputs to this form and then submit
     $('#configForm').submit(function (evt) {
-        changeRaw();
-        
         for(var id in ondeSessions) {
+            // if the form for a json object is visible, update the raw json value for it
+            if($("#"+id).is(":visible")) changeRaw(id);
+
             var value = $("#"+id+"-val").val();
             $("<input type='hidden' name='"+id+"'/>").val(value).appendTo($('#configForm'));
         }
-
         return true;
     });
 
@@ -57,14 +57,12 @@ define(["jquery", "onde"], function($) {
         return false;        
     });
 
-    // update the textareas containing the raw json to contain the form data for that json object
-    function changeRaw() {
-        for(var id in ondeSessions) {
-            var outData = ondeSessions[id].getData();
-            if(!outData.noData) {
-                if(typeof outData.data.value == "object") $("#"+id+"-val").val(JSON.stringify(outData.data.value,null,'\t'));
-                else $("#"+id+"-val").val(outData.data.value);
-            }
+    // update the textarea containing the raw json to contain the form data for that json object
+    function changeRaw(id) {
+        var outData = ondeSessions[id].getData();
+        if(!outData.noData) {
+           if(typeof outData.data.value == "object") $("#"+id+"-val").val(JSON.stringify(outData.data.value,null,'\t'));
+           else $("#"+id+"-val").val(outData.data.value);
         }
     }
 
@@ -109,7 +107,7 @@ define(["jquery", "onde"], function($) {
             rawSwitch.html("Show Raw");
         }
         else {
-            changeRaw();
+            changeRaw(id);
             $("#"+id+"-val").show();
             $("#"+id).hide();
             rawSwitch.html("Show Form");

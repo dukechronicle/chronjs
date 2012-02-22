@@ -4,7 +4,6 @@ var config = require("../../config");
 var db = require("../../db-abstract");
 var globalFunctions = require("../../global-functions");
 var log = require("../../log");
-var redis = require('../../redisclient');
 
 var async = require("async");
 var md = require('node-markdown').Markdown;
@@ -34,6 +33,16 @@ var VIDEO_PLAYERS = {
 };
 var VIDEO_REGEX_FORMAT = "(\{%s:)([^}]+)(\})";
 
+
+function renderBody(body) {
+    _.each(VIDEO_PLAYERS, function (name, tag) {
+        var pattern = new RegExp(sprintf(VIDEO_REGEX_FORMAT, name), 'g');
+        body = body.replace(pattern, function(match) {
+            return sprintf(tag, RegExp.$2);
+        });
+    });
+    return md(body);
+}
 
 function getAvailableUrl(url, n, callback) {
     var new_url = url;
@@ -70,17 +79,6 @@ function _URLify(s, maxChars) {
     s = s.replace(/[-\s]+/g, "-");   // convert spaces to hyphens
     s = s.toLowerCase();             // convert to lowercase
     return s.substring(0, maxChars);// trim to first num_chars chars
-}
-
-function renderBody(body, callback) {
-    for(var name in VIDEO_PLAYERS) {
-        var pattern = new RegExp(sprintf(REGEX_FORMAT, name), 'g');
-        body = body.replace(pattern, function(match) {
-            return sprintf(VIDEO_PLAYERS[name], RegExp.$2);
-        });
-    }
-
-    callback(null, md(body));
 }
 
 api.init = function(callback) {
@@ -131,7 +129,8 @@ api.addDoc = function(fields, callback) {
             fields.updated = fields.created || unix_timestamp;
             fields.urls = [url];
             fields.indexedBySolr = api.search.getIndexVersion();
-                
+            fields.renderedBody = renderBody(fields.body);
+
             // strip all html tags from the teaser
             fields.teaser = fields.teaser.replace(/<(.|\n)*?>/g,"");
 
@@ -139,7 +138,10 @@ api.addDoc = function(fields, callback) {
                 if (err) return callback(err);
                 api.search.indexArticle(res.id, fields.title, fields.body,
                                         fields.taxonomy, fields.authors,
-                                        fields.created, callback);
+                                        fields.created, function (err) {
+                                            if (err) callback(err);
+                                            else callback(null, url);
+                                        });
             });
         });
     }
@@ -149,18 +151,22 @@ api.addDoc = function(fields, callback) {
 api.editDoc = function(docid, fields, callback) {
     api.docsById(docid, function(err, res) {
         if (err) callback(err);
-        else if (fields.title && (_URLify(fields.title) !=  _URLify(res.title))){
-            getAvailableUrl(_URLify(fields.title), 0, function(err, url) {
-                if (err) return callback(err);
-                
-                fields.updated = globalFunctions.unixTimestamp();
-                fields.urls = res.urls;
-                fields.urls.push(url);
-
-                saveEditedDoc(docid, fields, url, callback);
-            });
+        else {
+            if (fields.body) fields.renderedBody = renderBody(fields.body);
+            fields.updated = globalFunctions.unixTimestamp();            
+            
+            if (fields.title && (_URLify(fields.title) !=  _URLify(res.title))){
+                getAvailableUrl(_URLify(fields.title), 0, function(err, url) {
+                    if (err) return callback(err);
+                   
+                    fields.urls = res.urls;
+                    fields.urls.push(url);
+                    
+                    saveEditedDoc(docid, fields, url, callback);
+                });
+            }
+            else saveEditedDoc(docid, fields, _.last(res.urls), callback);
         }
-        else saveEditedDoc(docid, fields, _.last(res.urls), callback);
     });
 };
 
@@ -354,9 +360,9 @@ function saveEditedDoc(docid, doc, url, callback) {
             api.search.indexArticle(docid, res.title, res.body, res.taxonomy,
                                     res.authors, res.created, function (err) {
                                         if (err) callback(err);
-                                        else callback(null, res, url);
+                                        else callback(null, url);
                                     });
         }
-        else callback(null, res, url);
+        else callback(null, url);
     });
 }

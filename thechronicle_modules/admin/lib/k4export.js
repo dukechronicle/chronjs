@@ -156,7 +156,7 @@ function ArticleParser(articleCallback) {
         }
         async.reduce(article.body, "",
                 function (memo, item, cb) {
-                    cb(undefined, memo + "<p>" + item + "</p>");
+                    cb(undefined, memo + item + "\n\n");
                 },
                 function (err, result) {
                     if (err)

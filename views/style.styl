@@ -5,12 +5,6 @@ text-color = #333
 bg-color = #F5F6F7
 header-height = 70px
 
-html
-    visibility hidden
-
-html.wf-active
-    visibility visible
-
 em
     font-style italic
 
@@ -50,8 +44,8 @@ strong
 
 @font-face
     font-family 'didot'
-    src url('css/fonts/didot.eot')
-    src local('☺'), url('css/fonts/didot.woff') format('woff'), url('css/fonts/didot.ttf') format('truetype'), url('css/fonts/didot.svg') format('svg')
+    src url('/css/fonts/didot.eot')
+    src local('☺'), url('/css/fonts/didot.woff') format('woff'), url('/css/fonts/didot.ttf') format('truetype'), url('/css/fonts/didot.svg') format('svg')
     font-weight normal
     font-style normal
 
@@ -225,7 +219,7 @@ body
                     transition(border-bottom-color, .25s, linear)
                 a:hover, a.active
                     border-bottom-color #DDD
-            h2.first a
+            h2:first-child a
                 padding-left 3px
             
             a

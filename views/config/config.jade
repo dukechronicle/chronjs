@@ -8,7 +8,7 @@
 h1 !{configTitle}
 div(style="color:red")
     !{error}
-form
+form(class="fake-form")
   h4 Config Profile Name:
   input(type='text', name=profileName, value=profileValue, readonly="true")
   br
@@ -24,7 +24,7 @@ form
                 !{JSON.stringify(param.defaultValue,null,"\t")}
         - else
             input(id=param.name+"-val", type='text', name=param.name, value=param.defaultValue, style="width:75%")
-        form(id=param.name)
+        form(id=param.name, class="fake-form")
             div(class="onde-panel")
         br
         br

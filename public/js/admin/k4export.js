@@ -28,10 +28,17 @@ define(['jquery', 'Article'], function ($, Article) {
             taxonomy: JSON.parse(taxonomy)
         });
 
-        var fields = { doc: article.toJSON() };
-        console.log(fields);
-        return callback();
+        try {
+            var imageData = JSON.parse($row.find("td > .image").val());
+            article.addImageVersions(imageData.originalId,
+                                     imageData.imageVersions,
+                                     imageData.imageVersionTypes);
+        }
+        catch (e) {}
+        
+        console.log(article.toJSON());
 
+        return callback();
         $.post('/api/article/edit', fields, function(data, status) {
 	    if (status != 'success')
 	        callback("Taxonomy change for article '" + article.title + "' failed");

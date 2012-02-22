@@ -94,29 +94,8 @@ api.init = function(callback) {
         api.s3.init();
         api.site.init();
 
-        //api.database.findDuplicateUrls(100);
-        //api.search.indexUnindexedArticles(1);
-        /** Chron Jobs! **/
-        /*
-        new api.cron.CronJob('0 * * * * *', function() {
-            process.nextTick(function() {
-                api.search.indexUnindexedArticles(300);
-            });
-        });*/
-
         callback(null);
     });
-};
-
-api.getArticles= function(parent_node, count, callback) {
-    var start = [parent_node];
-    var end = [parent_node, {}];
-    db.view("articles/descendants", {
-        startkey: start,
-        endkey: end,
-        limit: count
-    },
-    callback);
 };
 
 api.addDoc = function(fields, callback) {
@@ -191,15 +170,6 @@ api.docsByAuthor = function(author, callback) {
     });
 };
 
-api.addNode = function(parent_path, name, callback) {
-    parent_path.push(name);
-    db.save({
-        type: "node",
-        path: parent_path
-    }, 
-    callback);
-};
-
 api.articleForUrl = function(url, callback) {
     var query = {
         startkey: [url],
@@ -265,22 +235,15 @@ api.nodeForTitle = function(url, callback) {
     });
 };
 
-api.docsByDate = function(beforeKey, beforeID, callback) {
-    var query = {
-        descending:true,
-        limit: RESULTS_PER_PAGE
-    };
-
-    if(beforeKey) query.startkey = parseInt(beforeKey);
-    if(beforeID) query.startkey_docid = beforeID;
+api.docsByDate = function(limit, query, callback) {
+    query = _.defaults(query || {}, {
+        descending: true,
+        limit: limit || RESULTS_PER_PAGE
+    });
 
     db.view("articles/all_by_date", query, function(err, results) {
         if (err) callback(err);
-
-        // return only the array of the result values
-        callback(null, results.map(function(result) {
-            return result;
-        }));
+        else callback(null, _.map(results, function(doc){return doc.value}));
     });
 };
 

@@ -80,18 +80,6 @@ siteApi.editDocument = function (req, res, next) {
     });
 };
 
-siteApi.addImageVersionToArticle = function (req, res, next) {
-    api.image.addVersionsToDoc(req.body.docId, req.body.original,
-                               req.body.versionId, req.body.imageType,
-                               function (err, _res) {
-                                   if (err) {
-                                       log.warning(err);
-                                       _res.err = err;
-                                   }
-                                   res.send(_res);
-                               });
-};
-
 siteApi.addGroup = function (req, res, next) {
     var docId = req.body.docId;
     var nameSpace = req.body.nameSpace;

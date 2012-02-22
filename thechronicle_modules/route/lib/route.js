@@ -20,7 +20,7 @@ exports.init = function (app) {
 
     app.namespace('/api', function () {
         app.get('/All', siteApi.listAll);
-        app.get('/:groupname', siteApi.section);
+        app.get('/:section', siteApi.section);
         app.get('/article/:url', siteApi.article);
         app.get('/search/:query', siteApi.search);
         app.get('/staff/:query', siteApi.staff);
@@ -41,6 +41,9 @@ exports.init = function (app) {
     app.get('/towerview', site.towerview);
     app.get('/section/*', site.section);
 
+    app.get('/rss', site.rss);
+    app.get('/rss/*', site.rssSection);
+
     // Makes search url more readable
     app.get('/search', function (req, res) {
         var query = "--";            
@@ -56,10 +59,10 @@ exports.init = function (app) {
     app.get('/staff/:query', site.staff);
 
     app.get('/page/:url', site.page);
+    app.get('/page/:url/edit', api.site.checkAdmin, site.editPage);
     app.get('/article/:url', site.article);
     app.get('/article/:url/print', site.articlePrint);
     app.get('/article/:url/edit', api.site.checkAdmin, site.editArticle);
-    app.get('/page/:url/edit', api.site.checkAdmin, site.editPage);
     app.get('/login', site.login);
     app.get('/newsletter', site.newsletter);
     app.post('/newsletter', site.newsletterData);
@@ -95,7 +98,7 @@ exports.init = function (app) {
         app.post('/info', api.site.checkAdmin, admin.image.info);
         app.post('/crop', api.site.checkAdmin, admin.image.crop);
     });
-
+    
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);
 

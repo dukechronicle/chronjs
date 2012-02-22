@@ -114,15 +114,16 @@ function configureApp(sessionInfo, port) {
     app.configure(function() {
         app.set('views', __dirname + '/views');
         app.set('view engine', 'jade');
+        app.enable('jsonp callback');
         app.use(express.bodyParser({uploadDir: __dirname + '/uploads'}));
         app.use(express.methodOverride());
         // set up session
         app.use(express.cookieParser());
         app.use(express.session(sessionInfo));
-        /* set http cache to one minute by default for each response */
+        /* set http cache to 30 minutes by default for each response */
         app.use(function(req,res,next) {
             if(!api.accounts.isAdmin(req)) {
-                res.header('Cache-Control', 'public, max-age=300');
+                res.header('Cache-Control', 'public, max-age=1800');
             }
             next();
         });

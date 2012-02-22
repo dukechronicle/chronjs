@@ -11,6 +11,7 @@ var db = require('../../db-abstract');
 var k4export = require('./k4export');
 var log = require('../../log');
 var sitemap = require('../../sitemap');
+var redis = require('../../redisclient');
 
 admin.image = require('./image');
 admin.layout = require('./layout').renderLayout;
@@ -84,16 +85,17 @@ admin.manage = function (req, res, next) {
     var host = api.getDatabaseHost();
     var port = api.getDatabasePort() || "80";
 
-    var beforeKey = req.query.beforeKey;
-    var beforeID = req.query.beforeID;
+    var query = {};
+    if (req.query.beforeKey) query.startkey = parseInt(req.query.beforeKey);
+    if (req.query.beforeID) query.start_docid = req.query.beforeID;
 
-    api.docsByDate(beforeKey, beforeID, function (err, docs) {
+    api.docsByDate(null, query, function (err, docs) {
         if (err) next(err);
         else res.render('admin/manage', {
             js: ['admin/manage'],
             locals:{
                 docs:docs,
-                hasPrevious:(beforeID != null),
+                hasPrevious:(req.query.beforeID != null),
                 db:db,
                 host:host,
                 port:port
@@ -208,7 +210,12 @@ admin.editArticleData = function (req, http_res, next) {
 
         api.editDoc(id, fields, function (err, url) {
             if (err) next(err);
-            else http_res.redirect('/article/' + url);
+            else {
+                // reset redis cache
+                var redisKey = "article:" + url;
+                redis.client.del(redisKey);
+                http_res.redirect('/article/' + url);
+            }
         });
     }
 };

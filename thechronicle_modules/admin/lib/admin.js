@@ -191,15 +191,15 @@ admin.k4exportData = function (req, res, next) {
     },
     function(err, results) {
         res.render('admin/k4export', {
-	        js: ['admin/k4export?v=4'],
+	    js: ['admin/k4export?v=5'],
             locals:{
                 failed: results.k4.failed,
                 succeeded: results.k4.success,
                 taxonomy: results.taxonomy,
                 imageData: results.images
-	        }
+	    }
         });
-	});
+    });
 };
 
 admin.editArticleData = function (req, http_res, next) {

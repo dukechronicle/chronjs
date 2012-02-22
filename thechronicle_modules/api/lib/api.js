@@ -35,7 +35,7 @@ var VIDEO_REGEX_FORMAT = "(\{%s:)([^}]+)(\})";
 
 
 function renderBody(body) {
-    _.each(VIDEO_PLAYERS, function (name, tag) {
+    _.each(VIDEO_PLAYERS, function (tag, name) {
         var pattern = new RegExp(sprintf(VIDEO_REGEX_FORMAT, name), 'g');
         body = body.replace(pattern, function(match) {
             return sprintf(tag, RegExp.$2);

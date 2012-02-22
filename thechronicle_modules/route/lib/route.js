@@ -25,6 +25,7 @@ exports.init = function (app) {
         app.get('/search/:query', siteApi.search);
         app.get('/staff/:query', siteApi.staff);
 
+        app.post('/article/edit', api.site.checkAdmin, siteApi.editDocument);
         app.post('/group/add', api.site.checkAdmin, siteApi.addGroup);
         app.post('/group/remove', api.site.checkAdmin, siteApi.removeGroup);
         app.del('/:docId', api.site.checkAdmin, siteApi.deleteDocument);

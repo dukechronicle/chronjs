@@ -26,6 +26,6 @@
                     .image-container.medium-rectangle.lighten!=partial('ad/medium-rect', {title: "Advertisement"})
 
     .bottom
-        .multimedia!=partial('container/multimedia-news', {title: "Multimedia"})
+        .multimedia!=partial('container/multimedia', {title: "Multimedia", multimedia: model.multimedia.News})
         .more-news!=partial('container/block-row-same', {title: "More News", stories: model.Stories, sameSize: true})
 

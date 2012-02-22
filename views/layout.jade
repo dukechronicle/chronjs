@@ -1,11 +1,18 @@
 !!! 5
 html(lang="en")
     head
-        title The Chronicle | Duke University's Daily Independent Newspaper
+        if (typeof pageTitle != 'undefined')
+            title #{pageTitle} | The Chronicle
+        else
+            title The Chronicle | Duke University's Daily Independent Newspaper
+
         link(rel="image_src", href="http://dukechronicle.com/favicon.png")
 
+        script(src="/js/mobile-redirect.js?v=3")
+
         // border-radius support in ie
-            script(src="/js/curvycorners.js")
+        script(src="/js/curvycorners.js")
+
         // typekitload code should always load first because it will cause a relayout of dom
         script(src="http://use.typekit.com/dwv2bjy.js")
         script try{Typekit.load();}catch(e){}

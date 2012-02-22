@@ -173,7 +173,8 @@ admin.k4exportData = function (req, res, next) {
     },
     function(err, results) {
         res.render('admin/k4export', {
-	    js: ['admin/k4export?v=5'],
+	        css: ['css/msdropdown'],
+            js: ['admin/k4export?v=6'],
             locals:{
                 failed: results.k4.failed,
                 succeeded: results.k4.success,

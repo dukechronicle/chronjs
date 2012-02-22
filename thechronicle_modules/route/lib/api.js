@@ -67,6 +67,16 @@ siteApi.staff = function (req, res, next) {
     });
 };
 
+siteApi.editDocument = function (req, res, next) {
+    api.editDoc(req.body.id, req.body, function (err, _res) {
+        if (err) {
+            log.warning(err);
+            _res.err = err;
+        }
+        res.send(_res);
+    });
+};
+
 siteApi.addGroup = function (req, res, next) {
     var docId = req.body.docId;
     var nameSpace = req.body.nameSpace;

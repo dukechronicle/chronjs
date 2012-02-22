@@ -14,7 +14,7 @@ a(href='/admin/manage') Manage and edit uploaded articles
   h2 The followed articles were uploaded successfully
   table
     - each article in succeeded
-      tr
+      tr(id=article.id)
         td
           a(href='/article/' + article.url) #{article.title}
         td
@@ -35,4 +35,4 @@ a(href='/admin/manage') Manage and edit uploaded articles
         td
           img.preview(id='img-preview'+article.id)
         td
-          button(id='sub'+article.id, style='width: 200px', value=JSON.stringify(article)) Submit
+          button(id='sub'+article.id, style='width: 200px') Submit

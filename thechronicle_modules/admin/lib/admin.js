@@ -11,7 +11,6 @@ var db = require('../../db-abstract');
 var k4export = require('./k4export');
 var log = require('../../log');
 var sitemap = require('../../sitemap');
-var redis = require('../../redisclient');
 
 admin.image = require('./image');
 admin.layout = require('./layout').renderLayout;
@@ -210,12 +209,7 @@ admin.editArticleData = function (req, http_res, next) {
 
         api.editDoc(id, fields, function (err, url) {
             if (err) next(err);
-            else {
-                // reset redis cache
-                var redisKey = "article:" + url;
-                redis.client.del(redisKey);
-                http_res.redirect('/article/' + url);
-            }
+            else http_res.redirect('/article/' + url);
         });
     }
 };

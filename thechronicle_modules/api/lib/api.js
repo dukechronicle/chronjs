@@ -4,6 +4,7 @@ var config = require("../../config");
 var db = require("../../db-abstract");
 var globalFunctions = require("../../global-functions");
 var log = require("../../log");
+var redis = require('../../redisclient');
 
 var async = require("async");
 var md = require('node-markdown').Markdown;
@@ -316,6 +317,9 @@ api.getDatabasePort = function() {
 };
 
 function saveEditedDoc(docid, doc, url, callback) {
+    // reset redis cache
+    redis.client.del("article:" + url);
+
     db.merge(docid, doc, function(err, res) {
  	if (err) callback(err);
         // only reindex the article if they edited the search fields

@@ -7,101 +7,9 @@ var log = require('../../log');
 
 var asereje = require('asereje');
 
-var MOBILE_BROWSER_USER_AGENTS = ["Android", "iPhone", "Windows Phone",
-                                  "Blackberry", "Symbian", "Palm", "webOS"];
-
-var fs = require('fs');
-var yt2012Data = JSON.parse(fs.readFileSync("sample-data/young-trustee-2012.json"));
-
-var afterConfigChangeFunction = function(callback) { callback(); };
-
-site.setAfterConfigChangeFunction = function(func) {
-    afterConfigChangeFunction = func;
-};
-
-site.redirectMobile = function (req, res, next) {
-    var userAgent = req.headers['user-agent'] || '';
-
-    for(var i in MOBILE_BROWSER_USER_AGENTS) {
-        if(userAgent.indexOf(MOBILE_BROWSER_USER_AGENTS[i]) != -1) {
-            res.redirect('/m' + req.url);
-            return;
-        }
-    }
-
-    next();
-};
 
 site.mobile = function (req, res, next) {
     res.sendfile('public/m/index.html');
-};
-
-site.aboutUs = function (req, res) {
-    res.render('pages/about-us', {
-	filename: 'pages/about-us',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.privacyPolicy = function (req, res) {
-    res.render('pages/privacy-policy', {
-	filename:'pages/privacy-policy',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.userGuidelines = function (req, res) {
-    res.render('pages/user-guidelines', {
-	filename:'pages/user-guidelines',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.advertising = function (req, res) {
-    res.render('pages/advertising', {
-	filename:'pages/advertising',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.subscribe = function (req, res) {
-    res.render('pages/subscribe', {
-	filename:'pages/subscribe',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.editBoard = function (req, res) {
-    res.render('pages/edit-board', {
-	filename:'pages/edit-board',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.lettersToEditor = function (req, res) {
-    res.render('pages/letters', {
-	filename:'pages/letters',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.contact = function (req, res) {
-    res.render('pages/contact', {
-	filename:'pages/contact',
-	css: asereje.css(['container/style'])
-    });
-};
-
-site.yt2012 = function (req, res) {
-    var viewLocation = "pages/young-trustee-2012";
-    res.render(viewLocation, {
-        filename:viewLocation,
-        css: asereje.css(['container/style', 'pages/young-trustee-2012']),
-        locals: {
-            endorsements: yt2012Data[0],
-            pastYts: yt2012Data[1]
-        }
-    });
 };
 
 site.frontpage = function (req, res) {
@@ -120,6 +28,7 @@ site.frontpage = function (req, res) {
 site.news = function (req, res) {
     api.site.getNewsPageContent(function (err, model, children) {
         res.render('site/news', {
+            pageTitle: "News",
             css:asereje.css(['container/style', 'site/section', 'site/news']),
             subsections:children,
             filename:'views/site/news.jade',
@@ -131,6 +40,7 @@ site.news = function (req, res) {
 site.sports = function (req, res) {
     api.site.getSportsPageContent(function (err, model, children) {
         res.render('site/sports', {
+            pageTitle: "Sports",
             css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
             js:['slideshow/slideshow'],
             subsections:[children.men, children.women],
@@ -143,6 +53,7 @@ site.sports = function (req, res) {
 site.opinion = function (req, res) {
     api.site.getOpinionPageContent(function (err, model, children) {
         res.render('site/opinion', {
+            pageTitle: "Opinion",
             css:asereje.css(['container/style', 'site/section', 'site/opinion']),
             js:['opinion'],
             subsections:children,
@@ -155,6 +66,7 @@ site.opinion = function (req, res) {
 site.recess = function (req, res) {
     api.site.getRecessPageContent(function (err, model, children) {
         res.render('site/recess', {
+            pageTitle: "Recess",
             css:asereje.css(['container/style', 'site/section', 'site/recess']),
             subsections:children,
             filename:'views/site/recess.jade',
@@ -166,6 +78,7 @@ site.recess = function (req, res) {
 site.towerview = function (req, res) {
     api.site.getTowerviewPageContent(function (err, model, children) {
         res.render('site/towerview', {
+            pageTitle: "Towerview",
             css:asereje.css(['container/style', 'site/section', 'site/towerview']),
             subsections:children,
             filename:'views/site/towerview.jade',
@@ -182,11 +95,12 @@ site.section = function (req, res, next) {
 	    res.render('site/section', {
 	        css:asereje.css(['container/style', 'site/section']),
 	        locals: {
-                    docs:docs,
-		    subsections:children,
-		    parentPaths:parents,
-		    section:section,
-		    popular: popular
+                pageTitle: section,
+                docs:docs,
+                subsections:children,
+                parentPaths:parents,
+                section:section,
+                popular: popular
 	        }
 	    });
         }
@@ -219,6 +133,7 @@ site.staff = function (req, res) {
             css:asereje.css(['container/style', 'site/people']),
             js:['scrollLoad?v=2'],
             locals:{
+                pageTitle: globalFunctions.capitalizeWords(name),
                 docs: docs,
                 name: globalFunctions.capitalizeWords(name)
             }
@@ -234,9 +149,10 @@ site.page = function (req, res, next) {
         else if ('/page/' + url != doc.path)
             res.redirect(doc.url);
         else res.render('page', {
-	    css: asereje.css(['container/style']),
+	        css: asereje.css(['container/style']),
             filename:'views/page.jade',
             locals: {
+                pageTitle: doc.node_title,
                 doc:doc,
                 model: model
             }
@@ -247,6 +163,9 @@ site.page = function (req, res, next) {
 site.article = function (req, res, next) {
     var url = req.params.url;
     var isAdmin = api.accounts.isAdmin(req);
+    // cache article pages for a day
+    if (!isAdmin) res.header('Cache-Control', 'public, max-age=86400');
+
     api.site.getArticleContent(url, function (err, doc, model, parents) {
         if (err)
             next();
@@ -255,6 +174,7 @@ site.article = function (req, res, next) {
         else res.render('article', {
             locals: {
                 doc:doc,
+                pageTitle:doc.title,
                 isAdmin:isAdmin,
                 model:model,
                 parentPaths:parents,
@@ -262,7 +182,6 @@ site.article = function (req, res, next) {
                 disqusShortname: config.get('DISQUS_SHORTNAME')
             },
             filename:'views/article',
-            layout: 'layout-article',
             css:asereje.css(['container/style', 'article'])
         });
     });
@@ -354,7 +273,7 @@ site.logout = function (req, res) {
 
 site.config = function (req, res) {
     if (api.accounts.isAdmin(req))
-        api.site.renderConfigPage(res);
+        api.site.renderConfigPage(req, res);
     else
         api.site.askForLogin(res, '/config');
 };
@@ -363,12 +282,14 @@ site.configData = function (req, res) {
     if (api.accounts.isAdmin(req))
         config.setUp(req.body, function (err) {
             if (err)
-		        api.site.renderConfigPage(res,err);
-	        else 
-                afterConfigChangeFunction(function (err) {
+		        api.site.renderConfigPage(req, res, err);
+	        else {
+                log.notice("Config updated to use revision " + config.getConfigRevision());
+                config.runAfterConfigChangeFunction(function (err) {
 		            if (err) log.error(err);
                     res.redirect('/');
                 });
+            }   
         });
     else
 	    api.site.askForLogin(res, '/config');
@@ -400,6 +321,35 @@ site.newsletterData = function (req, res) {
         api.newsletter.removeSubscriber(email, afterFunc);
     else
         afterFunc();
+};
+
+site.rss = function (req, res, next) {
+    api.docsByDate(50, null, function (err, docs) {
+        if (err) next(err);
+        else {
+            res.render('rss', {
+                docs: docs,
+                section: [],
+                layout: false,
+                filename: 'rss'
+            });
+        }
+    });
+};
+
+site.rssSection = function (req, res, next) {
+    var taxonomy = req.params.toString().split('/');
+    api.taxonomy.docs(taxonomy, 50, null, function (err, docs) {
+        if (err) next(err);
+        else {
+            res.render('rss', {
+                docs: docs,
+                section: taxonomy,
+                layout: false,
+                filename: 'rss'
+            });
+        }
+    });
 };
 
 site.pageNotFound = function(req, res) {

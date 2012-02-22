@@ -4,34 +4,23 @@ var _ = require('underscore');
 
 
 var taxonomy = exports;
+
 taxonomy.docs = function(taxonomyTerm, limit, startkey_docid, callback) {
     var query = {
+        descending: true,
         startkey: [taxonomyTerm, {}],
         endkey: [taxonomyTerm],
-        descending: true
     };
 
-    if (limit) {
-        query.limit = limit;
-    }
-    if(startkey_docid) {
-        query.startkey_docid = startkey_docid;
-    }
+    if (limit) query.limit = limit;
+    if(startkey_docid) query.startkey_docid = startkey_docid;
 
-    db.view(
-        'articles/taxonomy',
-        query,
-        function(err, result) {
-            if (err) callback(err);
-            else callback(err, result);
-        }
-    );
+    db.view('articles/taxonomy', query, callback);
 };
 
 taxonomy.getHierarchy = function (callback) {
     db.view('articles/taxonomy_tree', {group:true}, callback);
 };
-
 
 taxonomy.getHierarchyTree = function (callback) {
     taxonomy.getHierarchy(function (error, res) {

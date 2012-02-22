@@ -4,10 +4,9 @@ define(['jquery', 'Article'], function ($, Article) {
 
         $("button").click(function () {
             $(this).attr('disabled', 'disabled');
-            var article = new Article(JSON.parse($(this).attr('value')));
             var $row = $(this).parent().parent();
             var $button = $(this);
-            editDocument(article, $row, function (err) {
+            editDocument($row, function (err) {
 	        if (err) alert(err);
 		$button.removeAttr('disabled');
             });
@@ -19,13 +18,17 @@ define(['jquery', 'Article'], function ($, Article) {
 
     });
 
-    function editDocument(article, $row, callback) {
+    function editDocument($row, callback) {
         var taxonomy = $row.find("td > .taxonomy").val();
         if (!taxonomy)
-            return callback("Must select a section for article "+article.title);
-        article.set({taxonomy: JSON.parse(article.taxonomy)});
+            return callback("Must select a section for article");
 
-        var fields = { doc: article.attributes() };
+        var article = new Article({
+            id: $row.attr('id'),
+            taxonomy: JSON.parse(taxonomy)
+        });
+
+        var fields = { doc: article.toJSON() };
         console.log(fields);
         return callback();
 

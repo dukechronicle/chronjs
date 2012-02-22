@@ -10,7 +10,17 @@ var _ = require('underscore');
 *@params http request, http response
 */
 siteApi.listAll = function (req, res, next) {
-    api.docsByDate(false,false, mapArticleReponse);
+    api.docsByDate(false,false, function mapArticleReponse(err,docs){
+		if (err) 
+			next(err);
+		else {
+			var result = _.map(docs, function (doc) {
+				return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls};
+			});
+			
+			sendResponseJSONP(res, req.query.callback, result);
+		}
+	});
 };
 
 /**
@@ -19,7 +29,17 @@ siteApi.listAll = function (req, res, next) {
 */
 siteApi.section = function (req, res, next) {
     var section = req.params.section;
-    api.taxonomy.docs([section], 10, mapArticleReponse);
+    api.taxonomy.docs([section], 10, function mapArticleReponse(err,docs){
+		if (err) 
+			next(err);
+		else {
+			var result = _.map(docs, function (doc) {
+				return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls};
+			});
+			
+			sendResponseJSONP(res, req.query.callback, result);
+		}
+	});
 };
 
 /**
@@ -103,7 +123,7 @@ siteApi.deleteDocument =  function (req, res, next) {
     });
 };
 
-function mapArticleReponse(err,docs){
+function mapArticleReponse(res,req,err,docs){
 	if (err) 
 	    next(err);
     else {

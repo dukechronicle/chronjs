@@ -4,7 +4,7 @@ var _ = require('underscore');
 
 
 var taxonomy = exports;
-taxonomy.docs = function(taxonomyTerm, limit, callback) {
+taxonomy.docs = function(taxonomyTerm, limit, startkey_docid, callback) {
     var query = {
         startkey: [taxonomyTerm, {}],
         endkey: [taxonomyTerm],
@@ -13,6 +13,9 @@ taxonomy.docs = function(taxonomyTerm, limit, callback) {
 
     if (limit) {
         query.limit = limit;
+    }
+    if(startkey_docid) {
+        query.startkey_docid = startkey_docid;
     }
 
     db.view(

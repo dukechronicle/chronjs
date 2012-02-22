@@ -5,34 +5,27 @@ var log = require('../../log')
 
 var _ = require('underscore');
 
-
+/**
+* Gets top articles of the day.
+*@params http request, http response
+*/
 siteApi.listAll = function (req, res, next) {
-    api.docsByDate(false,false,function(err,docs){
-	if (err) next(err);
-        else {
-            var result = _.map(docs, function (doc) {
-                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls};
-            });
-            
-            sendResponseJSONP(res, req.query.callback, result);
-        }
-    });
+    api.docsByDate(false,false, mapArticleReponse);
 };
 
+/**
+* Gets 10 articles within a section.
+*@params http request, http response
+*/
 siteApi.section = function (req, res, next) {
-    var groupName = req.params.groupname;
-    api.taxonomy.docs(groupName, 10, function (err, docs) {
-        if (err) next(err);
-        else {
-            var result = _.map(docs, function (doc) {
-                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls};
-            });
-
-            sendResponseJSONP(res, req.query.callback, result);
-        }
-    });
+    var section = req.params.section;
+    api.taxonomy.docs([section], 10, mapArticleReponse);
 };
 
+/**
+* Grabs the article for a given url
+*@params http request, http response
+*/
 siteApi.article = function (req, res, next) {
     api.articleForUrl(req.params.url, function (err, doc) {
         if (err) next(err);
@@ -48,6 +41,11 @@ siteApi.article = function (req, res, next) {
     });
 };
 
+/**
+* Uses the docsBySearchQuery function inside the search module in api.js
+* Sorts by either relavence or date (ascending or descending)
+*@params req, http response
+*/
 siteApi.search = function (req, res, next) {
     var wordsQuery = req.params.query.replace('-', ' ');
     api.search.docsBySearchQuery(wordsQuery, req.query.sort, req.query.order, req.query.facets, req.query.page, true, function (err, docs, facets) {
@@ -105,6 +103,18 @@ siteApi.deleteDocument =  function (req, res, next) {
     });
 };
 
+function mapArticleReponse(err,docs){
+	if (err) 
+	    next(err);
+    else {
+        var result = _.map(docs, function (doc) {
+            return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls};
+        });
+        
+        sendResponseJSONP(res, req.query.callback, result);
+    }
+}
+    
 function sendResponseJSONP(res, callback, result) {
     if (callback == null)
         res.send(result);

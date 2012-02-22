@@ -35,15 +35,10 @@ define(['jquery', 'Article'], function ($, Article) {
                                      imageData.imageVersionTypes);
         }
         catch (e) {}
-        
-        console.log(article.toJSON());
 
-        return callback();
-        $.post('/api/article/edit', fields, function(data, status) {
-	    if (status != 'success')
-	        callback("Taxonomy change for article '" + article.title + "' failed");
-            else
-                addImageVersions(article.id, $row.find("td > .image"), callback);
+        $.post('/api/article/edit', article.toJSON(), function(data, status) {
+	    if (status == 'success') callback();
+            else callback("Taxonomy change for article failed");
         });
     }
 

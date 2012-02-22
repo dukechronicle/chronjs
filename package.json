@@ -45,7 +45,8 @@
         "zipfile": "0.2.x",
     	"sax": "0.3.x",
         "mailchimp":"0.8.x",
-	"winston": "0.5.x",
-	"xmlbuilder": "0.3.x"
+	    "winston": "0.5.x",
+	    "xmlbuilder": "0.3.x",
+        "JSV": "3.5.x"
     }
 }

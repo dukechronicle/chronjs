@@ -19,7 +19,7 @@ exports.manage = function (req, httpRes) {
     var afterUrl = req.query.afterUrl;
     var forDocument = req.query.forDocument;
 
-    api.image.getAllOriginals(beforeKey, beforeID, function (err, origs) {
+    api.image.getOriginals(25, beforeKey, beforeID, function (err, origs) {
         httpRes.render('admin/articleimage', {
             filename:'views/admin/articleimage.jade',
             js:['admin/imgdelete'],
@@ -124,7 +124,7 @@ exports.renderImage = function (req, httpRes, next) {
                          function (err2, versions) {
                              if (err2) next(err2);
                              else {
-                                 var imageTypes = config.get('IMAGE_TYPES');
+                                 var imageTypes = api.image.IMAGE_TYPES;
                                  httpRes.render('admin/image', { //no errors have been found, render image
                                      js:['admin/imgdelete?v=2', 'crop?v=2', 'nicedate?v=2'],
                                      locals:{ //specifies/assigns variables to pass into function

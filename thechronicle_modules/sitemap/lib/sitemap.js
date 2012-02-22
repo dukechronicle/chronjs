@@ -112,6 +112,8 @@ function generateSitemap(docs, news, callback) {
 	root.att("xmlns:news", "http://www.google.com/schemas/sitemap-news/0.9");
     async.forEach(docs,
 		  function (doc, cb) {
+
+              if (!doc) return;
 		      // TODO: extract domain name
 		      var prefix = "http://www.dukechronicle.com/article/";
 		      var date = getDate(doc);

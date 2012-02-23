@@ -55,11 +55,6 @@ admin.newsletterData = function(req, res, next) {
     }
 };
 
-admin.indexArticles = function (req, res, next) {
-    api.search.indexUnindexedArticles();
-    res.redirect('/');
-};
-
 admin.addArticle = function (req, res, next) {
     api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
         res.render('admin/add', {

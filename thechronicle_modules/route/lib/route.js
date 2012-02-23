@@ -45,6 +45,7 @@ exports.init = function (app) {
     app.get('/rss-source/*', site.rssSection);
     app.get('/feed/all', redirect("/rss"));
     app.get('/rss', redirect("http://feeds.feedburner.com/thechronicle/all"));
+    app.get('/rss/news', redirect("http://feeds.feedburner.com/thechronicle/news"));
 
     // Makes search url more readable
     app.get('/search', function (req, res) {

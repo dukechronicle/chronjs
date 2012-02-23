@@ -33,7 +33,7 @@ group.list = function(namespace, callback) {
 };
 
 group.docs = function(namespace, group, callback) {
-    var redisKey = "group.docs:" + namespace.toString()
+    var redisKey = "group.docs:" + namespace.toString();
     if (group) rediskey += ":" + group.toString();
 
     redis.client.get(redisKey, function(err, res) {

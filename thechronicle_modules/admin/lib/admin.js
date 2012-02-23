@@ -11,7 +11,6 @@ var db = require('../../db-abstract');
 var k4export = require('./k4export');
 var log = require('../../log');
 var sitemap = require('../../sitemap');
-var redis = require('../../redisclient');
 
 admin.image = require('./image');
 admin.layout = require('./layout').renderLayout;
@@ -54,11 +53,6 @@ admin.newsletterData = function(req, res, next) {
             }
         });
     }
-};
-
-admin.indexArticles = function (req, res, next) {
-    api.search.indexUnindexedArticles();
-    res.redirect('/');
 };
 
 admin.addArticle = function (req, res, next) {
@@ -174,7 +168,8 @@ admin.k4exportData = function (req, res, next) {
     },
     function(err, results) {
         res.render('admin/k4export', {
-	    js: ['admin/k4export?v=5'],
+	        css: ['css/msdropdown'],
+            js: ['admin/k4export?v=6'],
             locals:{
                 failed: results.k4.failed,
                 succeeded: results.k4.success,
@@ -210,12 +205,7 @@ admin.editArticleData = function (req, http_res, next) {
 
         api.editDoc(id, fields, function (err, url) {
             if (err) next(err);
-            else {
-                // reset redis cache
-                var redisKey = "article:" + url;
-                redis.client.del(redisKey);
-                http_res.redirect('/article/' + url);
-            }
+            else http_res.redirect('/article/' + url);
         });
     }
 };

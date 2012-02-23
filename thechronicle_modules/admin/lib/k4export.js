@@ -1,4 +1,5 @@
 var api = require('../../api');
+var globalFunctions = require('../../global-functions');
 var log = require('../../log');
 
 var fs = require('fs');
@@ -24,7 +25,6 @@ exports.runExporter = runExporter;
  */
 function ArticleParser(articleCallback) {
     var thisParser = this;
-    var endWhitespace = /^\s+|\s+$/g;
     var actions = {
         "K4EXPORT:PUBLICATION:ISSUE:ARTICLE:ID":onId,
         "K4EXPORT:PUBLICATION:ISSUE:PUBLICATIONDATE":onDate,
@@ -111,7 +111,7 @@ function ArticleParser(articleCallback) {
             publish:false
         };
         parser.ontext = function (text) {
-            parser.textNode = text.replace(endWhitespace, '');
+            parser.textNode = globalFunctions.trim(text);
             async.reduceRight(parser.tags, parser.tag.name,
                     function (memo, item, cb) {
                         cb(undefined, item.name + ":" + memo);
@@ -192,7 +192,7 @@ function ArticleParser(articleCallback) {
         if (parser.metadataType == "Author") {
             async.map(parser.textNode.split(/\,\s*and\s|\sand\s|\,/),
                     function (name, cb) {
-                        cb(undefined, name.replace(endWhitespace));
+                        cb(undefined, globalFunctions.trim(name));
                     },
                     function (err, results) {
                         parser.article.authors = results;

@@ -28,11 +28,9 @@ a(href='/admin/manage') Manage and edit uploaded articles
                 - each key, value in subsections
                     option(value=value) #{key}
         td
-          select.image(id='img'+article.id, style='width: 200px')
+          select.image(id='img'+article.id, style='width: 300px')
             option(value='') Select an image
             - each image in imageData
-              option(value=JSON.stringify(image)) #{image.displayName}
-        td
-          img.preview(id='img-preview'+article.id)
+              option(value=JSON.stringify(image), title=image.thumbUrl) #{image.displayName}
         td
           button(id='sub'+article.id, style='width: 200px') Submit

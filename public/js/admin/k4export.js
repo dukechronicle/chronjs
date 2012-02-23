@@ -1,4 +1,4 @@
-define(['jquery', 'Article'], function ($, Article) {
+define(['jquery', 'Article', 'msdropdown'], function ($, Article) {
 
     $(function () {
 
@@ -12,10 +12,11 @@ define(['jquery', 'Article'], function ($, Article) {
             });
         });
 
-        $("select.image").change(function () {
-            showImage($(this));
-        });
-
+        try {
+            $("[id^=img]").msDropDown({visibleRows:4, rowHeight:100});
+        } catch(e) {
+            alert(e.message);
+        }
     });
 
     function editDocument($row, callback) {
@@ -29,10 +30,9 @@ define(['jquery', 'Article'], function ($, Article) {
         });
 
         try {
-            var imageData = JSON.parse($row.find("td > .image").val());
-            article.addImageVersions(imageData.originalId,
-                                     imageData.imageVersions,
-                                     imageData.imageVersionTypes);
+            var imgDDElement = $row.find("#img"+$row.attr('id'));
+            var imageData = JSON.parse(imgDDElement.val());
+            article.addImageVersions(imageData.originalId, imageData.imageVersions, imageData.imageVersionTypes);
         }
         catch (e) {}
 
@@ -41,17 +41,4 @@ define(['jquery', 'Article'], function ($, Article) {
             else callback("Taxonomy change for article failed");
         });
     }
-
-    function showImage($image) {
-        var $preview = $image.parent().parent().find("td > img.preview");
-        try {
-    	    var imageData = JSON.parse($image.val());
-            $preview.attr('src', imageData.thumbUrl);
-            $preview.fadeIn();
-        }
-        catch (e) {
-            $preview.fadeOut();
-        }
-    }
-
 });

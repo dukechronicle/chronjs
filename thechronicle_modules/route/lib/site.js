@@ -225,6 +225,7 @@ site.editArticle = function (req, res, next) {
                     doc.authors = doc.authors.join(", ");
 
                 res.render('admin/edit', {
+                    js:['admin/deleteArticle'],
                     locals:{
                         doc:doc,
                         groups:[],

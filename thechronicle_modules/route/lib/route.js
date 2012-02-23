@@ -77,7 +77,6 @@ exports.init = function (app) {
     app.namespace('/admin', function () {
         app.get('/', api.site.checkAdmin, admin.index);
         app.get('/newsletter', api.site.checkAdmin, admin.newsletter);
-        app.get('/index-articles', api.site.checkAdmin, admin.indexArticles);
         app.get('/add', api.site.checkAdmin, admin.addArticle);
         app.get('/add-page', api.site.checkAdmin, admin.addPage);
         app.get('/manage', api.site.checkAdmin, admin.manage);

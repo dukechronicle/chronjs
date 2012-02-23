@@ -41,8 +41,10 @@ exports.init = function (app) {
     app.get('/towerview', site.towerview);
     app.get('/section/*', site.section);
 
-    app.get('/rss', site.rss);
-    app.get('/rss/*', site.rssSection);
+    app.get('/rss-source', site.rss);
+    app.get('/rss-source/*', site.rssSection);
+    app.get('/feed/all', redirect("/rss"));
+    app.get('/rss', redirect("http://feeds.feedburner.com/thechronicle/all"));
 
     // Makes search url more readable
     app.get('/search', function (req, res) {
@@ -103,3 +105,9 @@ exports.init = function (app) {
     app.get('*', site.pageNotFound);
 
 };
+
+function redirect (url) {
+    return function(req, res) {
+        res.redirect(url, 301);
+    }
+}

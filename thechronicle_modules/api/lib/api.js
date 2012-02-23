@@ -4,6 +4,7 @@ var config = require("../../config");
 var db = require("../../db-abstract");
 var globalFunctions = require("../../global-functions");
 var log = require("../../log");
+var redis = require('../../redisclient');
 
 var async = require("async");
 var md = require('node-markdown').Markdown;
@@ -115,7 +116,7 @@ api.addDoc = function(fields, callback) {
 
             db.save(fields, function(err, res) {
                 if (err) return callback(err);
-                api.search.indexArticle(res.id, fields.title, fields.body,
+                api.search.indexArticle(res.id, fields.title, fields.renderedBody,
                                         fields.taxonomy, fields.authors,
                                         fields.created, function (err) {
                                             if (err) callback(err);
@@ -141,10 +142,10 @@ api.editDoc = function(docid, fields, callback) {
                     fields.urls = res.urls;
                     fields.urls.push(url);
                     
-                    saveEditedDoc(docid, fields, url, callback);
+                    saveEditedDoc(docid, fields, res.created, url, callback);
                 });
             }
-            else saveEditedDoc(docid, fields, _.last(res.urls), callback);
+            else saveEditedDoc(docid, fields, res.created, _.last(res.urls), callback);
         }
     });
 };
@@ -315,16 +316,19 @@ api.getDatabasePort = function() {
     return db.getDatabasePort();
 };
 
-function saveEditedDoc(docid, doc, url, callback) {
+function saveEditedDoc(docid, doc, docCreatedDate, url, callback) {
+    // reset redis cache
+    redis.client.del("article:" + url);
+
     db.merge(docid, doc, function(err, res) {
- 	if (err) callback(err);
+     	if (err) callback(err);
+        
         // only reindex the article if they edited the search fields
         else if (doc.title && doc.body) {
-            api.search.indexArticle(docid, res.title, res.body, res.taxonomy,
-                                    res.authors, res.created, function (err) {
-                                        if (err) callback(err);
-                                        else callback(null, url);
-                                    });
+            api.search.indexArticle(docid, doc.title, doc.renderedBody, doc.taxonomy, doc.authors, docCreatedDate, function (err) {
+                if (err) callback(err);
+                else callback(null, url);
+            });
         }
         else callback(null, url);
     });

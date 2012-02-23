@@ -2,7 +2,6 @@ var taxonomy = require('../../api/lib/taxonomy.js');
 var groups = require('../../api/lib/group.js');
 var api = require('../../api');
 var config = require('../../config');
-var globalFunctions = require('../../global-functions');
 
 var _ = require("underscore");
 
@@ -47,7 +46,7 @@ function renderPage(req,res,section_docs) {
             locals:{
                 page: group,
                 groups: layoutConfig[group].groups,
-                mainSections: globalFunctions.convertObjectToArray(config.get("TAXONOMY_MAIN_SECTIONS")),
+                mainSections: config.get("TAXONOMY_MAIN_SECTIONS"),
                 sectionDocs: section_docs,
                 groupDocs: group_docs,
                 nameSpace: layoutConfig[group].namespace

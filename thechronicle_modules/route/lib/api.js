@@ -10,11 +10,12 @@ var _ = require('underscore');
 *@params http request, http response
 */
 siteApi.listAll = function (req, res, next) {
+    console.log(req);
     api.docsByDate(null, null, function(err, docs) {
 	    if (err) next(err);
         else {
             var result = _.map(docs, function (doc) {
-                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls};
+                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id};
             });
         sendResponseJSONP(res, req.query.callback, result);
         }
@@ -31,7 +32,7 @@ siteApi.listSection = function (req, res, next) {
         if (err) next(err);
         else {
             var result = _.map(docs, function (doc) {
-                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls};
+                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id};
             });
             sendResponseJSONP(res, req.query.callback, result);
         }
@@ -45,7 +46,15 @@ siteApi.listSection = function (req, res, next) {
 siteApi.article = function (req, res, next) {
     api.articleForUrl(req.params.url, function (err, doc) {
         if (err) next(err);
-        else res.json(doc);
+        else {
+            var result = { title: doc.title,
+                url: doc.url,
+                renderedBody: doc.renderedBody,
+                author: doc.author
+            };
+            sendResponseJSONP(res, req.query.callback, result);
+	  	
+        }
     });
 };
 

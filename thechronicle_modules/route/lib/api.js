@@ -10,7 +10,6 @@ var _ = require('underscore');
 *@params http request, http response
 */
 siteApi.listAll = function (req, res, next) {
-    console.log(req);
     api.docsByDate(null, null, function(err, docs) {
 	    if (err) next(err);
         else {

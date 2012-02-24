@@ -100,17 +100,17 @@ define(["jquery", "onde"], function($) {
     function switchShow(id) {
         var rawSwitch = $("#"+id+"-rawSwitch");
 
-        if(rawSwitch.html() == "Show Form") {        
+        if(rawSwitch.val() == "Show Form") {        
             changeForm(id);
             $("#"+id+"-val").hide();
             $("#"+id).show();
-            rawSwitch.html("Show Raw");
+            rawSwitch.val("Show Raw");
         }
         else {
             changeRaw(id);
             $("#"+id+"-val").show();
             $("#"+id).hide();
-            rawSwitch.html("Show Form");
+            rawSwitch.val("Show Form");
         }
     }
 });

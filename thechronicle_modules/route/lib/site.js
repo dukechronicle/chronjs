@@ -340,7 +340,7 @@ site.rss = function (req, res, next) {
 
 site.rssSection = function (req, res, next) {
     var taxonomy = req.params.toString().split('/');
-    api.taxonomy.docs(taxonomy, 50, function (err, docs) {
+    api.taxonomy.docs(taxonomy, 50, null, function (err, docs) {
         if (err) next(err);
         else {
             res.render('rss', {

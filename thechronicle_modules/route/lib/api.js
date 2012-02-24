@@ -5,54 +5,67 @@ var log = require('../../log')
 
 var _ = require('underscore');
 
-
+/**
+* Gets top articles of the day.
+*@params http request, http response
+*/
 siteApi.listAll = function (req, res, next) {
-    api.docsByDate(null, null, function(err,docs) {
-	if (err) next(err);
+    api.docsByDate(null, null, function(err, docs) {
+	    if (err) next(err);
         else {
             var result = _.map(docs, function (doc) {
-                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls};
+                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id};
             });
             res.json(result);
         }
     });
 };
 
-siteApi.section = function (req, res, next) {
+/**
+* Gets 10 articles within a section.
+*@params http request, http response
+*/
+siteApi.listSection = function (req, res, next) {
     var section = req.params.section;
-    api.taxonomy.docs([section], 10, function (err, docs) {
+    api.taxonomy.docs([section], 10, null, function (err, docs) {
         if (err) next(err);
         else {
             var result = _.map(docs, function (doc) {
-                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls};
+                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id};
             });
             res.json(result);
         }
     });
 };
 
+/**
+* Grabs the article for a given url
+*@params http request, http response
+*/
 siteApi.article = function (req, res, next) {
     api.articleForUrl(req.params.url, function (err, doc) {
         if (err) next(err);
         else {
             var result = { title: doc.title,
                 url: doc.url,
-                body: doc.body,
+                renderedBody: doc.renderedBody,
                 author: doc.author
             };
-            res.json(result);
+            res.json(result);	  	
         }
     });
 };
 
+/**
+* Uses the docsBySearchQuery function inside the search module in api.js
+* Sorts by either relavence or date (ascending or descending)
+*@params req, http response
+*/
 siteApi.search = function (req, res, next) {
     var wordsQuery = req.params.query.replace('-', ' ');
     api.search.docsBySearchQuery(wordsQuery, req.query.sort, req.query.order, req.query.facets, req.query.page, true, function (err, docs, facets) {
         if (err) next(err);
-        else {
-            var result = { docs: docs, facets: facets };
-            res.json(result);
-        }
+        else res.json({docs: docs, facets: facets});
     });
 };
 
@@ -60,10 +73,7 @@ siteApi.staff = function (req, res, next) {
     var nameQuery = req.params.query.replace('-', ' ');
     api.search.docsByAuthor(nameQuery, 'desc', '', req.query.page, function (err, docs, facets) {
         if (err) next(err);
-        else {
-            var result = { docs: docs, facets: facets };
-            res.json(result);
-        }
+        else res.json({docs: docs, facets: facets});
     });
 };
 

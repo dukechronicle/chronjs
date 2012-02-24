@@ -4,13 +4,16 @@ var _ = require('underscore');
 
 
 var taxonomy = exports;
-taxonomy.docs = function(taxonomy, limit, callback) {
+
+taxonomy.docs = function(taxonomyTerm, limit, startkey_docid, callback) {
     var query = {
         descending: true,
-        startkey: [taxonomy, {}],
-        endkey: [taxonomy],
+        startkey: [taxonomyTerm, {}],
+        endkey: [taxonomyTerm],
     };
+
     if (limit) query.limit = limit;
+    if(startkey_docid) query.startkey_docid = startkey_docid;
 
     db.view('articles/taxonomy', query, callback);
 };
@@ -18,7 +21,6 @@ taxonomy.docs = function(taxonomy, limit, callback) {
 taxonomy.getHierarchy = function (callback) {
     db.view('articles/taxonomy_tree', {group:true}, callback);
 };
-
 
 taxonomy.getHierarchyTree = function (callback) {
     taxonomy.getHierarchy(function (error, res) {

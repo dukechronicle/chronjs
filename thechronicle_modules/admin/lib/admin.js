@@ -2,9 +2,7 @@ var admin = exports;
 
 var async = require('async');
 var fs = require('fs');
-var md = require('node-markdown').Markdown;
 var solr = require('solr');
-var sprintf = require('sprintf').sprintf;
 var _ = require("underscore");
 
 var api = require('../../api');
@@ -17,23 +15,6 @@ var sitemap = require('../../sitemap');
 admin.image = require('./image');
 admin.layout = require('./layout').renderLayout;
 
-var VIDEO_PLAYERS = {
-    "youtube": "<iframe width=\"560\" height=\"345\" src=\"http://www.youtube.com/embed/%s\" frameborder=\"0\" allowfullscreen></iframe>",
-    "vimeo": "<iframe src=\"http://player.vimeo.com/video/%s?title=0&amp;byline=0&amp;portrait=0\" width=\"400\" height=\"225\" frameborder=\"0\"></iframe>"
-};
-var REGEX_FORMAT = "(\{%s:)([^}]+)(\})";
-
-function _renderBody(body, callback) {
-
-    for(var name in VIDEO_PLAYERS) {
-        var pattern = new RegExp(sprintf(REGEX_FORMAT, name), 'g');
-        body = body.replace(pattern, function(match) {
-            return sprintf(VIDEO_PLAYERS[name], RegExp.$2);
-        });
-    }
-
-    callback(null, md(body));
-}
 
 admin.index = function (req, res, next) {
     res.render('admin/index');
@@ -74,11 +55,6 @@ admin.newsletterData = function(req, res, next) {
     }
 };
 
-admin.indexArticles = function (req, res, next) {
-    api.search.indexUnindexedArticles();
-    res.redirect('/');
-};
-
 admin.addArticle = function (req, res, next) {
     api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
         res.render('admin/add', {
@@ -103,16 +79,17 @@ admin.manage = function (req, res, next) {
     var host = api.getDatabaseHost();
     var port = api.getDatabasePort() || "80";
 
-    var beforeKey = req.query.beforeKey;
-    var beforeID = req.query.beforeID;
+    var query = {};
+    if (req.query.beforeKey) query.startkey = parseInt(req.query.beforeKey);
+    if (req.query.beforeID) query.start_docid = req.query.beforeID;
 
-    api.docsByDate(beforeKey, beforeID, function (err, docs) {
+    api.docsByDate(null, query, function (err, docs) {
         if (err) next(err);
         else res.render('admin/manage', {
             js: ['admin/manage'],
             locals:{
                 docs:docs,
-                hasPrevious:(beforeID != null),
+                hasPrevious:(req.query.beforeID != null),
                 db:db,
                 host:host,
                 port:port
@@ -191,15 +168,16 @@ admin.k4exportData = function (req, res, next) {
     },
     function(err, results) {
         res.render('admin/k4export', {
-	        js: ['admin/k4export?v=4'],
+	        css: ['css/msdropdown'],
+            js: ['admin/k4export?v=6'],
             locals:{
                 failed: results.k4.failed,
                 succeeded: results.k4.success,
                 taxonomy: results.taxonomy,
                 imageData: results.images
-	        }
+	    }
         });
-	});
+    });
 };
 
 admin.editArticleData = function (req, http_res, next) {
@@ -215,11 +193,6 @@ admin.editArticleData = function (req, http_res, next) {
     }
     else {
         var id = req.body.doc.id;
-        /*
-          var new_groups = req.body.doc.groups;
-          if(!(new_groups instanceof Array)) { //we will get a string if only one box is checked
-          new_groups = [new_groups];
-          }*/
 
         var fields = {
             title:req.body.doc.title,
@@ -228,20 +201,16 @@ admin.editArticleData = function (req, http_res, next) {
             teaser:req.body.doc.teaser,
             authors:req.body.doc.authors.split(", "),
             taxonomy:JSON.parse(req.body.doc.taxonomy)
-            //groups: new_groups
         };
-        _renderBody(req.body.doc.body, function (err, rendered) {
-            fields.renderedBody = rendered;
-            api.editDoc(id, fields,
-                        function (err, res, url) {
-                            if (err) next(err);
-                            else http_res.redirect('/article/' + url);
-                        });
+
+        api.editDoc(id, fields, function (err, url) {
+            if (err) next(err);
+            else http_res.redirect('/article/' + url);
         });
     }
 };
 
-admin.addArticleData = function (req, http_res, next) {
+admin.addArticleData = function (req, res, next) {
     if (req.body.doc.taxonomy == '') {
         next('No section selected for article');
     }
@@ -250,7 +219,7 @@ admin.addArticleData = function (req, http_res, next) {
 
         var fields = {
             body:form.body,
-            authors:form.authors.split(" ,"),
+            authors:form.authors.split(", "),
             title:form.title,
             subhead:form.subhead,
             teaser:form.teaser,
@@ -258,19 +227,9 @@ admin.addArticleData = function (req, http_res, next) {
             taxonomy:JSON.parse(form.taxonomy)
         };
 
-        async.waterfall([
-            function (callback) {
-                _renderBody(form.body, function (err, rendered) {
-                    fields.renderedBody = rendered;
-                    callback(null);
-                });
-            },
-            function (callback) {
-                api.addDoc(fields, callback);
-            }
-        ], function (err, url) {
+        api.addDoc(fields, function (err, url) {
             if (err) next(err);
-            else http_res.redirect('/article/' + url);
+            else res.redirect('/article/' + url);
         });
     }
 };

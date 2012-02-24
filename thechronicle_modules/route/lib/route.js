@@ -19,8 +19,8 @@ exports.preinit = function (app) {
 exports.init = function (app) {
 
     app.namespace('/api', function () {
-        app.get('/All', siteApi.listAll);
-        app.get('/:section', siteApi.section);
+        app.get('/all', siteApi.listAll);
+        app.get('/:section', siteApi.listSection);
         app.get('/article/:url', siteApi.article);
         app.get('/search/:query', siteApi.search);
         app.get('/staff/:query', siteApi.staff);

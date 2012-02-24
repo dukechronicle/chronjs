@@ -57,17 +57,6 @@ siteApi.article = function (req, res, next) {
 };
 
 /**
-* Grabs the article for a given url
-*@params http request, http response
-*/
-siteApi.articleOptimized = function (req, res, next) {
-    api.articleForUrl(req.params.url, function (err, doc) {
-        if (err) next(err);
-        else res.json(doc);
-    });
-};
-
-/**
 * Uses the docsBySearchQuery function inside the search module in api.js
 * Sorts by either relavence or date (ascending or descending)
 *@params req, http response

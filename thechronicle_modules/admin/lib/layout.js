@@ -2,7 +2,6 @@ var taxonomy = require('../../api/lib/taxonomy.js');
 var groups = require('../../api/lib/group.js');
 var api = require('../../api');
 var config = require('../../config');
-var globalFunctions = require('../../global-functions');
 
 var _ = require("underscore");
 
@@ -11,7 +10,7 @@ exports.renderLayout = function (req,res,next) {
     var section = req.query.section;
     
     if (section) {
-        api.taxonomy.docs([section], 30,
+        api.taxonomy.docs([section], 30, null,
         function (err, docs) {
             if (err) next(err);
             else {
@@ -23,8 +22,7 @@ exports.renderLayout = function (req,res,next) {
         });
     }
     else {
-        api.docsByDate(null, null,
-        function (err, docs) {
+        api.docsByDate(null, null, function (err, docs) {
             if (err) next(err);
             else renderPage(req,res,docs);
         });
@@ -48,7 +46,7 @@ function renderPage(req,res,section_docs) {
             locals:{
                 page: group,
                 groups: layoutConfig[group].groups,
-                mainSections: globalFunctions.convertObjectToArray(config.get("TAXONOMY_MAIN_SECTIONS")),
+                mainSections: config.get("TAXONOMY_MAIN_SECTIONS"),
                 sectionDocs: section_docs,
                 groupDocs: group_docs,
                 nameSpace: layoutConfig[group].namespace

@@ -1,43 +1,44 @@
-function editDocument(article) {
-    $("#sub"+article.id).attr('disabled', 'disabled');
-    
-    article.taxonomy = $("#tax"+article.id).val();
-    article.authors = article.authors.toString();
-    
-    var imageString = $("#img"+article.id).val();
-    var imageData;
-    if (imageString.length > 0) {
-    	imageData = JSON.parse(imageString);
-    }
-    
-    $.post('/admin/edit', { doc: article }, function(data, status) {
-	    if (status != 'success')
-	        alert("Taxonomy change for article '" + article.title + "' failed");
-	    
-        if (imageData != null && imageData.imageVersions != null && imageData.imageVersions.length > 0) {
-	        $.post('/admin/edit', {imageVersionId: imageData.imageVersions, docId: article.id, original: imageData.originalId, imageType: imageData.imageVersionTypes},
-            function(data, status) {
-                if (status != 'success')
-	                alert("Adding image for article '" + article.title + "' failed");
+define(['jquery', 'Article', 'msdropdown'], function ($, Article) {
 
-                $("#sub"+article.id).removeAttr('disabled');
+    $(function () {
+
+        $("button").click(function () {
+            $(this).attr('disabled', 'disabled');
+            var $row = $(this).parent().parent();
+            var $button = $(this);
+            editDocument($row, function (err) {
+	        if (err) alert(err);
+		$button.removeAttr('disabled');
             });
-	    }
-	    else
-		    $("#sub"+article.id).removeAttr('disabled');
+        });
+
+        try {
+            $("[id^=img]").msDropDown({visibleRows:4, rowHeight:100});
+        } catch(e) {
+            alert(e.message);
+        }
     });
-}
 
-function showImage(articleId) {
-    var imageString = $("#img"+articleId).val();
-    var imageData;
+    function editDocument($row, callback) {
+        var taxonomy = $row.find("td > .taxonomy").val();
+        if (!taxonomy)
+            return callback("Must select a section for article");
 
-    if (imageString.length > 0) {
-    	imageData = JSON.parse(imageString);
-        $("#img-preview"+articleId).attr('src', imageData.thumbUrl);
-        $("#img-preview"+articleId).fadeIn();
+        var article = new Article({
+            id: $row.attr('id'),
+            taxonomy: JSON.parse(taxonomy)
+        });
+
+        try {
+            var imgDDElement = $row.find("#img"+$row.attr('id'));
+            var imageData = JSON.parse(imgDDElement.val());
+            article.addImageVersions(imageData.originalId, imageData.imageVersions, imageData.imageVersionTypes);
+        }
+        catch (e) {}
+
+        $.post('/api/article/edit', article.toJSON(), function(data, status) {
+	    if (status == 'success') callback();
+            else callback("Taxonomy change for article failed");
+        });
     }
-    else {
-        $("#img-preview"+articleId).fadeOut();
-    }
-}
+});

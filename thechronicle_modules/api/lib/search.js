@@ -48,7 +48,7 @@ search.indexUnindexedArticles = function(count) {
 		// Attempt to index each file in row.
 		response.forEach(function(row) {
 			process.nextTick(function() {
-				search.indexArticle(row._id, row.title, row.body, row.taxonomy, row.authors, row.created, function(error2, response2) {
+				search.indexArticle(row._id, row.title, row.renderedBody, row.taxonomy, row.authors, row.created, function(error2, response2) {
 					if(error2)
 						log.warning(error2);
 					else {
@@ -253,7 +253,7 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
         
         docs.forEach(function(doc) {
             var sentenceFinds = {};
-            var sentences = doc.body.replace(/<[^>]*>/gm," ").split(".");
+            var sentences = doc.renderedBody.replace(/<[^>]*>/gm," ").split("."); //remove html from body and then split by sentence
 
             for(var i = 0; i < sentences.length; i ++) {
                 var startPos = 0;  

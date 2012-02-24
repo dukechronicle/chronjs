@@ -31,6 +31,16 @@ define(["jquery", "onde"], function($) {
             
             //show the form
             ondeSessions[obj.name].render(obj.encasedSchema, obj.encasedDefaultValue, { collapsedCollapsibles: false });
+
+            var outData = ondeSessions[obj.name].getData();
+            var rawData = $("#"+obj.name+"-val");
+            
+            // if onde is not correctly able to parse the data, and there is some data to parse, only show the raw json view            
+            if(outData.noData && rawData.val().length > 0) {
+                rawData.show(); // show the raw json
+                $("#"+obj.name).hide(); // hide the form
+                $("#"+obj.name+"-rawSwitch").hide(); // hide the switch to raw/json button
+            }
         }
     }
 

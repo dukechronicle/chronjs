@@ -71,10 +71,11 @@ Also, if you include a bins property in *fields*, the ultra-complicated bins arc
 
 ### Getting Documents Under a Node ###
 
-    api.taxonomy.docs(taxonomyPath, limit, callback);
+    api.taxonomy.docs(taxonomyPath, limit, startkey_docid, callback);
     
 *   `array` *taxonomyPath*: fetch docs under given taxonomy path ex. `["News"] or ["Sports"]`
 *    `int` *limit*: limit number of documents to return
+*    `string` *starkey_docid*: first document to return (pagination purposes).
 *    *callback* is called with two parameters, error and response (response from CouchDB)
 
 Note: this recursively walks the tree so passing `"Sports"` will also return documents from `["Sports", "Basketball"]`

@@ -12,7 +12,12 @@ var _ = require('underscore');
 siteApi.listAll = function (req, res, next) {
     api.docsByDate(null, null, function(err, docs) {
 	    if (err) next(err);
-        else res.json(docs);
+        else {
+            var result = _.map(docs, function (doc) {
+                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls};
+            });
+        sendResponseJSONP(res, req.query.callback, result);
+        }
     });
 };
 
@@ -20,11 +25,16 @@ siteApi.listAll = function (req, res, next) {
 * Gets 10 articles within a section.
 *@params http request, http response
 */
-siteApi.section = function (req, res, next) {
+siteApi.listSection = function (req, res, next) {
     var section = req.params.section;
     api.taxonomy.docs([section], 10, null, function (err, docs) {
         if (err) next(err);
-        else res.json(docs);
+        else {
+            var result = _.map(docs, function (doc) {
+                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls};
+            });
+            sendResponseJSONP(res, req.query.callback, result);
+        }
     });
 };
 
@@ -33,6 +43,17 @@ siteApi.section = function (req, res, next) {
 *@params http request, http response
 */
 siteApi.article = function (req, res, next) {
+    api.articleForUrl(req.params.url, function (err, doc) {
+        if (err) next(err);
+        else res.json(doc);
+    });
+};
+
+/**
+* Grabs the article for a given url
+*@params http request, http response
+*/
+siteApi.articleOptimized = function (req, res, next) {
     api.articleForUrl(req.params.url, function (err, doc) {
         if (err) next(err);
         else res.json(doc);
@@ -104,3 +125,10 @@ siteApi.deleteDocument =  function (req, res, next) {
         res.send({status: (err == null)});
     });
 };
+
+function sendResponseJSONP(res, callback, result) {
+    if (callback == null)
+        res.send(result);
+    else
+        res.send(callback + "(" + JSON.stringify(result) + ")");
+}

@@ -40,7 +40,7 @@
                 }
                 else
                 {
-                    getArticleList('All', 'The Chronicle', true);
+                    getArticleList('all', 'The Chronicle', true);
                 }
             });        
         </script> 
@@ -112,7 +112,7 @@
             // Retrieve if cache miss, forced reload, or if cache is too old:
             if(articleListCache[category] == null || forced || new Date().getTime() - articleListCache[category].timestamp > ARTICLE_LIST_CACHE_TIMEOUT)
             {
-                console.log("article list : cachemiss");
+                //console.log("article list : cachemiss");
                 var url = "/api/" + category;
                 //console.log(url);
                 $.ajax({
@@ -159,7 +159,8 @@
 				totalString.append(authorString);
             }
             
-            totalString.append($('<p />').append(article.body));
+            //console.log(article);
+            totalString.append($('<p />').append(article.renderedBody));
            
 			return totalString;
         }
@@ -263,9 +264,7 @@
 		</script>
     </head>
     
-	<!--<body>-->
-    <body onload="parseURL()">
- 
+    <body>
         <div id="ArticleList" data-role="page" articleListContainer="true" url="news" data-add-back-btn="false"> 
             <div data-role="header" data-position="fixed"> 
                 <h1 id="HEADER_TITLE" >The Chronicle</h1>

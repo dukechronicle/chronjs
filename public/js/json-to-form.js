@@ -4,17 +4,17 @@ define(["jquery", "onde"], function($) {
     // construct the nice looking forms to edit json
     for(var i in JSON_TO_FORM_ELEMENTS) {
         var obj = JSON_TO_FORM_ELEMENTS[i];
-        var element = $("#"+obj.name);
+        var $element = getForm(obj.name);
         
         // if this config element exists on the page, make a nice form for it
-        if(element.length) {
-            $("#"+obj.name+"-val").hide();
+        if($element.length) {
+            getRawJSON(obj.name).hide();
             
             // since all data is sent to the server as strings anyway, convert numbers to strings so it passes json validation
             if(typeof obj.defaultValue == "number" && obj.schema.type == "string") obj.defaultValue = ""+obj.defaultValue;
 
             //create the form
-            ondeSessions[obj.name] = new onde.Onde(element);
+            ondeSessions[obj.name] = new onde.Onde($element);
             
             //onde only works with objects, not strings, so we wrap the value in an object
             obj.encasedDefaultValue = {
@@ -33,13 +33,13 @@ define(["jquery", "onde"], function($) {
             ondeSessions[obj.name].render(obj.encasedSchema, obj.encasedDefaultValue, { collapsedCollapsibles: false });
 
             var outData = ondeSessions[obj.name].getData();
-            var rawData = $("#"+obj.name+"-val");
+            var $rawData = getRawJSON(obj.name);
             
             // if onde is not correctly able to parse the data, and there is some data to parse, only show the raw json view            
-            if(outData.noData && rawData.val().length > 0) {
-                rawData.show(); // show the raw json
-                $("#"+obj.name).hide(); // hide the form
-                $("#"+obj.name+"-rawSwitch").hide(); // hide the switch to raw/json button
+            if(outData.noData && $rawData.val().length > 0) {
+                $rawData.show(); // show the raw json
+                $element.hide(); // hide the form
+                getRawToFormSwitch(obj.name).hide(); // hide the switch to raw/json button
             }
         }
     }
@@ -48,9 +48,9 @@ define(["jquery", "onde"], function($) {
     $('#configForm').submit(function (evt) {
         for(var id in ondeSessions) {
             // if the form for a json object is visible, update the raw json value for it
-            if($("#"+id).is(":visible")) changeRaw(id);
+            if(getForm(id).is(":visible")) changeRaw(id);
 
-            var value = $("#"+id+"-val").val();
+            var value = getRawJSON(id).val();
             $("<input type='hidden' name='"+id+"'/>").val(value).appendTo($('#configForm'));
         }
         return true;
@@ -71,8 +71,8 @@ define(["jquery", "onde"], function($) {
     function changeRaw(id) {
         var outData = ondeSessions[id].getData();
         if(!outData.noData) {
-           if(typeof outData.data.value == "object") $("#"+id+"-val").val(JSON.stringify(outData.data.value,null,'\t'));
-           else $("#"+id+"-val").val(outData.data.value);
+           if(typeof outData.data.value == "object") getRawJSON(id).val(JSON.stringify(outData.data.value,null,'\t'));
+           else getRawJSON(id).val(outData.data.value);
         }
     }
 
@@ -82,7 +82,7 @@ define(["jquery", "onde"], function($) {
             var obj = JSON_TO_FORM_ELEMENTS[i];
 
             if(obj.name == id) {
-                var json = $("#"+obj.name+"-val").val();
+                var json = getRawJSON(id).val();
 
                 if(obj.schema.type == "object" || obj.schema.type == "array") {
                     try {
@@ -108,19 +108,31 @@ define(["jquery", "onde"], function($) {
 
     // switch whether the form or json is shown for the given config param id
     function switchShow(id) {
-        var rawSwitch = $("#"+id+"-rawSwitch");
+        var $rawSwitch = getRawToFormSwitch(id);
 
-        if(rawSwitch.val() == "Show Form") {        
+        if($rawSwitch.val() == "Show Form") {        
             changeForm(id);
-            $("#"+id+"-val").hide();
-            $("#"+id).show();
-            rawSwitch.val("Show Raw");
+            getRawJSON(id).hide();
+            getForm(id).show();
+            $rawSwitch.val("Show Raw");
         }
         else {
             changeRaw(id);
-            $("#"+id+"-val").show();
-            $("#"+id).hide();
-            rawSwitch.val("Show Form");
+            getRawJSON(id).show();
+            getForm(id).hide();
+            $rawSwitch.val("Show Form");
         }
+    }
+
+    function getForm(id) {
+         return $("#"+id);
+    }
+
+    function getRawJSON(id) {
+        return $("#"+id+"-val");
+    }
+
+    function getRawToFormSwitch(id) {
+        return $("#"+id+"-rawSwitch");
     }
 });

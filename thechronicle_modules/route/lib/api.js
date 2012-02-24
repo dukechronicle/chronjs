@@ -121,10 +121,3 @@ siteApi.deleteDocument =  function (req, res, next) {
         res.send({status: (err == null)});
     });
 };
-
-function sendResponseJSONP(res, callback, result) {
-    if (callback == null)
-        res.send(result);
-    else
-        res.send(callback + "(" + JSON.stringify(result) + ")");
-}

@@ -19,12 +19,13 @@ exports.preinit = function (app) {
 exports.init = function (app) {
 
     app.namespace('/api', function () {
-        app.get('/All', siteApi.listAll);
-        app.get('/:section', siteApi.section);
+        app.get('/all', siteApi.listAll);
+        app.get('/:section', siteApi.listSection);
         app.get('/article/:url', siteApi.article);
         app.get('/search/:query', siteApi.search);
         app.get('/staff/:query', siteApi.staff);
 
+        app.post('/article/edit', api.site.checkAdmin, siteApi.editDocument);
         app.post('/group/add', api.site.checkAdmin, siteApi.addGroup);
         app.post('/group/remove', api.site.checkAdmin, siteApi.removeGroup);
         app.del('/:docId', api.site.checkAdmin, siteApi.deleteDocument);
@@ -39,6 +40,12 @@ exports.init = function (app) {
     app.get('/recess', site.recess);
     app.get('/towerview', site.towerview);
     app.get('/section/*', site.section);
+
+    app.get('/rss-source', site.rss);
+    app.get('/rss-source/*', site.rssSection);
+    app.get('/feed/all', redirect("/rss"));
+    app.get('/rss', redirect("http://feeds.feedburner.com/thechronicle/all"));
+    app.get('/rss/news', redirect("http://feeds.feedburner.com/thechronicle/news"));
 
     // Makes search url more readable
     app.get('/search', function (req, res) {
@@ -55,10 +62,10 @@ exports.init = function (app) {
     app.get('/staff/:query', site.staff);
 
     app.get('/page/:url', site.page);
+    app.get('/page/:url/edit', api.site.checkAdmin, site.editPage);
     app.get('/article/:url', site.article);
     app.get('/article/:url/print', site.articlePrint);
     app.get('/article/:url/edit', api.site.checkAdmin, site.editArticle);
-    app.get('/page/:url/edit', api.site.checkAdmin, site.editPage);
     app.get('/login', site.login);
     app.get('/newsletter', site.newsletter);
     app.post('/newsletter', site.newsletterData);
@@ -71,7 +78,6 @@ exports.init = function (app) {
     app.namespace('/admin', function () {
         app.get('/', api.site.checkAdmin, admin.index);
         app.get('/newsletter', api.site.checkAdmin, admin.newsletter);
-        app.get('/index-articles', api.site.checkAdmin, admin.indexArticles);
         app.get('/add', api.site.checkAdmin, admin.addArticle);
         app.get('/add-page', api.site.checkAdmin, admin.addPage);
         app.get('/manage', api.site.checkAdmin, admin.manage);
@@ -94,8 +100,14 @@ exports.init = function (app) {
         app.post('/info', api.site.checkAdmin, admin.image.info);
         app.post('/crop', api.site.checkAdmin, admin.image.crop);
     });
-
+    
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);
 
 };
+
+function redirect (url) {
+    return function(req, res) {
+        res.redirect(url, 301);
+    }
+}

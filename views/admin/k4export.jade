@@ -14,11 +14,11 @@ a(href='/admin/manage') Manage and edit uploaded articles
   h2 The followed articles were uploaded successfully
   table
     - each article in succeeded
-      tr
+      tr(id=article.id)
         td
           a(href='/article/' + article.url) #{article.title}
         td
-          select(id='tax'+article.id, style='width: 200px')
+          select.taxonomy(id='tax'+article.id, style='width: 200px')
             - if (article.taxonomy[0] in taxonomy)
               - each key, value in taxonomy[article.taxonomy[0]]
                   option(value=value) #{key}
@@ -28,11 +28,9 @@ a(href='/admin/manage') Manage and edit uploaded articles
                 - each key, value in subsections
                     option(value=value) #{key}
         td
-          select(id='img'+article.id, style='width: 200px', onchange="showImage('"+article.id+"')")
+          select.image(id='img'+article.id, style='width: 300px')
             option(value='') Select an image
             - each image in imageData
-              option(value=JSON.stringify(image)) #{image.displayName}
+              option(value=JSON.stringify(image), title=image.thumbUrl) #{image.displayName}
         td
-          img(id='img-preview'+article.id)
-        td
-          button(id='sub'+article.id, style='width: 200px', onclick="editDocument("+JSON.stringify(article)+")") Submit
+          button(id='sub'+article.id, style='width: 200px') Submit

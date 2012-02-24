@@ -19,7 +19,8 @@ form(class="fake-form")
     if(showOnly == null || showOnly == param.name)
         h4 !{param.description+":"}
         - if(typeof param.defaultValue == "object") 
-            a(id=param.name+"-rawSwitch", class="rawSwitch") !{"Show Raw"}
+            input(type="button", id=param.name+"-rawSwitch", class="rawSwitch", value="Show Raw")
+            br
             textarea(id=param.name+"-val", name=param.name, class="expand", style="width:75%")
                 !{JSON.stringify(param.defaultValue,null,"\t")}
         - else

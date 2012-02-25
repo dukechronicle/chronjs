@@ -93,36 +93,9 @@ var configParams = [
         }
     },
     {
-        name: 'SOLR_HOST',
-        description: 'WebSolr Server URL',
-        defaultValue: 'index.websolr.com',
-        schema: {
-          type: "string",
-          required: true
-        }
-    },
-    {
-        name: 'SOLR_PORT',
-        description: 'WebSolr Server Port',
-        defaultValue: '80',
-        schema: {
-          type: "string",
-          required: true
-        }
-    },
-    {
-        name: 'SOLR_CORE',
-        description: 'WebSolr Core',
-        defaultValue: '/3f534ff3ff0',
-        schema: {
-          type: "string",
-          required: true
-        }
-    },
-    {
-        name: 'SOLR_PATH',
-        description: 'WebSolr Server Path',
-        defaultValue: '/solr',
+        name: 'SOLR_URL',
+        description: 'Solr Server URL',
+        defaultValue: 'http://index.websolr.com/solr/3f534ff3ff0',
         schema: {
           type: "string",
           required: true

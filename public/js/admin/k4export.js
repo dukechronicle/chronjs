@@ -37,10 +37,8 @@ define(['jquery', 'Article', 'msdropdown'], function ($, Article) {
         }
         catch (e) {}
 
-        $.ajax({
-            type: 'PUT',
+        article.save(null, {
             url: '/api/article/' + id,
-            data: article.toJSON(),
             success: function(data, status, jqXHR) {
                 callback(null, data);
             },

@@ -20,12 +20,13 @@ define(['jquery', 'Article', 'msdropdown'], function ($, Article) {
     });
 
     function editDocument($row, callback) {
+        var id = $row.attr('id');
         var taxonomy = $row.find("td > .taxonomy").val();
         if (!taxonomy)
             return callback("Must select a section for article");
 
         var article = new Article({
-            id: $row.attr('id'),
+            id: id,
             taxonomy: JSON.parse(taxonomy)
         });
 
@@ -36,9 +37,16 @@ define(['jquery', 'Article', 'msdropdown'], function ($, Article) {
         }
         catch (e) {}
 
-        $.post('/api/article/edit', article.toJSON(), function(data, status) {
-	    if (status == 'success') callback();
-            else callback("Taxonomy change for article failed");
+        $.ajax({
+            type: 'PUT',
+            url: '/api/article/' + id,
+            data: article.toJSON(),
+            success: function(data, status, jqXHR) {
+                callback(null, data);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                callback(textStatus, jqXHR, errorThrown);
+            }
         });
     }
 });

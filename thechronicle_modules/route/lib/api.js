@@ -108,36 +108,28 @@ siteApi.removeGroup = function (req, res, next) {
 
 siteApi.readArticle = function (req, res, next) {
     api.docsById(req.params.id, function (err, _res) {
-        if (err) {
-            log.warning(err);
-            _res.err = err;
-        }
-        res.json(_res);
+        if (err) res.send(err, 500);
+        else res.json(_res);
     });
 };
 
 siteApi.createArticle = function (req, res, next) {
     api.addDoc(req.body, function (err, _res) {
-        if (err) {
-            log.warning(err);
-            _res.err = err;
-        }
-        res.send(_res);
+        if (err) res.send(err, 500);
+        else res.send(_res);
     });
 };
 
 siteApi.updateArticle = function (req, res, next) {
     api.editDoc(req.body.id, req.body, function (err, _res) {
-        if (err) {
-            log.warning(err);
-            _res.err = err;
-        }
-        res.send(_res);
+        if (err) res.send(err, 500);
+        else res.send(_res);
     });
 };
 
 siteApi.deleteArticle =  function (req, res, next) {
     api.deleteDoc(req.params.id, req.body.rev, function (err) {
-        res.send({status: (err == null)});
+        if (err) res.send(err, 500);
+        else res.send({status: 'success'});
     });
 };

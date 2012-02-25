@@ -44,8 +44,8 @@ define(['jquery', 'Article', 'msdropdown'], function ($, Article) {
             success: function(data, status, jqXHR) {
                 callback(null, data);
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-                callback(textStatus, jqXHR, errorThrown);
+            error: function (jqXHR, status, errorThrown) {
+                callback(jqXHR.responseText);
             }
         });
     }

@@ -21,14 +21,17 @@ exports.init = function (app) {
     app.namespace('/api', function () {
         app.get('/all', siteApi.listAll);
         app.get('/:section', siteApi.listSection);
-        app.get('/article/:url', siteApi.article);
+        app.get('/article/url/:url', siteApi.articleByUrl);
         app.get('/search/:query', siteApi.search);
         app.get('/staff/:query', siteApi.staff);
 
-        app.post('/article/edit', api.site.checkAdmin, siteApi.editDocument);
+        app.get('/article/:id', siteApi.readArticle);
+        app.post('/article', api.site.checkAdmin, siteApi.createArticle);
+        app.put('/article/:id', api.site.checkAdmin, siteApi.updateArticle);
+        app.del('/article/:id', api.site.checkAdmin, siteApi.deleteArticle);
+
         app.post('/group/add', api.site.checkAdmin, siteApi.addGroup);
         app.post('/group/remove', api.site.checkAdmin, siteApi.removeGroup);
-        app.del('/:docId', api.site.checkAdmin, siteApi.deleteDocument);
     });
 
     app.get('/m/*', site.mobile);

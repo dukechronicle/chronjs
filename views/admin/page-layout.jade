@@ -6,7 +6,7 @@ h2 !{page} Layout
     - each group in groups
         br
         <h2>!{group}</h2>
-        .container(data-groupName=group)
+        .container(data-groupname=group)
             - if (groupDocs[group])
                 - each story, id in groupDocs[group]
                     .story(id=story._id, data-groups=JSON.stringify(story.groups))

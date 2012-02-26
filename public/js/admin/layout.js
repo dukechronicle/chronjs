@@ -6,7 +6,7 @@ define(['jquery', 'Article'], function($, Article) {
             $(this).attr("draggable", "true");
 
             var groups = $(this).attr('data-groups');
-            groups = groups ? JSON.parse($(this).attr('data-groups')) : [];
+            groups = groups ? JSON.parse($(this).data('groups')) : [];
             $(this).article = new Article({
                 id: $(this).attr('id'),
                 groups: groups

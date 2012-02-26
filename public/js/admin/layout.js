@@ -75,7 +75,7 @@ define(['jquery', 'Article'], function($, Article) {
 
             if (element.parent().data("groupname")) {
                 removeStoryFromContainer(element, element.parent());
-                $(this).remove();
+                element.remove();
             }
 
             element.appendTo($(this));

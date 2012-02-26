@@ -14,7 +14,7 @@ siteApi.listAll = function (req, res, next) {
 	    if (err) next(err);
         else {
             var result = _.map(docs, function (doc) {
-                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id};
+                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id, "created":doc.created};
             });
         sendResponseJSONP(res, req.query.callback, result);
         }
@@ -31,7 +31,7 @@ siteApi.listSection = function (req, res, next) {
         if (err) next(err);
         else {
             var result = _.map(docs, function (doc) {
-                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id};
+                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id, "created":doc.created};
             });
             sendResponseJSONP(res, req.query.callback, result);
         }

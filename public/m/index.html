@@ -185,7 +185,7 @@
             {
                 //console.log("article cache: cachemiss");
                 $.ajax({
-                    url: "/api/article/" + articleURL,
+                    url: "/api/article/url/" + articleURL,
                     dataType: "jsonp",
                     cache: false,
                     success: function(data){

@@ -42,7 +42,7 @@ siteApi.listSection = function (req, res, next) {
 * Grabs the article for a given url
 *@params http request, http response
 */
-siteApi.article = function (req, res, next) {
+siteApi.articleByUrl = function (req, res, next) {
     api.articleForUrl(req.params.url, function (err, doc) {
         if (err) next(err);
         else {
@@ -77,16 +77,6 @@ siteApi.staff = function (req, res, next) {
     });
 };
 
-siteApi.editDocument = function (req, res, next) {
-    api.editDoc(req.body.id, req.body, function (err, _res) {
-        if (err) {
-            log.warning(err);
-            _res.err = err;
-        }
-        res.send(_res);
-    });
-};
-
 siteApi.addGroup = function (req, res, next) {
     var docId = req.body.docId;
     var nameSpace = req.body.nameSpace;
@@ -116,8 +106,30 @@ siteApi.removeGroup = function (req, res, next) {
     });
 };
 
-siteApi.deleteDocument =  function (req, res, next) {
-    api.deleteDoc(req.params.docId, req.body.rev, function (err) {
-        res.send({status: (err == null)});
+siteApi.readArticle = function (req, res, next) {
+    api.docsById(req.params.id, function (err, _res) {
+        if (err) res.send(err, 500);
+        else res.json(_res);
+    });
+};
+
+siteApi.createArticle = function (req, res, next) {
+    api.addDoc(req.body, function (err, _res) {
+        if (err) res.send(err, 500);
+        else res.send(_res);
+    });
+};
+
+siteApi.updateArticle = function (req, res, next) {
+    api.editDoc(req.body.id, req.body, function (err, _res) {
+        if (err) res.send(err, 500);
+        else res.send(_res);
+    });
+};
+
+siteApi.deleteArticle =  function (req, res, next) {
+    api.deleteDoc(req.params.id, req.body.rev, function (err) {
+        if (err) res.send(err, 500);
+        else res.send({status: 'success'});
     });
 };

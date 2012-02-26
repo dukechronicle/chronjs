@@ -44,7 +44,7 @@ define(['jquery', 'Article'], function($, Article) {
 
         // remove on double click
         $("#layout").delegate(".story", "dblclick", function() {
-            $(this).article.removeGroup(NAMESPACE, $(this).parent().data("groupname"));
+            removeStoryFromGroup($(this), $(this).parent());
             $(this).remove();
         });
 
@@ -62,19 +62,17 @@ define(['jquery', 'Article'], function($, Article) {
             containerElement.appendTo($(this));
 
             element.addClass("exists");
-            //element.attr("draggable", false);
+            //
+
+.attr("draggable", false);
             //$(this).append(element.get(0));
 
             if (element.parent().data("groupname") && (element.parent().data("groupname") !== $(this).data("groupname"))) {
-                removeFromPrevious(docId, element, $(this).data("groupname"), containerElement);
-            } else {
-                $.post("/api/group/add", {
-                    docId: docId,
-                    groupName: $(this).data("groupname"),
-                    nameSpace: NAMESPACE,
-                    weight: containerElement.index()
-                });
-            }
+                removeStoryFromContainer(element, element.parent());
+		
+            } addStoryToContainer(element, $(this), $(this).index(element)); 
+
+         
             
             $(this).removeClass("over");
         });
@@ -92,7 +90,8 @@ define(['jquery', 'Article'], function($, Article) {
             // story has changed groups
             if (element.parent().data("groupname") && (element.parent().data("groupname") !== $(this).parent().data("groupname"))) {
                 removeFromPrevious(docId, element, $(_this).parent().data("groupname"), newElement);
-            } else {
+            } element.
+	    else {
                 element.remove();
                 $.post("/api/group/add", {
                     docId: docId,

@@ -120,6 +120,21 @@ define(['jquery', 'Article'], function($, Article) {
             e.dataTransfer.setData("Text", this.id);
         });
 
+        function addStoryToContainer(story, container, weight) {
+            var groupname = container.data("groupname");
+            story.article.addGroup(NAMESPACE, groupname, weight);
+            if (story.next().length > 0)
+                addStoryToContainer(story.next(), container, weight + 1);
+        }
+
+        function removeStoryFromContainer(story, container) {
+            var groupname = container.data("groupname");
+            var weight = container.index(story);
+            story.article.removeGroup(NAMESPACE, groupname);
+            if (story.next().length > 0)
+                addStoryToContainer(story.next(), container, weight);
+        }
+
         function removeFromPrevious(docId, element, newGroupName, newElement) {
             var oldElementParent = element.parent();
             nextSibling = element.next();

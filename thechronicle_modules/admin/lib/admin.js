@@ -86,7 +86,7 @@ admin.manage = function (req, res, next) {
     api.docsByDate(null, query, function (err, docs) {
         if (err) next(err);
         else res.render('admin/manage', {
-            js: ['admin/manage'],
+            js: ['admin/manage?v=2'],
             locals:{
                 docs:docs,
                 hasPrevious:(req.query.beforeID != null),
@@ -169,7 +169,7 @@ admin.k4exportData = function (req, res, next) {
     function(err, results) {
         res.render('admin/k4export', {
 	        css: ['css/msdropdown'],
-            js: ['admin/k4export?v=6'],
+            js: ['admin/k4export?v=7'],
             locals:{
                 failed: results.k4.failed,
                 succeeded: results.k4.success,

@@ -30,7 +30,7 @@ exports.renderLayout = function (req, res, next) {
             });
             
             res.render("admin/page-layout", {
-                css:['admin/layout/styles'],
+                css:['admin/layout'],
                 js:['admin/layout'],
                 locals:{
                     page: group,

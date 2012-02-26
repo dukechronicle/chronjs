@@ -1,6 +1,17 @@
-define(['jquery'], function($) {
+define(['jquery', 'Article'], function($, Article) {
 
     $(function() {
+        
+        $(".story").each(function () {
+            $(this).attr("draggable", "true");
+
+            var groups = $(this).attr('data-groups');
+            groups = groups ? JSON.parse($(this).attr('data-groups')) : [];
+            $(this).article = new Article({
+                id: $(this).attr('id'),
+                groups: groups
+            });
+        });
 
 	$("#taxonomy").change(function() {
 	    var section = $(this).attr('value');
@@ -17,7 +28,6 @@ define(['jquery'], function($) {
         jQuery.event.props.push('dataTransfer'); // solves dataTransfer undefined issue
 
         $("#layout").delegate(".container, .story", "dragover", function(e) {
-            console.log("dragover");
             if (e.preventDefault) e.preventDefault(); // Allows us to drop.
             e.dataTransfer.dropEffect = "move";
             $(this).addClass("over");
@@ -37,7 +47,7 @@ define(['jquery'], function($) {
             $.post("/api/group/remove", {
                 docId: $(this).attr("id"),
                 groupName: $(this).parent().data("groupname"),
-                nameSpace: nameSpace
+                nameSpace: NAMESPACE
             });
             $(this).remove();
         });
@@ -65,7 +75,7 @@ define(['jquery'], function($) {
                 $.post("/api/group/add", {
                     docId: docId,
                     groupName: $(this).data("groupname"),
-                    nameSpace: nameSpace,
+                    nameSpace: NAMESPACE,
                     weight: containerElement.index()
                 });
             }
@@ -91,7 +101,7 @@ define(['jquery'], function($) {
                 $.post("/api/group/add", {
                     docId: docId,
                     groupName: $(this).parent().data("groupname"),
-                    nameSpace: nameSpace,
+                    nameSpace: NAMESPACE,
                     weight: newElement.index()
                 });
             }
@@ -102,7 +112,7 @@ define(['jquery'], function($) {
                 $.post("/api/group/add", {
                     docId: nextSibling.attr("id"),
                     groupName: $(this).parent().data("groupname"),
-                    nameSpace: nameSpace,
+                    nameSpace: NAMESPACE,
                     weight: nextSibling.index()
                 });
             }
@@ -121,12 +131,12 @@ define(['jquery'], function($) {
             $.post("/api/group/remove", {
                 docId: element.attr("id"),
                 groupName: oldElementParent.data("groupname"),
-                nameSpace: nameSpace
+                nameSpace: NAMESPACE
             }, function() {
                 $.post("/api/group/add", {
                     docId: docId,
                     groupName: newGroupName,
-                    nameSpace: nameSpace,
+                    nameSpace: NAMESPACE,
                     weight: newElement.index()
                 });
             });
@@ -137,7 +147,7 @@ define(['jquery'], function($) {
                     $.post("/api/group/add", {
                         docId: nextSibling.attr("id"),
                         groupName: oldElementParent.data("groupname"),
-                        nameSpace: nameSpace,
+                        nameSpace: NAMESPACE,
                         weight: nextSibling.index()
                     });
                 } while ((nextSibling = nextSibling.next()) && (nextSibling.length > 0));

@@ -20,11 +20,10 @@ define(['jquery', 'jquery-ui'], function ($) {
                 height:140,
                 modal: true,
                 buttons: {
-                    "Delete": function() {
-
+                    Delete: function() {
                         $.ajax({
                             type: 'DELETE',
-                            url: '/api/' + docId,
+                            url: '/api/article/' + docId,
                             data: 'rev=' + docRev,
                             success: function() {
                                 $(this).remove();

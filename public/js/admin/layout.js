@@ -44,11 +44,7 @@ define(['jquery', 'Article'], function($, Article) {
 
         // remove on double click
         $("#layout").delegate(".story", "dblclick", function() {
-            $.post("/api/group/remove", {
-                docId: $(this).attr("id"),
-                groupName: $(this).parent().data("groupname"),
-                nameSpace: NAMESPACE
-            });
+            $(this).article.removeGroup(NAMESPACE, $(this).parent().data("groupname"));
             $(this).remove();
         });
 

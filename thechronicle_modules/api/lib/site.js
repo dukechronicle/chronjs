@@ -526,7 +526,9 @@ site.getArticleContentUncached = function(url, callback) {
 		    },
 		    function(cb) {
 			    api.search.relatedArticles(doc._id, 5, function(err, relatedArticles) {
-				    cb(null, relatedArticles);
+			        modifyArticlesForDisplay(relatedArticles, function(err, relatedArticles) {
+                        cb(null, relatedArticles);            
+			        });
 			    });
 		    },
 		    function(cb) {

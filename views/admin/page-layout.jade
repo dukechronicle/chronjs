@@ -1,4 +1,4 @@
-script nameSpace = !{JSON.stringify(nameSpace)};
+script NAMESPACE = !{JSON.stringify(nameSpace)};
 
 h2 !{page} Layout
 
@@ -6,10 +6,10 @@ h2 !{page} Layout
     - each group in groups
         br
         <h2>!{group}</h2>
-        #slideshow.container(data-groupName=group)
+        .container(data-groupName=group)
             - if (groupDocs[group])
                 - each story, id in groupDocs[group]
-                    .story(draggable='true', id='#{story._id}')
+                    .story(id=story._id, data-groups=JSON.stringify(story.groups))
                         #{story.title}
 
 #sidebar
@@ -21,5 +21,5 @@ h2 !{page} Layout
         #stories-container
             #stories
                 - each story, id in sectionDocs
-                    .story(draggable="true", id="#{story._id}")
+                    .story(id=story._id, data-groups=JSON.stringify(story.groups))
                         #{story.title}

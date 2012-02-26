@@ -49,68 +49,37 @@ define(['jquery', 'Article'], function($, Article) {
         });
 
         $("#layout").delegate(".container", "drop", function(e) {
-
             if (e.stopPropagation) e.stopPropagation();
 
             var docId = e.dataTransfer.getData("Text");
-
-	    console.log("dropping " + docId);
-
-            var element = $("#" + docId);
-
-            var containerElement = element.clone();
-            containerElement.appendTo($(this));
-
+            var element = $("#" + docId).appendTo($(this));
             element.addClass("exists");
-            //
 
-.attr("draggable", false);
-            //$(this).append(element.get(0));
-
-            if (element.parent().data("groupname") && (element.parent().data("groupname") !== $(this).data("groupname"))) {
+            if (element.parent().data("groupname")) {
                 removeStoryFromContainer(element, element.parent());
-		
-            } addStoryToContainer(element, $(this), $(this).index(element)); 
+                element.remove();
+            }
 
-         
-            
+            element.insertBefore($(this));
+            addStoryToContainer(element, $(this), $(this).index(element));
+
             $(this).removeClass("over");
         });
 
         $("#layout").delegate(".story", "drop", function(e) {
             if (e.stopPropagation) e.stopPropagation();
-            var _this = this;
+
             var docId = e.dataTransfer.getData("Text");
             var element = $("#" + docId);
-            var newElement = element.clone();
-            var nextSibling;
-            
-            newElement.insertBefore($(this));
+            element.addClass("exists");
 
-            // story has changed groups
-            if (element.parent().data("groupname") && (element.parent().data("groupname") !== $(this).parent().data("groupname"))) {
-                removeFromPrevious(docId, element, $(_this).parent().data("groupname"), newElement);
-            } element.
-	    else {
-                element.remove();
-                $.post("/api/group/add", {
-                    docId: docId,
-                    groupName: $(this).parent().data("groupname"),
-                    nameSpace: NAMESPACE,
-                    weight: newElement.index()
-                });
+            if (element.parent().data("groupname")) {
+                removeStoryFromContainer(element, element.parent());
+                $(this).remove();
             }
 
-            nextSibling = newElement;
-            while ((nextSibling = nextSibling.next()) && (nextSibling.length > 0)) {
-
-                $.post("/api/group/add", {
-                    docId: nextSibling.attr("id"),
-                    groupName: $(this).parent().data("groupname"),
-                    nameSpace: NAMESPACE,
-                    weight: nextSibling.index()
-                });
-            }
+            element.appendTo($(this));
+            addStoryToContainer(element, $(this), $(this).index(element));
 
             $(this).removeClass("over");
         });
@@ -133,37 +102,6 @@ define(['jquery', 'Article'], function($, Article) {
             if (story.next().length > 0)
                 addStoryToContainer(story.next(), container, weight);
         }
-
-        function removeFromPrevious(docId, element, newGroupName, newElement) {
-            var oldElementParent = element.parent();
-            nextSibling = element.next();
-
-            $.post("/api/group/remove", {
-                docId: element.attr("id"),
-                groupName: oldElementParent.data("groupname"),
-                nameSpace: NAMESPACE
-            }, function() {
-                $.post("/api/group/add", {
-                    docId: docId,
-                    groupName: newGroupName,
-                    nameSpace: NAMESPACE,
-                    weight: newElement.index()
-                });
-            });
-            element.remove();
-
-            if (nextSibling.length>0) {
-                do {
-                    $.post("/api/group/add", {
-                        docId: nextSibling.attr("id"),
-                        groupName: oldElementParent.data("groupname"),
-                        nameSpace: NAMESPACE,
-                        weight: nextSibling.index()
-                    });
-                } while ((nextSibling = nextSibling.next()) && (nextSibling.length > 0));
-            }
-        }
-    });
 
 });
 

@@ -1,16 +1,21 @@
 define(['jquery', 'Article'], function($, Article) {
 
+    var articles = new Backbone.Collection;
+
+
     $(function() {
         
         $(".story").each(function () {
             $(this).attr("draggable", "true");
 
-            var groups = $(this).attr('data-groups');
-            groups = groups ? JSON.parse($(this).data('groups')) : [];
-            $(this).article = new Article({
-                id: $(this).attr('id'),
-                groups: groups
-            });
+            var id = $(this).attr('id');
+            var groups = $(this).data('groups') || [];
+
+            if (articles.get(id) == undefined)
+                articles.add(new Article({
+                    id: $(this).attr('id'),
+                    groups: groups
+                }));
         });
 
 	$("#taxonomy").change(function() {
@@ -44,24 +49,21 @@ define(['jquery', 'Article'], function($, Article) {
 
         // remove on double click
         $("#layout").delegate(".story", "dblclick", function() {
-            removeStoryFromGroup($(this), $(this).parent());
-            $(this).remove();
+            removeStoryFromContainer($(this), $(this).parent());
         });
 
         $("#layout").delegate(".container", "drop", function(e) {
             if (e.stopPropagation) e.stopPropagation();
 
             var docId = e.dataTransfer.getData("Text");
-            var element = $("#" + docId).appendTo($(this));
+            var element = $("#" + docId);
             element.addClass("exists");
 
-            if (element.parent().data("groupname")) {
+            if (element.parent().data("groupname"))
                 removeStoryFromContainer(element, element.parent());
-                element.remove();
-            }
 
-            element.insertBefore($(this));
-            addStoryToContainer(element, $(this), $(this).index(element));
+            element.appendTo($(this));
+            addStoryToContainer(element, $(this));
 
             $(this).removeClass("over");
         });
@@ -73,13 +75,11 @@ define(['jquery', 'Article'], function($, Article) {
             var element = $("#" + docId);
             element.addClass("exists");
 
-            if (element.parent().data("groupname")) {
+            if (element.parent().data("groupname"))
                 removeStoryFromContainer(element, element.parent());
-                element.remove();
-            }
 
-            element.appendTo($(this));
-            addStoryToContainer(element, $(this), $(this).index(element));
+            element.insertBefore($(this));
+            addStoryToContainer(element, $(this).parent());
 
             $(this).removeClass("over");
         });
@@ -88,20 +88,28 @@ define(['jquery', 'Article'], function($, Article) {
             e.dataTransfer.setData("Text", this.id);
         });
 
-        function addStoryToContainer(story, container, weight) {
+        function addStoryToContainer(story, container) {
             var groupname = container.data("groupname");
-            story.article.addGroup(NAMESPACE, groupname, weight);
+            var weight = container.index(story);
+            articles.get(story.attr('id')).addGroup(NAMESPACE,groupname,weight);
             if (story.next().length > 0)
-                addStoryToContainer(story.next(), container, weight + 1);
+                addStoryToContainer(story.next(), container);
         }
 
         function removeStoryFromContainer(story, container) {
             var groupname = container.data("groupname");
-            var weight = container.index(story);
-            story.article.removeGroup(NAMESPACE, groupname);
-            if (story.next().length > 0)
-                addStoryToContainer(story.next(), container, weight);
+            articles.get(story.attr('id')).removeGroup(NAMESPACE, groupname);
+            if (story.next().length > 0) {
+                var next = story.next();
+                story.remove();
+                addStoryToContainer(next, container);
+            }
+            else {
+                story.remove();
+            }
         }
+
+    });
 
 });
 

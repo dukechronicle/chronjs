@@ -27,7 +27,9 @@ siteApi.listAll = function (req, res, next) {
 */
 siteApi.listSection = function (req, res, next) {
     var section = req.params.section;
-    api.taxonomy.docs([section], 10, null, function (err, docs) {
+    var docid = req.params.docid;
+    console.log("siteApi.listSection: " + docid);
+    api.taxonomy.docs([section], 10, docid, function (err, docs) {
         if (err) next(err);
         else {
             var result = _.map(docs, function (doc) {
@@ -46,10 +48,12 @@ siteApi.article = function (req, res, next) {
     api.articleForUrl(req.params.url, function (err, doc) {
         if (err) next(err);
         else {
-            var result = { title: doc.title,
-                url: doc.url,
-                renderedBody: doc.renderedBody,
-                author: doc.author
+            var result = { 
+                "title": doc.title,
+                "urls": doc.urls,
+                "renderedBody": doc.renderedBody,
+                "author": doc.author,
+                 "_id":doc._id
             };
             sendResponseJSONP(res, req.query.callback, result);
 	  	

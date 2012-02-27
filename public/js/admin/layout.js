@@ -1,21 +1,30 @@
 define(['jquery', 'Article'], function($, Article) {
 
-    var articles = new Backbone.Collection;
+    var articles = {};
+    var updated = [];
 
 
     $(function() {
         
         $(".story").each(function () {
-            $(this).attr("draggable", "true");
-
             var id = $(this).attr('id');
             var groups = $(this).data('groups') || [];
 
-            if (articles.get(id) == undefined)
-                articles.add(new Article({
+            if (! (id in articles))
+                articles[id] = new Article({
                     id: $(this).attr('id'),
                     groups: groups
-                }));
+                });
+        });
+
+        $("#save").click(function () {
+            var button = $(this);
+            button.attr('disabled', 'disabled');
+            updated = _.uniq(updated);
+            saveAll(function (err) {
+	        if (err) alert(err);
+		button.removeAttr('disabled');
+            });
         });
 
 	$("#taxonomy").change(function() {
@@ -91,14 +100,16 @@ define(['jquery', 'Article'], function($, Article) {
         function addStoryToContainer(story, container) {
             var groupname = container.data("groupname");
             var weight = container.children().index(story) + 1;
-            articles.get(story.attr('id')).addGroup(NAMESPACE,groupname,weight);
+            articles[story.attr('id')].addGroup(NAMESPACE,groupname,weight);
+            updated.push(story.attr('id'));
             if (story.next().length > 0)
                 addStoryToContainer(story.next(), container);
         }
 
         function removeStoryFromContainer(story, container) {
             var groupname = container.data("groupname");
-            articles.get(story.attr('id')).removeGroup(NAMESPACE, groupname);
+            articles[story.attr('id')].removeGroup(NAMESPACE, groupname);
+            updated.push(story.attr('id'));
             if (story.next().length > 0) {
                 var next = story.next();
                 story.remove();
@@ -109,7 +120,22 @@ define(['jquery', 'Article'], function($, Article) {
             }
         }
 
+        function saveAll(callback) {
+            var article = articles[updated.pop()];
+            console.log(article.toJSON());
+            article.save(null, {
+                url: '/api/article/' + article.get("id"),
+                success: function(data, status, jqXHR) {
+                    console.log(updated);
+                    if (updated.length > 0) saveAll(callback);
+                    else callback();
+                },
+                error: function (jqXHR, status, errorThrown) {
+                    callback(jqXHR.responseText);
+                }
+            });
+        }
+
     });
 
 });
-

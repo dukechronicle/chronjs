@@ -9,7 +9,7 @@ h2 !{page} Layout
         .container(data-groupname=group)
             - if (groupDocs[group])
                 - each story, id in groupDocs[group]
-                    .story(id=story._id, data-groups=JSON.stringify(story.groups))
+                    .story(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
                         #{story.title}
 
 #sidebar
@@ -22,5 +22,5 @@ h2 !{page} Layout
     #stories-container
         #stories
             - each story, id in sectionDocs
-                .story(id=story._id, data-groups=JSON.stringify(story.groups))
+                .story(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
                     #{story.title}

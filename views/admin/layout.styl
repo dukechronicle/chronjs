@@ -23,14 +23,16 @@
     background-color #ccc
 
 #sidebar
-    width 200px
-    float right
+    display block
+    position fixed
+    height 100%
+    right 10px
+    top 10px
 
     .story.exists
         opacity .4
 
-.fixed-container
-    position fixed
-    height 700px
-    overflow scroll
-    right 10px
+    #stories-container
+        height 95%
+        overflow auto
+

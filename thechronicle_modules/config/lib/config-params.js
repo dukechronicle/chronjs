@@ -95,7 +95,7 @@ var configParams = [
     {
         name: 'SOLR_URL',
         description: 'Solr Server URL',
-        defaultValue: 'http://index.websolr.com/solr/3f534ff3ff0',
+        defaultValue: 'http://index.websolr.com:80/solr/3f534ff3ff0',
         schema: {
           type: "string",
           required: true

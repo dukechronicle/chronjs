@@ -90,7 +90,7 @@ define(['jquery', 'Article'], function($, Article) {
 
         function addStoryToContainer(story, container) {
             var groupname = container.data("groupname");
-            var weight = container.index(story);
+            var weight = container.children().index(story) + 1;
             articles.get(story.attr('id')).addGroup(NAMESPACE,groupname,weight);
             if (story.next().length > 0)
                 addStoryToContainer(story.next(), container);

@@ -23,6 +23,7 @@ api.cron = require("./cron");
 api.database = require("./database");
 api.s3 = require('./s3');
 api.site = require('./site');
+api.page = require('./page');
 
 
 var MAX_URL_LENGTH = 50;

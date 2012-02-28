@@ -228,14 +228,6 @@ api.docForUrl = function(url, callback) {
     });
 };
 
-api.nodeForTitle = function(url, callback) {
-    db.view("articles/nodes", { key: url }, function(err, res) {
-        if (err) callback(err);
-        else if (res.length == 0) callback("Node not found: " + url);
-        else api.docsById(res[0].id, callback);
-    });
-};
-
 api.docsByDate = function(limit, query, callback) {
     query = _.defaults(query || {}, {
         descending: true,

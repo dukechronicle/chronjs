@@ -138,7 +138,7 @@ site.getFrontPageContent = function (callback) {
             model.printEdition = {
                 title: "Print",
                 imageUrl: "http://d2sug25c5hnh7r.cloudfront.net/images/issuu-thumb.png",
-                url: "http://issuu.com/dukechronicle/docs/100130news",
+                url: "http://issuu.com/dukechronicle/docs",
                 width: "134px",
                 height: "60px"
             };

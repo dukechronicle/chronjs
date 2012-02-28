@@ -12,5 +12,20 @@ page.getByUrl = function (url, callback) {
     });
 };
 
-page.add = db.page.add;
-page.edit = db.page.edit;
+page.add = function (data, callback) {
+    if (! ("node_title" in data)) callback("Title for page required");
+
+    data.type = "page";
+
+    db.page.add(data, function (err, res) {
+        if (err) callback(err);
+        else callback(null, res.node_title);
+    });
+};
+
+page.edit = function (id, data, callback) {
+    db.page.edit(id, data, function (err, res) {
+        if (err) callback(err);
+        else callback(null, res.node_title);
+    });
+};

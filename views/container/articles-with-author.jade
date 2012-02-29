@@ -9,4 +9,7 @@
                     a.list-story.hover.highlight-right(href='#{story.url || story.urls[0]}', class='#{story.cssClass}')
                         #{story.title}
                         - if (story.authors)
-                            p.author #{story.authors[0]}
+                            p.author
+                                span.author #{story.authors}
+                                - if (story.date)
+                                    span.date #{story.date}

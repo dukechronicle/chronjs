@@ -5,7 +5,8 @@
         <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1"> 
         <link rel="stylesheet" href="/m/themes/chronicle.min.css" />
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0.1/jquery.mobile.structure-1.0.1.min.css" />
-
+        <link rel="stylesheet" href="/m/css/chronmobile.css" />
+        
         <!--<script src="http://use.typekit.com/dwv2bjy.js"></script>
         <script>
             try{Typekit.load();}catch(e){}
@@ -45,8 +46,6 @@
             });        
         </script> 
 
-		<link rel="stylesheet" href="/m/css/chronmobile.css" />
-        
 		<script type="text/javascript"> 
 		var ARTICLE_LIST = "#ARTICLE_LIST";
 		var ARTICLE_CONTENT = "#ARTICLE_CONTENT";
@@ -54,6 +53,9 @@
         var UNKNOWN_ERROR = "An unknown error has occured, click back to return to the previous page.";
         var ARTICLE_NOT_FOUND = "The article cannot be found. Hit back to return to the previous page.";
 
+        // Last Section DocID
+        var lastDocID = [];
+        
         // Cache the list of articles. Emphemeral.
         var articleListCache = [];
         
@@ -63,6 +65,19 @@
         // Cache the articles. Shouldn't be cleared.
         var articleCache = [];
        
+        // Week
+        var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        function getDateString(time)
+        {
+            var date = new Date(time);
+            var month = MONTHS[date.getMonth()];
+            var day = date.getDate();
+            var year= date.getFullYear();
+            var dateString = " - " + month + " "+ day + ", " + year;
+            
+            return dateString;
+        }
+
 		function generateListItem(articleJSON)
 		{
 			var article = articleJSON;
@@ -76,10 +91,14 @@
 			
 			// Thumbnail
 			// hyperlink.append('<img src="' + 'img/test.png"' + ' "class"="ui-li-thumb" />');
-			
+
+            var dateString = getDateString(article.created*1000);
 			// Article Title
-			hyperlink.append($('<h3 />').text(article.title));
-			
+			hyperlink.append($('<h2 />').text(article.title));
+
+            // Article Date
+            hyperlink.append($('<h3 />').text(dateString));
+
 			// Article Synopsis
 			hyperlink.append($('<p />').text(article.teaser));
 		
@@ -102,6 +121,7 @@
             for(var i in articleListResponse)
             {
                 $(ARTICLE_LIST).append(generateListItem(articleListResponse[i]));
+                lastDocID[category] = articleListResponse[i]._id;
             }
 	
 			$(ARTICLE_LIST).listview('refresh');
@@ -112,8 +132,11 @@
             // Retrieve if cache miss, forced reload, or if cache is too old:
             if(articleListCache[category] == null || forced || new Date().getTime() - articleListCache[category].timestamp > ARTICLE_LIST_CACHE_TIMEOUT)
             {
-                //console.log("article list : cachemiss");
                 var url = "/api/" + category;
+                if(lastDocID[category] != null)
+                {
+                    url += "/" + lastDocID[category];
+                }
                 //console.log(url);
                 $.ajax({
                     url: url,
@@ -158,10 +181,10 @@
                 var authorString = $('<p />', {"class": "author"}).append(article.authors[author]);
 				totalString.append(authorString);
             }
-            
-            //console.log(article);
+
             totalString.append($('<p />').append(article.renderedBody));
-           
+            loadDisqusForArticle(true, 'dukechronicle', article._id, article.title, article.urls[0]);
+
 			return totalString;
         }
         
@@ -263,7 +286,7 @@
 			});
 		</script>
     </head>
-    
+
     <body>
         <div id="ArticleList" data-role="page" articleListContainer="true" url="news" data-add-back-btn="false"> 
             <div data-role="header" data-position="fixed"> 
@@ -289,6 +312,8 @@
 			<h1>The Chronicle</h1>
 		</div> 
 		<div id="ARTICLE_CONTENT" data-role="content" data-position="fixed"></div> 
+		<script src="/js/disqus.js?v=4" type="text/javascript"></script>
+        <div id="disqus_thread"></div>
 		<div data-role="footer" data-position="fixed"></div> 
 	</div> 
 

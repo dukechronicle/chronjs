@@ -2,7 +2,7 @@ h1 Editing a Document
 form(action='/admin/edit-page', method='POST')
     p
         label(for='title') Title:
-        input#title(type='text', name='doc[title]', value=doc.title)
+        input#title(type='text', name='doc[title]', value=doc.node_title)
     p
         label(for='body') Html:
         textarea#body(rows=5, cols=50, name='doc[body]', value)
@@ -15,4 +15,4 @@ form(action='/admin/edit-page', method='POST')
     input(type="hidden", name='doc[id]', value=doc._id);
 
     p
-        input(type='submit', value='Submit')
+        input(type='submit', class='btn', value='Submit')

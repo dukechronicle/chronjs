@@ -252,7 +252,7 @@ admin.editPageData = function (req, res, next) {
     var form = req.body.doc;
     var id = form.id;
 
-    var fields = req.body.{
+    var fields = {
         node_title: form.title,
         body: form.body,
         style: form.style

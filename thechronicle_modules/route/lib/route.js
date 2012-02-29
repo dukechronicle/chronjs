@@ -51,15 +51,15 @@ exports.init = function (app) {
     app.get('/rss/news', redirect("http://feeds.feedburner.com/thechronicle/news"));
 
     app.namespace('/page', function () {
-        app.get('/about-us', pages.about);
-        app.get('/advertising', pages.advertising);
-        app.get('/contact', pages.contact);
-        app.get('/edit-board', pages.editorial);
-        app.get('/letters-to-the-editor', pages.letters);
-        app.get('/privacy-policy', pages.privacy);
-        app.get('/subscribe', pages.subscribe);
-        app.get('/user-guidelines', pages.userGuidelines);
-        app.get('/young-trustee-2012', pages.youngTrustee2012);
+        app.get('/about-us', site.staticPage);
+        app.get('/advertising', site.staticPage);
+        app.get('/contact', site.staticPage);
+        app.get('/edit-board', site.staticPage);
+        app.get('/letters', site.staticPage);
+        app.get('/privacy-policy', site.staticPage);
+        app.get('/subscribe', site.staticPage);
+        app.get('/user-guidelines', site.staticPage);
+        app.get('/young-trustee-2012', site.staticPage);
     });
 
     // Makes search url more readable

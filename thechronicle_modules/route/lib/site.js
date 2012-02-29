@@ -6,6 +6,7 @@ var globalFunctions = require('../../global-functions');
 var log = require('../../log');
 
 var asereje = require('asereje');
+var _ = require('underscore');
 
 
 site.mobile = function (req, res, next) {
@@ -350,6 +351,15 @@ site.rssSection = function (req, res, next) {
                 filename: 'rss'
             });
         }
+    });
+};
+
+site.staticPage = function (req, res, next) {
+    var url = _.last(req.route.path.split('/'));
+    var filename = 'pages/' + url;
+    res.render(filename, {
+	css: asereje.css(['container/style']),
+        filename: filename
     });
 };
 

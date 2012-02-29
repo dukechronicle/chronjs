@@ -6,6 +6,7 @@ var globalFunctions = require('../../global-functions');
 var log = require('../../log');
 
 var asereje = require('asereje');
+var fs = require('fs');
 var _ = require('underscore');
 
 
@@ -357,9 +358,13 @@ site.rssSection = function (req, res, next) {
 site.staticPage = function (req, res, next) {
     var url = _.last(req.route.path.split('/'));
     var filename = 'pages/' + url;
-    res.render(filename, {
-	css: asereje.css(['container/style']),
-        filename: filename
+    fs.readFile('views/pages/page-data/' + url + '.json', function (err, data) {
+        var data = (!err && data) ? JSON.parse(data.toString()) : null;
+        res.render(filename, {
+	    css: asereje.css(['container/style']),
+            filename: filename,
+            data: data
+        });
     });
 };
 

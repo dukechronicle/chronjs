@@ -126,11 +126,9 @@ define(['jquery', 'Article'], function($, Article) {
 
         function saveAll(callback) {
             var article = articles[updated.pop()];
-            console.log(article.toJSON());
             article.save(null, {
                 url: '/api/article/' + article.get("id"),
                 success: function(data, status, jqXHR) {
-                    console.log(updated);
                     if (updated.length > 0) saveAll(callback);
                     else callback();
                 },

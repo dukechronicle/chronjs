@@ -125,7 +125,6 @@ siteApi.createArticle = function (req, res, next) {
 };
 
 siteApi.updateArticle = function (req, res, next) {
-    log.debug('receieved');
     api.editDoc(req.body.id, req.body, function (err, _res) {
         if (err) res.send(err, 500);
         else res.send({url: _res});

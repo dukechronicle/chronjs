@@ -87,8 +87,9 @@ exports.init = function (app) {
         app.get('/k4export', api.site.checkAdmin, admin.k4export);
         app.post('/k4export', api.site.checkAdmin, admin.k4exportData);
         app.post('/edit', api.site.checkAdmin, admin.editArticleData);
+        app.post('/edit-page', api.site.checkAdmin, admin.editPageData);
         app.post('/add', api.site.checkAdmin, admin.addArticleData);
-        app.post('/addPage', api.site.checkAdmin, admin.addPageData);
+        app.post('/add-page', api.site.checkAdmin, admin.addPageData);
         app.post('/newsletter', api.site.checkAdmin, admin.newsletterData);
         app.get('/layout/group/:group', api.site.checkAdmin, admin.layout);
     });

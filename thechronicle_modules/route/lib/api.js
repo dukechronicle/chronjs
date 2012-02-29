@@ -120,14 +120,15 @@ siteApi.readArticle = function (req, res, next) {
 siteApi.createArticle = function (req, res, next) {
     api.addDoc(req.body, function (err, _res) {
         if (err) res.send(err, 500);
-        else res.send(_res);
+        else res.send({url: _res});
     });
 };
 
 siteApi.updateArticle = function (req, res, next) {
+    log.debug('receieved');
     api.editDoc(req.body.id, req.body, function (err, _res) {
         if (err) res.send(err, 500);
-        else res.send(_res);
+        else res.send({url: _res});
     });
 };
 

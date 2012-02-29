@@ -18,13 +18,17 @@ define(['jquery', 'Article'], function($, Article) {
         });
 
         $("#save").click(function () {
-            var button = $(this);
-            button.attr('disabled', 'disabled');
-            updated = _.uniq(updated);
-            saveAll(function (err) {
-	        if (err) alert(err);
-		button.removeAttr('disabled');
-            });
+            if (_.isEmpty(updated))
+                alert("No updates make to layout");
+            else {
+                var button = $(this);
+                button.attr('disabled', 'disabled');
+                updated = _.uniq(updated);
+                saveAll(function (err) {
+	            if (err) alert(err);
+		    button.removeAttr('disabled');
+                });
+            }
         });
 
 	$("#taxonomy").change(function() {
@@ -131,7 +135,7 @@ define(['jquery', 'Article'], function($, Article) {
                     else callback();
                 },
                 error: function (jqXHR, status, errorThrown) {
-                    callback(jqXHR.responseText);
+                    callback(status.responseText);
                 }
             });
         }

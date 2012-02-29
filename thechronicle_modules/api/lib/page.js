@@ -19,13 +19,13 @@ page.add = function (data, callback) {
 
     db.page.add(data, function (err, res) {
         if (err) callback(err);
-        else callback(null, res.node_title);
+        else callback(null, data.node_title);
     });
 };
 
 page.edit = function (id, data, callback) {
     db.page.edit(id, data, function (err, res) {
         if (err) callback(err);
-        else callback(null, res.node_title);
+        else callback(null, data.node_title);
     });
 };

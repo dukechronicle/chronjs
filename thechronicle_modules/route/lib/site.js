@@ -241,7 +241,7 @@ site.editArticle = function (req, res, next) {
 
 site.editPage = function (req, res, next) {
     var url = req.params.url;
-    api.docForUrl(url, function (err, doc) {
+    api.page.getByUrl(url, function (err, doc) {
         if (err) next(err);
         else res.render('admin/editPage', {
             locals: {

@@ -50,6 +50,18 @@ exports.init = function (app) {
     app.get('/rss', redirect("http://feeds.feedburner.com/thechronicle/all"));
     app.get('/rss/news', redirect("http://feeds.feedburner.com/thechronicle/news"));
 
+    app.namespace('/page', function () {
+        app.get('/about-us', site.staticPage);
+        app.get('/advertising', site.staticPage);
+        app.get('/contact', site.staticPage);
+        app.get('/edit-board', site.staticPage);
+        app.get('/letters', site.staticPage);
+        app.get('/privacy-policy', site.staticPage);
+        app.get('/subscribe', site.staticPage);
+        app.get('/user-guidelines', site.staticPage);
+        app.get('/young-trustee-2012', site.staticPage);
+    });
+
     // Makes search url more readable
     app.get('/search', function (req, res) {
         var query = "--";            
@@ -64,8 +76,6 @@ exports.init = function (app) {
     });
     app.get('/staff/:query', site.staff);
 
-    app.get('/page/:url', site.page);
-    app.get('/page/:url/edit', api.site.checkAdmin, site.editPage);
     app.get('/article/:url', site.article);
     app.get('/article/:url/print', site.articlePrint);
     app.get('/article/:url/edit', api.site.checkAdmin, site.editArticle);

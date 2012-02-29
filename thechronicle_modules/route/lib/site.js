@@ -361,7 +361,7 @@ site.staticPage = function (req, res, next) {
     fs.readFile('views/pages/page-data/' + url + '.json', function (err, data) {
         var data = (!err && data) ? JSON.parse(data.toString()) : null;
         res.render(filename, {
-	    css: asereje.css(['container/style']),
+	    css: asereje.css(['container/style', filename]),
             filename: filename,
             data: data
         });

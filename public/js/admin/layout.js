@@ -5,17 +5,9 @@ define(['jquery', 'Article'], function($, Article) {
 
 
     $(function() {
-        
-        $(".story").each(function () {
-            var id = $(this).attr('id');
-            var groups = $(this).data('groups') || [];
 
-            if (! (id in articles))
-                articles[id] = new Article({
-                    id: $(this).attr('id'),
-                    groups: groups
-                });
-        });
+        createArticles($(".story")); // initialize article objects
+
 
         $("#save").click(function () {
             if (_.isEmpty(updated))
@@ -33,10 +25,12 @@ define(['jquery', 'Article'], function($, Article) {
 
 	$("#taxonomy").change(function() {
 	    var section = $(this).attr('value');
-	    var plainUrl = $(location).attr('href').split("?")[0];
-
-	    if(section != 'All') $("#stories-container").load(plainUrl + "?section=" + section + " #stories");
-            else $("#stories-container").load(plainUrl + " #stories");
+	    var url = $(location).attr('href').split("?")[0];
+	    if (section != 'All')
+                url += "?section=" + section;
+            $("#stories-container").load(url + " #stories", function () {
+                createArticles($("#stories > .story"));
+            });
 	});
 
 	/*
@@ -122,6 +116,19 @@ define(['jquery', 'Article'], function($, Article) {
             else {
                 story.remove();
             }
+        }
+
+        function createArticles(stories) {
+            stories.each(function () {
+                var id = $(this).attr('id');
+                var groups = $(this).data('groups') || [];
+                
+                if (! (id in articles))
+                    articles[id] = new Article({
+                        id: $(this).attr('id'),
+                        groups: groups
+                    });
+            });
         }
 
         function saveAll(callback) {

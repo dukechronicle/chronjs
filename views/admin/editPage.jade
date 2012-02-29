@@ -1,5 +1,5 @@
 h1 Editing a Document
-form(action='/admin/editPage', method='POST')
+form(action='/admin/edit-page', method='POST')
     p
         label(for='title') Title:
         input#title(type='text', name='doc[title]', value=doc.title)
@@ -7,6 +7,10 @@ form(action='/admin/editPage', method='POST')
         label(for='body') Html:
         textarea#body(rows=5, cols=50, name='doc[body]', value)
             #{doc.body}
+    p
+        label(for='body') Css:
+        textarea#body(rows=5, cols=50, name='doc[style]', value)
+            #{doc.style}
 
     input(type="hidden", name='doc[id]', value=doc._id);
 

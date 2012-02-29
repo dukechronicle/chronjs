@@ -6,7 +6,7 @@ define(['jquery', 'Article'], function($, Article) {
 
     $(function() {
 
-        createArticles($(".story")); // initialize article objects
+        initializeStories($(".story"));
 
 
         $("#save").click(function () {
@@ -29,7 +29,7 @@ define(['jquery', 'Article'], function($, Article) {
 	    if (section != 'All')
                 url += "?section=" + section;
             $("#stories-container").load(url + " #stories", function () {
-                createArticles($("#stories > .story"));
+                initializeStories($("#stories > .story"));
             });
 	});
 
@@ -56,15 +56,16 @@ define(['jquery', 'Article'], function($, Article) {
 
         // remove on double click
         $("#layout").delegate(".story", "dblclick", function() {
+            var id = $(this).attr('id');
             removeStoryFromContainer($(this), $(this).parent());
+            $("#" + id).removeClass("exists");
         });
 
         $("#layout").delegate(".container", "drop", function(e) {
             if (e.stopPropagation) e.stopPropagation();
 
             var docId = e.dataTransfer.getData("Text");
-            var element = $("#" + docId);
-            element.addClass("exists");
+            var element = $("#" + docId).addClass("exists").clone();
 
             if (element.parent().data("groupname"))
                 removeStoryFromContainer(element, element.parent());
@@ -79,7 +80,7 @@ define(['jquery', 'Article'], function($, Article) {
             if (e.stopPropagation) e.stopPropagation();
 
             var docId = e.dataTransfer.getData("Text");
-            var element = $("#" + docId);
+            var element = $("#" + docId).addClass("exists").clone();
             element.addClass("exists");
 
             if (element.parent().data("groupname"))
@@ -118,8 +119,11 @@ define(['jquery', 'Article'], function($, Article) {
             }
         }
 
-        function createArticles(stories) {
+        function initializeStories(stories) {
             stories.each(function () {
+                if ($("#layout").find("#" + $(this).attr('id')).length > 0)
+                    $(this).addClass("exists");
+
                 var id = $(this).attr('id');
                 var groups = $(this).data('groups') || [];
                 

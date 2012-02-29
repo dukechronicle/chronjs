@@ -43,7 +43,7 @@ define(['jquery', 'Article', 'msdropdown'], function ($, Article) {
                 callback(null, data);
             },
             error: function (jqXHR, status, errorThrown) {
-                callback(jqXHR.responseText);
+                callback(status.responseText);
             }
         });
     }

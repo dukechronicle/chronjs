@@ -20,7 +20,7 @@ define(["order!jquery", "order!underscore", "order!backbone"], function ($) {
         },
 
         addGroup: function (namespace, group, weight) {
-            removeGroup(namespace, group);
+            this.removeGroup(namespace, group);
             var groups = this.get("groups") || [];
 	    groups.push([namespace, group, weight]);
             this.set({groups: groups});
@@ -28,7 +28,7 @@ define(["order!jquery", "order!underscore", "order!backbone"], function ($) {
 
         removeGroup: function (namespace, group) {
             var groups = this.get("groups") || [];
-            groups = _.filter(groups, function (groupEntry) {
+            groups = _.reject(groups, function (entry) {
 		return entry[0].toString() == namespace.toString() &&
                     entry[1] == group;
             });

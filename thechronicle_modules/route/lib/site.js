@@ -6,6 +6,8 @@ var globalFunctions = require('../../global-functions');
 var log = require('../../log');
 
 var asereje = require('asereje');
+var fs = require('fs');
+var _ = require('underscore');
 
 
 site.mobile = function (req, res, next) {
@@ -241,7 +243,7 @@ site.editArticle = function (req, res, next) {
 
 site.editPage = function (req, res, next) {
     var url = req.params.url;
-    api.docForUrl(url, function (err, doc) {
+    api.page.getByUrl(url, function (err, doc) {
         if (err) next(err);
         else res.render('admin/editPage', {
             locals: {
@@ -350,6 +352,19 @@ site.rssSection = function (req, res, next) {
                 filename: 'rss'
             });
         }
+    });
+};
+
+site.staticPage = function (req, res, next) {
+    var url = _.last(req.route.path.split('/'));
+    var filename = 'pages/' + url;
+    fs.readFile('views/pages/page-data/' + url + '.json', function (err, data) {
+        var data = (!err && data) ? JSON.parse(data.toString()) : null;
+        res.render(filename, {
+	    css: asereje.css(['container/style', filename]),
+            filename: filename,
+            data: data
+        });
     });
 };
 

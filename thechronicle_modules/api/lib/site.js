@@ -581,7 +581,7 @@ site.getArticleContentUncached = function(url, callback) {
 };
 
 site.getPageContent = function(url, callback) {
-	api.nodeForTitle(url, function(err, doc) {
+	api.page.getByUrl(url, function(err, doc) {
 		if(err)
 			callback(err);
 		else {

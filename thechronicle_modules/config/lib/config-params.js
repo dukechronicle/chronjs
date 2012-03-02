@@ -649,7 +649,7 @@ var configParams = [
                     name: {type: "string", required: true},
                     user: {type: "string", required: false},
                     year: {type: "string", required: true},
-                    tagline: {type: "string", required: true},
+                    tagline: {type: "string", required: false},
                     day: {type: "string", required: true},
                     headshot: {type: "string", required: true}
                 }

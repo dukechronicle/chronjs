@@ -1,9 +1,18 @@
 define(["jquery", "onde"], function($) {
     var ondeSessions = {};
+    var objs = [];
 
     // construct the nice looking forms to edit json
-    for(var i in JSON_TO_FORM_ELEMENTS) {
-        var obj = JSON_TO_FORM_ELEMENTS[i];
+    var rawElements = getAllRawJSONs();
+
+    for(var i = 0; i < rawElements.length; i ++) {
+        var obj = {
+            name: $(rawElements[i]).attr("name"),
+            schema: JSON.parse($(rawElements[i]).attr("schema")),
+            defaultValue: $(rawElements[i]).val()
+        };
+        if(obj.schema.type == "object" || obj.schema.type == "array") obj.defaultValue = JSON.parse(obj.defaultValue);
+        
         var $element = getForm(obj.name);
         
         // if this config element exists on the page, make a nice form for it
@@ -28,6 +37,8 @@ define(["jquery", "onde"], function($) {
                     value: obj.schema
                 }
             };
+
+            objs.push(obj);
             
             //show the form
             ondeSessions[obj.name].render(obj.encasedSchema, obj.encasedDefaultValue, { collapsedCollapsibles: false });
@@ -78,8 +89,8 @@ define(["jquery", "onde"], function($) {
 
     // update the form for the json object to contain the textareas containg raw json
     function changeForm(id) {
-        for(var i in JSON_TO_FORM_ELEMENTS) {
-            var obj = JSON_TO_FORM_ELEMENTS[i];
+        for(var i in objs) {
+            var obj = objs[i];
 
             if(obj.name == id) {
                 var json = getRawJSON(id).val();
@@ -130,6 +141,10 @@ define(["jquery", "onde"], function($) {
 
     function getRawJSON(id) {
         return $("#"+id+"-val");
+    }
+
+    function getAllRawJSONs() {
+        return $('[id$="-val"]');
     }
 
     function getRawToFormSwitch(id) {

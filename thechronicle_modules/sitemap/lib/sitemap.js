@@ -43,7 +43,7 @@ sitemap.latestFullSitemap = function (path, callback) {
 };
 
 sitemap.latestNewsSitemap = function (path, callback) {
-    var query = { startkey: (new Date()).getTime() / 1000 - 2 * 24 * 60 * 60 };
+    var query = { endkey: (new Date()).getTime() / 1000 - 2 * 24 * 60 * 60 };
     latestSitemap(path + ".xml", query, true, callback);
 };
 
@@ -72,9 +72,8 @@ function latestSitemap(path, query, news, callback) {
         else if (results.length == 0) callback("No new articles for sitemap");
 	else {
 	    var lastkey = _.last(results).key;
-	    results = _.map(results, function (doc) {
+	    _.each(results, function (doc) {
 		delete doc.body;
-		return doc.value;
 	    });
 	    generateSitemap(results, news, function (err, xml) {
 		if (err) callback(err);
@@ -112,8 +111,6 @@ function generateSitemap(docs, news, callback) {
 	root.att("xmlns:news", "http://www.google.com/schemas/sitemap-news/0.9");
     async.forEach(docs,
 		  function (doc, cb) {
-
-              if (!doc) return;
 		      // TODO: extract domain name
 		      var prefix = "http://www.dukechronicle.com/article/";
 		      var date = getDate(doc);

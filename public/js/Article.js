@@ -17,6 +17,22 @@ define(["order!jquery", "order!underscore", "order!backbone"], function ($) {
                 images[imageTypes[i]] = versionIds[i];
             images["Original"] = originalId;
             this.set({images: images});
+        },
+
+        addGroup: function (namespace, group, weight) {
+            this.removeGroup(namespace, group);
+            var groups = this.get("groups") || [];
+	    groups.push([namespace, group, weight]);
+            this.set({groups: groups});
+        },
+
+        removeGroup: function (namespace, group) {
+            var groups = this.get("groups") || [];
+            groups = _.reject(groups, function (entry) {
+		return entry[0].toString() == namespace.toString() &&
+                    entry[1] == group;
+            });
+            this.set({groups: groups});
         }
 
     });

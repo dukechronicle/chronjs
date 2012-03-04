@@ -140,7 +140,7 @@ site.getFrontPageContent = function (callback) {
             model.printEdition = {
                 title: "Print",
                 imageUrl: "http://d2sug25c5hnh7r.cloudfront.net/images/issuu-thumb.png",
-                url: "http://issuu.com/dukechronicle/docs/100130news",
+                url: "http://issuu.com/dukechronicle/docs",
                 width: "134px",
                 height: "60px"
             };
@@ -528,7 +528,9 @@ site.getArticleContentUncached = function(url, callback) {
 		    },
 		    function(cb) {
 			    api.search.relatedArticles(doc._id, 5, function(err, relatedArticles) {
-				    cb(null, relatedArticles);
+			        modifyArticlesForDisplay(relatedArticles, function(err, relatedArticles) {
+                        cb(null, relatedArticles);            
+			        });
 			    });
 		    },
 		    function(cb) {
@@ -581,7 +583,7 @@ site.getArticleContentUncached = function(url, callback) {
 };
 
 site.getPageContent = function(url, callback) {
-	api.nodeForTitle(url, function(err, doc) {
+	api.page.getByUrl(url, function(err, doc) {
 		if(err)
 			callback(err);
 		else {

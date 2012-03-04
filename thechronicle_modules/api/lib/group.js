@@ -35,21 +35,21 @@ group.list = function(namespace, callback) {
 group.docs = function(namespace, group, callback) {
     var redisKey = "group.docs:" + namespace.toString();
     if (group) rediskey += ":" + group.toString();
-
+/*
     redis.client.get(redisKey, function(err, res) {
         if (res) callback(null, JSON.parse(res));
-	    else {
+	else {
+	*/
             groupDocs(namespace, group, function(err, results) {
-                if (err)
-                    callback(err);
+                if (err) callback(err);
                 else {
-                    redis.client.set(redisKey, JSON.stringify(results));
-                    redis.client.expire(redisKey, 60);
+     //               redis.client.set(redisKey, JSON.stringify(results));
+      //              redis.client.expire(redisKey, 2);
                     callback(null, results);
                 }
             });
-        }
-    });
+     //   }
+    //});
 };
 
 /**

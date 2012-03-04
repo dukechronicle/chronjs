@@ -275,7 +275,10 @@ var configParams = [
 						        "Volleyball": []
 					        }
 				        ]
-			        }
+			        },
+                                {
+                                        "Column": []
+                                }
 		        ]
 	        },
 	        {
@@ -313,11 +316,33 @@ var configParams = [
 			        },
 			        {
 				        "Literature": []
-			        }
+			        },
+                                {
+                                        "Column": []
+                                }
 		        ]
 	        },
 	        {
-		        "Towerview": []
+		        "Towerview": [
+                                {
+                                        "Savvy": []
+                                },
+                                {
+                                        "Prefix": []
+                                },
+                                {
+                                        "Wisdom": []
+                                },
+                                {
+                                        "Feature": []
+                                },
+                                {
+                                        "Column": []
+                                },
+                                {
+                                        "Editor's Note": []
+                                }
+                        ]
 	        }
         ],
         schema: {

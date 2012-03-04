@@ -63,9 +63,7 @@ site.askForLogin = function(res, afterLoginPage, username, err) {
 };
 
 site.renderConfigPage = function(req, res, err) {
-	console.log(JSON.stringify(config.getParameters()));
-
-    if(err) {
+	if(err) {
 		if( typeof err === 'object')
 			err = JSON.stringify(err);
 		err += "<br /><br />The live site was not updated to use the new configuration due to errors."

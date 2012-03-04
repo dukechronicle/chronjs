@@ -21,10 +21,10 @@ form(class="fake-form")
         - if(typeof param.defaultValue == "object") 
             input(type="button", id=param.name+"-rawSwitch", class="rawSwitch", value="Show Raw")
             br
-            textarea(id=param.name+"-val", name=param.name, class="expand", style="width:75%")
+            textarea(id=param.name+"-val", name=param.name, schema=JSON.stringify(param.schema), class="expand", style="width:75%")
                 !{JSON.stringify(param.defaultValue,null,"\t")}
         - else
-            input(id=param.name+"-val", type='text', name=param.name, value=param.defaultValue, style="width:75%")
+            input(id=param.name+"-val", type='text', name=param.name, schema=JSON.stringify(param.schema), value=param.defaultValue, style="width:75%")
         form(id=param.name, class="fake-form")
             div(class="onde-panel")
         br
@@ -35,6 +35,3 @@ form(id="configForm", action=action, method='POST')
   input(type='hidden', name=revisionName, value=revisionValue)
   input(type='hidden', name=profileName, value=profileValue, readonly="true")
   input(type='submit')
-
-script
-    var JSON_TO_FORM_ELEMENTS = !{JSON.stringify(configParams)};

@@ -98,18 +98,7 @@ site.getFrontPageContent = function (callback) {
         },
         function (cb) { //1
             var popularArticles = 7;
-            redis.client.zrevrange(_articleViewsKey([]), 0, popularArticles - 1, function (err, popular) {
-                if (err) return cb(err);
-                popular = popular.map(function (str) {
-                    var parts = str.split('||');
-                    return {
-                        urls:['/article/' + parts[0]],
-                        title:parts[1]
-                    };
-                });
-                if (BENCHMARK) log.info("REDIS TIME %d", Date.now() - start);
-                cb(null, popular);
-            });
+            api.disqus.listHot(popularArticles, cb);
         },
         function (cb) { //2
             var twitter = {};

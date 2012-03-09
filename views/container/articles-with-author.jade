@@ -6,7 +6,7 @@
         .content-container
             - each story in stories
                 h2
-                    a.list-story.hover.highlight-right(href='#{story.url || story.urls[0]}', class='#{story.cssClass}')
+                    a.list-story.hover.highlight-right(href='#{story.url || ('article/' + story.urls[story.urls.length-1])}', class='#{story.cssClass}')
                         #{story.title}
                         - if (story.authors)
                             p.author

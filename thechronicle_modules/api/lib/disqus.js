@@ -14,22 +14,31 @@ disqus.listHot = function(limit, callback) {
     if(!limit || limit < 0) limit = DISQUS_LIMIT;
 
     var options = {
-        forum: config.get("DISQUS_SHORTNAME"),
         limit: limit
     };
 
-    makeDisqusRequest('threads/listHot', 'GET', options, function(err, response) {
+    makeDisqusRequest('threads/list', 'GET', options, function(err, response) {
         if(err) return callback(err);
-
-        var ids = _.map(response, function(disqusArticleData) {
-            return disqusArticleData.identifiers[0];
-        });
-
-        api.docsById(ids, function(err, res) {
-            console.log(res);
-        });
+        else return getArticlesFromDisqusData(response, callback);        
     });
 };
+
+function getArticlesFromDisqusData(disqusData, callback) {
+    var ids = _.map(disqusData, function(disqusArticleData) {
+        return disqusArticleData.identifiers[0];
+    });
+
+    api.docsById(ids, function(err, res) {
+        if(err) return callback(err);
+
+        res = _.map(res, function(article) {
+            return article.doc;
+        });
+        res = _.compact(res);
+
+        return callback(null, res);
+    });
+}
 
 function makeDisqusRequest(func, method, params, callback) {
     var query = '';
@@ -39,6 +48,7 @@ function makeDisqusRequest(func, method, params, callback) {
         }
     }
     query += 'api_key=' + config.get('DISQUS_KEY');
+    query += '&forum=' + config.get("DISQUS_SHORTNAME");
 
     var options = {  
         host: DISQUS_HOST,   

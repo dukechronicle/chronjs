@@ -17,7 +17,7 @@ disqus.listHot = function(limit, callback) {
         limit: limit
     };
 
-    makeDisqusRequest('threads/list', 'GET', options, function(err, response) {
+    makeDisqusRequest('threads/listHot', 'GET', options, function(err, response) {
         if(err) return callback(err);
         else return getArticlesFromDisqusData(response, callback);        
     });

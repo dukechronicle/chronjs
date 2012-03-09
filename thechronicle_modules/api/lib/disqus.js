@@ -1,5 +1,8 @@
 var http  = require('http');
+var _  = require('underscore');
+
 var config = require('../../config');
+var api = require('./api');
 
 var disqus = {};
 var exports = module.exports = disqus;
@@ -16,8 +19,15 @@ disqus.listHot = function(limit, callback) {
     };
 
     makeDisqusRequest('threads/listHot', 'GET', options, function(err, response) {
-        console.log(err);
-        console.log(response);
+        if(err) return callback(err);
+
+        var ids = _.map(response, function(disqusArticleData) {
+            return disqusArticleData.identifiers[0];
+        });
+
+        api.docsById(ids, function(err, res) {
+            console.log(res);
+        });
     });
 };
 
@@ -50,7 +60,7 @@ function makeDisqusRequest(func, method, params, callback) {
             var jsonBody = JSON.parse(body);
 
             if(jsonBody.code !== 0) callback(jsonBody.response);
-            else callback(null, jsonBody);
+            else callback(null, jsonBody.response);
         });
     });
 

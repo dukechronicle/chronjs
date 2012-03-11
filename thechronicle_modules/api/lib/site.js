@@ -98,7 +98,11 @@ site.getFrontPageContent = function (callback) {
         },
         function (cb) { //1
             var popularArticles = 7;
-            api.disqus.listHot(popularArticles, cb);
+            api.disqus.listHot(popularArticles, function(err, results) {
+                if(err) return cb(err);
+
+                modifyArticlesForDisplay(results, cb);    
+            });
         },
         function (cb) { //2
             var twitter = {};

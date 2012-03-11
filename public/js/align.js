@@ -37,7 +37,7 @@ define(["jquery", "underscore"], function($) {
         },
         frontpageAlign: function() {
             // align main and sidebar height
-            var popularLiHeight = 24;
+            var popularLiHeight = 40;
 
             var extraHeight = $('#top > .sidebar').height() - $('#top > .content').height() + 3;
             var contentContainer = $('#top > .content .top-news .content-container');

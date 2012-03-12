@@ -96,15 +96,11 @@ db.whenDBExists = function(database,callback) {
 function updateViews(callback) {
     async.forEach(_.keys(designDoc), function (name, cb) {
        viewsAreUpToDate(name, designDoc[name], function(err, isUpToDate, newestModifiedTime, newestHash) {
-           if (err) {
-               log.warning(err);
-               callback(err);
-           }
-           else if (isUpToDate)
-               callback();
+           if (err) cb(err);
+           else if (isUpToDate) cb();
            else {
                log.notice('updating views to newest version - modified time: ' + newestModifiedTime + ' and hash: ' + newestHash);
-               createViews(name, designDoc[name], newestModifiedTime, newestHash, callback);
+               createViews(name, designDoc[name], newestModifiedTime, newestHash, cb);
            }
        });
     }, callback);

@@ -114,6 +114,9 @@ function configureApp(sessionInfo, port) {
     app.configure(function() {
         app.set('views', __dirname + '/views');
         app.set('view engine', 'jade');
+        app.set('view options', {
+            static_cdn: config.get("CLOUDFRONT_STATIC")
+        });
         app.enable('jsonp callback');
         app.use(express.bodyParser({uploadDir: __dirname + '/uploads'}));
         app.use(express.methodOverride());

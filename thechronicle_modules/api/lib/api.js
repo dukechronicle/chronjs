@@ -23,7 +23,7 @@ api.cron = require("./cron");
 api.database = require("./database");
 api.s3 = require('./s3');
 api.site = require('./site');
-api.survey = require('./survey');
+api.poll = require('./poll');
 api.page = require('./page');
 
 

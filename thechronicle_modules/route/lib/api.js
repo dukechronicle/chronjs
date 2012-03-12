@@ -138,8 +138,8 @@ siteApi.deleteArticle =  function (req, res, next) {
     });
 };
 
-siteApi.voteSurvey = function (req, res, next) {
-    api.survey.vote(req.body.id, req.body.answer, function (err, _res) {
+siteApi.votePoll = function (req, res, next) {
+    api.poll.vote(req.body.id, req.body.answer, function (err, _res) {
         if (err) res.send(err, 500);
         else res.send(_res);
     });

@@ -17,13 +17,13 @@ define(['jquery'], function ($) {
             if (!voted) {
                 voted = true;
 
-                var id = $(".survey").attr("id");
+                var id = $(".poll").attr("id");
                 var answer = $choice.attr("id");
                 $choice.attr("votes", function (index, votes) {
                     return parseInt(votes) + 1;
                 });
 
-                $.post('/api/survey/vote', { id: id, answer: answer });
+                $.post('/api/poll/vote', { id: id, answer: answer });
 
                 $(".choice").each(function () {
                     var percent = parseInt($(this).attr("votes")) / total;

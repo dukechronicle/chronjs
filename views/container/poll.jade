@@ -1,13 +1,13 @@
-.survey(id=survey.id)
+.poll(id=poll.id)
   .container.clearfix
       .vertical-container
-          h2.vertical Survey
+          h2.vertical Poll
 
       .rounded
           .content-container
-              h1 #{survey.title}
+              h1 #{poll.title}
               ul.choices
-              - each votes, choice in survey.answers
+              - each votes, choice in poll.answers
                   il.choice(id=choice, votes=votes)
                       a.hover(href="#")
                           h2 #{choice}

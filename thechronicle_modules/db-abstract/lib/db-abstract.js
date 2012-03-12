@@ -38,7 +38,7 @@ db.taxonomy = require('./taxonomy');
 db.search = require('./search');
 db.authors = require('./authors');
 db.database = require('./database');
-db.survey = require('./survey');
+db.poll = require('./poll');
 db.page = require('./page');
 
 

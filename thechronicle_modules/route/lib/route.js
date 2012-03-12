@@ -9,47 +9,32 @@ var async = require('async');
 
 // assigns the functionality needed before different modules are ready to be
 // initilized (before config settings have been set)
-exports.preinit = function (app, afterConfigChangeFunction) {
+exports.preinit = function (app) {
     app.post('/login', site.loginData);
     app.get('/logout', site.logout);
     app.get('/config', site.config);
     app.post('/config', site.configData);
-
-    site.setAfterConfigChangeFunction(afterConfigChangeFunction);
 };
 
 exports.init = function (app) {
 
     app.namespace('/api', function () {
-        app.get('/All', siteApi.listAll);
-        app.get('/:groupname', siteApi.section);
-        app.get('/article/:url', siteApi.article);
+        app.get('/all', siteApi.listAll);
+        app.get('/:section', siteApi.listSection);
+        app.get('/article/url/:url', siteApi.articleByUrl);
         app.get('/search/:query', siteApi.search);
         app.get('/staff/:query', siteApi.staff);
 
         app.post('/survey/vote', siteApi.voteSurvey);
-        app.post('/group/add', api.site.checkAdmin, siteApi.addGroup);
-        app.post('/group/remove', api.site.checkAdmin, siteApi.removeGroup);
-        app.del('/:docId', api.site.checkAdmin, siteApi.deleteDocument);
+        app.get('/article/:id', siteApi.readArticle);
+        app.post('/article', api.site.checkAdmin, siteApi.createArticle);
+        app.put('/article/:id', api.site.checkAdmin, siteApi.updateArticle);
+        app.del('/article/:id', api.site.checkAdmin, siteApi.deleteArticle);
     });
 
     app.get('/m/*', site.mobile);
 
-    // redirect mobile browsers to the mobile site
-    app.get('/*', site.redirectMobile);
-
     app.get('/survey', site.survey);
-
-    app.get('/about-us', site.aboutUs);
-    app.get('/privacy-policy', site.privacyPolicy);
-    app.get('/user-guidelines', site.userGuidelines);
-    app.get('/advertising', site.advertising);
-    app.get('/subscribe', site.subscribe);
-    app.get('/edit-board', site.editBoard);
-    app.get('/letters-to-the-editor', site.lettersToEditor);
-    app.get('/contact', site.contact);
-
-    app.get('/page/young-trustee-2012', site.yt2012);
 
     app.get('/', site.frontpage);
     app.get('/news', site.news);
@@ -58,6 +43,24 @@ exports.init = function (app) {
     app.get('/recess', site.recess);
     app.get('/towerview', site.towerview);
     app.get('/section/*', site.section);
+
+    app.get('/rss-source', site.rss);
+    app.get('/rss-source/*', site.rssSection);
+    app.get('/feed/all', redirect("/rss"));
+    app.get('/rss', redirect("http://feeds.feedburner.com/thechronicle/all"));
+    app.get('/rss/news', redirect("http://feeds.feedburner.com/thechronicle/news"));
+
+    app.namespace('/page', function () {
+        app.get('/about-us', site.staticPage);
+        app.get('/advertising', site.staticPage);
+        app.get('/contact', site.staticPage);
+        app.get('/edit-board', site.staticPage);
+        app.get('/letters', site.staticPage);
+        app.get('/privacy-policy', site.staticPage);
+        app.get('/subscribe', site.staticPage);
+        app.get('/user-guidelines', site.staticPage);
+        app.get('/young-trustee-2012', site.staticPage);
+    });
 
     // Makes search url more readable
     app.get('/search', function (req, res) {
@@ -73,11 +76,9 @@ exports.init = function (app) {
     });
     app.get('/staff/:query', site.staff);
 
-    app.get('/page/:url', site.page);
     app.get('/article/:url', site.article);
     app.get('/article/:url/print', site.articlePrint);
     app.get('/article/:url/edit', api.site.checkAdmin, site.editArticle);
-    app.get('/page/:url/edit', api.site.checkAdmin, site.editPage);
     app.get('/login', site.login);
     app.get('/newsletter', site.newsletter);
     app.post('/newsletter', site.newsletterData);
@@ -90,15 +91,15 @@ exports.init = function (app) {
     app.namespace('/admin', function () {
         app.get('/', api.site.checkAdmin, admin.index);
         app.get('/newsletter', api.site.checkAdmin, admin.newsletter);
-        app.get('/index-articles', api.site.checkAdmin, admin.indexArticles);
         app.get('/add', api.site.checkAdmin, admin.addArticle);
         app.get('/add-page', api.site.checkAdmin, admin.addPage);
         app.get('/manage', api.site.checkAdmin, admin.manage);
         app.get('/k4export', api.site.checkAdmin, admin.k4export);
         app.post('/k4export', api.site.checkAdmin, admin.k4exportData);
         app.post('/edit', api.site.checkAdmin, admin.editArticleData);
+        app.post('/edit-page', api.site.checkAdmin, admin.editPageData);
         app.post('/add', api.site.checkAdmin, admin.addArticleData);
-        app.post('/addPage', api.site.checkAdmin, admin.addPageData);
+        app.post('/add-page', api.site.checkAdmin, admin.addPageData);
         app.post('/newsletter', api.site.checkAdmin, admin.newsletterData);
         app.get('/layout/group/:group', api.site.checkAdmin, admin.layout);
     });
@@ -113,8 +114,14 @@ exports.init = function (app) {
         app.post('/info', api.site.checkAdmin, admin.image.info);
         app.post('/crop', api.site.checkAdmin, admin.image.crop);
     });
-
+    
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);
 
 };
+
+function redirect (url) {
+    return function(req, res) {
+        res.redirect(url, 301);
+    }
+}

@@ -4,10 +4,14 @@ var async = require('async');
 
 var RESULTS_PER_PAGE = 25;
 
-image.listOriginalsByDate = function (beforeKey, beforeID, callback) {
+image.listOriginalsByDate = function (limit, beforeKey, beforeID, callback) {
+    if(!limit || limit < 0) {
+        limit = RESULTS_PER_PAGE;
+    }
+
     var query = {
         descending:true,
-        limit: RESULTS_PER_PAGE
+        limit: limit
     };
 
     if(beforeKey) query.startkey = parseInt(beforeKey);

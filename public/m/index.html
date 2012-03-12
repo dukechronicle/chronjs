@@ -5,7 +5,8 @@
         <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1"> 
         <link rel="stylesheet" href="/m/themes/chronicle.min.css" />
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0.1/jquery.mobile.structure-1.0.1.min.css" />
-
+        <link rel="stylesheet" href="/m/css/chronmobile.css" />
+        
         <!--<script src="http://use.typekit.com/dwv2bjy.js"></script>
         <script>
             try{Typekit.load();}catch(e){}
@@ -23,14 +24,38 @@
                 //$.mobile.touchOverflowEnabled = true;
             });        
         </script> 
-
-		<link rel="stylesheet" href="/m/css/chronmobile.css" />
         
+        <script type="text/javascript"> 
+            // onLoad parse URL
+            $(function() {
+                // m/asdlfjsladkd
+                var relativeURL = window.location.pathname;
+
+                // " ", "m", "article", articleName
+                var splitString = relativeURL.split("/");
+
+                // TODO: malformed input?
+                if(splitString[2] == "article" && splitString[3] != null && splitString[3] != "")
+                {
+                    getArticle(splitString[3]);
+                }
+                else
+                {
+                    getArticleList('all', 'The Chronicle', true);
+                }
+            });        
+        </script> 
+
 		<script type="text/javascript"> 
 		var ARTICLE_LIST = "#ARTICLE_LIST";
 		var ARTICLE_CONTENT = "#ARTICLE_CONTENT";
 		var HEADER_TITLE = "#HEADER_TITLE";
+        var UNKNOWN_ERROR = "An unknown error has occured, click back to return to the previous page.";
+        var ARTICLE_NOT_FOUND = "The article cannot be found. Hit back to return to the previous page.";
 
+        // Last Section DocID
+        var lastDocID = [];
+        
         // Cache the list of articles. Emphemeral.
         var articleListCache = [];
         
@@ -40,6 +65,19 @@
         // Cache the articles. Shouldn't be cleared.
         var articleCache = [];
        
+        // Week
+        var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        function getDateString(time)
+        {
+            var date = new Date(time);
+            var month = MONTHS[date.getMonth()];
+            var day = date.getDate();
+            var year= date.getFullYear();
+            var dateString = " - " + month + " "+ day + ", " + year;
+            
+            return dateString;
+        }
+
 		function generateListItem(articleJSON)
 		{
 			var article = articleJSON;
@@ -53,10 +91,14 @@
 			
 			// Thumbnail
 			// hyperlink.append('<img src="' + 'img/test.png"' + ' "class"="ui-li-thumb" />');
-			
+
+            var dateString = getDateString(article.created*1000);
 			// Article Title
-			hyperlink.append($('<h3 />').text(article.title));
-			
+			hyperlink.append($('<h2 />').text(article.title));
+
+            // Article Date
+            hyperlink.append($('<h3 />').text(dateString));
+
 			// Article Synopsis
 			hyperlink.append($('<p />').text(article.teaser));
 		
@@ -79,6 +121,7 @@
             for(var i in articleListResponse)
             {
                 $(ARTICLE_LIST).append(generateListItem(articleListResponse[i]));
+                lastDocID[category] = articleListResponse[i]._id;
             }
 	
 			$(ARTICLE_LIST).listview('refresh');
@@ -89,14 +132,17 @@
             // Retrieve if cache miss, forced reload, or if cache is too old:
             if(articleListCache[category] == null || forced || new Date().getTime() - articleListCache[category].timestamp > ARTICLE_LIST_CACHE_TIMEOUT)
             {
-                console.log("article list : cachemiss");
                 var url = "/api/" + category;
+                if(lastDocID[category] != null)
+                {
+                    url += "/" + lastDocID[category];
+                }
                 //console.log(url);
                 $.ajax({
-                  url: url,
-                  cache: false,
-                  dataType: "jsonp",
-                  success: function(data){
+                    url: url,
+                    cache: false,
+                    dataType: "jsonp",
+                    success: function(data){
                         //console.log(category);
                         if(!data) {
                             $.mobile.changePage('#error', 'none');
@@ -105,7 +151,11 @@
                         // Insert into cache
                         articleListCache[category] = {timestamp: new Date().getTime(), data: data};
                         updateArticleList(articleListCache[category].data, $(this), title);
-                    }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        handleAJAXError(jqXHR);
+                    } 
+
                 });
             } 
 			else {
@@ -131,39 +181,57 @@
                 var authorString = $('<p />', {"class": "author"}).append(article.authors[author]);
 				totalString.append(authorString);
             }
-            
-            totalString.append($('<p />').append(article.body));
-           
+
+            totalString.append($('<p />').append(article.renderedBody));
+            loadDisqusForArticle(true, 'dukechronicle', article._id, article.title, article.urls[0]);
+
 			return totalString;
         }
         
+        function handleAJAXError(jqXHR)
+        {
+            if(jqXHR.status == 500)
+            {
+                $(ERROR_MESSAGE).text(ARTICLE_NOT_FOUND);
+            }
+            else
+            {
+                $(ERROR_MESSAGE).text(UNKNOWN_ERROR);
+            }
+            $.mobile.changePage('#error', 'slide');
+        }
+
         function getArticle(articleURL)
         {
             // Retrieve if cache miss, forced reload, or if cache is too old:
             if(articleCache[articleURL] == null)
             {
-               //console.log("article cache: cachemiss");
-               $.ajax({
-                   url: "/api/article/" + articleURL,
-                   dataType: "jsonp",
-                   cache: false,
-                   success: function(data){
-                   if(!data) {
-                       //console.log("get article failed");
-                       $.mobile.changePage('#error', 'slide');
-                       return;
-                   }
-
-                   // Insert into cache
-                   articleCache[articleURL] = {data: data};
-
-                   $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL].data));
-					$.mobile.changePage("#Article","slide");
-                  }
-               });
+                //console.log("article cache: cachemiss");
+                $.ajax({
+                    url: "/api/article/url/" + articleURL,
+                    dataType: "jsonp",
+                    cache: false,
+                    success: function(data){
+                        if(!data) {
+                            //console.log("get article failed");
+                            $.mobile.changePage('#error', 'slide');
+                            return;
+                        }
+     
+                        // Insert into cache
+                        articleCache[articleURL] = {data: data};
+     
+                        $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL].data));
+	     				$.mobile.changePage("#Article","slide");
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        handleAJAXError(jqXHR);
+                    }  
+                });
             }
 			else {
-                updateArticleContainer(articleCache[articleURL].data);
+                $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL].data));
+   				$.mobile.changePage("#Article","slide");
             } 
         }
              
@@ -187,7 +255,7 @@
 			$(ARTICLE_LIST).listview('refresh');
         }
 
-
+    
         </script>
 
 		<!-- Google Analytics Code-->
@@ -218,10 +286,8 @@
 			});
 		</script>
     </head>
-    
-	<!--<body>-->
-    <body onload="getArticleList('All', 'The Chronicle', true)">
- 
+
+    <body>
         <div id="ArticleList" data-role="page" articleListContainer="true" url="news" data-add-back-btn="false"> 
             <div data-role="header" data-position="fixed"> 
                 <h1 id="HEADER_TITLE" >The Chronicle</h1>
@@ -246,14 +312,16 @@
 			<h1>The Chronicle</h1>
 		</div> 
 		<div id="ARTICLE_CONTENT" data-role="content" data-position="fixed"></div> 
+		<script src="/js/disqus.js?v=4" type="text/javascript"></script>
+        <div id="disqus_thread"></div>
 		<div data-role="footer" data-position="fixed"></div> 
 	</div> 
 
-	<div id="error" data-role="page"> 
+	<div id="error" data-role="page" articleContainer="true" url="Article" data-add-back-btn="true" data-back-btn-text="Back"> 
 		<div data-role="header"> 
 			<h1>Error</h1> 
 		</div> 
-		<div data-role="content">    
+		<div id="ERROR_MESSAGE" data-role="content">    
 			An error has occured, click back to return to the previous page.
 		</div> 
 	</div> 

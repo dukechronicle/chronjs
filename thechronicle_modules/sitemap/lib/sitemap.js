@@ -4,10 +4,10 @@ var async = require('async');
 var builder = require('xmlbuilder');
 var child_process = require('child_process');
 var dateFormat = require('dateformat');
-var db = require('../../db-abstract');
 var fs = require('fs');
 var log = require('../../log');
 var _ = require('underscore');
+var api = require('../../api');
 
 var SITEMAP_URL_LIMIT = 10000;
 
@@ -43,12 +43,12 @@ sitemap.latestFullSitemap = function (path, callback) {
 };
 
 sitemap.latestNewsSitemap = function (path, callback) {
-    var query = { startkey: (new Date()).getTime() / 1000 - 2 * 24 * 60 * 60 };
+    var query = { endkey: (new Date()).getTime() / 1000 - 2 * 24 * 60 * 60 };
     latestSitemap(path + ".xml", query, true, callback);
 };
 
 function latestFullSitemapHelper(path, number, start, files, callback) {
-    var query = { limit: SITEMAP_URL_LIMIT };
+    var query = {};
     if (start != null) {
 	query.startkey = start;
 	query.skip = 1;
@@ -67,16 +67,13 @@ function latestFullSitemapHelper(path, number, start, files, callback) {
 }
 
 function latestSitemap(path, query, news, callback) {
-    query = query || {};
-    query.limit = query.limit || SITEMAP_URL_LIMIT;	
-    db.view("articles/all_by_date", query, function(err, results) {
+    api.docsByDate(SITEMAP_URL_LIMIT, query, function(err, results) {
         if (err) callback(err);
         else if (results.length == 0) callback("No new articles for sitemap");
 	else {
 	    var lastkey = _.last(results).key;
-	    results = _.map(results, function (doc) {
+	    _.each(results, function (doc) {
 		delete doc.body;
-		return doc.value;
 	    });
 	    generateSitemap(results, news, function (err, xml) {
 		if (err) callback(err);

@@ -1,6 +1,7 @@
 var configParams = require('./config-params.js');
 
 var _ = require('underscore');
+var jsonSchemaValidator = require("JSV").JSV.createEnvironment();
 var db = require('../../db-abstract');
 var url = require('url');
 var log = require('../../log');
@@ -20,8 +21,16 @@ var configDB = null;
 var documentExistsInDB = false;
 var configRevision = null;
 
-exports.init = function(callback)
+var afterConfigChangeFunction = function(callback) { callback(); };
+
+exports.runAfterConfigChangeFunction = function(callback) {
+    afterConfigChangeFunction(callback);
+};
+
+exports.init = function(func, callback)
 {
+    afterConfigChangeFunction = func;
+
     if(!COUCHDB_CONFIG_HOST) return callback('No config database defined! Please set your CHRONICLE_CONFIG_DB environment var to the CouchDB host that stores site config info');
     
     log.info("Connecting to config database '" + PROFILE_NAME + "'");
@@ -66,6 +75,13 @@ function getConfigParamObjectWithName(name) {
     return null;
 }
 
+exports.checkForUpdatedConfig = function(callback) {
+    var prevRev = configRevision;
+    getConfig(function() {
+        callback(prevRev != configRevision);
+    });
+}
+
 exports.get = function(variable) {
     if (!configProfile) {
         log.alert('Configuration is not defined!');
@@ -73,10 +89,10 @@ exports.get = function(variable) {
     }
     else if(!configProfile[variable]) {
         log.alert('Configuration property: "' + variable + '" not defined!');
-	return null;
+	    return null;
     }
     else {
-	return configProfile[variable];
+	    return JSON.parse(JSON.stringify(configProfile[variable])); // perform a deep copy and return that
     }
 };
 
@@ -100,9 +116,11 @@ exports.setUp = function (params, callback) {
 
     Object.keys(params).forEach(function (key) {
         if (params[key].length > 0) {
-            if(typeof getConfigParamObjectWithName(key).defaultValue == "object") {
+            var configParamObj = getConfigParamObjectWithName(key);
+            
+            if(typeof configParamObj.defaultValue == "object") {
                 try {
-                    configProfile[key] = JSON.parse(params[key]);
+                        params[key] = JSON.parse(params[key]);
                 }
                 catch(err) {
                     if(jsonError == null) jsonError = "";
@@ -111,8 +129,18 @@ exports.setUp = function (params, callback) {
                     jsonError += 'Config param ' + key + ' defined as improper JSON. Ignoring changes to ' + key + '.';
                 }
             }
-            else {
+
+            var report = jsonSchemaValidator.validate(params[key], configParamObj.schema);            
+            if (report.errors.length === 0) {
+                //JSON is valid against the schema
                 configProfile[key] = params[key];
+            }
+            else {
+                if(jsonError == null) jsonError = "";
+                else jsonError += "<br />";
+
+                jsonError += 'Config param ' + key + ' defined incorrectly according to schema. Ignoring changes to ' + key + '.';
+                jsonError += '<br />' + key + ' errors:<br />' + JSON.stringify(report.errors) + '<br />';
             }
         }
     });

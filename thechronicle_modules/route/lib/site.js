@@ -194,7 +194,8 @@ site.article = function (req, res, next) {
                 disqusShortname: config.get('DISQUS_SHORTNAME')
             },
             filename:'views/article',
-            css:asereje.css(['container/style', 'article'])
+            css:asereje.css(['container/style', 'article']),
+            js:['disqus?v=4']
         });
     });
 };

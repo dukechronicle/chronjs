@@ -50,7 +50,7 @@ ul.nav.clearfix
                         div!=partial('container/row-2', {story: model.Stories[5], tax: true})
                     if (model.Stories[7])
                         .last!=partial('container/row-2', {story: model.Stories[7], tax: true})
-            .multimedia!=partial('container/multimedia-sports', {title: "Multimedia"})
+            .multimedia!=partial('container/multimedia', {title: "Multimedia", multimedia: model.multimedia.Sports})
 
     .bottom
         .row.clearfix

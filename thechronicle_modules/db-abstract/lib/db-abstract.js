@@ -39,6 +39,8 @@ db.search = require('./search');
 db.authors = require('./authors');
 db.database = require('./database');
 db.survey = require('./survey');
+db.page = require('./page');
+
 
 db.getDatabaseName = function() {
     return DATABASE;

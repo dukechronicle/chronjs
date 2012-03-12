@@ -5,8 +5,10 @@ var views = {
     taxonomy:{
         map:function (doc) {
             if (doc.taxonomy) {
+                var path = [];
                 for (var i in doc.taxonomy) {
-                    emit([doc.taxonomy[i], parseInt(doc.created, 10)], doc);
+                    path.push(doc.taxonomy[i]);
+                    emit([eval(uneval(path)), parseInt(doc.created, 10)], doc);
                 }
             }
         }

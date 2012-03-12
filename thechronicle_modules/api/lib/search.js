@@ -1,6 +1,7 @@
 var solr = require('solr');
 var dateFormat = require('dateformat');
 var async = require('async');
+var url = require("url");
 
 var config = require('../../config');
 var globalFunctions = require('../../global-functions');
@@ -13,6 +14,8 @@ var db = require("../../db-abstract");
 // so the server knows it has to reindex all articles not using the newest indexing version. Keep the number numeric!
 var INDEX_VERSION = 0.5011;
 var RESULTS_PER_PAGE = 25;
+var MAX_MATCHED_PHRASES_PER_ARTICLE = 4;
+var COMMON_WORDS = ["the","be","to","of","and","a","in","that","have","it","for","not","on","with","he","as","you","do","at", "I"];
 
 var client = null;
 
@@ -36,7 +39,13 @@ search.getIndexVersion = function() {
 };
 
 search.init = function() {
-	client = solr.createClient(config.get('SOLR_HOST'), config.get('SOLR_PORT'), config.get('SOLR_CORE'), config.get('SOLR_PATH'));
+	var solrUrl = url.parse(config.get('SOLR_URL'));
+    
+    var solrPathArray = solrUrl.pathname.split("/");
+    var solrCore = "/" + solrPathArray[2];
+    var solrPath = "/" + solrPathArray[1];
+
+    client = solr.createClient(solrUrl.hostname, solrUrl.port, solrCore, solrPath);
 };
 
 // check for unindexed articles, or articles with index versioning below the current version, and index them in solr.
@@ -46,7 +55,7 @@ search.indexUnindexedArticles = function(count) {
 		// Attempt to index each file in row.
 		response.forEach(function(row) {
 			process.nextTick(function() {
-				search.indexArticle(row._id, row.title, row.body, row.taxonomy, row.authors, row.created, function(error2, response2) {
+				search.indexArticle(row._id, row.title, row.renderedBody, row.taxonomy, row.authors, row.created, function(error2, response2) {
 					if(error2)
 						log.warning(error2);
 					else {
@@ -201,8 +210,8 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 	});
 
     wordsQuery = wordsQuery.toLowerCase();
+
 	var words = wordsQuery.split(" ");
-	
     words = words.map(function(word) {
 		var newString = solr.valueEscape(word.replace(/"/g, '')); //remove "s from the query
 
@@ -212,10 +221,17 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 			return newString;
 	});
 
-	var fullQuery = 'author_sm:"' + wordsQuery.replace(/"/g, '') + '"';
-	for(var index = 0; index < words.length; index++) {
-		fullQuery = fullQuery + " OR title_textv:" + words[index] + " OR body_textv:" + words[index];
-	}
+	var fullQuery = "";
+    if(wordsQuery.indexOf('"') === 0 && wordsQuery.indexOf('"',1) === wordsQuery.length-1) {
+        // user searched for exact match
+        fullQuery = 'title_textv:' + wordsQuery + ' OR body_textv:' + wordsQuery + ' OR author_sm:' + wordsQuery;
+    }
+    else {
+        fullQuery = 'author_sm:"' + wordsQuery.replace(/"/g, '') + '"';
+	    for(var index = 0; index < words.length; index++) {
+	    	fullQuery = fullQuery + " OR title_textv:" + words[index] + " OR body_textv:" + words[index];
+	    }
+    }
 
 	querySolr(fullQuery, {
 		facet : true,
@@ -232,14 +248,53 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
     function(err, docs, facets) {
         if(err) return callback(err);
 
-        if(emboldenMatchedTerms) {
-            var regexString = "";
-            words.forEach(function(word) {
+        // replace teaser with text around matched terms
+        var regexString = "";
+        words.forEach(function(word) {
+            if(COMMON_WORDS.indexOf(word) == -1) {
                 if(regexString.length > 0) regexString += "|";
                 regexString += "\\b"+word+"\\b";
-            });
-            var regex = new RegExp(regexString,"gi");
+            }     
+        });
+        var regex = new RegExp(regexString,"gi");
+        
+        docs.forEach(function(doc) {
+            var sentenceFinds = {};
+            var sentences = doc.renderedBody.replace(/<[^>]*>/gm," ").split("."); //remove html from body and then split by sentence
 
+            for(var i = 0; i < sentences.length; i ++) {
+                var startPos = 0;  
+                while(startPos != -1) {
+                    startPos = sentences[i].regexIndexOf(regex,startPos);
+                    if(startPos != -1) {
+                        if(!sentenceFinds[i]) sentenceFinds[i] = 0;
+                        sentenceFinds[i] ++;
+                        startPos ++;
+                    }
+                }           
+            }
+
+            var numPhrases = MAX_MATCHED_PHRASES_PER_ARTICLE;
+            if(sentences.length < numPhrases) numPhrases = sentences.length;
+            
+            var sentencesToUse = [];
+            for(var j = 0; j < numPhrases; j ++) {
+                var use = 0;
+                for(var k = 0; k < sentences.length; k ++) {
+                    if(sentenceFinds[use] < sentenceFinds[k]) use = k;
+                }
+                if(sentenceFinds[use] > 0) sentencesToUse.push(use);
+                sentenceFinds[use] = 0;
+            }
+
+            var newTeaser = "...";
+            for(var l = 0; l < sentencesToUse.length; l ++) {
+                newTeaser += globalFunctions.trim(sentences[sentencesToUse[l]]) + "...";
+            }
+            if(newTeaser != "...") doc.teaser = newTeaser;
+        });
+
+        if(emboldenMatchedTerms) {
             // bold all matched words
             docs.forEach(function(doc) {
                 if(doc.teaser) doc.teaser = doc.teaser.replace(regex, function(m){return _embolden(m)});
@@ -429,4 +484,9 @@ function _sortObjByKeys(arr) {
 
 function _embolden(match) {
     return "<b>"+match+"</b>";
-};  
+};
+
+String.prototype.regexIndexOf = function(regex, startpos) {
+    var indexOf = this.substring(startpos || 0).search(regex);
+    return (indexOf >= 0) ? (indexOf + (startpos || 0)) : indexOf;
+};

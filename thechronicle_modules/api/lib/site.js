@@ -10,28 +10,25 @@ var rss = require('./rss');
 
 var _ = require("underscore");
 var async = require('async');
-var fs = require('fs');
 var nimble = require('nimble');
 
-var LAYOUT_GROUPS = null;
+var LAYOUT_GROUPS, COLUMNISTS_DATA, COLUMNIST_HEADSHOTS;
 
-var homeModel = JSON.parse(fs.readFileSync("sample-data/frontpage.json"));
-var newsModel = JSON.parse(fs.readFileSync("sample-data/news.json"));
-var sportsModel = JSON.parse(fs.readFileSync("sample-data/sports.json"));
-var columnistsData = JSON.parse(fs.readFileSync("sample-data/columnists.json"));
-var columnistsHeadshots = {};
-columnistsData.forEach(function(columnist) {
-	columnistsHeadshots[columnist.name] = {
-		headshot : columnist.headshot,
-		tagline : columnist.tagline
-	};
-});
 var BENCHMARK = false;
 
 var twitterFeeds = ["DukeChronicle", "ChronicleRecess", "TowerviewMag", "DukeBasketball", "ChronPhoto", "ChronicleSports"];
 
 site.init = function () {
     LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
+
+    COLUMNISTS_DATA = config.get("COLUMNISTS_DATA");
+    COLUMNIST_HEADSHOTS = {};
+    COLUMNISTS_DATA.forEach(function(columnist) {
+	COLUMNIST_HEADSHOTS[columnist.name] = {
+	    headshot : columnist.headshot,
+	    tagline : columnist.tagline
+	};
+    });
 };
 
 // Checks if you are an admin with browser check
@@ -65,7 +62,7 @@ site.askForLogin = function(res, afterLoginPage, username, err) {
 	});
 };
 
-site.renderConfigPage = function(res, err) {
+site.renderConfigPage = function(req, res, err) {
 	if(err) {
 		if( typeof err === 'object')
 			err = JSON.stringify(err);
@@ -73,13 +70,17 @@ site.renderConfigPage = function(res, err) {
 	}
 
 	res.render('config/config', {
-		locals : {
+		js: ['json-to-form?v=2','jquery.textarea-expander?v=2'],
+        css: ['css/onde'],
+        removeBootstrap: true,
+        locals : {
 			configParams : config.getParameters(),
 			profileName : config.getProfileNameKey(),
 			profileValue : config.getActiveProfileName(),
 			revisionName : config.getRevisionKey(),
 			revisionValue : config.getConfigRevision(),
-			error : err
+			error : err,
+            showOnly : req.query.showOnly
 		},
 		layout : 'admin/layout'
 	});
@@ -134,9 +135,15 @@ site.getFrontPageContent = function (callback) {
         else {
             if (BENCHMARK) log.info("TOTAL TIME %d", Date.now() - start);
             var model = results[0];
-            _.defaults(model, homeModel);
             model.popular = results[1];
             model.twitter = results[2];
+            model.printEdition = {
+                title: "Print",
+                imageUrl: "http://d2sug25c5hnh7r.cloudfront.net/images/issuu-thumb.png",
+                url: "http://issuu.com/dukechronicle/docs",
+                width: "134px",
+                height: "60px"
+            };
             callback(null, model);
         }
     });
@@ -187,9 +194,9 @@ site.getNewsPageContent = function(callback) {
 			callback(err);
 		} else {
 			var model = results[0];
-			_.defaults(model, newsModel);
 			model.popular = results[1];
-			model.Blog = results[2]
+			model.Blog = results[2];
+            model.multimedia = config.get('MULTIMEDIA_HTML');
 			model.adFullRectangle = {
 				"title" : "Advertisement",
 				"imageUrl" : "/images/ads/monster.png",
@@ -237,8 +244,8 @@ site.getSportsPageContent = function(callback) {
 			callback(err);
 		} else {
 			var model = results[0];
-			_.defaults(model, sportsModel);
 			model.Blog = results[1];
+            model.multimedia = config.get('MULTIMEDIA_HTML');
 			model.adFullRectangle = {
 				"title" : "Advertisement",
 				"imageUrl" : "/images/ads/monster.png",
@@ -256,88 +263,88 @@ site.getSportsPageContent = function(callback) {
 };
 
 site.getOpinionPageContent = function(callback) {
-	async.parallel([
+    async.parallel([
 	function(cb) {//0
-		api.group.docs(LAYOUT_GROUPS.Opinion.namespace, null, cb);
+	    api.group.docs(LAYOUT_GROUPS.Opinion.namespace, null, cb);
 	},
 
 	function(cb) {//1
-		api.taxonomy.getChildren(['Opinion'], cb);
+	    api.taxonomy.getChildren(['Opinion'], cb);
 	},
 
 	function(cb) {//2
-		rss.getRSS('blog-opinion', function(err, res) {
-			if(!err && res && res.items && res.items.length > 0) {
-				var Blog = res.items.map(function(item) {
-					item.url = item.link;
-					item.title = item.title.replace(/\&#8217;/g, '’');
-					delete item.link;
-					return item;
-				});
-				Blog.splice(5, Blog.length - 5);
-				cb(null, Blog)
-			} else
-				cb(err, []);
-		});
+	    rss.getRSS('blog-opinion', function(err, res) {
+		if(!err && res && res.items && res.items.length > 0) {
+		    var Blog = res.items.map(function(item) {
+			item.url = item.link;
+			item.title = item.title.replace(/\&#8217;/g, '’');
+			delete item.link;
+			return item;
+		    });
+		    Blog.splice(5, Blog.length - 5);
+		    cb(null, Blog)
+		} else
+		    cb(err, []);
+	    });
 	},
 
 	function(cb) {// 3
-		api.authors.getLatest("Editorial Board", "Opinion", 5, cb);
+	    api.authors.getLatest("Editorial Board", "Opinion", 5, cb);
 	},
 
 	function(cb) {//4
-		async.map(columnistsData, function(columnist, _callback) {
-			api.authors.getLatest(columnist.user || columnist.name, "Opinion", 5, function(err, res) {
-				columnist.stories = res;
-				_callback(err, columnist);
-			})
-		}, cb);
+	    async.map(COLUMNISTS_DATA, function(columnist, _callback) {
+		api.authors.getLatest(columnist.user || columnist.name, "Opinion", 5, function(err, res) {
+		    columnist.stories = res;
+		    _callback(err, columnist);
+		})
+	    }, cb);
 	}], function(err, results) {
-		if(err)
-			callback(err);
-		else {
-			var model = results[0];
-			if(model.Featured) {
-				model.Featured.forEach(function(article) {
-					article.author = article.authors[0];
-					var columnistObj = null;
-					if( columnistObj = columnistsHeadshots[article.author]) {
-						if(columnistObj.headshot)
-							article.thumb = columnistObj.headshot;
-						if(columnistObj.tagline)
-							article.tagline = columnistObj.tagline;
-					}
-				});
+	    if(err)
+		callback(err);
+	    else {
+		var model = results[0];
+		if (model.Featured) {
+		    model.Featured.forEach(function(article) {
+			article.author = article.authors[0];
+			var columnistObj = null;
+			if( columnistObj = COLUMNIST_HEADSHOTS[article.author]) {
+			    if(columnistObj.headshot)
+				article.thumb = columnistObj.headshot;
+			    if(columnistObj.tagline)
+				article.tagline = columnistObj.tagline;
 			}
-			model.Blog = results[2];
-			model.EditorialBoard = results[3];
-			model.Columnists = {};
-			// assign each columnist an object containing name and stories to make output jade easier
-			results[4].forEach(function(columnist, index) {
-				model.Columnists[index] = columnist;
-			});
-			// need to call compact to remove undefined entries in array
-			_.compact(model.Columnists);
-			model.adFullRectangle = {
-				"title" : "Advertisement",
-				"imageUrl" : "/images/ads/monster.png",
-				"url" : "http://google.com",
-				"width" : "300px",
-				"height" : "250px"
-			};
-
-			model.adFullBanner = {
-				"title" : "Ad",
-				"imageUrl" : "/images/ads/full-banner.jpg",
-				"url" : "http://google.com",
-				"width" : "468px",
-				"height" : "60px"
-			};
-
-			var children = results[1];
-			callback(null, model, children);
+		    });
 		}
-	});
+		model.Blog = results[2];
+		model.EditorialBoard = results[3];
+		model.Columnists = {};
+		// assign each columnist an object containing name and stories to make output jade easier
+		results[4].forEach(function(columnist, index) {
+		    model.Columnists[index] = columnist;
+		});
+		// need to call compact to remove undefined entries in array
+		_.compact(model.Columnists);
+		model.adFullRectangle = {
+		    "title" : "Advertisement",
+		    "imageUrl" : "/images/ads/monster.png",
+		    "url" : "http://google.com",
+		    "width" : "300px",
+		    "height" : "250px"
+		};
+
+		model.adFullBanner = {
+		    "title" : "Ad",
+		    "imageUrl" : "/images/ads/full-banner.jpg",
+		    "url" : "http://google.com",
+		    "width" : "468px",
+		    "height" : "60px"
+		};
+
+		var children = results[1];
+		callback(null, model, children);
+	    }
+        });
 };
 
 site.getRecessPageContent = function(callback) {
@@ -370,6 +377,7 @@ site.getRecessPageContent = function(callback) {
 		else {
 			var model = results[0];
 			model.Blog = results[2];
+            model.multimedia = config.get('MULTIMEDIA_HTML');
 			model.adMedRectangle = {
 				"title" : "Advertisement",
 				"imageUrl" : "https://www.google.com/help/hc/images/adsense_185665_adformat-text_250x250.png",
@@ -423,7 +431,7 @@ site.getSectionContent = function (params, callback) {
             });
         },
         function (cb) {
-            api.taxonomy.docs(section, 20, function (err, docs) {
+            api.taxonomy.docs(params, 20, null, function (err, docs) {
                 if (err) cb(err)
                 else modifyArticlesForDisplay(docs, cb);
             });
@@ -465,7 +473,7 @@ site.getSearchContent = function (wordsQuery, query, callback) {
             modifyArticlesForDisplay(docs, function (err, docs) {
                 if (err) callback(err);
                 else {
-                    var validSections = globalFunctions.convertObjectToArray(config.get("TAXONOMY_MAIN_SECTIONS"));
+                    var validSections = config.get("TAXONOMY_MAIN_SECTIONS");
                     // filter out all sections other than main sections
                     Object.keys(facets.Section).forEach(function(key) {
                         if (!_.include(validSections, key))
@@ -478,6 +486,27 @@ site.getSearchContent = function (wordsQuery, query, callback) {
 };
 
 site.getArticleContent = function(url, callback) {
+    var redisKey = "article:" + url;
+
+    redis.client.get(redisKey, function(err, res) {
+        if (res) {
+            var data = JSON.parse(res);
+            callback(null, data[0], data[1], data[2]);
+        } else {
+            site.getArticleContentUncached(url, function(err, doc, model, parents) {
+                if (err)
+                    callback(err);
+                else {
+                    redis.client.set(redisKey, JSON.stringify([doc, model, parents]));
+                    redis.client.expire(redisKey, 600);
+                    callback(null, doc, model, parents);
+                }
+            });
+        }
+    });
+};
+
+site.getArticleContentUncached = function(url, callback) {
 	api.articleForUrl(url, function(err, doc) {
 		if(err) return callback(err);
 
@@ -499,7 +528,9 @@ site.getArticleContent = function(url, callback) {
 		    },
 		    function(cb) {
 			    api.search.relatedArticles(doc._id, 5, function(err, relatedArticles) {
-				    cb(null, relatedArticles);
+			        modifyArticlesForDisplay(relatedArticles, function(err, relatedArticles) {
+                        cb(null, relatedArticles);            
+			        });
 			    });
 		    },
 		    function(cb) {
@@ -552,7 +583,7 @@ site.getArticleContent = function(url, callback) {
 };
 
 site.getPageContent = function(url, callback) {
-	api.nodeForTitle(url, function(err, doc) {
+	api.page.getByUrl(url, function(err, doc) {
 		if(err)
 			callback(err);
 		else {

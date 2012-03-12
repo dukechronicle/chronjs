@@ -47,7 +47,7 @@ var TAXONOMY = null;
 var articleIDs = [];
 
 log.init(function (err) {
-    config.init(function(err) {
+    config.init(function(){}, function(err) {
         if(err) {
             console.log(err);
         }
@@ -154,7 +154,7 @@ function assignImageNames(callback) {
 }
 
 function deleteOldImages(callback) {
-    var imgTypes = config.get('IMAGE_TYPES');
+    var imgTypes = api.image.IMAGE_TYPES;
     var functions = [];
     for(var i = 0; i < IMAGES.length; i ++) {
         functions.push(_getImageDeleteFunction(IMAGES[i].name));
@@ -179,7 +179,7 @@ function createImage(img, callback) {
             api.image.createOriginalFromFile(img.name, img.type, true, callback);
         },
         function(result, url, callback) {
-            var imgTypes = config.get('IMAGE_TYPES');
+            var imgTypes = api.image.IMAGE_TYPES;
             newImage['Original'] = result.id;
 
             var functions = [];

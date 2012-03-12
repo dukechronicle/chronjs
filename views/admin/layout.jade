@@ -10,7 +10,9 @@ html
 
     link(rel='stylesheet', href='/css/jquery.Jcrop.css')
     link(rel='stylesheet', href='/css/smoothness/jquery-ui.css')
-    link(rel='stylesheet', href='/css/bootstrap-1.2.0.min.css')
+    
+    if(typeof removeBootstrap == 'undefined' || !removeBootstrap)
+        link(rel='stylesheet', href='/css/bootstrap-1.2.0.min.css')
 
     title The Chronicle
     !=partial("code/google-analytics")
@@ -18,4 +20,4 @@ html
     #main
       #container!= body
 
-    script(data-main="/js/admin/main-js", src="/js/require-jquery.js")
+    script(data-main="/js/admin/main2", src="/js/require-jquery.js")

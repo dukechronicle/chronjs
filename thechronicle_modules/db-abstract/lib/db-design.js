@@ -7,11 +7,11 @@ exports.doc = {
 
             taxonomy:{
                 map:function (doc) {
-                    if (doc.taxonomy) {
+                    if (doc.type == 'article' && doc.taxonomy) {
                         var path = [];
                         for (var i in doc.taxonomy) {
                             path.push(doc.taxonomy[i]);
-                            emit([eval(uneval(path)), parseInt(doc.created, 10)], doc);
+                            emit([eval(uneval(path)), parseInt(doc.created)], doc);
                         }
                     }
                 }
@@ -197,6 +197,52 @@ exports.doc = {
             }
 
         }
+    },
+
+    polls: {
+        language: "javascript",
+        
+        views: {
+
+            date: {
+                map: function (doc) {
+                    if (doc.type == 'poll' && doc.created)
+                        emit(parseInt(doc.created, 10), doc);
+                }
+            },
+
+            taxonomy: {
+                map: function (doc) {
+                    if (doc.type == 'poll' && doc.taxonomy) {
+                        var path = [];
+                        for (var i in doc.taxonomy) {
+                            path.push(doc.taxonomy[i]);
+                            emit([eval(uneval(path)), parseInt(doc.created)], doc);
+                        }
+                    }
+                }
+            },
+
+            title: {
+                map: function (doc) {
+                    if (doc.type == 'poll' && doc.title)
+                        emit(doc.title, doc);
+                }
+            },
+
+            votes: {
+                map: function (doc) {
+                    if (doc.type == 'poll' && doc.answers) {
+                        var sum = 0;
+                        for (var i in doc.answers)
+                            sum += doc.answers[i];
+                        emit(sum, doc);
+                    }
+                }
+            }
+
+        }
+
     }
 
 };

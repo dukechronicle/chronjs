@@ -207,7 +207,7 @@ exports.doc = {
             date: {
                 map: function (doc) {
                     if (doc.type == 'poll' && doc.created)
-                        emit(parseInt(doc.created, 10), doc);
+                        emit(parseInt(doc.created), doc);
                 }
             },
 

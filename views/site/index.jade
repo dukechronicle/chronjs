@@ -19,9 +19,9 @@
             if (model.twitter)
                 .twitter!=partial('container/twitter', model.twitter)
             if (model.popular)
-                .most-popular!=partial('container/articles-with-author', {title: "What's Hot", stories: model.popular})
+                .most-popular!=partial('container/articles-with-subhead', {title: "What's Hot", stories: model.popular})
             if (model.Opinion)
-                .opinion!=partial('container/articles-with-author', {title: "Opinion", stories: model.Opinion})
+                .opinion!=partial('container/articles-with-subhead', {title: "Opinion", stories: model.Opinion})
             .image-container.medium-rectangle.lighten!=partial('ad/medium-rect', {title: "Advertisement"})
 
     #middle

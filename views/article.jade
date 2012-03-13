@@ -49,7 +49,7 @@
 
         .sidebar
             - if (model.related && model.related.length > 0)
-                .articles-with-author.related!=partial('container/articles-with-author', {title: "Related", stories: model.related})
+                .related!=partial('container/articles-with-subhead', {title: "Related", stories: model.related})
 
              // advertising
             .image-container.medium-rectangle!=partial('ad/medium-rect', {title: "Advertisement"})

@@ -100,6 +100,11 @@ site.getFrontPageContent = function (callback) {
             var popularArticles = 7;
             api.disqus.listHot(popularArticles, function(err, results) {
                 if(err) return cb(err);
+                
+                results.forEach(function(article) {
+                    article.subhead = article.numComments + " comment";
+                    if(article.numComments != 1) article.subhead += "s";
+                });
 
                 modifyArticlesForDisplay(results, cb);    
             });
@@ -628,6 +633,7 @@ function modifyArticleForDisplay(doc, callback) {
 			}
 		}
 	}
+    
 	return doc;
 }
 

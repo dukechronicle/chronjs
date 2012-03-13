@@ -31,8 +31,12 @@ function getArticlesFromDisqusData(disqusData, callback) {
     api.docsById(ids, function(err, res) {
         if(err) return callback(err);
 
-        res = _.map(res, function(article) {
-            return article.doc;
+        res = _.map(res, function(article, i) {
+            if(article.doc) {
+                article.doc.numComments = disqusData[i].posts;
+                return article.doc;
+            }
+            else return null;
         });
         res = _.compact(res);
 

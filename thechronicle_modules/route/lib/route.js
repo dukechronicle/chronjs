@@ -62,6 +62,7 @@ exports.init = function (app) {
         app.get('/young-trustee-2012', site.staticPage);
     });
 
+    app.get('/graduation', site.staticPage)
     // Makes search url more readable
     app.get('/search', function (req, res) {
         var query = "--";            

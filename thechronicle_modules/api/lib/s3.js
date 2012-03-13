@@ -4,23 +4,47 @@ var knox = require('knox');
 var config = require("../../config");
 var log = require('../../log');
 
-var BUCKET_NAME, STATIC_BUCKET_NAME, CLOUDFRONT_DISTRIBUTION;
+var BUCKET_NAME, CLOUDFRONT_DISTRIBUTION;
 var S3_URL = "http://s3.amazonaws.com/";
 
 
 s3.init = function () {
     BUCKET_NAME = config.get("S3_BUCKET");
-    STATIC_BUCKET_NAME = config.get("S3_STATIC_BUCKET");
     CLOUDFRONT_DISTRIBUTION = config.get("CLOUDFRONT_DISTRIBUTION");
 };
 
-s3.put = function (buf, key, type, callback) {
-    put(BUCKET_NAME, buf, key, type, callback);
+/**
+  For backwards compatibility, put function parameters are:
+    s3.put([bucket, ]buffer, key, type, callback)
+  If bucket is not given, it defaults to S3_BUCKET configuration parameter.
+*/
+s3.put = function () {
+    // convert arguments object to array
+    var args = Array.prototype.slice.call(arguments);
+
+    if (args.length == 4)
+        args.unshift(BUCKET_NAME);
+    if (args.length == 5)
+        put.apply(this, args);
+    else
+        log.error("Unknown argument types to s3.put");
 };
 
-s3.delete = function (key, callback) {
-    key = key.replace('/'+BUCKET_NAME+'/','');
-    del(BUCKET_NAME, key, callback);
+/**
+  For backwards compatibility, put function parameters are:
+    s3.delete([bucket, ]buffer, key, type, callback)
+  If bucket is not given, it defaults to S3_BUCKET configuration parameter.
+*/
+s3.delete = function () {
+    // convert arguments object to array
+    var args = Array.prototype.slice.call(arguments);
+
+    if (args.length == 2)
+        args.unshift(BUCKET_NAME);
+    if (args.length == 3)
+        del.apply(this, args);
+    else
+        log.error("Unknown argument types to s3.delete");
 };
 
 s3.getCloudFrontUrl = function(url) {
@@ -39,10 +63,11 @@ function put(bucket, buf, key, type, callback) {
         else
             callback(res);
     });
-    req.end(buf);
-}
+    req.end(buf);    
+};
 
 function del(bucket, key, callback) {
+    key = key.replace('/'+bucket+'/','');
     createClient(bucket).deleteFile(key, callback);
 };
 

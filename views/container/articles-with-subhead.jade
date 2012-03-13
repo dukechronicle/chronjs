@@ -1,4 +1,4 @@
-.container.clearfix.articles-with-author
+.container.clearfix.articles-with-subhead
     .vertical-container
         h2.vertical #{title}
 
@@ -9,8 +9,8 @@
                     h2
                         a.list-story.hover.highlight-right(href='#{story.url || ('article/' + story.urls[story.urls.length-1])}', class='#{story.cssClass}')
                             #{story.title}
-                            - if (story.authors)
-                                p.author
-                                    span.author #{story.authors}
+                            - if (story.subhead || story.authors)
+                                p.subhead
+                                    span.subhead #{story.subhead || story.authors}
                                     - if (story.date)
                                         span.date #{story.date}

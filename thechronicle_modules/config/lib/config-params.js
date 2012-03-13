@@ -93,6 +93,15 @@ var configParams = [
         }
     },
     {
+        name: 'CLOUDFRONT_STATIC',
+        description: 'CDN for Static Content',
+        defaultValue: 'http://d2sug25c5hnh7r.cloudfront.net',
+        schema: {
+            type: "string",
+            required: true
+        }
+    },
+    {
         name: 'REDIS_URL',
         description: 'Redis Server URL',
         defaultValue: 'redis://jodoglevy:2b258cbdcbbce003452a0ff4279d8701@barreleye.redistogo.com:9148/',

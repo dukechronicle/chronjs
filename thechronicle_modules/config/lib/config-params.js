@@ -84,6 +84,15 @@ var configParams = [
         }
     },
     {
+        name: 'S3_STATIC_BUCKET',
+        description: 'Amazon S3 Static Content Bucket Name',
+        defaultValue: 'chron_static',
+        schema: {
+          type: "string",
+          required: true
+        }
+    },
+    {
         name: 'CLOUDFRONT_STATIC',
         description: 'CDN for Static Content',
         defaultValue: 'http://d2sug25c5hnh7r.cloudfront.net',

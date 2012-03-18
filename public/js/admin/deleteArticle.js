@@ -24,7 +24,7 @@ define(['jquery', 'jquery-ui'], function ($) {
 
                         $.ajax({
                             type: 'DELETE',
-                            url: '/api/' + docId,
+                            url: '/api/article/' + docId,
                             data: 'rev=' + docRev,
                             success: function() {
                                 window.location = "/admin";

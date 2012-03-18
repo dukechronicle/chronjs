@@ -30,6 +30,15 @@ var configParams = [
         }
     },
     {
+        name: 'DISQUS_KEY',
+        description: 'Disqus Key',
+        defaultValue: '',
+        schema: {
+          type: "string",
+          required: true
+        }
+    },
+    {
         name: 'COUCHDB_URL',
         description: 'CouchDB Server URL',
         defaultValue: 'http://chrondev:pikachu@chrondev.iriscouch.com',
@@ -81,6 +90,15 @@ var configParams = [
         schema: {
           type: "string",
           required: true
+        }
+    },
+    {
+        name: 'CLOUDFRONT_STATIC',
+        description: 'CDN for Static Content',
+        defaultValue: 'http://d2sug25c5hnh7r.cloudfront.net',
+        schema: {
+            type: "string",
+            required: true
         }
     },
     {

@@ -70,6 +70,9 @@
 
             - if (model.popular && model.popular.length > 0)
                 .numbered-articles.most-popular!=partial('container/numbered-articles', {title: "Popular", stories: model.popular})
+            - if (model.poll)
+                .poll!=partial('container/poll', {poll: model.poll})
+
     // comments
     #disqus_thread.rounded(data-isproduction=(''+isProduction), data-shortname=disqusShortname, data-id=(doc.nid || doc._id), data-title=doc.title, data-url=doc.url)
 

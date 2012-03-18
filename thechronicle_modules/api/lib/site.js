@@ -532,7 +532,11 @@ site.getArticleContentUncached = function(url, callback) {
                 api.taxonomy.getParents(doc.taxonomy, cb);
             },
             function(cb) {
-                api.poll.getBySection(doc.taxonomy, 1, cb);
+                api.poll.getBySection(doc.taxonomy, 1, function (err, res) {
+                    if (err) cb(err);
+                    else if (res.length == 0) cb("No poll found");
+                    else cb(null, res[0]);
+                });
             }
         ], function(err, results) {
             if(err) callback(err);
@@ -547,7 +551,7 @@ site.getArticleContentUncached = function(url, callback) {
                     },
                     popular: results[0],
                     related: results[1],
-                    poll: results[2]
+                    poll: results[3]
                 };
                 var parents = results[2];
 

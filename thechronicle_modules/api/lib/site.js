@@ -487,7 +487,7 @@ site.getArticleContent = function(url, callback) {
     var redisKey = "article:" + url;
 
     redis.client.get(redisKey, function(err, res) {
-        if (res) {
+        if (res && false) {
             var data = JSON.parse(res);
             callback(null, data[0], data[1], data[2]);
         } else {
@@ -534,7 +534,7 @@ site.getArticleContentUncached = function(url, callback) {
             function(cb) {
                 api.poll.getBySection(doc.taxonomy, 1, function (err, res) {
                     if (err) cb(err);
-                    else if (res.length == 0) cb("No poll found");
+                    else if (res.length == 0) cb();
                     else cb(null, res[0]);
                 });
             }

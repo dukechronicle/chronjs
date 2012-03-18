@@ -139,229 +139,257 @@ var configParams = [
         name: 'TAXONOMY',
         description: 'Taxonomy tree for the site, used for categorizing articles and navigation',
         defaultValue: [
-	        {
-		        "News": [
-			        {
-				        "University": [
-					        {
-						        "Academics": []
-					        },
-					        {
-						        "Board of Trustees": []
-					        },
-					        {
-						        "Campus Crime": []
-					        },
-					        {
-						        "Dining": []
-					        },
-					        {
-						        "DSG": []
-					        },
-					        {
-						        "Graduate and Professional Schools": []
-					        },
-					        {
-						        "Residence Life": []
-					        },
-					        {
-						        "Student Life": []
-					        }
-				        ]
-			        },
-			        {
-				        "Local & National": [
-					        {
-						        "City of Durham": []
-					        },
-					        {
-						        "Durham Crime": []
-					        },
-					        {
-						        "Higher Education": []
-					        },
-					        {
-						        "National News and Politics": []
-					        },
-					        {
-						        "North Carolina": []
-					        }
-				        ]
-			        },
-			        {
-				        "Health & Science": [
-					        {
-						        "DUHS": []
-					        },
-					        {
-						        "Environment & Sustainability": []
-					        },
-					        {
-						        "Pratt": []
-					        },
-					        {
-						        "Research": []
-					        },
-					        {
-						        "School of Medicine": []
-					        },
-					        {
-						        "Student Health": []
-					        }
-				        ]
-			        }
-		        ]
-	        },
-	        {
-		        "Sports": [
-			        {
-				        "Men": [
-					        {
-						        "Baseball": []
-					        },
-					        {
-						        "Basketball": []
-					        },
-					        {
-						        "Cross country": []
-					        },
-					        {
-						        "Fencing": []
-					        },
-					        {
-						        "Football": []
-					        },
-					        {
-						        "Golf": []
-					        },
-					        {
-						        "Lacrosse": []
-					        },
-					        {
-						        "Soccer": []
-					        },
-					        {
-						        "Swimming and diving": []
-					        },
-					        {
-						        "Tennis": []
-					        },
-					        {
-						        "Track and field": []
-					        },
-					        {
-						        "Wrestling": []
-					        }
-				        ]
-			        },
-			        {
-				        "Women": [
-					        {
-						        "Basketball": []
-					        },
-					        {
-						        "Cross country": []
-					        },
-					        {
-						        "Fencing": []
-					        },
-					        {
-						        "Field hockey": []
-					        },
-					        {
-						        "Golf": []
-					        },
-					        {
-						        "Lacrosse": []
-					        },
-					        {
-						        "Rowing": []
-					        },
-					        {
-						        "Soccer": []
-					        },
-					        {
-						        "Swimming and diving": []
-					        },
-					        {
-						        "Tennis": []
-					        },
-					        {
-						        "Track and field": []
-					        },
-					        {
-						        "Volleyball": []
-					        }
-				        ]
-			        },
-                                {
-                                        "Column": []
-                                }
-		        ]
-	        },
-	        {
-		        "Opinion": [
-			        {
-				        "Letter to the Editor": []
-			        },
-			        {
-				        "Editorial Board": []
-			        },
-			        {
-				        "Column": []
-			        },
-			        {
-				        "Guest Commentary": []
-			        },
-			        {
-				        "Editor's Note": []
-			        }
-		        ]
-	        },
-	        {
-		        "Recess": [
-			        {
-				        "Page Two": []
-			        },
-			        {
-				        "Arts": []
-			        },
-			        {
-				        "Music": []
-			        },
-			        {
-				        "Film": []
-			        },
-			        {
-				        "Literature": []
-			        },
-                                {
-                                        "Column": []
-                                }
-		        ]
-	        },
-	        {
-		        "Towerview": [
-                                {
-                                        "Savvy": []
-                                },
-                                {
-                                        "Prefix": []
-                                },
-                                {
-                                        "Wisdom": []
-                                },
-                                {
-                                        "Feature": []
-                                },
-                                {
-                                        "Column": []
-                                },
-                                {
-                                        "Editor's Note": []
-                                }
+	    {
+		"News": [
+		    {
+			"University": [
+			    {
+				"Academics": []
+			    },
+			    {
+				"Board of Trustees": []
+			    },
+			    {
+				"Campus Crime": []
+			    },
+			    {
+				"Dining": []
+			    },
+			    {
+				"DSG": []
+			    },
+			    {
+				"Graduate and Professional Schools": []
+			    },
+			    {
+				"Residence Life": []
+			    },
+			    {
+				"Student Life": []
+			    }
+			]
+		    },
+		    {
+			"Local & National": [
+			    {
+				"City of Durham": []
+			    },
+			    {
+				"Durham Crime": []
+			    },
+			    {
+				"Higher Education": []
+			    },
+			    {
+				"National News and Politics": []
+			    },
+			    {
+				"North Carolina": []
+			    }
+			]
+		    },
+		    {
+			"Health & Science": [
+			    {
+				"DUHS": []
+			    },
+			    {
+				"Environment & Sustainability": []
+			    },
+			    {
+				"Pratt": []
+			    },
+			    {
+				"Research": []
+			    },
+			    {
+				"School of Medicine": []
+			    },
+			    {
+				"Student Health": []
+			    }
+			]
+		    }
+		]
+	    },
+	    {
+		"Sports": [
+                    {
+                        "Column": []
+                    },
+		    {
+			"Baseball": []
+		    },
+		    {
+			"Basketball": [
+                            {
+                                "Men": []
+                            },
+                            {
+                                "Women": []
+                            }
                         ]
-	        }
+		    },
+		    {
+			"Cross country": [
+                            {
+                                "Men": []
+                            },
+                            {
+                                "Women": []
+                            }
+                        ]
+		    },
+		    {
+			"Fencing": [
+                            {
+                                "Men": []
+                            },
+                            {
+                                "Women": []
+                            }
+                        ]
+		    },
+		    {
+			"Field hockey": []
+		    },
+		    {
+			"Football": []
+		    },
+		    {
+			"Golf": [
+                            {
+                                "Men": []
+                            },
+                            {
+                                "Women": []
+                            }
+                        ]
+		    },
+		    {
+			"Lacrosse": [
+                            {
+                                "Men": []
+                            },
+                            {
+                                "Women": []
+                            }
+                        ]
+		    },
+		    {
+			"Rowing": []
+		    },
+		    {
+			"Soccer": [
+                            {
+                                "Men": []
+                            },
+                            {
+                                "Women": []
+                            }
+                        ]
+		    },
+		    {
+			"Swimming and diving": [
+                            {
+                                "Men": []
+                            },
+                            {
+                                "Women": []
+                            }
+                        ]
+		    },
+		    {
+			"Tennis": [
+                            {
+                                "Men": []
+                            },
+                            {
+                                "Women": []
+                            }
+                        ]
+		    },
+		    {
+			"Track and field": [
+                            {
+                                "Men": []
+                            },
+                            {
+                                "Women": []
+                            }
+                        ]
+		    },
+		    {
+			"Volleyball": []
+		    },
+		    {
+			"Wrestling": []
+		    }
+		]
+	    },
+	    {
+		"Opinion": [
+		    {
+			"Letter to the Editor": []
+		    },
+		    {
+			"Editorial Board": []
+		    },
+		    {
+			"Column": []
+		    },
+		    {
+			"Guest Commentary": []
+		    },
+		    {
+			"Editor's Note": []
+		    }
+		]
+	    },
+	    {
+		"Recess": [
+		    {
+			"Page Two": []
+		    },
+		    {
+			"Arts": []
+		    },
+		    {
+			"Music": []
+		    },
+		    {
+			"Film": []
+		    },
+		    {
+			"Literature": []
+		    },
+                    {
+                        "Column": []
+                    }
+		]
+	    },
+	    {
+		"Towerview": [
+                    {
+                        "Savvy": []
+                    },
+                    {
+                        "Prefix": []
+                    },
+                    {
+                        "Wisdom": []
+                    },
+                    {
+                        "Feature": []
+                    },
+                    {
+                        "Column": []
+                    },
+                    {
+                        "Editor's Note": []
+                    }
+                ]
+	    }
         ],
         schema: {
             type: "array",

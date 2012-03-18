@@ -30,6 +30,15 @@ var configParams = [
         }
     },
     {
+        name: 'DISQUS_KEY',
+        description: 'Disqus Key',
+        defaultValue: '',
+        schema: {
+          type: "string",
+          required: true
+        }
+    },
+    {
         name: 'COUCHDB_URL',
         description: 'CouchDB Server URL',
         defaultValue: 'http://chrondev:pikachu@chrondev.iriscouch.com',

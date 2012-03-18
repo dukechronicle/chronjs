@@ -22,6 +22,7 @@ api.newsletter = require("./newsletter");
 api.cron = require("./cron");
 api.database = require("./database");
 api.s3 = require('./s3');
+api.disqus = require('./disqus');
 api.site = require('./site');
 api.poll = require('./poll');
 api.page = require('./page');
@@ -96,7 +97,6 @@ api.init = function(callback) {
         api.newsletter.init();
         api.s3.init();
         api.site.init();
-
         callback(null);
     });
 };

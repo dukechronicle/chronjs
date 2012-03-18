@@ -34,7 +34,7 @@ define(["jquery"], function($) {
             var id = $disqusThread.attr('data-id');
             var title = $disqusThread.attr('data-title');
             var url = $disqusThread.attr('data-url');
-            console.log(isProduction + " " + shortname + " " + id + " " + title + " " + url);
+
             loadDisqusForArticle(isProduction, shortname, id, title, url);
         }
     });

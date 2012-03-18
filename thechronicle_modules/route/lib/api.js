@@ -27,11 +27,12 @@ siteApi.listAll = function (req, res, next) {
 */
 siteApi.listSection = function (req, res, next) {
     var section = req.params.section;
-    api.taxonomy.docs([section], 10, null, function (err, docs) {
+    var startDocId = req.query.startDocId;
+    api.taxonomy.docs([section], 10, startDocId, function (err, docs) {
         if (err) next(err);
         else {
             var result = _.map(docs, function (doc) {
-                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id};
+                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id, "created":doc.created, "authors":doc.authors};
             });
             res.json(result);
         }

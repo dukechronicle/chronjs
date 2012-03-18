@@ -489,15 +489,15 @@ site.getArticleContent = function(url, callback) {
     redis.client.get(redisKey, function(err, res) {
         if (res) {
             var data = JSON.parse(res);
-            callback(null, data[0], data[1], data[2]);
+            callback(null, data[0], data[1], data[2], data[3]);
         } else {
-            site.getArticleContentUncached(url, function(err, doc, model, parents) {
+            site.getArticleContentUncached(url, function(err, doc, model, parents, poll) {
                 if (err)
                     callback(err);
                 else {
-                    redis.client.set(redisKey, JSON.stringify([doc, model, parents]));
+                    redis.client.set(redisKey, JSON.stringify([doc, model, parents, poll]));
                     redis.client.expire(redisKey, 600);
-                    callback(null, doc, model, parents);
+                    callback(null, doc, model, parents, poll);
                 }
             });
         }

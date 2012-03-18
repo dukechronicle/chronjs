@@ -489,15 +489,15 @@ site.getArticleContent = function(url, callback) {
     redis.client.get(redisKey, function(err, res) {
         if (res) {
             var data = JSON.parse(res);
-            callback(null, data[0], data[1], data[2], data[3]);
+            callback(null, data[0], data[1], data[2]);
         } else {
-            site.getArticleContentUncached(url, function(err, doc, model, parents, poll) {
+            site.getArticleContentUncached(url, function(err, doc, model, parents) {
                 if (err)
                     callback(err);
                 else {
-                    redis.client.set(redisKey, JSON.stringify([doc, model, parents, poll]));
+                    redis.client.set(redisKey, JSON.stringify([doc, model, parents]));
                     redis.client.expire(redisKey, 600);
-                    callback(null, doc, model, parents, poll);
+                    callback(null, doc, model, parents);
                 }
             });
         }
@@ -532,12 +532,10 @@ site.getArticleContentUncached = function(url, callback) {
 			    });
 		    },
 		    function(cb) {
-			    api.taxonomy.getParents(doc.taxonomy, function(err, parents) {
-				    if(err)
-					    cb(err);
-				    else
-					    cb(null, parents);
-			    });
+			api.taxonomy.getParents(doc.taxonomy, cb);
+		    },
+		    function(cb) {
+			api.poll.getBySection(doc.taxonomy, 1, cb);
 		    }
 		], function(err, results) {
 			if(err)
@@ -552,7 +550,8 @@ site.getArticleContentUncached = function(url, callback) {
 						"height" : "250px"
 					},
                     popular: results[0],
-				    related: results[1],
+                    related: results[1],
+				    poll: results[2]
 				};
                 var parents = results[2];
 

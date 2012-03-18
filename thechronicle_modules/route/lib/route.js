@@ -34,8 +34,6 @@ exports.init = function (app) {
 
     app.get('/m/*', site.mobile);
 
-    app.get('/poll', site.poll);
-
     app.get('/', site.frontpage);
     app.get('/news', site.news);
     app.get('/sports', site.sports);

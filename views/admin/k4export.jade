@@ -3,7 +3,7 @@ form(action='/admin/k4export', method='post', enctype='multipart/form-data')
   label(for='zip') XML Zip:
   input(type='file', name='zip')
   br
-  input(type='submit')
+  input(type='submit', class='btn')
 
 a(href='/admin/manage') Manage and edit uploaded articles
 - if (failed && failed.length)

@@ -22,7 +22,9 @@ api.newsletter = require("./newsletter");
 api.cron = require("./cron");
 api.database = require("./database");
 api.s3 = require('./s3');
+api.disqus = require('./disqus');
 api.site = require('./site');
+api.page = require('./page');
 
 
 var MAX_URL_LENGTH = 50;
@@ -94,7 +96,6 @@ api.init = function(callback) {
         api.newsletter.init();
         api.s3.init();
         api.site.init();
-
         callback(null);
     });
 };
@@ -225,14 +226,6 @@ api.docForUrl = function(url, callback) {
             var docType = key[docTypeKey];
             if (docType === 'article') return callback(null, doc);
         });
-    });
-};
-
-api.nodeForTitle = function(url, callback) {
-    db.view("articles/nodes", { key: url }, function(err, res) {
-        if (err) callback(err);
-        else if (res.length == 0) callback("Node not found: " + url);
-        else api.docsById(res[0].id, callback);
     });
 };
 

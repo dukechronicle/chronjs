@@ -14,16 +14,6 @@ site.mobile = function (req, res, next) {
     res.sendfile('public/m/index.html');
 };
 
-site.poll = function (req, res, next) {
-    api.poll.getPoll('8f094837374829e664dc4ea896015695', function (err, doc) {
-        res.render('container/poll', {
-            js: ['poll'],
-            css: asereje.css(['container/style', 'container/poll']),
-            locals: { poll: doc }
-        });
-    }); 
-};
-
 site.frontpage = function (req, res) {
     api.site.getFrontPageContent(function (err, model) {
         res.render('site/index', {
@@ -178,7 +168,7 @@ site.article = function (req, res, next) {
     // cache article pages for an hour
     if (!isAdmin) res.header('Cache-Control', 'public, max-age=3600');
 
-    api.site.getArticleContent(url, function (err, doc, model, parents) {
+    api.site.getArticleContent(url, function (err, doc, model, parents, poll) {
         if (err)
             next();
         else if ('/article/' + url != doc.url)
@@ -191,11 +181,12 @@ site.article = function (req, res, next) {
                 model:model,
                 parentPaths:parents,
                 isProduction: (process.env.NODE_ENV === 'production'),
-                disqusShortname: config.get('DISQUS_SHORTNAME')
+                disqusShortname: config.get('DISQUS_SHORTNAME'),
+                poll: poll
             },
             filename:'views/article',
-            css:asereje.css(['container/style', 'article']),
-            js:['site/disqus']
+            css:asereje.css(['container/style', 'article', 'container/poll']),
+            js:['site/disqus', 'poll']
         });
     });
 };

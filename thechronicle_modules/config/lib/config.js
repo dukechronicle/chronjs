@@ -89,10 +89,10 @@ exports.get = function(variable) {
     }
     else if(!configProfile[variable]) {
         log.alert('Configuration property: "' + variable + '" not defined!');
-	return null;
+	    return null;
     }
     else {
-	return configProfile[variable];
+	    return JSON.parse(JSON.stringify(configProfile[variable])); // perform a deep copy and return that
     }
 };
 

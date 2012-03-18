@@ -168,7 +168,7 @@ site.article = function (req, res, next) {
     // cache article pages for an hour
     if (!isAdmin) res.header('Cache-Control', 'public, max-age=3600');
 
-    api.site.getArticleContent(url, function (err, doc, model, parents, poll) {
+    api.site.getArticleContent(url, function (err, doc, model, parents) {
         if (err)
             next();
         else if ('/article/' + url != doc.url)
@@ -181,8 +181,7 @@ site.article = function (req, res, next) {
                 model:model,
                 parentPaths:parents,
                 isProduction: (process.env.NODE_ENV === 'production'),
-                disqusShortname: config.get('DISQUS_SHORTNAME'),
-                poll: poll
+                disqusShortname: config.get('DISQUS_SHORTNAME')
             },
             filename:'views/article',
             css:asereje.css(['container/style', 'article', 'container/poll']),

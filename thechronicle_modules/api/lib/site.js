@@ -98,17 +98,15 @@ site.getFrontPageContent = function (callback) {
         },
         function (cb) { //1
             var popularArticles = 7;
-            redis.client.zrevrange(_articleViewsKey([]), 0, popularArticles - 1, function (err, popular) {
-                if (err) return cb(err);
-                popular = popular.map(function (str) {
-                    var parts = str.split('||');
-                    return {
-                        urls:['/article/' + parts[0]],
-                        title:parts[1]
-                    };
+            api.disqus.listHot(popularArticles, function(err, results) {
+                if(err) return cb(err);
+                
+                results.forEach(function(article) {
+                    article.subhead = article.numComments + " comment";
+                    if(article.numComments != 1) article.subhead += "s";
                 });
-                if (BENCHMARK) log.info("REDIS TIME %d", Date.now() - start);
-                cb(null, popular);
+
+                modifyArticlesForDisplay(results, cb);    
             });
         },
         function (cb) { //2
@@ -635,6 +633,7 @@ function modifyArticleForDisplay(doc, callback) {
 			}
 		}
 	}
+    
 	return doc;
 }
 

@@ -100,8 +100,10 @@ site.section = function (req, res, next) {
                 subsections:children,
                 parentPaths:parents,
                 section:section,
-                popular: popular
-	        }
+                popular: popular,
+                taxonomyPath: params.join('/')
+	        },
+            js:['scrollLoadSection']
 	    });
         }
     });

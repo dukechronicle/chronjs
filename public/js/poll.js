@@ -17,7 +17,7 @@ define(['jquery'], function ($) {
             if (!voted) {
                 voted = true;
 
-                var id = $(".poll").attr("id");
+                var id = $(".poll > .container").attr("id");
                 var answer = $choice.attr("id");
                 $choice.attr("votes", function (index, votes) {
                     return parseInt(votes) + 1;

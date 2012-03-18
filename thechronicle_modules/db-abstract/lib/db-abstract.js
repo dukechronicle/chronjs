@@ -38,6 +38,7 @@ db.taxonomy = require('./taxonomy.js');
 db.search = require('./search.js');
 db.authors = require('./authors.js');
 db.database = require('./database.js');
+db.page = require('./page.js');
 
 db.getDatabaseName = function() {
     return DATABASE;

@@ -1,5 +1,5 @@
 h1 Add a Document
-form(action='/admin/addPage', method='POST')
+form(action='/admin/add-page', method='POST')
     p
         label(for='title') Title:
         input#title(type='text', name='doc[title]')
@@ -8,4 +8,7 @@ form(action='/admin/addPage', method='POST')
         label(for='body') Html:
         textarea#body(rows=20, cols=30, name='doc[body]')
     p
-        input(type='submit', value='add')
+        label(for='style') Css:
+        textarea#body(rows=20, cols=30, name='doc[style]')
+    p
+        input(type='submit', class='btn', value='Submit')

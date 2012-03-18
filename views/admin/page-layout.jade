@@ -6,20 +6,21 @@ h2 !{page} Layout
     - each group in groups
         br
         <h2>!{group}</h2>
-        .container(data-groupName=group)
+        .container(data-groupname=group)
             - if (groupDocs[group])
                 - each story, id in groupDocs[group]
-                    .story(id=story._id, data-groups=JSON.stringify(story.groups))
+                    .story(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
                         #{story.title}
 
 #sidebar
-    .fixed-container
-        select(id="taxonomy")
-                option(value="All") All
-                - each section in mainSections            
-                    option(value=section) !{section}
-        #stories-container
-            #stories
-                - each story, id in sectionDocs
-                    .story(id=story._id, data-groups=JSON.stringify(story.groups))
-                        #{story.title}
+    button#save.btn Save Layout
+    select#taxonomy
+        option(value="All") All
+            - each section in mainSections            
+                option(value=section) !{section}
+
+    #stories-container
+        #stories
+            - each story, id in sectionDocs
+                .story(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
+                    #{story.title}

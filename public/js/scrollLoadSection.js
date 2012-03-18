@@ -15,7 +15,7 @@ define(["jquery", "libs/dateFormat"], function($, dateFormat) {
             isLoadingPage = true;
 
             // use our api to load the next search page for this set of params
-            $.get("/api/"+scrollLoadUrl+"startDocId="+lastDocId, function(returnedData) {
+            $.get("/api/"+scrollLoadUrl+"docid="+lastDocId, function(returnedData) {
                 if(returnedData.length === 1) {
                     noPagesLeftToLoad = true;
                     loadImage.fadeOut();

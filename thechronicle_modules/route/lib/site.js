@@ -184,7 +184,8 @@ site.article = function (req, res, next) {
                 disqusShortname: config.get('DISQUS_SHORTNAME')
             },
             filename:'views/article',
-            css:asereje.css(['container/style', 'article'])
+            css:asereje.css(['container/style', 'article']),
+            js:['site/disqus']
         });
     });
 };
@@ -227,7 +228,7 @@ site.editArticle = function (req, res, next) {
                     doc.authors = doc.authors.join(", ");
 
                 res.render('admin/edit', {
-                    js:['admin/deleteArticle'],
+                    js:['admin/deleteArticle?v=2'],
                     locals:{
                         doc:doc,
                         groups:[],

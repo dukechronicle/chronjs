@@ -70,14 +70,8 @@
 
             - if (model.popular && model.popular.length > 0)
                 .numbered-articles.most-popular!=partial('container/numbered-articles', {title: "Popular", stories: model.popular})
-
-
-
     // comments
-    #disqus_thread.rounded
-script(src="/js/disqus.js?v=4", type="text/javascript")
-script
-    loadDisqusForArticle(!{isProduction}, '!{disqusShortname}', '!{doc.nid || doc._id}', '!{doc.title.replace(/'/g,"\\'")}', '!{doc.url}');
+    #disqus_thread.rounded(data-isproduction=(''+isProduction), data-shortname=disqusShortname, data-id=(doc.nid || doc._id), data-title=doc.title, data-url=doc.url)
 
 script(src="http://platform.twitter.com/widgets.js", type="text/javascript")
 script(type="text/javascript")

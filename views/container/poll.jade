@@ -1,13 +1,12 @@
-.poll(id=poll.id)
-  .container.clearfix
-      .vertical-container
-          h2.vertical Poll
+.container.clearfix(id=poll.id)
+  .vertical-container
+      h2.vertical Poll
 
-      .rounded
-          .content-container
-              h1 #{poll.title}
-              ul.choices
-              - each votes, choice in poll.answers
-                  il.choice(id=choice, votes=votes)
-                      a.hover(href="#")
-                          h2 #{choice}
+  .rounded
+      .content-container
+          h1 #{poll.title}
+          ul.choices
+          - each votes, choice in poll.answers
+              il.choice(id=choice, votes=votes)
+                  a.hover(href="#")
+                      h2 #{choice}

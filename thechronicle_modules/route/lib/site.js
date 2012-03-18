@@ -15,7 +15,7 @@ site.mobile = function (req, res, next) {
 };
 
 site.poll = function (req, res, next) {
-    api.poll.getPoll('8f094837374829e664dc4ea896015695', function (err, doc) {
+    api.poll.getPoll('8f094837374829e664dc4ea896015695', function (err, doc) { 
         res.render('container/poll', {
             js: ['poll'],
             css: asereje.css(['container/style', 'container/poll']),

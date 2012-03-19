@@ -25,17 +25,9 @@ function disqus_config() {
 }
 
 $(function() {
-	var $disqusThread = $("#disqus_thread");
-
-	if(! $disqusThread.length == 0) {
-		var isProduction = $disqusThread.attr('data-isproduction');
-		var shortname = $disqusThread.attr('data-shortname');
-		var id = $disqusThread.attr('data-id');
-		var title = $disqusThread.attr('data-title');
-		var url = $disqusThread.attr('data-url');
-
-		loadDisqusForArticle(isProduction, shortname, id, title, url);
-	}
+    var params = $("#disqus_thread").data('disqus');
+    loadDisqusForArticle(params.isProduction, params.shortname, params.id,
+                         params.title, params.url);
 });
 
 function loadDisqusForArticle(isProduction, disqusShortName, articleID, title, url)

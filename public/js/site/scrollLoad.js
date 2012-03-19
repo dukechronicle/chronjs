@@ -14,8 +14,8 @@ define(["jquery", "jquery-ui"], function($) {
             loadImage.fadeIn('slow');
             isLoadingPage = true;
 
-            // load data in a certain way depending on whether loading based on pages or docIDs is specified
-            if(typeof(nextPageToLoad) === "undefined") loadDataFromDocID();
+            // load data in a certain way depending on whether on pages or last doc is specified
+            if(typeof(nextPageToLoad) === "undefined") loadDataFromLastDoc();
             else loadPaginatedData();
         }
     });
@@ -65,14 +65,16 @@ define(["jquery", "jquery-ui"], function($) {
         });
     }
 
-    // load the next set of documents for this set of params, starting with docId
-    function loadDataFromDocID() {
-        $.get("/api/"+scrollLoadUrl+"&docid="+lastDocId, function(returnedData) {
+    // load the next set of documents for this set of params, starting with the last document currently on the page
+    function loadDataFromLastDoc() {
+        $.get("/api/"+scrollLoadUrl, {startdoc: lastDoc}, function(returnedData) {
             if(returnedData.length === 1) {
                 noPagesLeftToLoad = true;
                 loadImage.fadeOut();
             }
             else {
+                lastDoc = returnedData[returnedData.length-1];                
+
                 // add the docs to the page, correctly formatted, ignoring the duplicate doc
                 addArticle(returnedData,1);
             }

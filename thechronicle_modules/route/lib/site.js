@@ -41,7 +41,6 @@ site.news = function (req, res) {
 
 site.sports = function (req, res) {
     api.site.getSportsPageContent(function (err, model, children) {
-        log.debug(model);
         res.render('site/sports', {
             pageTitle: "Sports",
             css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),

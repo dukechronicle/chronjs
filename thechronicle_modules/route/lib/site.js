@@ -176,16 +176,20 @@ site.article = function (req, res, next) {
         else res.render('article', {
             locals: {
                 doc:doc,
-                pageTitle:doc.title,
                 isAdmin:isAdmin,
                 model:model,
                 parentPaths:parents,
-                isProduction: (process.env.NODE_ENV === 'production'),
-                disqusShortname: config.get('DISQUS_SHORTNAME')
+                disqusData: {
+                    isProduction: (process.env.NODE_ENV === 'production'),
+                    shortname: config.get('DISQUS_SHORTNAME'),
+                    id: doc._id,
+                    title: doc.title,
+                    url: doc.url
+                }
             },
             filename:'views/article',
             css:asereje.css(['container/style', 'article']),
-            js:['site/disqus?v=2']
+            js:['site/article']
         });
     });
 };

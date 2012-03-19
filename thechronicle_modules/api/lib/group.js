@@ -43,8 +43,8 @@ group.docs = function(namespace, group, callback) {/*
                 if (err)
                     callback(err);
                 else {
-                    redis.client.set(redisKey, JSON.stringify(results));
-                    redis.client.expire(redisKey, 120);
+                    //redis.client.set(redisKey, JSON.stringify(results));
+                    //redis.client.expire(redisKey, 120);
                     callback(null, results);
                 }
             }); /*

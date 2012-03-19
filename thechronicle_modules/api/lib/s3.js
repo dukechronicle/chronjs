@@ -1,57 +1,29 @@
 var s3 = exports;
 
 var knox = require('knox');
+var _ = require('underscore');
 var config = require("../../config");
 var log = require('../../log');
 
-var BUCKET_NAME, CLOUDFRONT_DISTRIBUTION;
+var CLOUDFRONT_MAPPING = {};
 var S3_URL = "http://s3.amazonaws.com/";
 
 
 s3.init = function () {
-    BUCKET_NAME = config.get("S3_BUCKET");
-    CLOUDFRONT_DISTRIBUTION = config.get("CLOUDFRONT_DISTRIBUTION");
-};
-
-/**
-  For backwards compatibility, put function parameters are:
-    s3.put([bucket, ]buffer, key, type, callback)
-  If bucket is not given, it defaults to S3_BUCKET configuration parameter.
-*/
-s3.put = function () {
-    // convert arguments object to array
-    var args = Array.prototype.slice.call(arguments);
-
-    if (args.length == 4)
-        args.unshift(BUCKET_NAME);
-    if (args.length == 5)
-        put.apply(this, args);
-    else
-        log.error("Unknown argument types to s3.put");
-};
-
-/**
-  For backwards compatibility, put function parameters are:
-    s3.delete([bucket, ]buffer, key, type, callback)
-  If bucket is not given, it defaults to S3_BUCKET configuration parameter.
-*/
-s3.delete = function () {
-    // convert arguments object to array
-    var args = Array.prototype.slice.call(arguments);
-
-    if (args.length == 2)
-        args.unshift(BUCKET_NAME);
-    if (args.length == 3)
-        del.apply(this, args);
-    else
-        log.error("Unknown argument types to s3.delete");
+    CLOUDFRONT_MAPPING[config.get("S3_BUCKET")] =
+        config.get("CLOUDFRONT_DISTRIBUTION");
+    CLOUDFRONT_MAPPING[config.get("S3_STATIC_BUCKET")] =
+        config.get("CLOUDFRONT_STATIC");
 };
 
 s3.getCloudFrontUrl = function(url) {
-    return url.replace(S3_URL + BUCKET_NAME, CLOUDFRONT_DISTRIBUTION);
+    _.each(CLOUDFRONT_MAPPING, function (bucket, cloudfront) {
+        url = url.replace(S3_URL + bucket, cloudfront);
+    });
+    return url;
 };
 
-function put(bucket, buf, key, type, callback) {
+s3.put = function (bucket, buf, key, type, callback) {
     var req = createClient(bucket).put(key, {
         'Content-Length':buf.length,
         'Content-Type':type,
@@ -66,7 +38,7 @@ function put(bucket, buf, key, type, callback) {
     req.end(buf);    
 };
 
-function del(bucket, key, callback) {
+s3.del = function (bucket, key, callback) {
     key = key.replace('/'+bucket+'/','');
     createClient(bucket).deleteFile(key, callback);
 };

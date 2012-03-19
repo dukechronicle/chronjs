@@ -1,4 +1,4 @@
-define(['jquery', 'jquery.Jcrop'], function ($) {
+define(['jquery', 'Jcrop'], function ($) {
 
     var sizes;
 

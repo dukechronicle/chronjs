@@ -189,7 +189,7 @@ site.article = function (req, res, next) {
             },
             filename:'views/article',
             css:asereje.css(['container/style', 'article']),
-            js:['site/disqus?v=2']
+            js:['site/article']
         });
     });
 };

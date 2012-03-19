@@ -24,34 +24,32 @@ function disqus_config() {
     }];
 }
 
-define(["jquery"], function($) {
-    $(function() {
-        var $disqusThread = $("#disqus_thread");
+$(function() {
+	var $disqusThread = $("#disqus_thread");
 
-        if(! $disqusThread.length == 0) {
-            var isProduction = $disqusThread.attr('data-isproduction');
-            var shortname = $disqusThread.attr('data-shortname');
-            var id = $disqusThread.attr('data-id');
-            var title = $disqusThread.attr('data-title');
-            var url = $disqusThread.attr('data-url');
+	if(! $disqusThread.length == 0) {
+		var isProduction = $disqusThread.attr('data-isproduction');
+		var shortname = $disqusThread.attr('data-shortname');
+		var id = $disqusThread.attr('data-id');
+		var title = $disqusThread.attr('data-title');
+		var url = $disqusThread.attr('data-url');
 
-            loadDisqusForArticle(isProduction, shortname, id, title, url);
-        }
-    });
-
-    function loadDisqusForArticle(isProduction, disqusShortName, articleID, title, url)
-    {
-        disqus_shortname = disqusShortName;
-        disqus_identifier = articleID;
-        disqus_title = title;
-        disqus_url = "http://dukechronicle.com" + url;
-        
-        if(!isProduction) disqus_developer = 1;
-	
-        (function() {
-	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-	        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-	    })();
-    }
+		loadDisqusForArticle(isProduction, shortname, id, title, url);
+	}
 });
+
+function loadDisqusForArticle(isProduction, disqusShortName, articleID, title, url)
+{
+	disqus_shortname = disqusShortName;
+	disqus_identifier = articleID;
+	disqus_title = title;
+	disqus_url = "http://dukechronicle.com" + url;
+	
+	if(!isProduction) disqus_developer = 1;
+
+	(function() {
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+}

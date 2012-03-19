@@ -114,7 +114,7 @@ site.getFrontPageContent = function (callback) {
             var selectedFeed = twitterFeeds[Math.floor(Math.random() * twitterFeeds.length)];
             twitter.user = selectedFeed;
             twitter.title = 'Twitter';
-            twitter.imageUrl = "http://d2sug25c5hnh7r.cloudfront.net/images/twitter-dukechronicle.png";
+            twitter.imageUrl = "https://api.twitter.com/1/users/profile_image?screen_name="+selectedFeed;
             rss.getRSS('twitter-' + selectedFeed, function (err, tweets) {
                 if (tweets && tweets.items && tweets.items.length > 0) {
                     twitter.tweet = tweets.items[0].title;

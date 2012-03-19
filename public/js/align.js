@@ -1,4 +1,4 @@
-define(["jquery", "underscore"], function($) {
+define(["jquery", "libs/underscore"], function($) {
     return {
         pageAlign:function () {
             $(".align-group").each(function () {

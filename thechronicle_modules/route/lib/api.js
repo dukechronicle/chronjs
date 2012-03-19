@@ -26,9 +26,9 @@ siteApi.listAll = function (req, res, next) {
 *@params http request, http response
 */
 siteApi.listSection = function (req, res, next) {
-    var section = req.params.section;
+    var sectionArray = req.params.toString().split('/');
     var startDocId = req.query.docid;
-    api.taxonomy.docs([section], 10, startDocId, function (err, docs) {
+    api.taxonomy.docs(sectionArray, 10, startDocId, function (err, docs) {
         if (err) next(err);
         else {
             var result = _.map(docs, function (doc) {

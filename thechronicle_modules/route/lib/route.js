@@ -20,7 +20,7 @@ exports.init = function (app) {
 
     app.namespace('/api', function () {
         app.get('/all', siteApi.listAll);
-        app.get('/:section', siteApi.listSection);
+        app.get('/section/*', siteApi.listSection);
         app.get('/article/url/:url', siteApi.articleByUrl);
         app.get('/search/:query', siteApi.search);
         app.get('/staff/:query', siteApi.staff);

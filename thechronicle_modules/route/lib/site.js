@@ -90,8 +90,8 @@ site.towerview = function (req, res) {
 };
 
 site.section = function (req, res, next) {
-    var params = req.params.toString().split('/');
-    api.site.getSectionContent(params, function (err, section, docs, children, parents, popular) {
+    var sectionArray = req.params.toString().split('/');
+    api.site.getSectionContent(sectionArray, function (err, section, docs, children, parents, popular) {
         if (err) next();
         else {
 	    res.render('site/section', {
@@ -103,7 +103,7 @@ site.section = function (req, res, next) {
                 parentPaths:parents,
                 section:section,
                 popular: popular,
-                taxonomyPath: params.join('/')
+                taxonomyPath: sectionArray.join('/')
 	        },
             js:['site/scrollLoad?v=4']
 	    });

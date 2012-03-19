@@ -67,7 +67,7 @@ define(["jquery", "jquery-ui"], function($) {
 
     // load the next set of documents for this set of params, starting with docId
     function loadDataFromDocID() {
-        $.get("/api/"+scrollLoadUrl+"docid="+lastDocId, function(returnedData) {
+        $.get("/api/"+scrollLoadUrl+"&docid="+lastDocId, function(returnedData) {
             if(returnedData.length === 1) {
                 noPagesLeftToLoad = true;
                 loadImage.fadeOut();

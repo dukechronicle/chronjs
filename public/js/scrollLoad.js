@@ -1,4 +1,4 @@
-define(["jquery", "jquery-ui"], function($) {
+define(["jquery", "libs/jquery-ui"], function($) {
     var nextPageToLoad = 2; // keeps track fo what page to load next
     var isLoadingPage = false; // stops multiple pages loading at once
     var noPagesLeftToLoad = false; // stops ajax requests from being issued once all articles for this search have been loaded

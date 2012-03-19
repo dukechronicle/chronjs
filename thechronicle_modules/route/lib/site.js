@@ -115,7 +115,7 @@ site.search = function (req, res, next) {
         if (err) next(err);
         else res.render('site/search', {
             css:asereje.css(['container/style', 'site/search']),
-            js:['scrollLoad?v=2'],
+            js:['scrollLoad?v=3'],
             locals: {
                 docs: docs,
                 currentFacets: req.query.facets || '',
@@ -133,7 +133,7 @@ site.staff = function (req, res) {
     api.site.getAuthorContent(name, function (err, docs) {
 	res.render('site/people', {
             css:asereje.css(['container/style', 'site/people']),
-            js:['scrollLoad?v=2'],
+            js:['scrollLoad?v=3'],
             locals:{
                 pageTitle: globalFunctions.capitalizeWords(name),
                 docs: docs,
@@ -185,7 +185,7 @@ site.article = function (req, res, next) {
             },
             filename:'views/article',
             css:asereje.css(['container/style', 'article']),
-            js:['site/disqus']
+            js:['site/disqus?v=2']
         });
     });
 };

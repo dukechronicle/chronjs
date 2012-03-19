@@ -105,7 +105,7 @@ site.section = function (req, res, next) {
                 popular: popular,
                 taxonomyPath: params.join('/')
 	        },
-            js:['scrollLoadSection']
+            js:['site/scrollLoad?v=4']
 	    });
         }
     });
@@ -117,7 +117,7 @@ site.search = function (req, res, next) {
         if (err) next(err);
         else res.render('site/search', {
             css:asereje.css(['container/style', 'site/search']),
-            js:['scrollLoad?v=3'],
+            js:['site/scrollLoad?v=4'],
             locals: {
                 docs: docs,
                 currentFacets: req.query.facets || '',
@@ -135,7 +135,7 @@ site.staff = function (req, res) {
     api.site.getAuthorContent(name, function (err, docs) {
 	res.render('site/people', {
             css:asereje.css(['container/style', 'site/people']),
-            js:['scrollLoad?v=3'],
+            js:['site/scrollLoad?v=4'],
             locals:{
                 pageTitle: globalFunctions.capitalizeWords(name),
                 docs: docs,

@@ -1,4 +1,4 @@
-define(["jquery", "onde"], function($) {
+define(["jquery", "libs/onde"], function($) {
     var ondeSessions = {};
     var objs = [];
 

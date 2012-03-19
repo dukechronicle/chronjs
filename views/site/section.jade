@@ -43,7 +43,7 @@
 - if(docs.length > 0)
     script(type='text/javascript')
         var scrollLoadUrl = "section/#{taxonomyPath}?";
-        var lastDocId = "#{docs[docs.length-1]._id}";
+        var lastDoc = !{JSON.stringify(docs[docs.length-1])};
 
         var scrollLoadHTML =
         '<a class="result rounded-hover addedArticle" href="/article/URL_REPLACE">'+

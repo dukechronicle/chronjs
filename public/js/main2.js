@@ -1,8 +1,12 @@
 require.config({
     paths: {
+        'jquery-ui': '/js/libs/jquery-ui.min.js',
         'backbone': '/js/libs/backbone-min',
-        'galleria': '/js/galleria/galleria-1.2.5',
-        'underscore': '/js/libs/underscore-min'
+        'underscore': '/js/libs/underscore-min',
+        'Jcrop': '/js/libs/jquery.Jcrop.min.js',
+        'msdropdown': '/js/libs/jquery.dd.js',
+        'order': '/js/libs/order.js',
+        'galleria': '/js/galleria/galleria-1.2.5'
     }
 });
 

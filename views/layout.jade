@@ -19,10 +19,7 @@ html(lang="en")
         script(src="http://use.typekit.com/dwv2bjy.js")
         script try{Typekit.load();}catch(e){}
 
-        script
-            var THE_CHRONICLE = {};
-        - if (typeof js != 'undefined')
-            script THE_CHRONICLE.scripts = !{JSON.stringify(js)}
+        script var THE_CHRONICLE = {};
 
         - if (typeof css != 'undefined')
             - each file in css
@@ -42,4 +39,4 @@ html(lang="en")
             footer
                 include /layout/footer
 
-        script(data-main="/js/main2", src="/js/require-jquery.js")
+        script(data-main="/js/site/main", src="/js/require-jquery.js")

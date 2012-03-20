@@ -1,7 +1,3 @@
-// All Javascript files used by the main site -- align must be first
-var SCRIPTS = ['site/align','site/article','site/opinion','site/scrollLoad',
-               'site/slideshow/frontpage-slideshow','site/slideshow/slideshow'];
-
 require.config({
     baseUrl: '/js',
     paths: {
@@ -10,12 +6,14 @@ require.config({
     }
 });
 
-require(SCRIPTS, function (align) {
-    loadAfterTypekit(function() {
-        align.pageAlign();
-        if (page() === 'front') align.frontpageAlign();
-        align.verticalAlign();
-    })
+require(['site/align','site/article','site/opinion','site/scrollLoad',
+         'site/slideshow/frontpage-slideshow','site/slideshow/slideshow'],
+        function (align) {
+            loadAfterTypekit(function() {
+                align.pageAlign();
+                if (page() === 'front') align.frontpageAlign();
+                align.verticalAlign();
+            });
 });
 
 function loadAfterTypekit(callback) {

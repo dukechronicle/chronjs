@@ -1,4 +1,4 @@
-define(['jquery', 'Article', 'msdropdown'], function ($, Article) {
+define(['jquery', 'Article', 'libs/jquery.dd'], function ($, Article) {
 
     $(function () {
 

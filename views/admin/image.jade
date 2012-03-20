@@ -1,9 +1,8 @@
-script var SIZES = '!{JSON.stringify(imageDetails)}'
 h1 Crop
 - if(url)
   img#toCrop(src=url)
 p
-  select#sizes
+  select#sizes(data-sizes=JSON.stringify(imageDetails))
     - each name in imageTypes
       option(value=name) #{name}
   &nbsp;

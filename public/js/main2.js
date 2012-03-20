@@ -5,7 +5,7 @@ require.config({
     }
 });
 
-require(["align", "site"], function (align) {
+require(['align'], function (align) {
     loadAfterTypekit(function() {
         align.pageAlign();
         if (page() === 'front') align.frontpageAlign();

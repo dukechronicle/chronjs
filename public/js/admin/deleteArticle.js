@@ -2,7 +2,7 @@ define(['jquery', 'libs/jquery-ui'], function ($) {
 
     $(function() {
 
-        $(".delete").click(function(event) {
+        $(".delete-article").click(function(event) {
             event.preventDefault();
 
             var anchor = $(event.target);

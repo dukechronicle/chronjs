@@ -13,55 +13,58 @@ define(['jquery'], function ($) {
 	// init event handlers
 	var dropbox = document.getElementById("dropbox");
 
-	dropbox.addEventListener("dragenter", function(evt) {
-	    evt.stopPropagation();
-	    evt.preventDefault();
-	}, false);
+        if (dropbox) {
 
-	dropbox.addEventListener("dragexit", function(evt) {
-	    evt.stopPropagation();
-	    evt.preventDefault();
-	}, false);
+	    dropbox.addEventListener("dragenter", function(evt) {
+	        evt.stopPropagation();
+	        evt.preventDefault();
+	    }, false);
 
-	dropbox.addEventListener("dragover", function(evt) {
-	    evt.stopPropagation();
-	    evt.preventDefault();
-	}, false);
+	    dropbox.addEventListener("dragexit", function(evt) {
+	        evt.stopPropagation();
+	        evt.preventDefault();
+	    }, false);
 
-	dropbox.addEventListener("drop", function(evt) {
-	    evt.stopPropagation();
-	    evt.preventDefault();
+	    dropbox.addEventListener("dragover", function(evt) {
+	        evt.stopPropagation();
+	        evt.preventDefault();
+	    }, false);
 
-	    var files = evt.dataTransfer.files;
-	    var count = files.length;
+	    dropbox.addEventListener("drop", function(evt) {
+	        evt.stopPropagation();
+	        evt.preventDefault();
 
-	    // Only call the handler if 1 or more files was dropped and files are not currently being uploaded
-	    if (count > 0 && !isUploading) {
-		imagesToProcess = count;
-		totalImages += count;
-		
-		isUploading = true;
+	        var files = evt.dataTransfer.files;
+	        var count = files.length;
 
-		if(count == 1) {
-		    $("#droplabel").text("Uploading " + files[0].name);
-		}
-		else {
-		    $("#droplabel").text("Uploading files...");
-		}
+	        // Only call the handler if 1 or more files was dropped and files are not currently being uploaded
+	        if (count > 0 && !isUploading) {
+		    imagesToProcess = count;
+		    totalImages += count;
+		    
+		    isUploading = true;
 
-		$.each(files,function(index,file) {
-		    // begin the read operation
-		    var reader = new FileReader();
+		    if(count == 1) {
+		        $("#droplabel").text("Uploading " + files[0].name);
+		    }
+		    else {
+		        $("#droplabel").text("Uploading files...");
+		    }
 
-		    // init the reader event handlers
-		    reader.onprogress = handleReaderProgress;
-		    reader.onloadend = handleReaderLoadEnd(file);
+		    $.each(files,function(index,file) {
+		        // begin the read operation
+		        var reader = new FileReader();
 
-		    reader.readAsDataURL(file);
-		});
-	    }
-	}, false);
+		        // init the reader event handlers
+		        reader.onprogress = handleReaderProgress;
+		        reader.onloadend = handleReaderLoadEnd(file);
 
+		        reader.readAsDataURL(file);
+		    });
+	        }
+	    }, false);
+
+        }
 	// init the widgets
 	//$("#progressbar").progressbar();
     });

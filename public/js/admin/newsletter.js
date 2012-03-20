@@ -35,9 +35,9 @@ define(['jquery', 'jquery-ui'], function ($) {
     function sendNewsletter(form, onSentText, callback) {
         $.post('/admin/newsletter', form.serialize(), function (msg) {
             if (msg == "sent")
-                $("#message").html(onSentText).addClass('alert-success');
+                $("#message").html(onSentText).addClass('alert-message success');
             else
-                $("#message").html("Could not send").addClass('alert-error');
+                $("#message").html("Could not send").addClass('alert-message error');
 
             if (callback) callback();
         });

@@ -67,8 +67,8 @@ define(["jquery", "jquery-ui"], function($) {
 
     // load the next set of documents for this set of params, starting with the last document currently on the page
     function loadDataFromLastDoc() {
-        $.get("/api/"+scrollLoadUrl, {startdoc: lastDoc}, function(returnedData) {
-            if(returnedData.length === 1) {
+        $.get("/api/"+scrollLoadUrl, {startdoc: JSON.stringify(lastDoc)}, function(returnedData) {
+            if(returnedData.length < 2) {
                 noPagesLeftToLoad = true;
                 loadImage.fadeOut();
             }

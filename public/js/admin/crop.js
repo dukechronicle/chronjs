@@ -9,15 +9,13 @@ define(['jquery', 'libs/jquery.Jcrop'], function ($) {
     };
 
     $(function () {
-        setSizes(SIZES);
-        updateCropSize();
-        $("#sizes").change(updateCropSize);
-        $("a.help").click(showDescriptions);
+        sizes = $("#sizes").data('sizes');
+        if (sizes) {
+            updateCropSize();
+            $("#sizes").change(updateCropSize);
+            $("a.help").click(showDescriptions);
+        }
     });
-
-    function setSizes(s) {
-        sizes = eval('(' + s + ')');
-    }
 
     function crop(dim) {
         cropOptions.aspectRatio = dim.width / dim.height;

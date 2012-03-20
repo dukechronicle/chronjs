@@ -2,8 +2,10 @@ define(['jquery', 'disqus'], function ($) {
 
     $(function() {
         var params = $("#disqus_thread").data('disqus');
-        loadDisqusForArticle(params.isProduction, params.shortname, params.id,
-                             params.title, params.url);
+        if (params) {
+            loadDisqusForArticle(params.isProduction, params.shortname,
+                                 params.id, params.title, params.url);
+        }
     });
 
     disqus_config = function () {

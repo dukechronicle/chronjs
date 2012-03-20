@@ -1,4 +1,4 @@
-define(['jquery', 'libs/jquery.Jcrop'], function ($) {
+define(['order!jquery', 'order!libs/jquery.Jcrop'], function ($) {
 
     var sizes;
 

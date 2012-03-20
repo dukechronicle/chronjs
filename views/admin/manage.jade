@@ -6,7 +6,7 @@ table.article-index(border=1)
             td
                 a(href='/article/' + doc.urls[doc.urls.length - 1] + '/edit') Edit
             td
-                a.delete-article(href='#', data-docId=doc._id, data-title=doc.title, data-docRev=doc._rev) Delete
+                a.delete-article(href='#', data-docid=doc._id, data-title=doc.title, data-rev=doc._rev, data-dest='') Delete
             td
                 a(href='http://'+ host + ':' + port + '/_utils/document.html?' + db + '/' + doc._id) #{doc._id}
 

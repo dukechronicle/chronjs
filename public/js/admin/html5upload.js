@@ -1,4 +1,4 @@
-define(['jquery', 'async'], function ($) {
+define(['jquery'], function ($) {
 
     var IMAGE_HTML = "<img id='tempPreview' />";
 

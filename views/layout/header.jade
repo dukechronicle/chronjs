@@ -32,19 +32,25 @@
 
 
 
+- if (typeof section == 'undefined') var section = undefined
 
 #header-bottom
     nav#nav.clearfix
         h2
-            a(href='/news') News
+            a(href='/news',
+              class=(section == 'News') ? "active" : "") News
         h2
-            a(href='/sports') Sports
+            a(href='/sports',
+              class=(section == 'Sports') ? "active" : "") Sports
         h2
-            a(href='/opinion') Opinion
+            a(href='/opinion',
+              class=(section == 'Opinion') ? "active" : "") Opinion
         h2
-            a(href='/recess') Recess
+            a(href='/recess',
+              class=(section == 'Recess') ? "active" : "") Recess
         h2
-            a(href='/towerview') Towerview
+            a(href='/towerview',
+              class=(section == 'Towerview') ? "active" : "") Towerview
         h2
             a(href='http://chronicleblogs.com') Blogs
         h2

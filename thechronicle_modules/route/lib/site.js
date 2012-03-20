@@ -32,9 +32,12 @@ site.news = function (req, res) {
         res.render('site/news', {
             pageTitle: "News",
             css:asereje.css(['container/style', 'site/section', 'site/news']),
-            subsections:children,
             filename:'views/site/news.jade',
-            model:model
+            locals: {
+                subsections:children,
+                section: 'News',
+                model:model
+            }
         });
     });
 };
@@ -45,9 +48,12 @@ site.sports = function (req, res) {
             pageTitle: "Sports",
             css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
             js:['slideshow/slideshow'],
-            subsections:[children.men, children.women],
             filename:'views/site/sports.jade',
-            model:model
+            locals: {
+                subsections: [children.men, children.women],
+                model:model,
+                section: 'Sports'
+            }
         });
     });
 };
@@ -58,9 +64,12 @@ site.opinion = function (req, res) {
             pageTitle: "Opinion",
             css:asereje.css(['container/style', 'site/section', 'site/opinion']),
             js:['opinion'],
-            subsections:children,
             filename:'views/site/opinion.jade',
-            model:model
+            locals: {
+                subsections:children,
+                section: 'Opinion',
+                model:model
+            }
         });
     });
 };
@@ -70,9 +79,12 @@ site.recess = function (req, res) {
         res.render('site/recess', {
             pageTitle: "Recess",
             css:asereje.css(['container/style', 'site/section', 'site/recess']),
-            subsections:children,
             filename:'views/site/recess.jade',
-            model:model
+            locals: {
+                subsections:children,
+                section: 'Recess',
+                model:model
+            }
         });
     });
 };
@@ -82,9 +94,12 @@ site.towerview = function (req, res) {
         res.render('site/towerview', {
             pageTitle: "Towerview",
             css:asereje.css(['container/style', 'site/section', 'site/towerview']),
-            subsections:children,
             filename:'views/site/towerview.jade',
-            model:model
+            locals: {
+                subsections:children,
+                section: 'Towerview',
+                model:model
+            }
         });
     });
 };
@@ -97,12 +112,12 @@ site.section = function (req, res, next) {
 	    res.render('site/section', {
 	        css:asereje.css(['container/style', 'site/section']),
 	        locals: {
-                pageTitle: section,
-                docs:docs,
-                subsections:children,
-                parentPaths:parents,
-                section:section,
-                popular: popular
+                    pageTitle: section,
+                    docs:docs,
+                    subsections:children,
+                    parentPaths:parents,
+                    section: params[0],
+                    popular: popular
 	        }
 	    });
         }
@@ -179,6 +194,7 @@ site.article = function (req, res, next) {
                 isAdmin:isAdmin,
                 model:model,
                 parentPaths:parents,
+                section: doc.taxonomy[0],
                 disqusData: {
                     isProduction: (process.env.NODE_ENV === 'production'),
                     shortname: config.get('DISQUS_SHORTNAME'),

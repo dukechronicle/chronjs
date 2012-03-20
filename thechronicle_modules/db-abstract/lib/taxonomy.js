@@ -16,7 +16,7 @@ taxonomy.docs = function(taxonomyTerm, limit, startDoc, callback) {
     
     if(startDoc) {       
         query.startkey_docid = startDoc._id;
-        query.startkey = [taxonomyTerm, parseInt(startDoc.created)]
+        query.startkey = [taxonomyTerm, startDoc.created]
     }
 
     db.view('articles/taxonomy', query, callback);

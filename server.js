@@ -4,6 +4,7 @@ var async = require('async');
 var express = require('express');
 require('express-namespace');
 var RedisStore = require('connect-redis')(express);
+var requirejs = require('requirejs');
 var stylus = require('stylus');
 var sprintf = require('sprintf').sprintf;
 
@@ -136,6 +137,7 @@ function configureApp(sessionInfo, port) {
 }
 
 function runSite(callback) {
+    buildJavascript(function(){});
     api.init(function (err) {
         if (err) log.crit("api initialization failed");
         else {
@@ -152,4 +154,13 @@ function runSite(callback) {
             });
         }
     });
+}
+
+function buildJavascript(callback) {
+    var config = { 
+        baseUrl: 'public/js/site',
+        name: 'main',
+        out: 'public/dist/everything.js'
+    };
+    requirejs.optimize(config, callback);
 }

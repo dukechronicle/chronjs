@@ -4,15 +4,15 @@ span(id='message')
 br
 br
 
-form(action='/admin/newsletter', onsubmit="sendNewsletter(this,false,'Test Sent.'); return false;")
+form#test
   label(for='testEmail') Test Email Address:
   input(type='text', name='testEmail')
   input(type='hidden', name='campaignID', value=campaignID)
   &nbsp;
-  input(type='submit', value='Send Test Newsletter')
+  input(type='submit', class='btn', value='Send Test Newsletter')
 br
 br
 
-form(action='/admin/newsletter', method='post', onsubmit="sendNewsletter(this,true,'Newsletter Sent.'); return false;")
+form#send
   input(type='hidden', name='campaignID', value=campaignID)
-  input(type='submit', value='Send Newsletter')
+  input(type='submit', class='btn', value='Send Newsletter')

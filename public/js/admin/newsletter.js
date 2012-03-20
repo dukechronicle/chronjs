@@ -1,33 +1,29 @@
-function areYouSure() {
-    var agree=confirm("Are you sure you want to send the newsletter to everyone?");
-    
-   return agree;
-}
+define(['jquery'], function ($) {
 
-function _sendNewsletter(form,onSentText) {
-    $.ajax({
-        type: "POST",
-        url: "/admin/newsletter",
-        data: $(form).serialize()
-    }).done(function(msg) {
-        if(msg == "sent") {
-            console.log('done');
-            $("#message").html(onSentText);
-        }
-        else {
-            $("#message").html("Could not send");
-        }
+    $(function () {
+        $("form#test").submit(function (e) {
+            e.preventDefault();
+            sendNewsletter($(this), 'Test sent');
+        });
+
+        $("form#send").submit(function (e) {
+            e.preventDefault();
+            if(areYouSure())
+                sendNewsletter($(this), 'Newsletter sent');
+        });
     });
-}
 
-function sendNewsletter(form,prompt,onSentText) {
-   if(prompt) {
-        if(areYouSure())
-        {
-            _sendNewsletter(form,onSentText);
-        }
-   }
-   else {
-        _sendNewsletter(form,onSentText);
-   }
-}
+    function areYouSure() {
+        return confirm("Are you sure you want to send the newsletter to everyone?");
+    }
+
+    function sendNewsletter(form,onSentText) {
+        $.post('/admin/newsletter', form.serialize(), function (msg) {
+            if (msg == "sent")
+                $("#message").html(onSentText);
+            else
+                $("#message").html("Could not send");
+        });
+    }
+
+});

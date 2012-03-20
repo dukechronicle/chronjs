@@ -21,11 +21,11 @@ define(['jquery', 'libs/jquery-ui'], function ($) {
             buttons: {
                 Send: function() {
                     sendNewsletter($("form#send"), 'Newsletter sent', function(){
-                        $(this).dialog('close');
+                        $("#newsletter-confirm").dialog('close');
                     });
                 },
                 Cancel: function() {
-                    $(this).dialog('close');
+                    $("#newsletter-confirm").dialog('close');
                 }
             }
         });

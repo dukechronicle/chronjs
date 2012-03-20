@@ -1,6 +1,6 @@
 h1 Newsletter
 
-div(id='message', class='alert')
+div(id='message')
 br
 br
 
@@ -12,6 +12,9 @@ form#test
   input(type='submit', class='btn', value='Send Test Newsletter')
 br
 br
+
+#dialog-confirm(title="Send newsletter?")
+  p Are you sure you want to send the newsletter to everyone?
 
 form#send
   input(type='hidden', name='campaignID', value=campaignID)

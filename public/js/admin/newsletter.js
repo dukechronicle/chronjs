@@ -1,6 +1,7 @@
-define(['jquery'], function ($) {
+define(['jquery', 'jquery-ui'], function ($) {
 
     $(function () {
+
         $("form#test").submit(function (e) {
             e.preventDefault();
             sendNewsletter($(this), 'Test sent');
@@ -8,21 +9,37 @@ define(['jquery'], function ($) {
 
         $("form#send").submit(function (e) {
             e.preventDefault();
-            if(areYouSure())
-                sendNewsletter($(this), 'Newsletter sent');
+            form = $(this);
+            $("#dialog-confirm").dialog('open');
         });
+
+        $("#dialog-confirm").dialog({
+            resizable: false,
+            autoOpen: false,
+            height:140,
+            modal: true,
+            buttons: {
+                Send: function() {
+                    sendNewsletter($("form#send"), 'Newsletter sent', function(){
+                        $(this).dialog('close');
+                    });
+                },
+                Cancel: function() {
+                    $(this).dialog('close');
+                }
+            }
+        });
+
     });
 
-    function areYouSure() {
-        return confirm("Are you sure you want to send the newsletter to everyone?");
-    }
-
-    function sendNewsletter(form,onSentText) {
+    function sendNewsletter(form, onSentText, callback) {
         $.post('/admin/newsletter', form.serialize(), function (msg) {
             if (msg == "sent")
                 $("#message").html(onSentText).addClass('alert-success');
             else
                 $("#message").html("Could not send").addClass('alert-error');
+
+            if (callback) callback();
         });
     }
 

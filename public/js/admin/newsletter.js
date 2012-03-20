@@ -20,9 +20,9 @@ define(['jquery'], function ($) {
     function sendNewsletter(form,onSentText) {
         $.post('/admin/newsletter', form.serialize(), function (msg) {
             if (msg == "sent")
-                $("#message").html(onSentText);
+                $("#message").html(onSentText).addClass('alert-success');
             else
-                $("#message").html("Could not send");
+                $("#message").html("Could not send").addClass('alert-error');
         });
     }
 

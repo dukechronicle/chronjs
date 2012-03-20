@@ -1,9 +1,6 @@
 !!! 5
 html
   head
-    - if (typeof js != 'undefined')
-        script var scripts = !{JSON.stringify(js)}
-
     - if (typeof css != 'undefined')
         - each file in css
             link(rel= 'stylesheet', href= '/' + file + '.css')
@@ -20,4 +17,4 @@ html
     #main
       #container!= body
 
-    script(data-main="/js/admin/main2", src="/js/require-jquery.js")
+    script(data-main="/js/admin/main", src="/js/require-jquery.js")

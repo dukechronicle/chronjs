@@ -1,7 +1,7 @@
 require.config({
     baseUrl: '/js',
     paths: {
-        'order': '/js/libs/order',
+        'jquery': '/js/libs/jquery',
         'galleria': '/js/galleria/galleria-1.2.5'
     }
 });

@@ -10,10 +10,10 @@ define(['jquery', 'libs/jquery-ui'], function ($) {
         $("form#send").submit(function (e) {
             e.preventDefault();
             form = $(this);
-            $("#dialog-confirm").dialog('open');
+            $("#newsletter-confirm").dialog('open');
         });
 
-        $("#dialog-confirm").dialog({
+        $("#newsletter-confirm").dialog({
             resizable: false,
             autoOpen: false,
             height:140,

@@ -2,7 +2,7 @@ define(['jquery', 'Article', 'libs/jquery.dd'], function ($, Article) {
 
     $(function () {
 
-        $("button").click(function () {
+        $(".export-index button").click(function () {
             $(this).attr('disabled', 'disabled');
             var $row = $(this).parent().parent();
             var $button = $(this);

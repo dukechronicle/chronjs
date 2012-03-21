@@ -158,9 +158,12 @@ function runSite(callback) {
 
 function buildJavascript(callback) {
     var config = { 
-        baseUrl: 'public/js/site',
-        name: 'main',
-        out: 'public/dist/everything.js'
+        baseUrl: 'public/js',
+        name: 'site/main',
+        out: 'built-js.js',
+        paths: {
+            jquery: 'require-jquery'
+        }
     };
     requirejs.optimize(config, callback);
 }

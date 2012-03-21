@@ -2,7 +2,7 @@
 - query = query.replace(/-/g, ' ');
 
 .div
-    img(src='https://d2sug25c5hnh7r.cloudfront.net/images/header-overlay.png', id='header-overlay', width='100px', height='122px')
+    img(src=static_cdn + '/images/header-overlay.png', id='header-overlay', width='100px', height='122px')
 
 #header-top
     .content
@@ -15,36 +15,42 @@
         .inner
             .icons
                 a(href='http://www.facebook.com/dukechronicle')
-                    img.first(src='https://d2sug25c5hnh7r.cloudfront.net/images/icons/facebook.png')
+                    img.first(src=static_cdn + '/images/icons/facebook.png')
                 a(href='http://twitter.com/dukechronicle')
-                    img(src='https://d2sug25c5hnh7r.cloudfront.net/images/icons/twitter.png')
+                    img(src=static_cdn + '/images/icons/twitter.png')
                 a(href='http://youtube.com/user/DukeChronicle')
-                    img(src='https://d2sug25c5hnh7r.cloudfront.net/images/icons/youtube.png')
+                    img(src=static_cdn + '/images/icons/youtube.png')
                 a(href='http://foursquare.com/dukechronicle')
-                    img(src='https://d2sug25c5hnh7r.cloudfront.net/images/icons/foursquare.png')
+                    img(src=static_cdn + '/images/icons/foursquare.png')
                 a(href='/rss')
-                    img(src='https://d2sug25c5hnh7r.cloudfront.net/images/icons/rss.png')
+                    img(src=static_cdn + '/images/icons/rss.png')
                 a(href='/newsletter')
-                    img.last(src='https://d2sug25c5hnh7r.cloudfront.net/images/icons/email.png')
+                    img.last(src=static_cdn + '/images/icons/email.png')
 
     .leaderboard
        !=partial('ad/full-banner-raw')
 
 
 
+- if (typeof section == 'undefined') var section = undefined
 
 #header-bottom
     nav#nav.clearfix
         h2
-            a(href='/news') News
+            a(href='/news',
+              class=(section == 'News') ? "active" : "") News
         h2
-            a(href='/sports') Sports
+            a(href='/sports',
+              class=(section == 'Sports') ? "active" : "") Sports
         h2
-            a(href='/opinion') Opinion
+            a(href='/opinion',
+              class=(section == 'Opinion') ? "active" : "") Opinion
         h2
-            a(href='/recess') Recess
+            a(href='/recess',
+              class=(section == 'Recess') ? "active" : "") Recess
         h2
-            a(href='/towerview') Towerview
+            a(href='/towerview',
+              class=(section == 'Towerview') ? "active" : "") Towerview
         h2
             a(href='http://chronicleblogs.com') Blogs
         h2

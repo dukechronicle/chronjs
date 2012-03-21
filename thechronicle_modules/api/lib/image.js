@@ -313,14 +313,14 @@ image.originalsForPhotographer = function (photog, callback) {
 
 image.getOriginals = function (limit, beforeKey, beforeID, callback) {
     db.image.listOriginalsByDate(limit, beforeKey, beforeID, function (err, res) {
-        res = res.map(function (doc) {
-            doc.displayName = doc.name;
-            var nameSplit = doc.name.split("-");
-            if (nameSplit.length > 1) doc.displayName = doc.name.replace(nameSplit[0]+"-","");
-            return doc;
-        });
-
-        callback(err, res);
+        if (err) callback(err);
+        else {
+            res = _.map(res, function (doc) {
+                doc.value.displayName = doc.value.name.replace(/\w*-/, '');
+                return doc.value;
+            });
+            callback(null, res);
+        }
     });
 };
 

@@ -25,7 +25,7 @@ admin.newsletter = function (req, res, next) {
         if (err) next(err);
         else {
             res.render('admin/newsletter', {
-                js: ['admin/newsletter'],
+                js: ['admin/newsletter?v=3'],
                 locals: {campaignID: campaignID}
             });
         }
@@ -234,33 +234,32 @@ admin.addArticleData = function (req, res, next) {
     }
 };
 
-admin.addPageData = function (req, http_res, next) {
+admin.addPageData = function (req, res, next) {
     var form = req.body.doc;
     var fields = {
-        body:form.body,
-        title:form.title
+        node_title: form.title,
+        body: form.body,
+        style: form.style
     };
 
-    async.waterfall([
-        function (callback) {
-            _renderBody(form.body, function (err, rendered) {
-                fields.renderedBody = rendered;
-                callback(null);
-            });
-        },
-        function (callback) {
-            api.addDoc(fields, callback);
-        }
-    ], function (err, url) {
+    api.page.add(fields, function (err, url) {
         if (err) next(err);
-        else http_res.redirect('page/' + url);
+        else res.redirect('/page/' + url);
     });
 };
 
+admin.editPageData = function (req, res, next) {
+    var form = req.body.doc;
+    var id = form.id;
 
-function insertParagraphTags(text) {
-    if (text.search(/<p>/) === -1) {
-        text = "<p>" + text.replace(/\r\n|\n/g, "</p><p>") + "</p>";
-    }
-    return text;
-}
+    var fields = {
+        node_title: form.title,
+        body: form.body,
+        style: form.style
+    };
+
+    api.page.edit(id, fields, function (err, url) {
+        if (err) next(err);
+        else res.redirect('/page/' + url);
+    });
+};

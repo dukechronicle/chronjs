@@ -14,7 +14,7 @@ siteApi.listAll = function (req, res, next) {
 	    if (err) next(err);
         else {
             var result = _.map(docs, function (doc) {
-                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id};
+                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id, "created":doc.created};
             });
             res.json(result);
         }
@@ -27,11 +27,13 @@ siteApi.listAll = function (req, res, next) {
 */
 siteApi.listSection = function (req, res, next) {
     var section = req.params.section;
-    api.taxonomy.docs([section], 10, null, function (err, docs) {
+    var docid = req.params.docid;
+    console.log("siteApi.listSection: " + docid);
+    api.taxonomy.docs([section], 10, docid, function (err, docs) {
         if (err) next(err);
         else {
             var result = _.map(docs, function (doc) {
-                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id};
+                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id, "created":doc.created};
             });
             res.json(result);
         }
@@ -46,10 +48,12 @@ siteApi.articleByUrl = function (req, res, next) {
     api.articleForUrl(req.params.url, function (err, doc) {
         if (err) next(err);
         else {
-            var result = { title: doc.title,
-                url: doc.url,
-                renderedBody: doc.renderedBody,
-                author: doc.author
+            var result = { 
+                "title": doc.title,
+                "urls": doc.urls,
+                "renderedBody": doc.renderedBody,
+                "author": doc.author,
+                 "_id":doc._id
             };
             res.json(result);	  	
         }
@@ -116,14 +120,14 @@ siteApi.readArticle = function (req, res, next) {
 siteApi.createArticle = function (req, res, next) {
     api.addDoc(req.body, function (err, _res) {
         if (err) res.send(err, 500);
-        else res.send(_res);
+        else res.send({url: _res});
     });
 };
 
 siteApi.updateArticle = function (req, res, next) {
     api.editDoc(req.body.id, req.body, function (err, _res) {
         if (err) res.send(err, 500);
-        else res.send(_res);
+        else res.send({url: _res});
     });
 };
 

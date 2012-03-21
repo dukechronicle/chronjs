@@ -1,7 +1,9 @@
 /* require npm nodejs modules */
 var asereje = require('asereje');
 var async = require('async');
+var crypto = require('crypto');
 var express = require('express');
+var fs = require('fs');
 require('express-namespace');
 var RedisStore = require('connect-redis')(express);
 var requirejs = require('requirejs');
@@ -137,7 +139,7 @@ function configureApp(sessionInfo, port) {
 }
 
 function runSite(callback) {
-    buildJavascript(function(){});
+    buildJavascript(function(){log.notice('built')});
     api.init(function (err) {
         if (err) log.crit("api initialization failed");
         else {
@@ -160,10 +162,21 @@ function buildJavascript(callback) {
     var config = { 
         baseUrl: 'public/js',
         name: 'site/main',
-        out: 'built-js.js',
+        out: 'public/dist/built-js.js',
         paths: {
             jquery: 'require-jquery'
         }
     };
-    requirejs.optimize(config, callback);
+    requirejs.optimize(config, function (buildResponse) {
+        fs.readFile(config.out, 'utf8', function (err, data) {
+            if (err) callback(err);
+            else {
+                var md5sum = crypto.createHash('md5');
+                md5sum.update(data.toString());
+                var jsHash = md5sum.digest('hex');
+                log.debug(jsHash);
+                fs.rename(config.out, 'public/dist/'+jsHash+'.js', callback);
+            }
+        });
+    });
 }

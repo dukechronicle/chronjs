@@ -1,8 +1,5 @@
 require.config({
     baseUrl: '/js',
-    paths: {
-        'order': '/js/libs/order'
-    }
 });
 
 require(['admin/crop','admin/deleteArticle','admin/html5upload',

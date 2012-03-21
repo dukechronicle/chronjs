@@ -6,9 +6,10 @@ define(['jquery', 'libs/jquery-ui'], function ($) {
             event.preventDefault();
 
             var anchor = $(event.target);
-            var title = anchor.attr('data-title');
-            var docId = anchor.attr('data-docId');
-            var docRev = anchor.attr('data-docRev');
+            var title = anchor.data('title');
+            var docId = anchor.data('docid');
+            var docRev = anchor.data('rev');
+            var dest = anchor.data('dest');
 
             $('<div id="dialog-confirm">Delete <strong>' + title + '?</strong></div>').appendTo('body');
 
@@ -27,7 +28,7 @@ define(['jquery', 'libs/jquery-ui'], function ($) {
                             url: '/api/article/' + docId,
                             data: 'rev=' + docRev,
                             success: function() {
-                                window.location = "/admin";
+                                window.location = dest;
                             }
                         });
                     },

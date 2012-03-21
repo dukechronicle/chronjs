@@ -25,13 +25,14 @@ function loadAfterTypekit(callback) {
 
 
 if (typeof window.THE_CHRONICLE != 'undefined' && typeof window.THE_CHRONICLE.scripts != 'undefined') {
-    window.THE_CHRONICLE.scripts.forEach(function(script) {
-        var scriptParts = script.split("?");
-    
+    var scripts = window.THE_CHRONICLE.scripts;
+    for (var i = 0; i < scripts.length; i++) {
+        var scriptParts = scripts[i].split("?");
+
         require({ urlArgs: scriptParts[1] }, [scriptParts[0]], function (module) {
             if (module && typeof module.init == 'function') module.init();
         });
-    })
+    }
 }
 
 function page() {

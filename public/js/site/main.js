@@ -1,8 +1,5 @@
 require.config({
-    baseUrl: '/js',
-    paths: {
-        'galleria': '/js/galleria/galleria-1.2.5'
-    }
+    baseUrl: '/js'
 });
 
 require(['site/align','site/article','site/opinion','site/scrollLoad',

@@ -30,6 +30,15 @@ var configParams = [
         }
     },
     {
+        name: 'DISQUS_KEY',
+        description: 'Disqus Key',
+        defaultValue: '',
+        schema: {
+          type: "string",
+          required: true
+        }
+    },
+    {
         name: 'COUCHDB_URL',
         description: 'CouchDB Server URL',
         defaultValue: 'http://chrondev:pikachu@chrondev.iriscouch.com',
@@ -84,6 +93,15 @@ var configParams = [
         }
     },
     {
+        name: 'CLOUDFRONT_STATIC',
+        description: 'CDN for Static Content',
+        defaultValue: 'http://d2sug25c5hnh7r.cloudfront.net',
+        schema: {
+            type: "string",
+            required: true
+        }
+    },
+    {
         name: 'REDIS_URL',
         description: 'Redis Server URL',
         defaultValue: 'redis://jodoglevy:2b258cbdcbbce003452a0ff4279d8701@barreleye.redistogo.com:9148/',
@@ -93,36 +111,9 @@ var configParams = [
         }
     },
     {
-        name: 'SOLR_HOST',
-        description: 'WebSolr Server URL',
-        defaultValue: 'index.websolr.com',
-        schema: {
-          type: "string",
-          required: true
-        }
-    },
-    {
-        name: 'SOLR_PORT',
-        description: 'WebSolr Server Port',
-        defaultValue: '80',
-        schema: {
-          type: "string",
-          required: true
-        }
-    },
-    {
-        name: 'SOLR_CORE',
-        description: 'WebSolr Core',
-        defaultValue: '/3f534ff3ff0',
-        schema: {
-          type: "string",
-          required: true
-        }
-    },
-    {
-        name: 'SOLR_PATH',
-        description: 'WebSolr Server Path',
-        defaultValue: '/solr',
+        name: 'SOLR_URL',
+        description: 'Solr Server URL',
+        defaultValue: 'http://index.websolr.com:80/solr/3f534ff3ff0',
         schema: {
           type: "string",
           required: true
@@ -302,7 +293,10 @@ var configParams = [
 						        "Volleyball": []
 					        }
 				        ]
-			        }
+			        },
+                                {
+                                        "Column": []
+                                }
 		        ]
 	        },
 	        {
@@ -340,11 +334,33 @@ var configParams = [
 			        },
 			        {
 				        "Literature": []
-			        }
+			        },
+                                {
+                                        "Column": []
+                                }
 		        ]
 	        },
 	        {
-		        "Towerview": []
+		        "Towerview": [
+                                {
+                                        "Savvy": []
+                                },
+                                {
+                                        "Prefix": []
+                                },
+                                {
+                                        "Wisdom": []
+                                },
+                                {
+                                        "Feature": []
+                                },
+                                {
+                                        "Column": []
+                                },
+                                {
+                                        "Editor's Note": []
+                                }
+                        ]
 	        }
         ],
         schema: {
@@ -624,7 +640,7 @@ var configParams = [
                     name: {type: "string", required: true},
                     user: {type: "string", required: false},
                     year: {type: "string", required: true},
-                    tagline: {type: "string", required: true},
+                    tagline: {type: "string", required: false},
                     day: {type: "string", required: true},
                     headshot: {type: "string", required: true}
                 }

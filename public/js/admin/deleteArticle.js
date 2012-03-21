@@ -1,4 +1,4 @@
-define(['order!jquery', 'order!libs/jquery-ui'], function ($) {
+define(['jquery', 'libs/jquery-ui'], function ($) {
 
     $(function() {
 

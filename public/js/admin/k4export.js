@@ -1,4 +1,4 @@
-define(['order!jquery', 'Article', 'order!libs/jquery.dd'], function ($, Article) {
+define(['jquery', 'Article', 'libs/jquery.dd'], function ($, Article) {
 
     $(function () {
 

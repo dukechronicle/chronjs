@@ -25,6 +25,9 @@ html(lang="en")
             - each file in css
                 link(rel= 'stylesheet', href= '/' + file + '.css')
 
+
+        script(src="/built-js.js")
+
         //if lt IE 9
             link(rel='stylesheet', href='/style-ie.css')
             script(src="//html5shim.googlecode.com/svn/trunk/html5.js")
@@ -38,5 +41,3 @@ html(lang="en")
             section!=body
             footer
                 include /layout/footer
-
-        script(data-main="/js/site/main", src="/js/require-jquery.js")

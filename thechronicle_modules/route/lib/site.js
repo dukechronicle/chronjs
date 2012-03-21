@@ -6,6 +6,8 @@ var globalFunctions = require('../../global-functions');
 var log = require('../../log');
 
 var asereje = require('asereje');
+var fs = require('fs');
+var _ = require('underscore');
 
 
 site.mobile = function (req, res, next) {
@@ -30,9 +32,12 @@ site.news = function (req, res) {
         res.render('site/news', {
             pageTitle: "News",
             css:asereje.css(['container/style', 'site/section', 'site/news']),
-            subsections:children,
             filename:'views/site/news.jade',
-            model:model
+            locals: {
+                subsections:children,
+                section: 'News',
+                model:model
+            }
         });
     });
 };
@@ -43,9 +48,12 @@ site.sports = function (req, res) {
             pageTitle: "Sports",
             css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
             js:['slideshow/slideshow'],
-            subsections:[children.men, children.women],
             filename:'views/site/sports.jade',
-            model:model
+            locals: {
+                subsections: [children.men, children.women],
+                model:model,
+                section: 'Sports'
+            }
         });
     });
 };
@@ -56,9 +64,12 @@ site.opinion = function (req, res) {
             pageTitle: "Opinion",
             css:asereje.css(['container/style', 'site/section', 'site/opinion']),
             js:['opinion'],
-            subsections:children,
             filename:'views/site/opinion.jade',
-            model:model
+            locals: {
+                subsections:children,
+                section: 'Opinion',
+                model:model
+            }
         });
     });
 };
@@ -68,9 +79,12 @@ site.recess = function (req, res) {
         res.render('site/recess', {
             pageTitle: "Recess",
             css:asereje.css(['container/style', 'site/section', 'site/recess']),
-            subsections:children,
             filename:'views/site/recess.jade',
-            model:model
+            locals: {
+                subsections:children,
+                section: 'Recess',
+                model:model
+            }
         });
     });
 };
@@ -80,9 +94,12 @@ site.towerview = function (req, res) {
         res.render('site/towerview', {
             pageTitle: "Towerview",
             css:asereje.css(['container/style', 'site/section', 'site/towerview']),
-            subsections:children,
             filename:'views/site/towerview.jade',
-            model:model
+            locals: {
+                subsections:children,
+                section: 'Towerview',
+                model:model
+            }
         });
     });
 };
@@ -95,12 +112,12 @@ site.section = function (req, res, next) {
 	    res.render('site/section', {
 	        css:asereje.css(['container/style', 'site/section']),
 	        locals: {
-                pageTitle: section,
-                docs:docs,
-                subsections:children,
-                parentPaths:parents,
-                section:section,
-                popular: popular
+                    pageTitle: section,
+                    docs:docs,
+                    subsections:children,
+                    parentPaths:parents,
+                    section: params[0],
+                    popular: popular
 	        }
 	    });
         }
@@ -113,7 +130,7 @@ site.search = function (req, res, next) {
         if (err) next(err);
         else res.render('site/search', {
             css:asereje.css(['container/style', 'site/search']),
-            js:['scrollLoad?v=2'],
+            js:['scrollLoad?v=3'],
             locals: {
                 docs: docs,
                 currentFacets: req.query.facets || '',
@@ -131,7 +148,7 @@ site.staff = function (req, res) {
     api.site.getAuthorContent(name, function (err, docs) {
 	res.render('site/people', {
             css:asereje.css(['container/style', 'site/people']),
-            js:['scrollLoad?v=2'],
+            js:['scrollLoad?v=3'],
             locals:{
                 pageTitle: globalFunctions.capitalizeWords(name),
                 docs: docs,
@@ -163,8 +180,8 @@ site.page = function (req, res, next) {
 site.article = function (req, res, next) {
     var url = req.params.url;
     var isAdmin = api.accounts.isAdmin(req);
-    // cache article pages for a day
-    if (!isAdmin) res.header('Cache-Control', 'public, max-age=86400');
+    // cache article pages for an hour
+    if (!isAdmin) res.header('Cache-Control', 'public, max-age=3600');
 
     api.site.getArticleContent(url, function (err, doc, model, parents) {
         if (err)
@@ -174,15 +191,21 @@ site.article = function (req, res, next) {
         else res.render('article', {
             locals: {
                 doc:doc,
-                pageTitle:doc.title,
                 isAdmin:isAdmin,
                 model:model,
                 parentPaths:parents,
-                isProduction: (process.env.NODE_ENV === 'production'),
-                disqusShortname: config.get('DISQUS_SHORTNAME')
+                section: doc.taxonomy[0],
+                disqusData: {
+                    isProduction: (process.env.NODE_ENV === 'production'),
+                    shortname: config.get('DISQUS_SHORTNAME'),
+                    id: doc._id,
+                    title: doc.title,
+                    url: doc.url
+                }
             },
             filename:'views/article',
-            css:asereje.css(['container/style', 'article'])
+            css:asereje.css(['container/style', 'article']),
+            js:['site/article']
         });
     });
 };
@@ -225,7 +248,7 @@ site.editArticle = function (req, res, next) {
                     doc.authors = doc.authors.join(", ");
 
                 res.render('admin/edit', {
-                    js:['admin/deleteArticle'],
+                    js:['admin/deleteArticle?v=2'],
                     locals:{
                         doc:doc,
                         groups:[],
@@ -241,7 +264,7 @@ site.editArticle = function (req, res, next) {
 
 site.editPage = function (req, res, next) {
     var url = req.params.url;
-    api.docForUrl(url, function (err, doc) {
+    api.page.getByUrl(url, function (err, doc) {
         if (err) next(err);
         else res.render('admin/editPage', {
             locals: {
@@ -350,6 +373,19 @@ site.rssSection = function (req, res, next) {
                 filename: 'rss'
             });
         }
+    });
+};
+
+site.staticPage = function (req, res, next) {
+    var url = _.last(req.route.path.split('/'));
+    var filename = 'pages/' + url;
+    fs.readFile('views/pages/page-data/' + url + '.json', function (err, data) {
+        var data = (!err && data) ? JSON.parse(data.toString()) : null;
+        res.render(filename, {
+	    css: asereje.css(['container/style', filename]),
+            filename: filename,
+            data: data
+        });
     });
 };
 

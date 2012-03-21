@@ -1,6 +1,7 @@
 var solr = require('solr');
 var dateFormat = require('dateformat');
 var async = require('async');
+var url = require("url");
 
 var config = require('../../config');
 var globalFunctions = require('../../global-functions');
@@ -38,7 +39,13 @@ search.getIndexVersion = function() {
 };
 
 search.init = function() {
-	client = solr.createClient(config.get('SOLR_HOST'), config.get('SOLR_PORT'), config.get('SOLR_CORE'), config.get('SOLR_PATH'));
+	var solrUrl = url.parse(config.get('SOLR_URL'));
+    
+    var solrPathArray = solrUrl.pathname.split("/");
+    var solrCore = "/" + solrPathArray[2];
+    var solrPath = "/" + solrPathArray[1];
+
+    client = solr.createClient(solrUrl.hostname, solrUrl.port, solrCore, solrPath);
 };
 
 // check for unindexed articles, or articles with index versioning below the current version, and index them in solr.
@@ -291,7 +298,7 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
             // bold all matched words
             docs.forEach(function(doc) {
                 if(doc.teaser) doc.teaser = doc.teaser.replace(regex, function(m){return _embolden(m)});
-                //if(doc.title) doc.title = doc.title.replace(regex, function(m){return _embolden(m)});
+                if(doc.title) doc.title = doc.title.replace(regex, function(m){return _embolden(m)});
                 
                 doc.authors = _.map(doc.authors, function(author) {
                     return author.replace(regex, function(m){return _embolden(m)});                    
@@ -476,7 +483,7 @@ function _sortObjByKeys(arr) {
 }
 
 function _embolden(match) {
-    return "<b>"+match+"</b>";
+    return "<strong>"+match+"</strong>";
 };
 
 String.prototype.regexIndexOf = function(regex, startpos) {

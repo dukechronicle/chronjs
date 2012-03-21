@@ -70,7 +70,9 @@ site.renderConfigPage = function(req, res, err) {
 	}
 
 	res.render('config/config', {
-		js: ['jquery.textarea-expander?v=2'],
+		js: ['json-to-form?v=2','jquery.textarea-expander?v=2'],
+        css: ['css/onde'],
+        removeBootstrap: true,
         locals : {
 			configParams : config.getParameters(),
 			profileName : config.getProfileNameKey(),
@@ -96,17 +98,15 @@ site.getFrontPageContent = function (callback) {
         },
         function (cb) { //1
             var popularArticles = 7;
-            redis.client.zrevrange(_articleViewsKey([]), 0, popularArticles - 1, function (err, popular) {
-                if (err) return cb(err);
-                popular = popular.map(function (str) {
-                    var parts = str.split('||');
-                    return {
-                        urls:['/article/' + parts[0]],
-                        title:parts[1]
-                    };
+            api.disqus.listHot(popularArticles, function(err, results) {
+                if(err) return cb(err);
+                
+                results.forEach(function(article) {
+                    article.subhead = article.numComments + " comment";
+                    if(article.numComments != 1) article.subhead += "s";
                 });
-                if (BENCHMARK) log.info("REDIS TIME %d", Date.now() - start);
-                cb(null, popular);
+
+                modifyArticlesForDisplay(results, cb);    
             });
         },
         function (cb) { //2
@@ -138,7 +138,7 @@ site.getFrontPageContent = function (callback) {
             model.printEdition = {
                 title: "Print",
                 imageUrl: "http://d2sug25c5hnh7r.cloudfront.net/images/issuu-thumb.png",
-                url: "http://issuu.com/dukechronicle/docs/100130news",
+                url: "http://issuu.com/dukechronicle/docs",
                 width: "134px",
                 height: "60px"
             };
@@ -526,7 +526,9 @@ site.getArticleContentUncached = function(url, callback) {
 		    },
 		    function(cb) {
 			    api.search.relatedArticles(doc._id, 5, function(err, relatedArticles) {
-				    cb(null, relatedArticles);
+			        modifyArticlesForDisplay(relatedArticles, function(err, relatedArticles) {
+                        cb(null, relatedArticles);            
+			        });
 			    });
 		    },
 		    function(cb) {
@@ -579,7 +581,7 @@ site.getArticleContentUncached = function(url, callback) {
 };
 
 site.getPageContent = function(url, callback) {
-	api.nodeForTitle(url, function(err, doc) {
+	api.page.getByUrl(url, function(err, doc) {
 		if(err)
 			callback(err);
 		else {
@@ -631,6 +633,7 @@ function modifyArticleForDisplay(doc, callback) {
 			}
 		}
 	}
+    
 	return doc;
 }
 

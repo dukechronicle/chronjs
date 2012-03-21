@@ -1,7 +1,6 @@
 require.config({
     baseUrl: '/js',
     paths: {
-        'order': '/js/libs/order',
         'galleria': '/js/galleria/galleria-1.2.5'
     }
 });

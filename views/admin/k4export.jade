@@ -12,7 +12,7 @@ a(href='/admin/manage') Manage and edit uploaded articles
     p #{article}
 - if (succeeded && succeeded.length)
   h2 The followed articles were uploaded successfully
-  table
+  table.export-index
     - each article in succeeded
       tr(id=article.id)
         td

@@ -25,7 +25,7 @@ admin.newsletter = function (req, res, next) {
         if (err) next(err);
         else {
             res.render('admin/newsletter', {
-                js: ['admin/newsletter?v=2'],
+                js: ['admin/newsletter?v=3'],
                 locals: {campaignID: campaignID}
             });
         }

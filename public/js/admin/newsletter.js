@@ -10,10 +10,10 @@ define(['jquery', 'libs/jquery-ui'], function ($) {
         $("form#send").submit(function (e) {
             e.preventDefault();
             form = $(this);
-            $("#dialog-confirm").dialog('open');
+            $("#newsletter-confirm").dialog('open');
         });
 
-        $("#dialog-confirm").dialog({
+        $("#newsletter-confirm").dialog({
             resizable: false,
             autoOpen: false,
             height:140,
@@ -21,11 +21,11 @@ define(['jquery', 'libs/jquery-ui'], function ($) {
             buttons: {
                 Send: function() {
                     sendNewsletter($("form#send"), 'Newsletter sent', function(){
-                        $(this).dialog('close');
+                        $("#newsletter-confirm").dialog('close');
                     });
                 },
                 Cancel: function() {
-                    $(this).dialog('close');
+                    $("#newsletter-confirm").dialog('close');
                 }
             }
         });

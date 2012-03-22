@@ -508,7 +508,7 @@ var configParams = [
                 },
                 {
                     "title": "twitter-DukeBasketball",
-                    "url": "http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=dukebasketball"
+                    "url": "http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=DukeBasketball"
                 },
                 {
                     "title": "twitter-ChronPhoto",
@@ -516,7 +516,7 @@ var configParams = [
                 },
                 {
                     "title": "twitter-ChronicleSports",
-                    "url": "http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=chroniclesports"
+                    "url": "http://api.twitter.com/1/statuses/user_timeline.rss?screen_name=ChronicleSports"
                 },
                 {
                     "title": "newsblog",

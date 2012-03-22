@@ -10,10 +10,11 @@ var log = require('../../log');
 var RESULTS_PER_PAGE = 25;
 
 // get all document under given taxonomy path ex. ["News", "University"]
-taxonomy.docs = function (taxonomyPath, limit, startkey_docid, callback) {
+// startDoc specifies the document within the taxonomy to start returning data at, for pagination.
+taxonomy.docs = function (taxonomyPath, limit, startDoc, callback) {
     limit = limit || RESULTS_PER_PAGE;
 
-    db.taxonomy.docs(taxonomyPath, limit, startkey_docid, function (err, docs) {
+    db.taxonomy.docs(taxonomyPath, limit, startDoc, function (err, docs) {
         if (err) callback(err);
         else callback(null, _.map(docs, function(doc){return doc.value}));
     });

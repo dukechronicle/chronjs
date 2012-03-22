@@ -50,7 +50,7 @@ site.sports = function (req, res) {
             js:['slideshow/slideshow'],
             filename:'views/site/sports.jade',
             locals: {
-                subsections: [children.men, children.women],
+                subsections: children,
                 model:model,
                 section: 'Sports'
             }

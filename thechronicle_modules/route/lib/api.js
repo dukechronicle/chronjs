@@ -22,18 +22,20 @@ siteApi.listAll = function (req, res, next) {
 };
 
 /**
-* Gets 10 articles within a section.
+* Gets articles within a section.
 *@params http request, http response
 */
 siteApi.listSection = function (req, res, next) {
-    var section = req.params.section;
-    var docid = req.params.docid;
-    console.log("siteApi.listSection: " + docid);
-    api.taxonomy.docs([section], 10, docid, function (err, docs) {
+    var sectionArray = req.params.toString().split('/');
+    
+    var startDoc = req.query.startdoc;
+    if(startDoc) startDoc = JSON.parse(startDoc);   
+
+    api.taxonomy.docs(sectionArray, 15, startDoc, function (err, docs) {
         if (err) next(err);
         else {
             var result = _.map(docs, function (doc) {
-                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id, "created":doc.created};
+                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id, "created":doc.created, "authors":doc.authors};
             });
             res.json(result);
         }

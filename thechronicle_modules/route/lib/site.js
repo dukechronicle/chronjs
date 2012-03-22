@@ -105,20 +105,22 @@ site.towerview = function (req, res) {
 };
 
 site.section = function (req, res, next) {
-    var params = req.params.toString().split('/');
-    api.site.getSectionContent(params, function (err, section, docs, children, parents, popular) {
+    var sectionArray = req.params.toString().split('/');
+    api.site.getSectionContent(sectionArray, function (err, section, docs, children, parents, popular) {
         if (err) next();
         else {
 	    res.render('site/section', {
 	        css:asereje.css(['container/style', 'site/section']),
 	        locals: {
-                    pageTitle: section,
-                    docs:docs,
-                    subsections:children,
-                    parentPaths:parents,
-                    section: params[0],
-                    popular: popular
-	        }
+                pageTitle: section,
+                docs:docs,
+                subsections:children,
+                parentPaths:parents,
+                section: sectionArray[0],
+                popular: popular,
+                taxonomyPath: sectionArray.join('/')
+	        },
+            js:['site/scrollLoad?v=4']
 	    });
         }
     });
@@ -130,7 +132,7 @@ site.search = function (req, res, next) {
         if (err) next(err);
         else res.render('site/search', {
             css:asereje.css(['container/style', 'site/search']),
-            js:['scrollLoad?v=3'],
+            js:['site/scrollLoad?v=4'],
             locals: {
                 docs: docs,
                 currentFacets: req.query.facets || '',
@@ -148,7 +150,7 @@ site.staff = function (req, res) {
     api.site.getAuthorContent(name, function (err, docs) {
 	res.render('site/people', {
             css:asereje.css(['container/style', 'site/people']),
-            js:['scrollLoad?v=3'],
+            js:['site/scrollLoad?v=4'],
             locals:{
                 pageTitle: globalFunctions.capitalizeWords(name),
                 docs: docs,

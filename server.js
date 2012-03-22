@@ -146,10 +146,16 @@ function runSite(callback) {
 	        });
             }
             
-            buildJavascript(function (err, jsFile) {
+            buildJavascript('site/main', 'site-js', function (err, jsFile) {
                 if (err) log.warning('Failed to build site Javascipt: ' + err);
                 else log.notice('Built site Javascript');
                 setViewOption('site_javascript', jsFile);
+             });
+
+            buildJavascript('admin/main', 'admin-js', function (err, jsFile) {
+                if (err) log.warning('Failed to build admin Javascipt: ' + err);
+                else log.notice('Built admin Javascript');
+                setViewOption('admin_javascript', jsFile);
              });
 
             redisClient.init(true, function(err) {
@@ -166,12 +172,11 @@ function setViewOption(key, value) {
     app.set('view options', viewOptions);
 }
 
-
-function buildJavascript(callback) {
+function buildJavascript(infile, outfile, callback) {
     var config = { 
         baseUrl: 'public/js',
-        name: 'site/main',
-        out: 'public/dist/built-js.js',
+        name: infile,
+        out: 'public/dist/' + outfile,
         paths: {
             jquery: 'require-jquery'
         }

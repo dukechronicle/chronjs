@@ -1,22 +1,4 @@
-ul.nav.clearfix
-    if (typeof subsections != 'undefined')
-        li
-            h2
-                a.men Men
-            .subnav.men.clearfix
-                for subsection in subsections[0]
-                    for subsectionName,subsectionPath in subsection
-                        h3
-                            a(href='/section/' + subsectionPath) #{subsectionName}
-        li
-            h2
-                a.men Women
-            .subnav.men.clearfix
-                for subsection in subsections[1]
-                    for subsectionName,subsectionPath in subsection
-                        h3
-                            a(href='/section/' + subsectionPath) #{subsectionName}
-
+!=partial('site/subnav', {subsections: subsections})
 
 #sports
     .top.clearfix

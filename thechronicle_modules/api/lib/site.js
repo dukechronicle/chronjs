@@ -13,21 +13,24 @@ var async = require('async');
 var nimble = require('nimble');
 
 var LAYOUT_GROUPS, COLUMNISTS_DATA, COLUMNIST_HEADSHOTS;
-
+var twitterFeeds = [];
 var BENCHMARK = false;
-
-var twitterFeeds = ["DukeChronicle", "ChronicleRecess", "TowerviewMag", "DukeBasketball", "ChronPhoto", "ChronicleSports"];
 
 site.init = function () {
     LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
 
     COLUMNISTS_DATA = config.get("COLUMNISTS_DATA");
     COLUMNIST_HEADSHOTS = {};
+
     COLUMNISTS_DATA.forEach(function(columnist) {
-	COLUMNIST_HEADSHOTS[columnist.name] = {
-	    headshot : columnist.headshot,
-	    tagline : columnist.tagline
-	};
+        COLUMNIST_HEADSHOTS[columnist.name] = {
+            headshot : columnist.headshot,
+            tagline : columnist.tagline
+	    };
+    });
+
+    twitterFeeds = _.filter(config.get("RSS_FEEDS"), function(rssFeed) {
+        return rssFeed.url.indexOf("api.twitter.com") !== -1;
     });
 };
 
@@ -110,12 +113,15 @@ site.getFrontPageContent = function (callback) {
             });
         },
         function (cb) { //2
-            var twitter = {};
             var selectedFeed = twitterFeeds[Math.floor(Math.random() * twitterFeeds.length)];
-            twitter.user = selectedFeed;
-            twitter.title = 'Twitter';
-            twitter.imageUrl = "http://d2sug25c5hnh7r.cloudfront.net/images/twitter-dukechronicle.png";
-            rss.getRSS('twitter-' + selectedFeed, function (err, tweets) {
+
+            var twitter = {
+                user: selectedFeed.url.split("screen_name=")[1],
+                title: 'Twitter'
+            };
+            twitter.imageUrl = "https://api.twitter.com/1/users/profile_image?screen_name="+twitter.user+"&size=bigger";
+
+            rss.getRSS(selectedFeed.title, function (err, tweets) {
                 if (tweets && tweets.items && tweets.items.length > 0) {
                     twitter.tweet = tweets.items[0].title;
                 } else {

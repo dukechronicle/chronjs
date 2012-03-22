@@ -1,18 +1,21 @@
 h1 Newsletter
 
-span(id='message')
+div(id='message', style='text-align:center;width:200px;')
 br
 br
 
-form(action='/admin/newsletter', onsubmit="sendNewsletter(this,false,'Test Sent.'); return false;")
+form#test
   label(for='testEmail') Test Email Address:
   input(type='text', name='testEmail')
   input(type='hidden', name='campaignID', value=campaignID)
   &nbsp;
-  input(type='submit', value='Send Test Newsletter')
+  input(type='submit', class='btn', value='Send Test Newsletter')
 br
 br
 
-form(action='/admin/newsletter', method='post', onsubmit="sendNewsletter(this,true,'Newsletter Sent.'); return false;")
+#dialog-confirm(title="Send newsletter?")
+  p Are you sure you want to send the newsletter to everyone?
+
+form#send
   input(type='hidden', name='campaignID', value=campaignID)
-  input(type='submit', value='Send Newsletter')
+  input(type='submit', class='btn', value='Send Newsletter')

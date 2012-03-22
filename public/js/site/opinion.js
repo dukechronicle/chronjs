@@ -1,9 +1,11 @@
 define(['jquery'], function($) {
 
+    var selected = $([]);
+    var selectedNav = $([]);
+
     $(function () {
         $('#columnists').show();
-        var selected = $([]);
-        var selectedNav = $([]);
+
         $('#columnist-list .content-container').on("click", "a", function(e) {
             e.preventDefault();
             selectedNav.removeClass('selected');

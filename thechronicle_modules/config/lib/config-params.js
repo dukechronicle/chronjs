@@ -231,7 +231,7 @@ var configParams = [
                         ]
 		    },
 		    {
-			"Cross country": [
+			"Cross Country": [
                             {
                                 "Men": []
                             },
@@ -251,7 +251,7 @@ var configParams = [
                         ]
 		    },
 		    {
-			"Field hockey": []
+			"Field Hockey": []
 		    },
 		    {
 			"Football": []
@@ -290,7 +290,7 @@ var configParams = [
                         ]
 		    },
 		    {
-			"Swimming and diving": [
+			"Swimming & Diving": [
                             {
                                 "Men": []
                             },
@@ -310,7 +310,7 @@ var configParams = [
                         ]
 		    },
 		    {
-			"Track and field": [
+			"Track & Field": [
                             {
                                 "Men": []
                             },

@@ -102,13 +102,20 @@ function configureApp(sessionInfo, port) {
 
     app.configure('development', function() {
         app.use(express.static(__dirname + '/public'));
-        app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+        app.error(express.errorHandler({ dumpExceptions: true, showStack: true }));
     });
 
     app.configure('production', function(){
         var oneYear = 31557600000;
         app.use(express.static(__dirname + '/public', {maxAge: oneYear}));
-        app.use(express.errorHandler());
+
+        app.error(function(err, req, res, next) {
+            var errOptions = {};
+            if(api.accounts.isAdmin(req)) errOptions = {dumpExceptions: true, showStack: true};
+           
+            var errHandler = express.errorHandler(errOptions);
+            errHandler(err, req, res, next);
+        });
     });
 
     app.configure(function() {

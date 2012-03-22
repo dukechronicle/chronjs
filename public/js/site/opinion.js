@@ -4,9 +4,9 @@ define(['jquery'], function($) {
     var selectedNav = $([]);
 
     $(function () {
-        $('#columnists').show();
+        $('#opinion #columnists').show();
 
-        $('#columnist-list .content-container').on("click", "a", function(e) {
+        $('#opinion #columnist-list .content-container a').click(function(e) {
             e.preventDefault();
             selectedNav.removeClass('selected');
             selected.hide();
@@ -15,7 +15,7 @@ define(['jquery'], function($) {
         });
         
         // randomly select a columnist
-        var columnistAnchors = $('#columnist-list h2 a');
+        var columnistAnchors = $('#opinion #columnist-list h2 a');
         var randomIndex = Math.floor(Math.random()*columnistAnchors.size());
         columnistAnchors.eq(randomIndex).click();
     });

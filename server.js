@@ -24,7 +24,7 @@ var SECRET = "i'll make you my dirty little secret";
 var SERVER = this;
 
 var app = null;
-
+var viewOptions = {};
 
 asereje.config({
     active: process.env.NODE_ENV === 'production',  // enable it just for production
@@ -117,9 +117,6 @@ function configureApp(sessionInfo, port) {
     app.configure(function() {
         app.set('views', __dirname + '/views');
         app.set('view engine', 'jade');
-        app.set('view options', {
-            static_cdn: config.get("CLOUDFRONT_STATIC")
-        });
         app.enable('jsonp callback');
         app.use(express.bodyParser({uploadDir: __dirname + '/uploads'}));
         app.use(express.methodOverride());
@@ -139,7 +136,7 @@ function configureApp(sessionInfo, port) {
 }
 
 function runSite(callback) {
-    buildJavascript(function(){log.notice('built')});
+    setViewOption('static_cdn', config.get('CLOUDFRONT_STATIC'));
     api.init(function (err) {
         if (err) log.crit("api initialization failed");
         else {
@@ -149,6 +146,12 @@ function runSite(callback) {
 	        });
             }
             
+            buildJavascript(function (err, jsFile) {
+                if (err) log.warning('Failed to build site Javascipt: ' + err);
+                else log.notice('Built site Javascript');
+                setViewOption('site_javascript', jsFile);
+             });
+
             redisClient.init(true, function(err) {
                 route.init(app);
                 log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));
@@ -157,6 +160,12 @@ function runSite(callback) {
         }
     });
 }
+
+function setViewOption(key, value) {
+    viewOptions[key] = value;
+    app.set('view options', viewOptions);
+}
+
 
 function buildJavascript(callback) {
     var config = { 
@@ -173,9 +182,10 @@ function buildJavascript(callback) {
             else {
                 var md5sum = crypto.createHash('md5');
                 md5sum.update(data.toString());
-                var jsHash = md5sum.digest('hex');
-                log.debug(jsHash);
-                fs.rename(config.out, 'public/dist/'+jsHash+'.js', callback);
+                var jsFile = '/dist/' + md5sum.digest('hex') + '.js';
+                fs.rename(config.out, 'public' + jsFile, function (err) {
+                    callback(err, jsFile);
+                });
             }
         });
     });

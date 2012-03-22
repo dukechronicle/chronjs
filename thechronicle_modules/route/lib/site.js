@@ -48,7 +48,7 @@ site.sports = function (req, res) {
             css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
             filename:'views/site/sports.jade',
             locals: {
-                subsections: [children.men, children.women],
+                subsections: children,
                 model:model,
                 section: 'Sports'
             }

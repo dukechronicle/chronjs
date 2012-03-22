@@ -16,8 +16,9 @@
                 .image-container.full-banner.lighten!=partial('ad/full-banner', {title: "AD"})
 
         .sidebar
-            if (model.twitter)
-                .twitter!=partial('container/twitter', model.twitter)
+            //
+                if (model.twitter)
+                    .twitter!=partial('container/twitter', model.twitter)
             if (model.popular)
                 .most-popular!=partial('container/articles-with-subhead', {title: "What's Hot", stories: model.popular})
             if (model.Opinion)

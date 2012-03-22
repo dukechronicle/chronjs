@@ -26,7 +26,6 @@ html(lang="en")
                 link(rel= 'stylesheet', href= '/' + file + '.css')
 
 
-        script(src=site_javascript)
 
         //if lt IE 9
             link(rel='stylesheet', href='/style-ie.css')
@@ -39,3 +38,5 @@ html(lang="en")
             section!=body
             footer
                 include /layout/footer
+
+        script(src=site_javascript)

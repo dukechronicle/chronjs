@@ -2,7 +2,9 @@
 
 script(type='text/javascript')
     var scrollLoadUrl = "search/#{query}?sort=#{sort}&order=#{order}&facets=#{currentFacets}";
-    var searchboxHTML = 
+    var nextPageToLoad = 2;
+    
+    var scrollLoadHTML = 
     '<a href="/article/URL_REPLACE" class="addedArticle result rounded-hover"><h3>HEADER_REPLACE</h3><div class="date">DATE_REPLACE<span class="sep">&nbsp;|&nbsp;</span>AUTHOR_REPLACE</div><div class="teaser">TEASER_REPLACE</div></a>';
 
 #search

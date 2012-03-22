@@ -19,13 +19,9 @@ html(lang="en")
         script(src="http://use.typekit.com/dwv2bjy.js")
         script try{Typekit.load();}catch(e){}
 
-        script var THE_CHRONICLE = {};
-
         - if (typeof css != 'undefined')
             - each file in css
                 link(rel= 'stylesheet', href= '/' + file + '.css')
-
-
 
         //if lt IE 9
             link(rel='stylesheet', href='/style-ie.css')
@@ -39,4 +35,4 @@ html(lang="en")
             footer
                 include /layout/footer
 
-        script(src=site_javascript)
+        script(src=site_javascript, type="text/javascript")

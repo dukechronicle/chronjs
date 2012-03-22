@@ -21,7 +21,7 @@ var SECRET = "i'll make you my dirty little secret";
 var SERVER = this;
 
 var app = null;
-
+var viewOptions = {};
 
 asereje.config({
     active: process.env.NODE_ENV === 'production',  // enable it just for production
@@ -114,9 +114,6 @@ function configureApp(sessionInfo, port) {
     app.configure(function() {
         app.set('views', __dirname + '/views');
         app.set('view engine', 'jade');
-        app.set('view options', {
-            static_cdn: config.get("CLOUDFRONT_STATIC")
-        });
         app.enable('jsonp callback');
         app.use(express.bodyParser({uploadDir: __dirname + '/uploads'}));
         app.use(express.methodOverride());
@@ -136,6 +133,7 @@ function configureApp(sessionInfo, port) {
 }
 
 function runSite(callback) {
+    setViewOption('static_cdn', config.get('CLOUDFRONT_STATIC'));
     api.init(function (err) {
         if (err) log.crit("api initialization failed");
         else {
@@ -152,4 +150,9 @@ function runSite(callback) {
             });
         }
     });
+}
+
+function setViewOption(key, value) {
+    viewOptions[key] = value;
+    app.set('view options', viewOptions);
 }

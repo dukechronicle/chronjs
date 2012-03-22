@@ -1,17 +1,15 @@
 /* require npm nodejs modules */
 var asereje = require('asereje');
 var async = require('async');
-var crypto = require('crypto');
 var express = require('express');
-var fs = require('fs');
 require('express-namespace');
 var RedisStore = require('connect-redis')(express);
-var requirejs = require('requirejs');
 var stylus = require('stylus');
 var sprintf = require('sprintf').sprintf;
 
 /* require internal modules */
 var api = require('./thechronicle_modules/api');
+var builder = require('./build-resources');
 var config = require('./thechronicle_modules/config');
 var log = require('./thechronicle_modules/log');
 var redisClient = require('./thechronicle_modules/redisclient');
@@ -153,13 +151,13 @@ function runSite(callback) {
 	        });
             }
             
-            buildJavascript('site/main', 'site-js', function (err, jsFile) {
+            builder.buildJavascript('site/main','site-js',function(err,jsFile) {
                 if (err) log.warning('Failed to build site Javascipt: ' + err);
                 else log.notice('Built site Javascript');
                 setViewOption('site_javascript', jsFile);
              });
 
-            buildJavascript('admin/main', 'admin-js', function (err, jsFile) {
+            builder.buildJavascript('admin/main','admin-js',function(err,jsFile){
                 if (err) log.warning('Failed to build admin Javascipt: ' + err);
                 else log.notice('Built admin Javascript');
                 setViewOption('admin_javascript', jsFile);
@@ -177,28 +175,4 @@ function runSite(callback) {
 function setViewOption(key, value) {
     viewOptions[key] = value;
     app.set('view options', viewOptions);
-}
-
-function buildJavascript(infile, outfile, callback) {
-    var config = { 
-        baseUrl: 'public/js',
-        name: infile,
-        out: 'public/dist/' + outfile,
-        paths: {
-            jquery: 'require-jquery'
-        }
-    };
-    requirejs.optimize(config, function (buildResponse) {
-        fs.readFile(config.out, 'utf8', function (err, data) {
-            if (err) callback(err);
-            else {
-                var md5sum = crypto.createHash('md5');
-                md5sum.update(data.toString());
-                var jsFile = '/dist/' + md5sum.digest('hex') + '.js';
-                fs.rename(config.out, 'public' + jsFile, function (err) {
-                    callback(err, jsFile);
-                });
-            }
-        });
-    });
 }

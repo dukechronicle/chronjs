@@ -67,6 +67,11 @@ define(["jquery", "jquery-ui"], function($) {
 
     // load the next set of documents for this set of params, starting with the last document currently on the page
     function loadDataFromLastDoc() {
+        // body and teaser aren't needed to paginate, and could be too big for the url, so remove them
+        delete lastDoc.body;
+        delete lastDoc.renderedBody;
+        delete lastDoc.teaser;
+
         $.get("/api/"+scrollLoadUrl, {startdoc: JSON.stringify(lastDoc)}, function(returnedData) {
             if(returnedData.length < 2) {
                 noPagesLeftToLoad = true;

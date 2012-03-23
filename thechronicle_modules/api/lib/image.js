@@ -1,17 +1,23 @@
-var db = require('../../db-abstract');
-var api = require('./api');
 var async = require('async');
 var fs = require('fs');
 var im = require('imagemagick');
-var _ = require("underscore");
-var s3 = require('./s3.js');
 var urllib = require('url');
+var _ = require('underscore');
+
+var api = require('./api');
+var config = require('../../config');
+var db = require('../../db-abstract');
 var globalFunctions = require('../../global-functions');
 var log = require('../../log');
 
 var image = exports;
 
+var IMAGE_BUCKET;
 var THUMB_DIMENSIONS = '100x100';
+
+image.init = function () {
+    IMAGE_BUCKET = config.get("S3_BUCKET");
+};
 
 image.IMAGE_TYPES = {
     LargeRect: {
@@ -136,7 +142,7 @@ image.createCroppedVersion = function(imageName, width, height, x1, y1, x2, y2, 
         function (orig, buf, callback) {
             var type = orig.value.contentType;
             var s3Name = width + "x" + height + "-" + x1 + "-" + y1 + "-" + orig.value.name;
-            s3.put(buf, s3Name, type, function (s3Err, url) {
+            api.s3.put(IMAGE_BUCKET, buf, s3Name, type, function (s3Err, url) {
                 callback(s3Err, orig, url);
             });
         },
@@ -213,7 +219,7 @@ image.deleteVersion = function (versionId, updateOriginal, topCallback) {
             if(isVersion) {               
                 var url = urllib.parse(version.url);           
                 log.info('deleting version from s3 ' + url.pathname);
-                s3.delete(url.pathname, callback);
+                api.s3.del(IMAGE_BUCKET, url.pathname, callback);
             }
             else callback();
         }
@@ -251,14 +257,14 @@ image.deleteOriginal = function (originalId, topCallback) {
         function (orig, callback) {
             var url = urllib.parse(orig.url);
             log.info('deleting original from s3');
-            s3.delete(url.pathname, function(err) {
+            api.s3.del(IMAGE_BUCKET, url.pathname, function(err) {
                 callback(err, orig);
             });
         },
         function (orig, callback) {
             var url = urllib.parse(orig.thumbUrl);
             log.info('deleting thumb from s3');
-            s3.delete(url.pathname, callback);
+            api.s3.del(IMAGE_BUCKET, url.pathname, callback);
         }
     ], topCallback);
 };
@@ -336,7 +342,7 @@ image.createOriginalFromFile = function (imageName, imageType, deleteLocal, topC
         },
         function (data, callback) {
             //put image in AWS S3 storage
-            s3.put(data, imageName, imageType, callback);
+            api.s3.put(IMAGE_BUCKET, data, imageName, imageType, callback);
         },
         function (url, callback) {
             im.convert([fileName, '-thumbnail', THUMB_DIMENSIONS, thumbName],
@@ -351,7 +357,7 @@ image.createOriginalFromFile = function (imageName, imageType, deleteLocal, topC
                 });
         },
         function (url, data, callback) {
-            s3.put(data, thumbName, imageType,
+            api.s3.put(IMAGE_BUCKET, data, thumbName, imageType,
                 function (err, thumbUrl) {
                     callback(err, url, thumbUrl);
                 });

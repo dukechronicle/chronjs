@@ -482,100 +482,77 @@ site.getSearchContent = function (wordsQuery, query, callback) {
 };
 
 site.getArticleContent = function(url, callback) {
-    var redisKey = "article:" + url;
-
-    redis.client.get(redisKey, function(err, res) {
-        if (res) {
-            var data = JSON.parse(res);
-            callback(null, data[0], data[1], data[2]);
-        } else {
-            site.getArticleContentUncached(url, function(err, doc, model, parents) {
-                if (err)
-                    callback(err);
-                else {
-                    redis.client.set(redisKey, JSON.stringify([doc, model, parents]));
-                    redis.client.expire(redisKey, 600);
-                    callback(null, doc, model, parents);
-                }
+    api.articleForUrl(url, function(err, doc) {
+	if (err) callback(err);
+        else {
+            doc = modifyArticleForDisplay(doc);
+            cache(site.getArticleContentUncached,600)(doc,function (err, model) {
+                callback(err, doc, model);
             });
         }
     });
 };
 
-site.getArticleContentUncached = function(url, callback) {
-	api.articleForUrl(url, function(err, doc) {
-		if(err) return callback(err);
+site.getArticleContentUncached = function(doc, callback) {
+    async.parallel([
+	function(cb) {
+	    redis.client.zrevrange(_articleViewsKey([]), 0, 4, function(err, popular) {
+		if(err) cb(err);
+		else cb(null, popular.map(function(str) {
+		    var parts = str.split('||');
+		    return {
+			urls : ['/article/' + parts[0]],
+			title : parts[1]
+		    };
+		}));
+	    });
+	},
+	function(cb) {
+	    api.search.relatedArticles(doc._id, 5, function(err, relatedArticles) {
+		modifyArticlesForDisplay(relatedArticles, cb);
+	    });
+	},
+	function(cb) {
+	    api.taxonomy.getParents(doc.taxonomy, cb);
+	}
+    ], function(err, results) {
+	if(err)
+	    callback(err);
+	else {
+	    var model = {
+		adFullRectangle : {
+		    "title" : "Advertisement",
+		    "imageUrl" : "/images/ads/monster.png",
+		    "url" : "http://google.com",
+		    "width" : "300px",
+		    "height" : "250px"
+		},
+                popular: results[0],
+		related: results[1],
+                parents: results[2]
+	    };
 
-        doc = modifyArticleForDisplay(doc);
-		async.parallel([
-		    function(cb) {
-			    redis.client.zrevrange(_articleViewsKey([]), 0, 4, function(err, popular) {
-				    if(err)
-					    cb(err);
-				    else
-					    cb(null, popular.map(function(str) {
-						    var parts = str.split('||');
-						    return {
-							    urls : ['/article/' + parts[0]],
-							    title : parts[1]
-						    };
-					    }));
-			    });
-		    },
-		    function(cb) {
-			    api.search.relatedArticles(doc._id, 5, function(err, relatedArticles) {
-			        modifyArticlesForDisplay(relatedArticles, function(err, relatedArticles) {
-                        cb(null, relatedArticles);            
-			        });
-			    });
-		    },
-		    function(cb) {
-			    api.taxonomy.getParents(doc.taxonomy, function(err, parents) {
-				    if(err)
-					    cb(err);
-				    else
-					    cb(null, parents);
-			    });
+            // put callback before statistics so the user doesn't have to wait for statistics to run to see the page
+	    callback(null, model);
+
+            // Statistics for most read
+	    if(doc.taxonomy) {
+		var length = doc.taxonomy.length;
+		var taxToSend = _.clone(doc.taxonomy);
+		var multi = redis.client.multi();
+		for(var i = length; i >= 0; i--) {
+		    taxToSend.splice(i, 1);
+		    multi.zincrby(_articleViewsKey(taxToSend), 1, _.last(doc.urls) + "||" + doc.title);
+		}
+		multi.exec(function(err, res) {
+		    if(err) {
+			log.warning("Failed to register article view: " + _.last(doc.urls));
+			log.warning(err);
 		    }
-		], function(err, results) {
-			if(err)
-				callback(err);
-			else {
-				var model = {
-					adFullRectangle : {
-						"title" : "Advertisement",
-						"imageUrl" : "/images/ads/monster.png",
-						"url" : "http://google.com",
-						"width" : "300px",
-						"height" : "250px"
-					},
-                    popular: results[0],
-				    related: results[1],
-				};
-                var parents = results[2];
-
-                // put callback before statistics so the user doesn't have to wait for statistics to run to see the page			
-				callback(null, doc, model, parents);
-
-                // Statistics for most read
-				if(doc.taxonomy) {
-					var length = doc.taxonomy.length;
-					var taxToSend = _.clone(doc.taxonomy);
-					var multi = redis.client.multi();
-					for(var i = length; i >= 0; i--) {
-						taxToSend.splice(i, 1);
-						multi.zincrby(_articleViewsKey(taxToSend), 1, _.last(doc.urls) + "||" + doc.title);
-					}
-					multi.exec(function(err, res) {
-						if(err) {
-							log.warning("Failed to register article view: " + _.last(doc.urls));
-							log.warning(err);
-						}
-					});
-				}
-			}
 		});
-	});
+	    }
+	}
+    });
 };
 
 site.getPageContent = function(url, callback) {
@@ -639,7 +616,7 @@ function _articleViewsKey(taxonomy) {
 	return "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE") + ":" + JSON.stringify(taxonomy);
 }
 
-function cache(func) {
+function cache(func, expireTime) {
     return function () {
         if (arguments.length == 0)
             log.error("cache function called with no callback");
@@ -655,7 +632,7 @@ function cache(func) {
                         if (err) callback(err);
                         else {
                             redis.client.set(redisKey, JSON.stringify(result));
-                            redis.client.expire(redisKey, 600);
+                            redis.client.expire(redisKey, expireTime);
                             callback(null, result);
                         }
                     })

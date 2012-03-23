@@ -638,3 +638,30 @@ function modifyArticleForDisplay(doc, callback) {
 function _articleViewsKey(taxonomy) {
 	return "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE") + ":" + JSON.stringify(taxonomy);
 }
+
+function cache(func) {
+    return function () {
+        if (arguments.length == 0)
+            log.error("cache function called with no callback");
+        else {
+            var args = Array.prototype.slice.call(arguments);
+            var callback = args.pop();
+            var redisKey = func.toString() + args.toString();
+ 
+            redis.client.get(redisKey, function(err, res) {
+                if (!err && res) callback(null, JSON.parse(res));
+                else {
+                    args.push(function (err, result) {
+                        if (err) callback(err);
+                        else {
+                            redis.client.set(redisKey, JSON.stringify(result));
+                            redis.client.expire(redisKey, 600);
+                            callback(null, result);
+                        }
+                    })
+                    func.apply(this, args);
+                }
+            });
+        }
+    };
+}

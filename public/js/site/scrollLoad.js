@@ -1,7 +1,6 @@
 define(["jquery", "libs/jquery-ui"], function($) {
-    var nextPageToLoad = 2; // keeps track fo what page to load next
     var isLoadingPage = false; // stops multiple pages loading at once
-    var noPagesLeftToLoad = false; // stops ajax requests from being issued once all articles for this search have been loaded
+    var noPagesLeftToLoad = false; // stops ajax requests from being issued once all articles for this page have been loaded
     var loadImage = null;
 
     $(document).ready(function() {
@@ -15,17 +14,9 @@ define(["jquery", "libs/jquery-ui"], function($) {
             loadImage.fadeIn('slow');
             isLoadingPage = true;
 
-            // use our api to load the next search page for this set of params
-            $.get("/api/"+scrollLoadUrl+"&page="+nextPageToLoad, function(returnedData) {
-                if(returnedData.docs.length === 0) {
-                    noPagesLeftToLoad = true;
-                    loadImage.fadeOut();
-                }
-                else {
-                    // add the docs to the search page, correctly formatted
-                    addArticle(returnedData.docs,0);
-                }
-            });
+            // load data in a certain way depending on whether on pages or last doc is specified
+            if(typeof(nextPageToLoad) === "undefined") loadDataFromLastDoc();
+            else loadPaginatedData();
         }
     });
 
@@ -41,7 +32,6 @@ define(["jquery", "libs/jquery-ui"], function($) {
         }
         else {
             // no more articles to add
-            nextPageToLoad ++;
             loadImage.fadeOut(function () {
                 isLoadingPage = false;
             });
@@ -49,7 +39,7 @@ define(["jquery", "libs/jquery-ui"], function($) {
     }
 
     function formatArticle(article) {
-        var addHTML = searchboxHTML;
+        var addHTML = scrollLoadHTML;
         addHTML = addHTML.replace("URL_REPLACE",article.urls[0]);
         addHTML = addHTML.replace("HEADER_REPLACE",article.title);
         addHTML = addHTML.replace("DATE_REPLACE", $.datepicker.formatDate("MM d, yy", new Date(article.created*1000)));
@@ -59,5 +49,40 @@ define(["jquery", "libs/jquery-ui"], function($) {
         return addHTML;
     }
 
+    // load the next page of documents for this set of params
+    function loadPaginatedData() {
+        $.get("/api/"+scrollLoadUrl+"&page="+nextPageToLoad, function(returnedData) {
+            if(returnedData.docs.length === 0) {
+                noPagesLeftToLoad = true;
+                loadImage.fadeOut();
+            }
+            else {
+                nextPageToLoad ++;
 
+                // add the docs to this page, correctly formatted
+                addArticle(returnedData.docs,0);
+            }
+        });
+    }
+
+    // load the next set of documents for this set of params, starting with the last document currently on the page
+    function loadDataFromLastDoc() {
+        // body and teaser aren't needed to paginate, and could be too big for the url, so remove them
+        delete lastDoc.body;
+        delete lastDoc.renderedBody;
+        delete lastDoc.teaser;
+
+        $.get("/api/"+scrollLoadUrl, {startdoc: JSON.stringify(lastDoc)}, function(returnedData) {
+            if(returnedData.length < 2) {
+                noPagesLeftToLoad = true;
+                loadImage.fadeOut();
+            }
+            else {
+                lastDoc = returnedData[returnedData.length-1];                
+
+                // add the docs to the page, correctly formatted, ignoring the duplicate doc
+                addArticle(returnedData,1);
+            }
+        });
+    }
 });

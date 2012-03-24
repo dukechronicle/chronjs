@@ -131,7 +131,9 @@
             // Retrieve if cache miss, forced reload, or if cache is too old:
             if(articleListCache[category] == null || forced || new Date().getTime() - articleListCache[category].timestamp > ARTICLE_LIST_CACHE_TIMEOUT)
             {
-                var url = "/api/" + category;
+                var url = "/api/all";
+                if(category.toLowerCase() != 'all') url = "/api/section/" + category;
+                
                 if(lastDocID[category] != null)
                 {
                     url += "/" + lastDocID[category];

@@ -2,6 +2,7 @@ define(["jquery", "libs/underscore"], function($) {
 
     return function () {
         pageAlign();
+        truncateTeaser();
         if ($("section > #frontpage").length > 0)
             frontpageAlign();
         verticalAlign();
@@ -90,6 +91,16 @@ define(["jquery", "libs/underscore"], function($) {
                 rounded.css('height') &&
                 (rounded.css('height').substring(0, rounded.css('height').length - 2) < height)) {
                 rounded.css('height', height + "px");
+            }
+        });
+    }
+
+    function truncateTeaser() {
+        $(".block-row .list-story").each(function () {
+            while ($(this)[0].scrollHeight > $(this).outerHeight()) {
+                $(this).children("p").text(function (index, text) {
+                    return text.replace(/\s+\S*\.*$/, "...");
+                });
             }
         });
     }

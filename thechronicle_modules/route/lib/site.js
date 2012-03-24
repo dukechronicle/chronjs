@@ -102,20 +102,22 @@ site.towerview = function (req, res) {
 };
 
 site.section = function (req, res, next) {
-    var params = req.params.toString().split('/');
-    api.site.getSectionContent(params, function (err, section, docs, children, parents, popular) {
+    var sectionArray = req.params.toString().split('/');
+    api.site.getSectionContent(sectionArray, function (err, section, docs, children, parents, popular) {
         if (err) next();
         else {
 	    res.render('site/section', {
 	        css:asereje.css(['container/style', 'site/section']),
 	        locals: {
-                    pageTitle: section,
-                    docs:docs,
-                    subsections:children,
-                    parentPaths:parents,
-                    section: params[0],
-                    popular: popular
-	        }
+                pageTitle: section,
+                docs:docs,
+                subsections:children,
+                parentPaths:parents,
+                section: sectionArray[0],
+                popular: popular,
+                taxonomyPath: sectionArray.join('/')
+	        },
+            js:['site/scrollLoad?v=5']
 	    });
         }
     });

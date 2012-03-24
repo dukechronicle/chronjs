@@ -1,9 +1,11 @@
+var columnistSelect;
+
 define(['jquery'], function($) {
 
     var selected = $([]);
     var selectedNav = $([]);
 
-    $(function () {
+    return columnistSelect = function () {
         $('#opinion #columnists').show();
 
         $('#opinion #columnist-list .content-container a').click(function(e) {
@@ -18,7 +20,7 @@ define(['jquery'], function($) {
         var columnistAnchors = $('#opinion #columnist-list h2 a');
         var randomIndex = Math.floor(Math.random()*columnistAnchors.size());
         columnistAnchors.eq(randomIndex).click();
-    });
+    };
 
     function show(index) {
         selected = $("#columnist-story-" + index);

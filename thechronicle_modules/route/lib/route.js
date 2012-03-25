@@ -55,14 +55,21 @@ exports.init = function (app) {
         app.get('/advertising', site.staticPage);
         app.get('/contact', site.staticPage);
         app.get('/edit-board', site.staticPage);
+        app.get('/graduation', site.staticPage)
         app.get('/letters', site.staticPage);
+        app.get('/newsletter', site.staticPage);
         app.get('/privacy-policy', site.staticPage);
         app.get('/subscribe', site.staticPage);
         app.get('/user-guidelines', site.staticPage);
         app.get('/young-trustee-2012', site.staticPage);
+        
+        app.post('/newsletter', site.newsletterData);
     });
 
-    app.get('/graduation', site.staticPage)
+    app.get('/graduation', function (req, res, next) {
+        res.redirect('/page/' + graduation);
+    });
+
     // Makes search url more readable
     app.get('/search', function (req, res) {
         var query = "--";            
@@ -77,12 +84,11 @@ exports.init = function (app) {
     });
     app.get('/staff/:query', site.staff);
 
+    app.get('/login', site.login);
+
     app.get('/article/:url', site.article);
     app.get('/article/:url/print', site.articlePrint);
     app.get('/article/:url/edit', api.site.checkAdmin, site.editArticle);
-    app.get('/login', site.login);
-    app.get('/newsletter', site.newsletter);
-    app.post('/newsletter', site.newsletterData);
 
     // Webmaster tools stuff -- don't delete
     app.get('/mu-7843c2b9-3b9490d6-8f535259-e645b756', function (req, res) {
@@ -93,14 +99,11 @@ exports.init = function (app) {
         app.get('/', api.site.checkAdmin, admin.index);
         app.get('/newsletter', api.site.checkAdmin, admin.newsletter);
         app.get('/add', api.site.checkAdmin, admin.addArticle);
-        app.get('/add-page', api.site.checkAdmin, admin.addPage);
         app.get('/manage', api.site.checkAdmin, admin.manage);
         app.get('/k4export', api.site.checkAdmin, admin.k4export);
         app.post('/k4export', api.site.checkAdmin, admin.k4exportData);
         app.post('/edit', api.site.checkAdmin, admin.editArticleData);
-        app.post('/edit-page', api.site.checkAdmin, admin.editPageData);
         app.post('/add', api.site.checkAdmin, admin.addArticleData);
-        app.post('/add-page', api.site.checkAdmin, admin.addPageData);
         app.post('/newsletter', api.site.checkAdmin, admin.newsletterData);
         app.get('/layout/group/:group', api.site.checkAdmin, admin.layout);
     });

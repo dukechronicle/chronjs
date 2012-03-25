@@ -1,0 +1,45 @@
+.ui-li-heading  {
+    white-space: normal;
+    font-weight: 600;
+    font-size: 14px;
+}
+.ui-li-desc {
+    white-space: normal;
+    line-height: 1.2em;
+}
+
+.ui-li-divider {
+    font-size: 1.2em;
+}
+.ui-li .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li {
+    padding: .1em 15px .1em 15px;
+}
+
+#ArticleListContent p {
+    line-height: 1.4em;
+    margin-top: 3px;
+    margin-bottom: 5px;
+}
+
+#ArticleListContent h2 {
+    font-size: 1.0em;
+    line-height: 1.3em;
+    font-weight: 550;
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+
+#ArticleListContent h3 {
+    font-size: 0.8em;
+    line-height: 1.3em;
+    font-weight: 100;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    color: #777777;
+}
+
+#ARTICLE_CONTENT .author {
+    margin-top: 0px;
+    font-size: 0.8em;
+}
+

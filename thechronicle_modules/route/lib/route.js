@@ -1,5 +1,5 @@
 var api = require('../../api');
-var admin = require('../../admin');
+var admin = require('./admin');
 var siteApi = require('./api');
 var log = require('../../log');
 var site = require('./site');

@@ -4,3 +4,5 @@
             if (story && story.images && story.images.LargeRect)
                 // add alt=story.teaser for teaser
                 img(width='636px', height='393px', src=story.images.LargeRect.url, title=story.title, longdesc=story.url)
+
+script CHRONICLE.onload.push(function(){initFrontpageSlideshow()});

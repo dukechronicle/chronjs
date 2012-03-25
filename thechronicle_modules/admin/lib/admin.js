@@ -134,3 +134,27 @@ admin.editArticle = function (doc, original, imageVersion, imageType, callback) 
         api.editDoc(id, fields, callback);
     }
 };
+
+admin.layout = function (section, group, layoutConfig, callback) {
+    async.parallel({
+        sectionDocs: function (cb) {
+            if (section)
+                api.taxonomy.docs([section], 30, null, cb);
+            else
+                api.docsByDate(30, null, cb);
+        },
+        groupDocs: function (cb) {
+            api.group.docs(layoutConfig[group].namespace, null, cb);
+        }
+    }, function (err, results) {
+        if (err) callback(err);
+        else {
+            // sort section documents alphabetically
+            results.sectionDocs = _.sortBy(results.sectionDocs, function (doc) {
+                return doc.title;
+            });
+            callback(null, results);
+        }
+    });
+};
+            

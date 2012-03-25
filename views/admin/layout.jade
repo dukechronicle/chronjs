@@ -11,6 +11,8 @@ html
     if(typeof removeBootstrap == 'undefined' || !removeBootstrap)
         link(rel='stylesheet', href='/css/bootstrap-1.2.0.min.css')
 
+    script var CHRONICLE = { onload: [] }
+
     title The Chronicle
     !=partial("code/google-analytics")
   body

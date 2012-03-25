@@ -7,6 +7,7 @@ var log = require('../../log');
 var redis = require('../../redisclient');
 var route = require('../../route');
 var rss = require('./rss');
+var popular = require('./popular');
 
 var _ = require("underscore");
 var async = require('async');
@@ -488,6 +489,8 @@ site.getArticleContent = function(url, callback) {
         if (res) {
             var data = JSON.parse(res);
             callback(null, data[0], data[1], data[2]);
+
+            popular.registerArticleView(data[0], function(err, res) {});
         } else {
             site.getArticleContentUncached(url, function(err, doc, model, parents) {
                 if (err)
@@ -496,6 +499,8 @@ site.getArticleContent = function(url, callback) {
                     redis.client.set(redisKey, JSON.stringify([doc, model, parents]));
                     redis.client.expire(redisKey, 600);
                     callback(null, doc, model, parents);
+
+                    popular.registerArticleView(doc, function(err, res) {});
                 }
             });
         }
@@ -556,23 +561,6 @@ site.getArticleContentUncached = function(url, callback) {
 
                 // put callback before statistics so the user doesn't have to wait for statistics to run to see the page			
 				callback(null, doc, model, parents);
-
-                // Statistics for most read
-				if(doc.taxonomy) {
-					var length = doc.taxonomy.length;
-					var taxToSend = _.clone(doc.taxonomy);
-					var multi = redis.client.multi();
-					for(var i = length; i >= 0; i--) {
-						taxToSend.splice(i, 1);
-						multi.zincrby(_articleViewsKey(taxToSend), 1, _.last(doc.urls) + "||" + doc.title);
-					}
-					multi.exec(function(err, res) {
-						if(err) {
-							log.warning("Failed to register article view: " + _.last(doc.urls));
-							log.warning(err);
-						}
-					});
-				}
 			}
 		});
 	});

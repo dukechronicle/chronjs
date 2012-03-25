@@ -1,24 +1,43 @@
+var scrollLoadPage, scrollLoadLastDoc;
+
 define(["jquery", "libs/jquery-ui"], function($) {
     var isLoadingPage = false; // stops multiple pages loading at once
     var noPagesLeftToLoad = false; // stops ajax requests from being issued once all articles for this page have been loaded
     var loadImage = null;
+    var scrollLoadUrl, nextPageToLoad, lastDoc, scrollLoadHTML;
+    
 
-    $(document).ready(function() {
-        loadImage = $("#loadImage");
-        loadImage.hide();
-    });
+    scrollLoadPage = function(_scrollLoadUrl, _nextPageToLoad, _scrollLoadHTML) {
+        scrollLoadUrl = _scrollLoadUrl;
+        nextPageToLoad = _nextPageToLoad;
+        scrollLoadHTML = _scrollLoadHTML;
 
-    $(window).scroll(function(){
-       // if they scrolled to the bottom of the page, load the next 'page' of articles
-       if(!isLoadingPage && !noPagesLeftToLoad && $(window).scrollTop() === ($(document).height() - $(window).height())) {
-            loadImage.fadeIn('slow');
-            isLoadingPage = true;
+        scrollLoad(loadPaginatedData);
+    };
 
-            // load data in a certain way depending on whether on pages or last doc is specified
-            if(typeof(nextPageToLoad) === "undefined") loadDataFromLastDoc();
-            else loadPaginatedData();
-        }
-    });
+    scrollLoadLastDoc = function(_scrollLoadUrl, _lastDoc, _scrollLoadHTML) {
+        scrollLoadUrl = _scrollLoadUrl;
+        lastDoc = _lastDoc;
+        scrollLoadHTML = _scrollLoadHTML;
+
+        scrollLoad(loadDataFromLastDoc);
+    };
+
+    function scrollLoad(documentLoad) {
+        $(document).ready(function() {
+            loadImage = $("#loadImage");
+            loadImage.hide();
+        });
+
+        $(window).scroll(function(){
+            // if they scrolled to the bottom of the page, load the next 'page' of articles
+            if(!isLoadingPage && !noPagesLeftToLoad && $(window).scrollTop() === ($(document).height() - $(window).height())) {
+                loadImage.fadeIn('slow');
+                isLoadingPage = true;
+                documentLoad();
+            }
+        });
+    }
 
     function addArticle(articles,i) {
         if(i < articles.length) {

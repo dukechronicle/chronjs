@@ -16,11 +16,11 @@ html
       initMobileOptions();
   body
     #ArticleList(data-role='page', articlelistcontainer='true', url='news', data-add-back-btn='false')
-      div(data-role='header')
+      div(data-role='header', data-position='fixed')
         h1#HEADER_TITLE The Chronicle
       #ArticleListContent(data-role='content')
         ul#ARTICLE_LIST(data-role='listview')
-      div(data-role='footer')
+      div(data-role='footer', data-position='fixed')
         div(data-role='navbar')
           ul
             li
@@ -33,7 +33,7 @@ html
       #ARTICLE_CONTENT(data-role='content')
       script(src='/js/disqus.js?v=4', type='text/javascript')
       #disqus_thread
-      div(data-role='footer')
+      div(data-role='footer', data-position='fixed')
     #error(data-role='page', articlecontainer='true', url='Article', data-add-back-btn='true', data-back-btn-text='Back')
       div(data-role='header')
         h1 Error

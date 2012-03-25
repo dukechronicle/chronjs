@@ -132,7 +132,8 @@ admin.editArticle = function (req, res, next) {
 };
 
 admin.editArticleData = function (req, res, next) {
-    adminApi.editArticle(req.body.doc, req.body.imageVersionId, function (err, url) {
+    log.debug(req.body);
+    adminApi.editArticle(req.body.doc, req.body.imageVersionId, req.body.original, req.body.imageType, function (err, url) {
         if (err) next(err);
         else res.redirect(req.body.afterUrl || ('/article/' + url));
     });

@@ -95,7 +95,7 @@ exports.init = function (app) {
         app.get('/:url/edit', api.site.checkAdmin, admin.editArticle);
         app.get('/new', api.site.checkAdmin, admin.addArticle);
         app.post('/', api.site.checkAdmin, admin.addArticleData);
-        app.put('/:url/edit', api.site.checkAdmin, admin.editArticleData);
+        app.post('/edit', api.site.checkAdmin, admin.editArticleData);
     });
 
     app.namespace('/admin', function () {

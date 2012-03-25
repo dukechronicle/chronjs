@@ -19,6 +19,8 @@ html(lang="en")
         script(src="http://use.typekit.com/dwv2bjy.js")
         script try{Typekit.load();}catch(e){}
 
+        script var CHRONICLE = { onload: [] }
+
         - if (typeof css != 'undefined')
             - each file in css
                 link(rel= 'stylesheet', href= '/' + file + '.css')

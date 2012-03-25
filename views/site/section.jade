@@ -21,6 +21,9 @@
                 var scrollLoadHTML =
                 '<a class="result rounded-hover addedArticle" href="/article/URL_REPLACE">'+
                 '<h3>HEADER_REPLACE</h3><div class="date">DATE_REPLACE</div><div class="teaser">TEASER_REPLACE</div></a>'
+                window.onload = function () {
+                    scrollLoadLastDoc(scrollLoadUrl, lastDoc, scrollLoadHTML);
+                }
 
             div.result.rounded-hover(id='loadImage')
                 img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto")

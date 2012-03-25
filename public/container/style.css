@@ -48,7 +48,7 @@ body .block-row.large-first a.hover.first{width:292px;}
 body .block-row.large-first a.hover.first img{width:292px;margin-bottom:0}
 body .rounded,body .rounded-hover{-webkit-border-radius:4px;-moz-border-radius:4px;-ms-border-radius:4px;-o-border-radius:4px;border-radius:4px;-webkit-box-shadow:rgba(0,0,0,0.40) 0 1px 3px;-moz-box-shadow:rgba(0,0,0,0.40) 0 1px 3px;-ms-box-shadow:rgba(0,0,0,0.40) 0 1px 3px;-o-box-shadow:rgba(0,0,0,0.40) 0 1px 3px;box-shadow:rgba(0,0,0,0.40) 0 1px 3px;background-color:#fff;background-image:-webkit-linear-gradient(bottom,whiteSmoke 0%,#fff 33%);background-image:-moz-linear-gradient(bottom,whiteSmoke 0%,#fff 33%);background-image:-ms-linear-gradient(bottom,whiteSmoke 0%,#fff 33%);background-image:-o-linear-gradient(bottom,whiteSmoke 0%,#fff 33%);float:left}
 body a.rounded-hover{border-left:1px solid transparent;border-right:1px solid transparent;}
-body a.rounded-hover h3{-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-ms-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear}
+body a.rounded-hover h3,body a.rounded-hover h3>*{-webkit-transition:color .25s linear;-moz-transition:color .25s linear;-ms-transition:color .25s linear;-o-transition:color .25s linear;transition:color .25s linear}
 body a.list-story{color:#000;display:block;padding:4px 0 4px 2px}
 body a.list-story.first{padding-top:2px}
 body a.list-story.last{padding-bottom:2px}

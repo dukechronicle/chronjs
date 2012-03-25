@@ -32,9 +32,12 @@ site.news = function (req, res) {
         res.render('site/news', {
             pageTitle: "News",
             css:asereje.css(['container/style', 'site/section', 'site/news']),
-            subsections:children,
             filename:'views/site/news.jade',
-            model:model
+            locals: {
+                subsections:children,
+                section: 'News',
+                model:model
+            }
         });
     });
 };
@@ -45,9 +48,12 @@ site.sports = function (req, res) {
             pageTitle: "Sports",
             css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
             js:['slideshow/slideshow'],
-            subsections:[children.men, children.women],
             filename:'views/site/sports.jade',
-            model:model
+            locals: {
+                subsections: children,
+                model:model,
+                section: 'Sports'
+            }
         });
     });
 };
@@ -58,9 +64,12 @@ site.opinion = function (req, res) {
             pageTitle: "Opinion",
             css:asereje.css(['container/style', 'site/section', 'site/opinion']),
             js:['opinion'],
-            subsections:children,
             filename:'views/site/opinion.jade',
-            model:model
+            locals: {
+                subsections:children,
+                section: 'Opinion',
+                model:model
+            }
         });
     });
 };
@@ -70,9 +79,12 @@ site.recess = function (req, res) {
         res.render('site/recess', {
             pageTitle: "Recess",
             css:asereje.css(['container/style', 'site/section', 'site/recess']),
-            subsections:children,
             filename:'views/site/recess.jade',
-            model:model
+            locals: {
+                subsections:children,
+                section: 'Recess',
+                model:model
+            }
         });
     });
 };
@@ -82,16 +94,19 @@ site.towerview = function (req, res) {
         res.render('site/towerview', {
             pageTitle: "Towerview",
             css:asereje.css(['container/style', 'site/section', 'site/towerview']),
-            subsections:children,
             filename:'views/site/towerview.jade',
-            model:model
+            locals: {
+                subsections:children,
+                section: 'Towerview',
+                model:model
+            }
         });
     });
 };
 
 site.section = function (req, res, next) {
-    var params = req.params.toString().split('/');
-    api.site.getSectionContent(params, function (err, section, docs, children, parents, popular) {
+    var sectionArray = req.params.toString().split('/');
+    api.site.getSectionContent(sectionArray, function (err, section, docs, children, parents, popular) {
         if (err) next();
         else {
 	    res.render('site/section', {
@@ -101,9 +116,11 @@ site.section = function (req, res, next) {
                 docs:docs,
                 subsections:children,
                 parentPaths:parents,
-                section:section,
-                popular: popular
-	        }
+                section: sectionArray[0],
+                popular: popular,
+                taxonomyPath: sectionArray.join('/')
+	        },
+            js:['site/scrollLoad?v=5']
 	    });
         }
     });
@@ -115,7 +132,7 @@ site.search = function (req, res, next) {
         if (err) next(err);
         else res.render('site/search', {
             css:asereje.css(['container/style', 'site/search']),
-            js:['scrollLoad?v=2'],
+            js:['site/scrollLoad?v=5'],
             locals: {
                 docs: docs,
                 currentFacets: req.query.facets || '',
@@ -133,7 +150,7 @@ site.staff = function (req, res) {
     api.site.getAuthorContent(name, function (err, docs) {
 	res.render('site/people', {
             css:asereje.css(['container/style', 'site/people']),
-            js:['scrollLoad?v=2'],
+            js:['site/scrollLoad?v=5'],
             locals:{
                 pageTitle: globalFunctions.capitalizeWords(name),
                 docs: docs,
@@ -176,16 +193,21 @@ site.article = function (req, res, next) {
         else res.render('article', {
             locals: {
                 doc:doc,
-                pageTitle:doc.title,
                 isAdmin:isAdmin,
                 model:model,
                 parentPaths:parents,
-                isProduction: (process.env.NODE_ENV === 'production'),
-                disqusShortname: config.get('DISQUS_SHORTNAME')
+                section: doc.taxonomy[0],
+                disqusData: {
+                    isProduction: (process.env.NODE_ENV === 'production'),
+                    shortname: config.get('DISQUS_SHORTNAME'),
+                    id: doc._id,
+                    title: doc.title,
+                    url: doc.url
+                }
             },
             filename:'views/article',
             css:asereje.css(['container/style', 'article', 'container/poll']),
-            js:['site/disqus', 'poll']
+            js:['site/article', 'poll']
         });
     });
 };
@@ -297,13 +319,6 @@ site.configData = function (req, res) {
         });
     else
 	    api.site.askForLogin(res, '/config');
-};
-
-site.newsletter = function (req, res) {
-    res.render('pages/newsletter', {
-	filename: 'pages/newsletter',
-	css: asereje.css(['container/style'])
-    });
 };
 
 site.newsletterData = function (req, res) {

@@ -12,7 +12,6 @@
             try{Typekit.load();}catch(e){}
         </script>
 		-->
-
         <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
         <script src="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js"></script>
     
@@ -132,7 +131,9 @@
             // Retrieve if cache miss, forced reload, or if cache is too old:
             if(articleListCache[category] == null || forced || new Date().getTime() - articleListCache[category].timestamp > ARTICLE_LIST_CACHE_TIMEOUT)
             {
-                var url = "/api/" + category;
+                var url = "/api/all";
+                if(category.toLowerCase() != 'all') url = "/api/section/" + category;
+                
                 if(lastDocID[category] != null)
                 {
                     url += "/" + lastDocID[category];
@@ -312,7 +313,7 @@
 			<h1>The Chronicle</h1>
 		</div> 
 		<div id="ARTICLE_CONTENT" data-role="content" data-position="fixed"></div> 
-		<script src="/js/disqus.js?v=4" type="text/javascript"></script>
+		<script src="/js/disqus.js?v=5" type="text/javascript"></script>
         <div id="disqus_thread"></div>
 		<div data-role="footer" data-position="fixed"></div> 
 	</div> 

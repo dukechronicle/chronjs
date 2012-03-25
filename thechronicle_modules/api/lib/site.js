@@ -159,22 +159,9 @@ site.getNewsPageContent = function(callback) {
 	function(cb) {
 		api.group.docs(LAYOUT_GROUPS.News.namespace, null, cb);
 	},
-
-	function(cb) {
-		redis.client.zrevrange(_articleViewsKey(['News']), 0, 3, function(err, popular) {
-			if(err)
-				cb(err);
-			else
-				cb(null, popular.map(function(str) {
-					var parts = str.split('||');
-					return {
-						urls : ['/article/' + parts[0]],
-						title : parts[1]
-					};
-				}));
-		});
-	},
-
+    function(cb) {
+        popular.getPopularArticles(['News'], 4, cb);
+    },
 	function(cb) {
 		rss.getRSS('newsblog', function(err, rss) {
 			if(!err && rss && rss.items && rss.items.length > 0) {
@@ -418,14 +405,8 @@ site.getTowerviewPageContent = function(callback) {
 site.getSectionContent = function (params, callback) {
     var section = _.last(params);
     async.parallel([
-        function (cb) {
-            redis.client.zrevrange(_articleViewsKey(params), 0, 4, function (err, popular) {
-                if (err) cb(err)
-                else cb(null, popular.map(function (str) {
-                    var parts = str.split('||');
-                    return { urls:['/article/' + parts[0]], title:parts[1] };
-                }));
-            });
+        function(cb) {
+            popular.getPopularArticles(params, 5, cb);
         },
         function (cb) {
             api.taxonomy.docs(params, 20, null, function (err, docs) {
@@ -514,19 +495,8 @@ site.getArticleContentUncached = function(url, callback) {
         doc = modifyArticleForDisplay(doc);
 		async.parallel([
 		    function(cb) {
-			    redis.client.zrevrange(_articleViewsKey([]), 0, 4, function(err, popular) {
-				    if(err)
-					    cb(err);
-				    else
-					    cb(null, popular.map(function(str) {
-						    var parts = str.split('||');
-						    return {
-							    urls : ['/article/' + parts[0]],
-							    title : parts[1]
-						    };
-					    }));
-			    });
-		    },
+                popular.getPopularArticles([], 5, cb);
+            },
 		    function(cb) {
 			    api.search.relatedArticles(doc._id, 5, function(err, relatedArticles) {
 			        modifyArticlesForDisplay(relatedArticles, function(err, relatedArticles) {
@@ -621,8 +591,4 @@ function modifyArticleForDisplay(doc, callback) {
 	}
     
 	return doc;
-}
-
-function _articleViewsKey(taxonomy) {
-	return "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE") + ":" + JSON.stringify(taxonomy);
 }

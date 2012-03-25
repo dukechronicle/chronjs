@@ -21,7 +21,7 @@ var SECRET = "i'll make you my dirty little secret";
 var SERVER = this;
 
 var app = null;
-
+var viewOptions = {};
 
 asereje.config({
     active: process.env.NODE_ENV === 'production',  // enable it just for production
@@ -102,21 +102,25 @@ function configureApp(sessionInfo, port) {
 
     app.configure('development', function() {
         app.use(express.static(__dirname + '/public'));
-        app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+        app.error(express.errorHandler({ dumpExceptions: true, showStack: true }));
     });
 
     app.configure('production', function(){
         var oneYear = 31557600000;
         app.use(express.static(__dirname + '/public', {maxAge: oneYear}));
-        app.use(express.errorHandler());
+
+        app.error(function(err, req, res, next) {
+            var errOptions = {};
+            if(api.accounts.isAdmin(req)) errOptions = {dumpExceptions: true, showStack: true};
+           
+            var errHandler = express.errorHandler(errOptions);
+            errHandler(err, req, res, next);
+        });
     });
 
     app.configure(function() {
         app.set('views', __dirname + '/views');
         app.set('view engine', 'jade');
-        app.set('view options', {
-            static_cdn: config.get("CLOUDFRONT_STATIC")
-        });
         app.enable('jsonp callback');
         app.use(express.bodyParser({uploadDir: __dirname + '/uploads'}));
         app.use(express.methodOverride());
@@ -136,6 +140,7 @@ function configureApp(sessionInfo, port) {
 }
 
 function runSite(callback) {
+    setViewOption('static_cdn', config.get('CLOUDFRONT_STATIC'));
     api.init(function (err) {
         if (err) log.crit("api initialization failed");
         else {
@@ -152,4 +157,9 @@ function runSite(callback) {
             });
         }
     });
+}
+
+function setViewOption(key, value) {
+    viewOptions[key] = value;
+    app.set('view options', viewOptions);
 }

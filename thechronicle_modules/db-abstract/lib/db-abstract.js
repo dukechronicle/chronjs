@@ -95,19 +95,22 @@ db.whenDBExists = function(database,callback) {
 
 function updateViews(callback) {
     async.forEach(_.keys(designDoc), function (name, cb) {
-       viewsAreUpToDate(name, designDoc[name], function(err, isUpToDate, newestModifiedTime, newestHash) {
-           if (err) cb(err);
-           else if (isUpToDate) cb();
-           else {
-               log.notice('updating views to newest version - modified time: ' + newestModifiedTime + ' and hash: ' + newestHash);
-               createViews(name, designDoc[name], newestModifiedTime, newestHash, cb);
+        var document = designDoc[name];
+        viewsAreUpToDate(name, designDoc[name], function(err, isUpToDate, newestModifiedTime, newestHash) {
+            if (err) cb(err);
+            else if (isUpToDate) cb();
+            else {
+                log.notice('updating views to newest version - modified time: ' + newestModifiedTime + ' and hash: ' + newestHash);
+                document.lastModified = newestModifiedTime;
+                document.hash = newestHash;
+                db.save('_design/' + name, document, callback);
            }
        });
     }, callback);
 }
 
 function viewsAreUpToDate(name, document, callback) {
-    // calculate the hash of the local design doc    
+    // calculate the hash of the local design doc views
     var md5sum = crypto.createHash('md5');
     md5sum.update(JSON.stringify(document, function(key, val) {
       if (typeof val === 'function') {
@@ -122,26 +125,19 @@ function viewsAreUpToDate(name, document, callback) {
 
         var localModifiedTime = stats.mtime;
 
-        db.get('_design/' + name + '-versioning', function (err, res) {
-            var currentHash = (res && res.views && res.views.hash) || '';
-            
-            // if the design document does not exist, or the modified time of the design doc does not exist, return false
-            // check if the design doc file has been modified since the the last time it was updated in the db, and if so, if the hash of each is different
-            var currentModifiedTime = res && res.views && res.views.lastModified;
-            if (!currentModifiedTime || (new Date(currentModifiedTime) < new Date(localModifiedTime) && currentHash != localHash))
+        db.get('_design/' + name, function (err, res) {
+            if (err) return callback(err);
+
+            // if the design document does not exist, or the modified time of
+            // the design doc does not exist, return false check if the design
+            // doc file has been modified since the the last time it was updated
+            // in the db, and if so, if the hash of each is different
+            var currentHash = res.hash; 
+            var currentModifiedTime = res.lastModified;
+            if (!res.hash || (new Date(res.lastModified) < new Date(localModifiedTime) && res.hash != localHash))
                 return callback(null, false, localModifiedTime, localHash);
             else
-                return callback(null, true, currentModifiedTime, currentHash);
+                return callback(null, true, res.lastModified, res.hash);
         });
-    });
-}
-
-function createViews(name, document, modifiedTime, hash, callback) {
-    db.save('_design/' + name, document, function (err) {
-        // update the versioning info for the design document
-        if (err)
-            callback(err);
-        else
-            db.save('_design/' + name + '-versioning', {lastModified: modifiedTime, hash: hash}, callback);
     });
 }

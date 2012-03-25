@@ -44,7 +44,7 @@ group.docs = function(namespace, group, callback) {
                 if (err) callback(err);
                 else {
      //               redis.client.set(redisKey, JSON.stringify(results));
-      //              redis.client.expire(redisKey, 2);
+     //               redis.client.expire(redisKey, 2);
                     callback(null, results);
                 }
             });

@@ -13,21 +13,24 @@ var async = require('async');
 var nimble = require('nimble');
 
 var LAYOUT_GROUPS, COLUMNISTS_DATA, COLUMNIST_HEADSHOTS;
-
+var twitterFeeds = [];
 var BENCHMARK = false;
-
-var twitterFeeds = ["DukeChronicle", "ChronicleRecess", "TowerviewMag", "DukeBasketball", "ChronPhoto", "ChronicleSports"];
 
 site.init = function () {
     LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
 
     COLUMNISTS_DATA = config.get("COLUMNISTS_DATA");
     COLUMNIST_HEADSHOTS = {};
+
     COLUMNISTS_DATA.forEach(function(columnist) {
-	COLUMNIST_HEADSHOTS[columnist.name] = {
-	    headshot : columnist.headshot,
-	    tagline : columnist.tagline
-	};
+        COLUMNIST_HEADSHOTS[columnist.name] = {
+            headshot : columnist.headshot,
+            tagline : columnist.tagline
+	    };
+    });
+
+    twitterFeeds = _.filter(config.get("RSS_FEEDS"), function(rssFeed) {
+        return rssFeed.url.indexOf("api.twitter.com") !== -1;
     });
 };
 
@@ -110,12 +113,15 @@ site.getFrontPageContent = function (callback) {
             });
         },
         function (cb) { //2
-            var twitter = {};
             var selectedFeed = twitterFeeds[Math.floor(Math.random() * twitterFeeds.length)];
-            twitter.user = selectedFeed;
-            twitter.title = 'Twitter';
-            twitter.imageUrl = "http://d2sug25c5hnh7r.cloudfront.net/images/twitter-dukechronicle.png";
-            rss.getRSS('twitter-' + selectedFeed, function (err, tweets) {
+
+            var twitter = {
+                user: selectedFeed.url.split("screen_name=")[1],
+                title: 'Twitter'
+            };
+            twitter.imageUrl = "https://api.twitter.com/1/users/profile_image?screen_name="+twitter.user+"&size=bigger";
+
+            rss.getRSS(selectedFeed.title, function (err, tweets) {
                 if (tweets && tweets.items && tweets.items.length > 0) {
                     twitter.tweet = tweets.items[0].title;
                 } else {
@@ -209,55 +215,47 @@ site.getNewsPageContent = function(callback) {
 };
 
 site.getSportsPageContent = function(callback) {
-	async.parallel([
-	function(cb) {//0
-		api.group.docs(LAYOUT_GROUPS.Sports.namespace, null, cb);
-	},
-
-	function(cb) {//1
-		rss.getRSS('sportsblog', function(err, res) {
-			if(!err && res && res.items && res.items.length > 0) {
-				var Blog = res.items.map(function(item) {
-					item.url = item.link;
-					item.title = item.title.replace(/\&#8217;/g, '’');
-					delete item.link;
-					return item;
-				});
-				Blog.splice(5, Blog.length - 5);
-				cb(null, Blog)
-			} else
-				cb(err, []);
-		});
-	},
-
-	function(cb) {//2
-		api.taxonomy.getChildren(['Sports', 'Men'], cb);
-	},
-
-	function(cb) {//3
-		api.taxonomy.getChildren(['Sports', 'Women'], cb);
-	}], function(err, results) {
-		if(err) {
-			log.warning(err);
-			callback(err);
-		} else {
-			var model = results[0];
-			model.Blog = results[1];
+    async.parallel([
+        function(cb) {//0
+            api.group.docs(LAYOUT_GROUPS.Sports.namespace, null, cb);
+        },
+        function(cb) {//1
+            rss.getRSS('sportsblog', function(err, res) {
+                if(!err && res && res.items && res.items.length > 0) {
+                    var Blog = res.items.map(function(item) {
+                        item.url = item.link;
+                        item.title = item.title.replace(/\&#8217;/g, '’');
+                        delete item.link;
+                        return item;
+                    });
+                    Blog.splice(5, Blog.length - 5);
+                    cb(null, Blog)
+                } else
+                    cb(err, []);
+            });
+        },
+        function(cb) {//2
+            api.taxonomy.getChildren(['Sports'], cb);
+        }
+    ], function(err, results) {
+        if(err) {
+            log.warning(err);
+            callback(err);
+        } else {
+            var model = results[0];
+            model.Blog = results[1];
             model.multimedia = config.get('MULTIMEDIA_HTML');
-			model.adFullRectangle = {
-				"title" : "Advertisement",
-				"imageUrl" : "/images/ads/monster.png",
-				"url" : "http://google.com",
-				"width" : "300px",
-				"height" : "250px"
-			};
-			var children = {
-				men : results[2],
-				women : results[3]
-			};
-			callback(null, model, children);
-		}
-	});
+            model.adFullRectangle = {
+                "title" : "Advertisement",
+                "imageUrl" : "/images/ads/monster.png",
+                "url" : "http://google.com",
+                "width" : "300px",
+                "height" : "250px"
+            };
+            var children = results[2];
+            callback(null, model, children);
+        }
+    });
 };
 
 site.getOpinionPageContent = function(callback) {

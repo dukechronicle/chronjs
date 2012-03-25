@@ -33,7 +33,7 @@ define(["jquery", "underscore"], function($) {
                 });
             });
 
-
+            truncateTeaser();
         },
         frontpageAlign: function() {
             // align main and sidebar height
@@ -87,4 +87,15 @@ define(["jquery", "underscore"], function($) {
             });
         }
     }
+
+    function truncateTeaser() {
+        $(".block-row .list-story").each(function () {
+            while ($(this)[0].scrollHeight > $(this).outerHeight()) {
+                $(this).children("p").text(function (index, text) {
+                    return text.replace(/\s+\S*\.*$/, "...");
+                });
+            }
+        });
+    }
+
 });

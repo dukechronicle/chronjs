@@ -94,6 +94,7 @@ api.init = function(callback) {
 
       	api.cron.init();
         api.search.init();
+        api.image.init();
         api.newsletter.init();
         api.s3.init();
         api.site.init();

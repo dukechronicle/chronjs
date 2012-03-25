@@ -90,7 +90,7 @@ exports.init = function (app) {
     app.namespace('/article', function () {
         app.get('/:url', site.article);
         app.get('/:url/print', site.articlePrint);
-        app.get('/:url/edit', api.site.checkAdmin, site.editArticle);
+        app.get('/:url/edit', api.site.checkAdmin, admin.editArticle);
         app.get('/new', api.site.checkAdmin, admin.addArticle);
         app.post('/', api.site.checkAdmin, admin.addArticleData);
         app.put('/:url/edit', api.site.checkAdmin, admin.editArticleData);

@@ -13,7 +13,6 @@ var log = require('../../log');
 var sitemap = require('../../sitemap');
 
 admin.image = require('./image');
-admin.layout = require('./layout');
 
 
 admin.sendNewsletter = function(testEmail, campaignId, callback) {

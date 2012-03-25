@@ -173,7 +173,7 @@ function getArticle(articleURL)
 
                 // Insert into cache
                 articleCache[articleURL] = {data: data};
-
+                $(ARTICLE_CONTENT).empty();
                 $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL].data));
  				$.mobile.changePage($("#Article"),{transition:"slide", dataUrl:"/m/article/"+articleURL});
                 
@@ -184,6 +184,7 @@ function getArticle(articleURL)
         });
     }
 	else {
+        $(ARTICLE_CONTENT).empty();
         $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL].data));
 			$.mobile.changePage($("#Article"),{transition:"slide", dataUrl:"/m/article/"+articleURL});
     } 
@@ -222,18 +223,16 @@ function initMobileOptions()
 
 function beginMobile()
 {
+    console.log("begin mobile called");
     // on Document Ready parse URL
       $(function() {
           var relativeURL = window.location.pathname;
           var splitString = relativeURL.split("/");
           // TODO: malformed input?
+          getArticleList('all', 'The Chronicle', true);
           if(splitString[2] == "article" && splitString[3] != null && splitString[3] != "")
           {
              getArticle(splitString[3]);
-          }
-          else
-          {
-             getArticleList('all', 'The Chronicle', true);
           }
       });
 }

@@ -66,9 +66,7 @@ exports.init = function (app) {
         app.post('/newsletter', site.newsletterData);
     });
 
-    app.get('/graduation', function (req, res, next) {
-        res.redirect('/page/' + graduation);
-    });
+    app.get('/graduation', redirect('/page/graduation'));
 
     // Makes search url more readable
     app.get('/search', function (req, res) {
@@ -86,24 +84,26 @@ exports.init = function (app) {
 
     app.get('/login', site.login);
 
-    app.get('/article/:url', site.article);
-    app.get('/article/:url/print', site.articlePrint);
-    app.get('/article/:url/edit', api.site.checkAdmin, site.editArticle);
-
     // Webmaster tools stuff -- don't delete
     app.get('/mu-7843c2b9-3b9490d6-8f535259-e645b756', function (req, res) {
         res.send('42');
     });
 
+    app.namespace('/article', function () {
+        app.get('/:url', site.article);
+        app.get('/:url/print', site.articlePrint);
+        app.get('/:url/edit', api.site.checkAdmin, site.editArticle);
+        app.get('/new', api.site.checkAdmin, admin.addArticle);
+        app.post('/', api.site.checkAdmin, admin.addArticleData);
+        app.put('/:url/edit', api.site.checkAdmin, admin.editArticleData);
+    });
+
     app.namespace('/admin', function () {
         app.get('/', api.site.checkAdmin, admin.index);
         app.get('/newsletter', api.site.checkAdmin, admin.newsletter);
-        app.get('/add', api.site.checkAdmin, admin.addArticle);
         app.get('/manage', api.site.checkAdmin, admin.manage);
         app.get('/k4export', api.site.checkAdmin, admin.k4export);
         app.post('/k4export', api.site.checkAdmin, admin.k4exportData);
-        app.post('/edit', api.site.checkAdmin, admin.editArticleData);
-        app.post('/add', api.site.checkAdmin, admin.addArticleData);
         app.post('/newsletter', api.site.checkAdmin, admin.newsletterData);
         app.get('/layout/group/:group', api.site.checkAdmin, admin.layout);
     });

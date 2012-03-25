@@ -112,10 +112,10 @@ admin.addArticle = function (doc, callback) {
 };
 
 admin.editArticle = function (doc, original, imageVersion, imageType, callback) {
-    if (req.body.imageVersionId) {
+    if (imageVersion) {
         api.image.addVersionsToDoc(doc.id, original, imageVersion, imageType, callback);
     }
-    else if (req.body.doc.taxonomy == '') {
+    else if (doc.taxonomy == '') {
         callback('No section selected for article');
     }
     else {

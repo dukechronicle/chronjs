@@ -1,6 +1,8 @@
+var initFrontpageSlideshow;
+
 define(["jquery", "galleria/galleria-1.2.5"], function($) {
 
-    $(function() {
+    initFrontpageSlideshow = function() {
         Galleria.loadTheme('/js/galleria/themes/frontpage-slideshow/galleria.frontpage-slideshow.js');
         $("#slides").galleria({
             transition: "fade",
@@ -8,6 +10,6 @@ define(["jquery", "galleria/galleria-1.2.5"], function($) {
             width: 636,
             height: 393
         });
-    });
+    };
 
 });

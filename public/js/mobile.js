@@ -207,6 +207,7 @@ function getSectionList()
         $(ARTICLE_LIST).append(listItem);
     }   
 
+    $(ARTICLE_LIST).scrollTop();
 	$(ARTICLE_LIST).listview('refresh');
 }
 

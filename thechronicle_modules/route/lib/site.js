@@ -321,13 +321,6 @@ site.configData = function (req, res) {
 	    api.site.askForLogin(res, '/config');
 };
 
-site.newsletter = function (req, res) {
-    res.render('pages/newsletter', {
-	filename: 'pages/newsletter',
-	css: asereje.css(['container/style'])
-    });
-};
-
 site.newsletterData = function (req, res) {
     var email = req.body.email;
     var action = req.body.action;

@@ -4,6 +4,13 @@ exports.doc = {
         language: "javascript",
         
         views: {
+            author_info:{
+                map:function (doc) {
+                    if (doc.type == "author-node") {
+                        emit(doc.name.toLowerCase(), doc);
+                    }
+                }
+            },
 
             taxonomy:{
                 map:function (doc) {

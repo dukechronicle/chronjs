@@ -24,6 +24,22 @@ popular.registerArticleView = function(doc, callback) {
 	}
 }
 
+popular.getPopularArticles = function(taxonomy, count, callback) {
+    redis.client.zrevrange(_articleViewsKey(taxonomy), 0, count - 1, function(err, popular) {
+		if(err)
+			callback(err);
+		else {
+		    callback(null, popular.map(function(str) {
+				var parts = str.split('||');
+				return {
+					urls : ['/article/' + parts[0]],
+					title : parts[1]
+				};
+			}));
+		}	
+	});
+}
+
 function _articleViewsKey(taxonomy) {
 	return "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE") + ":" + JSON.stringify(taxonomy);
 }

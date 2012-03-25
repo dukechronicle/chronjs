@@ -2,7 +2,11 @@ var admin = exports;
 
 var adminApi = require('../../admin');
 var api = require('../../api');
+var config = require('../../config');
+var globalFunctions = require('../../global-functions');
 var log = require('../../log');
+
+admin.image = adminApi.image;
 
 
 admin.index = function (req, res, next) {
@@ -134,5 +138,25 @@ admin.editArticleData = function (req, res, next) {
     });
 };
 
-admin.image = adminApi.image;
-admin.layout = adminApi.layout.renderLayout;
+admin.layout = function (req, res, next) {
+    var section = req.query.section;
+    var group = globalFunctions.capitalizeWords(req.params.group);
+    var layoutConfig = api.group.getLayoutGroups();
+    adminApi.layout(section, group, layoutConfig, function (err, results) {
+        if (err) next(err);
+        else {
+            res.render("admin/page-layout", {
+                css:['admin/layout'],
+                js:['admin/layout?v=1'],
+                locals:{
+                    page: group,
+                    groups: layoutConfig[group].groups,
+                    mainSections: config.get("TAXONOMY_MAIN_SECTIONS"),
+                    sectionDocs: results.sectionDocs,
+                    groupDocs: results.groupDocs,
+                    nameSpace: layoutConfig[group].namespace
+                }
+            });      
+        }
+    });
+};

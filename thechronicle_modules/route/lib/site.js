@@ -11,7 +11,10 @@ var _ = require('underscore');
 
 
 site.mobile = function (req, res, next) {
-    res.sendfile('public/m/index.html');
+    res.render('site/mobile', {
+        layout:false
+        //filename:'views/site/mobile.jade',
+    });    
 };
 
 site.frontpage = function (req, res) {

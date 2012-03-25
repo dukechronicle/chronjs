@@ -21,4 +21,6 @@ authors.getLatest = function (authorName, taxonomy, count, callback) {
     });
 };
 
-
+authors.getInfo = function (authorName, callback) {
+    db.authors.getInfo(authorName, callback);
+};

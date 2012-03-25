@@ -24,3 +24,15 @@ authors.getLatest = function (authorName, taxonomy, count, callback) {
             }
     );
 };
+
+authors.getInfo = function(authorName, callback) {
+    var query = {
+        startkey:authorName.toLowerCase(),
+        include_docs:true
+    };
+
+    db.view('articles/author_info', query,
+            function (err, res) {
+                callback(err, _.pluck(res, 'doc'));
+            });
+};

@@ -1,10 +1,9 @@
 script(type='text/javascript')
-    var scrollLoadUrl = "staff/#{name}?";
-    var scrollLoadHTML =
-    '<h3><a href="/article/URL_REPLACE" class="addedArticle">HEADER_REPLACE</a></h3><div class="date">DATE_REPLACE</div>';
-    window.onload = function () {
+    CHRONICLE.onload.push(function () {
+        var scrollLoadUrl = "staff/#{name}?";
+        var scrollLoadHTML = '<h3><a href="/article/URL_REPLACE" class="addedArticle">HEADER_REPLACE</a></h3><div class="date">DATE_REPLACE</div>';
         scrollLoadPage(scrollLoadUrl, 2, scrollLoadHTML);
-    }
+    });
 
 #people
     h1 #{name}

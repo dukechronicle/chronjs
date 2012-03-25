@@ -13,38 +13,16 @@ var log = require('../../log');
 var sitemap = require('../../sitemap');
 
 admin.image = require('./image');
-admin.layout = require('./layout').renderLayout;
+admin.layout = require('./layout');
 
 
-admin.index = function (req, res, next) {
-    res.render('admin/index');
-};
-
-admin.newsletter = function (req, res, next) {
-    api.newsletter.createNewsletter(function(err, campaignID) {
-        if (err) next(err);
-        else {
-            res.render('admin/newsletter', {
-                js: ['admin/newsletter?v=3'],
-                locals: {campaignID: campaignID}
-            });
-        }
-    });
-};
-
-admin.newsletterData = function(req, res, next) {
-    var testEmailToSendTo = req.body.testEmail;
-    var campaignID = req.body.campaignID;
-
-    if(testEmailToSendTo != null) {
-        api.newsletter.sendTestNewsletter(campaignID, testEmailToSendTo, function(err) {
-            res.send("sent");
-        });
+admin.sendNewsletter = function(testEmail, campaignId, callback) {
+    if (testEmail) {
+        api.newsletter.sendTestNewsletter(campaignID, testEmail, callback);
     }
     else {
-        api.newsletter.sendNewsletter(campaignID, function(err) {
-            res.send("sent");
-                                  
+        api.newsletter.sendNewsletter(campaignID, function (err) {
+            callback(err);
             if(process.env.NODE_ENV === 'production') {
                 log.notice("Building sitemaps...");
 		sitemap.generateAllSitemaps(function (err) {
@@ -55,64 +33,11 @@ admin.newsletterData = function(req, res, next) {
     }
 };
 
-admin.addArticle = function (req, res, next) {
-    api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
-        res.render('admin/add', {
-            locals:{
-                groups:[],
-                taxonomy:taxonomy
-            }
-        });
-    });
-};
-
-admin.addPage = function (req, res, next) {
-    res.render('admin/addPage', {
-        locals: {
-            groups:[]
-        }
-    });
-};
-
-admin.manage = function (req, res, next) {
-    var db = api.getDatabaseName();
-    var host = api.getDatabaseHost();
-    var port = api.getDatabasePort() || "80";
-
-    var query = {};
-    if (req.query.beforeKey) query.startkey = parseInt(req.query.beforeKey);
-    if (req.query.beforeID) query.start_docid = req.query.beforeID;
-
-    api.docsByDate(null, query, function (err, docs) {
-        if (err) next(err);
-        else res.render('admin/manage', {
-            js: ['admin/manage?v=2'],
-            locals:{
-                docs:docs,
-                hasPrevious:(req.query.beforeID != null),
-                db:db,
-                host:host,
-                port:port
-            }
-        });
-    });
-};
-
-admin.k4export = function (req, res, next) {
-    res.render('admin/k4export', {
-        locals:{
-            failed:null,
-            succeeded:null,
-            taxonomy:null
-        }
-    });
-};
-
-admin.k4exportData = function (req, res, next) {
+admin.k4export = function (filepath, callback) {
     async.parallel({
         k4: function(callback) {
-            k4export.runExporter(req.files.zip.path, function (failed, success) {
-	            fs.unlink(req.files.zip.path);
+            k4export.runExporter(filepath, function (failed, success) {
+	        fs.unlink(filepath);
                 callback(null, {failed: failed, success: success});
             });
         },
@@ -165,101 +90,47 @@ admin.k4exportData = function (req, res, next) {
                 callback(err, taxonomy);
             });
         }
-    },
-    function(err, results) {
-        res.render('admin/k4export', {
-	        css: ['css/msdropdown'],
-            js: ['admin/k4export?v=7'],
-            locals:{
-                failed: results.k4.failed,
-                succeeded: results.k4.success,
-                taxonomy: results.taxonomy,
-                imageData: results.images
-	    }
-        });
-    });
+    }, callback);
 };
 
-admin.editArticleData = function (req, http_res, next) {
+admin.addArticle = function (doc, callback) {
+    if (doc.taxonomy == '') {
+        callback('No section selected for article');
+    }
+    else {
+        var fields = {
+            body:doc.body,
+            authors:doc.authors.split(", "),
+            title:doc.title,
+            subhead:doc.subhead,
+            teaser:doc.teaser,
+            type:doc.type,
+            taxonomy:JSON.parse(doc.taxonomy)
+        };
+
+        api.addDoc(fields, callback);
+    }
+};
+
+admin.editArticle = function (doc, original, imageVersion, imageType, callback) {
     if (req.body.imageVersionId) {
-        api.image.addVersionsToDoc(req.body.docId, req.body.original, req.body.imageVersionId, req.body.imageType, function (err, res) {
-            if (err) next(http_res);
-            else if(req.body.afterUrl) http_res.redirect(req.body.afterUrl);
-            else http_res.redirect('/admin');
-        });
+        api.image.addVersionsToDoc(doc.id, original, imageVersion, imageType, callback);
     }
     else if (req.body.doc.taxonomy == '') {
-        next('No section selected for article');
+        callback('No section selected for article');
     }
     else {
-        var id = req.body.doc.id;
+        var id = doc.id;
 
         var fields = {
-            title:req.body.doc.title,
-            body:req.body.doc.body,
-            subhead:req.body.doc.subhead,
-            teaser:req.body.doc.teaser,
-            authors:req.body.doc.authors.split(", "),
-            taxonomy:JSON.parse(req.body.doc.taxonomy)
+            title: doc.title,
+            body: doc.body,
+            subhead: doc.subhead,
+            teaser: doc.teaser,
+            authors: doc.authors.split(", "),
+            taxonomy: JSON.parse(doc.taxonomy)
         };
 
-        api.editDoc(id, fields, function (err, url) {
-            if (err) next(err);
-            else http_res.redirect('/article/' + url);
-        });
+        api.editDoc(id, fields, callback);
     }
-};
-
-admin.addArticleData = function (req, res, next) {
-    if (req.body.doc.taxonomy == '') {
-        next('No section selected for article');
-    }
-    else {
-        var form = req.body.doc;
-
-        var fields = {
-            body:form.body,
-            authors:form.authors.split(", "),
-            title:form.title,
-            subhead:form.subhead,
-            teaser:form.teaser,
-            type:form.type,
-            taxonomy:JSON.parse(form.taxonomy)
-        };
-
-        api.addDoc(fields, function (err, url) {
-            if (err) next(err);
-            else res.redirect('/article/' + url);
-        });
-    }
-};
-
-admin.addPageData = function (req, res, next) {
-    var form = req.body.doc;
-    var fields = {
-        node_title: form.title,
-        body: form.body,
-        style: form.style
-    };
-
-    api.page.add(fields, function (err, url) {
-        if (err) next(err);
-        else res.redirect('/page/' + url);
-    });
-};
-
-admin.editPageData = function (req, res, next) {
-    var form = req.body.doc;
-    var id = form.id;
-
-    var fields = {
-        node_title: form.title,
-        body: form.body,
-        style: form.style
-    };
-
-    api.page.edit(id, fields, function (err, url) {
-        if (err) next(err);
-        else res.redirect('/page/' + url);
-    });
 };

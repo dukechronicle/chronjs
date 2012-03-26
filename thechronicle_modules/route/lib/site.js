@@ -188,9 +188,11 @@ site.article = function (req, res, next) {
     // cache article pages for an hour
     if (!isAdmin) res.header('Cache-Control', 'public, max-age=3600');
 
-    api.site.getArticleContent(url, function (err, doc, model, parents) {
-        if (err)
+    api.site.getArticleContent(url, function (err, doc, model) {
+        if (err === 'not found')
             next();
+        else if (err)
+            next(err);
         else if ('/article/' + url != doc.url)
             res.redirect(doc.url);
         else res.render('article', {
@@ -198,7 +200,7 @@ site.article = function (req, res, next) {
                 doc:doc,
                 isAdmin:isAdmin,
                 model:model,
-                parentPaths:parents,
+                parentPaths: model.parents,
                 section: doc.taxonomy[0],
                 disqusData: {
                     isProduction: (process.env.NODE_ENV === 'production'),

@@ -1,0 +1,43 @@
+!!! 5
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, minimum-scale=1, maximum-scale=1')
+    link(rel='stylesheet', href='http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.css')
+    link(rel='stylesheet', href='/css/themes/chronicle.min.css')
+    link(rel='stylesheet', href='/css/chronmobile.css')
+                
+    script(src='http://code.jquery.com/jquery-1.7.1.min.js')
+    script(src='http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js')
+    script(src='/js/mobile.js') 
+    script(src='/js/mobile-google-analytics.js')
+
+    script(type='text/javascript')
+      initMobileOptions();
+  body
+    #ArticleList(data-role='page', articlelistcontainer='true', url='news', data-add-back-btn='false')
+      div(data-role='header', data-position='fixed')
+        h1#HEADER_TITLE The Chronicle
+      #ArticleListContent(data-role='content')
+        ul#ARTICLE_LIST(data-role='listview')
+      div(data-role='footer', data-position='fixed')
+        div(data-role='navbar')
+          ul
+            li
+              a(href='javascript:getArticleList(\'All\', \'The Chronicle\', false)') All Stories
+            li
+              a(href='javascript:getSectionList()') Sections
+    #Article(data-role='page', articlecontainer='true', url='Article', data-add-back-btn='true', data-back-btn-text='Back')
+      div(data-role='header')
+        h1 The Chronicle
+      #ARTICLE_CONTENT(data-role='content')
+      script(src='/js/disqus.js?v=4', type='text/javascript')
+      #disqus_thread
+      div(data-role='footer', data-position='fixed')
+    #error(data-role='page', articlecontainer='true', url='Article', data-add-back-btn='true', data-back-btn-text='Back')
+      div(data-role='header')
+        h1 Error
+      #ERROR_MESSAGE(data-role='content')
+        | An error has occured, click back to return to the previous page.
+    script(type='text/javascript')
+      beginMobile();        

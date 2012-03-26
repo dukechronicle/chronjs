@@ -23,7 +23,7 @@ var SERVER = this;
 
 var app = null;
 var viewOptions = {
-    isProduction: process.env.NODE_ENV === 'production'
+    isProduction: true //process.env.NODE_ENV === 'production'
 };
 
 asereje.config({
@@ -154,7 +154,7 @@ function runSite(callback) {
                 sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
 		    if (err) log.error("Couldn't build news sitemap: " + err);
 	        });
-            
+            }
                 builder.buildJavascript('site/main','site-js',function(err,jsFile) {
                     if (err) log.warning('Failed to build site Javascipt: ' + err);
                     else log.notice('Built site Javascript');
@@ -166,7 +166,7 @@ function runSite(callback) {
                     else log.notice('Built admin Javascript');
                     setViewOption('admin_javascript', jsFile);
                 });
-            }
+            
 
             redisClient.init(true, function(err) {
                 route.init(app);

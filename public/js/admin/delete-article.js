@@ -1,6 +1,8 @@
+var deleteArticle;
+
 define(['jquery', 'libs/jquery-ui'], function ($) {
 
-    $(function() {
+    deleteArticle = function() {
 
         $(".delete-article").click(function(event) {
             event.preventDefault();
@@ -39,5 +41,5 @@ define(['jquery', 'libs/jquery-ui'], function ($) {
             });
 
         });
-    });
+    };
 });

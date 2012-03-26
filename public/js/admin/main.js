@@ -2,8 +2,8 @@ require.config({
     baseUrl: '/js',
 });
 
-require(['admin/crop','admin/deleteArticle','admin/html5upload',
-         'admin/imgdelete','admin/json-to-form','admin/k4export',
+require(['admin/crop','admin/delete-article','admin/html5upload',
+         'admin/delete-image','admin/json-to-form','admin/k4export',
          'admin/layout','admin/newsletter','admin/nicedate'], function () {
              $(function () {
                  if (typeof CHRONICLE == "object" && CHRONICLE.onload)

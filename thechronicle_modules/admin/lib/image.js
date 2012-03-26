@@ -37,7 +37,7 @@ exports.upload = function (req, res) {
     res.render('admin/upload', {
         filename:'admin/upload',
         css:['css/html5upload'],
-        js:['async', 'html5upload']
+        js:['async', 'html5upload?v=1']
     });
 };
 

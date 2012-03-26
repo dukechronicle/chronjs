@@ -1,8 +1,8 @@
-var imageDelete;
+var deleteImage;
 
 define(['jquery', 'libs/jquery-ui'], function ($) {
 
-    imageDelete = function() {
+    deleteImage = function() {
 
         $(".delete-image").click(function(event) {
             event.preventDefault();

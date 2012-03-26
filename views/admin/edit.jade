@@ -46,3 +46,5 @@ form(action='', method='POST')
         input(type='submit', value='Submit Changes')
         &nbsp;&nbsp;
         input.delete-article(type='button', value='Delete Article', data-docid=doc._id, data-rev=doc._rev, data-title=doc.title, data-dest='/admin')
+
+script CHRONICLE.onload.push(function(){deleteArticle()})

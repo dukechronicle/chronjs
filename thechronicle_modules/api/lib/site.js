@@ -7,6 +7,7 @@ var log = require('../../log');
 var redis = require('../../redisclient');
 var route = require('../../route');
 var rss = require('./rss');
+var popular = require('./popular');
 
 var _ = require("underscore");
 var async = require('async');
@@ -26,7 +27,7 @@ site.init = function () {
         COLUMNIST_HEADSHOTS[columnist.name] = {
             headshot : columnist.headshot,
             tagline : columnist.tagline
-	    };
+        };
     });
 
     twitterFeeds = _.filter(config.get("RSS_FEEDS"), function(rssFeed) {
@@ -36,57 +37,56 @@ site.init = function () {
 
 // Checks if you are an admin with browser check
 site.checkAdmin = function(req, res, next) {
-	site.restrictToAdmin(req, res, function() {
-		if(req.headers['user-agent'].indexOf("Chrome") === -1) {
-			site.askForLogin(res, req.url, '', 'Please use Google Chrome to use the admin interface');
-		} else {
-			next();
-		}
-	});
+    site.restrictToAdmin(req, res, function() {
+        if(req.headers['user-agent'].indexOf("Chrome") === -1) {
+            site.askForLogin(res, req.url, '', 'Please use Google Chrome to use the admin interface');
+        } else {
+            next();
+        }
+    });
 };
 // Checks if you are an admin
 site.restrictToAdmin = function(req, res, next) {
-	//if not admin, require login
-	if(!api.accounts.isAdmin(req)) {
-		site.askForLogin(res, req.url);
-	} else {
-		next();
-	}
+    //if not admin, require login
+    if(!api.accounts.isAdmin(req)) {
+        site.askForLogin(res, req.url);
+    } else {
+        next();
+    }
 };
 // redirects to login page
 site.askForLogin = function(res, afterLoginPage, username, err) {
-	res.render('login', {
-		locals : {
-			afterLogin : afterLoginPage,
-			username : username || '',
-			error : err || ''
-		},
-		layout : 'admin/layout'
-	});
+    res.render('login', {
+        locals : {
+            afterLogin : afterLoginPage,
+            username : username || '',
+            error : err || ''
+        },
+        layout : 'admin/layout'
+    });
 };
 
 site.renderConfigPage = function(req, res, err) {
-	if(err) {
-		if( typeof err === 'object')
-			err = JSON.stringify(err);
-		err += "<br /><br />The live site was not updated to use the new configuration due to errors."
-	}
+    if(err) {
+        if( typeof err === 'object')
+            err = JSON.stringify(err);
+        err += "<br /><br />The live site was not updated to use the new configuration due to errors."
+    }
 
-	res.render('config/config', {
-		js: ['admin/json-to-form?v=2'],
+    res.render('config/config', {
         css: ['css/onde'],
         removeBootstrap: true,
         locals : {
-			configParams : config.getParameters(),
-			profileName : config.getProfileNameKey(),
-			profileValue : config.getActiveProfileName(),
-			revisionName : config.getRevisionKey(),
-			revisionValue : config.getConfigRevision(),
-			error : err,
+            configParams : config.getParameters(),
+            profileName : config.getProfileNameKey(),
+            profileValue : config.getActiveProfileName(),
+            revisionName : config.getRevisionKey(),
+            revisionValue : config.getConfigRevision(),
+            error : err,
             showOnly : req.query.showOnly
-		},
-		layout : 'admin/layout'
-	});
+        },
+        layout : 'admin/layout'
+    });
 };
 
 site.getFrontPageContent = function (callback) {
@@ -154,64 +154,51 @@ site.getFrontPageContent = function (callback) {
 };
 
 site.getNewsPageContent = function(callback) {
-	async.parallel([
-	function(cb) {
-		api.group.docs(LAYOUT_GROUPS.News.namespace, null, cb);
-	},
+    async.parallel([
+    function(cb) {
+        api.group.docs(LAYOUT_GROUPS.News.namespace, null, cb);
+    },
+    function(cb) {
+        popular.getPopularArticles(['News'], 4, cb);
+    },
+    function(cb) {
+        rss.getRSS('newsblog', function(err, rss) {
+            if(!err && rss && rss.items && rss.items.length > 0) {
+                var Blog = rss.items.map(function(item) {
+                    item.url = item.link;
+                    item.title = item.title.replace(/\&#8217;/g, '’');
+                    delete item.link;
+                    return item;
+                });
+                Blog.splice(6, Blog.length - 6);
+                cb(null, Blog);
+            } else
+                cb(err, []);
+        });
+    },
 
-	function(cb) {
-		redis.client.zrevrange(_articleViewsKey(['News']), 0, 3, function(err, popular) {
-			if(err)
-				cb(err);
-			else
-				cb(null, popular.map(function(str) {
-					var parts = str.split('||');
-					return {
-						urls : ['/article/' + parts[0]],
-						title : parts[1]
-					};
-				}));
-		});
-	},
-
-	function(cb) {
-		rss.getRSS('newsblog', function(err, rss) {
-			if(!err && rss && rss.items && rss.items.length > 0) {
-				var Blog = rss.items.map(function(item) {
-					item.url = item.link;
-					item.title = item.title.replace(/\&#8217;/g, '’');
-					delete item.link;
-					return item;
-				});
-				Blog.splice(6, Blog.length - 6);
-				cb(null, Blog);
-			} else
-				cb(err, []);
-		});
-	},
-
-	function(cb) {
-		api.taxonomy.getChildren(['News'], cb);
-	}], function(err, results) {
-		if(err) {
-			log.warning(err);
-			callback(err);
-		} else {
-			var model = results[0];
-			model.popular = results[1];
-			model.Blog = results[2];
+    function(cb) {
+        api.taxonomy.getChildren(['News'], cb);
+    }], function(err, results) {
+        if(err) {
+            log.warning(err);
+            callback(err);
+        } else {
+            var model = results[0];
+            model.popular = results[1];
+            model.Blog = results[2];
             model.multimedia = config.get('MULTIMEDIA_HTML');
-			model.adFullRectangle = {
-				"title" : "Advertisement",
-				"imageUrl" : "/images/ads/monster.png",
-				"url" : "http://google.com",
-				"width" : "300px",
-				"height" : "250px"
-			};
-			var children = results[3];
-			callback(null, model, children);
-		}
-	});
+            model.adFullRectangle = {
+                "title" : "Advertisement",
+                "imageUrl" : "/images/ads/monster.png",
+                "url" : "http://google.com",
+                "width" : "300px",
+                "height" : "250px"
+            };
+            var children = results[3];
+            callback(null, model, children);
+        }
+    });
 };
 
 site.getSportsPageContent = function(callback) {
@@ -260,171 +247,167 @@ site.getSportsPageContent = function(callback) {
 
 site.getOpinionPageContent = function(callback) {
     async.parallel([
-	function(cb) {//0
-	    api.group.docs(LAYOUT_GROUPS.Opinion.namespace, null, cb);
-	},
+    function(cb) {//0
+        api.group.docs(LAYOUT_GROUPS.Opinion.namespace, null, cb);
+    },
 
-	function(cb) {//1
-	    api.taxonomy.getChildren(['Opinion'], cb);
-	},
+    function(cb) {//1
+        api.taxonomy.getChildren(['Opinion'], cb);
+    },
 
-	function(cb) {//2
-	    rss.getRSS('blog-opinion', function(err, res) {
-		if(!err && res && res.items && res.items.length > 0) {
-		    var Blog = res.items.map(function(item) {
-			item.url = item.link;
-			item.title = item.title.replace(/\&#8217;/g, '’');
-			delete item.link;
-			return item;
-		    });
-		    Blog.splice(5, Blog.length - 5);
-		    cb(null, Blog)
-		} else
-		    cb(err, []);
-	    });
-	},
+    function(cb) {//2
+        rss.getRSS('blog-opinion', function(err, res) {
+        if(!err && res && res.items && res.items.length > 0) {
+            var Blog = res.items.map(function(item) {
+                item.url = item.link;
+                item.title = item.title.replace(/\&#8217;/g, '’');
+                delete item.link;
+                return item;
+            });
+            Blog.splice(5, Blog.length - 5);
+            cb(null, Blog)
+        } else
+            cb(err, []);
+        });
+    },
 
-	function(cb) {// 3
-	    api.authors.getLatest("Editorial Board", "Opinion", 5, cb);
-	},
+    function(cb) {// 3
+        api.authors.getLatest("Editorial Board", "Opinion", 5, cb);
+    },
 
-	function(cb) {//4
-	    async.map(COLUMNISTS_DATA, function(columnist, _callback) {
-		api.authors.getLatest(columnist.user || columnist.name, "Opinion", 5, function(err, res) {
-		    columnist.stories = res;
-		    _callback(err, columnist);
-		})
-	    }, cb);
-	}], function(err, results) {
-	    if(err)
-		callback(err);
-	    else {
-		var model = results[0];
-		if (model.Featured) {
-		    model.Featured.forEach(function(article) {
-			article.author = article.authors[0];
-			var columnistObj = null;
-			if( columnistObj = COLUMNIST_HEADSHOTS[article.author]) {
-			    if(columnistObj.headshot)
-				article.thumb = columnistObj.headshot;
-			    if(columnistObj.tagline)
-				article.tagline = columnistObj.tagline;
-			}
-		    });
-		}
-		model.Blog = results[2];
-		model.EditorialBoard = results[3];
-		model.Columnists = {};
-		// assign each columnist an object containing name and stories to make output jade easier
-		results[4].forEach(function(columnist, index) {
-		    model.Columnists[index] = columnist;
-		});
-		// need to call compact to remove undefined entries in array
-		_.compact(model.Columnists);
-		model.adFullRectangle = {
-		    "title" : "Advertisement",
-		    "imageUrl" : "/images/ads/monster.png",
-		    "url" : "http://google.com",
-		    "width" : "300px",
-		    "height" : "250px"
-		};
+    function(cb) {//4
+        async.map(COLUMNISTS_DATA, function(columnist, _callback) {
+            api.authors.getLatest(columnist.user || columnist.name, "Opinion", 5, function(err, res) {
+                columnist.stories = res;
+                _callback(err, columnist);
+            })
+        }, cb);
+    }], function(err, results) {
+            if(err)
+                callback(err);
+            else {
+                var model = results[0];
+                if (model.Featured) {
+                    model.Featured.forEach(function(article) {
+                        article.author = article.authors[0];
+                        var columnistObj = null;
+                        if( columnistObj = COLUMNIST_HEADSHOTS[article.author]) {
+                            if(columnistObj.headshot)
+                                article.thumb = columnistObj.headshot;
+                            if(columnistObj.tagline)
+                                article.tagline = columnistObj.tagline;
+                        }
+                    });
+                }
+                model.Blog = results[2];
+                model.EditorialBoard = results[3];
+                model.Columnists = {};
+                // assign each columnist an object containing name and stories to make output jade easier
+                results[4].forEach(function(columnist, index) {
+                    model.Columnists[index] = columnist;
+                });
+                // need to call compact to remove undefined entries in array
+                _.compact(model.Columnists);
+                model.adFullRectangle = {
+                    "title" : "Advertisement",
+                    "imageUrl" : "/images/ads/monster.png",
+                    "url" : "http://google.com",
+                    "width" : "300px",
+                    "height" : "250px"
+                };
 
-		model.adFullBanner = {
-		    "title" : "Ad",
-		    "imageUrl" : "/images/ads/full-banner.jpg",
-		    "url" : "http://google.com",
-		    "width" : "468px",
-		    "height" : "60px"
-		};
+                model.adFullBanner = {
+                    "title" : "Ad",
+                    "imageUrl" : "/images/ads/full-banner.jpg",
+                    "url" : "http://google.com",
+                    "width" : "468px",
+                    "height" : "60px"
+                };
 
-		var children = results[1];
-		callback(null, model, children);
-	    }
+                var children = results[1];
+                callback(null, model, children);
+            }
         });
 };
 
 site.getRecessPageContent = function(callback) {
-	async.parallel([
-	function(cb) {
-		api.group.docs(LAYOUT_GROUPS.Recess.namespace, null, cb);
-	},
+    async.parallel([
+    function(cb) {
+        api.group.docs(LAYOUT_GROUPS.Recess.namespace, null, cb);
+    },
 
-	function(cb) {
-		api.taxonomy.getChildren(['Recess'], cb);
-	},
+    function(cb) {
+        api.taxonomy.getChildren(['Recess'], cb);
+    },
 
-	function(cb) {
-		rss.getRSS('recessblog', function(err, rss) {
-			if(!err && rss && rss.items && rss.items.length > 0) {
-				var Blog = rss.items.map(function(item) {
-					item.url = item.link;
-					item.title = item.title.replace(/\&#8217;/g, '’');
-					delete item.link;
-					return item;
-				});
-				Blog.splice(3, Blog.length - 3);
-				cb(null, Blog);
-			} else
-				cb(err, []);
-		});
-	}], function(err, results) {
-		if(err)
-			callback(err);
-		else {
-			var model = results[0];
-			model.Blog = results[2];
+    function(cb) {
+        rss.getRSS('recessblog', function(err, rss) {
+            if(!err && rss && rss.items && rss.items.length > 0) {
+                var Blog = rss.items.map(function(item) {
+                    item.url = item.link;
+                    item.title = item.title.replace(/\&#8217;/g, '’');
+                    delete item.link;
+                    return item;
+                });
+                Blog.splice(3, Blog.length - 3);
+                cb(null, Blog);
+            } else
+                cb(err, []);
+        });
+    }], 
+    function(err, results) {
+        if(err)
+            callback(err);
+        else {
+            var model = results[0];
+            model.Blog = results[2];
             model.multimedia = config.get('MULTIMEDIA_HTML');
-			model.adMedRectangle = {
-				"title" : "Advertisement",
-				"imageUrl" : "https://www.google.com/help/hc/images/adsense_185665_adformat-text_250x250.png",
-				"url" : "http://google.com",
-				"width" : "250px",
-				"height" : "250px"
-			};
-			var children = results[1];
+            model.adMedRectangle = {
+                "title" : "Advertisement",
+                "imageUrl" : "https://www.google.com/help/hc/images/adsense_185665_adformat-text_250x250.png",
+                "url" : "http://google.com",
+                "width" : "250px",
+                "height" : "250px"
+            };
+            var children = results[1];
 
-			callback(null, model, children);
-		}
-	});
+            callback(null, model, children);
+        }
+    });
 };
 
 site.getTowerviewPageContent = function(callback) {
-	async.parallel([
-	function(cb) {
-		api.group.docs(LAYOUT_GROUPS.Towerview.namespace, null, cb);
-	},
+    async.parallel([
+    function(cb) {
+        api.group.docs(LAYOUT_GROUPS.Towerview.namespace, null, cb);
+    },
 
-	function(cb) {
-		api.taxonomy.getChildren(['Towerview'], cb);
-	}], function(err, results) {
-		if(err)
-			callback(err);
-		else {
-			var model = results[0];
-			model.adFullRectangle = {
-				"title" : "Advertisement",
-				"imageUrl" : "/images/ads/monster.png",
-				"url" : "http://google.com",
-				"width" : "300px",
-				"height" : "250px"
-			};
-			var children = results[1];
-			callback(null, model, children);
-		}
-	});
+    function(cb) {
+        api.taxonomy.getChildren(['Towerview'], cb);
+    }], 
+    function(err, results) {
+        if(err)
+            callback(err);
+        else {
+            var model = results[0];
+            model.adFullRectangle = {
+                "title" : "Advertisement",
+                "imageUrl" : "/images/ads/monster.png",
+                "url" : "http://google.com",
+                "width" : "300px",
+                "height" : "250px"
+            };
+            var children = results[1];
+            callback(null, model, children);
+        }
+    });
 };
 
 site.getSectionContent = function (params, callback) {
     var section = _.last(params);
     async.parallel([
-        function (cb) {
-            redis.client.zrevrange(_articleViewsKey(params), 0, 4, function (err, popular) {
-                if (err) cb(err)
-                else cb(null, popular.map(function (str) {
-                    var parts = str.split('||');
-                    return { urls:['/article/' + parts[0]], title:parts[1] };
-                }));
-            });
+        function(cb) {
+            popular.getPopularArticles(params, 5, cb);
         },
         function (cb) {
             api.taxonomy.docs(params, 20, null, function (err, docs) {
@@ -433,7 +416,7 @@ site.getSectionContent = function (params, callback) {
             });
         },
         function (cb) {
-	    api.taxonomy.getParents(params, cb);
+            api.taxonomy.getParents(params, cb);
         },
         function (cb) {
             api.taxonomy.getChildren(params, function (err, children) {
@@ -450,16 +433,17 @@ site.getSectionContent = function (params, callback) {
                 var children = results[3];
                 callback(null, section, docs, children, parents, popular);
             }
-        });
+        }
+    );
 };
 
 site.getAuthorContent = function(name, callback) {
-	api.search.docsByAuthor(name, 'desc', '', 1, function(err, docs) {
-		if(err)
-			callback(err);
-		else
-			modifyArticlesForDisplay(docs, callback);
-	});
+    api.search.docsByAuthor(name, 'desc', '', 1, function(err, docs) {
+        if(err)
+            callback(err);
+        else
+            modifyArticlesForDisplay(docs, callback);
+    });
 };
 
 site.getSearchContent = function (wordsQuery, query, callback) {
@@ -483,11 +467,12 @@ site.getSearchContent = function (wordsQuery, query, callback) {
 
 site.getArticleContent = function(url, callback) {
     api.articleForUrl(url, function(err, doc) {
-	if (err) callback('not found');
+        if (err) callback('not found');
         else {
-            doc = modifyArticleForDisplay(doc);
-            cache(site.getArticleContentUncached,600)(doc,function (err, model) {
-                callback(err, doc, model);
+            var displayDoc = modifyArticleForDisplay(doc);
+            cache(site.getArticleContentUncached,600)(displayDoc,function (err, model) {
+                callback(err, displayDoc, model);
+                popular.registerArticleView(doc, function(err,res){});
             });
         }
     });
@@ -495,126 +480,96 @@ site.getArticleContent = function(url, callback) {
 
 site.getArticleContentUncached = function(doc, callback) {
     async.parallel([
-	function(cb) {
-	    redis.client.zrevrange(_articleViewsKey([]), 0, 4, function(err, popular) {
-		if(err) cb(err);
-		else cb(null, popular.map(function(str) {
-		    var parts = str.split('||');
-		    return {
-			urls : ['/article/' + parts[0]],
-			title : parts[1]
-		    };
-		}));
-	    });
-	},
-	function(cb) {
-	    api.search.relatedArticles(doc._id, 5, function(err, relatedArticles) {
-                if (err) cb(err);
-		else modifyArticlesForDisplay(relatedArticles, cb);
-	    });
-	},
-	function(cb) {
-	    api.taxonomy.getParents(doc.taxonomy, cb);
-	}
-    ], function(err, results) {
-	if(err)
-	    callback(err);
-	else {
-	    var model = {
-		adFullRectangle : {
-		    "title" : "Advertisement",
-		    "imageUrl" : "/images/ads/monster.png",
-		    "url" : "http://google.com",
-		    "width" : "300px",
-		    "height" : "250px"
-		},
-                popular: results[0],
-		related: results[1],
-                parents: results[2]
-	    };
+    function(cb) {
+        popular.getPopularArticles([], 5, cb);
+    },
+    function(cb) {
+        api.search.relatedArticles(doc._id, 5, function(err, relatedArticles) {
+            if (err) cb(err);
+            else modifyArticlesForDisplay(relatedArticles, cb);
+        });
+    },
+    function(cb) {
+        api.taxonomy.getParents(doc.taxonomy, cb);
+    }
+    ], 
+    function(err, results) {
+        if(err)
+            callback(err);
+        else {
+            var model = {
+            adFullRectangle : {
+                "title" : "Advertisement",
+                "imageUrl" : "/images/ads/monster.png",
+                "url" : "http://google.com",
+                "width" : "300px",
+                "height" : "250px"
+            },
+                    popular: results[0],
+            related: results[1],
+                    parents: results[2]
+            };
 
-            // put callback before statistics so the user doesn't have to wait for statistics to run to see the page
-	    callback(null, model);
-
-            // Statistics for most read
-	    if(doc.taxonomy) {
-		var length = doc.taxonomy.length;
-		var taxToSend = _.clone(doc.taxonomy);
-		var multi = redis.client.multi();
-		for(var i = length; i >= 0; i--) {
-		    taxToSend.splice(i, 1);
-		    multi.zincrby(_articleViewsKey(taxToSend), 1, _.last(doc.urls) + "||" + doc.title);
-		}
-		multi.exec(function(err, res) {
-		    if(err) {
-			log.warning("Failed to register article view: " + _.last(doc.urls));
-			log.warning(err);
-		    }
-		});
-	    }
-	}
+            callback(null, model);
+        }
     });
 };
 
 site.getPageContent = function(url, callback) {
-	api.page.getByUrl(url, function(err, doc) {
-		if(err)
-			callback(err);
-		else {
-			doc.path = "/page/" + url;
-			doc.fullUrl = "http://dukechronicle.com/page/" + url;
-			var model = {
-				adFullRectangle : {
-					"title" : "Advertisement",
-					"imageUrl" : "/images/ads/monster.png",
-					"url" : "http://google.com",
-					"width" : "300px",
-					"height" : "250px"
-				}
-			};
-			callback(null, doc, model);
-		}
-	});
+    api.page.getByUrl(url, function(err, doc) {
+        if(err)
+            callback(err);
+        else {
+            doc.path = "/page/" + url;
+            doc.fullUrl = "http://dukechronicle.com/page/" + url;
+            var model = {
+                adFullRectangle : {
+                    "title" : "Advertisement",
+                    "imageUrl" : "/images/ads/monster.png",
+                    "url" : "http://google.com",
+                    "width" : "300px",
+                    "height" : "250px"
+                }
+            };
+            callback(null, doc, model);
+        }
+    });
 };
 function modifyArticlesForDisplay(docs, callback) {
-	async.filter(docs, function(doc, cb) {
-		modifyArticleForDisplay(doc);
-		if(doc.url === undefined)
-			cb(null);
-		else
-			cb(doc);
-	}, function(results) {
-		callback(null, results);
-	});
+    async.filter(docs, function(doc, cb) {
+        modifyArticleForDisplay(doc);
+        if(doc.url === undefined)
+            cb(null);
+        else
+            cb(doc);
+    }, function(results) {
+        callback(null, results);
+    });
 }
 
 function modifyArticleForDisplay(doc, callback) {
-	if(doc.urls) {
-		doc.url = '/article/' + _.last(doc.urls);
-		doc.fullUrl = 'http://dukechronicle.com' + doc.url;
-	}
-	if(doc.created)
-		doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
+    if(doc.urls) {
+        doc.url = '/article/' + _.last(doc.urls);
+        doc.fullUrl = 'http://dukechronicle.com' + doc.url;
+    }
+    if(doc.created)
+        doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
 
-	doc.authorsArray = _.clone(doc.authors);
-	doc.authors = "";
-	doc.authorsHtml = "";
-	if(doc.authorsArray && doc.authorsArray.length > 0) {
-		for(var i = 0; i < doc.authorsArray.length; i++) {
-			doc.authorsHtml += "<a href='/staff/" + doc.authorsArray[i].replace(/ /g, '-') + "'>" + doc.authorsArray[i] + "</a>";
-			doc.authors += doc.authorsArray[i];
-			if(i < (doc.authorsArray.length - 1)) {
-				doc.authors += ", ";
-				doc.authorsHtml += ", ";
-			}
-		}
-	}
+    doc.authorsArray = _.clone(doc.authors);
+    doc.authors = "";
+    doc.authorsHtml = "";
+    if(doc.authorsArray && doc.authorsArray.length > 0) {
+        for(var i = 0; i < doc.authorsArray.length; i++) {
+            doc.authorsHtml += "<a href='/staff/" + doc.authorsArray[i].replace(/ /g, '-') + "'>" + doc.authorsArray[i] + "</a>";
+            doc.authors += doc.authorsArray[i];
+            if(i < (doc.authorsArray.length - 1)) {
+                doc.authors += ", ";
+                doc.authorsHtml += ", ";
+            }
+        }
+    }
     
-	return doc;
-}
-
-function _articleViewsKey(taxonomy) {
-	return "article_views:" + config.get("COUCHDB_URL") + ":" + config.get("COUCHDB_DATABASE") + ":" + JSON.stringify(taxonomy);
+    return doc;
 }
 
 function cache(func, expireTime) {

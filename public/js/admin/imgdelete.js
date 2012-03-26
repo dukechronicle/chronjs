@@ -1,6 +1,8 @@
+var imageDelete;
+
 define(['jquery', 'libs/jquery-ui'], function ($) {
 
-    $(function(){
+    imageDelete = function() {
 
         $(".delete-image").click(function(event) {
             event.preventDefault();
@@ -48,6 +50,6 @@ define(['jquery', 'libs/jquery-ui'], function ($) {
                 }
             );
         });
-    });
+    };
 
 });

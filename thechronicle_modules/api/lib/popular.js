@@ -21,7 +21,6 @@ popular.registerArticleView = function(doc, callback) {
                 taxToSend.splice(i, 1);
                 multi.zrem(_articleViewsKey(taxToSend), _.last(doc.urls) + "||" + doc.title);
             }
-            log.info('Removing article from popular: ' + _.last(doc.urls));
             multi.exec(function(err, res) {
                 if(err) {
                     log.warning("Failed to delete popular article: " + _.last(doc.urls));
@@ -42,7 +41,6 @@ popular.registerArticleView = function(doc, callback) {
                     log.warning("Failed to register article view: " + _.last(doc.urls));
                     log.warning(err);
                 }
-                log.info('Incrementing article view: ' + _.last(doc.urls));
                 callback(err, res);
             });
         }

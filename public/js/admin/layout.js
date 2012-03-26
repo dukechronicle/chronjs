@@ -1,10 +1,12 @@
+var layout;
+
 define(['jquery', 'Article'], function($, Article) {
 
     var articles = {};
     var updated = [];
 
 
-    $(function() {
+    layout = function() {
 
         initializeStories($(".story"));
 
@@ -149,6 +151,6 @@ define(['jquery', 'Article'], function($, Article) {
             });
         }
 
-    });
+    };
 
 });

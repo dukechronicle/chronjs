@@ -1,6 +1,8 @@
+var initNewsletterForm;
+
 define(['jquery', 'libs/jquery-ui'], function ($) {
 
-    $(function () {
+    initNewsletterForm = function () {
 
         $("form#test").submit(function (e) {
             e.preventDefault();
@@ -30,7 +32,7 @@ define(['jquery', 'libs/jquery-ui'], function ($) {
             }
         });
 
-    });
+    };
 
     function sendNewsletter(form, onSentText, callback) {
         $.post('/admin/newsletter', form.serialize(), function (msg) {

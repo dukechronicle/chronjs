@@ -30,17 +30,6 @@ exports.trim = function (string) {
     return string.replace(/^\s*|\s*$/g, '')
 };
 
-exports.sendJSONResponse = function(res,jsonObject) {
-    var jsonString = JSON.stringify(jsonObject);
-    
-    res.render('json', {
-            locals: {
-                  json: jsonString
-               },
-        layout: false
-        });
-};
-
 exports.downloadUrlToPath = function (url, path, callback) {
     var urlObj = urlModule.parse(url);
     log.info('host: ' + urlObj.host);

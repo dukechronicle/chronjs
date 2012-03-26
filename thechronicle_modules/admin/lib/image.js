@@ -74,17 +74,11 @@ exports.uploadData = function (req, httpRes) {
                 err = "Error";
             }
 
-            globalFunctions.sendJSONResponse(httpRes, {
-                error:err,
-                imageID:imageID
-            });
+            httpRes.send({error:err, imageID:imageID});
         }
         else {
             log.info('Image uploaded: ' + url + ' and stored in DB: ' + result);
-            globalFunctions.sendJSONResponse(httpRes, {
-                imageID:imageID,
-                imageName:imageName
-            });
+            httpRes.send({imageID:imageID, imageName:imageName});
         }
     });
 };
@@ -96,7 +90,7 @@ exports.articles = function (req, httpRes) {
         func = api.image.docsForOriginal;
                         
     func(id, function(err, res) {
-        globalFunctions.sendJSONResponse(httpRes, res);
+        httpRes.send(res);
     });
 };
 
@@ -105,12 +99,12 @@ exports.deleteImage = function (req, httpRes) {
     if(req.query.orig && req.query.orig == '1') {
         api.image.deleteOriginal(id, function(err, res) {
             var ret = (err != null);
-            globalFunctions.sendJSONResponse(httpRes, {ok: ret});
+            httpRes.send({ok: ret});
         });
     } else {
         api.image.deleteVersion(id, true, function(err, res) {
             var ret = (err != null);
-            globalFunctions.sendJSONResponse(httpRes, {ok: ret});
+            httpRes.send({ok: ret});
         })
     }
 };

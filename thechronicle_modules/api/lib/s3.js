@@ -23,12 +23,16 @@ s3.getCloudFrontUrl = function(url) {
     return url;
 };
 
-s3.put = function (bucket, buf, key, type, callback) {
-    var req = createClient(bucket).put(key, {
+s3.put = function (bucket, buf, key, type, encoding, callback) {
+    var options = {
         'Content-Length':buf.length,
         'Content-Type':type,
         'Cache-Control': 'public, max-age=86400'
-    });
+    };
+    if (encoding)
+        options.encoding = encoding;
+
+    var req = createClient(bucket).put(key, options);
     req.on('response', function (res) {
         if (200 == res.statusCode)
             callback(null, S3_URL + bucket + '/' + key);

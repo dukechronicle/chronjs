@@ -115,6 +115,7 @@ exports.init = function (app) {
         app.get('/:imageName', api.site.checkAdmin, admin.image.renderImage);
         app.post('/info', api.site.checkAdmin, admin.image.info);
         app.post('/crop', api.site.checkAdmin, admin.image.crop);
+        app.post('/add', api.site.checkAdmin, admin.addImageToArticle);
     });
     
     //The 404 Route (ALWAYS Keep this as the last route)

@@ -95,7 +95,7 @@ admin.addArticle = function (req, res, next) {
 };
 
 admin.addArticleData = function (req, res, next) {
-    api.addArticle(req.body.doc, function (err, url) {
+    adminApi.addArticle(req.body.doc, function (err, url) {
         if (err) next(err);
         else res.redirect('/article/' + url);
     });

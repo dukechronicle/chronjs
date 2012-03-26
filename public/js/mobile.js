@@ -207,8 +207,8 @@ function getSectionList()
         $(ARTICLE_LIST).append(listItem);
     }   
 
-    $(ARTICLE_LIST).scrollTop();
 	$(ARTICLE_LIST).listview('refresh');
+    $.mobile.silentScroll(0);
 }
 
 function initMobileOptions()
@@ -224,7 +224,6 @@ function initMobileOptions()
 
 function beginMobile()
 {
-    console.log("begin mobile called");
     // on Document Ready parse URL
       $(function() {
           var relativeURL = window.location.pathname;

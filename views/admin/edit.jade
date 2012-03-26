@@ -1,5 +1,6 @@
 h1 Editing a Document
-form(action='/article/edit', method='POST')
+form(action='', method='POST')
+    input(type="hidden", name="_method", value="put")
     p(style="margin-bottom: 2em")
         label(for='title') Title&nbsp;
         input#title(type='text', name='doc[title]', value=doc.title, style='width:600px')

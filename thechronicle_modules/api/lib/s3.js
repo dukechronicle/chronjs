@@ -30,7 +30,7 @@ s3.put = function (bucket, buf, key, type, encoding, callback) {
         'Cache-Control': 'public, max-age=86400'
     };
     if (encoding)
-        options.encoding = encoding;
+        options['Content-Encoding'] = encoding;
 
     var req = createClient(bucket).put(key, options);
     req.on('response', function (res) {

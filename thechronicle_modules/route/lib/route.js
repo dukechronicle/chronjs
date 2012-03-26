@@ -95,7 +95,7 @@ exports.init = function (app) {
         app.get('/:url/edit', api.site.checkAdmin, admin.editArticle);
         app.get('/new', api.site.checkAdmin, admin.addArticle);
         app.post('/', api.site.checkAdmin, admin.addArticleData);
-        app.post('/edit', api.site.checkAdmin, admin.editArticleData);
+        app.put('/:url/edit', api.site.checkAdmin, admin.editArticleData);
     });
 
     app.namespace('/admin', function () {
@@ -117,6 +117,7 @@ exports.init = function (app) {
         app.get('/:imageName', api.site.checkAdmin, admin.image.renderImage);
         app.post('/info', api.site.checkAdmin, admin.image.info);
         app.post('/crop', api.site.checkAdmin, admin.image.crop);
+        app.post('/add', api.site.checkAdmin, admin.addImageToArticle);
     });
     
     //The 404 Route (ALWAYS Keep this as the last route)

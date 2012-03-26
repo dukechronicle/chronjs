@@ -1,3 +1,5 @@
+var uploadImage;
+
 define(['jquery'], function ($) {
 
     var IMAGE_HTML = "<img id='tempPreview' />";
@@ -7,7 +9,7 @@ define(['jquery'], function ($) {
     var isUploading = false;
     var totalImages = 0;
 
-    $(function() {
+    uploadImage = function() {
 	dropLabelStartText = $("#droplabel").text();
 
 	// init event handlers
@@ -67,7 +69,7 @@ define(['jquery'], function ($) {
         }
 	// init the widgets
 	//$("#progressbar").progressbar();
-    });
+    };
 
     function handleReaderProgress(evt) {
 	if (evt.lengthComputable) {

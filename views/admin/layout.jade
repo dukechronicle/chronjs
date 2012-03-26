@@ -1,6 +1,8 @@
 !!! 5
 html
   head
+    title The Chronicle
+
     - if (typeof css != 'undefined')
         - each file in css
             link(rel= 'stylesheet', href= '/' + file + '.css')
@@ -13,7 +15,6 @@ html
 
     script var CHRONICLE = { onload: [] }
 
-    title The Chronicle
     !=partial("code/google-analytics")
   body
     #main
@@ -21,5 +22,5 @@ html
 
     - if (isProduction)
         script(src=static_cdn + admin_javascript, type="text/javascript")
-    -else
+    - else
         script(src="/js/require-jquery.js", data-main="/js/admin/main", type="text/javascript")

@@ -11,7 +11,10 @@ var _ = require('underscore');
 
 
 site.mobile = function (req, res, next) {
-    res.sendfile('public/m/index.html');
+    res.render('site/mobile', {
+        layout:false
+        //filename:'views/site/mobile.jade',
+    });    
 };
 
 site.frontpage = function (req, res) {
@@ -234,36 +237,6 @@ site.articlePrint = function (req, res, next) {
     });
 };
 
-site.editArticle = function (req, res, next) {
-    var url = req.params.url;
-    api.articleForUrl(url, function (err, doc) {
-        if (err)
-            next(err);
-        else if (req.query.removeImage)
-            api.image.removeVersionFromDocument(doc._id, null, req.query.removeImage, function(err, doc) {
-                if (err) next(err);
-                else res.redirect('/article/' + url + '/edit');
-            });
-        else
-            api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
-                if (doc.authors)
-                    doc.authors = doc.authors.join(", ");
-
-                res.render('admin/edit', {
-                    js:['admin/deleteArticle?v=2'],
-                    locals:{
-                        doc:doc,
-                        groups:[],
-                        images:doc.images || {},
-                        url:url,
-                        afterAddImageUrl: '/article/' + url + '/edit',
-                        taxonomy:taxonomy
-                    }
-                });
-            });
-    });
-};
-
 site.editPage = function (req, res, next) {
     var url = req.params.url;
     api.page.getByUrl(url, function (err, doc) {
@@ -319,13 +292,6 @@ site.configData = function (req, res) {
         });
     else
 	    api.site.askForLogin(res, '/config');
-};
-
-site.newsletter = function (req, res) {
-    res.render('pages/newsletter', {
-	filename: 'pages/newsletter',
-	css: asereje.css(['container/style'])
-    });
 };
 
 site.newsletterData = function (req, res) {

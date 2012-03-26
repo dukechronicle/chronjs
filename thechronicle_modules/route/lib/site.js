@@ -11,7 +11,10 @@ var _ = require('underscore');
 
 
 site.mobile = function (req, res, next) {
-    res.sendfile('public/m/index.html');
+    res.render('site/mobile', {
+        layout:false
+        //filename:'views/site/mobile.jade',
+    });    
 };
 
 site.frontpage = function (req, res) {
@@ -116,8 +119,7 @@ site.section = function (req, res, next) {
                 section: sectionArray[0],
                 popular: popular,
                 taxonomyPath: sectionArray.join('/')
-	        },
-            js:['site/scrollLoad?v=5']
+	        }
 	    });
         }
     });
@@ -180,9 +182,11 @@ site.article = function (req, res, next) {
     // cache article pages for an hour
     if (!isAdmin) res.header('Cache-Control', 'public, max-age=3600');
 
-    api.site.getArticleContent(url, function (err, doc, model, parents) {
-        if (err)
+    api.site.getArticleContent(url, function (err, doc, model) {
+        if (err === 'not found')
             next();
+        else if (err)
+            next(err);
         else if ('/article/' + url != doc.url)
             res.redirect(doc.url);
         else res.render('article', {
@@ -190,7 +194,7 @@ site.article = function (req, res, next) {
                 doc:doc,
                 isAdmin:isAdmin,
                 model:model,
-                parentPaths:parents,
+                parentPaths: model.parents,
                 section: doc.taxonomy[0],
                 disqusData: {
                     isProduction: (process.env.NODE_ENV === 'production'),
@@ -225,35 +229,6 @@ site.articlePrint = function (req, res, next) {
                 }
             });
         }
-    });
-};
-
-site.editArticle = function (req, res, next) {
-    var url = req.params.url;
-    api.articleForUrl(url, function (err, doc) {
-        if (err)
-            next(err);
-        else if (req.query.removeImage)
-            api.image.removeVersionFromDocument(doc._id, null, req.query.removeImage, function(err, doc) {
-                if (err) next(err);
-                else res.redirect('/article/' + url + '/edit');
-            });
-        else
-            api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
-                if (doc.authors)
-                    doc.authors = doc.authors.join(", ");
-
-                res.render('admin/edit', {
-                    locals:{
-                        doc:doc,
-                        groups:[],
-                        images:doc.images || {},
-                        url:url,
-                        afterAddImageUrl: '/article/' + url + '/edit',
-                        taxonomy:taxonomy
-                    }
-                });
-            });
     });
 };
 
@@ -312,13 +287,6 @@ site.configData = function (req, res) {
         });
     else
 	    api.site.askForLogin(res, '/config');
-};
-
-site.newsletter = function (req, res) {
-    res.render('pages/newsletter', {
-	filename: 'pages/newsletter',
-	css: asereje.css(['container/style'])
-    });
 };
 
 site.newsletterData = function (req, res) {

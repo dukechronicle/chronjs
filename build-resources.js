@@ -35,7 +35,7 @@ function storeS3(data, callback) {
 
     var md5sum = crypto.createHash('md5');
     md5sum.update(data);
-    var path = '/dist/' + md5sum.digest('hex');
+    var path = '/dist/' + md5sum.digest('hex') + '2';
 
     gzip(data, function (err, buffer) {
         if (err) callback(err);

@@ -132,10 +132,20 @@ admin.editArticle = function (req, res, next) {
 };
 
 admin.editArticleData = function (req, res, next) {
-    adminApi.editArticle(req.body.doc, req.body.imageVersionId, function (err, url) {
+    adminApi.editArticle(req.body.doc, function (err, url) {
         if (err) next(err);
-        else res.redirect(req.body.afterUrl || ('/article/' + url));
+        else res.redirect('/article/' + url);
     });
+};
+
+admin.addImageToArticle = function (req, res, next) {
+    var afterUrl = req.body.afterUrl || '/admin';
+    api.image.addVersionsToDoc(req.body.docId, req.body.original,
+                               req.body.imageVersionId, req.body.imageType,
+                               function (err) {
+                                   if (err) next(err);
+                                   else res.redirect(afterUrl);
+                               });
 };
 
 admin.layout = function (req, res, next) {

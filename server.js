@@ -143,7 +143,10 @@ function configureApp(sessionInfo, port) {
 function runSite(callback) {
     setViewOption('static_cdn', config.get('CLOUDFRONT_STATIC'));
     api.init(function (err) {
-        if (err) log.crit("api initialization failed");
+        if (err) {
+            log.crit("api initialization failed");
+            log.error(err);
+        }
         else {
 	    if (process.env.NODE_ENV === 'production') {
                 sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {

@@ -22,7 +22,9 @@ var SECRET = "i'll make you my dirty little secret";
 var SERVER = this;
 
 var app = null;
-var viewOptions = {};
+var viewOptions = {
+    isProduction: process.env.NODE_ENV === 'production'
+};
 
 asereje.config({
     active: process.env.NODE_ENV === 'production',  // enable it just for production
@@ -152,19 +154,19 @@ function runSite(callback) {
                 sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
 		    if (err) log.error("Couldn't build news sitemap: " + err);
 	        });
-            }
             
-            builder.buildJavascript('site/main','site-js',function(err,jsFile) {
-                if (err) log.warning('Failed to build site Javascipt: ' + err);
-                else log.notice('Built site Javascript');
-                setViewOption('site_javascript', jsFile);
-             });
+                builder.buildJavascript('site/main','site-js',function(err,jsFile) {
+                    if (err) log.warning('Failed to build site Javascipt: ' + err);
+                    else log.notice('Built site Javascript');
+                    setViewOption('site_javascript', jsFile);
+                });
 
-            builder.buildJavascript('admin/main','admin-js',function(err,jsFile){
-                if (err) log.warning('Failed to build admin Javascipt: ' + err);
-                else log.notice('Built admin Javascript');
-                setViewOption('admin_javascript', jsFile);
-             });
+                builder.buildJavascript('admin/main','admin-js',function(err,jsFile){
+                    if (err) log.warning('Failed to build admin Javascipt: ' + err);
+                    else log.notice('Built admin Javascript');
+                    setViewOption('admin_javascript', jsFile);
+                });
+            }
 
             redisClient.init(true, function(err) {
                 route.init(app);

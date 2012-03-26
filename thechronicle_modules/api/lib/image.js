@@ -142,7 +142,7 @@ image.createCroppedVersion = function(imageName, width, height, x1, y1, x2, y2, 
         function (orig, buf, callback) {
             var type = orig.value.contentType;
             var s3Name = width + "x" + height + "-" + x1 + "-" + y1 + "-" + orig.value.name;
-            api.s3.put(IMAGE_BUCKET, buf, s3Name, type, function (s3Err, url) {
+            api.s3.put(IMAGE_BUCKET, buf, s3Name, type, null, function (s3Err, url) {
                 callback(s3Err, orig, url);
             });
         },
@@ -342,7 +342,7 @@ image.createOriginalFromFile = function (imageName, imageType, deleteLocal, topC
         },
         function (data, callback) {
             //put image in AWS S3 storage
-            api.s3.put(IMAGE_BUCKET, data, imageName, imageType, callback);
+            api.s3.put(IMAGE_BUCKET, data, imageName, imageType, null, callback);
         },
         function (url, callback) {
             im.convert([fileName, '-thumbnail', THUMB_DIMENSIONS, thumbName],
@@ -357,7 +357,7 @@ image.createOriginalFromFile = function (imageName, imageType, deleteLocal, topC
                 });
         },
         function (url, data, callback) {
-            api.s3.put(IMAGE_BUCKET, data, thumbName, imageType,
+            api.s3.put(IMAGE_BUCKET, data, thumbName, imageType, null,
                 function (err, thumbUrl) {
                     callback(err, url, thumbUrl);
                 });

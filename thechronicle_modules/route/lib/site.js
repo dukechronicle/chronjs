@@ -189,8 +189,10 @@ site.article = function (req, res, next) {
     if (!isAdmin) res.header('Cache-Control', 'public, max-age=3600');
 
     api.site.getArticleContent(url, function (err, doc, model) {
-        if (err)
+        if (err === 'not found')
             next();
+        else if (err)
+            next(err);
         else if ('/article/' + url != doc.url)
             res.redirect(doc.url);
         else res.render('article', {

@@ -483,7 +483,7 @@ site.getSearchContent = function (wordsQuery, query, callback) {
 
 site.getArticleContent = function(url, callback) {
     api.articleForUrl(url, function(err, doc) {
-	if (err) callback(err);
+	if (err) callback('not found');
         else {
             doc = modifyArticleForDisplay(doc);
             cache(site.getArticleContentUncached,600)(doc,function (err, model) {
@@ -509,7 +509,8 @@ site.getArticleContentUncached = function(doc, callback) {
 	},
 	function(cb) {
 	    api.search.relatedArticles(doc._id, 5, function(err, relatedArticles) {
-		modifyArticlesForDisplay(relatedArticles, cb);
+                if (err) cb(err);
+		else modifyArticlesForDisplay(relatedArticles, cb);
 	    });
 	},
 	function(cb) {
@@ -623,7 +624,7 @@ function cache(func, expireTime) {
         else {
             var args = Array.prototype.slice.call(arguments);
             var callback = args.pop();
-            var redisKey = func.toString() + args.toString();
+            var redisKey = func.toString() + JSON.stringify(args);
  
             redis.client.get(redisKey, function(err, res) {
                 if (!err && res) callback(null, JSON.parse(res));

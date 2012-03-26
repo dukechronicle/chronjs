@@ -197,7 +197,6 @@ site.article = function (req, res, next) {
                 parentPaths: model.parents,
                 section: doc.taxonomy[0],
                 disqusData: {
-                    isProduction: (process.env.NODE_ENV === 'production'),
                     shortname: config.get('DISQUS_SHORTNAME'),
                     id: doc._id,
                     title: doc.title,

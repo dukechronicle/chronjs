@@ -48,6 +48,7 @@
 	    "winston": "0.5.x",
 	    "xmlbuilder": "0.3.x",
         "JSV": "3.5.x",
-        "requirejs": "1.0.x"
+        "requirejs": "1.0.x",
+        "gzip": "0.1.x"
     }
 }

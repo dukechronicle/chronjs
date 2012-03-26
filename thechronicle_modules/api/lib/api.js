@@ -89,7 +89,7 @@ api.init = function(callback) {
     db.init(function (err) {
         if(err) {
             log.error("db init failed!");
-            return callback(error);
+            return callback(err);
         }
 
       	api.cron.init();

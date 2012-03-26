@@ -103,9 +103,7 @@ function handleReaderLoadEnd(theFile) {
 			    alert('Error');
 		    },
 
-       		success: function(msg) {
-			    var json = jQuery.parseJSON(msg);
-
+       		success: function(json) {
 			    if(json.error) {
 				    alert(json.error);
 				    $("#"+json.imageID).fadeOut('slow'); // if error, remove image from the page

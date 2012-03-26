@@ -57,7 +57,13 @@ function getDate() {
 
 newsletter.sendTestNewsletter = function(campaignID, emailToSendTo, callback) {
     var params = {"test_emails":[emailToSendTo], "cid":campaignID};
-    mcAPI.campaignSendTest(params, callback);
+    mcAPI.campaignSendTest(params, function (res) {
+        if (res === false) {
+            log.warning("Sending Campaign failed!");
+            callback("Sending Campaign failed!");
+        }
+        else callback();
+    });
 };
 
 newsletter.addSubscriber = function (subscriberEmail, callback) {

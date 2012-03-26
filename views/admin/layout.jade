@@ -19,4 +19,7 @@ html
     #main
       #container!= body
 
-    script(src=admin_javascript, type="text/javascript")
+    - if (isProduction)
+        script(src=static_cdn + admin_javascript, type="text/javascript")
+    -else
+        script(src="/js/require-jquery.js", data-main="/js/admin/main", type="text/javascript")

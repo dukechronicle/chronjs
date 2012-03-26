@@ -1,3 +1,5 @@
+var cropImage;
+
 define(['jquery', 'libs/jquery.Jcrop'], function ($) {
 
     var sizes;
@@ -8,14 +10,14 @@ define(['jquery', 'libs/jquery.Jcrop'], function ($) {
         onRelease: clearCoords
     };
 
-    $(function () {
+    cropImage = function () {
         sizes = $("#sizes").data('sizes');
         if (sizes) {
             updateCropSize();
             $("#sizes").change(updateCropSize);
             $("a.help").click(showDescriptions);
         }
-    });
+    };
 
     function crop(dim) {
         cropOptions.aspectRatio = dim.width / dim.height;

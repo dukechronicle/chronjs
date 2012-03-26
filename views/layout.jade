@@ -37,7 +37,7 @@ html(lang="en")
             footer
                 include /layout/footer
 
-        - if (isProduction)
-            script(src=static_cdn + site_javascript, type="text/javascript")
-        -else
-            script(src="/js/require-jquery.js", data-main="/js/site/main", type="text/javascript")
+    - if (isProduction)
+        script(src=static_cdn + site_javascript, type="text/javascript")
+    -else
+        script(src="/js/require-jquery.js", data-main="/js/site/main", type="text/javascript")

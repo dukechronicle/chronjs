@@ -24,3 +24,5 @@ h2 !{page} Layout
             - each story, id in sectionDocs
                 .story(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
                     #{story.title}
+
+script CHRONICLE.onload.push(function(){layout()})

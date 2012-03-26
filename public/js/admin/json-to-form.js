@@ -1,3 +1,5 @@
+var json2form;
+
 define(["jquery", "libs/onde", "libs/jquery.textarea-expander"], function($) {
     var ondeSessions = {};
     var objs = [];
@@ -5,78 +7,82 @@ define(["jquery", "libs/onde", "libs/jquery.textarea-expander"], function($) {
     // construct the nice looking forms to edit json
     var rawElements = getAllRawJSONs();
 
-    for(var i = 0; i < rawElements.length; i ++) {
-        var obj = {
-            name: $(rawElements[i]).attr("name"),
-            schema: JSON.parse($(rawElements[i]).attr("schema")),
-            defaultValue: $(rawElements[i]).val()
-        };
-        if(obj.schema.type == "object" || obj.schema.type == "array") obj.defaultValue = JSON.parse(obj.defaultValue);
-        
-        var $element = getForm(obj.name);
-        
-        // if this config element exists on the page, make a nice form for it
-        if($element.length) {
-            getRawJSON(obj.name).hide();
-            
-            // since all data is sent to the server as strings anyway, convert numbers to strings so it passes json validation
-            if(typeof obj.defaultValue == "number" && obj.schema.type == "string") obj.defaultValue = ""+obj.defaultValue;
-
-            //create the form
-            ondeSessions[obj.name] = new onde.Onde($element);
-            
-            //onde only works with objects, not strings, so we wrap the value in an object
-            obj.encasedDefaultValue = {
-                value: obj.defaultValue
+    json2form = function () {
+        for(var i = 0; i < rawElements.length; i ++) {
+            var obj = {
+                name: $(rawElements[i]).attr("name"),
+                schema: JSON.parse($(rawElements[i]).attr("schema")),
+                defaultValue: $(rawElements[i]).val()
             };
+            if(obj.schema.type == "object" || obj.schema.type == "array") obj.defaultValue = JSON.parse(obj.defaultValue);
+            
+            var $element = getForm(obj.name);
+            
+            // if this config element exists on the page, make a nice form for it
+            if($element.length) {
+                getRawJSON(obj.name).hide();
+                
+                // since all data is sent to the server as strings anyway, convert numbers to strings so it passes json validation
+                if(typeof obj.defaultValue == "number" && obj.schema.type == "string") obj.defaultValue = ""+obj.defaultValue;
 
-            //onde only works with objects, not strings, so we add an object as the top level of the schema
-            obj.encasedSchema = {
-                type:'object',
-                properties: {
-                    value: obj.schema
+                //create the form
+                ondeSessions[obj.name] = new onde.Onde($element);
+                
+                //onde only works with objects, not strings, so we wrap the value in an object
+                obj.encasedDefaultValue = {
+                    value: obj.defaultValue
+                };
+
+                //onde only works with objects, not strings, so we add an object as the top level of the schema
+                obj.encasedSchema = {
+                    type:'object',
+                    properties: {
+                        value: obj.schema
+                    }
+                };
+
+                objs.push(obj);
+                
+                //show the form
+                ondeSessions[obj.name].render(obj.encasedSchema, obj.encasedDefaultValue, { collapsedCollapsibles: false });
+
+                var outData = ondeSessions[obj.name].getData();
+                var $rawData = getRawJSON(obj.name);
+                
+                // if onde is not correctly able to parse the data, and there is some data to parse, only show the raw json view            
+                if(outData.noData && $rawData.val().length > 0) {
+                    $rawData.show(); // show the raw json
+                    $element.hide(); // hide the form
+                    getRawToFormSwitch(obj.name).hide(); // hide the switch to raw/json button
                 }
-            };
-
-            objs.push(obj);
-            
-            //show the form
-            ondeSessions[obj.name].render(obj.encasedSchema, obj.encasedDefaultValue, { collapsedCollapsibles: false });
-
-            var outData = ondeSessions[obj.name].getData();
-            var $rawData = getRawJSON(obj.name);
-            
-            // if onde is not correctly able to parse the data, and there is some data to parse, only show the raw json view            
-            if(outData.noData && $rawData.val().length > 0) {
-                $rawData.show(); // show the raw json
-                $element.hide(); // hide the form
-                getRawToFormSwitch(obj.name).hide(); // hide the switch to raw/json button
             }
         }
-    }
 
-    // on form submit, add the json values of all forms as inputs to this form and then submit
-    $('#configForm').submit(function (evt) {
-        for(var id in ondeSessions) {
-            // if the form for a json object is visible, update the raw json value for it
-            if(getForm(id).is(":visible")) changeRaw(id);
+        // on form submit, add the json values of all forms as inputs to this form and then submit
+        $('#configForm').submit(function (evt) {
+            for(var id in ondeSessions) {
+                // if the form for a json object is visible, update the raw json value for it
+                if(getForm(id).is(":visible")) changeRaw(id);
 
-            var value = getRawJSON(id).val();
-            $("<input type='hidden' name='"+id+"'/>").val(value).appendTo($('#configForm'));
-        }
-        return true;
-    });
+                var value = getRawJSON(id).val();
+                $("<input type='hidden' name='"+id+"'/>").val(value).appendTo($('#configForm'));
+            }
+            return true;
+        });
 
-    // when show form / show raw is clicked, switch whether the form or json is shown
-    $(".rawSwitch").click(function(evt) {
-        switchShow($(this).attr("id").split("-")[0]);
-    });
+        // when show form / show raw is clicked, switch whether the form or json is shown
+        $(".rawSwitch").click(function(evt) {
+            switchShow($(this).attr("id").split("-")[0]);
+        });
 
-    // if any of the other forms on the page for used for json editing are submitted, actually submit the real config form instead
-    $('.fake-form').submit(function (evt) {
-        $('#configForm').submit();
-        return false;        
-    });
+        // if any of the other forms on the page for used for json editing are submitted, actually submit the real config form instead
+        $('.fake-form').submit(function (evt) {
+            $('#configForm').submit();
+            return false;        
+        });
+
+    };
+
 
     // update the textarea containing the raw json to contain the form data for that json object
     function changeRaw(id) {

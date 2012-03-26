@@ -1,6 +1,8 @@
+var k4export;
+
 define(['jquery', 'Article', 'libs/jquery.dd'], function ($, Article) {
 
-    $(function () {
+    k4export = function () {
 
         $(".export-index button").click(function () {
             $(this).attr('disabled', 'disabled');
@@ -17,7 +19,7 @@ define(['jquery', 'Article', 'libs/jquery.dd'], function ($, Article) {
         } catch(e) {
             alert(e.message);
         }
-    });
+    };
 
     function editDocument($row, callback) {
         var id = $row.attr('id');

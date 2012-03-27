@@ -41,12 +41,14 @@ exports.upload = function (req, res) {
 
 exports.uploadData = function (req, httpRes) {
     var imageData = req.body.imageData;
-    var imageName = req.body.imageName;
+    var imageName = req.body.imageName.replace(/[\s\#]/g, "_");
     // create a unique name for the image to avoid s3 blob collisions
     imageName = globalFunctions.randomString(8) + "-" + imageName;
     var thumbName = 'thumb_' + imageName;
     var imageType = req.body.imageType;
     var imageID = req.body.imageID;
+
+    log.debug(imageName);
 
     async.waterfall([
         function (callback) {

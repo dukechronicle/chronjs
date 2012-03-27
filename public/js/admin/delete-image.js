@@ -1,8 +1,10 @@
-define(['jquery', 'jquery-ui'], function ($) {
+var deleteImage;
 
-    $(function(){
+define(['jquery', 'libs/jquery-ui'], function ($) {
 
-        $(".delete").click(function(event) {
+    deleteImage = function() {
+
+        $(".delete-image").click(function(event) {
             event.preventDefault();
 
             var anchor = $(event.target);
@@ -48,6 +50,6 @@ define(['jquery', 'jquery-ui'], function ($) {
                 }
             );
         });
-    });
+    };
 
 });

@@ -74,7 +74,6 @@ site.renderConfigPage = function(req, res, err) {
     }
 
     res.render('config/config', {
-        js: ['json-to-form?v=2','jquery.textarea-expander?v=2'],
         css: ['css/onde'],
         removeBootstrap: true,
         locals : {

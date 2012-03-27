@@ -19,10 +19,7 @@ html(lang="en")
         script(src="http://use.typekit.com/dwv2bjy.js")
         script try{Typekit.load();}catch(e){}
 
-        script
-            var THE_CHRONICLE = {};
-        - if (typeof js != 'undefined')
-            script THE_CHRONICLE.scripts = !{JSON.stringify(js)}
+        script var CHRONICLE = { onload: [] }
 
         - if (typeof css != 'undefined')
             - each file in css
@@ -40,4 +37,7 @@ html(lang="en")
             footer
                 include /layout/footer
 
-        script(data-main="/js/main3.js", src="/js/require-jquery.js")
+    - if (isProduction)
+        script(src=static_cdn + site_javascript, type="text/javascript")
+    -else
+        script(src="/js/require-jquery.js", data-main="/js/site/main", type="text/javascript")

@@ -22,7 +22,6 @@ exports.manage = function (req, httpRes) {
     api.image.getOriginals(25, beforeKey, beforeID, function (err, origs) {
         httpRes.render('admin/articleimage', {
             filename:'views/admin/articleimage.jade',
-            js:['admin/imgdelete'],
             locals:{
                 origs:origs,
                 afterUrl:afterUrl,
@@ -36,8 +35,7 @@ exports.manage = function (req, httpRes) {
 exports.upload = function (req, res) {
     res.render('admin/upload', {
         filename:'admin/upload',
-        css:['css/html5upload'],
-        js:['async', 'html5upload?v=1']
+        css:['css/html5upload']
     });
 };
 
@@ -120,7 +118,6 @@ exports.renderImage = function (req, httpRes, next) {
                              else {
                                  var imageTypes = api.image.IMAGE_TYPES;
                                  httpRes.render('admin/image', { //no errors have been found, render image
-                                     js:['admin/imgdelete?v=2', 'crop?v=2', 'nicedate?v=2'],
                                      locals:{ //specifies/assigns variables to pass into function
                                          url:orig.value.url,
                                          name:imageName,

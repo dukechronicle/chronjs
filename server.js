@@ -9,6 +9,7 @@ var sprintf = require('sprintf').sprintf;
 
 /* require internal modules */
 var api = require('./thechronicle_modules/api');
+var builder = require('./build-resources');
 var config = require('./thechronicle_modules/config');
 var log = require('./thechronicle_modules/log');
 var redisClient = require('./thechronicle_modules/redisclient');
@@ -21,7 +22,9 @@ var SECRET = "i'll make you my dirty little secret";
 var SERVER = this;
 
 var app = null;
-var viewOptions = {};
+var viewOptions = {
+    isProduction: process.env.NODE_ENV === 'production'
+};
 
 asereje.config({
     active: process.env.NODE_ENV === 'production',  // enable it just for production
@@ -151,8 +154,20 @@ function runSite(callback) {
                 sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
 		    if (err) log.error("Couldn't build news sitemap: " + err);
 	        });
+
+                builder.buildJavascript('site/main','site-js',function(err,jsFile) {
+                    if (err) log.warning('Failed to build site Javascipt: ' + err);
+                    else log.notice('Built site Javascript');
+                    setViewOption('site_javascript', jsFile);
+                });
+
+                builder.buildJavascript('admin/main','admin-js',function(err,jsFile){
+                    if (err) log.warning('Failed to build admin Javascipt: ' + err);
+                    else log.notice('Built admin Javascript');
+                    setViewOption('admin_javascript', jsFile);
+                });
             }
-            
+
             redisClient.init(true, function(err) {
                 route.init(app);
                 log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));

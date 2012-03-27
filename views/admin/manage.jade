@@ -1,4 +1,4 @@
-table(border=1)
+table.article-index(border=1)
     - each doc in docs
         tr
             td
@@ -6,7 +6,7 @@ table(border=1)
             td
                 a(href='/article/' + doc.urls[doc.urls.length - 1] + '/edit') Edit
             td
-                a.delete(href='#', data-docId=doc._id, data-title=doc.title, data-docRev=doc._rev) Delete
+                a.delete-article(href='#', data-docid=doc._id, data-title=doc.title, data-rev=doc._rev, data-dest='') Delete
             td
                 a(href=db_url + '/' + doc._id) #{doc._id}
 
@@ -19,3 +19,5 @@ if (hasPrevious)
 
 if (docs.length != 0)
     a(href='/admin/manage?beforeKey=' + docs[docs.length - 1].created + '&beforeID=' + docs[docs.length - 1]._id) Next
+
+script CHRONICLE.onload.push(function(){deleteArticle()})

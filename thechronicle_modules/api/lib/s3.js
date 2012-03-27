@@ -17,7 +17,7 @@ s3.init = function () {
 };
 
 s3.getCloudFrontUrl = function(url) {
-    _.each(CLOUDFRONT_MAPPING, function (bucket, cloudfront) {
+    _.each(CLOUDFRONT_MAPPING, function (cloudfront, bucket) {
         url = url.replace(S3_URL + bucket, cloudfront);
     });
     return url;

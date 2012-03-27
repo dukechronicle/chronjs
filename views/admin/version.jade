@@ -23,7 +23,7 @@
         td
           img(src=version.doc.url)
         td
-          a.delete(href='#', data-id=version.doc._id, data-orig='0') Delete
+          a.delete-image(href='#', data-id=version.doc._id, data-orig='0') Delete
         - if(docId)
           td
             form(action='/admin/edit', method='POST')

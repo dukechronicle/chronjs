@@ -21,7 +21,6 @@ site.frontpage = function (req, res) {
     api.site.getFrontPageContent(function (err, model) {
         res.render('site/index', {
             css:asereje.css(['slideshow/style', 'container/style', 'site/frontpage']),
-            js:['slideshow/frontpage-slideshow'],
             filename:'views/site/index.jade',
             locals: {
                 model:model
@@ -50,7 +49,6 @@ site.sports = function (req, res) {
         res.render('site/sports', {
             pageTitle: "Sports",
             css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
-            js:['slideshow/slideshow'],
             filename:'views/site/sports.jade',
             locals: {
                 subsections: children,
@@ -66,7 +64,6 @@ site.opinion = function (req, res) {
         res.render('site/opinion', {
             pageTitle: "Opinion",
             css:asereje.css(['container/style', 'site/section', 'site/opinion']),
-            js:['opinion'],
             filename:'views/site/opinion.jade',
             locals: {
                 subsections:children,
@@ -122,8 +119,7 @@ site.section = function (req, res, next) {
                 section: sectionArray[0],
                 popular: popular,
                 taxonomyPath: sectionArray.join('/')
-	        },
-            js:['site/scrollLoad?v=5']
+	        }
 	    });
         }
     });
@@ -135,7 +131,6 @@ site.search = function (req, res, next) {
         if (err) next(err);
         else res.render('site/search', {
             css:asereje.css(['container/style', 'site/search']),
-            js:['site/scrollLoad?v=5'],
             locals: {
                 docs: docs,
                 currentFacets: req.query.facets || '',
@@ -153,7 +148,6 @@ site.staff = function (req, res) {
     api.site.getAuthorContent(name, function (err, docs) {
 	res.render('site/people', {
             css:asereje.css(['container/style', 'site/people']),
-            js:['site/scrollLoad?v=5'],
             locals:{
                 pageTitle: globalFunctions.capitalizeWords(name),
                 docs: docs,
@@ -203,7 +197,6 @@ site.article = function (req, res, next) {
                 parentPaths: model.parents,
                 section: doc.taxonomy[0],
                 disqusData: {
-                    isProduction: (process.env.NODE_ENV === 'production'),
                     shortname: config.get('DISQUS_SHORTNAME'),
                     id: doc._id,
                     title: doc.title,
@@ -211,8 +204,7 @@ site.article = function (req, res, next) {
                 }
             },
             filename:'views/article',
-            css:asereje.css(['container/style', 'article']),
-            js:['site/article']
+            css:asereje.css(['container/style', 'article'])
         });
     });
 };

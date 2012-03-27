@@ -1,8 +1,10 @@
-define(['jquery', 'Article', 'msdropdown'], function ($, Article) {
+var k4export;
 
-    $(function () {
+define(['jquery', 'Article', 'libs/jquery.dd'], function ($, Article) {
 
-        $("button").click(function () {
+    k4export = function () {
+
+        $(".export-index button").click(function () {
             $(this).attr('disabled', 'disabled');
             var $row = $(this).parent().parent();
             var $button = $(this);
@@ -17,7 +19,7 @@ define(['jquery', 'Article', 'msdropdown'], function ($, Article) {
         } catch(e) {
             alert(e.message);
         }
-    });
+    };
 
     function editDocument($row, callback) {
         var id = $row.attr('id');

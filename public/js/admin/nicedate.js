@@ -1,11 +1,13 @@
-define(['jquery', 'jquery-ui'], function ($) {
+var prettifyDate;
+
+define(['jquery', 'libs/jquery-ui'], function ($) {
 
     var niceDateTextbox;
     var realDateTextbox;
     var dateForm;
 
     // on load
-    $(function() {
+    prettifyDate = function() {
         setDateStuff("#nicedate","#date","#infoform");
         niceifyDate();
 
@@ -13,7 +15,7 @@ define(['jquery', 'jquery-ui'], function ($) {
             _setRealDate();
             return true;
         });
-    });
+    };
 
     // set up variables / form elements to be used
     function setDateStuff(niceDateBox,realDateBox,dateFormTemp) {

@@ -189,23 +189,28 @@ site.article = function (req, res, next) {
             next(err);
         else if ('/article/' + url != doc.url)
             res.redirect(doc.url);
-        else res.render('article', {
-            locals: {
-                doc:doc,
-                isAdmin:isAdmin,
-                model:model,
-                parentPaths: model.parents,
-                section: doc.taxonomy[0],
-                disqusData: {
-                    shortname: config.get('DISQUS_SHORTNAME'),
-                    id: doc._id,
-                    title: doc.title,
-                    url: doc.url
-                }
-            },
-            filename:'views/article',
-            css:asereje.css(['container/style', 'article', 'container/poll'])
-        });
+        else {
+            if (model.poll && req.session.polls &&
+                model.poll._id in req.session.polls)
+                model.poll.voted = true;
+            res.render('article', {
+                locals: {
+                    doc:doc,
+                    isAdmin:isAdmin,
+                    model:model,
+                    parentPaths: model.parents,
+                    section: doc.taxonomy[0],
+                    disqusData: {
+                        shortname: config.get('DISQUS_SHORTNAME'),
+                        id: doc._id,
+                        title: doc.title,
+                        url: doc.url
+                    }
+                },
+                filename:'views/article',
+                css:asereje.css(['container/style', 'article', 'container/poll'])
+            });
+        }
     });
 };
 

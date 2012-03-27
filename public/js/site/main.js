@@ -2,8 +2,8 @@ require.config({
     baseUrl: '/js'
 });
 
-require(['site/align','site/article','site/opinion','site/scrollLoad',
-         'site/slideshow/frontpage-slideshow','site/slideshow/slideshow'],
+require(['site/align','site/slideshow/slideshow','site/scrollLoad','site/poll',
+         'site/slideshow/frontpage-slideshow','site/article','site/opinion'],
         function (align) {
             loadAfterTypekit(align);
             $(function () {

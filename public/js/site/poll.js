@@ -5,11 +5,11 @@ define(['jquery'], function ($) {
 
     $(function () {
         
-        $(".choice").each(function () {
+        $(".poll .choice").each(function () {
             total += parseInt($(this).attr("votes"));
         });
 
-        $(".choice > a").click(function(e) {
+        $(".poll .choice > a").click(function(e) {
             e.preventDefault();
 
             var $choice = $(this).parent();

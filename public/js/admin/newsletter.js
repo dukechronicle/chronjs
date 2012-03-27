@@ -1,6 +1,8 @@
-define(['jquery', 'jquery-ui'], function ($) {
+var initNewsletterForm;
 
-    $(function () {
+define(['jquery', 'libs/jquery-ui'], function ($) {
+
+    initNewsletterForm = function () {
 
         $("form#test").submit(function (e) {
             e.preventDefault();
@@ -10,10 +12,10 @@ define(['jquery', 'jquery-ui'], function ($) {
         $("form#send").submit(function (e) {
             e.preventDefault();
             form = $(this);
-            $("#dialog-confirm").dialog('open');
+            $("#newsletter-confirm").dialog('open');
         });
 
-        $("#dialog-confirm").dialog({
+        $("#newsletter-confirm").dialog({
             resizable: false,
             autoOpen: false,
             height:140,
@@ -21,16 +23,16 @@ define(['jquery', 'jquery-ui'], function ($) {
             buttons: {
                 Send: function() {
                     sendNewsletter($("form#send"), 'Newsletter sent', function(){
-                        $("#dialog-confirm").dialog('close');
+                        $("#newsletter-confirm").dialog('close');
                     });
                 },
                 Cancel: function() {
-                    $("#dialog-confirm").dialog('close');
+                    $("#newsletter-confirm").dialog('close');
                 }
             }
         });
 
-    });
+    };
 
     function sendNewsletter(form, onSentText, callback) {
         $.post('/admin/newsletter', form.serialize(), function (msg) {

@@ -48,8 +48,6 @@ exports.uploadData = function (req, httpRes) {
     var imageType = req.body.imageType;
     var imageID = req.body.imageID;
 
-    log.debug(imageName);
-
     async.waterfall([
         function (callback) {
             if (!imageType in VALID_EXTENSIONS) {

@@ -1,14 +1,17 @@
-define(['jquery', 'jquery-ui'], function ($) {
+var deleteArticle;
 
-    $(function() {
+define(['jquery', 'libs/jquery-ui'], function ($) {
 
-        $(".delete").click(function(event) {
+    deleteArticle = function() {
+
+        $(".delete-article").click(function(event) {
             event.preventDefault();
 
             var anchor = $(event.target);
-            var title = anchor.attr('data-title');
-            var docId = anchor.attr('data-docId');
-            var docRev = anchor.attr('data-docRev');
+            var title = anchor.data('title');
+            var docId = anchor.data('docid');
+            var docRev = anchor.data('rev');
+            var dest = anchor.data('dest');
 
             $('<div id="dialog-confirm">Delete <strong>' + title + '?</strong></div>').appendTo('body');
 
@@ -20,14 +23,14 @@ define(['jquery', 'jquery-ui'], function ($) {
                 height:140,
                 modal: true,
                 buttons: {
-                    Delete: function() {
+                    "Delete": function() {
+
                         $.ajax({
                             type: 'DELETE',
                             url: '/api/article/' + docId,
                             data: 'rev=' + docRev,
                             success: function() {
-                                $(this).remove();
-                                location.reload();
+                                window.location = dest;
                             }
                         });
                     },
@@ -38,6 +41,5 @@ define(['jquery', 'jquery-ui'], function ($) {
             });
 
         });
-    });
-
+    };
 });

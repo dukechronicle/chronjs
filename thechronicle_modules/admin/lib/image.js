@@ -22,7 +22,6 @@ exports.manage = function (req, httpRes) {
     api.image.getOriginals(25, beforeKey, beforeID, function (err, origs) {
         httpRes.render('admin/articleimage', {
             filename:'views/admin/articleimage.jade',
-            js:['admin/imgdelete'],
             locals:{
                 origs:origs,
                 afterUrl:afterUrl,
@@ -36,14 +35,13 @@ exports.manage = function (req, httpRes) {
 exports.upload = function (req, res) {
     res.render('admin/upload', {
         filename:'admin/upload',
-        css:['css/html5upload'],
-        js:['async', 'html5upload']
+        css:['css/html5upload']
     });
 };
 
 exports.uploadData = function (req, httpRes) {
     var imageData = req.body.imageData;
-    var imageName = req.body.imageName;
+    var imageName = req.body.imageName.replace(/[\s\#]/g, "_");
     // create a unique name for the image to avoid s3 blob collisions
     imageName = globalFunctions.randomString(8) + "-" + imageName;
     var thumbName = 'thumb_' + imageName;
@@ -74,17 +72,11 @@ exports.uploadData = function (req, httpRes) {
                 err = "Error";
             }
 
-            globalFunctions.sendJSONResponse(httpRes, {
-                error:err,
-                imageID:imageID
-            });
+            httpRes.send({error:err, imageID:imageID});
         }
         else {
             log.info('Image uploaded: ' + url + ' and stored in DB: ' + result);
-            globalFunctions.sendJSONResponse(httpRes, {
-                imageID:imageID,
-                imageName:imageName
-            });
+            httpRes.send({imageID:imageID, imageName:imageName});
         }
     });
 };
@@ -96,7 +88,7 @@ exports.articles = function (req, httpRes) {
         func = api.image.docsForOriginal;
                         
     func(id, function(err, res) {
-        globalFunctions.sendJSONResponse(httpRes, res);
+        httpRes.send(res);
     });
 };
 
@@ -105,12 +97,12 @@ exports.deleteImage = function (req, httpRes) {
     if(req.query.orig && req.query.orig == '1') {
         api.image.deleteOriginal(id, function(err, res) {
             var ret = (err != null);
-            globalFunctions.sendJSONResponse(httpRes, {ok: ret});
+            httpRes.send({ok: ret});
         });
     } else {
         api.image.deleteVersion(id, true, function(err, res) {
             var ret = (err != null);
-            globalFunctions.sendJSONResponse(httpRes, {ok: ret});
+            httpRes.send({ok: ret});
         })
     }
 };
@@ -126,7 +118,6 @@ exports.renderImage = function (req, httpRes, next) {
                              else {
                                  var imageTypes = api.image.IMAGE_TYPES;
                                  httpRes.render('admin/image', { //no errors have been found, render image
-                                     js:['admin/imgdelete?v=2', 'crop?v=2', 'nicedate?v=2'],
                                      locals:{ //specifies/assigns variables to pass into function
                                          url:orig.value.url,
                                          name:imageName,

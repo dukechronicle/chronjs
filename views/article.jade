@@ -76,6 +76,14 @@
     // comments
     #disqus_thread.rounded(data-disqus=JSON.stringify(disqusData))
 
+script(type="text/javascript")
+    CHRONICLE.onload.push(function () {
+        loadDisqusForArticle(#{isProduction}, '#{disqusData.shortname}',
+                             '#{disqusData.id}', '#{disqusData.title}',
+                             '#{disqusData.url}');
+        configureAppendCommentCount();
+    });
+
 script(src="http://platform.twitter.com/widgets.js", type="text/javascript")
 script(type="text/javascript")
     (function() {

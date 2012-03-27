@@ -1,8 +1,7 @@
 !!! 5
 html
   head
-    - if (typeof js != 'undefined')
-        script var scripts = !{JSON.stringify(js)}
+    title The Chronicle
 
     - if (typeof css != 'undefined')
         - each file in css
@@ -14,10 +13,14 @@ html
     if(typeof removeBootstrap == 'undefined' || !removeBootstrap)
         link(rel='stylesheet', href='/css/bootstrap-1.2.0.min.css')
 
-    title The Chronicle
+    script var CHRONICLE = { onload: [] }
+
     !=partial("code/google-analytics")
   body
     #main
       #container!= body
 
-    script(data-main="/js/admin/main2", src="/js/require-jquery.js")
+    - if (isProduction)
+        script(src=static_cdn + admin_javascript, type="text/javascript")
+    - else
+        script(src="/js/require-jquery.js", data-main="/js/admin/main", type="text/javascript")

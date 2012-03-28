@@ -189,8 +189,8 @@ site.article = function (req, res, next) {
             next(err);
         else if ('/article/' + url != doc.url)
             res.redirect(doc.url);
-        else res.render('article', {
-            locals: {
+        else {
+            var locals = {
                 doc:doc,
                 pageTitle: doc.title,
                 isAdmin:isAdmin,
@@ -203,10 +203,16 @@ site.article = function (req, res, next) {
                     title: doc.title,
                     url: doc.url
                 }
-            },
-            filename:'views/article',
-            css:asereje.css(['container/style', 'article'])
-        });
+            };
+
+            if(doc.images.LargeRect) locals.pageImage = doc.images.LargeRect.url;
+                
+            res.render('article', {
+                locals: locals,
+                filename:'views/article',
+                css:asereje.css(['container/style', 'article'])
+            });
+        }
     });
 };
 

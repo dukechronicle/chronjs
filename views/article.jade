@@ -72,12 +72,12 @@
                 .numbered-articles.most-popular!=partial('container/numbered-articles', {title: "Popular", stories: model.popular})
 
     // comments
-    #disqus_thread.rounded(data-disqus=JSON.stringify(disqusData))
+    #disqus_thread.rounded
 
 script(type="text/javascript")
     CHRONICLE.onload.push(function () {
         loadDisqusForArticle(#{isProduction}, '#{disqusData.shortname}',
-                             '#{disqusData.id}', '#{disqusData.title}',
+                             '#{disqusData.id}', '#{disqusData.title.replace(/'/g,"\\'")}',
                              '#{disqusData.url}');
         configureAppendCommentCount();
     });

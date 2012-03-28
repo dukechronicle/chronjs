@@ -122,6 +122,7 @@ function configureApp(sessionInfo, port) {
     });
 
     app.configure(function() {
+        app.set('view options', viewOptions);
         app.set('views', __dirname + '/views');
         app.set('view engine', 'jade');
         app.enable('jsonp callback');

@@ -192,6 +192,7 @@ site.article = function (req, res, next) {
         else res.render('article', {
             locals: {
                 doc:doc,
+                pageTitle: doc.title,
                 isAdmin:isAdmin,
                 model:model,
                 parentPaths: model.parents,

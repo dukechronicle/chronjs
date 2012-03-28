@@ -199,7 +199,7 @@ site.article = function (req, res, next) {
                 section: doc.taxonomy[0],
                 disqusData: {
                     shortname: config.get('DISQUS_SHORTNAME'),
-                    id: doc._id,
+                    id: doc.nid || doc._id,
                     title: doc.title,
                     url: doc.url
                 }

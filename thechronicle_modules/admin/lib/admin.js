@@ -15,7 +15,7 @@ var sitemap = require('../../sitemap');
 admin.image = require('./image');
 
 
-admin.sendNewsletter = function(testEmail, campaignId, callback) {
+admin.sendNewsletter = function(testEmail, campaignID, callback) {
     if (testEmail) {
         api.newsletter.sendTestNewsletter(campaignID, testEmail, callback);
     }

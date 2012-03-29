@@ -189,23 +189,30 @@ site.article = function (req, res, next) {
             next(err);
         else if ('/article/' + url != doc.url)
             res.redirect(doc.url);
-        else res.render('article', {
-            locals: {
+        else {
+            var locals = {
                 doc:doc,
+                pageTitle: doc.title,
                 isAdmin:isAdmin,
                 model:model,
                 parentPaths: model.parents,
                 section: doc.taxonomy[0],
                 disqusData: {
                     shortname: config.get('DISQUS_SHORTNAME'),
-                    id: doc._id,
+                    id: doc.nid || doc._id,
                     title: doc.title,
                     url: doc.url
                 }
-            },
-            filename:'views/article',
-            css:asereje.css(['container/style', 'article'])
-        });
+            };
+
+            if(doc.images.ThumbSquareM) locals.pageImage = doc.images.ThumbSquareM.url;
+                
+            res.render('article', {
+                locals: locals,
+                filename:'views/article',
+                css:asereje.css(['container/style', 'article'])
+            });
+        }
     });
 };
 

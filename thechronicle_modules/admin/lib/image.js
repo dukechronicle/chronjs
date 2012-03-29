@@ -3,7 +3,7 @@ var config = require('../../config');
 var log = require('../../log');
 var async = require('async');
 var fs = require('fs');
-var api = require('../../api/lib/api.js');
+var api = require('../../api');
 var _ = require("underscore");
 
 var VALID_EXTENSIONS = {};
@@ -41,7 +41,7 @@ exports.upload = function (req, res) {
 
 exports.uploadData = function (req, httpRes) {
     var imageData = req.body.imageData;
-    var imageName = req.body.imageName;
+    var imageName = req.body.imageName.replace(/[\s\#]/g, "_");
     // create a unique name for the image to avoid s3 blob collisions
     imageName = globalFunctions.randomString(8) + "-" + imageName;
     var thumbName = 'thumb_' + imageName;

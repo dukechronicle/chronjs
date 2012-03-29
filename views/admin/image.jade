@@ -59,4 +59,6 @@ p
   - each version in versions
     #versions!= partial('version', {locals: {afterUrl: afterUrl, docId: docId, imageTypes: imageTypes, cropSizes: imageDetails, version: version}})
 
-script CHRONICLE.onload.push(function(){prettifyDate()}, function(){cropImage()})
+script(type="text/javascript")
+    CHRONICLE.onload.push(function(){prettifyDate()}, function(){cropImage()},
+                          function(){deleteImage()})

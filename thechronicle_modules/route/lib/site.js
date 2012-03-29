@@ -11,17 +11,14 @@ var _ = require('underscore');
 
 
 site.mobile = function (req, res, next) {
-    res.render('site/mobile', {
-        layout:false
-        //filename:'views/site/mobile.jade',
-    });    
+    res.render('mobile');
 };
 
 site.frontpage = function (req, res) {
     api.site.getFrontPageContent(function (err, model) {
-        res.render('site/index', {
-            css:asereje.css(['slideshow/style', 'container/style', 'site/frontpage']),
-            filename:'views/site/index.jade',
+        res.render('site/pages/frontpage', {
+            css:asereje.css(['site/slideshow/style', 'site/container/style', 'site/pages/frontpage']),
+            filename:'views/site/pages/frontpage.jade',
             locals: {
                 model:model
             }
@@ -31,10 +28,10 @@ site.frontpage = function (req, res) {
 
 site.news = function (req, res) {
     api.site.getNewsPageContent(function (err, model, children) {
-        res.render('site/news', {
+        res.render('site/pages/news', {
             pageTitle: "News",
-            css:asereje.css(['container/style', 'site/section', 'site/news']),
-            filename:'views/site/news.jade',
+            css:asereje.css(['site/container/style', 'site/pages/section', 'site/pages/news']),
+            filename:'views/site/pages/news.jade',
             locals: {
                 subsections:children,
                 section: 'News',
@@ -46,10 +43,10 @@ site.news = function (req, res) {
 
 site.sports = function (req, res) {
     api.site.getSportsPageContent(function (err, model, children) {
-        res.render('site/sports', {
+        res.render('site/pages/sports', {
             pageTitle: "Sports",
-            css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
-            filename:'views/site/sports.jade',
+            css:asereje.css(['site/container/style', 'site/pages/section', 'site/pages/sports', 'slideshow/style']),
+            filename:'views/site/pages/sports.jade',
             locals: {
                 subsections: children,
                 model:model,
@@ -61,10 +58,10 @@ site.sports = function (req, res) {
 
 site.opinion = function (req, res) {
     api.site.getOpinionPageContent(function (err, model, children) {
-        res.render('site/opinion', {
+        res.render('site/pages/opinion', {
             pageTitle: "Opinion",
-            css:asereje.css(['container/style', 'site/section', 'site/opinion']),
-            filename:'views/site/opinion.jade',
+            css:asereje.css(['site/container/style', 'site/pages/section', 'site/pages/opinion']),
+            filename:'views/site/pages/opinion.jade',
             locals: {
                 subsections:children,
                 section: 'Opinion',
@@ -76,10 +73,10 @@ site.opinion = function (req, res) {
 
 site.recess = function (req, res) {
     api.site.getRecessPageContent(function (err, model, children) {
-        res.render('site/recess', {
+        res.render('site/pages/recess', {
             pageTitle: "Recess",
-            css:asereje.css(['container/style', 'site/section', 'site/recess']),
-            filename:'views/site/recess.jade',
+            css:asereje.css(['site/container/style', 'site/pages/section', 'site/pages/recess']),
+            filename:'views/site/pages/recess.jade',
             locals: {
                 subsections:children,
                 section: 'Recess',
@@ -91,10 +88,10 @@ site.recess = function (req, res) {
 
 site.towerview = function (req, res) {
     api.site.getTowerviewPageContent(function (err, model, children) {
-        res.render('site/towerview', {
+        res.render('site/pages/towerview', {
             pageTitle: "Towerview",
-            css:asereje.css(['container/style', 'site/section', 'site/towerview']),
-            filename:'views/site/towerview.jade',
+            css:asereje.css(['site/container/style', 'site/pages/section', 'site/pages/towerview']),
+            filename:'views/site/pages/towerview.jade',
             locals: {
                 subsections:children,
                 section: 'Towerview',
@@ -109,8 +106,8 @@ site.section = function (req, res, next) {
     api.site.getSectionContent(sectionArray, function (err, section, docs, children, parents, popular) {
         if (err) next();
         else {
-	    res.render('site/section', {
-	        css:asereje.css(['container/style', 'site/section']),
+	    res.render('site/pages/section', {
+	        css:asereje.css(['site/container/style', 'site/pages/section']),
 	        locals: {
                 pageTitle: section,
                 docs:docs,
@@ -129,8 +126,8 @@ site.search = function (req, res, next) {
     var query = req.params.query.replace(/-/g, ' ');
     api.site.getSearchContent(query, req.query, function (err, docs, facets) {
         if (err) next(err);
-        else res.render('site/search', {
-            css:asereje.css(['container/style', 'site/search']),
+        else res.render('site/pages/search', {
+            css:asereje.css(['site/container/style', 'site/pages/search']),
             locals: {
                 docs: docs,
                 currentFacets: req.query.facets || '',
@@ -146,31 +143,12 @@ site.search = function (req, res, next) {
 site.staff = function (req, res) {
     var name = req.params.query.replace(/-/g, ' ');
     api.site.getAuthorContent(name, function (err, docs) {
-	res.render('site/people', {
-            css:asereje.css(['container/style', 'site/people']),
+	res.render('site/pages/people', {
+            css:asereje.css(['site/container/style', 'site/pages/people']),
             locals:{
                 pageTitle: globalFunctions.capitalizeWords(name),
                 docs: docs,
                 name: globalFunctions.capitalizeWords(name)
-            }
-        });
-    });
-};
-
-site.page = function (req, res, next) {
-    var url = req.params.url;
-    api.site.getPageContent(url, function (err, doc, model) {
-        if (err)
-            next();
-        else if ('/page/' + url != doc.path)
-            res.redirect(doc.url);
-        else res.render('page', {
-	        css: asereje.css(['container/style']),
-            filename:'views/page.jade',
-            locals: {
-                pageTitle: doc.node_title,
-                doc:doc,
-                model: model
             }
         });
     });
@@ -207,10 +185,10 @@ site.article = function (req, res, next) {
 
             if(doc.images.ThumbSquareM) locals.pageImage = doc.images.ThumbSquareM.url;
                 
-            res.render('article', {
+            res.render('site/pages/article', {
                 locals: locals,
-                filename:'views/article',
-                css:asereje.css(['container/style', 'article'])
+                filename:'views/site/pages/article',
+                css:asereje.css(['site/container/style', 'site/pages/article'])
             });
         }
     });
@@ -226,27 +204,15 @@ site.articlePrint = function (req, res, next) {
         else {
             doc.url += '/print';
             doc.fullUrl += '/print';
-            res.render('article-print', {
+            res.render('site/pages/article-print', {
 		css: asereje.css(),
-                filename:'views/article-print.jade',
-                layout:"layout-print.jade",
+                filename:'views/site/pages/article-print.jade',
+                layout:"site/layout-print.jade",
                 locals: {
                     doc:doc
                 }
             });
         }
-    });
-};
-
-site.editPage = function (req, res, next) {
-    var url = req.params.url;
-    api.page.getByUrl(url, function (err, doc) {
-        if (err) next(err);
-        else res.render('admin/editPage', {
-            locals: {
-                doc:doc
-            }
-        });
     });
 };
 
@@ -300,11 +266,11 @@ site.newsletterData = function (req, res) {
     var action = req.body.action;
 
     var afterFunc = function() {
-        res.render('pages/newsletter', {
-	    filename: 'pages/newsletter',
+        res.render('site/static_pages/newsletter', {
+	    filename: 'site/static_pages/newsletter',
             email: email,
             action: action,
-	    css: asereje.css(['container/style'])
+	    css: asereje.css(['site/container/style'])
         });
     };
     
@@ -347,11 +313,11 @@ site.rssSection = function (req, res, next) {
 
 site.staticPage = function (req, res, next) {
     var url = _.last(req.route.path.split('/'));
-    var filename = 'pages/' + url;
-    fs.readFile('views/pages/page-data/' + url + '.json', function (err, data) {
+    var filename = 'site/static-pages/' + url;
+    fs.readFile('views/site/static-pages/page-data/' + url + '.json', function (err, data) {
         var data = (!err && data) ? JSON.parse(data.toString()) : null;
         res.render(filename, {
-	    css: asereje.css(['container/style', filename]),
+	    css: asereje.css(['site/container/style', filename]),
             filename: filename,
             data: data
         });
@@ -359,8 +325,8 @@ site.staticPage = function (req, res, next) {
 };
 
 site.pageNotFound = function(req, res) {
-    res.render('pages/404', {
-        filename: 'pages/404',
+    res.render('site/static-pages/404', {
+        filename: 'site/static-pages/404',
         css: asereje.css([]),
 	status: 404,
         url: req.url

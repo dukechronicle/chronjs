@@ -56,13 +56,12 @@ site.restrictToAdmin = function(req, res, next) {
 };
 // redirects to login page
 site.askForLogin = function(res, afterLoginPage, username, err) {
-    res.render('login', {
+    res.render('admin/login', {
         locals : {
             afterLogin : afterLoginPage,
             username : username || '',
             error : err || ''
-        },
-        layout : 'admin/layout'
+        }
     });
 };
 

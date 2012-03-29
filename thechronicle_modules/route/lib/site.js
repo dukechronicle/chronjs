@@ -205,7 +205,7 @@ site.article = function (req, res, next) {
                 }
             };
 
-            if(doc.images.LargeRect) locals.pageImage = doc.images.LargeRect.url;
+            if(doc.images.ThumbSquareM) locals.pageImage = doc.images.ThumbSquareM.url;
                 
             res.render('article', {
                 locals: locals,

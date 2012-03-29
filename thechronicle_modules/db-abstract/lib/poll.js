@@ -14,7 +14,7 @@ poll.add = function (title, answers, taxonomy, callback) {
         created: globalFunctions.getTimestamp(),
         type: 'poll',
         answers: _.reduce(answers,
-                          function (memo, answer) { memo[answer] = 0 },
+                          function (memo, answer) { memo[answer] = 0; return memo; },
                           {})
     };        
     db.save(poll, callback);

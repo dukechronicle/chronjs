@@ -5,6 +5,10 @@ var log = require('../../log');
 
 var _ = require('underscore');
 
+poll.add = function(fields, callback) {
+	console.log(fields.title);
+	db.poll.add(fields.title, fields.answers, fields.taxonomy, callback);
+}
 
 poll.vote = function (id, answer, callback) {
     db.poll.getPoll(id, function (err, doc) {

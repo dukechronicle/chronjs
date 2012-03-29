@@ -8,7 +8,6 @@ var log = require('../../log');
 
 admin.image = adminApi.image;
 
-
 admin.index = function (req, res, next) {
     res.render('admin/index');
 };
@@ -146,6 +145,34 @@ admin.addImageToArticle = function (req, res, next) {
                                    if (err) next(err);
                                    else res.redirect(afterUrl);
                                });
+};
+
+admin.addPoll = function(req, res, next) {
+	api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
+        res.render('admin/addPoll', {
+            locals:{
+                groups:[],
+                taxonomy:taxonomy
+            }
+        });
+    });
+}
+
+admin.managePoll = function(req, res, next) {
+	api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
+        res.render('admin/managePoll', {
+            locals:{
+                docs:null
+            }
+        });
+    });
+}
+
+admin.addPollData = function (req, res, next) {
+    adminApi.addPoll(req.body.doc, function (err) {
+        if (err) next(err);
+        else res.redirect('/');
+    });
 };
 
 admin.layout = function (req, res, next) {

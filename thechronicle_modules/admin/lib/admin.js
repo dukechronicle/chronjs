@@ -131,6 +131,21 @@ admin.editArticle = function (doc, callback) {
     }
 };
 
+admin.addPoll = function (doc, callback) {
+    if (doc.taxonomy == '') {
+        callback('No section selected for poll');
+    }
+    else {
+        var fields = {
+            title:doc.title,
+            taxonomy:doc.taxonomy,
+            answers: new Array("Yes")
+        };
+
+        api.poll.add(fields, callback);
+    }
+};
+
 admin.layout = function (section, group, layoutConfig, callback) {
     async.parallel({
         sectionDocs: function (cb) {

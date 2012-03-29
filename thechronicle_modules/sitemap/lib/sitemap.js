@@ -8,6 +8,7 @@ var fs = require('fs');
 var log = require('../../log');
 var _ = require('underscore');
 var api = require('../../api');
+var config = require("../../config");
 
 var SITEMAP_URL_LIMIT = 10000;
 
@@ -91,8 +92,7 @@ function generateSitemapIndex(files, date, callback) {
 	att("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9");
     async.forEach(files,
 		  function (path, cb) {
-		      // TODO: extract domain name
-		      var prefix = "http://www.dukechronicle.com/";
+		      var prefix = "http://www." + config.get('DOMAIN_NAME') + "/";
 		      root.ele("sitemap").
 			    ele("loc", prefix + path.replace(/public\//g,"") + ".gz").up().
 			    ele("lastmod", dateFormat(date, "yyyy-mm-dd"));
@@ -111,8 +111,7 @@ function generateSitemap(docs, news, callback) {
 	root.att("xmlns:news", "http://www.google.com/schemas/sitemap-news/0.9");
     async.forEach(docs,
 		  function (doc, cb) {
-		      // TODO: extract domain name
-		      var prefix = "http://www.dukechronicle.com/article/";
+		      var prefix = "http://www." + config.get('DOMAIN_NAME') + "/article/";
 		      var date = getDate(doc);
 		      if (date === undefined) return cb(err);
 		      var url = root.ele('url');

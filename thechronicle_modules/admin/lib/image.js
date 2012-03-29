@@ -3,7 +3,7 @@ var config = require('../../config');
 var log = require('../../log');
 var async = require('async');
 var fs = require('fs');
-var api = require('../../api/lib/api.js');
+var api = require('../../api');
 var _ = require("underscore");
 
 var VALID_EXTENSIONS = {};

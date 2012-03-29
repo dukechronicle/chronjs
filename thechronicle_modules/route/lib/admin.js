@@ -18,7 +18,6 @@ admin.newsletter = function (req, res, next) {
         if (err) next(err);
         else {
             res.render('admin/newsletter', {
-                js: ['admin/newsletter?v=3'],
                 locals: {campaignID: campaignID}
             });
         }
@@ -47,7 +46,6 @@ admin.manage = function (req, res, next) {
     api.docsByDate(null, query, function (err, docs) {
         if (err) next(err);
         else res.render('admin/manage', {
-            js: ['admin/manage?v=2'],
             locals:{
                 docs:docs,
                 hasPrevious:(req.query.beforeID != null),
@@ -72,7 +70,6 @@ admin.k4exportData = function (req, res, next) {
     adminApi.k4export(req.files.zip.path, function(err, results) {
         res.render('admin/k4export', {
 	        css: ['css/msdropdown'],
-            js: ['admin/k4export?v=7'],
             locals:{
                 failed: results.k4.failed,
                 succeeded: results.k4.success,
@@ -117,7 +114,6 @@ admin.editArticle = function (req, res, next) {
                     doc.authors = doc.authors.join(", ");
 
                 res.render('admin/edit', {
-                    js:['admin/deleteArticle?v=2'],
                     locals:{
                         doc:doc,
                         groups:[],
@@ -157,7 +153,6 @@ admin.layout = function (req, res, next) {
         else {
             res.render("admin/page-layout", {
                 css:['admin/layout'],
-                js:['admin/layout?v=1'],
                 locals:{
                     page: group,
                     groups: layoutConfig[group].groups,

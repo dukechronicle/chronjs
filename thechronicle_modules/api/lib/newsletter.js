@@ -20,7 +20,7 @@ var mcAPI = null;
 var ARTICLE_IMAGE_WIDTH = 124;
 var ARTICLE_IMAGE_HEIGHT = 89;
 
-var newsletterFromEmail = "no-reply@dukechronicle.com";
+var newsletterFromEmail = null;
 var newsletterFromName = "The Chronicle";
 
 newsletter.init = function() {
@@ -29,6 +29,8 @@ newsletter.init = function() {
     listID = config.get("MAILCHIMP_LIST_ID");
 
     templateID = config.get("MAILCHIMP_TEMPLATE_ID");
+
+    newsletterFromEmail = "no-reply@"+config.get('DOMAIN_NAME');
 
     try { 
         mcAPI = new MailChimpAPI(apiKey, { version : '1.3', secure : false });

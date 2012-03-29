@@ -95,6 +95,12 @@ exports.init = function (app) {
         app.post('/', api.site.checkAdmin, admin.addArticleData);
         app.put('/:url/edit', api.site.checkAdmin, admin.editArticleData);
     });
+    
+    app.namespace('/poll', function () {
+    	app.get('/new', api.site.checkAdmin, admin.addPoll);
+    	app.get('/manage', api.site.checkAdmin, admin.managePoll);
+    	app.post('/', api.site.checkAdmin, admin.addPollData);
+    });
 
     app.namespace('/admin', function () {
         app.get('/', api.site.checkAdmin, admin.index);

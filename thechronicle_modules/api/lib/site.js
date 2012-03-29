@@ -470,10 +470,11 @@ site.getArticleContent = function(url, callback) {
         if (err) callback('not found');
         else {
             var displayDoc = modifyArticleForDisplay(doc);
-            cache(site.getArticleContentUncached,600)(displayDoc,function (err, model) {
-                callback(err, displayDoc, model);
-                popular.registerArticleView(doc, function(err,res){});
-            });
+            cache(site.getArticleContentUncached, 600, displayDoc)(
+                function (err, model) {
+                    callback(err, displayDoc, model);
+                    popular.registerArticleView(doc, function(err,res){});
+                });
         }
     });
 };
@@ -521,7 +522,7 @@ site.getPageContent = function(url, callback) {
             callback(err);
         else {
             doc.path = "/page/" + url;
-            doc.fullUrl = "http://dukechronicle.com/page/" + url;
+            doc.fullUrl = "http://" + config.get('DOMAIN_NAME') + "/page/" + url;
             var model = {
                 adFullRectangle : {
                     "title" : "Advertisement",
@@ -550,7 +551,7 @@ function modifyArticlesForDisplay(docs, callback) {
 function modifyArticleForDisplay(doc, callback) {
     if(doc.urls) {
         doc.url = '/article/' + _.last(doc.urls);
-        doc.fullUrl = 'http://dukechronicle.com' + doc.url;
+        doc.fullUrl = "http://" + config.get('DOMAIN_NAME') + doc.url;
     }
     if(doc.created)
         doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
@@ -572,15 +573,16 @@ function modifyArticleForDisplay(doc, callback) {
     return doc;
 }
 
-function cache(func, expireTime) {
-    return function () {
-        if (arguments.length == 0)
-            log.error("cache function called with no callback");
-        else {
-            var args = Array.prototype.slice.call(arguments);
-            var callback = args.pop();
-            var redisKey = func.toString() + JSON.stringify(args);
- 
+function cache() {
+    if (arguments.length < 2)
+        log.error("cache function called with wrong arguments");
+    else {
+        var args = Array.prototype.slice.call(arguments);
+        var func = args.shift();
+        var expireTime = args.shift();
+        var redisKey = func.toString() + JSON.stringify(args);
+
+        return function (callback) {
             redis.client.get(redisKey, function(err, res) {
                 if (!err && res) callback(null, JSON.parse(res));
                 else {
@@ -595,6 +597,6 @@ function cache(func, expireTime) {
                     func.apply(this, args);
                 }
             });
-        }
-    };
+        };
+    }
 }

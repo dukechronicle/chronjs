@@ -8,7 +8,10 @@ html(lang="en")
         else
             title The Chronicle | Duke University's Daily Independent Newspaper
 
-        link(rel="image_src", href="http://dukechronicle.com/favicon.png")
+        if (typeof pageImage != 'undefined')
+            link(rel="image_src", href=pageImage)
+        else
+            link(rel="image_src", href="http://dukechronicle.com/favicon.png")
 
         - if (typeof css != 'undefined')
             - each file in css

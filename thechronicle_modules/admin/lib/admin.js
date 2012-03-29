@@ -136,10 +136,13 @@ admin.addPoll = function (doc, callback) {
         callback('No section selected for poll');
     }
     else {
+    	var choices = [];
+    	choices[0] = "First";
+    	choices[1] = "Second";
         var fields = {
             title:doc.title,
-            taxonomy:doc.taxonomy,
-            answers: new Array("Yes")
+            taxonomy:JSON.parse(doc.taxonomy),
+            answers: choices
         };
 
         api.poll.add(fields, callback);

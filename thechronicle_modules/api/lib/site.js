@@ -531,7 +531,7 @@ site.getPageContent = function(url, callback) {
             callback(err);
         else {
             doc.path = "/page/" + url;
-            doc.fullUrl = "http://dukechronicle.com/page/" + url;
+            doc.fullUrl = "http://" + config.get('DOMAIN_NAME') + "/page/" + url;
             var model = {
                 adFullRectangle : {
                     "title" : "Advertisement",
@@ -560,7 +560,7 @@ function modifyArticlesForDisplay(docs, callback) {
 function modifyArticleForDisplay(doc, callback) {
     if(doc.urls) {
         doc.url = '/article/' + _.last(doc.urls);
-        doc.fullUrl = 'http://dukechronicle.com' + doc.url;
+        doc.fullUrl = "http://" + config.get('DOMAIN_NAME') + doc.url;
     }
     if(doc.created)
         doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");

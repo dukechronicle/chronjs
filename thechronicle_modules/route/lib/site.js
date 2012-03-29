@@ -204,10 +204,8 @@ site.articlePrint = function (req, res, next) {
         else {
             doc.url += '/print';
             doc.fullUrl += '/print';
-            res.render('site/pages/article-print', {
-		css: asereje.css(),
-                filename:'views/site/pages/article-print.jade',
-                layout:"site/layout-print.jade",
+            res.render('print/article', {
+                filename:'views/print/article.jade',
                 locals: {
                     doc:doc
                 }

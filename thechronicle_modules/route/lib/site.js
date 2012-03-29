@@ -190,23 +190,29 @@ site.article = function (req, res, next) {
         else if ('/article/' + url != doc.url)
             res.redirect(doc.url);
         else {
+            var locals = {
+                doc:doc,
+                pageTitle: doc.title,
+                isAdmin:isAdmin,
+                model:model,
+                parentPaths: model.parents,
+                section: doc.taxonomy[0],
+                disqusData: {
+                    shortname: config.get('DISQUS_SHORTNAME'),
+                    id: doc.nid || doc._id,
+                    title: doc.title,
+                    url: doc.url
+                }
+            };
+
+            if (doc.images.ThumbSquareM)
+                locals.pageImage = doc.images.ThumbSquareM.url;
             if (model.poll && req.session.polls &&
                 model.poll._id in req.session.polls)
                 model.poll.voted = true;
+
             res.render('article', {
-                locals: {
-                    doc:doc,
-                    isAdmin:isAdmin,
-                    model:model,
-                    parentPaths: model.parents,
-                    section: doc.taxonomy[0],
-                    disqusData: {
-                        shortname: config.get('DISQUS_SHORTNAME'),
-                        id: doc._id,
-                        title: doc.title,
-                        url: doc.url
-                    }
-                },
+                locals: locals,
                 filename:'views/article',
                 css:asereje.css(['container/style', 'article', 'container/poll'])
             });

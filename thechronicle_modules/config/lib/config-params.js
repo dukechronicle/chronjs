@@ -21,6 +21,15 @@ var configParams = [
         }
     },
     {
+        name: 'DOMAIN_NAME',
+        description: 'Site Domain Name (no www)',
+        defaultValue: 'dukechronicle.com',
+        schema: {
+          type: "string",
+          required: true
+        }
+    },
+    {
         name: 'DISQUS_SHORTNAME',
         description: 'Disqus Shortname',
         defaultValue: 'chronicletest',

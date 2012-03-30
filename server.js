@@ -74,25 +74,9 @@ log.init(function (err) {
     });
 });
 
-function compile(str, path) {
-  return stylus(str)
-	.set('filename', path)
-	.set('compress', true);
-}
-
 function configureApp(sessionInfo, port) {
     /* express configuration */
     app = express.createServer();
-
-    // add the stylus middleware, which re-compiles when
-    // a stylesheet has changed, compiling FROM src,
-    // TO dest. dest is optional, defaulting to src
-    app.use(stylus.middleware({
-        src: __dirname + '/views/styles'
-      , dest: __dirname + '/public'
-      , compile: compile
-      , firebug: true
-    }));
 
     app.error(function(err, req, res, next) {
         log.error(err);

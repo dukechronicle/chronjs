@@ -73,8 +73,7 @@ site.renderConfigPage = function(req, res, err) {
     }
 
     res.render('config/config', {
-        css: ['css/onde'],
-        removeBootstrap: true,
+        css: ['config/onde'],
         locals : {
             configParams : config.getParameters(),
             profileName : config.getProfileNameKey(),

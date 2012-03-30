@@ -265,7 +265,7 @@ site.newsletterData = function (req, res) {
     var action = req.body.action;
 
     var afterFunc = function() {
-        res.render('site/static_pages/newsletter', {
+        res.render('site/pages/newsletter', {
             layout: 'site/layout',
 	    css: asereje.css(['site/container/style']),
             locals: {
@@ -316,8 +316,8 @@ site.rssSection = function (req, res, next) {
 
 site.staticPage = function (req, res, next) {
     var url = _.last(req.route.path.split('/'));
-    var filename = 'site/static-pages/' + url;
-    fs.readFile('views/site/static-pages/page-data/' + url + '.json', function (err, data) {
+    var filename = 'site/pages/' + url;
+    fs.readFile('views/site/pages/page-data/' + url + '.json', function (err, data) {
         var data = (!err && data) ? JSON.parse(data.toString()) : null;
         res.render(filename, {
             layout: 'site/layout',
@@ -328,7 +328,7 @@ site.staticPage = function (req, res, next) {
 };
 
 site.pageNotFound = function(req, res) {
-    res.render('site/static-pages/404', {
+    res.render('site/pages/404', {
         layout: 'site/layout',
         css: asereje.css([]),
 	status: 404,

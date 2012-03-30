@@ -13,9 +13,7 @@ html(lang="en")
         else
             link(rel="image_src", href="http://dukechronicle.com/favicon.png")
 
-        - if (typeof css != 'undefined')
-            - each file in css
-                link(rel= 'stylesheet', href= '/' + file + '.css')
+        link(rel= 'stylesheet', href= '/dist/site.css')
 
         // typekitload code should always load first because it will cause a relayout of dom
         script(src="http://use.typekit.com/dwv2bjy.js")

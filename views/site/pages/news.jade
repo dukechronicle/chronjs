@@ -1,31 +1,30 @@
-!=partial('site/subnav', {subsections: subsections})
+!=partial('subnav', {subsections: subsections})
 
 #news
     .top.clearfix
         .main
             if (model.Featured && model.Featured[0])
-                .featured!=partial('container/featured-image', {title: "", story: model.Featured[0]});
+                .featured!=partial('../container/featured-image', {title: "", story: model.Featured[0]});
 
             if (model.Headlines && model.Headlines[0])
-                .headline!=partial('container/row', {title: "", story: model.Headlines[0]})
+                .headline!=partial('../container/row', {title: "", story: model.Headlines[0]})
             if (model.Headlines && model.Headlines[1])
-                .headline!=partial('container/row', {title: "", story: model.Headlines[1]})
+                .headline!=partial('../container/row', {title: "", story: model.Headlines[1]})
 
         .sidebar
             .top
                 if (model["Right Headlines"])
-                    .right-headlines!=partial('container/story-list-featured', {title: "Headlines", stories: model["Right Headlines"]})
+                    .right-headlines!=partial('../container/story-list-featured', {title: "Headlines", stories: model["Right Headlines"]})
                 if (model.Blog)
                     .blog.last
-                        !=partial('container/story-list-image', {title: "News Blog", stories: model.Blog, image:'http://d2sug25c5hnh7r.cloudfront.net/images/blogs/newsblog.jpg', imageHref:'http://bigblog.chronicleblogs.com/news'})
+                        !=partial('../container/story-list-image', {title: "News Blog", stories: model.Blog, image:'http://d2sug25c5hnh7r.cloudfront.net/images/blogs/newsblog.jpg', imageHref:'http://bigblog.chronicleblogs.com/news'})
 
             .middle
                 if (model.popular)
-                    .numbered-articles.most-popular!=partial('container/numbered-articles', {title: "Popular", stories: model.popular})
+                    .numbered-articles.most-popular!=partial('../container/numbered-articles', {title: "Popular", stories: model.popular})
                 if (model.adFullRectangle)
                     .image-container.medium-rectangle.lighten!=partial('ad/medium-rect', {title: "Advertisement"})
 
     .bottom
-        .multimedia!=partial('container/multimedia', {title: "Multimedia", multimedia: model.multimedia.News})
-        .more-news!=partial('container/block-row-same', {title: "More News", stories: model.Stories, sameSize: true})
-
+        .multimedia!=partial('../container/multimedia', {title: "Multimedia", multimedia: model.multimedia.News})
+        .more-news!=partial('../container/block-row-same', {title: "More News", stories: model.Stories, sameSize: true})

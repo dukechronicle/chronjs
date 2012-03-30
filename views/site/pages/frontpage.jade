@@ -2,37 +2,37 @@
     #top.clearfix
         .content
             if (model["Top Headline"])
-                #top-headline!=partial('container/top-headline', {stories: model["Top Headline"]})
+                #top-headline!=partial('../container/top-headline', {stories: model["Top Headline"]})
             if (model.Breaking)
-                #breaking!=partial('container/breaking', {stories: model.Breaking})
+                #breaking!=partial('../container/breaking', {stories: model.Breaking})
             if (model.Slideshow)
                 #slideshow!=partial('slideshow', {stories: model.Slideshow})
             if (model["Left Headlines"] && model["Right Headlines"])
-                .top-news.align-group!=partial('container/top-news', {title: "Top Stories", left: model["Left Headlines"], right: model["Right Headlines"]})
+                .top-news.align-group!=partial('../container/top-news', {title: "Top Stories", left: model["Left Headlines"], right: model["Right Headlines"]})
 
             .ads-row.clearfix
                 if (model.printEdition)
-                    .image-container.print-edition.lighten!=partial('container/image', model.printEdition)
+                    .image-container.print-edition.lighten!=partial('../container/image', model.printEdition)
                 .image-container.full-banner.lighten!=partial('ad/full-banner', {title: "AD"})
 
         .sidebar
             //
                 if (model.twitter)
-                    .twitter!=partial('container/twitter', model.twitter)
+                    .twitter!=partial('../container/twitter', model.twitter)
             if (model.popular)
-                .most-popular!=partial('container/articles-with-subhead', {title: "What's Hot", stories: model.popular})
+                .most-popular!=partial('../container/articles-with-subhead', {title: "What's Hot", stories: model.popular})
             if (model.Opinion)
-                .opinion!=partial('container/articles-with-subhead', {title: "Opinion", stories: model.Opinion})
+                .opinion!=partial('../container/articles-with-subhead', {title: "Opinion", stories: model.Opinion})
             .image-container.medium-rectangle.lighten!=partial('ad/medium-rect', {title: "Advertisement"})
 
     #middle
         #news-sports.clearfix.align-group
             if (model.News)
-                #news.align-element(data-alignTarget='div.rounded')!=partial('container/news', {title: "News", stories: model.News})
+                #news.align-element(data-alignTarget='div.rounded')!=partial('../container/news', {title: "News", stories: model.News})
             if (model.Sports)
-                #sports.align-element(data-alignTarget='div.rounded')!=partial('container/news', {title: "Sports", stories: model.Sports})
+                #sports.align-element(data-alignTarget='div.rounded')!=partial('../container/news', {title: "Sports", stories: model.Sports})
     #bottom
         if (model.Recess)
-            #recess!=partial('container/block-row', {title: "Recess", stories: model.Recess})
+            #recess!=partial('../container/block-row', {title: "Recess", stories: model.Recess})
         if (model.Towerview)
-            #towerview!=partial('container/block-row', {title: "Towerview", stories: model.Towerview})
+            #towerview!=partial('../container/block-row', {title: "Towerview", stories: model.Towerview})

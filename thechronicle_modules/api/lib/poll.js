@@ -6,8 +6,19 @@ var log = require('../../log');
 var _ = require('underscore');
 
 poll.add = function(fields, callback) {
-	db.poll.add(fields.title, fields.answers, fields.taxonomy, callback);
-}
+    var poll = {
+        title: fields.title,
+        taxonomy: fields.taxonomy,
+        created: globalFunctions.getTimestamp(),
+        type: 'poll',
+        answers: _.reduce(fields.answers,
+                          function (memo, answer) {
+                              memo[answer] = 0;
+                              return memo;
+                          }, {})
+    };
+    db.poll.add(poll, callback);
+};
 
 poll.vote = function (id, answer, callback) {
     db.poll.getPoll(id, function (err, doc) {

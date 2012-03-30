@@ -4,19 +4,8 @@ var db = require('./db-abstract');
 var globalFunctions = require('../../global-functions');
 var log = require('../../log');
 
-var _ = require('underscore');
 
-
-poll.add = function (title, answers, taxonomy, callback) {
-    var poll = {
-        title: title,
-        taxonomy: taxonomy,
-        created: globalFunctions.getTimestamp(),
-        type: 'poll',
-        answers: _.reduce(answers,
-                          function (memo, answer) { memo[answer] = 0; return memo; },
-                          {})
-    };        
+poll.add = function (poll, callback) {
     db.save(poll, callback);
 };
 

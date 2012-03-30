@@ -168,7 +168,12 @@ function runSite(callback) {
                     setViewOption('admin_javascript', jsFile);
                 });
             }
-
+            
+            builder.buildCSS(function (err) {
+                if (err) log.warning('Failed to build stylesheets: ' + err);
+                else log.notice('Built stylesheets');
+            });
+            
             redisClient.init(true, function(err) {
                 route.init(app);
                 log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));

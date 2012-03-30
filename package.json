@@ -49,6 +49,8 @@
 	    "xmlbuilder": "0.3.x",
         "JSV": "3.5.x",
         "requirejs": "1.0.x",
-        "gzip": "0.1.x"
+        "gzip": "0.1.x",
+        "walk": "2.1.x",
+        "sqwish": "0.2.x"
     }
 }

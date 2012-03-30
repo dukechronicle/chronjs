@@ -49,7 +49,7 @@
 
         .sidebar
             - if (model.related && model.related.length > 0)
-                .related!=partial('container/articles-with-subhead', {title: "Related", stories: model.related})
+                .related!=partial('../container/articles-with-subhead', {title: "Related", stories: model.related})
 
              // advertising
             .image-container.medium-rectangle!=partial('ad/medium-rect', {title: "Advertisement"})
@@ -69,7 +69,7 @@
                 }(document, 'script', 'facebook-jssdk'));
 
             - if (model.popular && model.popular.length > 0)
-                .numbered-articles.most-popular!=partial('container/numbered-articles', {title: "Popular", stories: model.popular})
+                .numbered-articles.most-popular!=partial('../container/numbered-articles', {title: "Popular", stories: model.popular})
 
     // comments
     #disqus_thread.rounded

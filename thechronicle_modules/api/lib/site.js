@@ -82,8 +82,7 @@ site.renderConfigPage = function(req, res, err) {
             revisionValue : config.getConfigRevision(),
             error : err,
             showOnly : req.query.showOnly
-        },
-        layout : 'admin/layout'
+        }
     });
 };
 

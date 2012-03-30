@@ -14,15 +14,14 @@ html(lang="en")
             link(rel="image_src", href="http://dukechronicle.com/favicon.png")
 
         link(rel= 'stylesheet', href= '/dist/site.css')
+        //if lt IE 9
+            link(rel='stylesheet', href='/dist/style-ie.css')
 
         // typekitload code should always load first because it will cause a relayout of dom
         script(src="http://use.typekit.com/dwv2bjy.js")
         script try{Typekit.load()}catch(e){}
 
         script var CHRONICLE = { onload: [] }
-
-        //if lt IE 9
-            link(rel='stylesheet', href='/style-ie.css')
 
         !=partial("code/google-analytics")
     body

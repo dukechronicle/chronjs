@@ -88,7 +88,7 @@ function configureApp(sessionInfo, port) {
     // a stylesheet has changed, compiling FROM src,
     // TO dest. dest is optional, defaulting to src
     app.use(stylus.middleware({
-        src: __dirname + '/views'
+        src: __dirname + '/views/styles'
       , dest: __dirname + '/public'
       , compile: compile
       , firebug: true

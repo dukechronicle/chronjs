@@ -1,0 +1,18 @@
+h1 Add a Poll
+form(action='/poll', method='POST')
+    input(type='hidden', name='doc[type]', value='poll')
+    p(style="margin-bottom: 2em")
+        label(for='title') Title&nbsp;
+        input#title(type='text', name='doc[title]', style='width:600px')
+    p(style="margin-bottom: 2em")
+        label(for='answers') Answers&nbsp;
+        input#answers(type='text', name='doc[answers]', style='width:600px')
+    p(style="margin-bottom: 2em")
+        label(for='section') Section&nbsp;
+        select(name='doc[taxonomy]', style='width: 600px')
+          option(value='') Select a section
+           - each subsections, section in taxonomy
+              - each key, value in subsections
+                  option(value=value) #{key}
+    p
+        input(type='submit', value='add')

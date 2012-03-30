@@ -1,22 +1,22 @@
-!=partial('site/subnav', {subsections: subsections})
+!=partial('subnav', {subsections: subsections})
 
 #opinion
     .top.clearfix
         .main
             if (model.Featured)
-                .columns-today!=partial('container/main-opinion', {title: "Today's Columns", stories: model.Featured})
+                .columns-today!=partial('../container/main-opinion', {title: "Today's Columns", stories: model.Featured})
             if (model.EditorialBoard)
-                .editorial-board!=partial('container/teaser-with-date.jade', {title: "Editorial Board", stories: model.EditorialBoard})
+                .editorial-board!=partial('../container/teaser-with-date.jade', {title: "Editorial Board", stories: model.EditorialBoard})
         .right
             if (model.Blog)
-                .blog!=partial('container/story-list', {title: "Backpages", stories: model.Blog})
+                .blog!=partial('../container/story-list', {title: "Backpages", stories: model.Blog})
             if (model.Popular)
-                .popular!=partial('container/story-list', {title: "Popular", stories: model.Popular})
+                .popular!=partial('../container/story-list', {title: "Popular", stories: model.Popular})
             if (model.adFullRectangle)
                 .image-container.medium-rectangle.lighten!=partial('ad/medium-rect', {title: "Advertisement"})
             if (model.adFullBanner)
                 .image-container.full-banner.lighten!=partial('ad/full-banner', {title: "AD"})
-            .cartoon!=partial('container/image.jade', {title: "Cartoon", url:"http://d2770i1y1fck5h.cloudfront.net/BAVfDPsH-chronicle_cartoon_s.jpg", imageUrl:"http://d2770i1y1fck5h.cloudfront.net/0AsQATpU-chronicle_cartoon_l.jpg", width: "462px", height: "599px", caption: "Mariah Hukins, Trinity '13"})
+            .cartoon!=partial('../container/image.jade', {title: "Cartoon", url:"http://d2770i1y1fck5h.cloudfront.net/BAVfDPsH-chronicle_cartoon_s.jpg", imageUrl:"http://d2770i1y1fck5h.cloudfront.net/0AsQATpU-chronicle_cartoon_l.jpg", width: "462px", height: "599px", caption: "Mariah Hukins, Trinity '13"})
             if (model.Columnists)
                 #columnists
                     #columnist-list
@@ -37,6 +37,6 @@
                                     h2.vertical &nbsp;
                         .rounded
                             - each columnist, index in model.Columnists
-                                .columnist-stories(id="columnist-story-#{index}")!=partial('container/opinion-story-list.jade', columnist)
+                                .columnist-stories(id="columnist-story-#{index}")!=partial('../container/opinion-story-list.jade', columnist)
 
-script CHRONICLE.onload.push(function(){columnistSelect()});
+script CHRONICLE.onload.push(function(){columnistSelect()})

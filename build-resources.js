@@ -73,7 +73,7 @@ function buildCSSFile(path, callback) {
     
     walker.on('end', function (err) {
         if (err) callback(err);
-        else if (process.env.NODE_ENV == 'production')
+        else if (true) //process.env.NODE_ENV == 'production')
             storeS3(style, "text/css", function (err, name) {
                 if (err) callback(err);
                 else callback(null, config.get('CLOUDFRONT_STATIC') + name);
@@ -112,12 +112,17 @@ function storeS3(data, type, callback) {
     md5sum.update(data);
     var path = '/dist/1' + md5sum.digest('hex');
 
-    gzip(data, function (err, buffer) {
-        if (err) callback(err);
-        else {
-            api.s3.put(bucket, buffer, path, type, "gzip", function(err) {
-                callback(err, path);
-            });
-        }
+    api.s3.get(bucket, path, function (err, res) {
+        log.debug(res);
+//        if (res.statusCode == 200 && false)
+//            callback(null, path);
+        gzip(data, function (err, buffer) {
+            if (err) callback(err);
+            else {
+                api.s3.put(bucket, buffer, path, type, "gzip", function(err) {
+                    callback(err, path);
+                });
+            }
+        });
     });
 }

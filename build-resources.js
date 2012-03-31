@@ -19,16 +19,19 @@ exports.buildCSS = buildCSS;
 
 
 function buildCSS(callback) {
+    var paths = {};
     fs.readdir(STYLE_DIR, function (err, files) {
         async.forEachSeries(files, function (file, cb) {
             fs.stat(STYLE_DIR + file, function (err, stats) {
                 if (err) cb(err);
                 else if (!stats.isDirectory()) cb();
-                else buildCSSFile(file, cb);
+                else buildCSSFile(file, function (err, path) {
+                    paths[file] = path;
+                    cb(err);
+                });
             });
         }, function (err) {
-            if (err) callback(err);
-            else callback();
+            callback(err, paths);
         });
     });
 }
@@ -70,7 +73,15 @@ function buildCSSFile(path, callback) {
     
     walker.on('end', function (err) {
         if (err) callback(err);
-        else fs.writeFile(DIST_DIR + path + '.css', style, callback);
+        else if (process.env.NODE_ENV == 'production')
+            storeS3(style, function (err, name) {
+                if (err) callback(err);
+                else callback(null, config.get('STATIC_CLOUDFRONT') + name);
+            });
+        else
+            fs.writeFile(DIST_DIR + path + '.css', style, function (err) {
+                callback(err, '/dist/' + path + '.css');
+            });
     });
 }
 

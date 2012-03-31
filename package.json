@@ -11,7 +11,6 @@
         "express-resource":"0.2.x",
         "jade":"0.20.0",
         "stylus":"0.22.6",
-        "asereje":"0.1.0",
 
         "async":"0.1.15",
         "nimble":"0.0.x",

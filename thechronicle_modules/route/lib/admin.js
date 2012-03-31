@@ -70,7 +70,6 @@ admin.k4export = function (req, res, next) {
 admin.k4exportData = function (req, res, next) {
     adminApi.k4export(req.files.zip.path, function(err, results) {
         res.render('admin/k4export', {
-	    css: ['css/msdropdown'],
             locals:{
                 failed: results.k4.failed,
                 succeeded: results.k4.success,
@@ -155,7 +154,6 @@ admin.layout = function (req, res, next) {
         if (err) next(err);
         else {
             res.render("admin/page-layout", {
-                css:['admin/layout'],
                 locals:{
                     page: group,
                     groups: layoutConfig[group].groups,

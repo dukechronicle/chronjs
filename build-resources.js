@@ -74,9 +74,9 @@ function buildCSSFile(path, callback) {
     walker.on('end', function (err) {
         if (err) callback(err);
         else if (process.env.NODE_ENV == 'production')
-            storeS3(style, function (err, name) {
+            storeS3(style, "text/css", function (err, name) {
                 if (err) callback(err);
-                else callback(null, config.get('STATIC_CLOUDFRONT') + name);
+                else callback(null, config.get('CLOUDFRONT_STATIC') + name);
             });
         else
             fs.writeFile(DIST_DIR + path + '.css', style, function (err) {
@@ -98,24 +98,24 @@ function buildJavascript(infile, outfile, callback) {
         fs.readFile(config.out, 'utf8', function (err, data) {
             if (err) callback(err);
             else {
-                storeS3(data.toString(), callback);
+                storeS3(data.toString(), "application/javascript", callback);
                 fs.unlink(config.out);
             }
         });
     });
 }
 
-function storeS3(data, callback) {
+function storeS3(data, type, callback) {
     var bucket = config.get('S3_STATIC_BUCKET');
 
     var md5sum = crypto.createHash('md5');
     md5sum.update(data);
-    var path = '/dist/' + md5sum.digest('hex') + '2';
+    var path = '/dist/1' + md5sum.digest('hex');
 
     gzip(data, function (err, buffer) {
         if (err) callback(err);
         else {
-            api.s3.put(bucket, buffer, path, "text/plain", "gzip", function(err){
+            api.s3.put(bucket, buffer, path, type, "gzip", function(err) {
                 callback(err, path);
             });
         }

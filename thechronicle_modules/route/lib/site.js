@@ -5,7 +5,6 @@ var config = require('../../config');
 var globalFunctions = require('../../global-functions');
 var log = require('../../log');
 
-var asereje = require('asereje');
 var fs = require('fs');
 var _ = require('underscore');
 
@@ -20,7 +19,6 @@ site.frontpage = function (req, res) {
     api.site.getFrontPageContent(function (err, model) {
         res.render('site/pages/frontpage', {
             layout: 'site/layout',
-            css:asereje.css(['site/slideshow/style', 'site/container/style', 'site/pages/frontpage']),
             locals: {
                 model:model
             }
@@ -32,7 +30,6 @@ site.news = function (req, res) {
     api.site.getNewsPageContent(function (err, model, children) {
         res.render('site/pages/news', {
             layout: 'site/layout',
-            css:asereje.css(['site/container/style', 'site/pages/section', 'site/pages/news']),
             pageTitle: "News",
             locals: {
                 subsections:children,
@@ -47,7 +44,6 @@ site.sports = function (req, res) {
     api.site.getSportsPageContent(function (err, model, children) {
         res.render('site/pages/sports', {
             layout: 'site/layout',
-            css:asereje.css(['site/container/style', 'site/pages/section', 'site/pages/sports', 'slideshow/style']),
             pageTitle: "Sports",
             locals: {
                 subsections: children,
@@ -62,7 +58,6 @@ site.opinion = function (req, res) {
     api.site.getOpinionPageContent(function (err, model, children) {
         res.render('site/pages/opinion', {
             layout: 'site/layout',
-            css:asereje.css(['site/container/style', 'site/pages/section', 'site/pages/opinion']),
             pageTitle: "Opinion",
             locals: {
                 subsections:children,
@@ -77,7 +72,6 @@ site.recess = function (req, res) {
     api.site.getRecessPageContent(function (err, model, children) {
         res.render('site/pages/recess', {
             layout: 'site/layout',
-            css:asereje.css(['site/container/style', 'site/pages/section', 'site/pages/recess']),
             pageTitle: "Recess",
             locals: {
                 subsections:children,
@@ -92,7 +86,6 @@ site.towerview = function (req, res) {
     api.site.getTowerviewPageContent(function (err, model, children) {
         res.render('site/pages/towerview', {
             layout: 'site/layout',
-            css:asereje.css(['site/container/style', 'site/pages/section', 'site/pages/towerview']),
             pageTitle: "Towerview",
             locals: {
                 subsections:children,
@@ -130,7 +123,6 @@ site.search = function (req, res, next) {
         if (err) next(err);
         else res.render('site/pages/search', {
             layout: 'site/layout',
-            css:asereje.css(['site/container/style', 'site/pages/search']),
             locals: {
                 docs: docs,
                 currentFacets: req.query.facets || '',
@@ -148,7 +140,6 @@ site.staff = function (req, res) {
     api.site.getAuthorContent(name, function (err, docs) {
 	res.render('site/pages/people', {
             layout: 'site/layout',
-            css:asereje.css(['site/container/style', 'site/pages/people']),
             locals: {
                 pageTitle: globalFunctions.capitalizeWords(name),
                 docs: docs,
@@ -191,7 +182,6 @@ site.article = function (req, res, next) {
                 
             res.render('site/pages/article', {
                 layout: 'site/layout',
-                css:asereje.css(['site/container/style', 'site/pages/article']),
                 locals: locals
             });
         }
@@ -269,7 +259,6 @@ site.newsletterData = function (req, res) {
     var afterFunc = function() {
         res.render('site/pages/newsletter', {
             layout: 'site/layout',
-	    css: asereje.css(['site/container/style']),
             locals: {
                 email: email,
                 action: action
@@ -323,7 +312,6 @@ site.staticPage = function (req, res, next) {
         var data = (!err && data) ? JSON.parse(data.toString()) : null;
         res.render(filename, {
             layout: 'site/layout',
-	    css: asereje.css(['site/container/style', filename]),
             data: data
         });
     });
@@ -332,7 +320,6 @@ site.staticPage = function (req, res, next) {
 site.pageNotFound = function(req, res) {
     res.render('site/pages/404', {
         layout: 'site/layout',
-        css: asereje.css([]),
 	status: 404,
         url: req.url
     });

@@ -1,5 +1,4 @@
 /* require npm nodejs modules */
-var asereje = require('asereje');
 var async = require('async');
 var express = require('express');
 require('express-namespace');
@@ -25,14 +24,6 @@ var app = null;
 var viewOptions = {
     isProduction: process.env.NODE_ENV === 'production'
 };
-
-asereje.config({
-    active: process.env.NODE_ENV === 'production',  // enable it just for production
-    js_globals: ['typekit', 'underscore-min', 'jquery'],  // js files that will be present always
-    css_globals: ['css/reset', 'css/search-webkit', 'style'],  // css files that will be present always
-    js_path: __dirname + '/public/js',  // javascript folder path
-    css_path: __dirname + '/public'  // css folder path
-});
 
 log.init(function (err) {
     if (err) console.err("Logger couldn't be initialized: " + err);

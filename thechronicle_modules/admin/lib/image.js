@@ -34,8 +34,7 @@ exports.manage = function (req, httpRes) {
 
 exports.upload = function (req, res) {
     res.render('admin/image/upload', {
-        layout: 'admin/layout',
-        css:['admin/image/upload']
+        layout: 'admin/layout'
     });
 };
 

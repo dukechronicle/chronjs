@@ -1,6 +1,7 @@
 var poll = exports;
 
 var db = require('../../db-abstract');
+var globalFunctions = require('../../global-functions');
 var log = require('../../log');
 
 var _ = require('underscore');

@@ -153,9 +153,12 @@ function runSite(callback) {
                 });
             }
             
-            builder.buildCSS(function (err) {
+            builder.buildCSS(function (err, paths) {
                 if (err) log.warning('Failed to build stylesheets: ' + err);
-                else log.notice('Built stylesheets');
+                else {
+                    log.notice('Built stylesheets');
+                    setViewOption('css_paths', paths);
+                }
             });
             
             redisClient.init(true, function(err) {

@@ -1,9 +1,9 @@
 var async = require('async');
+var cleanCSS = require('clean-css');
 var crypto = require('crypto');
 var requirejs = require('requirejs');
 var fs = require('fs');
 var gzip = require('gzip');
-var sqwish = require('sqwish');
 var stylus = require('stylus');
 var walk = require('walk');
 
@@ -62,7 +62,7 @@ function buildCSSFile(path, callback) {
                         next(err);
                     }
                     else {
-                        style += sqwish.minify(data, true);
+                        style += cleanCSS.process(data);
                         next();
                     }
                 });

@@ -51,6 +51,6 @@
         "requirejs": "1.0.x",
         "gzip": "0.1.x",
         "walk": "2.1.x",
-        "sqwish": "0.2.x"
+        "clean-css": "0.3.x"
     }
 }

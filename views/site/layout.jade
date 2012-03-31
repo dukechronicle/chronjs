@@ -13,9 +13,9 @@ html(lang="en")
         else
             link(rel="image_src", href="http://dukechronicle.com/favicon.png")
 
-        link(rel= 'stylesheet', href= '/dist/site.css')
+        link(rel= 'stylesheet', href=css_paths.site)
         //if lt IE 9
-            link(rel='stylesheet', href='/dist/style-ie.css')
+            link(rel='stylesheet', href=css_paths['style-ie'])
 
         // typekitload code should always load first because it will cause a relayout of dom
         script(src="http://use.typekit.com/dwv2bjy.js")

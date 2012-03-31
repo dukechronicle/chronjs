@@ -11,7 +11,9 @@ var _ = require('underscore');
 
 
 site.mobile = function (req, res, next) {
-    res.render('mobile');
+    res.render('mobile', {
+        layout: false
+    });
 };
 
 site.frontpage = function (req, res) {

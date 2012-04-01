@@ -2,8 +2,8 @@ var site = exports;
 
 var api = require('../../api');
 var config = require('../../config');
-var globalFunctions = require('../../global-functions');
 var log = require('../../log');
+var util = require('../../util');
 
 var fs = require('fs');
 var _ = require('underscore');
@@ -141,9 +141,9 @@ site.staff = function (req, res) {
 	res.render('site/pages/people', {
             layout: 'site/layout',
             locals: {
-                pageTitle: globalFunctions.capitalizeWords(name),
+                pageTitle: util.capitalizeWords(name),
                 docs: docs,
-                name: globalFunctions.capitalizeWords(name)
+                name: util.capitalizeWords(name)
             }
         });
     });

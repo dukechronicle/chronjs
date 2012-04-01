@@ -135,6 +135,11 @@ function generateArticle(articleJSON)
 		totalString.append(authorString);
     }
 
+    console.log(article.images);
+    if (article.images != null && article.images.LargeRect != null) {
+        var imageString = $('<img src='+article.images.LargeRect.url + ' alt="chronicle image"/>');
+              totalString.append(imageString);
+    }
     totalString.append($('<p />').append(article.renderedBody));
     loadDisqusForArticle(true, 'dukechronicle', article._id, article.title, article.urls[0]);
 

@@ -6,7 +6,7 @@ var _ = require('underscore');
 
 var log = require('../../log');
 
-var util = _.extend(require('util'), exports);
+var util = _.extend(exports, require('util'));
 
 
 util.unixTimestamp = function (date) {

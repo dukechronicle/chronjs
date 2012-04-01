@@ -1,4 +1,4 @@
-var globalFunctions = require('../../global-functions');
+var util = require('../../util');
 var config = require('../../config');
 var log = require('../../log');
 var async = require('async');
@@ -43,7 +43,7 @@ exports.uploadData = function (req, httpRes) {
     var imageData = req.body.imageData;
     var imageName = req.body.imageName.replace(/[\s\#]/g, "_");
     // create a unique name for the image to avoid s3 blob collisions
-    imageName = globalFunctions.randomString(8) + "-" + imageName;
+    imageName = util.randomString(8) + "-" + imageName;
     var thumbName = 'thumb_' + imageName;
     var imageType = req.body.imageType;
     var imageID = req.body.imageID;

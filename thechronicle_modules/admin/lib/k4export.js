@@ -1,6 +1,6 @@
 var api = require('../../api');
-var globalFunctions = require('../../global-functions');
 var log = require('../../log');
+var util = require('../../util');
 
 var fs = require('fs');
 var path = require('path');
@@ -111,7 +111,7 @@ function ArticleParser(articleCallback) {
             publish:false
         };
         parser.ontext = function (text) {
-            parser.textNode = globalFunctions.trim(text);
+            parser.textNode = util.trim(text);
             async.reduceRight(parser.tags, parser.tag.name,
                     function (memo, item, cb) {
                         cb(undefined, item.name + ":" + memo);
@@ -192,14 +192,13 @@ function ArticleParser(articleCallback) {
         if (parser.metadataType == "Author") {
             async.map(parser.textNode.split(/\,\s*and\s|\sand\s|\,/),
                     function (name, cb) {
-                        cb(undefined, globalFunctions.trim(name));
+                        cb(undefined, util.trim(name));
                     },
                     function (err, results) {
                         parser.article.authors = results;
                     });
         }
     }
-
 
     function onInlineTag(parser) {
         var tag = parser.tag;

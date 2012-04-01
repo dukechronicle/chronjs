@@ -2,21 +2,24 @@ var dateFormat = require('dateformat');
 var fs = require('fs');
 var http = require('http');
 var urlModule = require('url');
+var _ = require('underscore');
 
 var log = require('../../log');
 
+var util = _.extend(exports, require('util'));
 
-exports.unixTimestamp = function (date) {
+
+util.unixTimestamp = function (date) {
     date = date || new Date();
     return Math.round(new Date().getTime() / 1000);
 };
 
-exports.formatTimestamp = function (timestamp, format) {
+util.formatTimestamp = function (timestamp, format) {
     var date = new Date(timestamp*1000);
     return format ? dateFormat(date, format) : date;
 };
 
-exports.randomString = function (length) {
+util.randomString = function (length) {
     var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
     var randomstring = '';
     for (var i=0; i< length; i++) {
@@ -26,11 +29,11 @@ exports.randomString = function (length) {
     return randomstring;
 };
 
-exports.trim = function (string) {
+util.trim = function (string) {
     return string.replace(/^\s*|\s*$/g, '')
 };
 
-exports.downloadUrlToPath = function (url, path, callback) {
+util.downloadUrlToPath = function (url, path, callback) {
     var urlObj = urlModule.parse(url);
     log.info('host: ' + urlObj.host);
     var options = {
@@ -52,18 +55,8 @@ exports.downloadUrlToPath = function (url, path, callback) {
     });
 }
 
-exports.capitalizeWords = function(str) {
-	return str.replace( /(^|\s)([a-z])/g , function(m,p1,p2){ return p1+p2.toUpperCase(); } );
+util.capitalizeWords = function(str) {
+    return str.replace(/(^|\s)([a-z])/g , function(m, p1, p2) {
+        return p1+p2.toUpperCase();
+    });;
 }
-
-exports.convertObjectToArray = function(obj) {
-    var array = [];
-
-    for(var key in obj) {
-        if(typeof obj[key] != "function" && typeof obj[key] != "undefined") {
-            array.push(obj[key]);
-        }
-    }
-    
-    return array;
-};

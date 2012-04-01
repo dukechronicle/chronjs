@@ -135,7 +135,6 @@ function generateArticle(articleJSON)
 		totalString.append(authorString);
     }
 
-    console.log(article.images);
     if (article.images != null && article.images.LargeRect != null) {
         var imageString = $('<img src='+article.images.LargeRect.url + ' alt="chronicle image"/>');
               totalString.append(imageString);

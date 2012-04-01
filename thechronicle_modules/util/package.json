@@ -1,0 +1,5 @@
+{
+    "name": "thechronicle-util",
+    "version" : "0.0.1",
+    "main" : "./lib/util.js"
+}

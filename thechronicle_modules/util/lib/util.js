@@ -11,7 +11,7 @@ var util = _.extend(exports, require('util'));
 
 util.unixTimestamp = function (date) {
     date = date || new Date();
-    return Math.round(new Date().getTime() / 1000);
+    return Math.round(date.getTime() / 1000);
 };
 
 util.formatTimestamp = function (timestamp, format) {

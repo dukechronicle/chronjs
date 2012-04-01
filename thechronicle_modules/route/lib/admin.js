@@ -3,13 +3,13 @@ var admin = exports;
 var adminApi = require('../../admin');
 var api = require('../../api');
 var config = require('../../config');
-var globalFunctions = require('../../global-functions');
 var log = require('../../log');
+var util = require('../../util');
 
 admin.image = adminApi.image;
 
 admin.index = function (req, res, next) {
-    res.render('admin/index');
+    res.render('admin');
 };
 
 admin.newsletter = function (req, res, next) {
@@ -44,7 +44,8 @@ admin.manage = function (req, res, next) {
 
     api.docsByDate(null, query, function (err, docs) {
         if (err) next(err);
-        else res.render('admin/manage', {
+        else res.render('admin/article', {
+            layout: 'admin/layout',
             locals:{
                 docs:docs,
                 hasPrevious:(req.query.beforeID != null),
@@ -68,7 +69,6 @@ admin.k4export = function (req, res, next) {
 admin.k4exportData = function (req, res, next) {
     adminApi.k4export(req.files.zip.path, function(err, results) {
         res.render('admin/k4export', {
-	        css: ['css/msdropdown'],
             locals:{
                 failed: results.k4.failed,
                 succeeded: results.k4.success,
@@ -81,7 +81,8 @@ admin.k4exportData = function (req, res, next) {
 
 admin.addArticle = function (req, res, next) {
     api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
-        res.render('admin/add', {
+        res.render('admin/article/new', {
+            layout: 'admin/layout',
             locals:{
                 groups:[],
                 taxonomy:taxonomy
@@ -112,7 +113,8 @@ admin.editArticle = function (req, res, next) {
                 if (doc.authors)
                     doc.authors = doc.authors.join(", ");
 
-                res.render('admin/edit', {
+                res.render('admin/article/edit', {
+                    layout: 'admin/layout',
                     locals:{
                         doc:doc,
                         groups:[],
@@ -173,13 +175,12 @@ admin.addPollData = function (req, res, next) {
 
 admin.layout = function (req, res, next) {
     var section = req.query.section;
-    var group = globalFunctions.capitalizeWords(req.params.group);
+    var group = util.capitalizeWords(req.params.group);
     var layoutConfig = api.group.getLayoutGroups();
     adminApi.layout(section, group, layoutConfig, function (err, results) {
         if (err) next(err);
         else {
             res.render("admin/page-layout", {
-                css:['admin/layout'],
                 locals:{
                     page: group,
                     groups: layoutConfig[group].groups,

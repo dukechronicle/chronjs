@@ -1,5 +1,4 @@
 /* require npm nodejs modules */
-var asereje = require('asereje');
 var async = require('async');
 var express = require('express');
 require('express-namespace');
@@ -25,14 +24,6 @@ var app = null;
 var viewOptions = {
     isProduction: process.env.NODE_ENV === 'production'
 };
-
-asereje.config({
-    active: process.env.NODE_ENV === 'production',  // enable it just for production
-    js_globals: ['typekit', 'underscore-min', 'jquery'],  // js files that will be present always
-    css_globals: ['css/reset', 'css/search-webkit', 'style'],  // css files that will be present always
-    js_path: __dirname + '/public/js',  // javascript folder path
-    css_path: __dirname + '/public'  // css folder path
-});
 
 log.init(function (err) {
     if (err) console.err("Logger couldn't be initialized: " + err);
@@ -74,25 +65,9 @@ log.init(function (err) {
     });
 });
 
-function compile(str, path) {
-  return stylus(str)
-	.set('filename', path)
-	.set('compress', true);
-}
-
 function configureApp(sessionInfo, port) {
     /* express configuration */
     app = express.createServer();
-
-    // add the stylus middleware, which re-compiles when
-    // a stylesheet has changed, compiling FROM src,
-    // TO dest. dest is optional, defaulting to src
-    app.use(stylus.middleware({
-        src: __dirname + '/views'
-      , dest: __dirname + '/public'
-      , compile: compile
-      , firebug: true
-    }));
 
     app.error(function(err, req, res, next) {
         log.error(err);
@@ -168,7 +143,15 @@ function runSite(callback) {
                     setViewOption('admin_javascript', jsFile);
                 });
             }
-
+            
+            builder.buildCSS(function (err, paths) {
+                if (err) log.warning('Failed to build stylesheets: ' + err);
+                else {
+                    log.notice('Built stylesheets');
+                    setViewOption('css_paths', paths);
+                }
+            });
+            
             redisClient.init(true, function(err) {
                 route.init(app);
                 log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));

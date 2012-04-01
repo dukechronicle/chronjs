@@ -23,6 +23,12 @@ s3.getCloudFrontUrl = function(url) {
     return url;
 };
 
+s3.get = function (bucket, key, callback) {
+    createClient(bucket).get(key).on('response', function (res) {
+        callback(res.statusCode == 200, res);
+    }).end();
+};
+
 s3.put = function (bucket, buf, key, type, encoding, callback) {
     var options = {
         'Content-Length':buf.length,

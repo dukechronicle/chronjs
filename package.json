@@ -11,7 +11,6 @@
         "express-resource":"0.2.x",
         "jade":"0.20.0",
         "stylus":"0.22.6",
-        "asereje":"0.1.0",
 
         "async":"0.1.15",
         "nimble":"0.0.x",
@@ -49,6 +48,8 @@
 	    "xmlbuilder": "0.3.x",
         "JSV": "3.5.x",
         "requirejs": "1.0.x",
-        "gzip": "0.1.x"
+        "gzip": "0.1.x",
+        "walk": "2.1.x",
+        "clean-css": "0.3.x"
     }
 }

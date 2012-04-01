@@ -2,18 +2,26 @@ var _ = require("underscore");
 var log = require('../../log');
 var redis = require('../../redisclient');
 var config = require('../../config');
-var globalFunctions = require("../../global-functions");
+var util = require("../../util");
 
 var popular = exports;
 var POPULAR_EXPIRATION_SECS = 60*60*24*7; //one week
 
 popular.registerArticleView = function(doc, callback) {
-    var unix_timestamp = globalFunctions.unixTimestamp();
+    var unix_timestamp = util.unixTimestamp();
     if(doc.taxonomy) {
         var length = doc.taxonomy.length;
         var taxToSend = _.clone(doc.taxonomy);
 
-        if(unix_timestamp - doc.updated > POPULAR_EXPIRATION_SECS) {
+        var date;
+        if(doc.updated) {
+            date = parseInt(doc.updated, 10);
+        } else {
+            date = parseInt(doc.created, 10);
+        }
+        var diff = unix_timestamp - date;
+        if(diff > POPULAR_EXPIRATION_SECS) {
+
             //remove from redis
             
             var multi = redis.client.multi();

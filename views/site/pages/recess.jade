@@ -1,0 +1,46 @@
+!=partial('subnav', {subsections: subsections})
+
+#recess
+    .top.clearfix
+        // features
+        if (model.Featured)
+            if (model.Featured[0])
+                .main!=partial('../container/featured-image.jade', {title: "", story: model.Featured[0]})
+            .right
+                .column.first
+                    if (model.Featured[1])
+                        div!=partial('../container/block.jade', {title: "", story: model.Featured[1], imageType: "rect"})
+                    if (model.Featured[2])
+                        div!=partial('../container/block.jade', {title: "", story: model.Featured[2], imageType: "rect"})
+                // rss feed
+                .column.last
+                    if (model.Blog)
+                        .blog!=partial('../container/story-list', {title: "Blog", stories:model.Blog})
+                    if (model.adMedRectangle)
+                        .image-container.medium-rectangle.lighten!=partial('../container/image', model.adMedRectangle)
+
+
+    .middle.clearfix
+        // reviews
+        if (model.Music)
+         .reviews!=partial('../container/block-row.jade', {title: 'Music', stories: model.Music})
+        if (model.Stories)
+            .bottom
+                // stories
+                .row.clearfix
+                    if (model.Stories[0])
+                        div!=partial('../container/block.jade', {title: "", story:model.Stories[0]})
+                    if (model.Stories[1])
+                        div!=partial('../container/block.jade', {title: "", story:model.Stories[1]})
+                    if (model.Stories[2])
+                        div!=partial('../container/block.jade', {title: "", story:model.Stories[2]})
+                    if (model.Stories[3])
+                        .last!=partial('../container/block.jade', {title: "", story:model.Stories[3]})
+
+        // interviews
+        if (model.Film)
+            .interviews!=partial('../container/block-row.jade', {title: 'Film', stories: model.Film})
+        // sandbox
+        if (model.Art)
+            .sandbox!=partial('../container/block-row.jade', {title: 'Art', stories: model.Art})
+        .multimedia!=partial('../container/multimedia', {title: "Multimedia", multimedia: model.multimedia.Recess})

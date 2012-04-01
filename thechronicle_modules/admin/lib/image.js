@@ -1,4 +1,4 @@
-var globalFunctions = require('../../global-functions');
+var util = require('../../util');
 var config = require('../../config');
 var log = require('../../log');
 var async = require('async');
@@ -20,8 +20,8 @@ exports.manage = function (req, httpRes) {
     var forDocument = req.query.forDocument;
 
     api.image.getOriginals(25, beforeKey, beforeID, function (err, origs) {
-        httpRes.render('admin/articleimage', {
-            filename:'views/admin/articleimage.jade',
+        httpRes.render('admin/image', {
+            layout: 'admin/layout',
             locals:{
                 origs:origs,
                 afterUrl:afterUrl,
@@ -33,9 +33,8 @@ exports.manage = function (req, httpRes) {
 };
 
 exports.upload = function (req, res) {
-    res.render('admin/upload', {
-        filename:'admin/upload',
-        css:['css/html5upload']
+    res.render('admin/image/upload', {
+        layout: 'admin/layout'
     });
 };
 
@@ -43,7 +42,7 @@ exports.uploadData = function (req, httpRes) {
     var imageData = req.body.imageData;
     var imageName = req.body.imageName.replace(/[\s\#]/g, "_");
     // create a unique name for the image to avoid s3 blob collisions
-    imageName = globalFunctions.randomString(8) + "-" + imageName;
+    imageName = util.randomString(8) + "-" + imageName;
     var thumbName = 'thumb_' + imageName;
     var imageType = req.body.imageType;
     var imageID = req.body.imageID;
@@ -112,29 +111,29 @@ exports.renderImage = function (req, httpRes, next) {
     api.image.getOriginal(imageName, function (err, orig) {
         if (err) next(err);
         else {
-            api.docsById(orig.value.imageVersions,
-                         function (err2, versions) {
-                             if (err2) next(err2);
-                             else {
-                                 var imageTypes = api.image.IMAGE_TYPES;
-                                 httpRes.render('admin/image', { //no errors have been found, render image
-                                     locals:{ //specifies/assigns variables to pass into function
-                                         url:orig.value.url,
-                                         name:imageName,
-                                         id:orig.value._id,
-                                         caption:orig.value.caption,
-                                         location:orig.value.location,
-                                         photographer:orig.value.photographer,
-                                         date:orig.value.date,
-                                         versions:versions,
-                                         imageTypes:Object.keys(imageTypes),
-                                         afterUrl:req.query.afterUrl,
-                                         docId:req.query.docId,
-                                         imageDetails:imageTypes
-                                     }
-                                 });
-                             }
-                         })
+            api.docsById(orig.value.imageVersions, function (err, versions) {
+                if (err) next(err);
+                else {
+                    var imageTypes = api.image.IMAGE_TYPES;
+                    httpRes.render('admin/image/image', {
+                        layout: 'admin/layout',
+                        locals: {
+                            url:orig.value.url,
+                            name:imageName,
+                            id:orig.value._id,
+                            caption:orig.value.caption,
+                            location:orig.value.location,
+                            photographer:orig.value.photographer,
+                            date:orig.value.date,
+                            versions:versions,
+                            imageTypes:Object.keys(imageTypes),
+                            afterUrl:req.query.afterUrl,
+                            docId:req.query.docId,
+                            imageDetails:imageTypes
+                        }
+                    });
+                }
+            })
         }
     });
 };

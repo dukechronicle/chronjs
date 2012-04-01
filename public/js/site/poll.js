@@ -25,7 +25,7 @@ define(['jquery'], function ($) {
                     return parseInt(votes) + 1;
                 });
 
-                $.post('/api/poll/vote', { id: id, answer: answer });
+                $.post('/api/poll/' + id + '/vote', { answer: answer });
                 
                 showResults();
             }

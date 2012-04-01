@@ -13,7 +13,15 @@ popular.registerArticleView = function(doc, callback) {
         var length = doc.taxonomy.length;
         var taxToSend = _.clone(doc.taxonomy);
 
-        if(unix_timestamp - doc.updated > POPULAR_EXPIRATION_SECS) {
+        var date;
+        if(doc.updated) {
+            date = parseInt(doc.updated, 10);
+        } else {
+            date = parseInt(doc.created, 10);
+        }
+        var diff = unix_timestamp - date;
+        if(diff > POPULAR_EXPIRATION_SECS) {
+
             //remove from redis
             
             var multi = redis.client.multi();

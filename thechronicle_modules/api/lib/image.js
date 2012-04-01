@@ -290,8 +290,12 @@ image.docsForOriginal = function (origId, topCallback) {
                 })
             }, callback);
         },
-        function (articles, callback) {
-            callback(null, globalFunctions.convertObjectToArray(articles));
+        function (docs, callback) {
+            docs = _.filter(_.values(docs), function (doc) {
+                return typeof doc != 'function' && typeof doc != 'undefined';
+            });
+
+            callback(null, docs);
         }
     ], topCallback);
 };
@@ -302,13 +306,14 @@ image.docsForVersion = function (versionId, topCallback) {
             db.image.docsForVersion(versionId, callback);
         },
         function (docs, callback) {
-            var newDocs = [];
-            for (var i in Object.keys(docs)) {
-                if(typeof docs[i] != 'function' && typeof docs[i] != 'undefined') {
-                    newDocs.push(docs[i].value);
-                }
-            }
-            callback(null, newDocs);
+            var docs = _.filter(_.values(docs), function (doc) {
+                return typeof doc != 'function' && typeof doc != 'undefined';
+            });
+            docs = _.map(docs, function (doc) {
+                return doc.value;
+            });
+
+            callback(null, docs);
         }],
         topCallback);
 };

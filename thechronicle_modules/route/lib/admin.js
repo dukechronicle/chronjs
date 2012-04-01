@@ -3,8 +3,8 @@ var admin = exports;
 var adminApi = require('../../admin');
 var api = require('../../api');
 var config = require('../../config');
-var globalFunctions = require('../../global-functions');
 var log = require('../../log');
+var util = require('../../util');
 
 admin.image = adminApi.image;
 
@@ -146,7 +146,7 @@ admin.addImageToArticle = function (req, res, next) {
 
 admin.layout = function (req, res, next) {
     var section = req.query.section;
-    var group = globalFunctions.capitalizeWords(req.params.group);
+    var group = util.capitalizeWords(req.params.group);
     var layoutConfig = api.group.getLayoutGroups();
     adminApi.layout(section, group, layoutConfig, function (err, results) {
         if (err) next(err);

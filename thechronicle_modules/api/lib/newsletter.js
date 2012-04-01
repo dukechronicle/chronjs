@@ -9,7 +9,6 @@ var log = require('../../log');
 var jade = require('jade');
 var fs = require('fs');
 var config = require('../../config');
-var globalFunctions = require('../../global-functions');
 
 var apiKey = null;
 var layoutGroups = null;

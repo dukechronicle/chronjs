@@ -2,12 +2,12 @@ var site = exports;
 
 var api = require('./api');
 var config = require('../../config');
-var globalFunctions = require('../../global-functions');
 var log = require('../../log');
 var redis = require('../../redisclient');
 var route = require('../../route');
 var rss = require('./rss');
 var popular = require('./popular');
+var util = require('../../util');
 
 var _ = require("underscore");
 var async = require('async');
@@ -554,7 +554,7 @@ function modifyArticleForDisplay(doc, callback) {
         doc.fullUrl = "http://" + config.get('DOMAIN_NAME') + doc.url;
     }
     if(doc.created)
-        doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
+        doc.date = util.formatTimestamp(doc.created, "mmmm d, yyyy");
 
     doc.authorsArray = _.clone(doc.authors);
     doc.authors = "";

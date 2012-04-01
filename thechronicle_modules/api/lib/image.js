@@ -7,7 +7,7 @@ var _ = require('underscore');
 var api = require('./api');
 var config = require('../../config');
 var db = require('../../db-abstract');
-var globalFunctions = require('../../global-functions');
+var util = require('../../util');
 var log = require('../../log');
 
 var image = exports;
@@ -124,7 +124,7 @@ image.createCroppedVersion = function(imageName, width, height, x1, y1, x2, y2, 
         function (orig, callback) {
             croppedName = 'crop_' + orig.value.name;
             log.info(orig.value.url);
-            globalFunctions.downloadUrlToPath(orig.value.url, orig.value.name, function (err) {
+            util.downloadUrlToPath(orig.value.url, orig.value.name, function (err) {
                 callback(err, orig);
             });
         },

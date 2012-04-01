@@ -2,8 +2,8 @@ var site = exports;
 
 var api = require('../../api');
 var config = require('../../config');
-var globalFunctions = require('../../global-functions');
 var log = require('../../log');
+var util = require('../../util');
 
 var asereje = require('asereje');
 var fs = require('fs');
@@ -149,9 +149,9 @@ site.staff = function (req, res) {
 	res.render('site/people', {
             css:asereje.css(['container/style', 'site/people']),
             locals:{
-                pageTitle: globalFunctions.capitalizeWords(name),
+                pageTitle: util.capitalizeWords(name),
                 docs: docs,
-                name: globalFunctions.capitalizeWords(name)
+                name: util.capitalizeWords(name)
             }
         });
     });

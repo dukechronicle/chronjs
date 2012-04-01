@@ -56,13 +56,12 @@ site.restrictToAdmin = function(req, res, next) {
 };
 // redirects to login page
 site.askForLogin = function(res, afterLoginPage, username, err) {
-    res.render('login', {
+    res.render('admin/login', {
         locals : {
             afterLogin : afterLoginPage,
             username : username || '',
             error : err || ''
-        },
-        layout : 'admin/layout'
+        }
     });
 };
 
@@ -74,8 +73,7 @@ site.renderConfigPage = function(req, res, err) {
     }
 
     res.render('config/config', {
-        css: ['css/onde'],
-        removeBootstrap: true,
+        css: ['config/onde'],
         locals : {
             configParams : config.getParameters(),
             profileName : config.getProfileNameKey(),
@@ -84,8 +82,7 @@ site.renderConfigPage = function(req, res, err) {
             revisionValue : config.getConfigRevision(),
             error : err,
             showOnly : req.query.showOnly
-        },
-        layout : 'admin/layout'
+        }
     });
 };
 

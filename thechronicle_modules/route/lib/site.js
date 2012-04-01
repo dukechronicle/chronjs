@@ -5,23 +5,20 @@ var config = require('../../config');
 var log = require('../../log');
 var util = require('../../util');
 
-var asereje = require('asereje');
 var fs = require('fs');
 var _ = require('underscore');
 
 
 site.mobile = function (req, res, next) {
-    res.render('site/mobile', {
-        layout:false
-        //filename:'views/site/mobile.jade',
-    });    
+    res.render('mobile', {
+        layout: false
+    });
 };
 
 site.frontpage = function (req, res) {
     api.site.getFrontPageContent(function (err, model) {
-        res.render('site/index', {
-            css:asereje.css(['slideshow/style', 'container/style', 'site/frontpage']),
-            filename:'views/site/index.jade',
+        res.render('site/pages/frontpage', {
+            layout: 'site/layout',
             locals: {
                 model:model
             }
@@ -31,10 +28,9 @@ site.frontpage = function (req, res) {
 
 site.news = function (req, res) {
     api.site.getNewsPageContent(function (err, model, children) {
-        res.render('site/news', {
+        res.render('site/pages/news', {
+            layout: 'site/layout',
             pageTitle: "News",
-            css:asereje.css(['container/style', 'site/section', 'site/news']),
-            filename:'views/site/news.jade',
             locals: {
                 subsections:children,
                 section: 'News',
@@ -46,10 +42,9 @@ site.news = function (req, res) {
 
 site.sports = function (req, res) {
     api.site.getSportsPageContent(function (err, model, children) {
-        res.render('site/sports', {
+        res.render('site/pages/sports', {
+            layout: 'site/layout',
             pageTitle: "Sports",
-            css:asereje.css(['container/style', 'site/section', 'site/sports', 'slideshow/style']),
-            filename:'views/site/sports.jade',
             locals: {
                 subsections: children,
                 model:model,
@@ -61,10 +56,9 @@ site.sports = function (req, res) {
 
 site.opinion = function (req, res) {
     api.site.getOpinionPageContent(function (err, model, children) {
-        res.render('site/opinion', {
+        res.render('site/pages/opinion', {
+            layout: 'site/layout',
             pageTitle: "Opinion",
-            css:asereje.css(['container/style', 'site/section', 'site/opinion']),
-            filename:'views/site/opinion.jade',
             locals: {
                 subsections:children,
                 section: 'Opinion',
@@ -76,10 +70,9 @@ site.opinion = function (req, res) {
 
 site.recess = function (req, res) {
     api.site.getRecessPageContent(function (err, model, children) {
-        res.render('site/recess', {
+        res.render('site/pages/recess', {
+            layout: 'site/layout',
             pageTitle: "Recess",
-            css:asereje.css(['container/style', 'site/section', 'site/recess']),
-            filename:'views/site/recess.jade',
             locals: {
                 subsections:children,
                 section: 'Recess',
@@ -91,10 +84,9 @@ site.recess = function (req, res) {
 
 site.towerview = function (req, res) {
     api.site.getTowerviewPageContent(function (err, model, children) {
-        res.render('site/towerview', {
+        res.render('site/pages/towerview', {
+            layout: 'site/layout',
             pageTitle: "Towerview",
-            css:asereje.css(['container/style', 'site/section', 'site/towerview']),
-            filename:'views/site/towerview.jade',
             locals: {
                 subsections:children,
                 section: 'Towerview',
@@ -109,16 +101,16 @@ site.section = function (req, res, next) {
     api.site.getSectionContent(sectionArray, function (err, section, docs, children, parents, popular) {
         if (err) next();
         else {
-	    res.render('site/section', {
-	        css:asereje.css(['container/style', 'site/section']),
+	    res.render('site/pages/section', {
+                layout: 'site/layout',
 	        locals: {
-                pageTitle: section,
-                docs:docs,
-                subsections:children,
-                parentPaths:parents,
-                section: sectionArray[0],
-                popular: popular,
-                taxonomyPath: sectionArray.join('/')
+                    pageTitle: section,
+                    docs:docs,
+                    subsections:children,
+                    parentPaths:parents,
+                    section: sectionArray[0],
+                    popular: popular,
+                    taxonomyPath: sectionArray.join('/')
 	        }
 	    });
         }
@@ -129,8 +121,8 @@ site.search = function (req, res, next) {
     var query = req.params.query.replace(/-/g, ' ');
     api.site.getSearchContent(query, req.query, function (err, docs, facets) {
         if (err) next(err);
-        else res.render('site/search', {
-            css:asereje.css(['container/style', 'site/search']),
+        else res.render('site/pages/search', {
+            layout: 'site/layout',
             locals: {
                 docs: docs,
                 currentFacets: req.query.facets || '',
@@ -146,31 +138,12 @@ site.search = function (req, res, next) {
 site.staff = function (req, res) {
     var name = req.params.query.replace(/-/g, ' ');
     api.site.getAuthorContent(name, function (err, docs) {
-	res.render('site/people', {
-            css:asereje.css(['container/style', 'site/people']),
-            locals:{
+	res.render('site/pages/people', {
+            layout: 'site/layout',
+            locals: {
                 pageTitle: util.capitalizeWords(name),
                 docs: docs,
                 name: util.capitalizeWords(name)
-            }
-        });
-    });
-};
-
-site.page = function (req, res, next) {
-    var url = req.params.url;
-    api.site.getPageContent(url, function (err, doc, model) {
-        if (err)
-            next();
-        else if ('/page/' + url != doc.path)
-            res.redirect(doc.url);
-        else res.render('page', {
-	        css: asereje.css(['container/style']),
-            filename:'views/page.jade',
-            locals: {
-                pageTitle: doc.node_title,
-                doc:doc,
-                model: model
             }
         });
     });
@@ -207,10 +180,9 @@ site.article = function (req, res, next) {
 
             if(doc.images.ThumbSquareM) locals.pageImage = doc.images.ThumbSquareM.url;
                 
-            res.render('article', {
-                locals: locals,
-                filename:'views/article',
-                css:asereje.css(['container/style', 'article'])
+            res.render('site/pages/article', {
+                layout: 'site/layout',
+                locals: locals
             });
         }
     });
@@ -226,27 +198,12 @@ site.articlePrint = function (req, res, next) {
         else {
             doc.url += '/print';
             doc.fullUrl += '/print';
-            res.render('article-print', {
-		css: asereje.css(),
-                filename:'views/article-print.jade',
-                layout:"layout-print.jade",
+            res.render('print/article', {
                 locals: {
                     doc:doc
                 }
             });
         }
-    });
-};
-
-site.editPage = function (req, res, next) {
-    var url = req.params.url;
-    api.page.getByUrl(url, function (err, doc) {
-        if (err) next(err);
-        else res.render('admin/editPage', {
-            locals: {
-                doc:doc
-            }
-        });
     });
 };
 
@@ -300,11 +257,12 @@ site.newsletterData = function (req, res) {
     var action = req.body.action;
 
     var afterFunc = function() {
-        res.render('pages/newsletter', {
-	    filename: 'pages/newsletter',
-            email: email,
-            action: action,
-	    css: asereje.css(['container/style'])
+        res.render('site/pages/newsletter', {
+            layout: 'site/layout',
+            locals: {
+                email: email,
+                action: action
+            }
         });
     };
     
@@ -321,10 +279,11 @@ site.rss = function (req, res, next) {
         if (err) next(err);
         else {
             res.render('rss', {
-                docs: docs,
-                section: [],
                 layout: false,
-                filename: 'rss'
+                locals: {
+                    docs: docs,
+                    section: []
+                }
             });
         }
     });
@@ -336,10 +295,11 @@ site.rssSection = function (req, res, next) {
         if (err) next(err);
         else {
             res.render('rss', {
-                docs: docs,
-                section: taxonomy,
                 layout: false,
-                filename: 'rss'
+                locals: {
+                    docs: docs,
+                    section: taxonomy
+                }
             });
         }
     });
@@ -347,21 +307,19 @@ site.rssSection = function (req, res, next) {
 
 site.staticPage = function (req, res, next) {
     var url = _.last(req.route.path.split('/'));
-    var filename = 'pages/' + url;
-    fs.readFile('views/pages/page-data/' + url + '.json', function (err, data) {
+    var filename = 'site/pages/' + url;
+    fs.readFile('views/site/pages/page-data/' + url + '.json', function (err, data) {
         var data = (!err && data) ? JSON.parse(data.toString()) : null;
         res.render(filename, {
-	    css: asereje.css(['container/style', filename]),
-            filename: filename,
+            layout: 'site/layout',
             data: data
         });
     });
 };
 
 site.pageNotFound = function(req, res) {
-    res.render('pages/404', {
-        filename: 'pages/404',
-        css: asereje.css([]),
+    res.render('site/pages/404', {
+        layout: 'site/layout',
 	status: 404,
         url: req.url
     });

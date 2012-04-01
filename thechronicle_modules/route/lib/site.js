@@ -190,6 +190,8 @@ site.article = function (req, res, next) {
         else if ('/article/' + url != doc.url)
             res.redirect(doc.url);
         else {
+            req.session.polls = req.session.polls || {};
+
             var locals = {
                 doc:doc,
                 pageTitle: doc.title,
@@ -207,8 +209,7 @@ site.article = function (req, res, next) {
 
             if (doc.images.ThumbSquareM)
                 locals.pageImage = doc.images.ThumbSquareM.url;
-            if (model.poll && req.session.polls &&
-                model.poll._id in req.session.polls)
+            if (model.poll && model.poll._id in req.session.polls)
                 model.poll.voted = true;
 
             res.render('article', {

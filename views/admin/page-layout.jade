@@ -18,9 +18,14 @@ h2 !{page} Layout
         option(value="All") All
             - each section in mainSections            
                 option(value=section) !{section}
-
     #stories-container
         #stories
             - each story, id in sectionDocs
-                .story(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
-                    #{story.title}
+                - if ( ((Date.now()/1000 + 43200) > story.created ) || ((Date.now()/1000 - 43200) < story.created) )
+                    .story.today(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
+                        #{story.title}
+                - else
+                    .story(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
+                        #{story.title}
+
+script CHRONICLE.onload.push(function(){layout()})

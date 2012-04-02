@@ -1,0 +1,43 @@
+- if(typeof allVersions != 'undefined')
+    form(action='/admin/image/add', method='POST')
+        - each version, i in allVersions
+            - each type in imageTypes
+                - if (cropSizes[type].width == version.doc.width && cropSizes[type].height == version.doc.height)
+                    input(type='hidden', name='imageType['+i+']', value=type)
+            input(type='hidden', name='imageVersionId['+i+']', value=version.doc._id)
+        input(type='hidden', name='original', value=allVersions[0].doc.original)
+        input(type='hidden', name='docId', value=docId)
+        - if(afterUrl)
+            input(type='hidden', name='afterUrl', value=afterUrl)
+        input(type='submit', value='Add All Versions')
+- else if(typeof version != 'undefined')
+    table(border=1)
+      tr
+        td Width
+        td Height
+        td Image
+        td Add to Article
+      tr
+        td #{version.doc.width}
+        td #{version.doc.height}
+        td
+          img(src=version.doc.url)
+        td
+          a.delete-image(href='#', data-id=version.doc._id, data-orig='0') Delete
+        - if(docId)
+          td
+            form(action='/admin/edit', method='POST')
+              select(name='imageType')
+                - each type in imageTypes
+                  - if (cropSizes[type].width == version.doc.width && cropSizes[type].height == version.doc.height)
+                    option(value=type, selected='yes') #{type}
+                  - else
+                    option(value=type) #{type}
+              input(type='hidden', name='imageVersionId', value=version.doc._id)
+              input(type='hidden', name='original', value=version.doc.original)
+              input(type='hidden', name='docId', value=docId)
+              - if(afterUrl)
+                  input(type='hidden', name='afterUrl', value=afterUrl)
+              input(type='submit', value='Add Version')
+              &nbsp;
+              a.help What's This?

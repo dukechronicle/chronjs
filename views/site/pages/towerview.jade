@@ -1,0 +1,33 @@
+!=partial('subnav', {subsections: subsections})
+
+#towerview
+    .main.clearfix
+        // towerview features
+        if (model.Featured)
+            if (model.Featured[0])
+                .row.first!=partial('../container/featured-image.jade', {title: 'Features', story: model.Featured[0]})
+            .row.feature.clearfix
+                if (model.Featured[1])
+                    .first!=partial('../container/block-square-image', {title: 'Features', story: model.Featured[1]})
+                if (model.Featured[2])
+                    .last!=partial('../container/block-square-image',{title: '', story: model.Featured[2]})
+                
+            .row.last
+                // savvy
+                if (model.Savvy)
+                    .savvy!=partial('../container/block-row.jade', {title: '', stories: model.Savvy})
+                // wisdom
+                if (model.Wisdom)
+                    .wisdom!=partial('../container/block-row.jade', {title: 'Wisdom', stories: model.Wisdom})
+        .row.issuu
+            <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" style="width:642px;height:418px" id="2c3f0bb3-a340-e8fd-d4b8-3ab4b313eb48" ><param name="movie" value="http://static.issuu.com/webembed/viewers/style1/v2/IssuuReader.swf?mode=mini&amp;backgroundColor=%23222222&amp;documentId=120208035144-9ea2d9db9274409f91287028f86faa70" /><param name="allowfullscreen" value="true"/><param name="menu" value="false"/><param name="wmode" value="transparent"/><embed src="http://static.issuu.com/webembed/viewers/style1/v2/IssuuReader.swf" type="application/x-shockwave-flash" allowfullscreen="true" menu="false" wmode="transparent" style="width:642px;height:418px" flashvars="mode=mini&amp;backgroundColor=%23222222&amp;documentId=120208035144-9ea2d9db9274409f91287028f86faa70" /></object>
+
+    .sidebar.clearfix
+        if (model["Editors Note"])
+            .editorsNote!=partial('../container/block.jade', {title: "Letter from the Editor", story: model["Editors Note"][0]})
+        if (model.adFullRectangle)
+            .image-container.medium-rectangle.lighten!=partial('ad/medium-rect', {title: "Advertisement"})
+        // prefix
+        if (model.Prefix)
+            - each story in model.Prefix
+                .prefix!=partial('../container/block-wide-image.jade', {title: '', story: story})

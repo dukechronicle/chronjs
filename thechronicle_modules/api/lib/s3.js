@@ -17,18 +17,28 @@ s3.init = function () {
 };
 
 s3.getCloudFrontUrl = function(url) {
-    _.each(CLOUDFRONT_MAPPING, function (bucket, cloudfront) {
+    _.each(CLOUDFRONT_MAPPING, function (cloudfront, bucket) {
         url = url.replace(S3_URL + bucket, cloudfront);
     });
     return url;
 };
 
-s3.put = function (bucket, buf, key, type, callback) {
-    var req = createClient(bucket).put(key, {
+s3.get = function (bucket, key, callback) {
+    createClient(bucket).get(key).on('response', function (res) {
+        callback(res.statusCode == 200, res);
+    }).end();
+};
+
+s3.put = function (bucket, buf, key, type, encoding, callback) {
+    var options = {
         'Content-Length':buf.length,
         'Content-Type':type,
         'Cache-Control': 'public, max-age=86400'
-    });
+    };
+    if (encoding)
+        options['Content-Encoding'] = encoding;
+
+    var req = createClient(bucket).put(key, options);
     req.on('response', function (res) {
         if (200 == res.statusCode)
             callback(null, S3_URL + bucket + '/' + key);

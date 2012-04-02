@@ -1,0 +1,48 @@
+!!! 5
+html(lang="en")
+    head
+        script(src="/js/mobile-redirect.js?v=3")
+
+        if (typeof pageTitle != 'undefined')
+            title #{pageTitle} | The Chronicle
+        else
+            title The Chronicle | Duke University's Daily Independent Newspaper
+
+        if (typeof pageImage != 'undefined')
+            link(rel="image_src", href=pageImage)
+        else
+            link(rel="image_src", href=static_cdn + "/images/favicon.png")
+
+        link(rel="icon", href=static_cdn + "/images/favicon.ico")
+
+        link(rel="stylesheet", href=static_cdn + "/css/reset.css")
+        link(rel="stylesheet", href=css_paths.site)
+        //if lt IE 9
+            link(rel="stylesheet", href=css_paths['style-ie'])
+
+        // typekitload code should always load first because it will cause a relayout of dom
+        script(src="http://use.typekit.com/dwv2bjy.js")
+        script try{Typekit.load()}catch(e){}
+
+        script var CHRONICLE = { onload: [] }
+
+        !=partial("code/google-analytics")
+    body
+        #shell
+            header
+                include /layout/header
+            section!=body
+            footer
+                include /layout/footer
+        #scripts
+            // border-radius support in ie
+            script(type='text/javascript') var curvyCornersVerbose = false
+            script(src="/js/curvycorners.js")
+
+            //if lt IE 9
+                script(src="//html5shim.googlecode.com/svn/trunk/html5.js")
+
+            - if (isProduction)
+                script(src=static_cdn + site_javascript, type="text/javascript")
+            - else
+                script(src="/js/require-jquery.js", data-main="/js/site/main")

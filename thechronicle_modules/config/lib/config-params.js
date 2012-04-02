@@ -21,6 +21,15 @@ var configParams = [
         }
     },
     {
+        name: 'DOMAIN_NAME',
+        description: 'Site Domain Name (no www)',
+        defaultValue: 'dukechronicle.com',
+        schema: {
+          type: "string",
+          required: true
+        }
+    },
+    {
         name: 'DISQUS_SHORTNAME',
         description: 'Disqus Shortname',
         defaultValue: 'chronicletest',
@@ -58,7 +67,7 @@ var configParams = [
     },
     {
         name: 'S3_BUCKET',
-        description: 'Amazon S3 Bucket Name',
+        description: 'Amazon S3 Bucket Name for Site Content',
         defaultValue: 'chron_dev',
         schema: {
           type: "string",
@@ -85,7 +94,7 @@ var configParams = [
     },
     {
         name: 'CLOUDFRONT_DISTRIBUTION',
-        description: 'Amazon CloudFront Domain Name',
+        description: 'Amazon CloudFront Domain Name for Site Content',
         defaultValue: 'http://d164gy67scumxg.cloudfront.net',
         schema: {
           type: "string",
@@ -94,7 +103,7 @@ var configParams = [
     },
     {
         name: 'S3_STATIC_BUCKET',
-        description: 'Amazon S3 Static Content Bucket Name',
+        description: 'Amazon S3 Bucket Name for Static Content',
         defaultValue: 'chron_static',
         schema: {
           type: "string",
@@ -103,7 +112,7 @@ var configParams = [
     },
     {
         name: 'CLOUDFRONT_STATIC',
-        description: 'CDN for Static Content',
+        description: 'Amazon CloudFront Domain Name for Static Content',
         defaultValue: 'http://d2sug25c5hnh7r.cloudfront.net',
         schema: {
             type: "string",

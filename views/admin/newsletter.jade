@@ -13,9 +13,11 @@ form#test
 br
 br
 
-#dialog-confirm(title="Send newsletter?")
+#newsletter-confirm(title="Send newsletter?")
   p Are you sure you want to send the newsletter to everyone?
 
 form#send
   input(type='hidden', name='campaignID', value=campaignID)
   input(type='submit', class='btn', value='Send Newsletter')
+
+script CHRONICLE.onload.push(function(){initNewsletterForm()})

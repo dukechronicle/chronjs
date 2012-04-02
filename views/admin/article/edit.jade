@@ -1,0 +1,50 @@
+h1 Editing a Document
+form(action='', method='POST')
+    input(type="hidden", name="_method", value="put")
+    p(style="margin-bottom: 2em")
+        label(for='title') Title&nbsp;
+        input#title(type='text', name='doc[title]', value=doc.title, style='width:600px')
+    p(style="margin-bottom: 2em")
+        label(for='title') Subhead&nbsp;
+        input#title(type='text', name='doc[subhead]', value=doc.subhead, style='width:600px')
+    p(style="margin-bottom: 2em")
+        label(for='section') Section&nbsp;
+        select(name='doc[taxonomy]', style='width: 600px')
+          option(value='') Select a section
+           - each subsections, section in taxonomy
+              - each key, value in subsections
+                - if (JSON.stringify(doc.taxonomy) == value)
+                    option(value=value, selected='selected') #{key}
+                - else
+                    option(value=value) #{key}
+    p(style="margin-bottom: 2em")
+        label(for='author') Authors&nbsp;
+        input#author(type='text', name='doc[authors]', value=doc.authors, style='width:600px')
+    p(style="margin-bottom: 2em")
+        label(for='teaser') Teaser&nbsp;
+        textarea#teaser(rows=3, cols=50, name='doc[teaser]', value, style='width:600px; height: 2.5em')
+            #{doc.teaser}
+    p(style="margin-bottom: 2em")
+        label(for='body') Article&nbsp;
+        textarea#body(rows=5, cols=50, name='doc[body]', value, style='width:600px; height: 40em')
+            #{doc.body}
+
+    input(type="hidden", name='doc[id]', value=doc._id);
+    p
+        a(href='/admin/image/manage?afterUrl=' + afterAddImageUrl + '&forDocument=' + doc._id) Add images
+    - if(images)
+        p
+        table(border=1)
+            - each image, imageType in images
+                tr
+                    td #{imageType}
+                    td
+                        img(src=image.url)
+                    td
+                        a(href='/article/' + url + '/edit/?removeImage=' + image._id) Remove
+    p
+        input(type='submit', value='Submit Changes')
+        &nbsp;&nbsp;
+        input.delete-article(type='button', value='Delete Article', data-docid=doc._id, data-rev=doc._rev, data-title=doc.title, data-dest='/admin')
+
+script CHRONICLE.onload.push(function(){deleteArticle()})

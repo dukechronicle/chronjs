@@ -3,8 +3,7 @@ if (typeof doc !== 'undefined')
     form(action='/admin/author', method='POST')
         p
             label(for='name') Name:
-            input#name(type='text', value=doc['name'], id='authorName', name="name")
-            input(type='button', class='btn', value='Find Author', id='findAuthorButton')
+            input#name(type='text', value=doc['name'], name="name")
         p
             label(for='bio') Bio:
             textarea#bio(rows=20, cols=30, name="bio")
@@ -12,7 +11,8 @@ if (typeof doc !== 'undefined')
         p
             input(type='submit', class='btn', value='Save')
 else
-    p
-        label(for='name') Name:
-        input#name(type='text', id='authorName', name='name')
-        input(type='button', class='btn', value='Find Author', id='findAuthorButton')
+    form(action='/admin/author', method='GET')
+        p
+            label(for='name') Name:
+            input#name(type='text', name='name')
+            input(type='submit', class='btn', value='Find Author')

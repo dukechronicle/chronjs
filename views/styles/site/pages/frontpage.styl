@@ -1,0 +1,220 @@
+@import '../../mixins'
+
+page-width = 972px
+link-color = #36c
+container-padding = 4px
+top-content-width =  642px
+container-vertical-spacing = 23px
+
+body section > #frontpage
+    .sidebar
+        float right
+        // align side bar with main content bar
+        .container
+            width 300px + 3 * 2
+
+            .rounded
+                width 300px
+
+    .full-banner
+        float right
+
+    .medium-rectangle .rounded-hover
+        padding 3px
+
+    .print-edition
+        float left
+        width 140px
+
+    #breaking, #top-headline
+        .rounded
+            width 633px
+            .label
+                background-color red
+                padding-left 3px
+                padding-right 3px
+                color white
+                border-radius 4px
+                font-size .6em
+                position relative
+                top -4px
+            h1
+                font-size 1.3em
+
+    #slideshow
+        > .slideshow
+            background-color white
+
+            #slides
+                width 636px
+                height 393px
+                padding 3px
+                overflow hidden
+                img
+                    border-radius 4px
+
+                .galleria-info-title a
+                    color black
+                .galleria-info-title a:hover
+                    color #36C
+
+    #top
+        > .sidebar
+            .opinion
+                .list-story
+                    padding 2px 0px 2px 2px
+                .list-story.last
+                    padding 2px 0px 0px 2px
+        > .content
+            float left
+            width top-content-width
+
+            .rounded
+                padding container-padding
+
+                a.hover.highlight-right
+                    margin-right container-padding * -2
+                a.hover.highlight-left
+                    margin-left container-padding * -2
+
+            .top-news
+                .container
+                    top-content-full(top-content-width, container-padding)
+                .rounded
+                    padding = 10px
+                    width = top-content-width - 2 - padding
+                    leftColumnWidth = width/2
+
+
+                    .content-container
+                        padding-bottom 0.3em
+                        > .left
+                            width leftColumnWidth - padding
+
+                            a.hover
+                                padding-left padding
+
+                        > .right
+                            width (width - leftColumnWidth) - padding
+
+                            a.hover
+                                padding-right padding
+
+                    a.hover h2, a.hover h3
+                        font-size 1.2em
+
+                    a.hover
+                        margin-top 1em
+                    a.hover.first
+                        margin-top 0em
+
+                    a.hover h3
+                        margin-top 0px
+
+                    a.hover.teaser
+                        padding-bottom 0.3em
+
+                    p
+                        font-size 1em
+                        margin-top 5px
+
+                    ul li h3
+                        background url('http://d2sug25c5hnh7r.cloudfront.net/images/bullet.gif') no-repeat left 7px
+
+    #news, #sports
+        container-width = (page-width/2 - container-vertical-spacing/2)
+        padding = 10px
+        usable-width = container-width - (padding + 4) * 2
+        width container-width
+
+        .rounded
+            padding padding
+            width 454px
+
+        .content-container
+            a.hover.highlight-right, a.hover.highlight-left
+                margin 0px
+
+            h2, h3, h4
+                font-size 1.2em
+                line-height 1.3em
+            h4
+                font-size 1em
+
+            p.teaser
+                    margin-top 5px
+
+            .top
+                margin-bottom 1em
+                p.teaser
+                    vertical-align text-bottom
+                // fix highlight locaiton
+                a.hover
+                    margin-left -14px
+                    padding-left 14px
+
+                rounded-image()
+
+                img
+                    float right
+                    width 186px
+                    height 133px
+
+                .text
+                    float left
+                    width 240px
+                    height 115px
+
+            .bottom
+                padding-top 10px
+
+                bottom-padding-top = 6px
+
+                clear both
+                .left
+                    width 240px
+                    a.hover
+                        padding-top 8px
+                        padding-bottom 8px
+                        margin-left -14px
+                        padding-left 14px
+
+                    a.hover.first
+                        padding-top bottom-padding-top
+                    a.hover.last
+                        padding-bottom 0px
+                .right
+                    width 190px
+
+                    ul li
+                        padding-left 11px
+                        background url('http://d2sug25c5hnh7r.cloudfront.net/images/bullet.gif') no-repeat left 1em
+
+                        a.hover
+                            padding-top bottom-padding-top
+                            margin-right -14px
+                            padding-right 14px
+                            padding-bottom 6px
+
+
+
+    #news
+        float left
+        .content-container h2
+            margin-top -4px
+
+    #sports
+        float right
+        .content-container h2
+            margin-top -4px
+        img
+            width 186px
+            height 133px
+
+    #recess, #towerview
+        .block-row.large-first a.hover.first img
+            width 292px
+            height 174px
+        .block-row a.hover img
+            width 133px
+            height 95px

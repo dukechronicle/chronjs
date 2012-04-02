@@ -1,5 +1,4 @@
 /* require npm nodejs modules */
-var asereje = require('asereje');
 var async = require('async');
 var express = require('express');
 require('express-namespace');
@@ -9,6 +8,7 @@ var sprintf = require('sprintf').sprintf;
 
 /* require internal modules */
 var api = require('./thechronicle_modules/api');
+var builder = require('./build-resources');
 var config = require('./thechronicle_modules/config');
 var log = require('./thechronicle_modules/log');
 var redisClient = require('./thechronicle_modules/redisclient');
@@ -21,15 +21,9 @@ var SECRET = "i'll make you my dirty little secret";
 var SERVER = this;
 
 var app = null;
-var viewOptions = {};
-
-asereje.config({
-    active: process.env.NODE_ENV === 'production',  // enable it just for production
-    js_globals: ['typekit', 'underscore-min', 'jquery'],  // js files that will be present always
-    css_globals: ['css/reset', 'css/search-webkit', 'style'],  // css files that will be present always
-    js_path: __dirname + '/public/js',  // javascript folder path
-    css_path: __dirname + '/public'  // css folder path
-});
+var viewOptions = {
+    isProduction: process.env.NODE_ENV === 'production'
+};
 
 log.init(function (err) {
     if (err) console.err("Logger couldn't be initialized: " + err);
@@ -71,25 +65,9 @@ log.init(function (err) {
     });
 });
 
-function compile(str, path) {
-  return stylus(str)
-	.set('filename', path)
-	.set('compress', true);
-}
-
 function configureApp(sessionInfo, port) {
     /* express configuration */
     app = express.createServer();
-
-    // add the stylus middleware, which re-compiles when
-    // a stylesheet has changed, compiling FROM src,
-    // TO dest. dest is optional, defaulting to src
-    app.use(stylus.middleware({
-        src: __dirname + '/views'
-      , dest: __dirname + '/public'
-      , compile: compile
-      , firebug: true
-    }));
 
     app.error(function(err, req, res, next) {
         log.error(err);
@@ -119,6 +97,7 @@ function configureApp(sessionInfo, port) {
     });
 
     app.configure(function() {
+        app.set('view options', viewOptions);
         app.set('views', __dirname + '/views');
         app.set('view engine', 'jade');
         app.enable('jsonp callback');
@@ -142,13 +121,36 @@ function configureApp(sessionInfo, port) {
 function runSite(callback) {
     setViewOption('static_cdn', config.get('CLOUDFRONT_STATIC'));
     api.init(function (err) {
-        if (err) log.crit("api initialization failed");
+        if (err) {
+            log.crit("api initialization failed");
+            log.error(err);
+        }
         else {
 	    if (process.env.NODE_ENV === 'production') {
                 sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
 		    if (err) log.error("Couldn't build news sitemap: " + err);
 	        });
+
+                builder.buildJavascript('site/main','site-js',function(err,jsFile) {
+                    if (err) log.warning('Failed to build site Javascipt: ' + err);
+                    else log.notice('Built site Javascript');
+                    setViewOption('site_javascript', jsFile);
+                });
+
+                builder.buildJavascript('admin/main','admin-js',function(err,jsFile){
+                    if (err) log.warning('Failed to build admin Javascipt: ' + err);
+                    else log.notice('Built admin Javascript');
+                    setViewOption('admin_javascript', jsFile);
+                });
             }
+            
+            builder.buildCSS(function (err, paths) {
+                if (err) log.warning('Failed to build stylesheets: ' + err);
+                else {
+                    log.notice('Built stylesheets');
+                    setViewOption('css_paths', paths);
+                }
+            });
             
             redisClient.init(true, function(err) {
                 route.init(app);

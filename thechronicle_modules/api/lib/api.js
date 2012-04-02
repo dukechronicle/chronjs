@@ -2,9 +2,9 @@ var api = exports;
 
 var config = require("../../config");
 var db = require("../../db-abstract");
-var globalFunctions = require("../../global-functions");
 var log = require("../../log");
 var redis = require('../../redisclient');
+var util = require("../../util");
 
 var async = require("async");
 var md = require('node-markdown').Markdown;
@@ -88,7 +88,7 @@ api.init = function(callback) {
     db.init(function (err) {
         if(err) {
             log.error("db init failed!");
-            return callback(error);
+            return callback(err);
         }
 
       	api.cron.init();
@@ -106,7 +106,7 @@ api.addDoc = function(fields, callback) {
         getAvailableUrl(_URLify(fields.title), 0, function(err, url) {
             if (err) return callback(err);
 
-            var unix_timestamp = globalFunctions.unixTimestamp();
+            var unix_timestamp = util.unixTimestamp();
             fields.created = fields.created || unix_timestamp;
             fields.updated = fields.created || unix_timestamp;
             fields.urls = [url];
@@ -135,7 +135,7 @@ api.editDoc = function(docid, fields, callback) {
         if (err) callback(err);
         else {
             if (fields.body) fields.renderedBody = renderBody(fields.body);
-            fields.updated = globalFunctions.unixTimestamp();            
+            fields.updated = util.unixTimestamp();            
             
             if (fields.title && (_URLify(fields.title) !=  _URLify(res.title))){
                 getAvailableUrl(_URLify(fields.title), 0, function(err, url) {

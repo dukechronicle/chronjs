@@ -1,15 +1,13 @@
+var configureAppendCommentCount;
+
 define(['jquery', 'disqus'], function ($) {
 
-    $(function() {
-        var params = $("#disqus_thread").data('disqus');
-        loadDisqusForArticle(params.isProduction, params.shortname, params.id,
-                             params.title, params.url);
-    });
-
-    disqus_config = function () {
-        this.callbacks.afterRender = [function() {
-            appendCommentCount();
-        }];
+    return configureAppendCommentCount = function() {
+        disqus_config = function () {
+            this.callbacks.afterRender = [function() {
+                appendCommentCount();
+            }];
+        }
     }
 
     function appendCommentCount() {

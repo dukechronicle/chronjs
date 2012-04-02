@@ -1,0 +1,23 @@
+table(border=1)
+    if (typeof afterUrl != 'undefined')
+        != partial('original', {collection: origs, locals: {afterUrl: afterUrl, docId: docId}})
+    else
+        != partial('original', {collection: origs})
+
+if (origs.length == 0)
+    h1 No Images Available
+
+if (hasPrevious)
+    a(onClick="history.go(-1);") Previous
+    br
+
+if (origs.length != 0)
+    if (typeof docId != 'undefined')
+        if (typeof afterUrl != 'undefined')
+            a(href='/admin/image/manage?beforeKey=' + origs[origs.length - 1].date + '&beforeID=' + origs[origs.length - 1]._id + '&afterUrl=' + afterUrl + '&forDocument=' + docId) Next        
+        else
+            a(href='/admin/image/manage?beforeKey=' + origs[origs.length - 1].date + '&beforeID=' + origs[origs.length - 1]._id + '&forDocument=' + docId) Next          
+    else
+        a(href='/admin/image/manage?beforeKey=' + origs[origs.length - 1].date + '&beforeID=' + origs[origs.length - 1]._id) Next
+
+script CHRONICLE.onload.push(function(){deleteImage()})

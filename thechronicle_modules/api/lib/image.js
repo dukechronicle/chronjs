@@ -7,7 +7,7 @@ var _ = require('underscore');
 var api = require('./api');
 var config = require('../../config');
 var db = require('../../db-abstract');
-var globalFunctions = require('../../global-functions');
+var util = require('../../util');
 var log = require('../../log');
 
 var image = exports;
@@ -38,7 +38,7 @@ image.IMAGE_TYPES = {
     ThumbSquareM: {
         width: 183,
         height: 183,
-        description: "Used for articles on the towerview layout that are in the featured group in position 2 or 3, and for articles in the sports layout in the stories group"
+        description: "Used for articles on the towerview layout that are in the featured group in position 2 or 3, and for articles in the sports layout in the stories group. Also used as the picture facebook shows when people like or share articles."
     },
     ThumbWide: {
         width: 300,
@@ -124,7 +124,7 @@ image.createCroppedVersion = function(imageName, width, height, x1, y1, x2, y2, 
         function (orig, callback) {
             croppedName = 'crop_' + orig.value.name;
             log.info(orig.value.url);
-            globalFunctions.downloadUrlToPath(orig.value.url, orig.value.name, function (err) {
+            util.downloadUrlToPath(orig.value.url, orig.value.name, function (err) {
                 callback(err, orig);
             });
         },
@@ -142,7 +142,7 @@ image.createCroppedVersion = function(imageName, width, height, x1, y1, x2, y2, 
         function (orig, buf, callback) {
             var type = orig.value.contentType;
             var s3Name = width + "x" + height + "-" + x1 + "-" + y1 + "-" + orig.value.name;
-            api.s3.put(IMAGE_BUCKET, buf, s3Name, type, function (s3Err, url) {
+            api.s3.put(IMAGE_BUCKET, buf, s3Name, type, null, function (s3Err, url) {
                 callback(s3Err, orig, url);
             });
         },
@@ -290,8 +290,12 @@ image.docsForOriginal = function (origId, topCallback) {
                 })
             }, callback);
         },
-        function (articles, callback) {
-            callback(null, globalFunctions.convertObjectToArray(articles));
+        function (docs, callback) {
+            docs = _.filter(_.values(docs), function (doc) {
+                return typeof doc != 'function' && typeof doc != 'undefined';
+            });
+
+            callback(null, docs);
         }
     ], topCallback);
 };
@@ -302,13 +306,14 @@ image.docsForVersion = function (versionId, topCallback) {
             db.image.docsForVersion(versionId, callback);
         },
         function (docs, callback) {
-            var newDocs = [];
-            for (var i in Object.keys(docs)) {
-                if(typeof docs[i] != 'function' && typeof docs[i] != 'undefined') {
-                    newDocs.push(docs[i].value);
-                }
-            }
-            callback(null, newDocs);
+            var docs = _.filter(_.values(docs), function (doc) {
+                return typeof doc != 'function' && typeof doc != 'undefined';
+            });
+            docs = _.map(docs, function (doc) {
+                return doc.value;
+            });
+
+            callback(null, docs);
         }],
         topCallback);
 };
@@ -342,7 +347,7 @@ image.createOriginalFromFile = function (imageName, imageType, deleteLocal, topC
         },
         function (data, callback) {
             //put image in AWS S3 storage
-            api.s3.put(IMAGE_BUCKET, data, imageName, imageType, callback);
+            api.s3.put(IMAGE_BUCKET, data, imageName, imageType, null, callback);
         },
         function (url, callback) {
             im.convert([fileName, '-thumbnail', THUMB_DIMENSIONS, thumbName],
@@ -357,7 +362,7 @@ image.createOriginalFromFile = function (imageName, imageType, deleteLocal, topC
                 });
         },
         function (url, data, callback) {
-            api.s3.put(IMAGE_BUCKET, data, thumbName, imageType,
+            api.s3.put(IMAGE_BUCKET, data, thumbName, imageType, null,
                 function (err, thumbUrl) {
                     callback(err, url, thumbUrl);
                 });

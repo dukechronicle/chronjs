@@ -21,7 +21,7 @@ h2 !{page} Layout
     #stories-container
         #stories
             - each story, id in sectionDocs
-                - if ( ((Date.now()/1000 + 43200) > story.created ) || ((Date.now()/1000 - 43200) < story.created) )
+                - if ((Date.now()/1000) - story.created <= 86400)
                     .story.today(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
                         #{story.title}
                 - else

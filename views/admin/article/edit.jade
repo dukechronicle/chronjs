@@ -30,18 +30,7 @@ form(action='', method='POST')
             #{doc.body}
 
     input(type="hidden", name='doc[id]', value=doc._id);
-    p
-        a(href='/admin/image/manage?afterUrl=' + afterAddImageUrl + '&forDocument=' + doc._id) Add images
-    - if(images)
-        p
-        table(border=1)
-            - each image, imageType in images
-                tr
-                    td #{imageType}
-                    td
-                        img(src=image.url)
-                    td
-                        a(href='/article/' + url + '/edit/?removeImage=' + image._id) Remove
+    !=partial("admin/container/images")
     p
         input(type='submit', value='Submit Changes')
         &nbsp;&nbsp;

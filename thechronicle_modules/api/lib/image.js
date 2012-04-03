@@ -72,6 +72,8 @@ image.addVersionsToDoc = function(docId, originalImageId, versionImageIds, image
     
     api.docsById(docId,
     function (err, doc) {
+        if(err) return callback(err);
+
         var images = doc.images || {};
 
         for(var i = 0; i < versionImageIds.length; i ++) {        

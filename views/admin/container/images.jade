@@ -1,0 +1,12 @@
+p
+    a(href='/admin/image/manage?forDocument=' + doc._id) Add images
+    - if(typeof doc.images != "undefined")
+        p
+            table(border=1)
+                - each image, imageType in doc.images
+                    tr
+                        td #{imageType}
+                        td
+                            img(src=image.url)
+                        td
+                            a(href='/admin/image/remove/' + image._id + '?fromDoc=' + doc._id) Remove

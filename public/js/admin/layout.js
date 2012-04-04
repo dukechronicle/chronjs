@@ -56,6 +56,14 @@ define(['jquery', 'Article'], function($, Article) {
             $(this).removeClass("over");
         });
 
+        // mark on single click
+        $("#layout").delegate(".story", "click", function() {
+            var id = $(this).attr('id');
+            $(this).addClass(".ui-state-hover-light");
+            //removeStoryFromContainer($(this), $(this).parent());
+            //$("#" + id).removeClass("exists");
+        });
+
         // remove on double click
         $("#layout").delegate(".story", "dblclick", function() {
             var id = $(this).attr('id');

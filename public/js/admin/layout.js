@@ -187,7 +187,7 @@ define(['jquery', 'Article'], function($, Article) {
         function showHotkeys(){
             $(".hotkey").each(function(index) {
                 var group = $(this).attr('group');
-                var mapping = $('div[data-groupname='+group+']');
+                var mapping = $('div[data-groupname="'+group+'"]');
                 var pos = mapping.position();
                 var height = mapping.outerHeight();
                 var width = mapping.outerWidth();

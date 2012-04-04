@@ -61,10 +61,10 @@ define(['jquery', 'Article'], function($, Article) {
             var id = $(this).attr('id');
             $('.story').removeClass("ui-state-highlight");
             $(this).addClass("ui-state-highlight");
+            selectedArticle = $(this);
             showHotkeys();
 
         });
-
 
         // remove on double click
         $("#layout").delegate(".story", "dblclick", function() {
@@ -108,6 +108,28 @@ define(['jquery', 'Article'], function($, Article) {
             e.dataTransfer.setData("Text", this.id);
         });
 
+        // If an article is selected, copt it to the 
+        // container that corresponds with the key pressed
+        $('body').bind('keypress', function(e) {
+            if (!selectedArticle) return;
+            var code = e.keyCode || e.which;
+            $(".hotkey").each(function(index) {
+                if (index+97 == code) code -= 32;
+                if (index+65 == code)
+                {   
+                    selectedArticle.removeClass("ui-state-highlight");
+                    $(".hotkey").fadeOut();
+                    var element = selectedArticle.addClass("exists").clone();
+                    element.addClass("exists");
+                    var container = $('div[keycode='+code+']')
+                    element.appendTo(container);
+                    addStoryToContainer(element, container);
+                    selectedArticle = null;
+
+                }
+            });
+        });
+
         function addStoryToContainer(story, container) {
             var groupname = container.data("groupname");
             var weight = container.children().index(story) + 1;
@@ -115,6 +137,7 @@ define(['jquery', 'Article'], function($, Article) {
             updated.push(story.attr('id'));
             if (story.next().length > 0)
                 addStoryToContainer(story.next(), container);
+
         }
 
         function removeStoryFromContainer(story, container) {

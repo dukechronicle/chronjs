@@ -28,17 +28,15 @@ form(action='', method='POST')
     script
         function formatText(tag) {
             var textBox = document.getElementById('mainText');
-            var tagStart = '<'+tag+'>'
-            var tagEnd = '</'+tag+'>'
             var start = textBox.selectionStart;
             var end = textBox.selectionEnd;
             var text = textBox.value;
-            textBox.value = text.substring(0, start)+tagStart+text.substring(start,end)+tagEnd+text.substring(end);
+            textBox.value = text.substring(0, start)+tag+text.substring(start,end)+tag+text.substring(end);
         }
 
     p(style="margin-left:130px;margin-bottom: 1 em")
-        button(style="height:20px",type="button", onclick="formatText('i')") <i>Italicize</i>
-        button(style="height:20px;margin-left:10px", type="button", onclick="formatText('b')") <b>Bold</b>
+        button(style="height:20px",type="button", onclick="formatText('*')") <i>Italicize</i>
+        button(style="height:20px;margin-left:10px", type="button", onclick="formatText('**')") <b>Bold</b>
 
     p(style="margin-bottom: 2em")
         label(for='body') Article&nbsp;

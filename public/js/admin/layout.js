@@ -4,7 +4,7 @@ define(['jquery', 'Article'], function($, Article) {
 
     var articles = {};
     var updated = [];
-
+    var selectedArticle;
 
     layout = function() {
 
@@ -57,12 +57,14 @@ define(['jquery', 'Article'], function($, Article) {
         });
 
         // mark on single click
-        $("#layout").delegate(".story", "click", function() {
+        $("#container").delegate(".story", "click", function() {
             var id = $(this).attr('id');
-            $(this).addClass(".ui-state-hover-light");
-            //removeStoryFromContainer($(this), $(this).parent());
-            //$("#" + id).removeClass("exists");
+            $('.story').removeClass("ui-state-highlight");
+            $(this).addClass("ui-state-highlight");
+            showHotkeys();
+
         });
+
 
         // remove on double click
         $("#layout").delegate(".story", "dblclick", function() {
@@ -159,6 +161,20 @@ define(['jquery', 'Article'], function($, Article) {
             });
         }
 
+        function showHotkeys(){
+            $(".hotkey").each(function(index) {
+                var group = $(this).attr('group');
+                var mapping = $('div[data-groupname='+group+']');
+                var pos = mapping.position();
+                var height = mapping.outerHeight();
+                var width = mapping.outerWidth();
+               $(this).css({
+                    position: "absolute",
+                    top: pos.top + height/2 - $(this).innerHeight()/2 + "px",
+                    left: (pos.left + width + 50) + "px"
+                }).fadeIn();
+            });
+        }
     };
 
 });

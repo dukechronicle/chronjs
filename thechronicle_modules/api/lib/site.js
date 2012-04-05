@@ -565,6 +565,9 @@ function modifyArticleForDisplay(doc, callback) {
                 doc.authorsHtml += ", ";
             }
         }
+    
+        if(COLUMNIST_HEADSHOTS[doc.authorsArray[0]])
+            doc.subhead = doc.subhead || COLUMNIST_HEADSHOTS[doc.authorsArray[0]].tagline;
     }
     
     return doc;

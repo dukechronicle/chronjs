@@ -102,8 +102,8 @@ site.getFrontPageContent = function (callback) {
                 if(err) return cb(err);
                 
                 results.forEach(function(article) {
-                    article.subhead = article.numComments + " comment";
-                    if(article.numComments != 1) article.subhead += "s";
+                    article.info = article.numComments + " comment";
+                    if(article.numComments != 1) article.info += "s";
                 });
 
                 modifyArticlesForDisplay(results, cb);    
@@ -574,6 +574,9 @@ function modifyArticleForDisplay(doc, callback) {
                 doc.authorsHtml += ", ";
             }
         }
+    
+        if(COLUMNIST_HEADSHOTS[doc.authorsArray[0]])
+            doc.subhead = doc.subhead || COLUMNIST_HEADSHOTS[doc.authorsArray[0]].tagline;
     }
     
     return doc;

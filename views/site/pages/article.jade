@@ -1,9 +1,9 @@
 #article
     section
-      .nav.clearfix
-        - each parent in parentPaths
-          h2.selected
-            a(href='../section' + parent.path + '/' + parent.name) #{parent.name}
+        .nav.clearfix
+            - each parent in parentPaths
+                h2
+                    a(href='/section'+parent.path+'/'+parent.name) #{parent.name}
 
     article
         .content.rounded
@@ -11,10 +11,15 @@
             if (typeof isAdmin != 'undefined' && isAdmin)
                 a.edit(href=doc.url + "/edit") Edit
             h1 #{doc.title}
-            // article image
+
+            if (doc.subhead)
+                p
+                    i #{doc.subhead}
+           
             if (doc.embed)
                 .embed!=doc.embed
             else
+                // article image
                 if (doc.images && doc.images.LargeRect && doc.images.LargeRect.url)
                     if (typeof isAdmin != 'undefined' && isAdmin && doc.images.Original)
                         a(href="/admin/image/"+doc.images.Original.name)

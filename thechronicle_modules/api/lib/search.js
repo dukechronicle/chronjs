@@ -2,13 +2,14 @@ var solr = require('solr');
 var dateFormat = require('dateformat');
 var async = require('async');
 var url = require("url");
-
-var config = require('../../config');
-var globalFunctions = require('../../global-functions');
-var log = require('../../log');
-var api = require("./api");
 var _ = require("underscore");
+
+var api = require("./api");
+var config = require('../../config');
 var db = require("../../db-abstract");
+var log = require('../../log');
+var util = require('../../util');
+
 
 // whenever the way an article should be indexed by solr is changed, this number should be incremented
 // so the server knows it has to reindex all articles not using the newest indexing version. Keep the number numeric!
@@ -186,7 +187,7 @@ search.docsByAuthor = function(authorName, sortOrder, facets, page, callback) {
 
 // Function for searching by query
 search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page, emboldenMatchedTerms, callback) {
-	wordsQuery = globalFunctions.trim(wordsQuery);
+	wordsQuery = util.trim(wordsQuery);
 	if(wordsQuery.length == 0)
 		wordsQuery = "--";
 
@@ -289,7 +290,7 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
 
             var newTeaser = "...";
             for(var l = 0; l < sentencesToUse.length; l ++) {
-                newTeaser += globalFunctions.trim(sentences[sentencesToUse[l]]) + "...";
+                newTeaser += util.trim(sentences[sentencesToUse[l]]) + "...";
             }
             if(newTeaser != "...") doc.teaser = newTeaser;
         });
@@ -355,7 +356,7 @@ function querySolr(query, options, callback) {
 				for(var i = 0; i < field.length; i += 2) {
 					if(field[i + 1] > 0) {
 						if(niceName == "Author") {
-							field[i] = globalFunctions.capitalizeWords(field[i]);
+							field[i] = util.capitalizeWords(field[i]);
 						}
 						facets[niceName][field[i]] = field[i + 1];
 					}

@@ -1,8 +1,8 @@
 /* require internal modules */
 var config = require('../thechronicle_modules/config');
-var api = require('../thechronicle_modules/api/lib/api');
-var s3 = require('../thechronicle_modules/api/lib/s3');
-var globalFunctions = require('../thechronicle_modules/global-functions');
+var api = require('../thechronicle_modules/api');
+var s3 = require('../thechronicle_modules/api');
+var util = require('../thechronicle_modules/util');
 var log = require('../thechronicle_modules/log');
 
 var async = require('async');
@@ -66,10 +66,6 @@ log.init(function (err) {
             async.waterfall([
                 function(callback) {
                     api.init(callback);
-                },
-                function(callback) {
-                    s3.init();
-                    callback();
                 },
                 function(callback) {
                     console.log("creating database...");
@@ -136,11 +132,11 @@ function _getCropFunc(img, newImage, imgTypes, key) {
 
 function _getImageDeleteFunction(imageName) {
     return function(cb) {
-         console.log('deleting ' + imageName);
-         s3.delete(imageName, function(err) {
+        console.log('deleting ' + imageName);
+        api.s3.del(config.get("S3_BUCKET"), imageName, function(err) {
             if(err) console.log(err);
             cb(null);
-         });
+        });
     };
 }
 
@@ -173,7 +169,7 @@ function createImage(img, callback) {
 
     async.waterfall([     
         function(callback) {
-            globalFunctions.downloadUrlToPath(img.url, img.name, callback);
+            util.downloadUrlToPath(img.url, img.name, callback);
         },
         function(callback) {
             api.image.createOriginalFromFile(img.name, img.type, true, callback);

@@ -1,7 +1,7 @@
 var poll = exports;
 
 var db = require('../../db-abstract');
-var globalFunctions = require('../../global-functions');
+var util = require('../../util');
 var log = require('../../log');
 
 var _ = require('underscore');
@@ -10,7 +10,7 @@ poll.add = function(fields, callback) {
     var poll = {
         title: fields.title,
         taxonomy: fields.taxonomy,
-        created: globalFunctions.getTimestamp(),
+        created: util.unixTimestamp(),
         type: 'poll',
         answers: _.reduce(fields.answers,
                           function (memo, answer) {

@@ -16,6 +16,7 @@ h2 !{page} Layout
                     -else    
                         .story(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
                             #{story.title}
+                            
         letter = String.fromCharCode(code)
         h1(class="hotkey", group=group, style="display:none") #{letter}
 

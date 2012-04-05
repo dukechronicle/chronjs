@@ -8,9 +8,13 @@ h2 !{page} Layout
         <h2>!{group}</h2>
         .container(data-groupname=group)
             - if (groupDocs[group])
-                - each story, id in groupDocs[group]
-                    .story(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
-                        #{story.title}
+                - each story, id in groupDocs[group] 
+                    - if (((Date.now()/1000 + 43200) > story.created ) && ((Date.now()/1000 - 43200) < story.created))
+                        .story.today(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
+                            #{story.title}
+                    -else    
+                        .story(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
+                            #{story.title}
 
 #sidebar
     button#save.btn Save Layout

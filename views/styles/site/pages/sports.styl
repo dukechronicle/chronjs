@@ -1,0 +1,199 @@
+@import '../../mixins'
+
+page-width = 972px
+link-color = #36c
+container-padding = 4px
+top-content-width =  642px
+container-vertical-spacing = 23px
+
+body section > #sports
+    width = 636px
+    right-width = 330px
+    height = 393px
+
+    .top
+        margin-bottom 5px
+
+        .slideshow-wrapper.right-select > .slideshow
+            width width + 6 + right-width
+            position relative
+            .slides img
+                width width
+                border-radius 4px
+
+            .slides
+                border-radius 4px
+                width width
+                float right
+
+            .headlines
+                 float left
+                 width right-width
+
+                 height height + 6px
+                 display block
+                 background transparent
+
+
+                 div
+                     width 630px margin 0 auto
+                 a.page
+                     padding-left = 3px
+                     padding-right = 8px
+                     margin = 20px + padding-left + padding-right
+                     
+                     text-align left
+                     cursor pointer
+                     width right-width - margin
+                     display inline-block
+                     margin 0px 0px 13px 0px
+                     padding-right padding-right
+                     padding-top 3px
+                     font-size 1.2em
+
+                     padding-left padding-left
+                     height 115px
+                     color #444
+                     line-height 1.3em
+
+                     text-shadow 0px 1px 1px white
+                     float left
+                     transition(border-right-color, .25s, linear)
+
+                     h2
+                        font-size 1.2em
+                        line-height 1.2em
+                        margin-bottom 8px
+
+                     p.teaser
+                        font-size 0.85em
+                        line-height 1.2em
+                        color #444
+                     img
+                        border-radius 4px
+                        height 118px
+                        width 118px
+                        float left
+                        margin-right 10px
+
+                 a.page.last
+                    margin-bottom 0px
+
+                 a.page:hover
+                     color black
+                     text-decoration none
+                 a.page.active
+                     border-right-color #4D90F0
+
+                     h2
+                        color #36C
+
+                 a.page.active:hover
+                     h2
+                        text-decoration underline
+
+                 a.page.rounded
+                     box-shadow rgba(0,0,0,0.30) 0 1px 3px
+                     background-linear-gradient bottom #EDEDED white
+
+
+    .medium-rectangle
+        .rounded-hover
+            width 306px
+            height 256px
+            img
+
+                padding-left 3px
+                padding-top 3px
+
+    .middle
+        margin-bottom 6px
+        .left
+            float left
+            .container .rounded
+                width 305px
+                height 297px
+
+                h2
+                    font-size 1em
+                    margin-bottom 10px
+        .right
+            .column.first
+                margin-right 14px
+            .column
+                thumb-dim = 70px
+                float left
+                .container.row
+                    width 314px
+                    margin-bottom 14px
+
+                    .rounded-hover
+                        width 312px
+                        padding 0px
+                        height 124px
+
+                        :hover
+                            h2
+                                color link-color
+                    img
+                        border-radius 4px
+                        width thumb-dim
+                        height thumb-dim
+                        float right
+                        margin-top 4px
+
+                    h2
+                        transition(color, .25s, linear)
+                        font-size 1.2em
+                        color black
+                        line-height 1.2em
+                        margin-bottom 5px
+                        height 36px
+                        padding-left 5px
+                        padding-top 2px
+
+                    p
+                        color #444
+                        font-size 0.9em
+                        line-height 1.4em
+                        width 221px
+                        padding-left 5px
+                        float left
+
+    .blog
+        .rounded
+            width 306px
+            height 211px
+
+    .multimedia
+        clear both
+        .rounded-hover
+            width 636px
+            height 211px
+
+            .element
+                width 205px
+                float left
+                margin-right 7px
+            .element.last
+                margin-right 0px
+    .sport-block
+        width 311px
+        float left
+        margin-right 19px
+
+    .sport-block .rounded-hover
+        width 305px
+        height 305px
+
+
+    
+    .last > .sport-block
+        margin-right 0px
+
+    .bottom
+        .row
+            margin-bottom 6px
+        .row.last
+            margin-bottom 0px
+

@@ -7,7 +7,7 @@ var _ = require('underscore');
 var api = require('./api');
 var config = require('../../config');
 var db = require('../../db-abstract');
-var globalFunctions = require('../../global-functions');
+var util = require('../../util');
 var log = require('../../log');
 
 var image = exports;
@@ -124,7 +124,7 @@ image.createCroppedVersion = function(imageName, width, height, x1, y1, x2, y2, 
         function (orig, callback) {
             croppedName = 'crop_' + orig.value.name;
             log.info(orig.value.url);
-            globalFunctions.downloadUrlToPath(orig.value.url, orig.value.name, function (err) {
+            util.downloadUrlToPath(orig.value.url, orig.value.name, function (err) {
                 callback(err, orig);
             });
         },
@@ -290,8 +290,12 @@ image.docsForOriginal = function (origId, topCallback) {
                 })
             }, callback);
         },
-        function (articles, callback) {
-            callback(null, globalFunctions.convertObjectToArray(articles));
+        function (docs, callback) {
+            docs = _.filter(_.values(docs), function (doc) {
+                return typeof doc != 'function' && typeof doc != 'undefined';
+            });
+
+            callback(null, docs);
         }
     ], topCallback);
 };
@@ -302,13 +306,14 @@ image.docsForVersion = function (versionId, topCallback) {
             db.image.docsForVersion(versionId, callback);
         },
         function (docs, callback) {
-            var newDocs = [];
-            for (var i in Object.keys(docs)) {
-                if(typeof docs[i] != 'function' && typeof docs[i] != 'undefined') {
-                    newDocs.push(docs[i].value);
-                }
-            }
-            callback(null, newDocs);
+            var docs = _.filter(_.values(docs), function (doc) {
+                return typeof doc != 'function' && typeof doc != 'undefined';
+            });
+            docs = _.map(docs, function (doc) {
+                return doc.value;
+            });
+
+            callback(null, docs);
         }],
         topCallback);
 };

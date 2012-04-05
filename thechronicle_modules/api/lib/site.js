@@ -2,12 +2,12 @@ var site = exports;
 
 var api = require('./api');
 var config = require('../../config');
-var globalFunctions = require('../../global-functions');
 var log = require('../../log');
 var redis = require('../../redisclient');
 var route = require('../../route');
 var rss = require('./rss');
 var popular = require('./popular');
+var util = require('../../util');
 
 var _ = require("underscore");
 var async = require('async');
@@ -56,13 +56,12 @@ site.restrictToAdmin = function(req, res, next) {
 };
 // redirects to login page
 site.askForLogin = function(res, afterLoginPage, username, err) {
-    res.render('login', {
+    res.render('admin/login', {
         locals : {
             afterLogin : afterLoginPage,
             username : username || '',
             error : err || ''
-        },
-        layout : 'admin/layout'
+        }
     });
 };
 
@@ -74,8 +73,7 @@ site.renderConfigPage = function(req, res, err) {
     }
 
     res.render('config/config', {
-        css: ['css/onde'],
-        removeBootstrap: true,
+        css: ['config/onde'],
         locals : {
             configParams : config.getParameters(),
             profileName : config.getProfileNameKey(),
@@ -84,8 +82,7 @@ site.renderConfigPage = function(req, res, err) {
             revisionValue : config.getConfigRevision(),
             error : err,
             showOnly : req.query.showOnly
-        },
-        layout : 'admin/layout'
+        }
     });
 };
 
@@ -105,8 +102,8 @@ site.getFrontPageContent = function (callback) {
                 if(err) return cb(err);
                 
                 results.forEach(function(article) {
-                    article.subhead = article.numComments + " comment";
-                    if(article.numComments != 1) article.subhead += "s";
+                    article.info = article.numComments + " comment";
+                    if(article.numComments != 1) article.info += "s";
                 });
 
                 modifyArticlesForDisplay(results, cb);    
@@ -563,7 +560,7 @@ function modifyArticleForDisplay(doc, callback) {
         doc.fullUrl = "http://" + config.get('DOMAIN_NAME') + doc.url;
     }
     if(doc.created)
-        doc.date = globalFunctions.formatTimestamp(doc.created, "mmmm d, yyyy");
+        doc.date = util.formatTimestamp(doc.created, "mmmm d, yyyy");
 
     doc.authorsArray = _.clone(doc.authors);
     doc.authors = "";
@@ -577,6 +574,9 @@ function modifyArticleForDisplay(doc, callback) {
                 doc.authorsHtml += ", ";
             }
         }
+    
+        if(COLUMNIST_HEADSHOTS[doc.authorsArray[0]])
+            doc.subhead = doc.subhead || COLUMNIST_HEADSHOTS[doc.authorsArray[0]].tagline;
     }
     
     return doc;

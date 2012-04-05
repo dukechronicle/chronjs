@@ -55,7 +55,8 @@ siteApi.articleByUrl = function (req, res, next) {
                 "urls": doc.urls,
                 "renderedBody": doc.renderedBody,
                 "author": doc.author,
-                 "_id":doc._id
+                 "_id":doc._id,
+                 "images": doc.images
             };
             res.json(result);	  	
         }

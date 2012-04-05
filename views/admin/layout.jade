@@ -3,15 +3,8 @@ html
   head
     title The Chronicle
 
-    - if (typeof css != 'undefined')
-        - each file in css
-            link(rel= 'stylesheet', href= '/' + file + '.css')
-
-    link(rel='stylesheet', href='/css/jquery.Jcrop.css')
+    link(rel='stylesheet', href=css_paths.admin)
     link(rel='stylesheet', href='/css/smoothness/jquery-ui.css')
-    
-    if(typeof removeBootstrap == 'undefined' || !removeBootstrap)
-        link(rel='stylesheet', href='/css/bootstrap-1.2.0.min.css')
 
     script var CHRONICLE = { onload: [] }
 

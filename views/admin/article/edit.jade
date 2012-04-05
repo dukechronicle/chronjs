@@ -1,3 +1,6 @@
+script(src='/wysiwym.js')
+
+
 h1 Editing a Document
 form(action='', method='POST')
     input(type="hidden", name="_method", value="put")
@@ -24,19 +27,19 @@ form(action='', method='POST')
         label(for='teaser') Teaser&nbsp;
         textarea#teaser(rows=3, cols=50, name='doc[teaser]', value, style='width:600px; height: 2.5em')
             #{doc.teaser}
-    // Add ability to format selected text to make it easier for posters
-    script
-        function formatText(tag) {
-            var textBox = document.getElementById('mainText');
-            var start = textBox.selectionStart;
-            var end = textBox.selectionEnd;
-            var text = textBox.value;
-            textBox.value = text.substring(0, start)+tag+text.substring(start,end)+tag+text.substring(end);
-        }
 
-    p(style="margin-left:130px;margin-bottom: 1 em")
-        button(style="height:20px",type="button", onclick="formatText('*')") <i>Italicize</i>
-        button(style="height:20px;margin-left:10px", type="button", onclick="formatText('**')") <b>Bold</b>
+    script
+      $(function() {
+
+        // Sets up the Wysiwym editor given a markup language Current markup
+        // languages include: Wysiwym.Markup, Wysiwym.MediaWiki, Wysiwym.BBCode
+        // For a list of other options see the README.txt.
+        $('#mainText').wysiwym(Wysiwym.Mediawiki, {
+            helpEnabled: true,
+            helpToggle: true
+        });
+
+      });
 
     p(style="margin-bottom: 2em")
         label(for='body') Article&nbsp;

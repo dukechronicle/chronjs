@@ -11,6 +11,6 @@
                             #{story.title}
                             - if (story.info || story.authors)
                                 p.subhead
-                                    span.subhead #{story.subhead || story.authors}
+                                    span.subhead #{story.info || story.authors}
                                     - if (story.date)
                                         span.date #{story.date}

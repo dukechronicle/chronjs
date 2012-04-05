@@ -136,7 +136,6 @@ admin.addPoll = function (doc, callback) {
         callback('No section selected for poll');
     }
     else {
-    	console.log(doc.answers);
         var fields = {
             title:doc.title,
             taxonomy:JSON.parse(doc.taxonomy),

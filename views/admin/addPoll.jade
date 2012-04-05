@@ -3,7 +3,7 @@ script(type='text/javascript')
     fields = 1;
     function addField() {
         if (fields != 5) {
-            document.getElementById('answers').innerHTML += "<label></label><input id='answers' type='text' name='doc.answers["+fields+"]' style='width:600px'/><br/>";
+            document.getElementById('answers').innerHTML += "<label></label><input id='answers' type='text' name='doc[answers]["+fields+"]' style='width:600px'/><br/>";
             fields += 1;
         } else {
             document.getElementById('answers').innerHTML += "<br /><label></label>Only 10 answer fields allowed.";
@@ -24,7 +24,7 @@ form(action='/admin/poll', method='POST')
                   option(value=value) #{key}
     p#answers(style="margin-bottom: 2em")
         label(for='answers') Answers&nbsp;
-        input#answers(type='text', name='doc.answers[0]', style='width:600px')
+        input#answers(type='text', name='doc[answers][0]', style='width:600px')
         br
     input#add(type='button', onclick='addField()', name='add', value='Add answer field')
     p

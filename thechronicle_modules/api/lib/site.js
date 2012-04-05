@@ -102,8 +102,8 @@ site.getFrontPageContent = function (callback) {
                 if(err) return cb(err);
                 
                 results.forEach(function(article) {
-                    article.subhead = article.numComments + " comment";
-                    if(article.numComments != 1) article.subhead += "s";
+                    article.info = article.numComments + " comment";
+                    if(article.numComments != 1) article.info += "s";
                 });
 
                 modifyArticlesForDisplay(results, cb);    

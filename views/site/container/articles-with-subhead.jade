@@ -9,7 +9,7 @@
                     h2
                         a.list-story.hover.highlight-right(href='#{story.url || ('article/' + story.urls[story.urls.length-1])}', class='#{story.cssClass}')
                             #{story.title}
-                            - if (story.subhead || story.authors)
+                            - if (story.info || story.authors)
                                 p.subhead
                                     span.subhead #{story.subhead || story.authors}
                                     - if (story.date)

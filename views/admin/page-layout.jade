@@ -9,9 +9,13 @@ h2 !{page} Layout
         code = 65+i       
         .container(data-groupname=group,keycode=code)
             - if (groupDocs[group])
-                - each story, id in groupDocs[group]
-                    .story(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
-                        #{story.title}
+                - each story, id in groupDocs[group] 
+                    - if (((Date.now()/1000 + 43200) > story.created ) && ((Date.now()/1000 - 43200) < story.created))
+                        .story.today(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
+                            #{story.title}
+                    -else    
+                        .story(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
+                            #{story.title}
         letter = String.fromCharCode(code)
         h1(class="hotkey", group=group, style="display:none") #{letter}
 

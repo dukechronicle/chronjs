@@ -1,6 +1,6 @@
 h1 Add a Poll
 script(type='text/javascript')
-    fields = 1;
+    fields = 2;
     function addField() {
         if (fields != 5) {
             document.getElementById('answers').innerHTML += "<label></label><input id='answers' type='text' name='doc[answers]["+fields+"]' style='width:600px'/><br/>";
@@ -25,6 +25,9 @@ form(action='/admin/poll', method='POST')
     p#answers(style="margin-bottom: 2em")
         label(for='answers') Answers&nbsp;
         input#answers(type='text', name='doc[answers][0]', style='width:600px')
+        br
+        label
+        input#answers(type='text', name='doc[answers][1]', style='width:600px')
         br
     input#add(type='button', onclick='addField()', name='add', value='Add answer field')
     p

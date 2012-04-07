@@ -47,9 +47,9 @@ admin.author = function (req, res, next) {
 };
 
 admin.editAuthorData = function (req, res, next) {
-    adminApi.saveAuthorInfo(req.body, function (err, url) {
+    adminApi.saveAuthorInfo(req.body, function (err, response) {
         if (err) next(err);
-        else res.redirect('/admin/author');
+        else res.redirect('/admin/author?name=' + req.body.name);
     });
 };
 

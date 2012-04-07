@@ -25,7 +25,7 @@ authors.getInfo = function (authorName, callback) {
     db.authors.getInfo(authorName, callback);
 };
 
-authors.editInfo = function(doc, callback) {
+authors.setInfo = function(doc, callback) {
     var fields = {
         name: doc.name,
         bio: doc.bio,

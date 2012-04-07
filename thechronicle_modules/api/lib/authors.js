@@ -26,16 +26,11 @@ authors.getInfo = function (authorName, callback) {
 };
 
 authors.setInfo = function(doc, callback) {
+    var id = doc.id;
     var fields = {
         name: doc.name,
         bio: doc.bio,
         type: "author-node"
     };
-
-    if (doc.id) {
-        var id = doc.id;
-        db.merge(id, fields, callback);
-    } else {
-        db.save(fields, callback);
-    }
+    db.authors.setInfo(id, fields, callback);
 };

@@ -36,3 +36,11 @@ authors.getInfo = function(authorName, callback) {
                 callback(err, _.pluck(res, 'doc'));
             });
 };
+
+authors.setInfo = function (id, fields, callback) {
+    if (id) {
+        db.merge(id, fields, callback);
+    } else {
+        db.save(fields, callback);
+    }
+}

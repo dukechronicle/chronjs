@@ -26,6 +26,30 @@ admin.duplicates = function (req, res, next) {
                 }
             });
         }
+admin.author = function (req, res, next) {
+    var name = req.query.name;
+    var renderFunc = function (doc) {
+        res.render('admin/author', {
+            locals:{
+                doc:doc
+            }
+        });
+    }
+    if (!name) {
+        renderFunc();
+    } else {
+        adminApi.getAuthorInfo(name, function (err, docs) {
+            if (docs.length == 0) renderFunc({name: name});
+            else renderFunc(docs[0]);
+        });
+    }
+
+};
+
+admin.editAuthorData = function (req, res, next) {
+    adminApi.saveAuthorInfo(req.body, function (err, url) {
+        if (err) next(err);
+        else res.redirect('/admin/author');
     });
 };
 

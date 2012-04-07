@@ -9,6 +9,7 @@ if (typeof doc !== 'undefined')
             textarea#bio(rows=20, cols=30, name="bio")
                 !{doc['bio']}
         p
+            input(type="hidden", name='id', value=doc._id);
             input(type='submit', class='btn', value='Save')
 else
     form(action='/admin/author', method='GET')

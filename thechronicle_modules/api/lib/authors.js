@@ -24,3 +24,18 @@ authors.getLatest = function (authorName, taxonomy, count, callback) {
 authors.getInfo = function (authorName, callback) {
     db.authors.getInfo(authorName, callback);
 };
+
+authors.editInfo = function(doc, callback) {
+    var fields = {
+        name: doc.name,
+        bio: doc.bio,
+        type: "author-node"
+    };
+
+    if (doc.id) {
+        var id = doc.id;
+        db.merge(id, fields, callback);
+    } else {
+        db.save(fields, callback);
+    }
+};

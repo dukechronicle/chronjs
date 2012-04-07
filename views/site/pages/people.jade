@@ -5,6 +5,13 @@ script(type='text/javascript')
 
 #people
     h1 #{name}
+    .sidebar
+        .sort.container.clearfix
+            .vertical-container
+                h2.vertical Author Bio
+            .rounded
+                .content-container
+                    !{bio}
     .main
         .rounded.result
             for doc in docs

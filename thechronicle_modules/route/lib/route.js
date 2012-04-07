@@ -105,6 +105,7 @@ exports.init = function (app) {
 
         app.get('/system/memory', api.site.checkAdmin, admin.memory);
         app.get('/author', api.site.checkAdmin, admin.author);
+        app.post('/author', api.site.checkAdmin, admin.editAuthorData);
     });
     
     app.namespace('/admin/image', function () {

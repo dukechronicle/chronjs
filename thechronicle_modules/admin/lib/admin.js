@@ -93,6 +93,31 @@ admin.manage = function (req, res, next) {
     });
 };
 
+admin.saveAuthorInfo = function (doc, callback) {
+    api.authors.editInfo(doc, callback);
+};
+
+admin.addArticle = function (doc, callback) {
+    if (doc.taxonomy == '') {
+        callback('No section selected for article');
+    }
+    else {
+        var fields = {
+            body:doc.body,
+            authors:doc.authors.split(", "),
+            title:doc.title,
+            subhead:doc.subhead,
+            teaser:doc.teaser,
+            type:doc.type,
+            taxonomy:JSON.parse(doc.taxonomy)
+        };
+
+        api.addDoc(fields, callback);
+    }
+};
+
+
+
 admin.k4export = function (filepath, callback) {
     async.parallel({
         k4      :function (callback) {

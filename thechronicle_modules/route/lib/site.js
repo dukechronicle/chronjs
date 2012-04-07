@@ -147,7 +147,7 @@ site.staff = function (req, res) {
                         pageTitle: util.capitalizeWords(name),
                         docs: docs,
                         name: util.capitalizeWords(name), 
-                        bio: info[0]
+                        authorInfo: info[0]
                     }
                 });
             });

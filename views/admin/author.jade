@@ -8,8 +8,9 @@ if (typeof doc !== 'undefined')
             label(for='bio') Bio:
             textarea#bio(rows=20, cols=30, name="bio")
                 !{doc['bio']}
+        input(type="hidden", name='id', value=doc._id);
+        !=partial("admin/container/images")
         p
-            input(type="hidden", name='id', value=doc._id);
             input(type='submit', class='btn', value='Save')
 else
     form(action='/admin/author', method='GET')

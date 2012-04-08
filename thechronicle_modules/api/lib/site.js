@@ -435,10 +435,27 @@ site.getSectionContent = function (params, callback) {
 };
 
 site.getAuthorContent = function(name, callback) {
-    api.search.docsByAuthor(name, 'desc', '', 1, function(err, docs) {
-        if(err) callback(err);
-        else callback(null, modifyArticlesForDisplay(docs));
-    });
+    async.parallel([
+        function(cb) {
+            api.search.docsByAuthor(name, 'desc', '', 1, function(err, docs) {
+                if(err)
+                    cb(err);
+                else
+                    callback(null, modifyArticlesForDisplay(docs));
+            });
+        },
+        function(cb) {
+            api.authors.getInfo(name, cb);
+        }], function (err, results) {
+            if (err)
+                callback(err);
+            else {
+                var docs = results[0];
+                var info = results[1][0];
+                callback(null, docs, info);
+            }
+        }
+    );
 };
 
 site.getSearchContent = function (wordsQuery, query, callback) {

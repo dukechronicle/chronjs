@@ -1,5 +1,6 @@
 var db = require('../../db-abstract');
 var dateFormat = require('dateformat');
+var md = require('node-markdown').Markdown;
 
 var authors = exports;
 
@@ -32,5 +33,6 @@ authors.setInfo = function(doc, callback) {
         bio: doc.bio,
         type: "author-node"
     };
+    fields.renderedBio = md(fields.bio);
     db.authors.setInfo(id, fields, callback);
 };

@@ -10,7 +10,7 @@ exports.doc = {
                     if (doc.taxonomy) {
                         var path = [];
                         for (var i in doc.taxonomy) {
-                            path.push(doc.taxonomy[i]);
+                            path.push(doc.taxonomy[i].toLowerCase());
                             emit([eval(uneval(path)), parseInt(doc.created, 10)], doc);
                         }
                     }

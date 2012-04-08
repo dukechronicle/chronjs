@@ -15,6 +15,8 @@ var ARTICLE_LIST_CACHE_TIMEOUT = 100000;
 
 // Cache the articles. Shouldn't be cleared.
 var articleCache = [];
+
+$("#searchInput").submit(search);
         
 function getDateString(time)
 {
@@ -239,4 +241,32 @@ function beginMobile()
              getArticle(splitString[3]);
           }
       });
+}
+
+function search(eventObject)
+{
+    eventObject.preventDefault();
+    value = $("#searchInput").val();
+    console.log(value);
+    value = value.replace(/\s+/g , "-");
+
+     $.ajax({
+            url: "/api/search/" + query,
+            dataType: "jsonp",
+            cache: false,
+            success: function(data){
+                if(!data) {
+                    //console.log("get article failed");
+                    $.mobile.changePage('#error', 'slide');
+                    return;
+                }
+                console.log(data);
+                updateArticleList(data, $(this), title);
+
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                handleAJAXError(jqXHR);
+            }  
+        });
+     return false;
 }

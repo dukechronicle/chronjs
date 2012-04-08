@@ -13,6 +13,7 @@ var log = require('./thechronicle_modules/log');
 
 var STYLE_DIR = __dirname + '/views/styles/';
 var DIST_DIR = __dirname + '/public/dist/';
+var JS_SOURCES = [ 'site', 'admin' ];
 
 exports.buildJavascript = buildJavascript;
 exports.buildCSS = buildCSS;
@@ -74,10 +75,7 @@ function buildCSSFile(path, callback) {
     walker.on('end', function (err) {
         if (err) callback(err);
         else if (process.env.NODE_ENV == 'production')
-            storeS3(style, "text/css", function (err, name) {
-                if (err) callback(err);
-                else callback(null, config.get('CLOUDFRONT_STATIC') + name);
-            });
+            storeS3(style, "text/css", callback);
         else
             fs.writeFile(DIST_DIR + path + '.css', style, function (err) {
                 callback(err, '/dist/' + path + '.css');
@@ -85,11 +83,23 @@ function buildCSSFile(path, callback) {
     });
 }
 
-function buildJavascript(infile, outfile, callback) {
+function buildJavascript(callback) {
+    var paths = {};
+    async.forEachSeries(JS_SOURCES, function (src, cb) {
+        buildJavascriptFile(src, function (err, path) {
+            paths[src] = path;
+            cb(err);
+        });
+    }, function (err) {
+        callback(err, paths);
+    });
+}
+
+function buildJavascriptFile(src, callback) {
     var config = { 
         baseUrl: 'public/js',
-        name: infile,
-        out: 'public/dist/' + outfile,
+        name: src + '/main',
+        out: 'public/dist/' + src + '-js',
         paths: {
             jquery: 'require-jquery'
         }
@@ -116,7 +126,7 @@ function storeS3(data, type, callback) {
         if (err) callback(err);
         else {
             api.s3.put(bucket, buffer, path, type, "gzip", function(err) {
-                callback(err, path);
+                callback(err, config.get('CLOUDFRONT_STATIC') + path);
             });
         }
     });

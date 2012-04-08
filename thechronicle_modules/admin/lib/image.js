@@ -53,7 +53,7 @@ exports.uploadData = function (req, httpRes) {
                 callback("Invalid file type for " + imageName + ". Must be an image.");
             }
             else {
-                callback(null)
+                callback(null);
             }
         },
         function (callback) {
@@ -102,7 +102,7 @@ exports.deleteImage = function (req, httpRes) {
         api.image.deleteVersion(id, true, function(err, res) {
             var ret = (err != null);
             httpRes.send({ok: ret});
-        })
+        });
     }
 };
 
@@ -133,7 +133,7 @@ exports.renderImage = function (req, httpRes, next) {
                         }
                     });
                 }
-            })
+            });
         }
     });
 };
@@ -150,7 +150,7 @@ exports.info = function (req, httpRes) {
     data.location = req.body.location;
 
     // make sure date stays numeric so it can be sorted correctly
-    data.date = parseInt(req.body.date);
+    data.date = parseInt(req.body.date, 10);
     if(isNaN(data.date)) data.date = req.body.date;
 
     api.image.edit(id, data, function () {  //passes the recently create "id" and "data" and an anonymous function to image.edit, which calls another function from db
@@ -168,13 +168,18 @@ exports.crop = function (req, httpRes, next) {
     var width = req.body.finalWidth;
     var height = req.body.finalHeight;
 
-    api.image.createCroppedVersion(imageName, width, height, req.body.x1, req.body.y1, req.body.x2, req.body.y2, function (err, orig) {
-        if (err) next(err);
-        else {
-            if (docId)
-                if (afterUrl) httpRes.redirect('/admin/image/' + imageName + '?afterUrl=' + afterUrl + '&docId=' + docId);
-            else httpRes.redirect('/admin/image/' + imageName + '?docId=' + docId);
-            else httpRes.redirect('/admin/image/' + imageName);
-        }
-    });
+    if(req.body.x1 < 0 || req.body.y1 < 0) {
+        next("Image is too small for this version size");
+    }
+    else {
+        api.image.createCroppedVersion(imageName, width, height, req.body.x1, req.body.y1, req.body.x2, req.body.y2, function (err, orig) {
+            if (err) next(err);
+            else {
+                if (docId)
+                    if (afterUrl) httpRes.redirect('/admin/image/' + imageName + '?afterUrl=' + afterUrl + '&docId=' + docId);
+                else httpRes.redirect('/admin/image/' + imageName + '?docId=' + docId);
+                else httpRes.redirect('/admin/image/' + imageName);
+            }
+        });
+    }
 };

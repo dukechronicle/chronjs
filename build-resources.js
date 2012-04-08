@@ -13,6 +13,7 @@ var log = require('./thechronicle_modules/log');
 
 var STYLE_DIR = __dirname + '/views/styles/';
 var DIST_DIR = __dirname + '/public/dist/';
+var JS_SOURCES = [ 'site', 'admin' ];
 
 exports.buildJavascript = buildJavascript;
 exports.buildCSS = buildCSS;
@@ -85,11 +86,23 @@ function buildCSSFile(path, callback) {
     });
 }
 
-function buildJavascript(infile, outfile, callback) {
+function buildJavascript(callback) {
+    var paths = {};
+    async.forEachSeries(JS_SOURCES, function (src, cb) {
+        buildJavascript(src, function (err, path) {
+            paths[src] = path;
+            cb(err);
+        });
+    }, function (err) {
+        callback(err, paths);
+    });
+}
+
+function buildJavascriptFile(src, callback) {
     var config = { 
         baseUrl: 'public/js',
-        name: infile,
-        out: 'public/dist/' + outfile,
+        name: src + '/main',
+        out: 'public/dist/' + outfile + '-js',
         paths: {
             jquery: 'require-jquery'
         }

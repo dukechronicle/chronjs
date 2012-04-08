@@ -3728,32 +3728,36 @@ this.prependChild( 'info', 'myElement' );
                 // link takes precedence over lightbox if both are detected
                 if ( data.link || self._options.lightbox || self._options.clicknext ) {
 
-                    $( next.image ).css({
-                        cursor: 'pointer'
-                    }).bind( 'mouseup', function() {
+                    if (data.link) {
+                        $(next.image).parent().attr("href", data.link);
+                    } else {
+                        $( next.image ).css({
+                            cursor: 'pointer'
+                        }).bind( 'mouseup', function() {
 
-                        // clicknext
-                        if ( self._options.clicknext && !Galleria.TOUCH ) {
-                            if ( self._options.pauseOnInteraction ) {
-                                self.pause();
+                            // clicknext
+                            if ( self._options.clicknext && !Galleria.TOUCH ) {
+                                if ( self._options.pauseOnInteraction ) {
+                                    self.pause();
+                                }
+                                self.next();
+                                return;
                             }
-                            self.next();
-                            return;
-                        }
 
-                        // popup link
-                        if ( data.link ) {
-                            if ( self._options.popupLinks ) {
-                                win = window.open( data.link, '_blank' );
-                            } else {
-                                window.location.href = data.link;
+                            // popup link
+                            if ( data.link ) {
+                                if ( self._options.popupLinks ) {
+                                    win = window.open( data.link, '_blank' );
+                                } else {
+                                    window.location.href = data.link;
+                                }
+                                return;
                             }
-                            return;
-                        }
 
-                        self.openLightbox();
+                            self.openLightbox();
 
-                    });
+                        });
+                    }
                 }
 
                 // remove the queued image
@@ -4738,7 +4742,6 @@ Galleria.Picture.prototype = {
 
     load: function(src, callback) {
 
-        // set a load timeout for debugging
         this.tid = window.setTimeout( (function(src) {
             return function() {
                 Galleria.raise('Image not loaded in ' + Math.round( TIMEOUT/1000 ) + ' seconds: '+ src);
@@ -4801,10 +4804,12 @@ Galleria.Picture.prototype = {
             }( this, callback, src ));
 
         // remove any previous images
-        $container.find( 'img' ).remove();
+        $container.find( 'a.img-link' ).remove();
+
 
         // append the image
-        $image.css( 'display', 'block').appendTo( this.container );
+        var link = $("<a class='img-link' href='#'></a>").appendTo(this.container);
+        $image.css( 'display', 'block').appendTo( link );
 
         // hide it for now
         Utils.hide( this.image );

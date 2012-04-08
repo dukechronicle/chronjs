@@ -75,10 +75,7 @@ function buildCSSFile(path, callback) {
     walker.on('end', function (err) {
         if (err) callback(err);
         else if (process.env.NODE_ENV == 'production')
-            storeS3(style, "text/css", function (err, name) {
-                if (err) callback(err);
-                else callback(null, config.get('CLOUDFRONT_STATIC') + name);
-            });
+            storeS3(style, "text/css", callback);
         else
             fs.writeFile(DIST_DIR + path + '.css', style, function (err) {
                 callback(err, '/dist/' + path + '.css');
@@ -89,7 +86,7 @@ function buildCSSFile(path, callback) {
 function buildJavascript(callback) {
     var paths = {};
     async.forEachSeries(JS_SOURCES, function (src, cb) {
-        buildJavascript(src, function (err, path) {
+        buildJavascriptFile(src, function (err, path) {
             paths[src] = path;
             cb(err);
         });
@@ -102,7 +99,7 @@ function buildJavascriptFile(src, callback) {
     var config = { 
         baseUrl: 'public/js',
         name: src + '/main',
-        out: 'public/dist/' + outfile + '-js',
+        out: 'public/dist/' + src + '-js',
         paths: {
             jquery: 'require-jquery'
         }
@@ -129,7 +126,7 @@ function storeS3(data, type, callback) {
         if (err) callback(err);
         else {
             api.s3.put(bucket, buffer, path, type, "gzip", function(err) {
-                callback(err, path);
+                callback(err, config.get('CLOUDFRONT_STATIC') + path);
             });
         }
     });

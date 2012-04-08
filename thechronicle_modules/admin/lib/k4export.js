@@ -147,6 +147,18 @@ function ArticleParser(articleCallback) {
 
         if (article.section == "Editorial")
 	    article.section = "Opinion";
+        if (article.taxonomy) {
+            api.taxonomy.getTaxonomySubtree(article.taxonomy, function (err) {
+                if (err && article.section)
+                    article.taxonomy = [ article.section ];
+                else if (err)
+                    delete article.taxonomy;
+            });
+        }
+        else if (article.section) {
+            article.taxonomy = [ article.section ];
+        }
+        delete article.section;
 
         try {
             if (article.body[0].match(/^by [^\.]*$/i)) article.body.shift();

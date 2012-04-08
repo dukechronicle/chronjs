@@ -21,6 +21,9 @@ html
         ul#ARTICLE_LIST(data-role='listview')
       div(data-role='footer', data-position='fixed')
         div(data-role='navbar')
+          form(id = "searchBox", onSubmit="javascript:search()", action = "")
+            label(for="search-basic")
+            input(id = "searchInput", type="search", name="search" ,value="")
           ul
             li
               a(href='javascript:getArticleList(\'All\', \'The Chronicle\', false)') All Stories
@@ -38,5 +41,6 @@ html
         h1 Error
       #ERROR_MESSAGE(data-role='content')
         | An error has occured, click back to return to the previous page.
+    
     script(type='text/javascript')
       beginMobile();        

@@ -81,7 +81,7 @@ image.addVersionsToDoc = function(docId, originalImageId, versionImageIds, image
         }
         images["Original"] = originalImageId;
 
-        api.editDoc(doc._id, { images:images }, callback);
+        db.merge(doc._id, { images:images }, callback);
     });
 };
 

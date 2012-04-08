@@ -33,6 +33,7 @@ authors.getInfo = function(authorName, callback) {
 
     db.view('articles/author_info', query,
             function (err, res) {
+                console.log(res);
                 callback(err, _.pluck(res, 'doc'));
             });
 };

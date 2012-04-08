@@ -139,19 +139,17 @@ site.search = function (req, res, next) {
 
 site.staff = function (req, res) {
     var name = req.params.query.replace(/-/g, ' ');
-    api.site.getAuthorContent(name, function (err, docs) {
-        api.authors.getInfo(name, function (err, info) {
-            res.render('site/pages/people', {
-                    layout: 'site/layout',
-                    locals: {
-                        pageTitle: util.capitalizeWords(name),
-                        docs: docs,
-                        name: util.capitalizeWords(name), 
-                        authorInfo: info[0]
-                    }
-                });
-            });
+    api.site.getAuthorContent(name, function (err, docs, info) {
+        res.render('site/pages/people', {
+            layout: 'site/layout',
+            locals: {
+                pageTitle: util.capitalizeWords(name),
+                docs: docs,
+                name: util.capitalizeWords(name), 
+                authorInfo: info
+            }
         });
+    });
 };
 
 site.article = function (req, res, next) {

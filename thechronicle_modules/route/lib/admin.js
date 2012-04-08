@@ -33,6 +33,11 @@ admin.index = function (req, res, next) {
     res.render('admin');
 };
 
+admin.file_upload = function (req, res, next) {
+    res.render('admin/file_upload');
+};
+
+
 admin.newsletter = function (req, res, next) {
     api.newsletter.createNewsletter(function(err, campaignID) {
         if (err) next(err);

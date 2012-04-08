@@ -110,6 +110,8 @@ exports.init = function (app) {
         app.get('/duplicates', api.site.checkAdmin, admin.duplicates);
 
         app.get('/system/memory', api.site.checkAdmin, admin.memory);
+        app.get('/file_upload', api.site.checkAdmin, admin.file_upload);
+
     });
     
     app.namespace('/admin/image', function () {

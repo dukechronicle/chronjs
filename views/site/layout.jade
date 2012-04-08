@@ -43,6 +43,6 @@ html(lang="en")
                 script(src="//html5shim.googlecode.com/svn/trunk/html5.js")
 
             - if (isProduction)
-                script(src=static_cdn + site_javascript, type="text/javascript")
+                script(src=js_paths.site, type="text/javascript")
             - else
                 script(src="/js/require-jquery.js", data-main="/js/site/main")

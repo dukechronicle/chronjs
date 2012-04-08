@@ -7,6 +7,7 @@ var path = require('path');
 var async = require('async');
 var sax = require('sax');
 var zipfile = require('zipfile');
+var _ = require('underscore');
 
 
 exports.runExporter = runExporter;
@@ -143,9 +144,23 @@ function ArticleParser(articleCallback) {
             callback("XML couldn't be parsed");
             return;
         }
+
+        if (article.section == "Editorial")
+	    article.section = "Opinion";
+        if (article.taxonomy) {
+            api.taxonomy.getTaxonomySubtree(article.taxonomy, function (err) {
+                if (err && article.section)
+                    article.taxonomy = [ article.section ];
+                else if (err)
+                    delete article.taxonomy;
+            });
+        }
+        else if (article.section) {
+            article.taxonomy = [ article.section ];
+        }
+        delete article.section;
+
         try {
-            if (article.taxonomy[0] == "Editorial")
-		article.taxonomy = [ "Opinion" ];
             if (article.body[0].match(/^by [^\.]*$/i)) article.body.shift();
             if (article.body[0].match(/^from [^\.]*$/i)) article.body.shift();
             if (article.body[0].match(/^THE CHRONICLE$/)) article.body.shift();
@@ -174,7 +189,7 @@ function ArticleParser(articleCallback) {
     }
 
     function onSection(parser) {
-        parser.article.taxonomy = [ parser.textNode ];
+        parser.article.section = parser.textNode;
     }
 
     function onDate(parser) {
@@ -187,16 +202,14 @@ function ArticleParser(articleCallback) {
         parser.metadataType = parser.textNode;
     }
 
-
     function onMetadata(parser) {
         if (parser.metadataType == "Author") {
-            async.map(parser.textNode.split(/\,\s*and\s|\sand\s|\,/),
-                    function (name, cb) {
-                        cb(undefined, util.trim(name));
-                    },
-                    function (err, results) {
-                        parser.article.authors = results;
-                    });
+            parser.article.authors = 
+                _.map(parser.textNode.split(/\,\s*and\s|\sand\s|\,/), util.trim);
+        }
+        if (parser.metadataType == "Article Type") {
+            parser.article.taxonomy =
+                util.trim(parser.textNode).split('-');
         }
     }
 

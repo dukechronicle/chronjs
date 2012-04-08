@@ -13,6 +13,7 @@ var RESULTS_PER_PAGE = 25;
 // startDoc specifies the document within the taxonomy to start returning data at, for pagination.
 taxonomy.docs = function (taxonomyPath, limit, startDoc, callback) {
     limit = limit || RESULTS_PER_PAGE;
+    taxonomyPath = _.map(taxonomyPath, function (s) { return s.toLowerCase() });
 
     db.taxonomy.docs(taxonomyPath, limit, startDoc, function (err, docs) {
         if (err) callback(err);

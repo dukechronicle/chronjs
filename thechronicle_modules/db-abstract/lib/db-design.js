@@ -8,6 +8,11 @@ exports.doc = {
                 map:function (doc) {
                     if (doc.type == "author-node") {
                         emit(doc.name.toLowerCase(), doc);
+                        if (doc.images) {
+                            for (var type in doc.images) {
+                                emit(doc.name.toLowerCase(), {_id:doc.images[type]});
+                            }
+                        }
                     }
                 }
             },

@@ -126,3 +126,31 @@ image.docsForVersion = function(versionId, callback) {
         key: versionId
     }, callback);
 };
+
+/*
+** Combines a db response that contains documents and images so that the document contains the image objects instead of just image IDs
+*/
+image.dereferenceDocumentImages = function(dbres) {
+    var imageMap = {};
+    var retArray = [];
+
+    dbres.forEach(function(doc){
+        var tempDoc = doc;
+        if (tempDoc.type == "image" || tempDoc.type == "imageVersion") 
+            imageMap[tempDoc._id] = tempDoc;
+    });
+
+    dbres.forEach(function(doc){
+        var tempDoc = doc;
+        if (tempDoc.type != "image" && tempDoc.type != "imageVersion") {
+            if (tempDoc.images) {
+                Object.keys(tempDoc.images).forEach(function(imageType){
+                    var imageID = tempDoc.images[imageType];
+                    tempDoc.images[imageType] = imageMap[imageID];
+                });
+            }
+            retArray.push(tempDoc);
+        }
+    });
+    return retArray;
+}

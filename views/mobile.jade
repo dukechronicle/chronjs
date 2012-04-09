@@ -21,9 +21,9 @@ html
         ul#ARTICLE_LIST(data-role='listview')
       div(data-role='footer', data-position='fixed')
         div(data-role='navbar')
-          form(id = "searchBox", onSubmit="javascript:search()", action = "")
+          form(id="searchBox")
             label(for="search-basic")
-            input(id = "searchInput", type="search", name="search" ,value="")
+            input(id="searchInput", type="search", name="search", value="")
           ul
             li
               a(href='javascript:getArticleList(\'All\', \'The Chronicle\', false)') All Stories

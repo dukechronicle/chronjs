@@ -114,6 +114,8 @@ define(['jquery', 'Article'], function($, Article) {
             if (!selectedArticle) return;
             var code = e.keyCode || e.which;
             $(".hotkey").each(function(index) {
+                // If the keypress is lowercase, subtract
+                // 32 from the ascii value to convert it to uppercase
                 if (index+97 == code) code -= 32;
                 if (index+65 == code)
                 {   

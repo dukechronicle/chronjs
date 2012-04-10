@@ -19,9 +19,12 @@ a(href='/admin/manage') Manage and edit uploaded articles
           a(href='/article/' + article.url) #{article.title}
         td
           select.taxonomy(id='tax'+article.id, style='width: 200px')
-            - if (article.taxonomy[0] in taxonomy)
+            - if (article.taxonomy && article.taxonomy[0] in taxonomy)
               - each key, value in taxonomy[article.taxonomy[0]]
-                  option(value=value) #{key}
+                - if (JSON.stringify(article.taxonomy) == value)
+                    option(value=value, selected='selected') #{key}
+                - else
+                    option(value=value) #{key}
             - else
               option(value='') Select a section
               - each subsections, section in taxonomy
@@ -33,6 +36,6 @@ a(href='/admin/manage') Manage and edit uploaded articles
             - each image in imageData
               option(value=JSON.stringify(image), title=image.thumbUrl) #{image.displayName}
         td
-          button(id='sub'+article.id, style='width: 200px') Submit
+          button.btn(id='sub'+article.id, style='width: 200px') Submit
 
 script CHRONICLE.onload.push(function(){k4export()})

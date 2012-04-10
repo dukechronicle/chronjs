@@ -131,16 +131,12 @@ function runSite(callback) {
 		    if (err) log.error("Couldn't build news sitemap: " + err);
 	        });
 
-                builder.buildJavascript('site/main','site-js',function(err,jsFile) {
-                    if (err) log.warning('Failed to build site Javascipt: ' + err);
-                    else log.notice('Built site Javascript');
-                    setViewOption('site_javascript', jsFile);
-                });
-
-                builder.buildJavascript('admin/main','admin-js',function(err,jsFile){
-                    if (err) log.warning('Failed to build admin Javascipt: ' + err);
-                    else log.notice('Built admin Javascript');
-                    setViewOption('admin_javascript', jsFile);
+                builder.buildJavascript(function(err, paths) {
+                    if (err) log.warning('Failed to build Javascipt: ' + err);
+                    else {
+                        log.notice('Built site Javascript');
+                        setViewOption('js_paths', paths);
+                    }
                 });
             }
             

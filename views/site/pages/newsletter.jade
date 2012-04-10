@@ -16,14 +16,14 @@
 
 
   .subscribe(style='float: left; padding: 10px; margin-bottom: 19px; width: 300px')
-      form(method="post", action="/newsletter")
+      form(method="post", action="")
           input(type="text", name="email", placeholder='Your email address')
           input(type="hidden", name="action", value="subscribe")
           input(type="submit", value="Subscribe", style='float: right; width: 100px; margin-top: 2px')
 
 
   .unsubscribe(style='float: left; padding: 10px; width: 300px')
-      form(method="post", action="/newsletter")
+      form(method="post", action="")
           input(type="text", name="email", placeholder='Your email address')
           input(type="hidden", name="action", value="unsubscribe")
           input(type="submit", value="Unsubscribe", style='float: right; width: 100px; margin-top: 2px')

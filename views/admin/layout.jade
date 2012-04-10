@@ -4,7 +4,6 @@ html
     title The Chronicle
 
     link(rel='stylesheet', href=css_paths.admin)
-    link(rel='stylesheet', href='/css/smoothness/jquery-ui.css')
 
     script var CHRONICLE = { onload: [] }
 
@@ -14,6 +13,6 @@ html
       #container!= body
 
     - if (isProduction)
-        script(src=static_cdn + admin_javascript, type="text/javascript")
+        script(src=js_paths.admin, type="text/javascript")
     - else
         script(src="/js/require-jquery.js", data-main="/js/admin/main", type="text/javascript")

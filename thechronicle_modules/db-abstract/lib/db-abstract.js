@@ -22,6 +22,7 @@ db.search = require('./search.js');
 db.authors = require('./authors.js');
 db.database = require('./database.js');
 db.page = require('./page.js');
+db.article = require('./article.js');
 
 db.getDatabaseName = function() {
     return DATABASE;

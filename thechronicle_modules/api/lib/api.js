@@ -25,6 +25,7 @@ api.s3 = require('./s3');
 api.disqus = require('./disqus');
 api.site = require('./site');
 api.page = require('./page');
+api.article = require('./article');
 
 
 var MAX_URL_LENGTH = 50;

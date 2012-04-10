@@ -106,6 +106,7 @@ exports.init = function (app) {
         app.post('/k4export', api.site.checkAdmin, admin.k4exportData);
         app.post('/newsletter', api.site.checkAdmin, admin.newsletterData);
         app.get('/layout/group/:group', api.site.checkAdmin, admin.layout);
+        app.get('/duplicates', api.site.checkAdmin, admin.duplicates);
     });
     
     app.namespace('/admin/image', function () {

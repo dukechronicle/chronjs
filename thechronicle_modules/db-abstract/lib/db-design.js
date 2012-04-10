@@ -31,6 +31,15 @@ exports.doc = {
                     }
                 }
             },
+            duplicates:{
+                map:function (doc) {
+                    if (doc.type == "article") {
+                        for (var i in doc.urls) {
+                            emit([doc.created, doc.title], doc);
+                        }
+                    }
+                }
+            },
             // return all doc ids keyed by doc url if one exists
             duplicate_urls:{
                 map:function (doc) {

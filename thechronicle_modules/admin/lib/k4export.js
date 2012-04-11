@@ -189,7 +189,7 @@ function ArticleParser(articleCallback) {
     }
 
     function onSection(parser) {
-        parser.article.taxonomy = [ parser.textNode ];
+        parser.article.section = parser.textNode;
     }
 
     function onDate(parser) {

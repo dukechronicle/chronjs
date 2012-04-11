@@ -35,7 +35,8 @@ exports.doc = {
                 map:function (doc) {
                     if (doc.type == "article") {
                         for (var i in doc.urls) {
-                            emit([doc.created, doc.title], doc);
+                            // sort by created day and then by title                            
+                            emit([Math.floor(doc.created/86400), doc.title], doc);
                         }
                     }
                 }

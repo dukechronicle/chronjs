@@ -271,3 +271,30 @@ function search(eventObject)
 
     return false;
 }
+
+
+
+
+
+
+
+
+// Google Analytics Code for Mobile
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5900287-12']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+$('[data-role=page]').live('pageshow', function (event, ui) {
+try {
+hash = location.hash;
+if (hash && hash.length > 1) {
+_gaq.push(['_trackPageview', hash.substr(1)]);
+} else {
+_gaq.push(['_trackPageview']);
+}
+} catch(err) {
+}
+});

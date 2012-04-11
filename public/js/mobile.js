@@ -45,13 +45,13 @@ function generateListItem(articleJSON)
 
     var dateString = getDateString(article.created*1000);
 	// Article Title
-	hyperlink.append($('<h2 />').text(article.title));
+	hyperlink.append($('<h2 />').html(article.title));
 
     // Article Date
-    hyperlink.append($('<h3 />').text(dateString));
+    hyperlink.append($('<h3 />').html(dateString));
 
 	// Article Synopsis
-	hyperlink.append($('<p />').text(article.teaser));
+	hyperlink.append($('<p />').html(article.teaser));
 
 	return listItem.append(hyperlink);
 }

@@ -9,9 +9,11 @@ script(type='text/javascript')
         .sidebar
             .sort.container.clearfix
                 .vertical-container
-                    h2.vertical Author Bio
+                    h2.vertical Biography
                 .rounded
                     .content-container
+                        if (authorInfo.images && authorInfo.images.ThumbWide)
+                            img(src=authorInfo.images.ThumbWide.url)
                         !{authorInfo.renderedBio}
     .main
         .rounded.result

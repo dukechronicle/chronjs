@@ -10,8 +10,8 @@ exports.doc = {
                     if (doc.type == 'article' && doc.taxonomy) {
                         var path = [];
                         for (var i in doc.taxonomy) {
-                            path.push(doc.taxonomy[i]);
-                            emit([eval(uneval(path)), parseInt(doc.created)], doc);
+                            path.push(doc.taxonomy[i].toLowerCase());
+                            emit([eval(uneval(path)), parseInt(doc.created, 10)], doc);
                         }
                     }
                 }

@@ -67,10 +67,14 @@ define(['jquery', 'Article'], function($, Article) {
             if (e.stopPropagation) e.stopPropagation();
 
             var docId = e.dataTransfer.getData("Text");
-            var element = $("#" + docId).addClass("exists").clone();
+            var original = $("#" + docId);
+            var element = original.addClass("exists").clone();
 
             if (element.parent().data("groupname"))
                 removeStoryFromContainer(element, element.parent());
+
+            if (original.parent().attr('id') != "stories")
+                removeStoryFromContainer(original, original.parent());
 
             element.appendTo($(this));
             addStoryToContainer(element, $(this));
@@ -82,12 +86,16 @@ define(['jquery', 'Article'], function($, Article) {
             if (e.stopPropagation) e.stopPropagation();
 
             var docId = e.dataTransfer.getData("Text");
-            var element = $("#" + docId).addClass("exists").clone();
+            var original = $("#" + docId);
+            var element = original.addClass("exists").clone();
             element.addClass("exists");
 
             if (element.parent().data("groupname"))
                 removeStoryFromContainer(element, element.parent());
 
+            if (original.parent().attr('id') != "stories")
+                removeStoryFromContainer(original, original.parent());
+            
             element.insertBefore($(this));
             addStoryToContainer(element, $(this).parent());
 

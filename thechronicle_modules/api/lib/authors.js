@@ -31,6 +31,9 @@ authors.setInfo = function(doc, callback) {
     var fields = {
         name: doc.name,
         bio: doc.bio,
+        dukeAffiliation: doc.dukeAffiliation,
+        tagline: doc.tagline,
+        columnistDay: doc.columnistDay,
         type: "author-node"
     };
     fields.renderedBio = md(fields.bio);

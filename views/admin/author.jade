@@ -5,6 +5,15 @@ if (typeof doc !== 'undefined')
             label(for='name') Name:
             input#name(type='text', value=doc['name'], name="name")
         p
+            label(for='dukeAffiliation') Year / Duke Affil.:
+            input#dukeAffiliation(type='text', value=doc['dukeAffiliation'], name="dukeAffiliation")
+        p
+            label(for='tagline') Tagline:
+            input#tagline(type='text', value=doc['tagline'], name="tagline")
+        p
+            label(for='columnistDay') Columnist Day:
+            input#columnistDay(type='text', value=doc['columnistDay'], name="columnistDay")
+        p
             label(for='bio') Bio:
             textarea#bio(rows=20, cols=30, name="bio")
                 !{doc['bio']}

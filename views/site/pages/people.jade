@@ -5,16 +5,18 @@ script(type='text/javascript')
 
 #people
     h1 #{name}
+    p.dukeAffiliation #{authorInfo.dukeAffiliation}
+    p.tagline #{authorInfo.tagline}
     if (authorInfo)
         .sidebar
-            .sort.container.clearfix
+            .container.clearfix.block
                 .vertical-container
                     h2.vertical Biography
                 .rounded
                     .content-container
                         if (authorInfo.images && authorInfo.images.ThumbWide)
                             img(src=authorInfo.images.ThumbWide.url)
-                        !{authorInfo.renderedBio}
+                        .bio !{authorInfo.renderedBio}
     .main
         .rounded.result
             for doc in docs

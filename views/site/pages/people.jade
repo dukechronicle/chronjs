@@ -6,17 +6,23 @@ script(type='text/javascript')
 #people
     .authorInfo
         .container.clearfix
-            .vertical-container
-                h2.vertical Staff Profile
-            .rounded
-                .content-container.clearfix
-                    if (authorInfo.images && authorInfo.images.ThumbSquareM)
-                        img(src=authorInfo.images.ThumbSquareM.url)
-                    .author-inner-container
-                        h1 #{name}
-                        .dukeAffiliation #{authorInfo.dukeAffiliation}
-                        .tagline #{authorInfo.tagline}
-                        .bio !{authorInfo.renderedBio}
+            if (authorInfo)
+                .vertical-container
+                    h2.vertical Staff Profile
+                .rounded
+                    .content-container.clearfix
+                        if (authorInfo.images && authorInfo.images.ThumbSquareM)
+                            img(src=authorInfo.images.ThumbSquareM.url)
+                        .author-inner-container
+                            h1 #{name}
+                            .dukeAffiliation #{authorInfo.dukeAffiliation}
+                            .tagline #{authorInfo.tagline}
+                            .bio !{authorInfo.renderedBio}
+            else
+                .rounded
+                    .content-container.clearfix
+                        author-inner-container
+                            h1 #{name}
     .main
         .rounded.result
             for doc in docs

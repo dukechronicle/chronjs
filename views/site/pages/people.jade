@@ -4,18 +4,18 @@ script(type='text/javascript')
     });
 
 #people
-    h1 #{name}
-    p.dukeAffiliation #{authorInfo.dukeAffiliation}
-    p.tagline #{authorInfo.tagline}
-    if (authorInfo)
-        .sidebar
-            .container.clearfix.block
-                .vertical-container
-                    h2.vertical Biography
-                .rounded
-                    .content-container
-                        if (authorInfo.images && authorInfo.images.ThumbWide)
-                            img(src=authorInfo.images.ThumbWide.url)
+    .authorInfo
+        .container.clearfix
+            .vertical-container
+                h2.vertical Staff Profile
+            .rounded
+                .content-container.clearfix
+                    if (authorInfo.images && authorInfo.images.ThumbSquareM)
+                        img(src=authorInfo.images.ThumbSquareM.url)
+                    .author-inner-container
+                        h1 #{name}
+                        .dukeAffiliation #{authorInfo.dukeAffiliation}
+                        .tagline #{authorInfo.tagline}
                         .bio !{authorInfo.renderedBio}
     .main
         .rounded.result

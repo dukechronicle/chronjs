@@ -4,7 +4,10 @@ define(['jquery', 'Article'], function($, Article) {
 
     var articles = {};
     var updated = [];
-
+    var selectedArticle;
+    var upperAsciiStart = 65;
+    var lowerAsciiStart = 97;
+    var caseConversion = 32;
 
     layout = function() {
 
@@ -54,6 +57,16 @@ define(['jquery', 'Article'], function($, Article) {
 
         $("#layout").delegate(".container, .story", "dragleave", function() {
             $(this).removeClass("over");
+        });
+
+        // mark on single click
+        $("#container").delegate(".story", "click", function() {
+            var id = $(this).attr('id');
+            $('.story').removeClass("ui-state-highlight");
+            $(this).addClass("ui-state-highlight");
+            selectedArticle = $(this);
+            showHotkeys();
+
         });
 
         // remove on double click
@@ -106,6 +119,30 @@ define(['jquery', 'Article'], function($, Article) {
             e.dataTransfer.setData("Text", this.id);
         });
 
+        // If an article is selected, copt it to the 
+        // container that corresponds with the key pressed
+        $('body').bind('keypress', function(e) {
+            if (!selectedArticle) return;
+            var code = e.keyCode || e.which;
+            $(".hotkey").each(function(index) {
+                // If the keypress is lowercase, subtract
+                // 32 from the ascii value to convert it to uppercase
+                if (lowerAsciiStart+97 == code) code -= caseConversion;
+                if (upperAsciiStart+65 == code)
+                {   
+                    selectedArticle.removeClass("ui-state-highlight");
+                    $(".hotkey").fadeOut();
+                    var element = selectedArticle.addClass("exists").clone();
+                    element.addClass("exists");
+                    var container = $('div[keycode='+code+']')
+                    element.appendTo(container);
+                    addStoryToContainer(element, container);
+                    selectedArticle = null;
+
+                }
+            });
+        });
+
         function addStoryToContainer(story, container) {
             var groupname = container.data("groupname");
             var weight = container.children().index(story) + 1;
@@ -113,6 +150,7 @@ define(['jquery', 'Article'], function($, Article) {
             updated.push(story.attr('id'));
             if (story.next().length > 0)
                 addStoryToContainer(story.next(), container);
+
         }
 
         function removeStoryFromContainer(story, container) {
@@ -159,6 +197,20 @@ define(['jquery', 'Article'], function($, Article) {
             });
         }
 
+        function showHotkeys(){
+            $(".hotkey").each(function(index) {
+                var group = $(this).attr('group');
+                var mapping = $('div[data-groupname="'+group+'"]');
+                var pos = mapping.position();
+                var height = mapping.outerHeight();
+                var width = mapping.outerWidth();
+               $(this).css({
+                    position: "absolute",
+                    top: pos.top + height/2 - $(this).innerHeight()/2 + "px",
+                    left: (pos.left + width + 50) + "px"
+                }).fadeIn();
+            });
+        }
     };
 
 });

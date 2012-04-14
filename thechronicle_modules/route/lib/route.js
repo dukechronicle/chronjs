@@ -112,6 +112,7 @@ exports.init = function (app) {
         app.get('/system/memory', api.site.checkAdmin, admin.memory);
         app.get('/devtools/start', api.site.checkAdmin, function() {devtools.start();});
         app.get('/devtools/stop', api.site.checkAdmin, function() {devtools.stop();});
+        app.get('/devtools/memory', api.site.checkAdmin, function(req, res) {res.send(process.memoryUsage());});
     });
     
     app.namespace('/admin/image', function () {

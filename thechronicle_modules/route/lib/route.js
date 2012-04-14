@@ -3,6 +3,7 @@ var admin = require('./admin');
 var siteApi = require('./api');
 var log = require('../../log');
 var site = require('./site');
+var xhrproxy = require('./xhrproxy');
 
 var async = require('async');
 
@@ -122,7 +123,10 @@ exports.init = function (app) {
         app.post('/crop', api.site.checkAdmin, admin.image.crop);
         app.post('/add', api.site.checkAdmin, admin.addImageToArticle);
     });
-    
+
+    app.namespace('/xhrproxy', function() {
+        app.get('/openx/:path', xhrproxy.openx);
+    })
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);
 

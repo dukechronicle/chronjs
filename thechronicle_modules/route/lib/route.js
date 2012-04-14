@@ -107,6 +107,8 @@ exports.init = function (app) {
         app.post('/newsletter', api.site.checkAdmin, admin.newsletterData);
         app.get('/layout/group/:group', api.site.checkAdmin, admin.layout);
         app.get('/duplicates', api.site.checkAdmin, admin.duplicates);
+
+        app.get('/system/memory', api.site.checkAdmin, admin.memory);
     });
     
     app.namespace('/admin/image', function () {

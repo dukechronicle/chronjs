@@ -3,7 +3,7 @@ require.config({
 });
 
 require(['site/align','site/article','site/opinion','site/scrollLoad',
-         'site/slideshow/frontpage-slideshow','site/slideshow/slideshow'],
+         'site/slideshow/frontpage-slideshow','site/slideshow/slideshow', 'site/openx'],
         function (align) {
             loadAfterTypekit(align);
             $(function () {

@@ -33,8 +33,6 @@
 
         "solr":"0.2.x",
 
-        "expresso":"*",
-
         "nodemailer":"0.3.x",
         "jsdom":"0.2.x",
         "jquery":"1.6.x",

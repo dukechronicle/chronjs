@@ -46,7 +46,12 @@ search.init = function() {
     var solrCore = "/" + solrPathArray[2];
     var solrPath = "/" + solrPathArray[1];
 
-    client = solr.createClient(solrUrl.hostname, solrUrl.port, solrCore, solrPath);
+    client = solr.createClient({
+        host: solrUrl.hostname,
+        port: solrUrl.port,
+        core: solrCore,
+        path: solrPath
+    });
 };
 
 // check for unindexed articles, or articles with index versioning below the current version, and index them in solr.

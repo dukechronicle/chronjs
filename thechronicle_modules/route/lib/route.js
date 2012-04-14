@@ -6,7 +6,7 @@ var site = require('./site');
 var xhrproxy = require('./xhrproxy');
 
 var async = require('async');
-
+var devtools = require('../../../custom_modules/webkit-devtools-agent');
 
 // assigns the functionality needed before different modules are ready to be
 // initilized (before config settings have been set)
@@ -110,6 +110,8 @@ exports.init = function (app) {
         app.get('/duplicates', api.site.checkAdmin, admin.duplicates);
 
         app.get('/system/memory', api.site.checkAdmin, admin.memory);
+        app.get('/devtools/start', api.site.checkAdmin, function() {devtools.start();});
+        app.get('/devtools/stop', api.site.checkAdmin, function() {devtools.stop();});
     });
     
     app.namespace('/admin/image', function () {

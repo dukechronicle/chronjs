@@ -1,3 +1,4 @@
+var devtools = require('./custom_modules/webkit-devtools-agent');
 /* require npm nodejs modules */
 var async = require('async');
 var express = require('express');

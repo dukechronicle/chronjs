@@ -17,7 +17,7 @@ admin.duplicates = function (req, res, next) {
     api.article.getDuplicates(50, function(err, duplicateDocs) {
         if (err) next(err);
         else {
-            res.render('admin/article', {
+            res.render('admin/article/duplicates', {
                 layout: 'admin/layout',
                 locals:{
                     docs: duplicateDocs,

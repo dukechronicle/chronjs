@@ -3,7 +3,7 @@ var agents = require('./lib');
 var wss;
 
 var port = process.env.DEBUG_PORT || 1337;
-var host = process.env.DEBUG_HOST || '127.0.0.1';
+var host = process.env.DEBUG_HOST || '0.0.0.0';
 
 exports.start = function() {
     wss = new WebSocketServer({port: port, host: host});

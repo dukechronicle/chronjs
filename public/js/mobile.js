@@ -45,13 +45,13 @@ function generateListItem(articleJSON)
 
     var dateString = getDateString(article.created*1000);
 	// Article Title
-	hyperlink.append($('<h2 />').text(article.title));
+	hyperlink.append($('<h2 />').html(article.title));
 
     // Article Date
-    hyperlink.append($('<h3 />').text(dateString));
+    hyperlink.append($('<h3 />').html(dateString));
 
 	// Article Synopsis
-	hyperlink.append($('<p />').text(article.teaser));
+	hyperlink.append($('<p />').html(article.teaser));
 
 	return listItem.append(hyperlink);
 }
@@ -238,5 +238,63 @@ function beginMobile()
           {
              getArticle(splitString[3]);
           }
+
+          $("#searchBox").submit(search);
       });
 }
+
+function search(eventObject)
+{
+    eventObject.preventDefault();
+
+    var rawQuery = $("#searchInput").val();
+    var query = rawQuery.replace(/\s+/g , "-");
+
+    if(query.length > 0) {
+        $.ajax({
+            url: "/api/search/" + query,
+            dataType: "jsonp",
+            cache: false,
+            success: function(data) {
+                if(!data) {
+                    $.mobile.changePage('#error', 'slide');
+                    return;
+                }
+                
+                updateArticleList(data.docs, $(this), "Search Results for '" + rawQuery + "'");
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                handleAJAXError(jqXHR);
+            }  
+        });
+    }
+
+    return false;
+}
+
+
+
+
+
+
+
+
+// Google Analytics Code for Mobile
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-5900287-12']);
+(function() {
+var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+})();
+$('[data-role=page]').live('pageshow', function (event, ui) {
+try {
+hash = location.hash;
+if (hash && hash.length > 1) {
+_gaq.push(['_trackPageview', hash.substr(1)]);
+} else {
+_gaq.push(['_trackPageview']);
+}
+} catch(err) {
+}
+});

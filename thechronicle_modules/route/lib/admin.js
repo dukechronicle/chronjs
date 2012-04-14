@@ -186,3 +186,12 @@ admin.layout = function (req, res, next) {
         }
     });
 };
+
+admin.memory = function (req, res, next) {
+    var megabyte = 1048576;
+    var usage = process.memoryUsage();
+    res.send("rss: " + Math.round(usage.rss/megabyte) + " MB<br />" +
+        "heapTotal: " + Math.round(usage.heapTotal/megabyte) + " MB<br />" +
+        "heapUsed: " + Math.round(usage.heapUsed/megabyte) + " MB<br />"
+    );
+}

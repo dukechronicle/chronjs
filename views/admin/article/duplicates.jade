@@ -1,4 +1,9 @@
-div.alert.alert-info Below shows all articles that have 1 or more duplicates within the latest 50 articles. Please remove all versions of the duplicate article but the one that should go on the site.
+br
+div.alert-message.block-message.info
+    strong Heads Up!
+    span &nbsp; Below shows all articles that have one or more duplicates within the latest 50 articles.
+    br
+    span Please remove all versions of the duplicate article but the one that should go on the site.
 br
 
 table.article-index(border=1)
@@ -8,7 +13,7 @@ table.article-index(border=1)
                 a(href='/article/' + doc.urls[doc.urls.length - 1]) #{doc.title}
             td
                 if(doc.groups && doc.groups.length > 0)
-                    span.label.label-important This article is in the layout!
+                    span.alert-message.block-message.error This article is in the layout!
             td
                 a(href='/article/' + doc.urls[doc.urls.length - 1] + '/edit') Edit
             td

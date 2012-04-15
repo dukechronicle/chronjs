@@ -56,7 +56,7 @@ db.connect = function (host, database) {
 };
 
 db.init = function(callback) {
-	DATABASE = config.get("COUCHDB_DATABASE");
+    DATABASE = config.get("COUCHDB_DATABASE");
     DB_HOST = url.parse(config.get("COUCHDB_URL")).hostname;
     DB_PORT = url.parse(config.get("COUCHDB_URL")).port;
 

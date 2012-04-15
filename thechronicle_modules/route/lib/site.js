@@ -101,9 +101,9 @@ site.section = function (req, res, next) {
     api.site.getSectionContent(sectionArray, function (err, section, docs, children, parents, popular) {
         if (err) next();
         else {
-	    res.render('site/pages/section', {
+        res.render('site/pages/section', {
                 layout: 'site/layout',
-	        locals: {
+            locals: {
                     pageTitle: section,
                     docs:docs,
                     subsections:children,
@@ -111,8 +111,8 @@ site.section = function (req, res, next) {
                     section: sectionArray[0],
                     popular: popular,
                     taxonomyPath: sectionArray.join('/')
-	        }
-	    });
+            }
+        });
         }
     });
 };
@@ -138,7 +138,7 @@ site.search = function (req, res, next) {
 site.staff = function (req, res) {
     var name = req.params.query.replace(/-/g, ' ');
     api.site.getAuthorContent(name, function (err, docs) {
-	res.render('site/pages/people', {
+    res.render('site/pages/people', {
             layout: 'site/layout',
             locals: {
                 pageTitle: util.capitalizeWords(name),
@@ -215,9 +215,9 @@ site.loginData = function (req, res) {
     var body = req.body;
     api.accounts.login(req, body.username, body.password, function (err) {
         if (err)
-	    api.site.askForLogin(res, body.afterLogin, body.username, err);
+        api.site.askForLogin(res, body.afterLogin, body.username, err);
         else
-	    res.redirect(req.body.afterLogin);
+        res.redirect(req.body.afterLogin);
     });
 };
 
@@ -239,17 +239,17 @@ site.configData = function (req, res) {
     if (api.accounts.isAdmin(req))
         config.setUp(req.body, function (err) {
             if (err)
-		        api.site.renderConfigPage(req, res, err);
-	        else {
+                api.site.renderConfigPage(req, res, err);
+            else {
                 log.notice("Config updated to use revision " + config.getConfigRevision());
                 config.runAfterConfigChangeFunction(function (err) {
-		            if (err) log.error(err);
+                    if (err) log.error(err);
                     res.redirect('/');
                 });
             }   
         });
     else
-	    api.site.askForLogin(res, '/config');
+        api.site.askForLogin(res, '/config');
 };
 
 site.newsletterData = function (req, res) {
@@ -320,7 +320,7 @@ site.staticPage = function (req, res, next) {
 site.pageNotFound = function(req, res) {
     res.render('site/pages/404', {
         layout: 'site/layout',
-	status: 404,
+    status: 404,
         url: req.url
     });
 };

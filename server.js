@@ -28,7 +28,7 @@ var viewOptions = {
 log.init(function (err) {
     if (err) console.err("Logger couldn't be initialized: " + err);
     config.init(runSite, function(err) {
-	    if (err) log.crit(err);
+        if (err) log.crit(err);
 
         var sessionInfo = {
             secret: SECRET,
@@ -50,16 +50,16 @@ log.init(function (err) {
             configureApp(sessionInfo, PORT);
             route.preinit(app);
 
-	        if (!config.isSetUp()) {
-	            app.get('/', function(req, res, next) {
-		            if (!config.isSetUp()) res.redirect('/config');
-		            else next();
-	            });
+            if (!config.isSetUp()) {
+                app.get('/', function(req, res, next) {
+                    if (!config.isSetUp()) res.redirect('/config');
+                    else next();
+                });
             }
-	        else {
-	            runSite(function (err) {
-		            if (err) log.error(err);
-	            });
+            else {
+                runSite(function (err) {
+                    if (err) log.error(err);
+                });
             }
         });
     });
@@ -126,10 +126,10 @@ function runSite(callback) {
             log.error(err);
         }
         else {
-	    if (process.env.NODE_ENV === 'production') {
+        if (process.env.NODE_ENV === 'production') {
                 sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
-		    if (err) log.error("Couldn't build news sitemap: " + err);
-	        });
+            if (err) log.error("Couldn't build news sitemap: " + err);
+            });
 
                 builder.buildJavascript(function(err, paths) {
                     if (err) log.warning('Failed to build Javascipt: ' + err);

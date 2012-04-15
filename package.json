@@ -43,10 +43,10 @@
         "htmlparser":"1.7.x",
 
         "zipfile":"0.3.x",
-    	"sax":"0.x",
+        "sax":"0.x",
         "mailchimp":"0.x",
-	    "winston":"0.x",
-	    "xmlbuilder":"0.x",
+        "winston":"0.x",
+        "xmlbuilder":"0.x",
         "JSV":"4.x",
         "requirejs":"1.x",
         "gzip":"0.x",

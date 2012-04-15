@@ -84,8 +84,8 @@ function ArticleParser(articleCallback) {
      *     article object passed as arguments
      */
     this.parseFile = function(zipFile, name, callback) {
-    	var extension = path.extname(name);
-	    if (extension == '.xml') {
+        var extension = path.extname(name);
+        if (extension == '.xml') {
             zipFile.readFile(name, function(err, data) {
                 if (err) {
                     log.warning("Can't open file: " + err);
@@ -146,7 +146,7 @@ function ArticleParser(articleCallback) {
         }
 
         if (article.section == "Editorial")
-	    article.section = "Opinion";
+        article.section = "Opinion";
         if (article.taxonomy) {
             api.taxonomy.getTaxonomySubtree(article.taxonomy, function (err) {
                 if (err && article.section)
@@ -242,7 +242,7 @@ function ArticleParser(articleCallback) {
  */
 function runExporter(zipPath, callback) {
     var parser = new ArticleParser(function (article, callback) {
-	api.addDoc(article, function (err, url, id) {
+    api.addDoc(article, function (err, url, id) {
             if (err) {
                 log.warning("Error adding article: " + err);
                 callback(article.title);

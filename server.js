@@ -8,7 +8,7 @@ var sprintf = require('sprintf').sprintf;
 
 /* require internal modules */
 var api = require('./thechronicle_modules/api');
-var builder = require('./build-resources');
+var builder = require('./build-assets');
 var config = require('./thechronicle_modules/config');
 var log = require('./thechronicle_modules/log');
 var redisClient = require('./thechronicle_modules/redisclient');
@@ -47,20 +47,26 @@ log.init(function (err) {
                 });
             }
 
-            configureApp(sessionInfo, PORT);
-            route.preinit(app);
+            builder.buildAssets(function(err, paths) {
+                if (err) log.warning('Failed to build assets: ' + err);
+                else log.notice('Built assets');
 
-            if (!config.isSetUp()) {
-                app.get('/', function(req, res, next) {
-                    if (!config.isSetUp()) res.redirect('/config');
-                    else next();
-                });
-            }
-            else {
-                runSite(function (err) {
-                    if (err) log.error(err);
-                });
-            }
+                viewOptions.paths = paths;
+                configureApp(sessionInfo, PORT);
+                route.preinit(app);
+
+                if (!config.isSetUp()) {
+                    app.get('/', function(req, res, next) {
+                        if (!config.isSetUp()) res.redirect('/config');
+                        else next();
+                    });
+                }
+                else {
+                    runSite(function (err) {
+                        if (err) log.error(err);
+                    });
+                }
+            });
         });
     });
 });
@@ -132,18 +138,10 @@ function runSite(callback) {
                 });
             }
             
-            builder.buildAssets(function(err, paths) {
-                if (err) log.warning('Failed to build assets: ' + err);
-                else {
-                    log.notice('Built assets');
-                    setViewOption('paths', paths);
-
-                    redisClient.init(true, function(err) {
-                        route.init(app);
-                        log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));
-                        callback();
-                    });
-                }
+            redisClient.init(true, function(err) {
+                route.init(app);
+                log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));
+                callback();
             });
         }
     });

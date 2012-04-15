@@ -73,7 +73,6 @@ site.renderConfigPage = function(req, res, err) {
     }
 
     res.render('config', {
-        layout: 'config/layout',
         locals : {
             configParams : config.getParameters(),
             profileName : config.getProfileNameKey(),

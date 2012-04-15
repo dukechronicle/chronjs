@@ -7,9 +7,8 @@ window.fbAsyncInit = function() {
         xfbml      : true  // parse XFBML
     });
     // subscribe to like button
-    FB.Event.subscribe('edge.create', function(targetUrl) {
-        alert("test");
-        _gaq.push(['_trackSocial', 'facebook', 'like', targetUrl]);
+    FB.Event.subscribe('edge.create', function(url) {
+        _gaq.push(['_trackSocial', 'facebook', 'like', url]);
     });
 };
 

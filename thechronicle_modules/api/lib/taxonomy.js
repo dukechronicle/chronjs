@@ -11,13 +11,19 @@ var RESULTS_PER_PAGE = 25;
 
 // get all document under given taxonomy path ex. ["News", "University"]
 // startDoc specifies the document within the taxonomy to start returning data at, for pagination.
-taxonomy.docs = function (taxonomyPath, limit, startDoc, callback) {
-    limit = limit || RESULTS_PER_PAGE;
+taxonomy.docs = function (taxonomyPath, limit, query, callback) {
+    query = query || {};
+    query.limit = limit || RESULTS_PER_PAGE;
+
     taxonomyPath = _.map(taxonomyPath, function (s) { return s.toLowerCase() });
 
-    db.taxonomy.docs(taxonomyPath, limit, startDoc, function (err, docs) {
+    db.taxonomy.docs(taxonomyPath, query, function (err, docs) {
         if (err) callback(err);
-        else callback(null, _.map(docs, function(doc){return doc.value}));
+        else {
+            var docValues = _.map(docs, function (doc) { return doc.value });
+            var lastKey = _.last(docs) ? _.last(docs).key : undefined;
+            callback(null, docValues, lastKey);
+        }
     });
 };
 

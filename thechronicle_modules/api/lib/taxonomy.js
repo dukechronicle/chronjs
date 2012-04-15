@@ -22,9 +22,9 @@ taxonomy.docs = function (taxonomyPath, limit, query, callback) {
         else {
             // hack to return view keys with returned docs
             callback(null, _.map(docs, function (doc) {
-                doc.value['query-key'] = doc.key;
+                doc.value.query_key = doc.key;
                 return doc.value;
-            });
+            }));
         }
     });
 };

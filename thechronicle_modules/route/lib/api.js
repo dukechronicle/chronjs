@@ -39,7 +39,7 @@ siteApi.listSection = function (req, res, next) {
         else {
             var result = _.map(docs, function (doc) {
                 return _.pick(doc, 'title', 'teaser', 'urls', '_id', 'created',
-                              'authors');
+                              'authors', 'query_key');
             });
             res.json(result);
         }

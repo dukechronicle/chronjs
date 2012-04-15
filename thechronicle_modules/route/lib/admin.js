@@ -157,16 +157,36 @@ admin.addPoll = function(req, res, next) {
     });
 };
 
+
 admin.managePoll = function(req, res, next) {
-	api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
-        res.render('admin/poll', {
-            layout: 'admin/layout',
-            locals:{
-                docs:null
-            }
-        });
-    });
+	adminApi.getPolls(function(err, docs) {
+		api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
+			res.render('admin/poll', {
+				layout : 'admin/layout',
+				locals : {
+					docs : docs
+				}
+			});
+		});
+	});
 };
+
+admin.editPoll = function(req, res, next) {
+	adminApi.getPoll(req.params.id, function(err, doc) {
+		console.log(doc);
+		api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
+			res.render('admin/poll/edit', {
+				layout : 'admin/layout',
+				locals : {
+					taxonomy : taxonomy,
+					doc : doc
+				}
+			});
+		});
+	});
+};
+
+
 
 admin.addPollData = function (req, res, next) {
     adminApi.addPoll(req.body.doc, function (err) {

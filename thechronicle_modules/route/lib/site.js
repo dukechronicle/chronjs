@@ -180,7 +180,9 @@ site.article = function (req, res, next) {
             };
 
             if(doc.images.ThumbSquareM) locals.pageImage = doc.images.ThumbSquareM.url;
-                
+
+            locals.article = true;
+
             res.render('site/pages/article', {
                 layout: 'site/layout',
                 locals: locals

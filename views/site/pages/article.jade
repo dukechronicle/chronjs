@@ -63,15 +63,7 @@
                 .vertical-container
                     h2.vertical Facebook Recommended
                 .rounded(style="width: 300px; height: 300px; background: white")
-                    .fb-recommendations(data-site="dukechronicle.com", data-border-color="white", data-width="300", data-height="300", data-font="lucida grande", data-header="true", max-age="7")
-            script
-                (function(d, s, id) {
-                    var js, fjs = d.getElementsByTagName(s)[0];
-                    if (d.getElementById(id)) {return;}
-                    js = d.createElement(s); js.id = id;
-                    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-                    fjs.parentNode.insertBefore(js, fjs);
-                }(document, 'script', 'facebook-jssdk'));
+                    fb:recommendations(site="www.dukechronicle.com", border-color="white", width="300", height="300", font="lucida grande", header="false", max-age="7")
 
             - if (model.popular && model.popular.length > 0)
                 .numbered-articles.most-popular!=partial('../container/numbered-articles', {title: "Popular", stories: model.popular})

@@ -27,8 +27,22 @@ html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
         script var CHRONICLE = { onload: [] }
 
         !=partial("code/google-analytics")
+
+        - if (typeof article !== "undefined")
+            // opengraph
+            meta(property="og:title", content=doc.title)
+            meta(property="og:type", content="article")
+            meta(property="og:url", content=doc.fullUrl)
+            if (typeof pageImage != 'undefined')
+                meta(property="og:image", content=pageImage)
+            else
+                meta(property="og:image", content=static_cdn + "/images/favicon.png")
+
+            meta(property="og:site_name", content="Duke Chronicle")
+            meta(property="fb:app_id", content="335954613131615")
     body
-        #fb-root // required for facebook javascript sdk
+        // required for facebook javascript sdk
+        #fb-root
         #shell
             header
                 include /layout/header

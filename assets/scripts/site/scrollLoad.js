@@ -91,21 +91,27 @@ define(["jquery", "libs/jquery-ui"], function($) {
         delete lastDoc.renderedBody;
         delete lastDoc.teaser;
 
-        var params = { 
+        var params = {
             startkey: lastDoc.query_key,
             startid: lastDoc._id
         };
 
-        $.get("/api/"+scrollLoadUrl, params, function(returnedData) {
-            if(returnedData.length < 2) {
-                noPagesLeftToLoad = true;
-                loadImage.fadeOut();
-            }
-            else {
-                lastDoc = returnedData[returnedData.length-1];                
+        $.ajax({
+            url: "/api/"+scrollLoadUrl,
+            dataType: 'json',
+            data: params,
+            cache: false,
+            success: function(returnedData) {
+                if(returnedData.length < 2) {
+                    noPagesLeftToLoad = true;
+                    loadImage.fadeOut();
+                }
+                else {
+                    lastDoc = returnedData[returnedData.length-1];                
 
-                // add the docs to the page, correctly formatted, ignoring the duplicate doc
-                addArticle(returnedData,1);
+                    // add the docs to the page, correctly formatted, ignoring the duplicate doc
+                    addArticle(returnedData,1);
+                }
             }
         });
     }

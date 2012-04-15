@@ -1,7 +1,7 @@
 var db = require('./db-abstract');
 var async = require('async');
 var _ = require('underscore');
-
+var log = require('../../log');
 
 var taxonomy = exports;
 

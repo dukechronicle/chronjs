@@ -1,5 +1,5 @@
 !!! 5
-html(lang="en")
+html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
     head
         script(src="/js/mobile-redirect.js?v=3")
 
@@ -28,6 +28,7 @@ html(lang="en")
 
         !=partial("code/google-analytics")
     body
+        #fb-root // required for facebook javascript sdk
         #shell
             header
                 include /layout/header
@@ -35,12 +36,11 @@ html(lang="en")
             footer
                 include /layout/footer
         #scripts
-            // border-radius support in ie
-            script(type='text/javascript') var curvyCornersVerbose = false
-            script(src="/js/curvycorners.js")
-
             //if lt IE 9
                 script(src="//html5shim.googlecode.com/svn/trunk/html5.js")
+                // border-radius support in ie
+                script(type='text/javascript') var curvyCornersVerbose = false
+                script(src="/js/curvycorners.js")
 
             - if (isProduction)
                 script(src=js_paths.site, type="text/javascript")

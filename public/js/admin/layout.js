@@ -127,8 +127,8 @@ define(['jquery', 'Article'], function($, Article) {
             $(".hotkey").each(function(index) {
                 // If the keypress is lowercase, subtract
                 // 32 from the ascii value to convert it to uppercase
-                if (lowerAsciiStart+97 == code) code -= caseConversion;
-                if (upperAsciiStart+65 == code)
+                if (lowerAsciiStart+index == code) code -= caseConversion;
+                if (upperAsciiStart+index == code)
                 {   
                     selectedArticle.removeClass("ui-state-highlight");
                     $(".hotkey").fadeOut();

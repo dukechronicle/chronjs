@@ -126,19 +126,19 @@ function runSite(callback) {
             log.error(err);
         }
         else {
-        if (process.env.NODE_ENV === 'production') {
+            if (process.env.NODE_ENV === 'production') {
                 sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
-            if (err) log.error("Couldn't build news sitemap: " + err);
-            });
-
-                builder.buildJavascript(function(err, paths) {
-                    if (err) log.warning('Failed to build Javascipt: ' + err);
-                    else {
-                        log.notice('Built site Javascript');
-                        setViewOption('js_paths', paths);
-                    }
+                    if (err) log.error("Couldn't build news sitemap: " + err);
                 });
             }
+            
+            builder.buildJavascript(function(err, paths) {
+                if (err) log.warning('Failed to build Javascipt: ' + err);
+                else {
+                    log.notice('Built site Javascript');
+                    setViewOption('js_paths', paths);
+                }
+            });
             
             builder.buildCSS(function (err, paths) {
                 if (err) log.warning('Failed to build stylesheets: ' + err);

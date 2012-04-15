@@ -91,7 +91,12 @@ define(["jquery", "libs/jquery-ui"], function($) {
         delete lastDoc.renderedBody;
         delete lastDoc.teaser;
 
-        $.get("/api/"+scrollLoadUrl, {startdoc: JSON.stringify(lastDoc)}, function(returnedData) {
+        var params = { 
+            startkey: lastDoc.query_key,
+            startid: lastDoc._id
+        };
+
+        $.get("/api/"+scrollLoadUrl, params, function(returnedData) {
             if(returnedData.length < 2) {
                 noPagesLeftToLoad = true;
                 loadImage.fadeOut();

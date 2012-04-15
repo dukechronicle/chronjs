@@ -14,7 +14,9 @@ poll.add = function(fields, callback) {
         type: 'poll',
         answers: _.reduce(fields.answers,
                           function (memo, answer) {
+                          	if (answer) {
                               memo[answer] = 0;
+                             }
                               return memo;
                           }, {})
     };
@@ -24,7 +26,9 @@ poll.add = function(fields, callback) {
 poll.edit = function(fields, callback) {
 	var answersWithCounts = {};
 	for (i=0; i<fields.answers.length;i++) {
-		answersWithCounts[fields.answers[i]] = parseInt(fields.count[i]);
+		if (fields.answers[i]) {
+		    answersWithCounts[fields.answers[i]] = parseInt(fields.count[i]);
+		}
 	}
 	var poll = {
         title: fields.title,

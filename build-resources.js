@@ -15,9 +15,12 @@ var STYLE_DIR = __dirname + '/views/styles/';
 var DIST_DIR = __dirname + '/public/dist/';
 var JS_SOURCES = [ 'site', 'admin' ];
 
-exports.buildJavascript = buildJavascript;
-exports.buildCSS = buildCSS;
+exports.buildAssets = buildAssets;
 
+
+function buildAssets(callback) {
+    async.parallel({css: buildCSS, js: buildJavascript}, callback);
+}
 
 function buildCSS(callback) {
     var paths = {};

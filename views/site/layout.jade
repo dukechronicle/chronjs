@@ -42,7 +42,4 @@ html(lang="en")
             //if lt IE 9
                 script(src="//html5shim.googlecode.com/svn/trunk/html5.js")
 
-            - if (isProduction)
-                script(src=js_paths.site, type="text/javascript")
-            - else
-                script(src="/js/require-jquery.js", data-main="/js/site/main")
+            script(src=js_paths.site, type="text/javascript")

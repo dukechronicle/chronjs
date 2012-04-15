@@ -97,21 +97,26 @@ function buildJavascript(callback) {
 
 function buildJavascriptFile(src, callback) {
     var config = { 
-        baseUrl: 'public/js',
+        baseUrl: 'assets/scripts',
         name: src + '/main',
-        out: 'public/dist/' + src + '-js',
+        out: 'public/dist/' + src + '.js',
         paths: {
             jquery: 'require-jquery'
         }
     };
     requirejs.optimize(config, function (buildResponse) {
-        fs.readFile(config.out, 'utf8', function (err, data) {
-            if (err) callback(err);
-            else {
-                storeS3(data.toString(), "application/javascript", callback);
-                fs.unlink(config.out);
-            }
-        });
+        if (process.env.NODE_ENV == 'production') {
+            fs.readFile(config.out, 'utf8', function (err, data) {
+                if (err) callback(err);
+                else {
+                    storeS3(data.toString(),"application/javascript",callback);
+                    fs.unlink(config.out);
+                }
+            });
+        }
+        else {
+            callback(null, '/dist/' + src + '.js');
+        }
     });
 }
 

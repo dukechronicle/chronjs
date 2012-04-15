@@ -2,11 +2,15 @@ window.fbAsyncInit = function() {
     FB.init({
         appId      : '335954613131615', // App ID
         //channelUrl : '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel File
-        status     : true, // check login status
+        status     : false, // check login status
         cookie     : true, // enable cookies to allow the server to access the session
         xfbml      : true  // parse XFBML
     });
-// Additional initialization code here
+    // subscribe to like button
+    FB.Event.subscribe('edge.create', function(targetUrl) {
+        alert("test");
+        _gaq.push(['_trackSocial', 'facebook', 'like', targetUrl]);
+    });
 };
 
 // Load the SDK Asynchronously

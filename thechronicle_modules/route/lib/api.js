@@ -30,9 +30,9 @@ siteApi.listSection = function (req, res, next) {
     
     var query = {};
     if (req.query.startkey)
-        query.startkey = req.query.startkey;
+        query.endkey = req.query.startkey;
     if (req.query.startid)
-        query.start_docid = req.query.startid;
+        query.endkey_docid = req.query.startid;
 
     api.taxonomy.docs(sectionArray, 15, query, function (err, docs) {
         if (err) next(err);

@@ -146,6 +146,23 @@ admin.addPoll = function (doc, callback) {
     }
 };
 
+admin.editPoll = function (doc, callback) {
+	if (doc.taxonomy == '') {
+        callback('No section selected for poll');
+    }
+    else {
+        var fields = {
+        	id:doc.id,
+            title:doc.title,
+            taxonomy:JSON.parse(doc.taxonomy),
+            answers: doc.answers,
+            count: doc.count
+        };
+
+        api.poll.edit(fields, callback);
+    }
+}
+
 admin.getPolls = function (callback) {
 	api.poll.getByDate('', callback);
 }

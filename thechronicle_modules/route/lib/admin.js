@@ -173,7 +173,6 @@ admin.managePoll = function(req, res, next) {
 
 admin.editPoll = function(req, res, next) {
 	adminApi.getPoll(req.params.id, function(err, doc) {
-		console.log(doc);
 		api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
 			res.render('admin/poll/edit', {
 				layout : 'admin/layout',
@@ -191,7 +190,14 @@ admin.editPoll = function(req, res, next) {
 admin.addPollData = function (req, res, next) {
     adminApi.addPoll(req.body.doc, function (err) {
         if (err) next(err);
-        else res.redirect('/');
+        else res.redirect('/admin/poll/manage');
+    });
+};
+
+admin.editPollData = function (req, res, next) {
+    adminApi.editPoll(req.body.doc, function (err) {
+        if (err) next(err);
+        else res.redirect('/admin/poll/manage');
     });
 };
 

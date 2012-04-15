@@ -132,26 +132,18 @@ function runSite(callback) {
                 });
             }
             
-            builder.buildJavascript(function(err, paths) {
-                if (err) log.warning('Failed to build Javascipt: ' + err);
+            builder.buildAssets(function(err, paths) {
+                if (err) log.warning('Failed to build assets: ' + err);
                 else {
-                    log.notice('Built site Javascript');
-                    setViewOption('js_paths', paths);
+                    log.notice('Built assets');
+                    setViewOption('paths', paths);
+
+                    redisClient.init(true, function(err) {
+                        route.init(app);
+                        log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));
+                        callback();
+                    });
                 }
-            });
-            
-            builder.buildCSS(function (err, paths) {
-                if (err) log.warning('Failed to build stylesheets: ' + err);
-                else {
-                    log.notice('Built stylesheets');
-                    setViewOption('css_paths', paths);
-                }
-            });
-            
-            redisClient.init(true, function(err) {
-                route.init(app);
-                log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));
-                callback();
             });
         }
     });

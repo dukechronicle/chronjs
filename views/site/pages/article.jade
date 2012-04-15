@@ -44,7 +44,7 @@
                 .print
                     a(href=doc.url + '/print') Print
                 .facebook
-                    iframe(src='http://www.facebook.com/plugins/like.php?app_id=176268009080455&amp;href=' + encodeURIComponent(doc.fullUrl) + '&amp;send=false&amp;layout=button_count&amp;width=121&amp;show_faces=false&amp;action=recommend&amp;colorscheme=light&amp;font=lucida+grande&amp;height=20', scrolling='no', frameborder='0', style='border:none; overflow:hidden; width:121px; height:20px;', allowTransparency='true')
+                    fb:like(href=doc.fullUrl, send="false", layout="button_count", width="130", show_faces="false", action="recommend", font="lucida grande", style="margin-bottom: -5px")
                 .twitter
                     a.twitter-share-button(href="http://twitter.com/share?via=dukechronicle" )
                         | Tweet

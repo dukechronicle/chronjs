@@ -5,19 +5,12 @@ var _ = require('underscore');
 
 var taxonomy = exports;
 
-taxonomy.docs = function(taxonomyTerm, limit, startDoc, callback) {
-    var query = {
+taxonomy.docs = function(taxonomyTerm, query, callback) {
+    query = _.defaults(query, {
         descending: true,
         startkey: [taxonomyTerm, {}],
         endkey: [taxonomyTerm],
-    };
-    
-    if (limit) query.limit = limit;
-    
-    if(startDoc) {       
-        query.startkey_docid = startDoc._id;
-        query.startkey = [taxonomyTerm, startDoc.created]
-    }
+    });
 
     db.view('articles/taxonomy', query, callback);
 };

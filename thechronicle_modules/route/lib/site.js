@@ -20,7 +20,8 @@ site.frontpage = function (req, res) {
         res.render('site/pages/frontpage', {
             layout: 'site/layout',
             locals: {
-                model:model
+                model:model,
+                frontpage: true
             }
         });
     });

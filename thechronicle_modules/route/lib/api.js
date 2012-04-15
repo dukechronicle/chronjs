@@ -11,7 +11,7 @@ var _ = require('underscore');
 */
 siteApi.listAll = function (req, res, next) {
     api.docsByDate(null, null, function(err, docs) {
-	    if (err) next(err);
+        if (err) next(err);
         else {
             var result = _.map(docs, function (doc) {
                 return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id, "created":doc.created};
@@ -58,7 +58,7 @@ siteApi.articleByUrl = function (req, res, next) {
                  "_id":doc._id,
                  "images": doc.images
             };
-            res.json(result);	  	
+            res.json(result);
         }
     });
 };

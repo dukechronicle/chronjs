@@ -10,9 +10,9 @@ exports.init = function (callback) {
 
     logger.setLevels(winston.config.syslog.levels);
     logger.add(CustomConsole, {
-	level: 'debug',
-	msgStringify: function (msg) { return util.inspect(msg, false, null); },
-	handleExceptions: true
+    level: 'debug',
+    msgStringify: function (msg) { return util.inspect(msg, false, null); },
+    handleExceptions: true
     });
 
     if (process.env.NODE_ENV === 'production' && process.env.CHRONICLE_LOGGLY_SUBDOMAIN && process.env.CHRONICLE_LOGGLY_TOKEN) {

@@ -9,8 +9,8 @@ define(['jquery', 'Article', 'libs/jquery.dd'], function ($, Article) {
             var $row = $(this).parent().parent();
             var $button = $(this);
             editDocument($row, function (err) {
-	        if (err) alert(err);
-		$button.removeAttr('disabled');
+            if (err) alert(err);
+        $button.removeAttr('disabled');
             });
         });
 

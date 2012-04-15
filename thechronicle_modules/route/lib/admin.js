@@ -95,7 +95,7 @@ admin.k4exportData = function (req, res, next) {
                 succeeded: results.k4.success,
                 taxonomy: results.taxonomy,
                 imageData: results.images
-	    }
+        }
         });
     });
 };

@@ -16,7 +16,7 @@ exports.init = function () {
                  if(updated) {
                     log.notice("Config updated to use revision " + config.getConfigRevision());
                     config.runAfterConfigChangeFunction(function (err) {
-		                if (err) log.error(err);
+                        if (err) log.error(err);
                     });
                 }
             });            

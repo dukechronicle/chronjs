@@ -157,89 +157,89 @@ var configParams = [
         name: 'TAXONOMY',
         description: 'Taxonomy tree for the site, used for categorizing articles and navigation',
         defaultValue: [
-	    {
-		"News": [
-		    {
-			"University": [
-			    {
-				"Academics": []
-			    },
-			    {
-				"Board of Trustees": []
-			    },
-			    {
-				"Campus Crime": []
-			    },
-			    {
-				"Dining": []
-			    },
-			    {
-				"DSG": []
-			    },
-			    {
-				"Graduate and Professional Schools": []
-			    },
-			    {
-				"Residence Life": []
-			    },
-			    {
-				"Student Life": []
-			    }
-			]
-		    },
-		    {
-			"Local & National": [
-			    {
-				"City of Durham": []
-			    },
-			    {
-				"Durham Crime": []
-			    },
-			    {
-				"Higher Education": []
-			    },
-			    {
-				"National News and Politics": []
-			    },
-			    {
-				"North Carolina": []
-			    }
-			]
-		    },
-		    {
-			"Health & Science": [
-			    {
-				"DUHS": []
-			    },
-			    {
-				"Environment & Sustainability": []
-			    },
-			    {
-				"Pratt": []
-			    },
-			    {
-				"Research": []
-			    },
-			    {
-				"School of Medicine": []
-			    },
-			    {
-				"Student Health": []
-			    }
-			]
-		    }
-		]
-	    },
-	    {
-		"Sports": [
+        {
+        "News": [
+            {
+            "University": [
+                {
+                "Academics": []
+                },
+                {
+                "Board of Trustees": []
+                },
+                {
+                "Campus Crime": []
+                },
+                {
+                "Dining": []
+                },
+                {
+                "DSG": []
+                },
+                {
+                "Graduate and Professional Schools": []
+                },
+                {
+                "Residence Life": []
+                },
+                {
+                "Student Life": []
+                }
+            ]
+            },
+            {
+            "Local & National": [
+                {
+                "City of Durham": []
+                },
+                {
+                "Durham Crime": []
+                },
+                {
+                "Higher Education": []
+                },
+                {
+                "National News and Politics": []
+                },
+                {
+                "North Carolina": []
+                }
+            ]
+            },
+            {
+            "Health & Science": [
+                {
+                "DUHS": []
+                },
+                {
+                "Environment & Sustainability": []
+                },
+                {
+                "Pratt": []
+                },
+                {
+                "Research": []
+                },
+                {
+                "School of Medicine": []
+                },
+                {
+                "Student Health": []
+                }
+            ]
+            }
+        ]
+        },
+        {
+        "Sports": [
                     {
                         "Column": []
                     },
-		    {
-			"Baseball": []
-		    },
-		    {
-			"Basketball": [
+            {
+            "Baseball": []
+            },
+            {
+            "Basketball": [
                             {
                                 "Men": []
                             },
@@ -247,9 +247,9 @@ var configParams = [
                                 "Women": []
                             }
                         ]
-		    },
-		    {
-			"Cross Country": [
+            },
+            {
+            "Cross Country": [
                             {
                                 "Men": []
                             },
@@ -257,9 +257,9 @@ var configParams = [
                                 "Women": []
                             }
                         ]
-		    },
-		    {
-			"Fencing": [
+            },
+            {
+            "Fencing": [
                             {
                                 "Men": []
                             },
@@ -267,15 +267,15 @@ var configParams = [
                                 "Women": []
                             }
                         ]
-		    },
-		    {
-			"Field Hockey": []
-		    },
-		    {
-			"Football": []
-		    },
-		    {
-			"Golf": [
+            },
+            {
+            "Field Hockey": []
+            },
+            {
+            "Football": []
+            },
+            {
+            "Golf": [
                             {
                                 "Men": []
                             },
@@ -283,9 +283,9 @@ var configParams = [
                                 "Women": []
                             }
                         ]
-		    },
-		    {
-			"Lacrosse": [
+            },
+            {
+            "Lacrosse": [
                             {
                                 "Men": []
                             },
@@ -293,12 +293,12 @@ var configParams = [
                                 "Women": []
                             }
                         ]
-		    },
-		    {
-			"Rowing": []
-		    },
-		    {
-			"Soccer": [
+            },
+            {
+            "Rowing": []
+            },
+            {
+            "Soccer": [
                             {
                                 "Men": []
                             },
@@ -306,9 +306,9 @@ var configParams = [
                                 "Women": []
                             }
                         ]
-		    },
-		    {
-			"Swimming & Diving": [
+            },
+            {
+            "Swimming & Diving": [
                             {
                                 "Men": []
                             },
@@ -316,9 +316,9 @@ var configParams = [
                                 "Women": []
                             }
                         ]
-		    },
-		    {
-			"Tennis": [
+            },
+            {
+            "Tennis": [
                             {
                                 "Men": []
                             },
@@ -326,9 +326,9 @@ var configParams = [
                                 "Women": []
                             }
                         ]
-		    },
-		    {
-			"Track & Field": [
+            },
+            {
+            "Track & Field": [
                             {
                                 "Men": []
                             },
@@ -336,58 +336,58 @@ var configParams = [
                                 "Women": []
                             }
                         ]
-		    },
-		    {
-			"Volleyball": []
-		    },
-		    {
-			"Wrestling": []
-		    }
-		]
-	    },
-	    {
-		"Opinion": [
-		    {
-			"Letter to the Editor": []
-		    },
-		    {
-			"Editorial Board": []
-		    },
-		    {
-			"Column": []
-		    },
-		    {
-			"Guest Commentary": []
-		    },
-		    {
-			"Editor's Note": []
-		    }
-		]
-	    },
-	    {
-		"Recess": [
-		    {
-			"Page Two": []
-		    },
-		    {
-			"Arts": []
-		    },
-		    {
-			"Music": []
-		    },
-		    {
-			"Film": []
-		    },
-		    {
-			"Literature": []
-		    },
+            },
+            {
+            "Volleyball": []
+            },
+            {
+            "Wrestling": []
+            }
+        ]
+        },
+        {
+        "Opinion": [
+            {
+            "Letter to the Editor": []
+            },
+            {
+            "Editorial Board": []
+            },
+            {
+            "Column": []
+            },
+            {
+            "Guest Commentary": []
+            },
+            {
+            "Editor's Note": []
+            }
+        ]
+        },
+        {
+        "Recess": [
+            {
+            "Page Two": []
+            },
+            {
+            "Arts": []
+            },
+            {
+            "Music": []
+            },
+            {
+            "Film": []
+            },
+            {
+            "Literature": []
+            },
                     {
                         "Column": []
                     }
-		]
-	    },
-	    {
-		"Towerview": [
+        ]
+        },
+        {
+        "Towerview": [
                     {
                         "Savvy": []
                     },
@@ -407,7 +407,7 @@ var configParams = [
                         "Editor's Note": []
                     }
                 ]
-	    }
+        }
         ],
         schema: {
             type: "array",
@@ -424,94 +424,94 @@ var configParams = [
         name: 'LAYOUT_GROUPS',
         description: 'Groups used for layouts',
         defaultValue: {
-	        "Frontpage": {
-		        "namespace": [
-			        "Layouts",
-			        "Frontpage"
-		        ],
-		        "groups": [
-			        "Top Headline",
-			        "Breaking",
-			        "Slideshow",
-			        "Left Headlines",
-			        "Right Headlines",
-			        "Opinion",
-			        "News",
-			        "Sports",
-			        "Recess",
-			        "Towerview"
-		        ]
-	        },
-	        "News": {
-		        "namespace": [
-			        "Layouts",
-			        "News"
-		        ],
-		        "groups": [
-			        "Featured",
-			        "Right Headlines",
-			        "Headlines",
-			        "Stories"
-		        ]
-	        },
-	        "Sports": {
-		        "namespace": [
-			        "Layouts",
-			        "Sports"
-		        ],
-		        "groups": [
-			        "Slideshow",
-			        "Stories"
-		        ]
-	        },
-	        "Opinion": {
-		        "namespace": [
-			        "Layouts",
-			        "Opinion"
-		        ],
-		        "groups": [
-			        "Featured"
-		        ]
-	        },
-	        "Recess": {
-		        "namespace": [
-			        "Layouts",
-			        "Recess"
-		        ],
-		        "groups": [
-			        "Featured",
-			        "Music",
-			        "Film",
-			        "Art",
-			        "Stories"
-		        ]
-	        },
-	        "Towerview": {
-		        "namespace": [
-			        "Layouts",
-			        "Towerview"
-		        ],
-		        "groups": [
-			        "Featured",
-			        "Savvy",
-			        "Wisdom",
-			        "Editors Note",
-			        "Prefix"
-		        ]
-	        },
-	        "Newsletter": {
-		        "namespace": [
-			        "Layouts",
-			        "Newsletter"
-		        ],
-		        "groups": [
-			        "News",
-			        "Sports",
-			        "Opinion",
-			        "Recess",
-			        "Towerview"
-		        ]
-	        }
+            "Frontpage": {
+                "namespace": [
+                    "Layouts",
+                    "Frontpage"
+                ],
+                "groups": [
+                    "Top Headline",
+                    "Breaking",
+                    "Slideshow",
+                    "Left Headlines",
+                    "Right Headlines",
+                    "Opinion",
+                    "News",
+                    "Sports",
+                    "Recess",
+                    "Towerview"
+                ]
+            },
+            "News": {
+                "namespace": [
+                    "Layouts",
+                    "News"
+                ],
+                "groups": [
+                    "Featured",
+                    "Right Headlines",
+                    "Headlines",
+                    "Stories"
+                ]
+            },
+            "Sports": {
+                "namespace": [
+                    "Layouts",
+                    "Sports"
+                ],
+                "groups": [
+                    "Slideshow",
+                    "Stories"
+                ]
+            },
+            "Opinion": {
+                "namespace": [
+                    "Layouts",
+                    "Opinion"
+                ],
+                "groups": [
+                    "Featured"
+                ]
+            },
+            "Recess": {
+                "namespace": [
+                    "Layouts",
+                    "Recess"
+                ],
+                "groups": [
+                    "Featured",
+                    "Music",
+                    "Film",
+                    "Art",
+                    "Stories"
+                ]
+            },
+            "Towerview": {
+                "namespace": [
+                    "Layouts",
+                    "Towerview"
+                ],
+                "groups": [
+                    "Featured",
+                    "Savvy",
+                    "Wisdom",
+                    "Editors Note",
+                    "Prefix"
+                ]
+            },
+            "Newsletter": {
+                "namespace": [
+                    "Layouts",
+                    "Newsletter"
+                ],
+                "groups": [
+                    "News",
+                    "Sports",
+                    "Opinion",
+                    "Recess",
+                    "Towerview"
+                ]
+            }
         },
         schema: {
             type: "object",

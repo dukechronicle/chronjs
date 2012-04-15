@@ -22,25 +22,25 @@ define(['jquery', 'Article'], function($, Article) {
                 button.attr('disabled', 'disabled');
                 updated = _.uniq(updated);
                 saveAll(function (err) {
-	            if (err) alert(err);
-		    button.removeAttr('disabled');
+                if (err) alert(err);
+            button.removeAttr('disabled');
                 });
             }
         });
 
-	$("#taxonomy").change(function() {
-	    var section = $(this).attr('value');
-	    var url = $(location).attr('href').split("?")[0];
-	    if (section != 'All')
+    $("#taxonomy").change(function() {
+        var section = $(this).attr('value');
+        var url = $(location).attr('href').split("?")[0];
+        if (section != 'All')
                 url += "?section=" + section;
             $("#stories-container").load(url + " #stories", function () {
                 initializeStories($("#stories > .story"));
             });
-	});
+    });
 
-	/*
-	 * Bindings for drag and drop
-	 */
+    /*
+     * Bindings for drag and drop
+     */
         // http://weblog.bocoup.com/using-datatransfer-with-jquery-events
         jQuery.event.props.push('dataTransfer'); // solves dataTransfer undefined issue
 

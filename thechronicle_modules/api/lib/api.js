@@ -92,7 +92,7 @@ api.init = function(callback) {
             return callback(err);
         }
 
-      	api.cron.init();
+          api.cron.init();
         api.search.init();
         api.image.init();
         api.newsletter.init();
@@ -316,7 +316,7 @@ function saveEditedDoc(docid, doc, docCreatedDate, url, callback) {
     redis.client.del("article:" + url);
 
     db.merge(docid, doc, function(err, res) {
-     	if (err) callback(err);
+         if (err) callback(err);
         
         // only reindex the article if they edited the search fields
         else if (doc.title && doc.body) {

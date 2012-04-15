@@ -1,0 +1,30 @@
+h1 Edit a Poll
+form(action='/admin/poll/edit', method='POST')
+    input(type='hidden', name='doc[type]', value='poll')
+    input(type='hidden', name='doc[id]', value=doc._id)
+    p(style="margin-bottom: 2em")
+        label(for='title') Title&nbsp;
+        input#title(type='text', name='doc[title]', value=doc.title, style='width:600px')
+    p(style="margin-bottom: 2em")
+        label(for='section') Section&nbsp;
+        select(name='doc[taxonomy]', style='width: 600px')
+          option(value='') Select a section
+           - each subsections, section in taxonomy
+              - each key, value in subsections
+                - if (JSON.stringify(doc.taxonomy) == value)
+                    option(value=value, selected='selected') #{key}
+                - else
+                    option(value=value) #{key}
+    p#answers(style="margin-bottom: 2em")
+     - var i = 0;
+     - for (var answer in doc.answers)
+         - if (i==0)
+             label(for='answers') Answers&nbsp;
+         - else
+             label
+         input(type='text', id='answer'+i, name='doc[answers]['+ i +']', value=answer, style='width:600px')
+         input#answercount(type='text', name='doc[count]['+ i++ +']', value=doc.answers[answer], style='width:60px')
+         br
+    input#edit(type='button', name='edit', value='Add answer field')
+    p
+        input(type="submit", class="btn", value="Edit")

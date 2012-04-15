@@ -104,6 +104,9 @@ function buildJavascriptFile(src, callback) {
             jquery: 'require-jquery'
         }
     };
+    if (process.env.NODE_ENV != 'production')
+        config.optimize = 'none';
+
     requirejs.optimize(config, function (buildResponse) {
         if (process.env.NODE_ENV == 'production') {
             fs.readFile(config.out, 'utf8', function (err, data) {

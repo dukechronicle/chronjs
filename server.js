@@ -127,32 +127,45 @@ function runSite(callback) {
         }
         else {
             if (process.env.NODE_ENV === 'production') {
-                sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
-                    if (err) log.error("Couldn't build news sitemap: " + err);
-                });
-
-                builder.buildJavascript(function (err, paths) {
-                    if (err) log.warning('Failed to build Javascipt: ' + err);
-                    else {
-                        log.notice('Built site Javascript');
-                        setViewOption('js_paths', paths);
+                async.parallel([
+                    function(cb) {
+                        builder.buildJavascript(function (err, paths) {
+                            if (err) log.warning('Failed to build Javascipt: ' + err);
+                            else {
+                                log.notice('Built site Javascript');
+                                setViewOption('js_paths', paths);
+                                cb(null);
+                            }
+                        });
+                    },
+                    function(cb) {
+                        builder.buildCSS(function (err, paths) {
+                            if (err) log.warning('Failed to build stylesheets: ' + err);
+                            else {
+                                log.notice('Built stylesheets');
+                                setViewOption('css_paths', paths);
+                                cb(null);
+                            }
+                        });
                     }
+                ],
+                function(err, results) {
+                    redisClient.init(true, function (err) {
+                        route.init(app);
+                        log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));
+                        callback();
+                        sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
+                            if (err) log.error("Couldn't build news sitemap: " + err);
+                        });
+                    });
                 });
-
-                builder.buildCSS(function (err, paths) {
-                    if (err) log.warning('Failed to build stylesheets: ' + err);
-                    else {
-                        log.notice('Built stylesheets');
-                        setViewOption('css_paths', paths);
-                    }
+            } else {
+                redisClient.init(true, function (err) {
+                    route.init(app);
+                    log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));
+                    callback();
                 });
             }
-
-            redisClient.init(true, function (err) {
-                route.init(app);
-                log.notice(sprintf("Site configured and listening on port %d in %s mode", app.address().port, app.settings.env));
-                callback();
-            });
         }
     });
 }

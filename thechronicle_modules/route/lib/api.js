@@ -28,14 +28,18 @@ siteApi.listAll = function (req, res, next) {
 siteApi.listSection = function (req, res, next) {
     var sectionArray = req.params.toString().split('/');
     
-    var startDoc = req.query.startdoc;
-    if(startDoc) startDoc = JSON.parse(startDoc);   
+    var query = {};
+    if (req.query.startkey)
+        query.startkey = req.query.startkey;
+    if (req.query.startid)
+        query.start_docid = req.query.startid;
 
-    api.taxonomy.docs(sectionArray, 15, startDoc, function (err, docs) {
+    api.taxonomy.docs(sectionArray, 15, query, function (err, docs) {
         if (err) next(err);
         else {
             var result = _.map(docs, function (doc) {
-                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id, "created":doc.created, "authors":doc.authors};
+                return _.pick(doc, 'title', 'teaser', 'urls', '_id', 'created',
+                              'authors');
             });
             res.json(result);
         }

@@ -20,9 +20,11 @@ taxonomy.docs = function (taxonomyPath, limit, query, callback) {
     db.taxonomy.docs(taxonomyPath, query, function (err, docs) {
         if (err) callback(err);
         else {
-            var docValues = _.map(docs, function (doc) { return doc.value });
-            var lastKey = _.last(docs) ? _.last(docs).key : undefined;
-            callback(null, docValues, lastKey);
+            // hack to return view keys with returned docs
+            callback(null, _.map(docs, function (doc) {
+                doc.value['query-key'] = doc.key;
+                return doc.value;
+            });
         }
     });
 };

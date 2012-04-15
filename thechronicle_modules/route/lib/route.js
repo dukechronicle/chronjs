@@ -123,7 +123,7 @@ exports.init = function (app) {
     	app.get('/manage', api.site.checkAdmin, admin.managePoll);
     	app.get('/:id', api.site.checkAdmin, admin.editPoll);
     	app.post('/', api.site.checkAdmin, admin.addPollData);
-    	app.put('/edit', api.site.checkAdmin, admin.editPollData);
+    	app.post('/edit', api.site.checkAdmin, admin.editPollData);
     });
     
     //The 404 Route (ALWAYS Keep this as the last route)

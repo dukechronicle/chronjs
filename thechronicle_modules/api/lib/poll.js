@@ -21,6 +21,21 @@ poll.add = function(fields, callback) {
     db.poll.add(poll, callback);
 };
 
+poll.edit = function(fields, callback) {
+	var answersWithCounts = {};
+	for (i=0; i<fields.answers.length;i++) {
+		answersWithCounts[fields.answers[i]] = parseInt(fields.count[i]);
+	}
+	var poll = {
+        title: fields.title,
+        taxonomy: fields.taxonomy,
+        created: util.unixTimestamp(),
+        type: 'poll',
+        answers: answersWithCounts
+    };
+    db.poll.edit(fields.id, poll, callback);
+}
+
 poll.vote = function (id, answer, callback) {
     db.poll.getPoll(id, function (err, doc) {
         if (err)

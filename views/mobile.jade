@@ -8,7 +8,7 @@ html
                 
     script(src='http://code.jquery.com/jquery-1.7.1.min.js')
     script(src='http://code.jquery.com/mobile/1.1.0-rc.1/jquery.mobile-1.1.0-rc.1.min.js')
-    script(src='/js/mobile.js?v=3')
+    script(src='/js/mobile.js?v=4')
 
     script(type='text/javascript')
       initMobileOptions();
@@ -18,7 +18,7 @@ html
         h1#HEADER_TITLE The Chronicle
         form(id="searchBox")
             label(for="search-basic")
-            input(id="searchInput", type="search", name="search", value="")
+            input(id="searchInput", type="search", name="search", value="", placeholder="Search")
       #ArticleListContent(data-role='content')
         ul#ARTICLE_LIST(data-role='listview')
       div(data-role='footer', data-position='fixed')

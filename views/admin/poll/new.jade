@@ -1,13 +1,24 @@
 h1 Add a Poll
 script(type='text/javascript')
-    fields = 2;
     function addField() {
-        if (fields != 5) {
+        fields = 0;
+        for (fields=0;fields<5;fields++) {
+            var string = "";
+            var x=document.getElementsByName("doc[answers]["+fields+"]");
+            if (x.length) {
+                string +=x;
+                alert(string);  
+                continue;
+            } else {
+                break;
+            }
+        }
+        if (fields < 5) {
             document.getElementById('answers').innerHTML += "<label></label><input id='answers' type='text' name='doc[answers]["+fields+"]' style='width:600px'/><br/>";
             fields += 1;
         } else {
-            document.getElementById('answers').innerHTML += "<br /><label></label>Only 10 answer fields allowed.";
-            document.form.add.disabled=true;
+            document.getElementById('answers').innerHTML += "<br /><label></label>Only 5 answer fields allowed.";
+            document.getElementById('add').disabled = true;
         }
     }
 form(action='/admin/poll', method='POST')
@@ -24,10 +35,10 @@ form(action='/admin/poll', method='POST')
                   option(value=value) #{key}
     p#answers(style="margin-bottom: 2em")
         label(for='answers') Answers&nbsp;
-        input#answers(type='text', name='doc[answers][0]', style='width:600px')
+        input#answerchoices(type='text', name='doc[answers][0]', style='width:600px')
         br
         label
-        input#answers(type='text', name='doc[answers][1]', style='width:600px')
+        input#answerchoices(type='text', name='doc[answers][1]', style='width:600px')
         br
     input#add(type='button', onclick='addField()', name='add', value='Add answer field')
     p

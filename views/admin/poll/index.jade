@@ -1,3 +1,10 @@
 table.poll-index(border=1)
-  if (docs==null)
-    h1 Managing Polls Not Available
+    - each doc in docs
+        tr
+            td
+                a(href='/admin/') #{doc.title}
+            td
+                a(href='/admin/poll/' + doc._id) Edit
+              
+if (docs.length == 0)
+    h1 No Polls Available

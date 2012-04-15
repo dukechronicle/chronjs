@@ -146,6 +146,14 @@ admin.addPoll = function (doc, callback) {
     }
 };
 
+admin.getPolls = function (callback) {
+	api.poll.getByDate('', callback);
+}
+
+admin.getPoll = function (id, callback) {
+	api.poll.getPoll(id, callback);
+}
+
 admin.layout = function (section, group, layoutConfig, callback) {
     async.parallel({
         sectionDocs: function (cb) {

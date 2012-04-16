@@ -1,5 +1,5 @@
 !!! 5
-html(lang="en")
+html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
     head
         script(src="/js/mobile-redirect.js?v=3")
 
@@ -27,7 +27,22 @@ html(lang="en")
         script var CHRONICLE = { onload: [] }
 
         !=partial("code/google-analytics")
+
+        - if (typeof article !== "undefined")
+            // opengraph
+            meta(property="og:title", content=doc.title)
+            meta(property="og:type", content="article")
+            meta(property="og:url", content=doc.fullUrl)
+            if (typeof pageImage != 'undefined')
+                meta(property="og:image", content=pageImage)
+            else
+                meta(property="og:image", content=static_cdn + "/images/favicon.png")
+
+            meta(property="og:site_name", content="Duke Chronicle")
+            meta(property="fb:app_id", content="335954613131615")
     body
+        // required for facebook javascript sdk
+        #fb-root
         #shell
             header
                 include /layout/header
@@ -35,11 +50,10 @@ html(lang="en")
             footer
                 include /layout/footer
         #scripts
-            // border-radius support in ie
-            script(type='text/javascript') var curvyCornersVerbose = false
-            script(src="/js/curvycorners.js")
-
             //if lt IE 9
                 script(src="//html5shim.googlecode.com/svn/trunk/html5.js")
+                // border-radius support in ie
+                script(type='text/javascript') var curvyCornersVerbose = false
+                script(src="/js/curvycorners.js")
 
             script(src=paths.js.site, type="text/javascript")

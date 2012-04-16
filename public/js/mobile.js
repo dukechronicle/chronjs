@@ -261,7 +261,7 @@ function search(eventObject)
                     return;
                 }
                 
-                updateArticleList(data.docs, $(this), "Search Results for '" + rawQuery + "'");
+                updateArticleList(data.docs, $(this), "Search Results");
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 handleAJAXError(jqXHR);

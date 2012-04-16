@@ -3,7 +3,7 @@ html
   head
     title The Chronicle
 
-    link(rel='stylesheet', href=css_paths.config)
+    link(rel='stylesheet', href=paths.css.config);
 
     script var CHRONICLE = { onload: [] }
 
@@ -12,7 +12,4 @@ html
     #main
       #container!= body
 
-    - if (isProduction)
-        script(src=js_paths.admin, type="text/javascript")
-    - else
-        script(src="/js/require-jquery.js", data-main="/js/admin/main", type="text/javascript")
+      script(src=paths.js.admin, type="text/javascript")

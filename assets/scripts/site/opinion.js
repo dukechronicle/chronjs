@@ -26,6 +26,9 @@ define(['jquery'], function($) {
         selected = $("#columnist-story-" + index);
         selectedNav.addClass('selected');
         selected.show();
+        while (selected.height() > selected.parent().height()) {
+            selected.find("a:last").remove();
+        }
     }
 
 });

@@ -2,7 +2,7 @@
 
 script(type='text/javascript')
     CHRONICLE.onload.push(function () {
-        var scrollLoadUrl = "search/#{query}?sort=#{sort}&order=#{order}&facets=#{currentFacets}";
+        var scrollLoadUrl = "search/?q=#{query}&sort=#{sort}&order=#{order}&facets=#{currentFacets}";
         var scrollLoadHTML = '<a href="/article/URL_REPLACE" class="addedArticle result rounded-hover"><h3>HEADER_REPLACE</h3><div class="date">DATE_REPLACE<span class="sep">&nbsp;|&nbsp;</span>AUTHOR_REPLACE</div><div class="teaser">TEASER_REPLACE</div></a>';
         scrollLoadPage(scrollLoadUrl, 2, scrollLoadHTML);
     });
@@ -14,9 +14,9 @@ script(type='text/javascript')
                 h2.vertical Sort
             .rounded
                 .content-container
-                    a.hover.highlight-right(href=query+'?sort=relevance&order=desc'+'&facets='+currentFacets) Relevance
-                    a.hover.highlight-right(href=query+'?sort=date&order=desc'+'&facets='+currentFacets) Newest First
-                    a.hover.highlight-right(href=query+'?sort=date&order=asc'+'&facets='+currentFacets) Oldest First
+                    a.hover.highlight-right(href='?q=' + query +'&sort=relevance&order=desc'+'&facets='+currentFacets) Relevance
+                    a.hover.highlight-right(href='?q=' + query +'&sort=date&order=desc'+'&facets='+currentFacets) Newest First
+                    a.hover.highlight-right(href='?q=' + query +'&sort=date&order=asc'+'&facets='+currentFacets) Oldest First
         - if(currentFacets.length > 0)
             - currentFacets += ',';
         for facet,facetName in facets
@@ -26,7 +26,7 @@ script(type='text/javascript')
                 .rounded
                     .content-container
                         for value,key in facet
-                            a.hover.highlight-right(href=query+'?sort='+sort+'&order='+order+'&facets='+currentFacets+facetName+':'+key)
+                            a.hover.highlight-right(href='?q=' + query + '&sort='+sort+'&order='+order+'&facets='+currentFacets+facetName+':'+key)
                                 - if(facetName == 'Month')
                                     #{monthArray[key-1]} (#{value})
                                 - else
@@ -52,4 +52,4 @@ script(type='text/javascript')
             br
             br
             br
-            br
+            b

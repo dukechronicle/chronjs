@@ -237,8 +237,7 @@ body
         //background #e9e9e9
 
         //background transparent -webkit-gradient(linear,left bottom,left top,color-stop(0, rgb(237,237,237)),color-stop(.5, rgb(255,255,255)))
-        //background transparent -moz-linear-gradient(center bottom,rgb(237,237,237) 0%,rgb(255,255,255) 50%)
-        
+        //background transparent -moz-linear-gradient(center bottom,rgb(237,237,237) 0%,rgb(255,255,255) 50%)      
     
     .vertical-container
         // will be unhidden by vertical align js function
@@ -285,6 +284,34 @@ body
             float right
             padding-top 3px
             color #444
+
+    // Search Results Container, also used on author pages
+    .search-result
+        display block
+        width 596px
+        float left
+        margin-bottom 10px
+        padding-left 8px
+        padding-right 8px
+
+        h3
+            font-size 1.2em
+            color black
+
+        .date
+            margin-bottom 5px
+            margin-top -3px
+        .teaser, .date
+            color #444
+            font-size 0.9em
+        .sep
+            font-size 0.7em
+            margin-left 4px
+            margin-right 4px
+    .search-result:hover
+        h3, h3>*
+            color #36c
+
 .lighten
     img
         opacity 0.8

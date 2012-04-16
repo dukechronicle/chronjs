@@ -14,8 +14,8 @@ script(type='text/javascript')
                         if (authorInfo.images && authorInfo.images.ThumbSquareM)
                             img(src=authorInfo.images.ThumbSquareM.url)
                         .author-inner-container
-                            h1 #{name}
-                            .dukeAffiliation #{authorInfo.dukeAffiliation}
+                            h1 #{authorInfo.name}
+                            .dukeAffiliation #{authorInfo.affiliation}
                             .tagline #{authorInfo.tagline}
                             .bio !{authorInfo.renderedBio}
             else

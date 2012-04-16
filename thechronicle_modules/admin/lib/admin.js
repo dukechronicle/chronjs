@@ -97,6 +97,10 @@ admin.saveAuthorInfo = function (doc, callback) {
     api.authors.setInfo(doc, callback);
 };
 
+admin.getAuthorInfo = function (name, callback) {
+    api.authors.getInfo(name, callback);
+};
+
 admin.k4export = function (filepath, callback) {
     async.parallel({
         k4      :function (callback) {

@@ -8,7 +8,7 @@ var sprintf = require('sprintf').sprintf;
 
 /* require internal modules */
 var api = require('./thechronicle_modules/api');
-var builder = require('./build-resources');
+var builder = require('./build-assets');
 var config = require('./thechronicle_modules/config');
 var log = require('./thechronicle_modules/log');
 var redisClient = require('./thechronicle_modules/redisclient');
@@ -22,7 +22,8 @@ var SERVER = this;
 
 var app = null;
 var viewOptions = {
-    isProduction: process.env.NODE_ENV === 'production'
+    isProduction: process.env.NODE_ENV === 'production',
+    static_cdn: ''
 };
 
 log.init(function (err) {
@@ -47,20 +48,26 @@ log.init(function (err) {
                 });
             }
 
-            configureApp(sessionInfo, PORT);
-            route.preinit(app);
+            builder.buildAssets(function(err, paths) {
+                if (err) log.warning('Failed to build assets: ' + err);
+                else log.notice('Built assets');
 
-            if (!config.isSetUp()) {
-                app.get('/', function(req, res, next) {
-                    if (!config.isSetUp()) res.redirect('/config');
-                    else next();
-                });
-            }
-            else {
-                runSite(function (err) {
-                    if (err) log.error(err);
-                });
-            }
+                viewOptions.paths = paths;
+                configureApp(sessionInfo, PORT);
+                route.preinit(app);
+
+                if (!config.isSetUp()) {
+                    app.get('/', function(req, res, next) {
+                        if (!config.isSetUp()) res.redirect('/config');
+                        else next();
+                    });
+                }
+                else {
+                    runSite(function (err) {
+                        if (err) log.error(err);
+                    });
+                }
+            });
         });
     });
 });
@@ -119,7 +126,6 @@ function configureApp(sessionInfo, port) {
 }
 
 function runSite(callback) {
-    setViewOption('static_cdn', config.get('CLOUDFRONT_STATIC'));
     api.init(function (err) {
         if (err) {
             log.crit("api initialization failed");
@@ -130,23 +136,14 @@ function runSite(callback) {
                 sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
                     if (err) log.error("Couldn't build news sitemap: " + err);
                 });
+
+                builder.pushAssets(viewOptions.paths, function (err, paths) {
+                    if (err) log.warning('Failed to push assets to S3: ' + err);
+                    else log.notice('Static content pushed to S3');
+                    setViewOption('static_cdn', config.get('CLOUDFRONT_STATIC'));
+                    setViewOption('paths', paths);
+                });
             }
-            
-            builder.buildJavascript(function(err, paths) {
-                if (err) log.warning('Failed to build Javascipt: ' + err);
-                else {
-                    log.notice('Built site Javascript');
-                    setViewOption('js_paths', paths);
-                }
-            });
-            
-            builder.buildCSS(function (err, paths) {
-                if (err) log.warning('Failed to build stylesheets: ' + err);
-                else {
-                    log.notice('Built stylesheets');
-                    setViewOption('css_paths', paths);
-                }
-            });
             
             redisClient.init(true, function(err) {
                 route.init(app);

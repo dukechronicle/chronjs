@@ -6,18 +6,51 @@ var fs = require('fs');
 var gzip = require('gzip');
 var stylus = require('stylus');
 var walk = require('walk');
+var _ = require('underscore');
 
 var api = require('./thechronicle_modules/api');
 var config = require('./thechronicle_modules/config');
 var log = require('./thechronicle_modules/log');
 
-var STYLE_DIR = __dirname + '/views/styles/';
+var STYLE_DIR = __dirname + '/assets/styles/';
 var DIST_DIR = __dirname + '/public/dist/';
 var JS_SOURCES = [ 'site', 'admin' ];
 
-exports.buildJavascript = buildJavascript;
-exports.buildCSS = buildCSS;
+exports.buildAssets = buildAssets;
+exports.pushAssets = pushAssets;
 
+
+function buildAssets(callback) {
+    async.parallel({css: buildCSS, js: buildJavascript}, callback);
+}
+
+function pushAssets(paths, callback) {
+    async.parallel({
+        css: pushAll(paths.css, "text/css"),
+        js: pushAll(paths.js, "application/javascript")
+    }, function (err) {
+        callback(err, paths);
+    });
+}
+
+function pushAll(paths, type) {
+    return function (callback) {
+        async.forEach(_.keys(paths), function (src, callback) {
+            fs.readFile('public' + paths[src], 'utf8', function (err, data) {
+                if (err) callback(err);
+                else {
+                    storeS3(data.toString(), type, function (err, path) {
+                        if (err) callback(err);
+                        else {
+                            paths[src] = path;
+                            callback();
+                        }
+                    });
+                }
+            });
+        }, callback);
+    };
+}
 
 function buildCSS(callback) {
     var paths = {};
@@ -74,12 +107,11 @@ function buildCSSFile(path, callback) {
     
     walker.on('end', function (err) {
         if (err) callback(err);
-        else if (process.env.NODE_ENV == 'production')
-            storeS3(style, "text/css", callback);
-        else
+        else {
             fs.writeFile(DIST_DIR + path + '.css', style, function (err) {
                 callback(err, '/dist/' + path + '.css');
             });
+        }
     });
 }
 
@@ -108,18 +140,7 @@ function buildJavascriptFile(src, callback) {
         config.optimize = 'none';
 
     requirejs.optimize(config, function (buildResponse) {
-        if (process.env.NODE_ENV == 'production') {
-            fs.readFile(config.out, 'utf8', function (err, data) {
-                if (err) callback(err);
-                else {
-                    storeS3(data.toString(),"application/javascript",callback);
-                    fs.unlink(config.out);
-                }
-            });
-        }
-        else {
-            callback(null, '/dist/' + src + '.js');
-        }
+        callback(null, '/dist/' + src + '.js');
     });
 }
 
@@ -128,7 +149,7 @@ function storeS3(data, type, callback) {
 
     var md5sum = crypto.createHash('md5');
     md5sum.update(data);
-    var path = '/dist/1' + md5sum.digest('hex');
+    var path = '/dist/' + md5sum.digest('hex');
 
     gzip(data, function (err, buffer) {
         if (err) callback(err);

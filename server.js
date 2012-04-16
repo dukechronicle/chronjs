@@ -22,7 +22,8 @@ var SERVER = this;
 
 var app = null;
 var viewOptions = {
-    isProduction: process.env.NODE_ENV === 'production'
+    isProduction: process.env.NODE_ENV === 'production',
+    static_cdn: ''
 };
 
 log.init(function (err) {
@@ -125,7 +126,6 @@ function configureApp(sessionInfo, port) {
 }
 
 function runSite(callback) {
-    setViewOption('static_cdn', config.get('CLOUDFRONT_STATIC'));
     api.init(function (err) {
         if (err) {
             log.crit("api initialization failed");
@@ -135,6 +135,13 @@ function runSite(callback) {
             if (process.env.NODE_ENV === 'production') {
                 sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
                     if (err) log.error("Couldn't build news sitemap: " + err);
+                });
+
+                builder.pushAssets(viewOptions.paths, function (err, paths) {
+                    if (err) log.warning('Failed to push assets to S3: ' + err);
+                    else log.notice('Static content pushed to S3');
+                    setViewOption('static_cdn', config.get('CLOUDFRONT_STATIC'));
+                    setViewOption('paths', paths);
                 });
             }
             

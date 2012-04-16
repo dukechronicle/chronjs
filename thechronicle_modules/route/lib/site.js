@@ -119,7 +119,7 @@ site.section = function (req, res, next) {
 };
 
 site.search = function (req, res, next) {
-    var query = req.params.query.replace(/-/g, ' ');
+    var query = req.query.q.replace(/-/g, ' ');
     api.site.getSearchContent(query, req.query, function (err, docs, facets) {
         if (err) next(err);
         else res.render('site/pages/search', {
@@ -128,7 +128,7 @@ site.search = function (req, res, next) {
                 docs: docs,
                 currentFacets: req.query.facets || '',
                 facets: facets,
-                query: req.params.query,
+                query: req.query.q,
                 sort: req.query.sort,
                 order: req.query.order
             }

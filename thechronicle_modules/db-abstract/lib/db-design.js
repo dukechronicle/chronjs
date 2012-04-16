@@ -7,7 +7,7 @@ exports.doc = {
 
             taxonomy:{
                 map:function (doc) {
-                    if (doc.type == 'article' && doc.taxonomy) {
+                    if (doc.taxonomy) {
                         var path = [];
                         for (var i in doc.taxonomy) {
                             path.push(doc.taxonomy[i].toLowerCase());

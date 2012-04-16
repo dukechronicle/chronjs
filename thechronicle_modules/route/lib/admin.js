@@ -26,6 +26,9 @@ admin.duplicates = function (req, res, next) {
                 }
             });
         }
+    });
+}
+
 admin.author = function (req, res, next) {
     var name = req.query.name;
     var renderFunc = function (doc) {

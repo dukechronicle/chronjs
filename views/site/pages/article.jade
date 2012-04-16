@@ -44,7 +44,7 @@
                 .print
                     a(href=doc.url + '/print') Print
                 .facebook
-                    iframe(src='http://www.facebook.com/plugins/like.php?app_id=176268009080455&amp;href=' + encodeURIComponent(doc.fullUrl) + '&amp;send=false&amp;layout=button_count&amp;width=121&amp;show_faces=false&amp;action=recommend&amp;colorscheme=light&amp;font=lucida+grande&amp;height=20', scrolling='no', frameborder='0', style='border:none; overflow:hidden; width:121px; height:20px;', allowTransparency='true')
+                    fb:like(href=doc.fullUrl, send="false", layout="button_count", width="130", show_faces="false", action="recommend", font="lucida grande", style="margin-bottom: -5px")
                 .twitter
                     a.twitter-share-button(href="http://twitter.com/share?via=dukechronicle" )
                         | Tweet
@@ -63,15 +63,7 @@
                 .vertical-container
                     h2.vertical Facebook Recommended
                 .rounded(style="width: 300px; height: 300px; background: white")
-                    .fb-recommendations(data-site="dukechronicle.com", data-border-color="white", data-width="300", data-height="300", data-font="lucida grande", data-header="true", max-age="7")
-            script
-                (function(d, s, id) {
-                    var js, fjs = d.getElementsByTagName(s)[0];
-                    if (d.getElementById(id)) {return;}
-                    js = d.createElement(s); js.id = id;
-                    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-                    fjs.parentNode.insertBefore(js, fjs);
-                }(document, 'script', 'facebook-jssdk'));
+                    fb:recommendations(site="www.dukechronicle.com", border-color="white", width="300", height="300", font="lucida grande", header="false", max-age="7")
 
             - if (model.popular && model.popular.length > 0)
                 .numbered-articles.most-popular!=partial('../container/numbered-articles', {title: "Popular", stories: model.popular})

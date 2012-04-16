@@ -1,6 +1,6 @@
 exports.doc = {
 
-    articles: {
+    authors: {
         language: "javascript",
         
         views: {
@@ -15,8 +15,14 @@ exports.doc = {
                         }
                     }
                 }
-            },
+            }
+        }
+    },
 
+    articles: {
+        language: "javascript",
+        
+        views: {
             taxonomy:{
                 map:function (doc) {
                     if (doc.taxonomy) {

@@ -73,7 +73,7 @@ db.init = function(callback) {
         // initialize database if it doesn't already exist
         if(!exists) {
             db.create(function(err, response) {
-                if(err) return callback(error);
+                if(err) return callback(err);
                 else updateViews(callback);
             });
         }

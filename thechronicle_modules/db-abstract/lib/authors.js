@@ -31,7 +31,7 @@ authors.getInfo = function(authorName, callback) {
         include_docs:true
     };
 
-    db.view('articles/author_info', query,
+    db.view('authors/author_info', query,
             function (err, res) {
                 res = db.image.dereferenceDocumentImages(res);
                 callback(err, res);

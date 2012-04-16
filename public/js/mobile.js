@@ -136,7 +136,7 @@ function generateArticle(articleJSON)
     }
 
     if (article.images != null && article.images.LargeRect != null) {
-        var imageString = $('<img src='+article.images.LargeRect.url + ' alt="chronicle image"/>');
+        var imageString = $('<img class="article-image" src='+article.images.LargeRect.url + ' alt="chronicle image"/>');
               totalString.append(imageString);
     }
     totalString.append($('<p />').append(article.renderedBody));

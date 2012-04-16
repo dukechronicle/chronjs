@@ -6,6 +6,7 @@ var fs = require('fs');
 var gzip = require('gzip');
 var stylus = require('stylus');
 var walk = require('walk');
+var _ = require('underscore');
 
 var api = require('./thechronicle_modules/api');
 var config = require('./thechronicle_modules/config');
@@ -23,15 +24,32 @@ function buildAssets(callback) {
     async.parallel({css: buildCSS, js: buildJavascript}, callback);
 }
 
-function pushAssets(callback) {/*
-    fs.readFile(config.out, 'utf8', function (err, data) {
-        if (err) callback(err);
-        else {
-            storeS3(data.toString(), "application/javascript", callback);
-        }
+function pushAssets(paths, callback) {
+    async.parallel({
+        css: pushAll(paths.css, "text/css"),
+        js: pushAll(paths.js, "application/javascript")
+    }, function (err) {
+        callback(err, paths);
     });
+}
 
-    storeS3(style, "text/css", callback);*/
+function pushAll(paths, type) {
+    return function (callback) {
+        async.forEach(_.keys(paths), function (src, callback) {
+            fs.readFile('public' + paths[src], 'utf8', function (err, data) {
+                if (err) callback(err);
+                else {
+                    storeS3(data.toString(), type, function (err, path) {
+                        if (err) callback(err);
+                        else {
+                            paths[src] = path;
+                            callback();
+                        }
+                    });
+                }
+            });
+        }, callback);
+    };
 }
 
 function buildCSS(callback) {

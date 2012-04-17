@@ -1,34 +1,37 @@
 @import '../../mixins'
 
 #people
+    h1
+        font-size 1.5em
+        margin-bottom 10px
+
     .authorInfo
         margin-bottom 10px
         .rounded
-            width 972px
-            padding 0
-            font-size 1.2em
             .content-container
-                padding 8px
+                padding 0
                 img
-                    float left
-                    margin-right 10px
+                    width 300px
+                    height 120px
                     border-radius 4px
-                h1
-                    line-height 1
-                    font-size 1.6em
-                .dukeAffiliation
-                    font-size .9em
-                    margin 0
-                .tagline
-                    margin-top 6px
-                    font-style italic
-                .bio
-                    margin-top 5px
-                    font-size .9em
-                    color #444
-                    p
-                        margin-bottom 10px
-
+                .author-inner-container
+                    padding 0 3px
+                    h1
+                        margin-bottom 0
+                        line-height 1
+                        font-size 1.3em
+                    .dukeAffiliation
+                        font-size .9em
+                        margin 0
+                    .tagline
+                        margin-top 6px
+                        font-style italic
+                    .bio
+                        margin-top 5px
+                        font-size .9em
+                        color #444
+                        p
+                            margin-bottom 10px
     .sidebar
         float right
         width 306px
@@ -39,14 +42,14 @@
                 color black
             a:hover
                 color #36C
-        .content-container
-            padding 0px
-            h2
-                margin-top 4px
-                margin-bottom 4px
-            h2, p.teaser
-                padding 0px 3px
-            img
-                width 300px
-                height 120px
-                border-radius 4px
+
+    .authors-articles
+        .rounded
+            width 636px
+            a.hover
+                padding-bottom 18px
+                h2
+                    font-size 1.3em
+                p.date
+                    font-size 0.9em
+                    margin-bottom 6px

@@ -4,25 +4,24 @@ script(type='text/javascript')
     });
 
 #people
-    .authorInfo
-        .container.clearfix
-            if (authorInfo)
+    if (authorInfo)
+        h1 #{authorInfo.name}
+        .sidebar.authorInfo
+            .container.clearfix
                 .vertical-container
-                    h2.vertical Staff Profile
+                    h2.vertical Profile
                 .rounded
-                    .content-container.clearfix
-                        if (authorInfo.images && authorInfo.images.ThumbSquareM)
-                            img(src=authorInfo.images.ThumbSquareM.url)
+                    .content-container
+                        if (authorInfo.images && authorInfo.images.ThumbWide)
+                            img(src=authorInfo.images.ThumbWide.url)
                         .author-inner-container
                             h1 #{authorInfo.name}
                             .dukeAffiliation #{authorInfo.affiliation}
                             .tagline #{authorInfo.tagline}
                             .bio !{authorInfo.renderedBio}
-            else
-                .rounded
-                    .content-container.clearfix
-                        author-inner-container
-                            h1 #{name}
+    else
+        h1 #{name}
+
     .main
         .rounded.result
             for doc in docs

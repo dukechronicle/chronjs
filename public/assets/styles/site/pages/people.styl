@@ -1,13 +1,41 @@
 @import '../../mixins'
 
-#people
+page-width = 972px
+link-color = #36c
+container-padding = 4px
+top-content-width =  642px
+container-vertical-spacing = 23px
+
+body section > #people
+
     h1
         font-size 1.5em
         margin-bottom 10px
 
-    .authorInfo
+    > .main
+        width 672px
+        .authors-articles
+            .rounded
+                width 636px
+                a.hover
+                    padding-bottom 18px
+                    h2
+                        font-size 1.3em
+                    p.date
+                        font-size 0.9em
+                        margin-bottom 6px
+
+    > .authorInfo
         margin-bottom 10px
+        float right
+        width 306px
         .rounded
+            width 300px
+            font-size 1.
+            a
+                color black
+            a:hover
+                color #36C
             .content-container
                 padding 0
                 img
@@ -32,24 +60,3 @@
                         color #444
                         p
                             margin-bottom 10px
-    .sidebar
-        float right
-        width 306px
-        .rounded
-            width 300px
-            font-size 1.1em
-            a
-                color black
-            a:hover
-                color #36C
-
-    .authors-articles
-        .rounded
-            width 636px
-            a.hover
-                padding-bottom 18px
-                h2
-                    font-size 1.3em
-                p.date
-                    font-size 0.9em
-                    margin-bottom 6px

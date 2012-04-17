@@ -406,9 +406,9 @@ site.getSectionContent = function (params, callback) {
             popular.getPopularArticles(params, 5, cb);
         },
         function (cb) {
-            api.taxonomy.docs(params, 20, null, function (err, docs) {
+            api.taxonomy.docs(params, 20, null, function (err, docs, next) {
                 if (err) cb(err)
-                else cb(null, modifyArticlesForDisplay(docs));
+                else cb(null, {docs:modifyArticlesForDisplay(docs), next:next});
             });
         },
         function (cb) {
@@ -424,10 +424,11 @@ site.getSectionContent = function (params, callback) {
                 callback(err);
             else {
                 var popular = results[0];
-                var docs = results[1];
+                var docs = results[1].docs;
+                var next = results[1].next;
                 var parents = results[2]
                 var children = results[3];
-                callback(null, section, docs, children, parents, popular);
+                callback(null, section, docs, next, children, parents, popular);
             }
         }
     );

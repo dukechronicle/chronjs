@@ -86,33 +86,24 @@ define(["jquery", "libs/jquery-ui"], function($) {
 
     // load the next set of documents for this set of params, starting with the last document currently on the page
     function loadDataFromLastDoc() {
-        // body and teaser aren't needed to paginate, and could be too big for the url, so remove them
-        delete lastDoc.body;
-        delete lastDoc.renderedBody;
-        delete lastDoc.teaser;
-
         var params = {
-            startkey: lastDoc.query_key,
+            startkey: JSON.stringify(lastDoc.query_key),
             startid: lastDoc._id
         };
 
-        $.ajax({
-            url: "/api/"+scrollLoadUrl,
-            dataType: 'json',
-            data: params,
-            cache: false,
-            success: function(returnedData) {
-                if(returnedData.length < 2) {
-                    noPagesLeftToLoad = true;
-                    loadImage.fadeOut();
-                }
-                else {
-                    lastDoc = returnedData[returnedData.length-1];                
+        $.get(scrollLoadUrl, params, function(docs) {
+            if (docs.length <= 1) {
+                noPagesLeftToLoad = true;
+                loadImage.fadeOut();
+            }
+            else {
+                lastDoc = docs[docs.length-1];                
 
-                    // add the docs to the page, correctly formatted, ignoring the duplicate doc
-                    addArticle(returnedData,1);
-                }
+                // add the docs to the page, correctly formatted,
+                // ignoring the duplicate doc
+                addArticle(docs, 1);
             }
         });
     }
+
 });

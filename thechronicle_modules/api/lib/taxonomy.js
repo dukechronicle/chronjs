@@ -22,7 +22,7 @@ taxonomy.docs = function (taxonomyPath, limit, query, callback) {
     db.taxonomy.docs(taxonomyPath, query, function (err, docs) {
         if (err) callback(err);
         else {
-            var lastDoc = null;
+            var lastDoc = {id: null, key: null};
             if (docs.length == query.limit) {
                 lastDoc = docs.pop();
                 delete lastDoc.value;

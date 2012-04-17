@@ -99,21 +99,22 @@ site.towerview = function (req, res) {
 
 site.section = function (req, res, next) {
     var sectionArray = req.params.toString().split('/');
-    api.site.getSectionContent(sectionArray, function (err, section, docs, children, parents, popular) {
+    api.site.getSectionContent(sectionArray, function (err, section, docs, nextDoc, children, parents, popular) {
         if (err) next();
         else {
-        res.render('site/pages/section', {
+            res.render('site/pages/section', {
                 layout: 'site/layout',
-            locals: {
+                locals: {
                     pageTitle: section,
                     docs:docs,
+                    next:nextDoc,
                     subsections:children,
                     parentPaths:parents,
                     section: sectionArray[0],
                     popular: popular,
                     taxonomyPath: sectionArray.join('/')
-            }
-        });
+                }
+            });
         }
     });
 };

@@ -42,8 +42,8 @@ exports.init = function(func, callback)
         // initialize database if it doesn't already exist
         if(!exists) {
             log.alert("Database for config profile '" + PROFILE_NAME + "' does not exist. Creating...");
-            configDB.create();
-            db.whenDBExists(configDB,function() {
+            configDB.create(function(err, response) {
+                if(err) return callback(err);
                 getConfig(callback);
             });
         }

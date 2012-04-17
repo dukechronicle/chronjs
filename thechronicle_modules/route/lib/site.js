@@ -20,7 +20,8 @@ site.frontpage = function (req, res) {
         res.render('site/pages/frontpage', {
             layout: 'site/layout',
             locals: {
-                model:model
+                model:model,
+                frontpage: true
             }
         });
     });
@@ -118,7 +119,7 @@ site.section = function (req, res, next) {
 };
 
 site.search = function (req, res, next) {
-    var query = req.params.query.replace(/-/g, ' ');
+    var query = req.query.q.replace(/-/g, ' ');
     api.site.getSearchContent(query, req.query, function (err, docs, facets) {
         if (err) next(err);
         else res.render('site/pages/search', {
@@ -127,7 +128,7 @@ site.search = function (req, res, next) {
                 docs: docs,
                 currentFacets: req.query.facets || '',
                 facets: facets,
-                query: req.params.query,
+                query: req.query.q,
                 sort: req.query.sort,
                 order: req.query.order
             }
@@ -179,7 +180,9 @@ site.article = function (req, res, next) {
             };
 
             if(doc.images.ThumbSquareM) locals.pageImage = doc.images.ThumbSquareM.url;
-                
+
+            locals.article = true;
+
             res.render('site/pages/article', {
                 layout: 'site/layout',
                 locals: locals

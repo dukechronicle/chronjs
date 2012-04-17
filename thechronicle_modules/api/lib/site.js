@@ -273,7 +273,7 @@ site.getOpinionPageContent = function(callback) {
 
     function(cb) {//4
         async.map(COLUMNISTS_DATA, function(columnist, _callback) {
-            api.authors.getLatest(columnist.user || columnist.name, "Opinion", 5, function(err, res) {
+            api.authors.getLatest(columnist.user || columnist.name, "Opinion", 7, function(err, res) {
                 columnist.stories = res;
                 _callback(err, columnist);
             })

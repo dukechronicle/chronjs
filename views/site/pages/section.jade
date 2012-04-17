@@ -16,7 +16,7 @@
         - if(docs.length > 0)
             script(type='text/javascript')
                 CHRONICLE.onload.push(function () {
-                    var scrollLoadUrl = "section/#{taxonomyPath}?";
+                    var scrollLoadUrl = "/api/section/#{taxonomyPath}";
                     var lastDoc = !{JSON.stringify(docs[docs.length-1])};
                     var scrollLoadHTML = '<a class="result rounded-hover addedArticle" href="/article/URL_REPLACE">'+ '<h3>HEADER_REPLACE</h3><div class="date">DATE_REPLACE</div><div class="teaser">TEASER_REPLACE</div></a>';
                     scrollLoadLastDoc(scrollLoadUrl, lastDoc, scrollLoadHTML);

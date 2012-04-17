@@ -64,32 +64,23 @@ db.init = function(callback) {
     var database = db.connect(config.get("COUCHDB_URL"),DATABASE);
     _.extend(db, database);
 
-    db.exists(function (error,exists) {
-          if(error)
-        {
+    db.exists(function (error,exists) {    
+        if(error) {
             log.error("ERROR db-abstract" + error);
             return callback(error);
         }
-
+        
         // initialize database if it doesn't already exist
         if(!exists) {
-            db.create();
-            db.whenDBExists(db,function() {
-                updateViews(callback);
+            db.create(function(err, response) {
+                if(err) return callback(err);
+                else updateViews(callback);
             });
         }
         else {
              updateViews(callback);
         }
     });
-};
-
-// only calls the callback when the DB exists, loops until then. Should not be used anywhere other than db init due to its blocking nature
-db.whenDBExists = function(database,callback) {
-     database.exists(function (error,exists) {
-        if(exists) callback();
-        else db.whenDBExists(database,callback);     
-     });
 };
 
 function updateViews(callback) {

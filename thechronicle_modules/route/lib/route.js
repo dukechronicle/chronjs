@@ -23,7 +23,7 @@ exports.init = function (app) {
         app.get('/all', siteApi.listAll);
         app.get('/section/*', siteApi.listSection);
         app.get('/article/url/:url', siteApi.articleByUrl);
-        app.get('/search/:query', siteApi.search);
+        app.get('/search', siteApi.search);
         app.get('/staff/:query', siteApi.staff);
 
         app.get('/article/:id', siteApi.readArticle);
@@ -70,13 +70,7 @@ exports.init = function (app) {
     app.get('/graduation', redirect('/page/graduation'));
 
     // Makes search url more readable
-    app.get('/search', function (req, res) {
-        var query = "--";            
-        if (req.param('search') != null)
-            query = req.param('search').replace(/ /g, '-');
-        res.redirect('/search/' + query + '?sort=relevance&order=desc'); 
-    });
-    app.get('/search/:query', site.search);
+    app.get('/search', site.search);
 
     app.get('/users/:query', function (req, res) {
         res.redirect('/staff/' + req.params.query);

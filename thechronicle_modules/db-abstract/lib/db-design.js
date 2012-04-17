@@ -34,10 +34,8 @@ exports.doc = {
             duplicates:{
                 map:function (doc) {
                     if (doc.type == "article") {
-                        for (var i in doc.urls) {
-                            // sort by created day and then by title                            
-                            emit([Math.floor(doc.created/86400), doc.title], doc);
-                        }
+                        // sort by created day and then by title                            
+                        emit([Math.floor(doc.created/86400), doc.title], doc);
                     }
                 }
             },

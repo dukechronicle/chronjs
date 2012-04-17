@@ -4,7 +4,7 @@ define(["jquery", "libs/jquery-ui"], function($) {
     var isLoadingPage = false; // stops multiple pages loading at once
     var noPagesLeftToLoad = false; // stops ajax requests from being issued once all articles for this page have been loaded
     var loadImage = null;
-    var scrollLoadUrl, nextPageToLoad, lastDoc, scrollLoadHTML;
+    var scrollLoadUrl, nextPageToLoad, scrollLoadHTML;
     
 
     scrollLoadPage = function(_scrollLoadUrl, _nextPageToLoad, _scrollLoadHTML) {
@@ -15,9 +15,8 @@ define(["jquery", "libs/jquery-ui"], function($) {
         scrollLoad(loadPaginatedData);
     };
 
-    scrollLoadLastDoc = function(_scrollLoadUrl, _lastDoc, _scrollLoadHTML) {
+    scrollLoadLastDoc = function(_scrollLoadUrl, _scrollLoadHTML) {
         scrollLoadUrl = _scrollLoadUrl;
-        lastDoc = _lastDoc;
         scrollLoadHTML = _scrollLoadHTML;
 
         scrollLoad(loadDataFromLastDoc);
@@ -44,8 +43,8 @@ define(["jquery", "libs/jquery-ui"], function($) {
             // add and fade in the article, then when fade in done add next article
             var HTMLToAdd = formatArticle(articles[i]);
             loadImage.before(HTMLToAdd)
-            $(".addedArticle:last").hide();
-            $(".addedArticle:last").fadeIn(function () {
+            $(".document:last").hide();
+            $(".document:last").fadeIn(function () {
                 addArticle(articles,i+1);
             });
         }
@@ -87,8 +86,8 @@ define(["jquery", "libs/jquery-ui"], function($) {
     // load the next set of documents for this set of params, starting with the last document currently on the page
     function loadDataFromLastDoc() {
         var params = {
-            startkey: JSON.stringify(lastDoc.query_key),
-            startid: lastDoc._id
+            startkey: $(".document:last").attr('data-key'),
+            startid:  $(".document:last").attr('id')
         };
 
         $.get(scrollLoadUrl, params, function(docs) {
@@ -97,8 +96,6 @@ define(["jquery", "libs/jquery-ui"], function($) {
                 loadImage.fadeOut();
             }
             else {
-                lastDoc = docs[docs.length-1];                
-
                 // add the docs to the page, correctly formatted,
                 // ignoring the duplicate doc
                 addArticle(docs, 1);

@@ -9,7 +9,7 @@
 #section
     .articles
         for doc in docs
-            a.result.rounded-hover(href=doc.url)
+            a.result.document.rounded-hover(href=doc.url, data-key=JSON.stringify(doc.query_key), id=doc._id)
                 h3 #{doc.title}
                 .date #{doc.date}
                 .teaser #{doc.teaser}
@@ -17,21 +17,13 @@
             script(type='text/javascript')
                 CHRONICLE.onload.push(function () {
                     var scrollLoadUrl = "/api/section/#{taxonomyPath}";
-                    var lastDoc = !{JSON.stringify(docs[docs.length-1])};
-                    var scrollLoadHTML = '<a class="result rounded-hover addedArticle" href="/article/URL_REPLACE">'+ '<h3>HEADER_REPLACE</h3><div class="date">DATE_REPLACE</div><div class="teaser">TEASER_REPLACE</div></a>';
-                    scrollLoadLastDoc(scrollLoadUrl, lastDoc, scrollLoadHTML);
+                    var scrollLoadHTML = '<a class="result rounded-hover document" href="/article/URL_REPLACE">'+ '<h3>HEADER_REPLACE</h3><div class="date">DATE_REPLACE</div><div class="teaser">TEASER_REPLACE</div></a>';
+                    scrollLoadLastDoc(scrollLoadUrl, scrollLoadHTML);
                 });
 
-            div.result.rounded-hover(id='loadImage')
-                img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto")
-                br
-                br
-                br
-                br
-                br
-                br
-                br
-                br
+            div.result.rounded-hover#loadImage(style="height:300px;")
+                img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto;")
+
     .sidebar
         - if (typeof popular != 'undefined' && popular.length > 0)
             .numbered-articles.most-popular!=partial('../container/numbered-articles', {title: "Popular", stories: popular})

@@ -13,18 +13,22 @@ var RESULTS_PER_PAGE = 25;
 // startDoc specifies the document within the taxonomy to start returning data at, for pagination.
 taxonomy.docs = function (taxonomyPath, limit, query, callback) {
     query = query || {};
-    query.limit = limit || RESULTS_PER_PAGE;
+    
+    // get extra document for pagination
+    query.limit = (limit || query.limit || RESULTS_PER_PAGE) + 1;
 
     taxonomyPath = _.map(taxonomyPath, function (s) { return s.toLowerCase() });
 
     db.taxonomy.docs(taxonomyPath, query, function (err, docs) {
         if (err) callback(err);
         else {
-            // hack to return view keys with returned docs
-            callback(null, _.map(docs, function (doc) {
-                doc.value.query_key = doc.key;
-                return doc.value;
-            }));
+            var lastDoc = null;
+            if (docs.length == query.limit) {
+                lastDoc = docs.pop();
+                delete lastDoc.value;
+            }
+            var docValues = _.map(docs, function (doc) { return doc.value });
+            callback(null, docValues, lastDoc);
         }
     });
 };

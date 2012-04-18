@@ -4,21 +4,17 @@ define(["jquery", "libs/jquery-ui"], function($) {
     var isLoadingPage = false; // stops multiple pages loading at once
     var noPagesLeftToLoad = false; // stops ajax requests from being issued once all articles for this page have been loaded
     var loadImage = null;
-    var scrollLoadUrl, nextPageToLoad, scrollLoadHTML;
+    var scrollLoadUrl, nextPageToLoad;
     
 
-    scrollLoadPage = function(_scrollLoadUrl, _nextPageToLoad, _scrollLoadHTML) {
+    scrollLoadPage = function(_scrollLoadUrl, _nextPageToLoad) {
         scrollLoadUrl = _scrollLoadUrl;
         nextPageToLoad = _nextPageToLoad;
-        scrollLoadHTML = _scrollLoadHTML;
-
         scrollLoad(loadPaginatedData);
     };
 
-    scrollLoadLastDoc = function(_scrollLoadUrl, _scrollLoadHTML) {
+    scrollLoadLastDoc = function(_scrollLoadUrl) {
         scrollLoadUrl = _scrollLoadUrl;
-        scrollLoadHTML = _scrollLoadHTML;
-
         scrollLoad(loadDataFromLastDoc);
     };
 
@@ -30,12 +26,56 @@ define(["jquery", "libs/jquery-ui"], function($) {
 
         $(window).scroll(function(){
             // if they scrolled to the bottom of the page, load the next 'page' of articles
-            if(!isLoadingPage && !noPagesLeftToLoad && $(window).scrollTop() === ($(document).height() - $(window).height())) {
+            if (!isLoadingPage && !noPagesLeftToLoad && bottomOfPage()) {
                 loadImage.fadeIn('slow');
                 isLoadingPage = true;
                 documentLoad();
             }
         });
+    }
+
+    function bottomOfPage () {
+        return $(window).scrollTop() == ($(document).height()-$(window).height())
+    }
+
+    // load the next page of documents for this set of params
+    function loadPaginatedData() {
+        $.get("/api/"+scrollLoadUrl+"&page="+nextPageToLoad, function(returnedData) {
+            if(returnedData.docs.length === 0) {
+                noPagesLeftToLoad = true;
+                loadImage.fadeOut();
+            }
+            else {
+                nextPageToLoad ++;
+
+                // add the docs to this page, correctly formatted
+                addArticle(returnedData.docs,0);
+            }
+        });
+    }
+
+    // load the next set of documents for this set of params, starting with the last document currently on the page
+       function loadDataFromLastDoc() {
+        var next = $(".result:last").attr('data-key');
+
+        if (!next || !JSON.parse(next)) {
+            noPagesLeftToLoad = true;
+            loadImage.fadeOut();
+        }
+        else {
+            $.get(scrollLoadUrl, {key: next}, function (result) {
+                if (result.docs.length == 1) {
+                    noPagesLeftToLoad = true;
+                    loadImage.fadeOut();
+                }
+                else {
+                    // add the docs to the page, correctly formatted,
+                    // ignoring the duplicate doc
+                    addArticle(result.docs);
+                    $(".result:last").attr('data-key', result.next);
+                }
+            });
+        }
     }
 
     function addArticle(articles) {
@@ -63,52 +103,12 @@ define(["jquery", "libs/jquery-ui"], function($) {
         var date = new Date(article.created * 1000);
         
         document.attr("href", '/article/'+article.urls[article.urls.length - 1]);
-        document.find(".title").text(article.title);
-        document.find(".date").text($.datepicker.formatDate("MM d, yy", date));
-        document.find(".teaser").text(article.teaser);
-        document.find(".author").text(article.authors.join(", "));
+        document.find(".title").html(article.title);
+        document.find(".date").html($.datepicker.formatDate("MM d, yy", date));
+        document.find(".teaser").html(article.teaser);
+        document.find(".author").html(article.authors.join(", "));
 
         return document;
-    }
-
-    // load the next page of documents for this set of params
-    function loadPaginatedData() {
-        $.get("/api/"+scrollLoadUrl+"&page="+nextPageToLoad, function(returnedData) {
-            if(returnedData.docs.length === 0) {
-                noPagesLeftToLoad = true;
-                loadImage.fadeOut();
-            }
-            else {
-                nextPageToLoad ++;
-
-                // add the docs to this page, correctly formatted
-                addArticle(returnedData.docs,0);
-            }
-        });
-    }
-
-    // load the next set of documents for this set of params, starting with the last document currently on the page
-    function loadDataFromLastDoc() {
-        var next = $(".result:last").attr('data-key');
-
-        if (!next || !JSON.parse(next)) {
-            noPagesLeftToLoad = true;
-            loadImage.fadeOut();
-        }
-        else {
-            $.get(scrollLoadUrl, {key: next}, function (result) {
-                if (result.docs.length == 1) {
-                    noPagesLeftToLoad = true;
-                    loadImage.fadeOut();
-                }
-                else {
-                    // add the docs to the page, correctly formatted,
-                    // ignoring the duplicate doc
-                    addArticle(result.docs);
-                    $(".result:last").attr('data-key', result.next);
-                }
-            });
-        }
     }
 
 });

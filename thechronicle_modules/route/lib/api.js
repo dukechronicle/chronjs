@@ -27,21 +27,15 @@ siteApi.listAll = function (req, res, next) {
 */
 siteApi.listSection = function (req, res, next) {
     var sectionArray = req.params.toString().split('/');
-    
-    var query = {};
-    if (req.query.startkey)
-        query.startkey = JSON.parse(req.query.startkey);
-    if (req.query.startid)
-        query.startkey_docid = req.query.startid;
-
-    api.taxonomy.docs(sectionArray, 15, query, function (err, docs) {
+    var start = req.query.key && JSON.parse(req.query.key);
+    api.taxonomy.docs(sectionArray, 15, start, function (err, docs, next) {
         if (err) next(err);
         else {
-            var result = _.map(docs, function (doc) {
+            docs = _.map(docs, function (doc) {
                 return _.pick(doc, 'title', 'teaser', 'urls', '_id', 'created',
                               'authors', 'query_key');
             });
-            res.json(result);
+            res.json({docs: docs, next: next});
         }
     });
 };

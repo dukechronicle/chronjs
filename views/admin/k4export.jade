@@ -14,9 +14,9 @@ a(href='/admin/manage') Manage and edit uploaded articles
   h2 The followed articles were uploaded successfully
   table.export-index
     - each article in succeeded
-      tr(id=article.id)
+      tr
         td
-          a(href='/article/' + article.url) #{article.title}
+          h3 #{article.title}
         td
           select.taxonomy(id='tax'+article.id, style='width: 200px')
             - if (article.taxonomy && article.taxonomy[0] in taxonomy)

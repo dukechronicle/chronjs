@@ -69,8 +69,8 @@ siteApi.articleByUrl = function (req, res, next) {
 *@params req, http response
 */
 siteApi.search = function (req, res, next) {
-    var wordsQuery = req.params.query.replace('-', ' ');
-    api.search.docsBySearchQuery(wordsQuery, req.query.sort, req.query.order, req.query.facets, req.query.page, true, function (err, docs, facets) {
+    var query = req.query.q.replace(/-/g, ' ');
+    api.search.docsBySearchQuery(query, req.query.sort, req.query.order, req.query.facets, req.query.page, true, function (err, docs, facets) {
         if (err) next(err);
         else res.json({docs: docs, facets: facets});
     });

@@ -87,18 +87,24 @@ define(["jquery", "libs/jquery-ui"], function($) {
     function loadDataFromLastDoc() {
         var next = $(".result:last").attr('data-key');
 
-        $.get(scrollLoadUrl, {key: next}, function (result) {
-            if (result.docs.length == 1) {
-                noPagesLeftToLoad = true;
-                loadImage.fadeOut();
-            }
-            else {
-                // add the docs to the page, correctly formatted,
-                // ignoring the duplicate doc
-                addArticle(result.docs, 0);
-                $(".result:last").attr('data-key', JSON.stringify(result.next));
-            }
-        });
+        if (!next || !JSON.parse(next)) {
+            noPagesLeftToLoad = true;
+            loadImage.fadeOut();
+        }
+        else {
+            $.get(scrollLoadUrl, {key: next}, function (result) {
+                if (result.docs.length == 1) {
+                    noPagesLeftToLoad = true;
+                    loadImage.fadeOut();
+                }
+                else {
+                    // add the docs to the page, correctly formatted,
+                    // ignoring the duplicate doc
+                    addArticle(result.docs, 0);
+                    $(".result:last").attr('data-key', result.next);
+                }
+            });
+        }
     }
 
 });

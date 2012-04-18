@@ -22,8 +22,8 @@ var configParams = [
     },
     {
         name: 'DOMAIN_NAME',
-        description: 'Site Domain Name (no www)',
-        defaultValue: 'dukechronicle.com',
+        description: 'Site Domain Name',
+        defaultValue: 'www.dukechronicle.com',
         schema: {
           type: "string",
           required: true

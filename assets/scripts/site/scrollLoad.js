@@ -85,20 +85,18 @@ define(["jquery", "libs/jquery-ui"], function($) {
 
     // load the next set of documents for this set of params, starting with the last document currently on the page
     function loadDataFromLastDoc() {
-        var params = {
-            startkey: $(".document:last").attr('data-key'),
-            startid:  $(".document:last").attr('id')
-        };
+        var next = $(".result:last").attr('data-key');
 
-        $.get(scrollLoadUrl, params, function(docs) {
-            if (docs.length <= 1) {
+        $.get(scrollLoadUrl, {key: next}, function (result) {
+            if (result.docs.length == 1) {
                 noPagesLeftToLoad = true;
                 loadImage.fadeOut();
             }
             else {
                 // add the docs to the page, correctly formatted,
                 // ignoring the duplicate doc
-                addArticle(docs, 1);
+                addArticle(result.docs, 0);
+                $(".result:last").attr('data-key', JSON.stringify(result.next));
             }
         });
     }

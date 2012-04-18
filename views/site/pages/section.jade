@@ -9,7 +9,7 @@
 #section
     .articles
         for doc in docs
-            a.result.document.rounded-hover(href=doc.url, data-key=JSON.stringify(doc.query_key), id=doc._id)
+            a.result.rounded-hover(href=doc.url)
                 h3 #{doc.title}
                 .date #{doc.date}
                 .teaser #{doc.teaser}
@@ -21,7 +21,7 @@
                     scrollLoadLastDoc(scrollLoadUrl, scrollLoadHTML);
                 });
 
-            div.result.rounded-hover#loadImage(style="height:300px;")
+            div.result.rounded-hover#loadImage(style="height:300px;", data-key=JSON.stringify(next))
                 img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto;")
 
     .sidebar

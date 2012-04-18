@@ -10,15 +10,13 @@
     .articles
         for doc in docs
             a.result.rounded-hover(href=doc.url)
-                h3 #{doc.title}
+                h3.title #{doc.title}
                 .date #{doc.date}
                 .teaser #{doc.teaser}
         - if(docs.length > 0)
             script(type='text/javascript')
                 CHRONICLE.onload.push(function () {
-                    var scrollLoadUrl = "/api/section/#{taxonomyPath}";
-                    var scrollLoadHTML = '<a class="result rounded-hover document" href="/article/URL_REPLACE">'+ '<h3>HEADER_REPLACE</h3><div class="date">DATE_REPLACE</div><div class="teaser">TEASER_REPLACE</div></a>';
-                    scrollLoadLastDoc(scrollLoadUrl, scrollLoadHTML);
+                    scrollLoadLastDoc("/api/section/#{taxonomyPath}");
                 });
 
             div.result.rounded-hover#loadImage(style="height:300px;", data-key=JSON.stringify(next))

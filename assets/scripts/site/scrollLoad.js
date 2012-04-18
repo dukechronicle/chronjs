@@ -38,14 +38,17 @@ define(["jquery", "libs/jquery-ui"], function($) {
         });
     }
 
-    function addArticle(articles,i) {
-        if(i < articles.length) {
-            // add and fade in the article, then when fade in done add next article
-            var HTMLToAdd = formatArticle(articles[i]);
-            loadImage.before(HTMLToAdd)
-            $(".document:last").hide();
-            $(".document:last").fadeIn(function () {
-                addArticle(articles,i+1);
+    function addArticle(articles) {
+        if (articles.length > 0) {
+            // add and fade in the article, then when fade in done add next
+            // article
+
+            var model = $(".result:first");
+            var article = formatArticle(model.clone(), articles.shift());
+            loadImage.before(article);
+            article.hide();
+            article.fadeIn(function () {
+                addArticle(articles);
             });
         }
         else {
@@ -56,15 +59,16 @@ define(["jquery", "libs/jquery-ui"], function($) {
         }
     }
 
-    function formatArticle(article) {
-        var addHTML = scrollLoadHTML;
-        addHTML = addHTML.replace("URL_REPLACE",article.urls[0]);
-        addHTML = addHTML.replace("HEADER_REPLACE",article.title);
-        addHTML = addHTML.replace("DATE_REPLACE", $.datepicker.formatDate("MM d, yy", new Date(article.created*1000)));
-        addHTML = addHTML.replace("AUTHOR_REPLACE",article.authors.join(", "));
-        addHTML = addHTML.replace("TEASER_REPLACE",article.teaser);
+    function formatArticle(document, article) {
+        var date = new Date(article.created * 1000);
+        
+        document.attr("href", '/article/'+article.urls[article.urls.length - 1]);
+        document.find(".title").text(article.title);
+        document.find(".date").text($.datepicker.formatDate("MM d, yy", date));
+        document.find(".teaser").text(article.teaser);
+        document.find(".author").text(article.authors.join(", "));
 
-        return addHTML;
+        return document;
     }
 
     // load the next page of documents for this set of params
@@ -100,7 +104,7 @@ define(["jquery", "libs/jquery-ui"], function($) {
                 else {
                     // add the docs to the page, correctly formatted,
                     // ignoring the duplicate doc
-                    addArticle(result.docs, 0);
+                    addArticle(result.docs);
                     $(".result:last").attr('data-key', result.next);
                 }
             });

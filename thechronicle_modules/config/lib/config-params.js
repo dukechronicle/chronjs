@@ -688,7 +688,8 @@ var configParams = [
                     year: {type: "string", required: true},
                     tagline: {type: "string", required: false},
                     day: {type: "string", required: true},
-                    headshot: {type: "string", required: true}
+                    headshot: {type: "string", required: true},
+                    twitter: {type: "string", required: false}
                 }
             },
             required: true

@@ -242,17 +242,7 @@ function ArticleParser(articleCallback) {
  */
 function runExporter(zipPath, callback) {
     var parser = new ArticleParser(function (article, callback) {
-    api.addDoc(article, function (err, url, id) {
-            if (err) {
-                log.warning("Error adding article: " + err);
-                callback(article.title);
-            }
-            else {
-                article.url = url;
-                article.id = id;
-                callback(undefined, article);
-            }
-        });
+        callback(undefined, article);
     });
 
     parser.parse(zipPath, callback);

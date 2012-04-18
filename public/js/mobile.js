@@ -252,7 +252,7 @@ function search(eventObject)
 
     if(query.length > 0) {
         $.ajax({
-            url: "/api/search/" + query,
+            url: "/api/search?q=" + query,
             dataType: "jsonp",
             cache: false,
             success: function(data) {

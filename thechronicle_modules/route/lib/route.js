@@ -23,7 +23,7 @@ exports.init = function (app) {
         app.get('/all', siteApi.listAll);
         app.get('/section/*', siteApi.listSection);
         app.get('/article/url/:url', siteApi.articleByUrl);
-        app.get('/search/:query', siteApi.search);
+        app.get('/search', siteApi.search);
         app.get('/staff/:query', siteApi.staff);
 
         app.get('/article/:id', siteApi.readArticle);

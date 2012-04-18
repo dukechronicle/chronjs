@@ -1,6 +1,7 @@
 !!! 5
 html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
-    head
+    - if (typeof article != undefined) prefix = "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#"
+    head(prefix=prefix)
         script(src="/js/mobile-redirect.js?v=3")
 
         if (typeof pageTitle != 'undefined')

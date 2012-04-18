@@ -1,6 +1,8 @@
 !!! 5
 html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
-    - if (typeof article != undefined) prefix = "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#"
+    - if (typeof article !== undefined)
+        prefix = "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#";
+
     head(prefix=prefix)
         script(src="/js/mobile-redirect.js?v=3")
 
@@ -32,6 +34,7 @@ html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
         - if (typeof article !== "undefined")
             // opengraph
             meta(property="og:title", content=doc.title)
+            //meta(property="og:published_time", content=published_time)
             meta(property="og:type", content="article")
             meta(property="og:url", content=doc.fullUrl)
             meta(property="og:description", content=doc.teaser)

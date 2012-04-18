@@ -29,7 +29,7 @@ newsletter.init = function() {
 
     templateID = config.get("MAILCHIMP_TEMPLATE_ID");
 
-    newsletterFromEmail = "no-reply@"+config.get('DOMAIN_NAME');
+    newsletterFromEmail = "no-reply@"+config.get('DOMAIN_NAME').replace("www.", "");
 
     try { 
         mcAPI = new MailChimpAPI(apiKey, { version : '1.3', secure : false });

@@ -33,12 +33,13 @@ html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
             meta(property="og:title", content=doc.title)
             meta(property="og:type", content="article")
             meta(property="og:url", content=doc.fullUrl)
+            meta(property="og:description", content=doc.teaser)
             if (typeof pageImage != 'undefined')
                 meta(property="og:image", content=pageImage)
             else
                 meta(property="og:image", content=static_cdn + "/images/favicon.png")
 
-            meta(property="og:site_name", content="Duke Chronicle")
+            meta(property="og:site_name", content="The Chronicle")
             meta(property="fb:app_id", content="335954613131615")
     body
         // required for facebook javascript sdk

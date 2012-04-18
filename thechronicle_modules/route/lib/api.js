@@ -35,7 +35,7 @@ siteApi.listSection = function (req, res, next) {
                 return _.pick(doc, 'title', 'teaser', 'urls', '_id', 'created',
                               'authors', 'query_key');
             });
-            res.json({docs: docs, next: next});
+            res.json({docs: docs, next: JSON.stringify(next)});
         }
     });
 };

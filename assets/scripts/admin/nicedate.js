@@ -5,6 +5,7 @@ define(['jquery', 'libs/jquery-ui'], function ($) {
     var niceDateTextbox;
     var realDateTextbox;
     var dateForm;
+    var niceDateChanged = false;
 
     // on load
     prettifyDate = function() {
@@ -26,7 +27,11 @@ define(['jquery', 'libs/jquery-ui'], function ($) {
 
     // make the date look nice for the user
     function niceifyDate() {
-        $(niceDateTextbox).datepicker();
+        $(niceDateTextbox).datepicker({
+            onSelect: function(dateText, inst) {
+                niceDateChanged = true;
+            }
+        });
 
         var dateInt = parseInt($(realDateTextbox).val());
         var date = new Date(dateInt);
@@ -35,8 +40,10 @@ define(['jquery', 'libs/jquery-ui'], function ($) {
         }
     }
 
-    // convert the nice date visible to the user to a timestamp
+    // convert the nice date visible to the user to a timestamp if the user changed the nice date
     function _setRealDate() {
+        if(!niceDateChanged) return;
+
         var date = new Date($(niceDateTextbox).val());
         
         if(date.toDateString() != 'Invalid Date') {

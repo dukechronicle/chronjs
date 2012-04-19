@@ -48,7 +48,7 @@ define(['jquery', 'Article', 'libs/jquery.dd'], function ($, Article) {
         }
 
         article.save(null, {
-            url: '/api/article/' + id,
+            url: '/api/article',
             success: function(data, status, jqXHR) {
                 callback(null, data);
             },

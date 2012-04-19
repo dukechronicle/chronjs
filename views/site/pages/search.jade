@@ -33,16 +33,17 @@ script(type='text/javascript')
 
     .main
         for doc in docs
-            a.result.rounded-hover(href=doc.url)
-                h3 !{doc.title}
-                .dateline
-                    span.date !{doc.date}
-                    span.sep &nbsp;|&nbsp;
-                    span.author !{doc.authors}
-                .teaser !{doc.teaser}
+            .document
+                a.result.rounded-hover(href=doc.url)
+                    h3 !{doc.title}
+                    .dateline
+                        span.date !{doc.date}
+                        span.sep &nbsp;|&nbsp;
+                        span.author !{doc.authors}
+                    .teaser !{doc.teaser}
         - if(docs.length == 0)
             div No articles found
-        div.result.rounded-hover(id='loadImage')
+        div.result.rounded-hover(id='loadImage', style="height: 300px;")
             img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto")
             br
             br

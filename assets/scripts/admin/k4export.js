@@ -4,42 +4,48 @@ define(['jquery', 'Article', 'libs/jquery.dd'], function ($, Article) {
 
     k4export = function () {
 
-        $(".export-index button").click(function () {
-            $(this).attr('disabled', 'disabled');
-            var $row = $(this).parent().parent();
-            var $button = $(this);
-            editDocument($row, function (err) {
-                if (err) alert(err);
-                $row.fadeOut('fast', function () {
-                    $row.remove();
-                });
+        $(".article-form").submit(function (e) {
+            e.preventDefault();
+            $form = $(this);
+            $form.children(".btn").attr('disabled', 'disabled');
+            editDocument($form, function (err) {
+                if (err) {
+                    alert(err);
+                    $form.children(".btn").removeAttr('disabled');
+                }
+                else {
+                    $form.fadeOut('slow', function () {
+                        $form.remove();
+                    });
+                }
             });
         });
 
         try {
-            $("[id^=img]").msDropDown({visibleRows:4, rowHeight:100});
+            $(".article-form .image").msDropDown({visibleRows:4, rowHeight:100});
         } catch(e) {
             alert(e.message);
         }
     };
 
-    function editDocument($row, callback) {
-        var id = $row.attr('id');
-        var taxonomy = $row.find("td > .taxonomy").val();
-        if (!taxonomy)
+    function editDocument($form, callback) {
+        var article = new Article($form.data("article"));
+
+        article.set({
+            taxonomy: JSON.parse($form.children(".taxonomy").val())
+        });
+        if (!article.get('taxonomy'))
             return callback("Must select a section for article");
 
-        var article = new Article({
-            id: id,
-            taxonomy: JSON.parse(taxonomy)
-        });
-
         try {
-            var imgDDElement = $row.find("#img"+$row.attr('id'));
-            var imageData = JSON.parse(imgDDElement.val());
-            article.addImageVersions(imageData.originalId, imageData.imageVersions, imageData.imageVersionTypes);
+            var imageData = JSON.parse($form.find(".image").val());
+            article.addImageVersions(imageData.originalId,
+                                     imageData.imageVersions,
+                                     imageData.imageVersionTypes);
         }
-        catch (e) {}
+        catch (e) {
+            return callback("Error getting image: " + e);
+        }
 
         article.save(null, {
             url: '/api/article/' + id,
@@ -51,4 +57,5 @@ define(['jquery', 'Article', 'libs/jquery.dd'], function ($, Article) {
             }
         });
     }
+
 });

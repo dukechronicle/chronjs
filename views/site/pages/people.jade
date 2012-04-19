@@ -10,21 +10,11 @@ script(type='text/javascript')
     .main
         .rounded.result
             for doc in docs
-                h3
-                    a(href=doc.url) #{doc.title}
-                .date #{doc.date}
-                    //span.sep &nbsp;|&nbsp
-                    //| #{doc.authors}
-                //.teaser #{doc.teaser}
+                .document
+                    h3
+                        a.title.url(href=doc.url) #{doc.title}
+                    .date #{doc.date}
             - if(docs.length == 0)
                 div No articles found
-            div.result.rounded-hover(id='loadImage')
+            div.result.rounded-hover(id='loadImage', style="height: 300px;")
                 img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto")
-                br
-                br
-                br
-                br
-                br
-                br
-                br
-                br

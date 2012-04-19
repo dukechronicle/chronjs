@@ -16,7 +16,7 @@ siteApi.listAll = function (req, res, next) {
             var result = _.map(docs, function (doc) {
                 return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id, "created":doc.created};
             });
-            res.json(result);
+            res.json({docs: result});
         }
     });
 };

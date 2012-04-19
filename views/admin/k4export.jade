@@ -12,30 +12,25 @@ a(href='/admin/manage') Manage and edit uploaded articles
     p #{article}
 - if (succeeded && succeeded.length)
   h2 The followed articles were uploaded successfully
-  table.export-index
-    - each article in succeeded
-      tr
-        td
-          h3 #{article.title}
-        td
-          select.taxonomy(id='tax'+article.id, style='width: 200px')
-            - if (article.taxonomy && article.taxonomy[0] in taxonomy)
-              - each key, value in taxonomy[article.taxonomy[0]]
-                - if (JSON.stringify(article.taxonomy) == value)
-                    option(value=value, selected='selected') #{key}
-                - else
-                    option(value=value) #{key}
+  - each article in succeeded
+    form.well.form-inline.article-form(data-article=JSON.stringify(article))
+      h3.title #{article.title}
+      select.taxonomy
+        - if (article.taxonomy && article.taxonomy[0] in taxonomy)
+          - each key, value in taxonomy[article.taxonomy[0]]
+            - if (JSON.stringify(article.taxonomy) == value)
+                option(value=value, selected='selected') #{key}
             - else
-              option(value='') Select a section
-              - each subsections, section in taxonomy
-                - each key, value in subsections
-                    option(value=value) #{key}
-        td
-          select.image(id='img'+article.id, style='width: 300px')
-            option(value='') Select an image
-            - each image in imageData
-              option(value=JSON.stringify(image), title=image.thumbUrl) #{image.displayName}
-        td
-          button.btn(id='sub'+article.id, style='width: 200px') Submit
+                option(value=value) #{key}
+        - else
+          option(value='') Select a section
+          - each subsections, section in taxonomy
+            - each key, value in subsections
+                option(value=value) #{key}
+      select.image
+        option(value='') Select an image
+        - each image in imageData
+          option(value=JSON.stringify(image), title=image.thumbUrl) #{image.displayName}
+      input.btn(type="submit") Submit
 
 script CHRONICLE.onload.push(function(){k4export()})

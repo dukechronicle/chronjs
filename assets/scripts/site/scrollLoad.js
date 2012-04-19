@@ -40,6 +40,7 @@ define(["jquery", "libs/jquery-ui"], function($) {
 
     // load the next page of documents for this set of params
     function loadPaginatedData() {
+        console.log("/api/"+scrollLoadUrl+"&page="+nextPageToLoad);
         $.get("/api/"+scrollLoadUrl+"&page="+nextPageToLoad, function(returnedData) {
             if(returnedData.docs.length === 0) {
                 noPagesLeftToLoad = true;
@@ -55,7 +56,7 @@ define(["jquery", "libs/jquery-ui"], function($) {
     }
 
     // load the next set of documents for this set of params, starting with the last document currently on the page
-       function loadDataFromLastDoc() {
+    function loadDataFromLastDoc() {
         var next = $(".result:last").attr('data-key');
 
         if (!next || !JSON.parse(next)) {
@@ -83,7 +84,7 @@ define(["jquery", "libs/jquery-ui"], function($) {
             // add and fade in the article, then when fade in done add next
             // article
 
-            var model = $(".result:first");
+            var model = $(".document:first");
             var article = formatArticle(model.clone(), articles.shift());
             loadImage.before(article);
             article.hide();
@@ -101,8 +102,9 @@ define(["jquery", "libs/jquery-ui"], function($) {
 
     function formatArticle(document, article) {
         var date = new Date(article.created * 1000);
+        var url = article.urls[article.urls.length - 1];
         
-        document.attr("href", '/article/'+article.urls[article.urls.length - 1]);
+        document.find("a.url").attr("href", '/article/' + url);
         document.find(".title").html(article.title);
         document.find(".date").html($.datepicker.formatDate("MM d, yy", date));
         document.find(".teaser").html(article.teaser);

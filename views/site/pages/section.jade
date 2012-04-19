@@ -9,10 +9,11 @@
 #section
     .articles
         for doc in docs
-            a.result.rounded-hover(href=doc.url)
-                h3.title !{doc.title}
-                .date !{doc.date}
-                .teaser !{doc.teaser}
+            .document
+                a.result.rounded-hover(href=doc.url)
+                    h3.title !{doc.title}
+                    .date !{doc.date}
+                    .teaser !{doc.teaser}
         - if(docs.length > 0)
             script(type='text/javascript')
                 CHRONICLE.onload.push(function () {

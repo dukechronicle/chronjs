@@ -68,17 +68,19 @@ siteApi.articleByUrl = function (req, res, next) {
 */
 siteApi.search = function (req, res, next) {
     var query = req.query.q.replace(/-/g, ' ');
-    api.search.docsBySearchQuery(query, req.query.sort, req.query.order, req.query.facets, req.query.page, true, function (err, docs, facets) {
+    var page = (req.query.key && parseInt(req.query.key)) || req.query.page || 1;
+    api.search.docsBySearchQuery(query, req.query.sort, req.query.order, req.query.facets, page, true, function (err, docs, facets) {
         if (err) next(err);
-        else res.json({docs: docs, facets: facets});
+        else res.json({docs: docs, facets: facets, next: page + 1});
     });
 };
 
 siteApi.staff = function (req, res, next) {
     var nameQuery = req.params.query.replace('-', ' ');
-    api.search.docsByAuthor(nameQuery, 'desc', '', req.query.page, function (err, docs, facets) {
+    var page = (req.query.key && parseInt(req.query.key)) || req.query.page || 1;
+    api.search.docsByAuthor(nameQuery, 'desc', '', page, function (err, docs, facets) {
         if (err) next(err);
-        else res.json({docs: docs, facets: facets});
+        else res.json({docs: docs, facets: facets, next: page + 1});
     });
 };
 

@@ -215,9 +215,9 @@ function ArticleParser(articleCallback) {
 
     function onInlineTag(parser) {
         var tag = parser.tag;
-        if (tag.attributes.name == "Root")
+        if (tag.attributes.NAME == "Root")
             parser.article.title = parser.textNode;
-        if (tag.attributes.name == "Story")
+        if (tag.attributes.NAME == "Story")
             parser.article.body.push(parser.textNode);
     }
 

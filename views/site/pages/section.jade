@@ -20,7 +20,7 @@
         - if(docs.length > 0)
             script(type='text/javascript')
                 CHRONICLE.onload.push(function () {
-                    scrollLoadLastDoc("/api/section/#{taxonomyPath}");
+                    scrollLoad("/api/section/#{taxonomyPath}");
                 });
 
             div.result.rounded-hover#loadImage(style="height:300px;", data-key=JSON.stringify(next))

@@ -1,24 +1,12 @@
-var scrollLoadPage, scrollLoadLastDoc;
+var scrollLoad;
 
 define(["jquery", "libs/jquery-ui"], function($) {
     var isLoadingPage = false; // stops multiple pages loading at once
     var noPagesLeftToLoad = false; // stops ajax requests from being issued once all articles for this page have been loaded
     var loadImage = null;
-    var scrollLoadUrl, nextPageToLoad;
-    
 
-    scrollLoadPage = function(_scrollLoadUrl, _nextPageToLoad) {
-        scrollLoadUrl = _scrollLoadUrl;
-        nextPageToLoad = _nextPageToLoad;
-        scrollLoad(loadPaginatedData);
-    };
 
-    scrollLoadLastDoc = function(_scrollLoadUrl) {
-        scrollLoadUrl = _scrollLoadUrl;
-        scrollLoad(loadDataFromLastDoc);
-    };
-
-    function scrollLoad(documentLoad) {
+    scrollLoad = function (scrollLoadUrl) {
         $(document).ready(function() {
             loadImage = $("#loadImage");
             loadImage.hide();
@@ -29,33 +17,17 @@ define(["jquery", "libs/jquery-ui"], function($) {
             if (!isLoadingPage && !noPagesLeftToLoad && bottomOfPage()) {
                 loadImage.fadeIn('slow');
                 isLoadingPage = true;
-                documentLoad();
+                loadDocuments(scrollLoadUrl);
             }
         });
     }
 
     function bottomOfPage () {
-        return $(window).scrollTop() == ($(document).height()-$(window).height())
+        return $(window).scrollTop() ==
+            ($(document).height() - $(window).height());
     }
 
-    // load the next page of documents for this set of params
-    function loadPaginatedData() {
-        $.get("/api/"+scrollLoadUrl+"&page="+nextPageToLoad, function(returnedData) {
-            if(returnedData.docs.length === 0) {
-                noPagesLeftToLoad = true;
-                loadImage.fadeOut();
-            }
-            else {
-                nextPageToLoad ++;
-
-                // add the docs to this page, correctly formatted
-                addArticle(returnedData.docs,0);
-            }
-        });
-    }
-
-    // load the next set of documents for this set of params, starting with the last document currently on the page
-    function loadDataFromLastDoc() {
+    function loadDocuments(scrollLoadUrl) {
         var next = loadImage.attr('data-key');
 
         if (!next || !JSON.parse(next)) {
@@ -64,7 +36,7 @@ define(["jquery", "libs/jquery-ui"], function($) {
         }
         else {
             $.get(scrollLoadUrl, {key: next}, function (result) {
-                if (result.docs.length == 1) {
+                if (result.docs.length == 0) {
                     noPagesLeftToLoad = true;
                     loadImage.fadeOut();
                 }

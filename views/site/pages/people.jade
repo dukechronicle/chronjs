@@ -1,8 +1,6 @@
 script(type='text/javascript')
     CHRONICLE.onload.push(function () {
-        var scrollLoadUrl = "staff/#{name}?";
-        var scrollLoadHTML = '<h3><a href="/article/URL_REPLACE" class="addedArticle">HEADER_REPLACE</a></h3><div class="date">DATE_REPLACE</div>';
-        scrollLoadPage(scrollLoadUrl, 2, scrollLoadHTML);
+        scrollLoadLastDoc("/api/staff/#{name}");
     });
 
 #people
@@ -16,5 +14,5 @@ script(type='text/javascript')
                     .date #{doc.date}
             - if(docs.length == 0)
                 div No articles found
-            div#loadImage(style="height: 300px;")
+            div#loadImage(style="height: 300px;", data-key="2")
                 img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto")

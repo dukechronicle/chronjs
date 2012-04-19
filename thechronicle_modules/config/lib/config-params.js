@@ -22,8 +22,8 @@ var configParams = [
     },
     {
         name: 'DOMAIN_NAME',
-        description: 'Site Domain Name (no www)',
-        defaultValue: 'dukechronicle.com',
+        description: 'Site Domain Name',
+        defaultValue: 'www.dukechronicle.com',
         schema: {
           type: "string",
           required: true
@@ -688,7 +688,8 @@ var configParams = [
                     year: {type: "string", required: true},
                     tagline: {type: "string", required: false},
                     day: {type: "string", required: true},
-                    headshot: {type: "string", required: true}
+                    headshot: {type: "string", required: true},
+                    twitter: {type: "string", required: false}
                 }
             },
             required: true

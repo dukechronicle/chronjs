@@ -10,7 +10,7 @@
     .articles
         for doc in docs
             .document
-                a.result.rounded-hover(href=doc.url)
+                a.result.url.rounded-hover(href=doc.url)
                     h3.title !{doc.title}
                     .date !{doc.date}
                     .teaser !{doc.teaser}

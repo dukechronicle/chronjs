@@ -34,8 +34,8 @@ script(type='text/javascript')
     .main
         for doc in docs
             .document
-                a.result.rounded-hover(href=doc.url)
-                    h3 !{doc.title}
+                a.result.url.rounded-hover(href=doc.url)
+                    h3.title !{doc.title}
                     .dateline
                         span.date !{doc.date}
                         span.sep &nbsp;|&nbsp;
@@ -45,11 +45,3 @@ script(type='text/javascript')
             div No articles found
         div.result.rounded-hover(id='loadImage', style="height: 300px;")
             img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto")
-            br
-            br
-            br
-            br
-            br
-            br
-            br
-            b

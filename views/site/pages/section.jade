@@ -12,7 +12,10 @@
             .document
                 a.result.url.rounded-hover(href=doc.url)
                     h3.title !{doc.title}
-                    .date !{doc.date}
+                    .dateline
+                        span.date !{doc.date}
+                        span.sep &nbsp;|&nbsp;
+                        span.author !{doc.authors}
                     .teaser !{doc.teaser}
         - if(docs.length > 0)
             script(type='text/javascript')

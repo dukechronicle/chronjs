@@ -40,7 +40,6 @@ define(["jquery", "libs/jquery-ui"], function($) {
 
     // load the next page of documents for this set of params
     function loadPaginatedData() {
-        console.log("/api/"+scrollLoadUrl+"&page="+nextPageToLoad);
         $.get("/api/"+scrollLoadUrl+"&page="+nextPageToLoad, function(returnedData) {
             if(returnedData.docs.length === 0) {
                 noPagesLeftToLoad = true;
@@ -57,7 +56,7 @@ define(["jquery", "libs/jquery-ui"], function($) {
 
     // load the next set of documents for this set of params, starting with the last document currently on the page
     function loadDataFromLastDoc() {
-        var next = $(".result:last").attr('data-key');
+        var next = loadImage.attr('data-key');
 
         if (!next || !JSON.parse(next)) {
             noPagesLeftToLoad = true;
@@ -73,7 +72,7 @@ define(["jquery", "libs/jquery-ui"], function($) {
                     // add the docs to the page, correctly formatted,
                     // ignoring the duplicate doc
                     addArticle(result.docs);
-                    $(".result:last").attr('data-key', result.next);
+                    loadImage.attr('data-key', result.next);
                 }
             });
         }

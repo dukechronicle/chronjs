@@ -15,7 +15,19 @@ exports.doc = {
                         }
                     }
                 }
-            }
+            },
+            columnists_info:{
+                map:function (doc) {
+                    if (doc.type == "author-node" && doc.currentColumnist) {
+                        emit(doc.name.toLowerCase(), doc);
+                        if (doc.images) {
+                            for (var type in doc.images) {
+                                emit(doc.name.toLowerCase(), {_id:doc.images[type]});
+                            }
+                        }
+                    }
+                }
+            },
         }
     },
 

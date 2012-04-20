@@ -11,6 +11,9 @@ if (typeof doc !== 'undefined')
             label(for='tagline') Tagline:
             input#tagline(type='text', value=doc['tagline'], name="tagline")
         p
+            label(for='currentColumnist') Current Columnist:
+            input#tagline(type='checkbox', checked=doc['currentColumnist'], name="currentColumnist")
+        p
             label(for='bio') Bio:
             textarea#bio(rows=20, cols=30, name="bio")
                 !{doc['bio']}

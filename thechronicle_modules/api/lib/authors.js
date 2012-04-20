@@ -26,15 +26,22 @@ authors.getInfo = function (authorName, callback) {
     db.authors.getInfo(authorName, callback);
 };
 
+authors.getColumnists = function (callback) {
+    db.authors.getColumnists(callback);
+};
+
 authors.setInfo = function(doc, callback) {
     var id = doc.id;
     var fields = {
         name: doc.name,
         bio: doc.bio,
         affiliation: doc.affiliation,
+        currentColumnist: false,
         tagline: doc.tagline,
         type: "author-node"
     };
+    if (doc.currentColumnist == "on")
+        fields.currentColumnist = true;
     fields.renderedBio = md(fields.bio);
     db.authors.setInfo(id, fields, callback);
 };

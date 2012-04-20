@@ -28,6 +28,7 @@ authors.getLatest = function (authorName, taxonomy, count, callback) {
 authors.getInfo = function(authorName, callback) {
     var query = {
         startkey:authorName.toLowerCase(),
+        endkey:authorName.toLowerCase(),
         include_docs:true
     };
 

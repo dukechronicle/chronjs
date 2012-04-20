@@ -44,6 +44,11 @@ image.IMAGE_TYPES = {
         width: 300,
         height: 120,
         description: "Used for articles on the towerview layout that are in the prefix group."
+    },
+    StaffHeadshot: {
+        width: 300,
+        height: 225,
+        description: "Used on staff author pages for the staff profile. Staff pictures only need this format, and this format should only be used for staff pictures."
     }
 };
 

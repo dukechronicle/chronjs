@@ -13,12 +13,13 @@ var _ = require("underscore");
 var async = require('async');
 var nimble = require('nimble');
 
-var LAYOUT_GROUPS;
+var LAYOUT_GROUPS, columnistHeadshots;
 var twitterFeeds = [];
 var BENCHMARK = false;
 
 site.init = function () {
     LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
+    //columnistHeadshots = {}; // init empty object, to avoid null pointer in "modifyArticleForDisplay()"
 
     twitterFeeds = _.filter(config.get("RSS_FEEDS"), function(rssFeed) {
         return rssFeed.url.indexOf("api.twitter.com") !== -1;
@@ -275,12 +276,12 @@ site.getOpinionPageContent = function(callback) {
                 callback(err);
             else {
                 // maps columnist headshots to name for use on rest of page
-                COLUMNIST_HEADSHOTS = {};
+                columnistHeadshots = {};
                 results[4].forEach(function(columnist) {
                     var name = columnist.name.toLowerCase();
-                    COLUMNIST_HEADSHOTS[name] = {tagline : columnist.tagline};
+                    columnistHeadshots[name] = {tagline : columnist.tagline};
                     if (columnist.images && columnist.images.ThumbSquareM)
-                        COLUMNIST_HEADSHOTS[name].headshot = columnist.images.ThumbSquareM.url;
+                        columnistHeadshots[name].headshot = columnist.images.ThumbSquareM.url;
                 });
 
 
@@ -289,7 +290,7 @@ site.getOpinionPageContent = function(callback) {
                     model.Featured.forEach(function(article) {
                         article.author = article.authors[0];
                         var columnistObj = null;
-                        if( columnistObj = COLUMNIST_HEADSHOTS[article.author.toLowerCase()]) {
+                        if( columnistObj = columnistHeadshots[article.author.toLowerCase()]) {
                             if(columnistObj.headshot)
                                 article.thumb = columnistObj.headshot;
                             if(columnistObj.tagline)
@@ -577,9 +578,9 @@ function modifyArticleForDisplay(doc) {
                 doc.authorsHtml += ", ";
             }
         }
-    
-        if(COLUMNIST_HEADSHOTS[doc.authorsArray[0]])
-            doc.subhead = doc.subhead || COLUMNIST_HEADSHOTS[doc.authorsArray[0]].tagline;
+        console.log(columnistHeadshots);
+        if(columnistHeadshots && columnistHeadshots[doc.authorsArray[0]])
+            doc.subhead = doc.subhead || columnistHeadshots[doc.authorsArray[0]].tagline;
     }
     
     return doc;

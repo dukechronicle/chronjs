@@ -27,15 +27,15 @@ siteApi.listAll = function (req, res, next) {
 */
 siteApi.listSection = function (req, res, next) {
     var sectionArray = req.params.toString().split('/');
-    var start = req.query.key && JSON.parse(req.query.key);
-    api.taxonomy.docs(sectionArray, 15, start, function (err, docs, next) {
+    var start = req.query.start && JSON.parse(req.query.start);
+    api.taxonomy.docs(sectionArray, 15, start, function (err, docs, nextKey) {
         if (err) next(err);
         else {
             docs = _.map(docs, function (doc) {
                 return _.pick(doc, 'title', 'teaser', 'urls', '_id', 'created',
                               'authors', 'query_key');
             });
-            res.json({docs: docs, next: JSON.stringify(next)});
+            res.json({docs: docs, next: JSON.stringify(nextKey)});
         }
     });
 };
@@ -68,7 +68,7 @@ siteApi.articleByUrl = function (req, res, next) {
 */
 siteApi.search = function (req, res, next) {
     var query = req.query.q.replace(/-/g, ' ');
-    var page = (req.query.key && parseInt(req.query.key)) || req.query.page || 1;
+    var page = (req.query.start && parseInt(req.query.start)) || 1;
     api.search.docsBySearchQuery(query, req.query.sort, req.query.order, req.query.facets, page, true, function (err, docs, facets) {
         if (err) next(err);
         else res.json({docs: docs, facets: facets, next: page + 1});
@@ -77,7 +77,7 @@ siteApi.search = function (req, res, next) {
 
 siteApi.staff = function (req, res, next) {
     var nameQuery = req.params.query.replace('-', ' ');
-    var page = (req.query.key && parseInt(req.query.key)) || req.query.page || 1;
+    var page = (req.query.start && parseInt(req.query.start)) || 1;
     api.search.docsByAuthor(nameQuery, 'desc', '', page, function (err, docs, facets) {
         if (err) next(err);
         else res.json({docs: docs, facets: facets, next: page + 1});

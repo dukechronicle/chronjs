@@ -35,7 +35,7 @@ define(["jquery", "libs/jquery-ui"], function($) {
             loadImage.fadeOut();
         }
         else {
-            $.get(scrollLoadUrl, {key: next}, function (result) {
+            $.get(scrollLoadUrl, {start: next}, function (result) {
                 if (result.docs.length == 0) {
                     noPagesLeftToLoad = true;
                     loadImage.fadeOut();

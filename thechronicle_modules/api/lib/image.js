@@ -38,7 +38,7 @@ image.IMAGE_TYPES = {
     ThumbSquareM: {
         width: 200, // 183
         height: 200, // 183
-        description: "Used for articles on the towerview layout that are in the featured group in position 2 or 3, and for articles in the sports layout in the stories group. Also used as the picture facebook shows when people like or share articles."
+        description: "Used for articles on the towerview layout that are in the featured group in position 2 or 3, and for articles in the sports layout in the stories group. Used as the columnist image on the opinion page. Also used as the picture facebook shows when people like or share articles."
     },
     ThumbWide: {
         width: 300,

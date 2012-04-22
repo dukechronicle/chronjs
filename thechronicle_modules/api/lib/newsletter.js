@@ -29,7 +29,7 @@ newsletter.init = function() {
 
     templateID = config.get("MAILCHIMP_TEMPLATE_ID");
 
-    newsletterFromEmail = "no-reply@"+config.get('DOMAIN_NAME');
+    newsletterFromEmail = "no-reply@"+config.get('DOMAIN_NAME').replace("www.", "");
 
     try { 
         mcAPI = new MailChimpAPI(apiKey, { version : '1.3', secure : false });
@@ -68,7 +68,7 @@ newsletter.sendTestNewsletter = function(campaignID, emailToSendTo, callback) {
 };
 
 newsletter.addSubscriber = function (subscriberEmail, callback) {
-   var params = {"id":listID, "email_address":subscriberEmail, "send_welcome":true};
+    var params = {"id":listID, "email_address":subscriberEmail, "send_welcome":true};
     mcAPI.listSubscribe(params, function (res) {
         if (res === false) {
             log.warning("Adding subscriber to list failed!");
@@ -103,10 +103,10 @@ newsletter.createNewsletter = function (callback) {
     var optArray = {"list_id":listID, "subject":getNewsletterSubject(), "from_email":newsletterFromEmail, "from_name":newsletterFromName, "title":getNewsletterSubject(), "template_id":templateID};
     
     api.group.docs(layoutGroups.Newsletter.namespace, null, function (err, model) {
-	fs.readFile('views/newsletter.jade', function (err, data) {
-	    var newsHTML = jade.compile(data)({
-		model: model
-	    });
+        fs.readFile('views/newsletter.jade', function (err, data) {
+            var newsHTML = jade.compile(data)({
+                model: model
+            });
             var adHTML = "<a href='www.google.com'><img src='https://www.google.com/help/hc/images/adsense_185666_adformat-display_160x600_en.jpg'></img></a>";
 
             // disable test ad
@@ -116,15 +116,15 @@ newsletter.createNewsletter = function (callback) {
             var params = {"type":"regular", "options":optArray, "content":contentArr};
 
             mcAPI.campaignCreate(params, function (res) {
-		if (res.error) {
+                if (res.error) {
                     log.warning('Error: ' + res.error + ' (' + res.code + ')');
                     callback('Error: ' + res.error + ' (' + res.code + ')');
-		}
-		else {
-		    log.info("Campaign ID: " + res);
-		    callback(null, res);
-		}
+                }
+                else {
+                    log.info("Campaign ID: " + res);
+                    callback(null, res);
+                }
             });
-	});
+        });
     });         
 };

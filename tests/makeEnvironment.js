@@ -52,7 +52,7 @@ log.init(function (err) {
             console.log(err);
         }
         else if(!config.isSetUp()) {
-	        console.log('You must run server.js to set up config options before you can generate an environment');
+            console.log('You must run server.js to set up config options before you can generate an environment');
         }
         else if(config.get('COUCHDB_URL').indexOf("heroku") != -1 || config.get('COUCHDB_URL').indexOf("cloudant") != -1 || config.get('S3_BUCKET').indexOf("production") != -1) {
             console.log("You can't create an environment using the production config options. Recommend use of db server chrondev.iriscouch.com and S3 bucket chron_dev");

@@ -84,8 +84,8 @@ function ArticleParser(articleCallback) {
      *     article object passed as arguments
      */
     this.parseFile = function(zipFile, name, callback) {
-    	var extension = path.extname(name);
-	    if (extension == '.xml') {
+        var extension = path.extname(name);
+        if (extension == '.xml') {
             zipFile.readFile(name, function(err, data) {
                 if (err) {
                     log.warning("Can't open file: " + err);
@@ -146,7 +146,7 @@ function ArticleParser(articleCallback) {
         }
 
         if (article.section == "Editorial")
-	    article.section = "Opinion";
+            article.section = "Opinion";
         if (article.taxonomy) {
             api.taxonomy.getTaxonomySubtree(article.taxonomy, function (err) {
                 if (err && article.section)
@@ -178,7 +178,6 @@ function ArticleParser(articleCallback) {
                         callback(err);
                     else {
                         article.body = result;
-                        article.renderedBody = article.body;
                         callback(undefined, article);
                     }
                 });
@@ -215,9 +214,9 @@ function ArticleParser(articleCallback) {
 
     function onInlineTag(parser) {
         var tag = parser.tag;
-        if (tag.attributes.name == "Root")
+        if (tag.attributes.NAME == "Root")
             parser.article.title = parser.textNode;
-        if (tag.attributes.name == "Story")
+        if (tag.attributes.NAME == "Story")
             parser.article.body.push(parser.textNode);
     }
 
@@ -242,17 +241,7 @@ function ArticleParser(articleCallback) {
  */
 function runExporter(zipPath, callback) {
     var parser = new ArticleParser(function (article, callback) {
-	api.addDoc(article, function (err, url, id) {
-            if (err) {
-                log.warning("Error adding article: " + err);
-                callback(article.title);
-            }
-            else {
-                article.url = url;
-                article.id = id;
-                callback(undefined, article);
-            }
-        });
+        callback(undefined, article);
     });
 
     parser.parse(zipPath, callback);

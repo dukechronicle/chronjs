@@ -1,0 +1,27 @@
+br
+div.alert-message.block-message.info
+    strong Heads Up!
+    span &nbsp; Below shows all articles that have one or more duplicates within the latest 50 articles.
+    br
+    span Please remove all versions of the duplicate article but the one that should go on the site.
+br
+
+table.article-index(border=1)
+    - each doc in docs
+        tr
+            td
+                a(href='/article/' + doc.urls[doc.urls.length - 1]) #{doc.title}
+            td
+                if(doc.groups && doc.groups.length > 0)
+                    span.alert-message.block-message.error This article is in the layout!
+            td
+                a(href='/article/' + doc.urls[doc.urls.length - 1] + '/edit') Edit
+            td
+                a.delete-article(href='#', data-docid=doc._id, data-title=doc.title, data-rev=doc._rev, data-dest='') Delete
+            td
+                a(href=db_url + '/' + doc._id) #{doc._id}
+
+if (docs.length == 0)
+    h1 No Duplicates Found
+
+script CHRONICLE.onload.push(function(){deleteArticle()})

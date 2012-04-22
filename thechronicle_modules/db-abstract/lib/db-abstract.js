@@ -15,14 +15,15 @@ var DB_PORT = null;
 
 var db = exports;
 
-db.group = require('./group');
-db.image = require('./image');
-db.taxonomy = require('./taxonomy');
-db.search = require('./search');
-db.authors = require('./authors');
-db.database = require('./database');
+db.group = require('./group.js');
+db.image = require('./image.js');
+db.taxonomy = require('./taxonomy.js');
+db.search = require('./search.js');
+db.authors = require('./authors.js');
+db.database = require('./database.js');
 db.poll = require('./poll');
-db.page = require('./page');
+db.page = require('./page.js');
+db.article = require('./article.js');
 
 
 db.getDatabaseName = function() {
@@ -57,7 +58,7 @@ db.connect = function (host, database) {
 };
 
 db.init = function(callback) {
-	DATABASE = config.get("COUCHDB_DATABASE");
+    DATABASE = config.get("COUCHDB_DATABASE");
     DB_HOST = url.parse(config.get("COUCHDB_URL")).hostname;
     DB_PORT = url.parse(config.get("COUCHDB_URL")).port;
 
@@ -65,32 +66,23 @@ db.init = function(callback) {
     var database = db.connect(config.get("COUCHDB_URL"),DATABASE);
     _.extend(db, database);
 
-    db.exists(function (error,exists) {
-          if(error)
-        {
+    db.exists(function (error,exists) {    
+        if(error) {
             log.error("ERROR db-abstract" + error);
             return callback(error);
         }
-
+        
         // initialize database if it doesn't already exist
         if(!exists) {
-            db.create();
-            db.whenDBExists(db,function() {
-                updateViews(callback);
+            db.create(function(err, response) {
+                if(err) return callback(err);
+                else updateViews(callback);
             });
         }
         else {
              updateViews(callback);
         }
     });
-};
-
-// only calls the callback when the DB exists, loops until then. Should not be used anywhere other than db init due to its blocking nature
-db.whenDBExists = function(database,callback) {
-     database.exists(function (error,exists) {
-        if(exists) callback();
-        else db.whenDBExists(database,callback);     
-     });
 };
 
 function updateViews(callback) {

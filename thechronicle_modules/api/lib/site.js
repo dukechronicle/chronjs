@@ -13,13 +13,12 @@ var _ = require("underscore");
 var async = require('async');
 var nimble = require('nimble');
 
-var LAYOUT_GROUPS, columnistHeadshots;
+var LAYOUT_GROUPS;
 var twitterFeeds = [];
 var BENCHMARK = false;
 
 site.init = function () {
     LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
-    //columnistHeadshots = {}; // init empty object, to avoid null pointer in "modifyArticleForDisplay()"
 
     twitterFeeds = _.filter(config.get("RSS_FEEDS"), function(rssFeed) {
         return rssFeed.url.indexOf("api.twitter.com") !== -1;
@@ -484,6 +483,7 @@ site.getArticleContent = function(url, callback) {
             var displayDoc = modifyArticleForDisplay(doc);
             cache(site.getArticleContentUncached, 600, displayDoc)(
                 function (err, model) {
+                    displayDoc.subhead = displayDoc.subhead || model.authorInfo.tagline;
                     callback(err, displayDoc, model);
                     popular.registerArticleView(doc, function(err,res){});
                 });
@@ -504,6 +504,9 @@ site.getArticleContentUncached = function(doc, callback) {
     },
     function(cb) {
         api.taxonomy.getParents(doc.taxonomy, cb);
+    },
+    function(cb) {
+        api.authors.getInfo(doc.authorsArray[0], cb);
     }
     ], 
     function(err, results) {
@@ -512,17 +515,17 @@ site.getArticleContentUncached = function(doc, callback) {
         else {
             var model = {
             adFullRectangle : {
-                "title" : "Advertisement",
-                "imageUrl" : "/images/ads/monster.png",
-                "url" : "http://google.com",
-                "width" : "300px",
-                "height" : "250px"
-            },
-                    popular: results[0],
-            related: results[1],
-                    parents: results[2]
+                    "title" : "Advertisement",
+                    "imageUrl" : "/images/ads/monster.png",
+                    "url" : "http://google.com",
+                    "width" : "300px",
+                    "height" : "250px"
+                },
+                popular: results[0],
+                related: results[1],
+                parents: results[2],
+                authorInfo: results[3][0]
             };
-
             callback(null, model);
         }
     });
@@ -578,9 +581,6 @@ function modifyArticleForDisplay(doc) {
                 doc.authorsHtml += ", ";
             }
         }
-        console.log(columnistHeadshots);
-        if(columnistHeadshots && columnistHeadshots[doc.authorsArray[0]])
-            doc.subhead = doc.subhead || columnistHeadshots[doc.authorsArray[0]].tagline;
     }
     
     return doc;

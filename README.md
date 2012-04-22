@@ -6,15 +6,15 @@
 
     https://github.com/joyent/node/wiki/Installation
 
-### Set NodeJS to run at version 0.4.12
+### Set NodeJS to run at version 0.6.15
 
 Install NVM: https://github.com/creationix/nvm
     
 Then:
 
-    $ nvm install v0.4.12
+    $ nvm install v0.6.15
 
-    $ nvm use v0.4.12
+    $ nvm use v0.6.15
 
 ### Install imagemagick
 
@@ -22,11 +22,11 @@ Then:
 
 ### Clone this repository on to hard drive
 
-    $ git clone git@github.com:thechronicle/website.git
+    $ git clone git@github.com:thechronicle/chronjs.git
 
 ### Install dependencies specified in package.json
 
-    $ cd website
+    $ cd chronjs
 
     $ npm install
 
@@ -81,7 +81,7 @@ As you continue to extend the Chronicle framework, you may find that defining so
 In the code, you can access global configuration settings by:
 
     var config = require('./thechronicle_modules/config');
-	
+
     param_value = config.get('param_name');
 
 Remember that config properties could change during runtime if someone changes settings at http://localhost:4000/config, so you should always access config properties directly via config.get() rather than a global variable within your file that called config.get at file start.

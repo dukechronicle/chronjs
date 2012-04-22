@@ -8,6 +8,27 @@ var util = require('../../util');
 
 admin.image = adminApi.image;
 
+admin.duplicates = function (req, res, next) {
+    var db = api.getDatabaseName();
+    var host = api.getDatabaseHost();
+    var port = api.getDatabasePort() || "80";
+    var db_url = 'http://' + host + ':' + port + '/_utils/document.html?' + db;
+
+    api.article.getDuplicates(50, function(err, duplicateDocs) {
+        if (err) next(err);
+        else {
+            res.render('admin/article/duplicates', {
+                layout: 'admin/layout',
+                locals:{
+                    docs: duplicateDocs,
+                    hasPrevious: false,
+                    db_url: db_url
+                }
+            });
+        }
+    });
+};
+
 admin.index = function (req, res, next) {
     res.render('admin');
 };
@@ -74,7 +95,7 @@ admin.k4exportData = function (req, res, next) {
                 succeeded: results.k4.success,
                 taxonomy: results.taxonomy,
                 imageData: results.images
-	    }
+            }
         });
     });
 };
@@ -221,3 +242,12 @@ admin.layout = function (req, res, next) {
         }
     });
 };
+
+admin.memory = function (req, res, next) {
+    var megabyte = 1048576;
+    var usage = process.memoryUsage();
+    res.send("rss: " + Math.round(usage.rss/megabyte) + " MB<br />" +
+        "heapTotal: " + Math.round(usage.heapTotal/megabyte) + " MB<br />" +
+        "heapUsed: " + Math.round(usage.heapUsed/megabyte) + " MB<br />"
+    );
+}

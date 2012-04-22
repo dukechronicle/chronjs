@@ -10,7 +10,7 @@ var $ = require("jquery");
 
 smtp.addSubscriber = function(subscriberEmail, callback){
     redisclient.client.sadd(DB_LIST_NAME, subscriberEmail, function(err, res){
-	log.info(subscriberEmail);
+    log.info(subscriberEmail);
         if(err)
             log.warning(err);
         callback(err,res);

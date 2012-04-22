@@ -3,6 +3,7 @@ var admin = require('./admin');
 var siteApi = require('./api');
 var log = require('../../log');
 var site = require('./site');
+var xhrproxy = require('./xhrproxy');
 
 var async = require('async');
 
@@ -22,10 +23,11 @@ exports.init = function (app) {
         app.get('/all', siteApi.listAll);
         app.get('/section/*', siteApi.listSection);
         app.get('/article/url/:url', siteApi.articleByUrl);
-        app.get('/search/:query', siteApi.search);
-        app.get('/staff/:query', siteApi.staff);
 
         app.post('/poll/:id/vote', siteApi.votePoll);
+        app.get('/search', siteApi.search);
+        app.get('/staff/:query', siteApi.staff);
+
         app.get('/article/:id', siteApi.readArticle);
         app.post('/article', api.site.checkAdmin, siteApi.createArticle);
         app.put('/article/:id', api.site.checkAdmin, siteApi.updateArticle);
@@ -67,13 +69,7 @@ exports.init = function (app) {
     app.get('/graduation', redirect('/page/graduation'));
 
     // Makes search url more readable
-    app.get('/search', function (req, res) {
-        var query = "--";            
-        if (req.param('search') != null)
-            query = req.param('search').replace(/ /g, '-');
-        res.redirect('/search/' + query + '?sort=relevance&order=desc'); 
-    });
-    app.get('/search/:query', site.search);
+    app.get('/search', site.search);
 
     app.get('/users/:query', function (req, res) {
         res.redirect('/staff/' + req.params.query);
@@ -104,6 +100,9 @@ exports.init = function (app) {
         app.post('/k4export', api.site.checkAdmin, admin.k4exportData);
         app.post('/newsletter', api.site.checkAdmin, admin.newsletterData);
         app.get('/layout/group/:group', api.site.checkAdmin, admin.layout);
+        app.get('/duplicates', api.site.checkAdmin, admin.duplicates);
+
+        app.get('/system/memory', api.site.checkAdmin, admin.memory);
     });
     
     app.namespace('/admin/image', function () {
@@ -117,7 +116,7 @@ exports.init = function (app) {
         app.post('/crop', api.site.checkAdmin, admin.image.crop);
         app.post('/add', api.site.checkAdmin, admin.addImageToArticle);
     });
-    
+   
     app.namespace('/admin/poll', function () {
     	app.get('/new', api.site.checkAdmin, admin.addPoll);
     	app.get('/manage', api.site.checkAdmin, admin.managePoll);
@@ -126,9 +125,12 @@ exports.init = function (app) {
     	app.post('/edit', api.site.checkAdmin, admin.editPollData);
     });
     
+    app.namespace('/xhrproxy', function() {
+        app.get('/openx/:path', xhrproxy.openx);
+    })
+
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);
-
 };
 
 function redirect (url) {

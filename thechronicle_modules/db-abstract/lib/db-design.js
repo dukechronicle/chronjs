@@ -31,6 +31,16 @@ exports.doc = {
                     }
                 }
             },
+            duplicates:{
+                map:function (doc) {
+                    if (doc.type == "article") {
+                        for (var i in doc.urls) {
+                            // sort by created day and then by title                            
+                            emit([Math.floor(doc.created/86400), doc.title], doc);
+                        }
+                    }
+                }
+            },
             // return all doc ids keyed by doc url if one exists
             duplicate_urls:{
                 map:function (doc) {
@@ -192,7 +202,6 @@ exports.doc = {
                         }
                     }
                 }
-
                 send(JSON.stringify(rows));
             }
 
@@ -240,7 +249,6 @@ exports.doc = {
                     }
                 }
             }
-
         }
 
     }

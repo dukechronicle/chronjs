@@ -24,9 +24,9 @@ admin.sendNewsletter = function(testEmail, campaignID, callback) {
             callback(err);
             if(process.env.NODE_ENV === 'production') {
                 log.notice("Building sitemaps...");
-		sitemap.generateAllSitemaps(function (err) {
-		    if (err) log.warning(err);
-		});
+                sitemap.generateAllSitemaps(function (err) {
+                    if (err) log.warning(err);
+                });
             }
         });
     }
@@ -36,7 +36,7 @@ admin.k4export = function (filepath, callback) {
     async.parallel({
         k4: function(callback) {
             k4export.runExporter(filepath, function (failed, success) {
-	        fs.unlink(filepath);
+            fs.unlink(filepath);
                 callback(null, {failed: failed, success: success});
             });
         },

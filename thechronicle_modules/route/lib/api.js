@@ -11,12 +11,12 @@ var _ = require('underscore');
 */
 siteApi.listAll = function (req, res, next) {
     api.docsByDate(null, null, function(err, docs) {
-	    if (err) next(err);
+        if (err) next(err);
         else {
             var result = _.map(docs, function (doc) {
                 return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id, "created":doc.created};
             });
-            res.json(result);
+            res.json({docs: result});
         }
     });
 };
@@ -27,17 +27,15 @@ siteApi.listAll = function (req, res, next) {
 */
 siteApi.listSection = function (req, res, next) {
     var sectionArray = req.params.toString().split('/');
-    
-    var startDoc = req.query.startdoc;
-    if(startDoc) startDoc = JSON.parse(startDoc);   
-
-    api.taxonomy.docs(sectionArray, 15, startDoc, function (err, docs) {
+    var start = req.query.start && JSON.parse(req.query.start);
+    api.taxonomy.docs(sectionArray, 15, start, function (err, docs, nextKey) {
         if (err) next(err);
         else {
-            var result = _.map(docs, function (doc) {
-                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id, "created":doc.created, "authors":doc.authors};
+            docs = _.map(docs, function (doc) {
+                return _.pick(doc, 'title', 'teaser', 'urls', '_id', 'created',
+                              'authors', 'query_key');
             });
-            res.json(result);
+            res.json({docs: docs, next: JSON.stringify(nextKey)});
         }
     });
 };
@@ -58,7 +56,7 @@ siteApi.articleByUrl = function (req, res, next) {
                  "_id":doc._id,
                  "images": doc.images
             };
-            res.json(result);	  	
+            res.json(result);
         }
     });
 };
@@ -69,18 +67,20 @@ siteApi.articleByUrl = function (req, res, next) {
 *@params req, http response
 */
 siteApi.search = function (req, res, next) {
-    var wordsQuery = req.params.query.replace('-', ' ');
-    api.search.docsBySearchQuery(wordsQuery, req.query.sort, req.query.order, req.query.facets, req.query.page, true, function (err, docs, facets) {
+    var query = req.query.q.replace(/-/g, ' ');
+    var page = (req.query.start && parseInt(req.query.start)) || 1;
+    api.search.docsBySearchQuery(query, req.query.sort, req.query.order, req.query.facets, page, true, function (err, docs, facets) {
         if (err) next(err);
-        else res.json({docs: docs, facets: facets});
+        else res.json({docs: docs, facets: facets, next: page + 1});
     });
 };
 
 siteApi.staff = function (req, res, next) {
     var nameQuery = req.params.query.replace('-', ' ');
-    api.search.docsByAuthor(nameQuery, 'desc', '', req.query.page, function (err, docs, facets) {
+    var page = (req.query.start && parseInt(req.query.start)) || 1;
+    api.search.docsByAuthor(nameQuery, 'desc', '', page, function (err, docs, facets) {
         if (err) next(err);
-        else res.json({docs: docs, facets: facets});
+        else res.json({docs: docs, facets: facets, next: page + 1});
     });
 };
 

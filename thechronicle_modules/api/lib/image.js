@@ -36,8 +36,8 @@ image.IMAGE_TYPES = {
         description: "Used for the first article in each of the following layout groups: the Frontpage layout page for the Recess and Towerview groups, the Towerview layout page for the Savvy and Wisdom groups, and the Recess layout page for the Music, Film, and Art groups."
     },
     ThumbSquareM: {
-        width: 183,
-        height: 183,
+        width: 200, // 183
+        height: 200, // 183
         description: "Used for articles on the towerview layout that are in the featured group in position 2 or 3, and for articles in the sports layout in the stories group. Also used as the picture facebook shows when people like or share articles."
     },
     ThumbWide: {

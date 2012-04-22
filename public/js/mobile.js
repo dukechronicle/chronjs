@@ -31,35 +31,35 @@ function getDateString(time)
 
 function generateListItem(articleJSON)
 {
-	var article = articleJSON;
+    var article = articleJSON;
         
-	// Containers
-	var listItem = $('<li />');
-	
-	// Hyperlink
-	article.url = article.urls[article.urls.length - 1];
-	var hyperlink = $('<a />',{ "href":"javascript:getArticle('" + article.url+ "')"});
-	
-	// Thumbnail
-	// hyperlink.append('<img src="' + 'img/test.png"' + ' "class"="ui-li-thumb" />');
+    // Containers
+    var listItem = $('<li />');
+
+    // Hyperlink
+    article.url = article.urls[article.urls.length - 1];
+    var hyperlink = $('<a />',{ "href":"javascript:getArticle('" + article.url+ "')"});
+
+    // Thumbnail
+    // hyperlink.append('<img src="' + 'img/test.png"' + ' "class"="ui-li-thumb" />');
 
     var dateString = getDateString(article.created*1000);
-	// Article Title
-	hyperlink.append($('<h2 />').html(article.title));
+    // Article Title
+    hyperlink.append($('<h2 />').html(article.title));
 
     // Article Date
     hyperlink.append($('<h3 />').html(dateString));
 
-	// Article Synopsis
-	hyperlink.append($('<p />').html(article.teaser));
+    // Article Synopsis
+    hyperlink.append($('<p />').html(article.teaser));
 
-	return listItem.append(hyperlink);
+    return listItem.append(hyperlink);
 }
 
 function updateArticleList(responseText, articleListContainer, category)
 {
     var articleListResponse = responseText;
-	$(HEADER_TITLE).text(category);
+    $(HEADER_TITLE).text(category);
 
     if(articleListResponse == null)
     {
@@ -67,7 +67,7 @@ function updateArticleList(responseText, articleListContainer, category)
         return;
     }
 
-	$(ARTICLE_LIST).empty();
+    $(ARTICLE_LIST).empty();
 
     for(var i in articleListResponse)
     {
@@ -75,7 +75,7 @@ function updateArticleList(responseText, articleListContainer, category)
         lastDocID[category] = articleListResponse[i]._id;
     }
 
-	$(ARTICLE_LIST).listview('refresh');
+    $(ARTICLE_LIST).listview('refresh');
 }
 
 function getArticleList(category, title, forced)
@@ -103,7 +103,7 @@ function getArticleList(category, title, forced)
                 }
                 // Insert into cache
                 articleListCache[category] = {timestamp: new Date().getTime(), data: data};
-                updateArticleList(articleListCache[category].data, $(this), title);
+                updateArticleList(articleListCache[category].data.docs, $(this), title);
             },
             error: function (jqXHR, textStatus, ERROR_MESSAGEThrown) {
                 handleAJAXError(jqXHR);
@@ -111,7 +111,7 @@ function getArticleList(category, title, forced)
 
         });
     } 
-	else {
+    else {
         updateArticleList(articleListCache[category].data, $(this), title);
     }
 }
@@ -126,23 +126,23 @@ function generateArticle(articleJSON)
         return;
     }
     
-	var totalString = $('<div />');
-	totalString.append($('<h2 />').append(article.title));
+    var totalString = $('<div />');
+    totalString.append($('<h2 />').append(article.title));
 
     for(author in article.authors)
     {
         var authorString = $('<p />', {"class": "author"}).append(article.authors[author]);
-		totalString.append(authorString);
+        totalString.append(authorString);
     }
 
     if (article.images != null && article.images.LargeRect != null) {
-        var imageString = $('<img src='+article.images.LargeRect.url + ' alt="chronicle image"/>');
+        var imageString = $('<img class="article-image" src='+article.images.LargeRect.url + ' alt="chronicle image"/>');
               totalString.append(imageString);
     }
     totalString.append($('<p />').append(article.renderedBody));
     loadDisqusForArticle(true, 'dukechronicle', article._id, article.title, article.urls[0]);
 
-	return totalString;
+    return totalString;
 }
 
 function handleAJAXError(jqXHR)
@@ -179,7 +179,7 @@ function getArticle(articleURL)
                 articleCache[articleURL] = {data: data};
                 $(ARTICLE_CONTENT).empty();
                 $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL].data));
- 				$.mobile.changePage($("#Article"),{transition:"slide", dataUrl:"/m/article/"+articleURL});
+                 $.mobile.changePage($("#Article"),{transition:"slide", dataUrl:"/m/article/"+articleURL});
                 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -187,31 +187,31 @@ function getArticle(articleURL)
             }  
         });
     }
-	else {
+    else {
         $(ARTICLE_CONTENT).empty();
         $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL].data));
-			$.mobile.changePage($("#Article"),{transition:"slide", dataUrl:"/m/article/"+articleURL});
+            $.mobile.changePage($("#Article"),{transition:"slide", dataUrl:"/m/article/"+articleURL});
     } 
 }
      
 
 function getSectionList()
 {
-	$(ARTICLE_LIST).empty();
-	$(HEADER_TITLE).text("The Chronicle");
+    $(ARTICLE_LIST).empty();
+    $(HEADER_TITLE).text("The Chronicle");
 
     // Containers
     var categories = ["News", "Sports", "Opinion", "Recess", "Towerview"];
     for(var i in categories)
     {
-	    var listItem = $('<li />');
-	    hyperlink = $('<a />',{ "href":"javascript:getArticleList('" + categories[i] + "','" + categories[i] +"')"});
+        var listItem = $('<li />');
+        hyperlink = $('<a />',{ "href":"javascript:getArticleList('" + categories[i] + "','" + categories[i] +"')"});
         hyperlink.append($('<h4 />').text(categories[i]));
         listItem.append(hyperlink);
         $(ARTICLE_LIST).append(listItem);
     }   
 
-	$(ARTICLE_LIST).listview('refresh');
+    $(ARTICLE_LIST).listview('refresh');
     $.mobile.silentScroll(0);
 }
 
@@ -252,7 +252,7 @@ function search(eventObject)
 
     if(query.length > 0) {
         $.ajax({
-            url: "/api/search/" + query,
+            url: "/api/search?q=" + query,
             dataType: "jsonp",
             cache: false,
             success: function(data) {
@@ -261,7 +261,7 @@ function search(eventObject)
                     return;
                 }
                 
-                updateArticleList(data.docs, $(this), "Search Results for '" + rawQuery + "'");
+                updateArticleList(data.docs, $(this), "Search Results");
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 handleAJAXError(jqXHR);

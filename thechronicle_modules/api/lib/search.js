@@ -226,7 +226,6 @@ search.docsBySearchQuery = function(wordsQuery, sortBy, sortOrder, facets, page,
         else
             return newString;
     });
-};
 
     var fullQuery = "";
     if(wordsQuery.indexOf('"') === 0 && wordsQuery.indexOf('"',1) === wordsQuery.length-1) {
@@ -472,8 +471,8 @@ function _makeFacets(facets, callback) {
         }
     }
 
-	facetFields.push("section_s");
-	facetFields.push("author_sm");
+    facetFields.push("section_s");
+    facetFields.push("author_sm");
 
     callback(facetFields, facetQueries);
 }

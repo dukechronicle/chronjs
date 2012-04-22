@@ -103,7 +103,7 @@ function getArticleList(category, title, forced)
                 }
                 // Insert into cache
                 articleListCache[category] = {timestamp: new Date().getTime(), data: data};
-                updateArticleList(articleListCache[category].data, $(this), title);
+                updateArticleList(articleListCache[category].data.docs, $(this), title);
             },
             error: function (jqXHR, textStatus, ERROR_MESSAGEThrown) {
                 handleAJAXError(jqXHR);

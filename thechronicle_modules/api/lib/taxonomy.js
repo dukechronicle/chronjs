@@ -9,15 +9,24 @@ var log = require('../../log');
 
 var RESULTS_PER_PAGE = 25;
 
+
 // get all document under given taxonomy path ex. ["News", "University"]
 // startDoc specifies the document within the taxonomy to start returning data at, for pagination.
-taxonomy.docs = function (taxonomyPath, limit, startDoc, callback) {
-    limit = limit || RESULTS_PER_PAGE;
+taxonomy.docs = function (taxonomyPath, limit, start, callback) {
+    // get extra document for pagination
+    limit = (limit || RESULTS_PER_PAGE) + 1;
     taxonomyPath = _.map(taxonomyPath, function (s) { return s.toLowerCase() });
-
-    db.taxonomy.docs(taxonomyPath, limit, startDoc, function (err, docs) {
+    db.taxonomy.docs(taxonomyPath, limit, start, function (err, docs) {
         if (err) callback(err);
-        else callback(null, _.map(docs, function(doc){return doc.value}));
+        else {
+            var lastDoc;
+            if (docs.length == limit) {
+                lastDoc = docs.pop();
+                delete lastDoc.value;
+            }
+            var docValues = _.map(docs, function (doc) { return doc.value });
+            callback(null, docValues, lastDoc);
+        }
     });
 };
 

@@ -105,7 +105,7 @@ site.getFrontPageContent = function (callback) {
                     if(article.numComments != 1) article.info += "s";
                 });
 
-                modifyArticlesForDisplay(results, cb);    
+                cb(null, modifyArticlesForDisplay(results));
             });
         },
         function (cb) { //2
@@ -406,9 +406,9 @@ site.getSectionContent = function (params, callback) {
             popular.getPopularArticles(params, 5, cb);
         },
         function (cb) {
-            api.taxonomy.docs(params, 20, null, function (err, docs) {
+            api.taxonomy.docs(params, 20, null, function (err, docs, next) {
                 if (err) cb(err)
-                else modifyArticlesForDisplay(docs, cb);
+                else cb(null, {docs:modifyArticlesForDisplay(docs), next:next});
             });
         },
         function (cb) {
@@ -424,10 +424,11 @@ site.getSectionContent = function (params, callback) {
                 callback(err);
             else {
                 var popular = results[0];
-                var docs = results[1];
+                var docs = results[1].docs;
+                var next = results[1].next;
                 var parents = results[2]
                 var children = results[3];
-                callback(null, section, docs, children, parents, popular);
+                callback(null, section, docs, next, children, parents, popular);
             }
         }
     );
@@ -435,29 +436,24 @@ site.getSectionContent = function (params, callback) {
 
 site.getAuthorContent = function(name, callback) {
     api.search.docsByAuthor(name, 'desc', '', 1, function(err, docs) {
-        if(err)
-            callback(err);
-        else
-            modifyArticlesForDisplay(docs, callback);
+        if(err) callback(err);
+        else callback(null, modifyArticlesForDisplay(docs));
     });
 };
 
 site.getSearchContent = function (wordsQuery, query, callback) {
     api.search.docsBySearchQuery(wordsQuery, query.sort, query.order, query.facets, 1, true, function (err, docs, facets) {
         if (err) callback(err);
-        else
-            modifyArticlesForDisplay(docs, function (err, docs) {
-                if (err) callback(err);
-                else {
-                    var validSections = config.get("TAXONOMY_MAIN_SECTIONS");
-                    // filter out all sections other than main sections
-                    Object.keys(facets.Section).forEach(function(key) {
-                        if (!_.include(validSections, key))
-                            delete facets.Section[key];
-                    });
-                    callback(null, docs, facets);
-                }
+        else {
+            docs = modifyArticlesForDisplay(docs);
+            var validSections = config.get("TAXONOMY_MAIN_SECTIONS");
+            // filter out all sections other than main sections
+            Object.keys(facets.Section).forEach(function(key) {
+                if (!_.include(validSections, key))
+                    delete facets.Section[key];
             });
+            callback(null, docs, facets);
+        }
     });
 };
 
@@ -483,7 +479,7 @@ site.getArticleContentUncached = function(doc, callback) {
     function(cb) {
         api.search.relatedArticles(doc._id, 5, function(err, relatedArticles) {
             if (err) cb(err);
-            else modifyArticlesForDisplay(relatedArticles, cb);
+            else cb(null, modifyArticlesForDisplay(relatedArticles));
         });
     },
     function(cb) {
@@ -532,19 +528,17 @@ site.getPageContent = function(url, callback) {
         }
     });
 };
-function modifyArticlesForDisplay(docs, callback) {
-    async.filter(docs, function(doc, cb) {
-        modifyArticleForDisplay(doc);
-        if(doc.url === undefined)
-            cb(null);
-        else
-            cb(doc);
-    }, function(results) {
-        callback(null, results);
+
+function modifyArticlesForDisplay(docs) {
+    docs = _.map(docs, function (doc) {
+        return modifyArticleForDisplay(doc);
+    });
+    return _.filter(docs, function (doc) {
+        return doc.url;
     });
 }
 
-function modifyArticleForDisplay(doc, callback) {
+function modifyArticleForDisplay(doc) {
     if(doc.urls) {
         doc.url = '/article/' + _.last(doc.urls);
         doc.fullUrl = "http://" + config.get('DOMAIN_NAME') + doc.url;

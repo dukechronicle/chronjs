@@ -1,5 +1,5 @@
 require.config({
-    baseUrl: '/js',
+    baseUrl: '/assets/scripts',
 });
 
 require(['admin/crop','admin/delete-article','admin/html5upload',

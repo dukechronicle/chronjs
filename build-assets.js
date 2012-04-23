@@ -12,7 +12,7 @@ var api = require('./thechronicle_modules/api');
 var config = require('./thechronicle_modules/config');
 var log = require('./thechronicle_modules/log');
 
-var STYLE_DIR = __dirname + '/assets/styles/';
+var STYLE_DIR = __dirname + '/public/assets/styles/';
 var DIST_DIR = __dirname + '/public/dist/';
 var JS_SOURCES = [ 'site', 'admin' ];
 
@@ -59,8 +59,13 @@ function buildCSS(callback) {
             fs.stat(STYLE_DIR + file, function (err, stats) {
                 if (err) cb(err);
                 else if (!stats.isDirectory()) cb();
-                else buildCSSFile(file, function (err, path) {
-                    paths[file] = path;
+                else if (process.env.NODE_ENV == 'production')
+                    buildCSSFile(file, function (err, path) {
+                        paths[file] = path;
+                        cb(err);
+                    });
+                else getCSSFiles(file, function (err, filepaths) {
+                    paths[file] = filepaths;
                     cb(err);
                 });
             });
@@ -115,13 +120,32 @@ function buildCSSFile(path, callback) {
     });
 }
 
+function getCSSFiles(path, callback) {
+    var files = [];
+    var walker = walk.walk(STYLE_DIR + path);
+    walker.on('file', function (name, stats, next) {
+        var file = name.replace(STYLE_DIR, '/assets/styles/') + '/' + stats.name;
+        files.push(file.replace(/\.styl$/, '.css'));
+        next();
+    });
+    walker.on('end', function (err) {
+        callback(err, files);
+    });
+}
+
 function buildJavascript(callback) {
     var paths = {};
     async.forEachSeries(JS_SOURCES, function (src, cb) {
-        buildJavascriptFile(src, function (err, path) {
-            paths[src] = path;
-            cb(err);
-        });
+        if (process.env.NODE_ENV === 'production') {
+            buildJavascriptFile(src, function (err, path) {
+                paths[src] = path;
+                cb(err);
+            });
+        }
+        else {
+            paths[src] = '/assets/scripts/' + src + '/main';
+            cb();
+        }
     }, function (err) {
         callback(err, paths);
     });
@@ -129,7 +153,7 @@ function buildJavascript(callback) {
 
 function buildJavascriptFile(src, callback) {
     var config = { 
-        baseUrl: 'assets/scripts',
+        baseUrl: 'public/assets/scripts',
         name: src + '/main',
         out: 'public/dist/' + src + '.js',
         paths: {

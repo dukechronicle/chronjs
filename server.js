@@ -86,6 +86,11 @@ function configureApp(sessionInfo, port) {
     // these app.configure calls need to come before app.use(app.router)!
 
     app.configure('development', function () {
+        app.use(stylus.middleware({
+            src: 'public',
+            dest: 'public',
+            force: true
+        }));
         app.use(express.static(__dirname + '/public'));
         app.error(express.errorHandler({ dumpExceptions:true, showStack:true }));
     });

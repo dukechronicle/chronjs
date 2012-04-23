@@ -59,8 +59,13 @@ function buildCSS(callback) {
             fs.stat(STYLE_DIR + file, function (err, stats) {
                 if (err) cb(err);
                 else if (!stats.isDirectory()) cb();
-                else buildCSSFile(file, function (err, path) {
-                    paths[file] = path;
+                else if (process.env.NODE_ENV == 'production')
+                    buildCSSFile(file, function (err, path) {
+                        paths[file] = path;
+                        cb(err);
+                    });
+                else getCSSFiles(file, function (err, filepaths) {
+                    paths[file] = filepaths;
                     cb(err);
                 });
             });
@@ -112,6 +117,19 @@ function buildCSSFile(path, callback) {
                 callback(err, '/dist/' + path + '.css');
             });
         }
+    });
+}
+
+function getCSSFiles(path, callback) {
+    var files = [];
+    var walker = walk.walk(STYLE_DIR + path);
+    walker.on('file', function (name, stats, next) {
+        var file = name.replace(STYLE_DIR, '/assets/styles/') + '/' + stats.name;
+        files.push(file.replace(/\.styl$/, '.css'));
+        next();
+    });
+    walker.on('end', function (err) {
+        callback(err, files);
     });
 }
 

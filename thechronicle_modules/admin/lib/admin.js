@@ -135,7 +135,9 @@ admin.layout = function (section, group, layoutConfig, callback) {
     async.parallel({
         sectionDocs: function (cb) {
             if (section)
-                api.taxonomy.docs([section], 30, null, cb);
+                api.taxonomy.docs([section], 30, null, function (err, docs) {
+                    cb(err, docs); // need to ignore last callback argument
+                });
             else
                 api.docsByDate(30, null, cb);
         },

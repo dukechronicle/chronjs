@@ -222,7 +222,7 @@ function ArticleParser(articleCallback) {
 
     function onTextBreak(parser) {
         var tag = parser.tags[parser.tags.length - 1];
-        if (tag.attributes.name == "Story")
+        if (tag.attributes.NAME == "Story")
             parser.article.body.push(parser.textNode);
     }
 

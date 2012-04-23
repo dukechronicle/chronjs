@@ -43,9 +43,7 @@ define(['jquery', 'Article', 'libs/jquery.dd'], function ($, Article) {
                                      imageData.imageVersions,
                                      imageData.imageVersionTypes);
         }
-        catch (e) {
-            return callback("Error getting image: " + e);
-        }
+        catch (e) {}
 
         article.save(null, {
             url: '/api/article',

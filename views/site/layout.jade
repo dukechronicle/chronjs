@@ -63,4 +63,4 @@ html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
                 script(type='text/javascript') var curvyCornersVerbose = false
                 script(src="/js/curvycorners.js")
 
-            script(src=paths.js.site, type="text/javascript")
+            !=partial("../partials/_script", { src: "site" })

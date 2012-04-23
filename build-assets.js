@@ -118,10 +118,16 @@ function buildCSSFile(path, callback) {
 function buildJavascript(callback) {
     var paths = {};
     async.forEachSeries(JS_SOURCES, function (src, cb) {
-        buildJavascriptFile(src, function (err, path) {
-            paths[src] = path;
-            cb(err);
-        });
+        if (process.env.NODE_ENV === 'production') {
+            buildJavascriptFile(src, function (err, path) {
+                paths[src] = path;
+                cb(err);
+            });
+        }
+        else {
+            paths[src] = '/assets/scripts/' + src + '/main';
+            cb();
+        }
     }, function (err) {
         callback(err, paths);
     });

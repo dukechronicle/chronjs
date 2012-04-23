@@ -147,17 +147,13 @@ function ArticleParser(articleCallback) {
 
         if (article.section == "Editorial")
         article.section = "Opinion";
-        if (article.taxonomy) {
-            api.taxonomy.getTaxonomySubtree(article.taxonomy, function (err) {
-                if (err && article.section)
-                    article.taxonomy = [ article.section ];
-                else if (err)
-                    delete article.taxonomy;
-            });
-        }
-        else if (article.section) {
+
+        if (article.taxonomy && api.taxonomy.getTaxonomyTree(article.taxonomy))
+            ; // keep taxonomy unchanged if it's set and valid
+        else if (article.section)
             article.taxonomy = [ article.section ];
-        }
+        else
+            delete article.taxonomy;
         delete article.section;
 
         try {

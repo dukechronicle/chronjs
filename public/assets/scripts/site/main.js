@@ -1,5 +1,5 @@
 require.config({
-    baseUrl: '/js'
+    baseUrl: '/assets/scripts'
 });
 
 require(['site/align','site/article','site/opinion','site/scrollLoad',

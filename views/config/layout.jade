@@ -12,4 +12,4 @@ html
     #main
       #container!= body
 
-      script(src=paths.js.admin, type="text/javascript")
+      !=partial("../partials/_script", { src: "admin" })

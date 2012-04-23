@@ -30,28 +30,18 @@ taxonomy.docs = function (taxonomyPath, limit, start, callback) {
     });
 };
 
-taxonomy.getTaxonomyTree = function(callback) {
-    buildTree(config.get("TAXONOMY"), callback);
-};
-
-taxonomy.getTaxonomySubtree = function(taxonomyPath, callback) {
-    taxonomy.getTaxonomyTree(function(err, tree) {
-    if (err)
-        callback(err);
-    else {
-        taxonomyPath.forEach(function (section) {
-        try {
-            tree = tree[section];
-        } catch (err) {
-            tree = undefined;
-        }
+taxonomy.getTaxonomyTree = function(taxonomyPath) {
+    var tree = config.get("TAXONOMY");
+    if (taxonomyPath) {
+        _.each(taxonomyPath, function (section) {
+            try {
+                tree = tree[section];
+            } catch (err) {
+                tree = undefined;
+            }
         });
-        if (tree === undefined)
-        callback("Taxonomy path not found: " + taxonomyPath);
-        else
-        callback(null, tree);
     }
-    });
+    return tree;
 };
 
 taxonomy.getParents = function(taxonomyPath, callback) {
@@ -66,59 +56,40 @@ taxonomy.getParents = function(taxonomyPath, callback) {
 
 taxonomy.getChildren = function(taxonomyPath, callback) {
     var path = taxonomyPath.join('/');
-    taxonomy.getTaxonomySubtree(taxonomyPath, function (err, tree) {
-    if (err)
-        callback(err);
-    else {
-        var children = _.map(tree, function (key, value) {
+    var tree = taxonomy.getTaxonomyTree(taxonomyPath);
+
+    log.debug('here');
+    if (!tree) return callback("Taxonomy not valid: " + path);
+
+    var children = _.map(tree, function (key, value) {
         var child = {};
         child[path + '/' + value] = value;
         return child;
-        });
-        callback(null, children);
-    }
     });
+    callback(null, children);
 };
 
 taxonomy.getTaxonomyListing = function (callback) {
-    taxonomy.getTaxonomyTree(function (err, tree) {
-    var taxonomy = {};
+    var tree = taxonomy.getTaxonomyTree();
+    var sections = {};
     _.forEach(tree, function (value, key) {
         var listing = {}, path = [key];
         listing[JSON.stringify(path)] = key;
         getTaxonomyListingHelper(value, listing, path, 1);
-        taxonomy[key] = listing;
+        sections[key] = listing;
     });
-    callback(null, taxonomy);
-    });
+    callback(null, sections);
 };
-
-function buildTree(taxonomy, callback) {
-    async.reduce(taxonomy, {},
-         function (tree, section, cb) {
-             // should only be one attribute in object
-             for (var key in section) {
-             buildTree(section[key], function (err, subtree) {
-                 tree[key] = subtree;
-                 cb(err, tree);
-             });
-             break;
-             }
-         },
-         function (err, tree) {
-             callback(err, tree);
-         });
-}
 
 function getTaxonomyListingHelper(tree, listing, path, depth) {
     _.forEach(tree, function (value, key) {
         var dashes = "";
         for (var i = 0; i < depth; i++)
-        dashes += "-";
-    path.push(key);
-    listing[JSON.stringify(path)] = dashes + "  " + key;
-    getTaxonomyListingHelper(value, listing, path, depth + 1);
-    path.pop();
+            dashes += "-";
+        path.push(key);
+        listing[JSON.stringify(path)] = dashes + "  " + key;
+        getTaxonomyListingHelper(value, listing, path, depth + 1);
+        path.pop();
     });
     return listing;
 }

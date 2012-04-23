@@ -3,7 +3,7 @@ html
   head
     title The Chronicle
 
-    link(rel='stylesheet', href=paths.css.admin)
+    !=partial("../partials/_stylesheet", { src: "admin" })
 
     script var CHRONICLE = { onload: [] }
 

@@ -1,7 +1,7 @@
 !!! 5
 html
   head
-    link(rel='stylesheet', href=paths.css.print)
+    !=partial("../partials/_stylesheet", { src: "print" })
     title The Chronicle
     !=partial("code/google-analytics")
   body!= body

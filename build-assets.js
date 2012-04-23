@@ -12,7 +12,7 @@ var api = require('./thechronicle_modules/api');
 var config = require('./thechronicle_modules/config');
 var log = require('./thechronicle_modules/log');
 
-var STYLE_DIR = __dirname + '/assets/styles/';
+var STYLE_DIR = __dirname + '/public/assets/styles/';
 var DIST_DIR = __dirname + '/public/dist/';
 var JS_SOURCES = [ 'site', 'admin' ];
 
@@ -129,7 +129,7 @@ function buildJavascript(callback) {
 
 function buildJavascriptFile(src, callback) {
     var config = { 
-        baseUrl: 'assets/scripts',
+        baseUrl: 'public/assets/scripts',
         name: src + '/main',
         out: 'public/dist/' + src + '.js',
         paths: {

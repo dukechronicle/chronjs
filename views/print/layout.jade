@@ -1,7 +1,9 @@
+include ../mixins/layout-helpers
+
 !!! 5
 html
   head
-    !=partial("../partials/_stylesheet", { src: "print" })
+    mixin stylesheet(isProduction, "print")
     title The Chronicle
     !=partial("code/google-analytics")
   body!= body

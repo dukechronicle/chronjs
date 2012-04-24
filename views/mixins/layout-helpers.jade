@@ -1,0 +1,12 @@
+mixin require-script(production, src)
+  - if (production)
+    script(src=paths.js[src], type="text/javascript")
+  - else
+    script(src="/assets/scripts/require-jquery.js", type="text/javascript", data-main=paths.js[src])
+
+mixin stylesheet(production, src)
+  - if (production)
+    link(rel="stylesheet", href=paths.css[src])
+  - else
+    - each file in paths.css[src]
+      link(rel="stylesheet", href=file)

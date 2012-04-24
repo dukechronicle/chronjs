@@ -1,5 +1,3 @@
-var uploadImage;
-
 define(['jquery'], function ($) {
 
     var IMAGE_HTML = "<img id='tempPreview' />";
@@ -9,7 +7,10 @@ define(['jquery'], function ($) {
     var isUploading = false;
     var totalImages = 0;
 
-    uploadImage = function() {
+    return { "upload-image": uploadImage }
+
+
+    function uploadImage () {
     dropLabelStartText = $("#droplabel").text();
 
     // init event handlers

@@ -1,3 +1,5 @@
+.js-page-id.crop-image.prettify-date
+
 h1 Crop
 - if(url)
   img#toCrop(src=url)
@@ -58,7 +60,3 @@ p
     #versions!= partial('version', {locals: {afterUrl: afterUrl, docId: docId, imageTypes: imageTypes, cropSizes: imageDetails, allVersions: versions}})
   - each version in versions
     #versions!= partial('version', {locals: {afterUrl: afterUrl, docId: docId, imageTypes: imageTypes, cropSizes: imageDetails, version: version}})
-
-script(type="text/javascript")
-    CHRONICLE.onload.push(function(){prettifyDate()}, function(){cropImage()},
-                          function(){deleteImage()})

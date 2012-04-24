@@ -1,5 +1,3 @@
-var cropImage;
-
 define(['jquery', 'libs/jquery.Jcrop'], function ($) {
 
     var sizes;
@@ -10,7 +8,9 @@ define(['jquery', 'libs/jquery.Jcrop'], function ($) {
         onRelease: clearCoords
     };
 
-    cropImage = function () {
+    return { "crop-image": cropImage }
+
+    function cropImage () {
         sizes = $("#sizes").data('sizes');
         if (sizes) {
             updateCropSize();

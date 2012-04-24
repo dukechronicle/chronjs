@@ -1,3 +1,5 @@
+.js-page-id.config
+
 - var configTitle = 'Chronicle Configuration';
 - if(showOnly == null)
     - var action = '/config';
@@ -35,5 +37,3 @@ form(id="configForm", action=action, method='POST')
   input(type='hidden', name=revisionName, value=revisionValue)
   input(type='hidden', name=profileName, value=profileValue, readonly="true")
   input(type='submit')
-
-script CHRONICLE.onload.push(function(){json2form()})

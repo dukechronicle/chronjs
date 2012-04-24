@@ -1,3 +1,5 @@
+.js-page-id.k4export
+
 h1 K4 Exporter
 form(action='/admin/k4export', method='post', enctype='multipart/form-data')
   label(for='zip') XML Zip:
@@ -32,5 +34,3 @@ a(href='/admin/manage') Manage and edit uploaded articles
         - each image in imageData
           option(value=JSON.stringify(image), title=image.thumbUrl) #{image.displayName}
       input.btn(type="submit") Submit
-
-script CHRONICLE.onload.push(function(){k4export()})

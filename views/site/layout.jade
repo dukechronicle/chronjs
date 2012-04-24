@@ -19,9 +19,9 @@ html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
         link(rel="icon", href=static_cdn + "/images/favicon.ico")
 
         link(rel="stylesheet", href=static_cdn + "/css/reset.css")
-        link(rel="stylesheet", href=paths.css.site)
+        !=partial("../partials/_stylesheet", { src: "site" })
         //if lt IE 9
-            link(rel="stylesheet", href=paths.css['style-ie'])
+            !=partial("../partials/_stylesheet", { src: "style-ie" })
 
         // typekitload code should always load first because it will cause a relayout of dom
         script(src="http://use.typekit.com/dwv2bjy.js")
@@ -63,4 +63,4 @@ html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
                 script(type='text/javascript') var curvyCornersVerbose = false
                 script(src="/js/curvycorners.js")
 
-            script(src=paths.js.site, type="text/javascript")
+            !=partial("../partials/_script", { src: "site" })

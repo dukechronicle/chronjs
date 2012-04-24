@@ -1,0 +1,5 @@
+- if (isProduction)
+    link(rel="stylesheet", href=paths.css[src])
+- else
+    - each file in paths.css[src]
+        link(rel="stylesheet", href=file)

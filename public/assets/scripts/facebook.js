@@ -1,4 +1,5 @@
 window.fbAsyncInit = function() {
+    var readTriggerTime = 20000;
     FB.init({
         appId      : '335954613131615', // App ID
         //channelUrl : '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel File
@@ -7,45 +8,59 @@ window.fbAsyncInit = function() {
         xfbml      : true  // parse XFBML
     });
 
-    FB.Event.subscribe('auth.statusChange', function(response) {
-        if (response.authResponse) {
-            var accessToken = response.authResponse.accessToken;
+    if (location.pathname.match("/article/(.*)")) {
+        var readTrigger = null;
+        FB.Event.subscribe('auth.statusChange', function(response) {
+            if (response.authResponse) {
+                var accessToken = response.authResponse.accessToken;
+                var status = "on";
+                if ($.cookie("disable-sharing")) {
+                    status = "off";
+                }
+                $('article').append(
+                    "<div id='social-share'>" +
+                        "<div class='activities' style='display:none'></div>" +
+                        "<a class='share-button' href='#'>Sharing is <u>" + status + "</u></a>" +
+                        "<a class='activity-button' href='#'>" +
+                            "<img class='activity-icon' src='/images/icons/social-activity-icon.png'></img>" +
+                        "</a>" +
+                    "</div>"
+                );
+                updateRecentActivities(accessToken);
+                if (status === "on") {
+                    readTrigger = setTimeout(function(){markRead(accessToken)}, readTriggerTime);
+                }
 
-            $('article').append(
-                "<div id='social-share'>" +
-                    "<div class='activities' style='display:none'></div>" +
-                    "<a class='share-button' data-status='off' href='#'>Sharing On</a>" +
-                    "<a class='activity-button' href='#'>" +
-                        "<img class='activity-icon' src='/images/icons/social-activity-icon.png'></img>" +
-                    "</a>" +
-                "</div>"
-            );
-            updateRecentActivities(accessToken);
-            $('#social-share .activity-button').click(function(event) {
-                event.stopPropagation();
-                event.preventDefault();
-                $('#social-share .activities').toggle();
-            });
-            if (location.pathname.match("/article/(.*)")) {
-                setTimeout(function() {
-                    var url = "http://www.dukechronicle.com" + location.pathname;
-                    $.post(
-                        "https://graph.facebook.com/me/dukechronicle:read",
-                        {article: url, access_token: response.authResponse.accessToken},
-                        function() {
-                            updateRecentActivities(accessToken);
-                        },
-                        "json"
-                    )
-                }, 20000)
+                $('#social-share .activity-button').click(function(event) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    $('#social-share .activities').toggle();
+                });
+                var shareButton = $('#social-share .share-button');
+                shareButton.click(function(event) {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    if (status === "on") {
+                       status = "off";
+                        $.cookie("disable-sharing", true);
+                        clearTimeout(readTrigger)
+                    } else {
+                      status = "on"
+                        $.cookie("disable-sharing", null);
+                        readTrigger = setTimeout(function(){markRead(accessToken)}, readTriggerTime);
+
+                    }
+                    shareButton.html("Sharing is <u>" + status + "</u>");
+
+                });
             }
-        }
-    });
+        });
 
-    // subscribe to like button
-    FB.Event.subscribe('edge.create', function(url) {
-        _gaq.push(['_trackSocial', 'facebook', 'like', url]);
-    });
+        // subscribe to like button
+        FB.Event.subscribe('edge.create', function(url) {
+            _gaq.push(['_trackSocial', 'facebook', 'like', url]);
+        });
+    }
 };
 
 // Load the SDK Asynchronously
@@ -56,6 +71,19 @@ js = d.createElement('script'); js.id = id; js.async = true;
 js.src = "//connect.facebook.net/en_US/all.js";
 ref.parentNode.insertBefore(js, ref);
 }(document));
+
+
+function markRead(accessToken) {
+                var url = "http://www.dukechronicle.com" + location.pathname;
+                $.post(
+                    "https://graph.facebook.com/me/dukechronicle:read",
+                    {article: url, access_token: response.authResponse.accessToken},
+                    function() {
+                        updateRecentActivities(accessToken);
+                    },
+                    "json"
+                )
+}
 
 function updateRecentActivities(accessToken) {
     $.getJSON('https://graph.facebook.com/me/dukechronicle:read',

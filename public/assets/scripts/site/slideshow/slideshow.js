@@ -1,6 +1,7 @@
-var initSlideshow;
-
 define(['jquery'], function($) {
+
+    return { slideshow: initSlideshow }
+
     var currentSlide = 0;
     var nextSlide = 0;
     var totalSlides = $('.slideshow .slides img').size();
@@ -8,20 +9,19 @@ define(['jquery'], function($) {
     var positions  = [0, 135, 270];
     // start by showing only the first sldie
 
-    initSlideshow = function () {
+    function initSlideshow () {
         $('.slideshow .headlines a:eq(0)').addClass('active');
 
         // TODO cross browser compatibility
         // bind headlines to slideshow switches
         $('.slideshow .headlines a').each(function(index) {
-        $(this).click(function(event) {
-            if (index != currentSlide) {
+            $(this).click(function(event) {
+                if (index != currentSlide) {
                     event.preventDefault();
-            showSlide(index);
-            $('.slideshow div.caret').css('-webkit-transform',
-                                                  'translate(0px, ' + parseInt(positions[index], 10) + 'px) rotate(45deg)');
-            }
-        });
+                    showSlide(index);
+                    $('.slideshow div.caret').css('-webkit-transform', 'translate(0px, ' + parseInt(positions[index], 10) + 'px) rotate(45deg)');
+                }
+            });
         });
     }
 
@@ -34,8 +34,8 @@ define(['jquery'], function($) {
 
     // generic function used to switch from one slide to anoter
     function showSlide(newSlide) {
-    $('.slideshow .slides img:eq(' + currentSlide + ')').fadeOut('slow');
-    $('.slideshow .slides img:eq(' + newSlide + ')').fadeIn('slow');
+        $('.slideshow .slides img:eq(' + currentSlide + ')').fadeOut('slow');
+        $('.slideshow .slides img:eq(' + newSlide + ')').fadeIn('slow');
 
         $('.slideshow .slides .text a:eq(' + currentSlide + ')').fadeOut('active');
         $('.slideshow .slides .text a:eq(' + newSlide + ')').fadeIn('active');
@@ -47,11 +47,11 @@ define(['jquery'], function($) {
         $('.slideshow .slides .text h2:eq(' + newSlide + ')').fadeIn('slow');
 
         var previousLink = $('.slideshow .headlines a:eq(' + currentSlide + ')');
-    previousLink.removeClass('active');
+        previousLink.removeClass('active');
         var nextLink = $('.slideshow .headlines a:eq(' + newSlide + ')')
-    nextLink.addClass('active');
+        nextLink.addClass('active');
         
-    currentSlide = newSlide;
+        currentSlide = newSlide;
     }
 
 });

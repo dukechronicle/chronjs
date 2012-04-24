@@ -1,12 +1,12 @@
-var configureAppendCommentCount;
-
 define(['jquery', 'disqus'], function ($) {
 
-    return configureAppendCommentCount = function() {
-        disqus_config = function () {
-            this.callbacks.afterRender = [function() {
-                appendCommentCount();
-            }];
+    return {
+        article: function() {
+            disqus_config = function () {
+                this.callbacks.afterRender = [function() {
+                    appendCommentCount();
+                }];
+            }
         }
     }
 

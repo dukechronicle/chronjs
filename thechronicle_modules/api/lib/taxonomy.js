@@ -58,7 +58,6 @@ taxonomy.getChildren = function(taxonomyPath, callback) {
     var path = taxonomyPath.join('/');
     var tree = taxonomy.getTaxonomyTree(taxonomyPath);
 
-    log.debug('here');
     if (!tree) return callback("Taxonomy not valid: " + path);
 
     var children = _.map(tree, function (key, value) {

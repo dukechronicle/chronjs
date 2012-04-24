@@ -1,8 +1,8 @@
-var k4export;
-
 define(['jquery', 'Article', 'libs/jquery.dd'], function ($, Article) {
 
-    k4export = function () {
+    return { k4export: k4export }
+
+    function k4export () {
 
         $(".article-form").submit(function (e) {
             e.preventDefault();

@@ -16,17 +16,11 @@ window.fbAsyncInit = function() {
                     "<div class='activities' style='display:none'></div>" +
                     "<a class='share-button' data-status='off' href='#'>Sharing On</a>" +
                     "<a class='activity-button' href='#'>" +
-                    "<img class='activity-icon' src='/images/icons/social-activity-icon.png'></img>" +
+                        "<img class='activity-icon' src='/images/icons/social-activity-icon.png'></img>" +
                     "</a>" +
-                    "</div>"
+                "</div>"
             );
             updateRecentActivities(accessToken);
-            $('#social-share .activities td.delete').delegate("a", "click", function() {
-                var activityId = $(this).attr("data-id");
-                $('#activity-' + activityId).remove();
-                $.get("/xhrproxy/delete_activity", {activity_id: activityId, access_token: accessToken });
-                return false;
-            });
             $('#social-share .activity-button').click(function(event) {
                 event.stopPropagation();
                 event.preventDefault();
@@ -43,7 +37,7 @@ window.fbAsyncInit = function() {
                         },
                         "json"
                     )
-                }, 2000)
+                }, 20000)
             }
         }
     });
@@ -58,9 +52,9 @@ window.fbAsyncInit = function() {
 (function(d){
     var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
     if (d.getElementById(id)) {return;}
-    js = d.createElement('script'); js.id = id; js.async = true;
-    js.src = "//connect.facebook.net/en_US/all.js";
-    ref.parentNode.insertBefore(js, ref);
+js = d.createElement('script'); js.id = id; js.async = true;
+js.src = "//connect.facebook.net/en_US/all.js";
+ref.parentNode.insertBefore(js, ref);
 }(document));
 
 function updateRecentActivities(accessToken) {
@@ -79,6 +73,12 @@ function updateRecentActivities(accessToken) {
             html += "</table>";
             $('#social-share .activities').empty();
             $('#social-share .activities').append(html);
+            $('#social-share .activities td.delete').delegate("a", "click", function() {
+                var activityId = $(this).attr("data-id");
+                $('#activity-' + activityId).remove();
+                $.get("/xhrproxy/delete_activity", {activity_id: activityId, access_token: accessToken });
+                return false;
+            });
         }
     );
 }

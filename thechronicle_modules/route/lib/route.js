@@ -120,6 +120,7 @@ exports.init = function (app) {
 
     app.namespace('/xhrproxy', function() {
         app.get('/openx/:path', xhrproxy.openx);
+        app.get('/delete_activity', xhrproxy.delete_activity);
     })
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);

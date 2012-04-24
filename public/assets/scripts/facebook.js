@@ -1,5 +1,5 @@
 window.fbAsyncInit = function() {
-    var readTriggerTime = 4000;
+    var readTriggerTime = 20000;
     FB.init({
         appId      : '335954613131615', // App ID
         //channelUrl : '//WWW.YOUR_DOMAIN.COM/channel.html', // Channel File

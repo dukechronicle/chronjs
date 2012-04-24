@@ -1,3 +1,5 @@
+include ../mixins/layout-helpers
+
 !!! 5
 html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
     - if (typeof article !== undefined)
@@ -19,9 +21,9 @@ html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
         link(rel="icon", href=static_cdn + "/images/favicon.ico")
 
         link(rel="stylesheet", href=static_cdn + "/css/reset.css")
-        !=partial("../partials/_stylesheet", { src: "site" })
+        mixin stylesheet(isProduction, "site")
         //if lt IE 9
-            !=partial("../partials/_stylesheet", { src: "style-ie" })
+            mixin stylesheet(isProduction, "style-ie")
 
         // typekitload code should always load first because it will cause a relayout of dom
         script(src="http://use.typekit.com/dwv2bjy.js")
@@ -63,4 +65,4 @@ html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
                 script(type='text/javascript') var curvyCornersVerbose = false
                 script(src="/js/curvycorners.js")
 
-            !=partial("../partials/_script", { src: "site" })
+            mixin require-script(isProduction, "site")

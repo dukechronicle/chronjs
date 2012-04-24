@@ -1,9 +1,11 @@
+include ../mixins/layout-helpers
+
 !!! 5
 html
   head
     title The Chronicle
 
-    !=partial("../partials/_stylesheet", { src: "config" })
+    mixin stylesheet(isProduction, "config")
 
     script var CHRONICLE = { onload: [] }
 
@@ -11,5 +13,5 @@ html
   body
     #main
       #container!= body
-
-      !=partial("../partials/_script", { src: "admin" })
+      #scripts
+        mixin require-script(isProduction, "admin")

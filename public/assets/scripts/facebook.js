@@ -38,6 +38,8 @@ window.fbAsyncInit = function() {
                 });
                 var shareButton = $('#social-share .share-button');
                 shareButton.click(function(event) {
+                    event.stopPropagation();
+                    event.preventDefault();
                     if (status === "on") {
                        status = "off";
                         $.cookie("disable-sharing", true);

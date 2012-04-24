@@ -1,6 +1,6 @@
 define(["jquery", "galleria/galleria-1.2.5"], function($) {
 
-    return { "frontpage-slideshow": initSlideshow }
+    return { "slideshow-frontpage": initSlideshow }
 
     function initSlideshow() {
         Galleria.loadTheme('/js/galleria/themes/frontpage-slideshow/galleria.frontpage-slideshow.js');

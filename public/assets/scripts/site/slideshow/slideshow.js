@@ -1,6 +1,6 @@
 define(['jquery'], function($) {
 
-    return { slideshow: initSlideshow }
+    return { "slideshow-right": initSlideshow }
 
     var currentSlide = 0;
     var nextSlide = 0;

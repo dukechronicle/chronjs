@@ -1,3 +1,5 @@
+.js-page-id.opinion
+
 !=partial('subnav', {subsections: subsections})
 
 #opinion
@@ -38,5 +40,3 @@
                         .rounded
                             - each columnist, index in model.Columnists
                                 .columnist-stories(id="columnist-story-#{index}")!=partial('../container/opinion-story-list.jade', columnist)
-
-script CHRONICLE.onload.push(function(){columnistSelect()})

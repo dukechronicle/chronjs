@@ -1,8 +1,8 @@
-var initFrontpageSlideshow;
-
 define(["jquery", "galleria/galleria-1.2.5"], function($) {
 
-    initFrontpageSlideshow = function() {
+    return { "frontpage-slideshow": initSlideshow }
+
+    function initSlideshow() {
         Galleria.loadTheme('/js/galleria/themes/frontpage-slideshow/galleria.frontpage-slideshow.js');
         $("#slides").galleria({
             transition: "fade",

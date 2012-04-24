@@ -1,9 +1,9 @@
 define(['jquery'], function($) {
 
-    return { opinion: columnistSelect }
-
     var selected = $([]);
     var selectedNav = $([]);
+
+    return { opinion: columnistSelect }
 
     function columnistSelect () {
         $('#opinion #columnists').show();

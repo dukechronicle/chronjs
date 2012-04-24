@@ -1,13 +1,14 @@
 define(['jquery'], function($) {
 
-    return { "slideshow-right": initSlideshow }
-
     var currentSlide = 0;
     var nextSlide = 0;
     var totalSlides = $('.slideshow .slides img').size();
 
     var positions  = [0, 135, 270];
     // start by showing only the first sldie
+
+    return { "slideshow-right": initSlideshow }
+
 
     function initSlideshow () {
         $('.slideshow .headlines a:eq(0)').addClass('active');

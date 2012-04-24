@@ -1,10 +1,10 @@
 define(["jquery", "libs/jquery-ui"], function($) {
 
-    return { "infinite-scroll": scrollLoad() }
-
     var isLoadingPage = false; // stops multiple pages loading at once
     var noPagesLeftToLoad = false; // stops ajax requests from being issued once all articles for this page have been loaded
     var loadImage = null;
+
+    return { "infinite-scroll": scrollLoad }
 
 
     function scrollLoad() {

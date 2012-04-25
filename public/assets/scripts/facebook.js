@@ -77,7 +77,7 @@ function markRead(accessToken) {
                 var url = "http://www.dukechronicle.com" + location.pathname;
                 $.post(
                     "https://graph.facebook.com/me/dukechronicle:read",
-                    {article: url, access_token: response.authResponse.accessToken},
+                    {article: url, access_token: accessToken},
                     function() {
                         updateRecentActivities(accessToken);
                     },

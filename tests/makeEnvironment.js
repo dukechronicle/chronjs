@@ -41,7 +41,6 @@ var NUM_ARTICLES = 25;
 
 var ARTICLES_PER_LAYOUT_GROUP = 4;
 
-var TAXONOMY = null;
 
 // holds the IDs of the articles, once they have been found
 var articleIDs = [];
@@ -58,9 +57,6 @@ log.init(function (err) {
             console.log("You can't create an environment using the production config options. Recommend use of db server chrondev.iriscouch.com and S3 bucket chron_dev");
         }
         else {
-            TAXONOMY = config.get('TAXONOMY');
-            delete(TAXONOMY["has"]); // extra key added to taxonomy that shouldn't be there
-
             console.log('creating environment...this could take a few minutes');
         
             async.waterfall([
@@ -287,20 +283,15 @@ function generateSentence(numWords) {
 
 function generateTaxonomy() {
     var taxonomy = [];
-    var taxonomyLevelTree = TAXONOMY;
+    var tree = api.taxonomy.getTaxonomyTree();
     
-    taxonomyLevelTree = taxonomyLevelTree[getRandomNumber(Object.keys(taxonomyLevelTree).length)];
-    taxonomy[0] = Object.keys(taxonomyLevelTree)[0];
-
-    var i = 1;
-    while(true) {       
-        taxonomyLevelTree = taxonomyLevelTree[taxonomy[i-1]];
-        
-        if(Object.keys(taxonomyLevelTree).length == 0) break;
-        
-        taxonomyLevelTree = taxonomyLevelTree[getRandomNumber(Object.keys(taxonomyLevelTree).length)];
-        taxonomy[i] = Object.keys(taxonomyLevelTree)[getRandomNumber(Object.keys(taxonomyLevelTree).length)];
-        i ++;
+    while (true) {
+        var keys = Object.keys(tree);
+        if (keys.length == 0)
+            break;
+        var section = keys[getRandomNumber(keys.length)];
+        taxonomy.push(section);
+        tree = tree[section];
     }
 
     return taxonomy;

@@ -1,16 +1,16 @@
-var scrollLoad;
-
 define(["jquery", "libs/jquery-ui"], function($) {
+
     var isLoadingPage = false; // stops multiple pages loading at once
     var noPagesLeftToLoad = false; // stops ajax requests from being issued once all articles for this page have been loaded
     var loadImage = null;
 
+    return { "infinite-scroll": scrollLoad }
 
-    scrollLoad = function (scrollLoadUrl) {
-        $(document).ready(function() {
-            loadImage = $("#loadImage");
-            loadImage.hide();
-        });
+
+    function scrollLoad() {
+        loadImage = $("#loadImage");
+        loadImage.hide();
+        var scrollLoadUrl = loadImage.data('url');
 
         $(window).scroll(function(){
             // if they scrolled to the bottom of the page, load the next 'page' of articles

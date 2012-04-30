@@ -4,6 +4,7 @@ width = 636px
 height = 393px
 right-width = 330px
 textHeight = 80px
+link-color = #36C
 
 
 .slideshow-right
@@ -42,7 +43,7 @@ textHeight = 80px
             z-index 5
 
         a:hover  h1
-            color #36c
+            color link-color
 
         .text
             margin-top 400px
@@ -113,7 +114,7 @@ textHeight = 80px
          a.page.active
              border-right-color #4D90F0
              h2
-                color #36C
+                color link-color
 
          a.page.active:hover
              h2
@@ -157,3 +158,18 @@ textHeight = 80px
     font-family  Georgia,"Century Schoolbook","Times New Roman",Times,serif
     padding 0
     margin-bottom 20px
+
+    background-color white
+
+    #slides
+        width width
+        height height
+        padding 3px
+        overflow hidden
+        img
+            border-radius 4px
+
+        .galleria-info-title a
+            color black
+        .galleria-info-title a:hover
+            color link-color

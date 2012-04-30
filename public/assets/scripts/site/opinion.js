@@ -3,7 +3,7 @@ define(['jquery'], function($) {
     var selected = $([]);
     var selectedNav = $([]);
 
-    return { opinion: columnistSelect }
+    return { "#opinion": columnistSelect }
 
     function columnistSelect () {
         $('#opinion #columnists').show();

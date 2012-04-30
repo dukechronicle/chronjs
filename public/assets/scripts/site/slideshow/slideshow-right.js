@@ -7,7 +7,7 @@ define(['jquery'], function($) {
     var positions  = [0, 135, 270];
     // start by showing only the first sldie
 
-    return { "slideshow-right": initSlideshow }
+    return { ".slideshow-right": initSlideshow }
 
 
     function initSlideshow () {

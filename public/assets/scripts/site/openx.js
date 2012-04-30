@@ -2,7 +2,7 @@ define(["jquery", "libs/jquery.metadata", "libs/jquery.openxtag.min"], function(
 
     return {
 
-        "": function () {
+        ".openx-ad": function () {
             $.openxtag('init', {
                 delivery: '/xhrproxy/openx'
             });

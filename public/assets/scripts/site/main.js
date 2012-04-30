@@ -3,13 +3,15 @@ require.config({
 });
 
 require(['site/align','site/article','site/opinion','site/scrollLoad',
-         'site/slideshow/frontpage-slideshow','site/slideshow/slideshow', 'site/openx', 'libs/jquery.cookie', 'facebook'],
+         'site/slideshow/frontpage-slideshow','site/slideshow/slideshow',
+         'site/openx', 'libs/jquery.cookie', 'facebook'],
         function (align) {
-            loadAfterTypekit(align);
+            var args = Array.prototype.slice(arguments);
+            loadAfterTypekit(args.shift()); // align page after typekit loads
             $(function () {
-                if (typeof CHRONICLE == "object" && CHRONICLE.onload)
-                    for (var i in CHRONICLE.onload)
-                        CHRONICLE.onload[i]();
+                for (var i in args)
+                    if (typeof args[i] == "function")
+                        args[i]();
             });
         });
 

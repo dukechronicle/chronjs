@@ -1,5 +1,3 @@
-var json2form;
-
 define(["jquery", "libs/onde", "libs/jquery.textarea-expander"], function($) {
     var ondeSessions = {};
     var objs = [];
@@ -7,7 +5,9 @@ define(["jquery", "libs/onde", "libs/jquery.textarea-expander"], function($) {
     // construct the nice looking forms to edit json
     var rawElements = getAllRawJSONs();
 
-    json2form = function () {
+    return { config: json2form }
+
+    function json2form () {
         for(var i = 0; i < rawElements.length; i ++) {
             var obj = {
                 name: $(rawElements[i]).attr("name"),

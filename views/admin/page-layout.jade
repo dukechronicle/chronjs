@@ -1,8 +1,8 @@
-script NAMESPACE = !{JSON.stringify(nameSpace)};
+.js-page-id.layout
 
 h2 !{page} Layout
 
-#layout
+#layout(data-namespace=nameSpace)
     - each group, i in groups
         br
         <h2>!{group}</h2>
@@ -35,5 +35,3 @@ h2 !{page} Layout
                 - else
                     .story(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
                         #{story.title}
-
-script CHRONICLE.onload.push(function(){layout()})

@@ -1,12 +1,16 @@
-var configureAppendCommentCount;
-
 define(['jquery', 'disqus'], function ($) {
 
-    return configureAppendCommentCount = function() {
-        disqus_config = function () {
-            this.callbacks.afterRender = [function() {
-                appendCommentCount();
-            }];
+    return {
+        article: function() {
+            var data = $("#disqus_thread").data('disqus');
+            loadDisqusForArticle(data.production, data.shortname, data.id,
+                                 data.title.replace(/'/g,"\\'"), data.url);
+
+            disqus_config = function () {
+                this.callbacks.afterRender = [function() {
+                    appendCommentCount();
+                }];
+            }
         }
     }
 

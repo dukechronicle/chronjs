@@ -1,12 +1,16 @@
 define(['jquery'], function($) {
+
     var currentSlide = 0;
     var nextSlide = 0;
-    var totalSlides = $('.slideshow .slides img').size();
+    var totalSlides = $('.slideshow-right .slides img').size();
 
     var positions  = [0, 135, 270];
-    // start by showing only the first slide
+    // start by showing only the first sldie
 
-    return function () {
+    return { "slideshow-right": initSlideshow }
+
+
+    function initSlideshow () {
         $('.slideshow-right .headlines a:eq(0)').addClass('active');
 
         // TODO cross browser compatibility
@@ -16,12 +20,18 @@ define(['jquery'], function($) {
                 if (index != currentSlide) {
                     event.preventDefault();
                     showSlide(index);
-                    $('.slideshow-right div.caret').css('-webkit-transform',
-                                                  'translate(0px, ' + parseInt(positions[index], 10) + 'px) rotate(45deg)');
+                    $('.slideshow-right div.caret').css('-webkit-transform', 'translate(0px, ' + parseInt(positions[index], 10) + 'px) rotate(45deg)');
                 }
             });
         });
     }
+
+    /*
+      setInterval(function(){
+      nextSlide = currentSlide + 1;
+      if (nextSlide === totalSlides) nextSlide = 0;
+      showSlide(nextSlide);
+      }, 6000);*/
 
     // generic function used to switch from one slide to anoter
     function showSlide(newSlide) {
@@ -43,14 +53,6 @@ define(['jquery'], function($) {
         nextLink.addClass('active');
         
         currentSlide = newSlide;
-    }
-
-    function iterateSlides() {
-        setInterval(function(){
-            nextSlide = currentSlide + 1;
-            if (nextSlide === totalSlides) nextSlide = 0;
-            showSlide(nextSlide);
-        }, 6000);
     }
 
 });

@@ -1,8 +1,8 @@
-var deleteArticle;
-
 define(['jquery', 'libs/jquery-ui'], function ($) {
 
-    deleteArticle = function() {
+    return { "": deleteArticle }
+
+    function deleteArticle() {
 
         $(".delete-article").click(function(event) {
             event.preventDefault();

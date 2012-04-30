@@ -1,11 +1,11 @@
-var columnistSelect;
-
 define(['jquery'], function($) {
 
     var selected = $([]);
     var selectedNav = $([]);
 
-    return columnistSelect = function () {
+    return { opinion: columnistSelect }
+
+    function columnistSelect () {
         $('#opinion #columnists').show();
 
         $('#opinion #columnist-list .content-container a').click(function(e) {

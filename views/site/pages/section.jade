@@ -1,3 +1,5 @@
+.js-page-id.infinite-scroll
+
 .nav.clearfix
     for parent in parentPaths
         h2.selected
@@ -18,12 +20,7 @@
                         span.author !{doc.authors}
                     .teaser !{doc.teaser}
         - if(docs.length > 0)
-            script(type='text/javascript')
-                CHRONICLE.onload.push(function () {
-                    scrollLoad("/api/section/#{taxonomyPath}");
-                });
-
-            div.result.rounded-hover#loadImage(style="height:300px;", data-key=JSON.stringify(next))
+            div.result.rounded-hover#loadImage(style="height:300px;", data-key=JSON.stringify(next), data-url="/api/section/#{taxonomyPath}")
                 img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto;")
 
     .sidebar

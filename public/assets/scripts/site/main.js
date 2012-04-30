@@ -5,15 +5,22 @@ require.config({
 require(['site/align','site/article','site/opinion','site/scrollLoad',
          'site/slideshow/frontpage-slideshow','site/slideshow/slideshow-right',
          'site/openx', 'libs/jquery.cookie', 'facebook'],
-        function () {
+        function (align) {
             var args = Array.prototype.slice.call(arguments);
-            loadAfterTypekit(args.shift()); // align page after typekit loads
+            loadAfterTypekit(args.shift()); // align after typekit loads
             $(function () {
-                for (var i in args)
-                    if (typeof args[i] == "function")
-                        args[i]();
+                for (var i in args) {
+                    var functions = args[i];
+                    for (var selector in functions)
+                        if (!selector || hasSelector(selector))
+                            functions[selector]();
+                }
             });
         });
+
+function hasSelector(selector) {
+    return $(".js-page-id." + selector).length > 0;
+}
 
 function loadAfterTypekit(callback) {
     if ($('html').hasClass("wf-active") || $('html').hasClass("wf-inactive")) {

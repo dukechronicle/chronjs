@@ -1,8 +1,8 @@
-var initNewsletterForm;
-
 define(['jquery', 'libs/jquery-ui'], function ($) {
 
-    initNewsletterForm = function () {
+    return { newsletter: initNewsletterForm }
+
+    function initNewsletterForm () {
 
         $("form#test").submit(function (e) {
             e.preventDefault();

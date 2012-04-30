@@ -3,14 +3,94 @@
 headlines-height = 50px
 width = 636px
 height = 393px
+right-width = 330px
 textHeight = 80px
 
-.slideshow.right
+.slideshow-right
     box-shadow none
+    width width + 6 + right-width
+    position relative
+
     .slides
+        border-radius 4px
+        width width
+        float right
         height height
         img
             margin-top 0px
+            width width
+            border-radius 4px
+
+    .headlines
+         float left
+         width right-width
+
+         height height + 6px
+         display block
+         background transparent
+
+
+         div
+             width 630px margin 0 auto
+         a.page
+             padding-left = 3px
+             padding-right = 8px
+             margin = 20px + padding-left + padding-right
+                     
+             text-align left
+             cursor pointer
+             width right-width - margin
+             display inline-block
+             margin 0px 0px 13px 0px
+             padding-right padding-right
+             padding-top 3px
+             font-size 1.2em
+
+             padding-left padding-left
+             height 115px
+             color #444
+             line-height 1.3em
+
+             text-shadow 0px 1px 1px white
+             float left
+             transition(border-right-color, .25s, linear)
+
+             h2
+                 font-size 1.2em
+                 line-height 1.2em
+                 margin-bottom 8px
+
+             p.teaser
+                 font-size 0.85em
+                 line-height 1.2em
+                 color #444
+             img
+                 border-radius 4px
+                 height 118px
+                 width 118px
+                 float left
+                 margin-right 10px
+
+         a.page.last
+             margin-bottom 0px
+
+         a.page:hover
+             color black
+             text-decoration none
+         a.page.active
+             border-right-color #4D90F0
+
+             h2
+                color #36C
+
+         a.page.active:hover
+             h2
+                text-decoration underline
+
+         a.page.rounded
+             box-shadow rgba(0,0,0,0.30) 0 1px 3px
+             background-linear-gradient bottom #EDEDED white
+
 .slideshow.vertical
     .headlines
         a.page

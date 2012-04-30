@@ -1,11 +1,25 @@
 define(["jquery", "libs/underscore"], function($) {
 
-    return function () {
-        pageAlign();
-        truncateTeaser();
-        if ($("section > #frontpage").length > 0)
-            frontpageAlign();
-        verticalAlign();
+    return {
+        
+        ".align-group": loadAfterTypekit(pageAlign),
+        ".block-row .list-story": loadAfterTypekit(truncateTeaser),
+        ".vertical-container": loadAfterTypekit(verticalAlign),
+        "#frontpage": loadAfterTypekit(frontpageAlign)
+
+    }
+
+    function loadAfterTypekit(callback) {
+        return function () {
+            if ($('html').hasClass("wf-active") ||
+                $('html').hasClass("wf-inactive")) {
+                callback();
+            }
+            else {
+                var retry = function() {loadAfterTypekit(callback)};
+                setTimeout(retry, 300)
+            }
+        }
     }
 
     function pageAlign() {

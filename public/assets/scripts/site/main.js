@@ -7,7 +7,6 @@ require(['site/align','site/article','site/opinion','site/scrollLoad',
          'site/openx', 'libs/jquery.cookie', 'facebook'],
         function (align) {
             var args = Array.prototype.slice.call(arguments);
-            loadAfterTypekit(args.shift()); // align after typekit loads
             $(function () {
                 for (var i in args) {
                     var functions = args[i];
@@ -17,12 +16,3 @@ require(['site/align','site/article','site/opinion','site/scrollLoad',
                 }
             });
         });
-
-function loadAfterTypekit(callback) {
-    if ($('html').hasClass("wf-active") || $('html').hasClass("wf-inactive")) {
-        callback();
-    } else {
-        var retry = function() {loadAfterTypekit(callback)};
-        setTimeout(retry, 300)
-    }
-}

@@ -12,15 +12,11 @@ require(['site/align','site/article','site/opinion','site/scrollLoad',
                 for (var i in args) {
                     var functions = args[i];
                     for (var selector in functions)
-                        if (!selector || hasSelector(selector))
+                        if (!selector || $(selector).length > 0)
                             functions[selector]();
                 }
             });
         });
-
-function hasSelector(selector) {
-    return $(".js-page-id." + selector).length > 0;
-}
 
 function loadAfterTypekit(callback) {
     if ($('html').hasClass("wf-active") || $('html').hasClass("wf-inactive")) {

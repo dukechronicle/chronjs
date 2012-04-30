@@ -4,7 +4,7 @@ define(["jquery", "libs/jquery-ui"], function($) {
     var noPagesLeftToLoad = false; // stops ajax requests from being issued once all articles for this page have been loaded
     var loadImage = null;
 
-    return { "infinite-scroll": scrollLoad }
+    return { "#loadImage": scrollLoad }
 
 
     function scrollLoad() {

@@ -1,45 +1,48 @@
 define(['jquery', 'libs/jquery-ui'], function ($) {
 
-    return { newsletter: initNewsletterForm }
+    return {
+        
+        "#newsletter": function () {
 
-    function initNewsletterForm () {
+            $("#newsletter #message").hide();
+            
+            $("#newsletter #test").submit(function (e) {
+                e.preventDefault();
+                sendNewsletter($(this), 'Test sent');
+            });
 
-        $("form#test").submit(function (e) {
-            e.preventDefault();
-            sendNewsletter($(this), 'Test sent');
-        });
+            $("#newsletter #send").submit(function (e) {
+                e.preventDefault();
+                $("#confirm").dialog('open');
+            });
 
-        $("form#send").submit(function (e) {
-            e.preventDefault();
-            form = $(this);
-            $("#newsletter-confirm").dialog('open');
-        });
-
-        $("#newsletter-confirm").dialog({
-            resizable: false,
-            autoOpen: false,
-            height:140,
-            modal: true,
-            buttons: {
-                Send: function() {
-                    sendNewsletter($("form#send"), 'Newsletter sent', function(){
-                        $("#newsletter-confirm").dialog('close');
-                    });
-                },
-                Cancel: function() {
-                    $("#newsletter-confirm").dialog('close');
+            $("#newsletter #confirm").dialog({
+                resizable: false,
+                autoOpen: false,
+                height:140,
+                modal: true,
+                buttons: {
+                    Send: function() {
+                        sendNewsletter($("#send"), 'Newsletter sent', function() {
+                            $("#confirm").dialog('close');
+                        });
+                    },
+                    Cancel: function() {
+                        $("#confirm").dialog('close');
+                    }
                 }
-            }
-        });
+            });
 
-    };
+        }
+
+    }
 
     function sendNewsletter(form, onSentText, callback) {
         $.post('/admin/newsletter', form.serialize(), function (msg) {
             if (msg == "sent")
-                $("#message").html(onSentText).addClass('alert-message success');
+                $("#message").html(onSentText).addClass('success').show();
             else
-                $("#message").html("Could not send").addClass('alert-message error');
+                $("#message").html("Could not send").addClass('error').show();
 
             if (callback) callback();
         });

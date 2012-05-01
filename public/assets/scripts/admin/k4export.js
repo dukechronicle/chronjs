@@ -1,32 +1,37 @@
 define(['jquery', 'Article', 'libs/jquery.dd'], function ($, Article) {
 
-    return { k4export: k4export }
+    return { 
 
-    function k4export () {
+        "#k4export": function () {
 
-        $(".article-form").submit(function (e) {
-            e.preventDefault();
-            $form = $(this);
-            $form.children(".btn").attr('disabled', 'disabled');
-            editDocument($form, function (err) {
-                if (err) {
-                    alert(err);
-                    $form.children(".btn").removeAttr('disabled');
-                }
-                else {
-                    $form.fadeOut('slow', function () {
-                        $form.remove();
-                    });
-                }
+            $("#k4export .article-form").submit(function (e) {
+                e.preventDefault();
+                $form = $(this);
+                $form.children(".btn").attr('disabled', 'disabled');
+                editDocument($form, function (err) {
+                    if (err) {
+                        alert(err);
+                        $form.children(".btn").removeAttr('disabled');
+                    }
+                    else {
+                        $form.fadeOut('slow', function () {
+                            $form.remove();
+                        });
+                    }
+                });
             });
-        });
 
-        try {
-            $(".article-form .image").msDropDown({visibleRows:4, rowHeight:100});
-        } catch(e) {
-            alert(e.message);
+            try {
+                $("#k4export .article-form .image").msDropDown({
+                    visibleRows:4,
+                    rowHeight:100
+                });
+            } catch(e) {
+                alert(e.message);
+            }
         }
-    };
+
+    }
 
     function editDocument($form, callback) {
         var article = new Article($form.data("article"));

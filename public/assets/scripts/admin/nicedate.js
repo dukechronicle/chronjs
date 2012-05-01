@@ -5,7 +5,7 @@ define(['jquery', 'libs/jquery-ui'], function ($) {
     var dateForm;
     var niceDateChanged = false;
 
-    return { "prettify-date": prettifyDate }
+    return { "#nicedate": prettifyDate }
 
 
     // on load

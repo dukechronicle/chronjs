@@ -7,7 +7,7 @@ define(['jquery'], function ($) {
     var isUploading = false;
     var totalImages = 0;
 
-    return { "upload-image": uploadImage }
+    return { "#dropbox": uploadImage }
 
 
     function uploadImage () {

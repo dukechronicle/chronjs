@@ -1,63 +1,49 @@
 @import '../../mixins'
 
-headlines-height = 50px
 width = 636px
 height = 393px
+right-width = 330px
 textHeight = 80px
+link-color = #36C
 
-.slideshow.right
+
+.slideshow-right
     box-shadow none
-    .slides
-        height height
-        img
-            margin-top 0px
-.slideshow.vertical
-    .headlines
-        a.page
-            border-bottom 1px solid transparent
-            height 41px
-            transition border-color 0.25s linear
-        a.page:hover, a.page.active
-            border-bottom-color #4D90F0
-
-
-.slideshow
-    width width + 6
-    border-radius  4px
-    black-box-shadow 0.398438 0px 1px 3px
+    width width + 6 + right-width
+    position relative
+    padding 0
+    margin-bottom 20px
+    float right
 
     font-size  0.9em
     font-family  Georgia,"Century Schoolbook","Times New Roman",Times,serif
-    padding 0
-    margin-bottom 20px
-
-
-    .slides img
-        border-bottom 1px solid #ccc
-        width width
-        height height
-        position absolute
-        left 0
-        top 0
-        margin-bottom textHeight
-        z-index 5
 
     .slides
-        background-linear-gradient bottom, whiteSmoke 0%, white 33%
-        border-top-left-radius  4px
-        border-top-right-radius  4px
-        position relative
+        border-radius 4px
         width width
+        float right
+        height height
+        background-linear-gradient bottom, whiteSmoke 0%, white 33%
+        black-box-shadow 0.3 0 1px 3px
+        border 3px solid white
         text-align left
         overflow hidden
-        height height + textHeight
-        border 3px solid white
-        //border-color #E5E5E5 #DBDBDB #D2D2D2
-        black-box-shadow 0.3 0 1px 3px
+        position relative
 
-        a:hover
-            h1
-                color #36c
+        img
+            margin-top 0px
+            border-radius 4px
+            width width
+            height height
+            border-bottom 1px solid #ccc
+            position absolute
+            left 0
+            top 0
+            margin-bottom textHeight
+            z-index 5
+
+        a:hover  h1
+            color link-color
 
         .text
             margin-top 400px
@@ -70,45 +56,74 @@ textHeight = 80px
                 margin-bottom 2px
 
     .headlines
+        float left
+        width right-width
+        height height + 6px
         display block
-        width 100%
-        height headlines-height
+        background transparent
         text-align center
-        background #fff
-        *overflow hidden
 
-        -webkit-border-bottom-left-radius  4px
-        -webkit-border-bottom-right-radius  4px
-        -moz-border-radius-bottomleft  4px
-        -moz-border-radius-bottomright  4px
-
-        background -moz-linear-gradient(center bottom,whiteSmoke 0%,white 33%)
-        background -webkit-gradient(linear,left bottom,left top,color-stop(0,whiteSmoke),color-stop(.33,white))
-        
         div
             width 630px margin 0 auto
+
         a.page
+            padding-left = 3px
+            padding-right = 8px
+            margin = 20px + padding-left + padding-right
+                     
+            text-align left
             cursor pointer
-            width 180px
-            display block
-            float left
-            padding 3px 15px 6px 15px
-            height headlines-height - (6 * 2)
-            color black
-            line-height 1.2em
-            font-size 1em
-            -webkit-transition color linear .2s
+            width right-width - margin
+            display inline-block
+            margin 0px 0px 13px 0px
+            padding 3px padding-right 6px padding-left
+            font-size 1.2em
+
+            height 115px
+            color #444
+            line-height 1.3em
+
             text-shadow 0px 1px 1px white
+            float left
+            transition border-right-color, .25s, linear
+            transition color linear .2s
 
-        a.page:hover
-            color #36C
-            text-decoration none
-        a.page.active
-            color #36C
-            text-shadow 0px 1px 0px white
+            h2
+                font-size 1.2em
+                line-height 1.2em
+                margin-bottom 8px
 
-        a.page.active:hover
-            text-decoration underline
+             p.teaser
+                 font-size 0.85em
+                 line-height 1.2em
+                 color #444
+             img
+                 border-radius 4px
+                 height 118px
+                 width 118px
+                 float left
+                 margin-right 10px
+
+         a.page.last
+             margin-bottom 0px
+
+         a.page:hover
+             color black
+             text-decoration none
+
+         a.page.active
+             border-right-color #4D90F0
+             h2
+                color link-color
+
+         a.page.active:hover
+             h2
+                text-decoration underline
+
+         a.page.rounded
+             box-shadow rgba(0,0,0,0.30) 0 1px 3px
+             background-linear-gradient bottom #EDEDED white
+
     .caret
         transform rotate(45deg)
         position absolute
@@ -134,4 +149,27 @@ textHeight = 80px
             top -1px
             z-index 1
 
+.slideshow
+    width width + 6
+    border-radius  4px
+    black-box-shadow 0.398438 0px 1px 3px
 
+    font-size  0.9em
+    font-family  Georgia,"Century Schoolbook","Times New Roman",Times,serif
+    padding 0
+    margin-bottom 20px
+
+    background-color white
+
+    #slides
+        width width
+        height height
+        padding 3px
+        overflow hidden
+        img
+            border-radius 4px
+
+        .galleria-info-title a
+            color black
+        .galleria-info-title a:hover
+            color link-color

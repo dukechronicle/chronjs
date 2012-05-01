@@ -1,37 +1,36 @@
-.js-page-id.layout
-
-h2 !{page} Layout
-
-#layout(data-namespace=nameSpace)
-    - each group, i in groups
-        br
-        <h2>!{group}</h2>
-        code = 65+i       
-        .container(data-groupname=group,keycode=code)
-            - if (groupDocs[group])
-                - each story, id in groupDocs[group] 
+#layout
+    h2 !{page} Layout
+  
+    #groups(data-namespace=nameSpace)
+        - each group, i in groups
+            br
+            <h2>!{group}</h2>
+            code = 65+i       
+            .container(data-groupname=group,keycode=code)
+                - if (groupDocs[group])
+                    - each story, id in groupDocs[group] 
+                        - if (((Date.now()/1000 + 43200) > story.created ) && ((Date.now()/1000 - 43200) < story.created))
+                            .story.today(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
+                                #{story.title}
+                        -else    
+                            .story(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
+                                #{story.title}
+                                
+            letter = String.fromCharCode(code)
+            h1(class="hotkey", group=group, style="display:none") #{letter}
+    
+    #sidebar
+        button#save.btn Save Layout
+        select#taxonomy
+            option(value="All") All
+                - each section in mainSections            
+                    option(value=section) !{section}
+        #stories-container
+            #stories
+                - each story, id in sectionDocs
                     - if (((Date.now()/1000 + 43200) > story.created ) && ((Date.now()/1000 - 43200) < story.created))
                         .story.today(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
                             #{story.title}
-                    -else    
+                    - else
                         .story(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
                             #{story.title}
-                            
-        letter = String.fromCharCode(code)
-        h1(class="hotkey", group=group, style="display:none") #{letter}
-
-#sidebar
-    button#save.btn Save Layout
-    select#taxonomy
-        option(value="All") All
-            - each section in mainSections            
-                option(value=section) !{section}
-    #stories-container
-        #stories
-            - each story, id in sectionDocs
-                - if (((Date.now()/1000 + 43200) > story.created ) && ((Date.now()/1000 - 43200) < story.created))
-                    .story.today(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
-                        #{story.title}
-                - else
-                    .story(id=story._id, data-groups=JSON.stringify(story.groups), draggable="true")
-                        #{story.title}

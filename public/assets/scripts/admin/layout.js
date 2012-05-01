@@ -8,12 +8,12 @@ define(['jquery', 'Article'], function($, Article) {
     var caseConversion = 32;
     var namespace;
 
-    return { layout: initLayout }
+    return { "#layout": initLayout }
 
 
     function initLayout () {
 
-        namespace = $("#layout").data('namespace');
+        namespace = $("#groups").data('namespace');
 
         initializeStories($(".story"));
 
@@ -48,18 +48,18 @@ define(['jquery', 'Article'], function($, Article) {
         // http://weblog.bocoup.com/using-datatransfer-with-jquery-events
         jQuery.event.props.push('dataTransfer'); // solves dataTransfer undefined issue
 
-        $("#layout").delegate(".container, .story", "dragover", function(e) {
+        $("#groups").delegate(".container, .story", "dragover", function(e) {
             if (e.preventDefault) e.preventDefault(); // Allows us to drop.
             e.dataTransfer.dropEffect = "move";
             $(this).addClass("over");
             return false;
         });
 
-        $("#layout").delegate(".container, .story", "dragenter", function () {
+        $("#groups").delegate(".container, .story", "dragenter", function () {
             $(this).addClass("over");
         });
 
-        $("#layout").delegate(".container, .story", "dragleave", function() {
+        $("#groups").delegate(".container, .story", "dragleave", function() {
             $(this).removeClass("over");
         });
 
@@ -74,13 +74,13 @@ define(['jquery', 'Article'], function($, Article) {
         });
 
         // remove on double click
-        $("#layout").delegate(".story", "dblclick", function() {
+        $("#groups").delegate(".story", "dblclick", function() {
             var id = $(this).attr('id');
             removeStoryFromContainer($(this), $(this).parent());
             $("#" + id).removeClass("exists");
         });
 
-        $("#layout").delegate(".container", "drop", function(e) {
+        $("#groups").delegate(".container", "drop", function(e) {
             if (e.stopPropagation) e.stopPropagation();
 
             var docId = e.dataTransfer.getData("Text");
@@ -99,7 +99,7 @@ define(['jquery', 'Article'], function($, Article) {
             $(this).removeClass("over");
         });
 
-        $("#layout").delegate(".story", "drop", function(e) {
+        $("#groups").delegate(".story", "drop", function(e) {
             if (e.stopPropagation) e.stopPropagation();
 
             var docId = e.dataTransfer.getData("Text");
@@ -175,7 +175,7 @@ define(['jquery', 'Article'], function($, Article) {
 
     function initializeStories(stories) {
         stories.each(function () {
-            if ($("#layout").find("#" + $(this).attr('id')).length > 0)
+            if ($("#groups").find("#" + $(this).attr('id')).length > 0)
                 $(this).addClass("exists");
 
             var id = $(this).attr('id');

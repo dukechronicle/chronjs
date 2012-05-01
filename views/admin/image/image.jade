@@ -1,8 +1,6 @@
-.js-page-id.crop-image.prettify-date
-
 h1 Crop
 - if(url)
-  img#toCrop(src=url)
+  img#crop(src=url)
 p
   select#sizes(data-sizes=JSON.stringify(imageDetails))
     - each name in imageTypes

@@ -5,7 +5,7 @@ define(["jquery", "libs/onde", "libs/jquery.textarea-expander"], function($) {
     // construct the nice looking forms to edit json
     var rawElements = getAllRawJSONs();
 
-    return { config: json2form }
+    return { "#configForm": json2form }
 
     function json2form () {
         for(var i = 0; i < rawElements.length; i ++) {

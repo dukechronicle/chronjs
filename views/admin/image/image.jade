@@ -20,32 +20,37 @@ p
       input(type='hidden', name='afterUrl', value=afterUrl)
     - if(docId)
       input(type='hidden', name='docId', value=docId)
-    input(type='submit')
+    input.btn(type='submit')
 p
-  br
-  form(id="infoform", action='/admin/image/info', method='POST')
-    span Name: 
-    input(type='text', name='name', value=name)
-    br
-    span Caption: 
-    input(type='text', name='caption', value=caption)
-    br
-    span Location: 
-    input(type='text', name='location', value=location)
-    br
-    span Photographer: 
-    input(type='text', name='photographer', value=photographer)
-    br
-    span Date: 
-    input(id='nicedate', type='text', name='nicedate', value=date)
-    input(id='date', type='hidden', name='date', value=date)
+  form.form-horizontal(id="infoform", action='/admin/image/info', method='POST')
+    fieldset
+      .control-group
+        label.control-label(for="name") Name
+        .controls
+          input.span6#name(type='text', name='name', value=name)
+      .control-group
+        label.control-label(for="caption") Caption
+        .controls
+          input.span6#caption(type='text', name='caption', value=caption)
+      .control-group
+        label.control-label(for="location") Location
+        .controls
+          input.span6#location(type='text', name='location', value=location)
+      .control-group
+        label.control-label(for="photog") Photographer
+        .controls
+          input.span6#photog(type='text', name='photographer', value=photographer)
+      .control-group
+        label.control-label(for="nicedate") Date
+        .controls
+          input.span6#nicedate(type='text', name='nicedate', value=date)
+          input(id='date', type='hidden', name='date', value=date)
     input(type='hidden', name='id', value=id)
     - if(afterUrl)
       input(type='hidden', name='afterUrl', value=afterUrl)
     - if(docId)
       input(type='hidden', name='docId', value=docId)
-    br
-    input(type='submit')
+    input.btn(type='submit')
 
 - if(versions.length > 0)
   hr

@@ -1,5 +1,3 @@
-var prettifyDate;
-
 define(['jquery', 'libs/jquery-ui'], function ($) {
 
     var niceDateTextbox;
@@ -7,8 +5,11 @@ define(['jquery', 'libs/jquery-ui'], function ($) {
     var dateForm;
     var niceDateChanged = false;
 
+    return { "#nicedate": prettifyDate }
+
+
     // on load
-    prettifyDate = function() {
+    function prettifyDate() {
         setDateStuff("#nicedate","#date","#infoform");
         niceifyDate();
 

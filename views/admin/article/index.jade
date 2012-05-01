@@ -1,4 +1,4 @@
-table.article-index(border=1)
+table.table.article-index
     - each doc in docs
         tr
             td
@@ -19,5 +19,3 @@ if (hasPrevious)
 
 if (docs.length != 0)
     a(href='/admin/manage?beforeKey=' + docs[docs.length - 1].created + '&beforeID=' + docs[docs.length - 1]._id) Next
-
-script CHRONICLE.onload.push(function(){deleteArticle()})

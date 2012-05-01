@@ -172,7 +172,9 @@ site.article = function (req, res, next) {
                 model:model,
                 parentPaths: model.parents,
                 section: doc.taxonomy[0],
+                article: true,
                 disqusData: {
+                    production: process.env.NODE_ENV == 'production',
                     shortname: config.get('DISQUS_SHORTNAME'),
                     id: doc.nid || doc._id,
                     title: doc.title,
@@ -180,9 +182,8 @@ site.article = function (req, res, next) {
                 }
             };
 
-            if(doc.images.ThumbSquareM) locals.pageImage = doc.images.ThumbSquareM.url;
-
-            locals.article = true;
+            if (doc.images.ThumbSquareM)
+                locals.pageImage = doc.images.ThumbSquareM.url;
 
             res.render('site/pages/article', {
                 layout: 'site/layout',

@@ -1,23 +1,17 @@
-h1 Newsletter
+#newsletter
+  h1 Newsletter
+  
+  #message.alert-message.block-message
 
-div(id='message', style='text-align:center;width:200px;')
-br
-br
+  form.form-inline#test
+    label(for='testEmail') Test Email Address:
+    input(type='text', name='testEmail')
+    input(type='hidden', name='campaignID', value=campaignID)
+    input(type='submit', class='btn', value='Send Test Newsletter')
+  
+  form.form-inline#send
+    input(type='hidden', name='campaignID', value=campaignID)
+    input(type='submit', class='btn', value='Send Newsletter')
 
-form#test
-  label(for='testEmail') Test Email Address:
-  input(type='text', name='testEmail')
-  input(type='hidden', name='campaignID', value=campaignID)
-  &nbsp;
-  input(type='submit', class='btn', value='Send Test Newsletter')
-br
-br
-
-#newsletter-confirm(title="Send newsletter?")
-  p Are you sure you want to send the newsletter to everyone?
-
-form#send
-  input(type='hidden', name='campaignID', value=campaignID)
-  input(type='submit', class='btn', value='Send Newsletter')
-
-script CHRONICLE.onload.push(function(){initNewsletterForm()})
+  #confirm(title="Send newsletter?")
+    p Are you sure you want to send the newsletter to everyone?

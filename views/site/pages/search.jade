@@ -1,10 +1,5 @@
 - var monthArray = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-script(type='text/javascript')
-    CHRONICLE.onload.push(function () {
-        scrollLoad("/api/search/?q=#{query}&sort=#{sort}&order=#{order}&facets=#{currentFacets}");
-    });
-
 #search
     .sidebar
         .sort.container.clearfix
@@ -42,5 +37,5 @@ script(type='text/javascript')
                     .teaser !{doc.teaser}
         - if(docs.length == 0)
             div No articles found
-        div.result.rounded-hover#loadImage(style="height: 300px;", data-key="2")
+        div.result.rounded-hover#loadImage(style="height: 300px;", data-key="2", data-url="/api/search/?q=#{query}&sort=#{sort}&order=#{order}&facets=#{currentFacets}")
             img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto")

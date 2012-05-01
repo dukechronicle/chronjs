@@ -8,7 +8,11 @@ define(['jquery', 'libs/jquery-ui'], function ($) {
             
             $("#newsletter #test").submit(function (e) {
                 e.preventDefault();
-                sendNewsletter($(this), 'Test sent');
+                var $form = $(this);
+                $form.children(".btn").attr('disabled', 'disabled');
+                sendNewsletter($(this), 'Test sent', function () {
+                    $form.children(".btn").removeAttr('disabled');
+                });
             });
 
             $("#newsletter #send").submit(function (e) {
@@ -40,9 +44,9 @@ define(['jquery', 'libs/jquery-ui'], function ($) {
     function sendNewsletter(form, onSentText, callback) {
         $.post('/admin/newsletter', form.serialize(), function (msg) {
             if (msg == "sent")
-                $("#message").html(onSentText).addClass('success').show();
+                $("#message").html(onSentText).addClass('alert-success').show();
             else
-                $("#message").html("Could not send").addClass('error').show();
+                $("#message").html("Could not send").addClass('alert-error').show();
 
             if (callback) callback();
         });

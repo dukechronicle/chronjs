@@ -483,7 +483,7 @@ site.getArticleContent = function(url, callback) {
             var displayDoc = modifyArticleForDisplay(doc);
             cache(site.getArticleContentUncached, 600, displayDoc)(
                 function (err, model) {
-                    displayDoc.subhead = displayDoc.subhead || model.authorInfo.tagline;
+                    if(model.authorInfo) displayDoc.subhead = displayDoc.subhead || model.authorInfo.tagline;
                     callback(err, displayDoc, model);
                     popular.registerArticleView(doc, function(err,res){});
                 });

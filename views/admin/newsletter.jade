@@ -1,17 +1,17 @@
-#newsletter
+#newsletter.container
   h1 Newsletter
+    
+  #message.alert
   
-  #message.alert-message.block-message
-
   form.form-inline#test
     label(for='testEmail') Test Email Address:
     input(type='text', name='testEmail')
     input(type='hidden', name='campaignID', value=campaignID)
-    input(type='submit', class='btn', value='Send Test Newsletter')
-  
+    input.btn(type='submit', value='Send Test Newsletter')
+    
   form.form-inline#send
     input(type='hidden', name='campaignID', value=campaignID)
-    input(type='submit', class='btn', value='Send Newsletter')
-
+    input.btn(type='submit', value='Send Newsletter')
+  
   #confirm(title="Send newsletter?")
     p Are you sure you want to send the newsletter to everyone?

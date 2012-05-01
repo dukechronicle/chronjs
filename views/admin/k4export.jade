@@ -1,10 +1,10 @@
-#k4export
+#k4export.container
   h1 K4 Exporter
-  form(action='/admin/k4export', method='post', enctype='multipart/form-data')
-    label(for='zip') XML Zip:
-    input(type='file', name='zip')
+  form.well(action='/admin/k4export', method='post', enctype='multipart/form-data')
+    label(for='zip') XML Zip
+    input#zip(type='file', name='zip')
     br
-    input(type='submit', class='btn')
+    input.btn-primary.btn-large(type='submit')
   
   a(href='/admin/manage') Manage and edit uploaded articles
   - if (failed && failed.length)

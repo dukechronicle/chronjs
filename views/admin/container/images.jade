@@ -1,6 +1,7 @@
 p
-    a(href='/admin/image/manage?forDocument=' + doc._id) Add images
-    - if(typeof doc.images != "undefined")
+    - if(doc._id)
+        a(href='/admin/image/manage?forDocument=' + doc._id) Add images
+    - if(doc.images)
         p
             table(border=1)
                 - each image, imageType in doc.images

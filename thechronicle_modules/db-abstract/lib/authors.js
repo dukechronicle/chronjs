@@ -40,6 +40,8 @@ authors.getColumnists = function(callback) {
 };
 
 authors.getLatest = function (authorName, taxonomy, count, callback) {
+    authorName = authorName.toLowerCase();
+
     var query = {
         startkey:[authorName, {}],
         endkey:[authorName],

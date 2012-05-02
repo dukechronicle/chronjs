@@ -111,7 +111,7 @@ exports.doc = {
                     if (doc.authors && doc.taxonomy) {
                         for (var t in doc.taxonomy) {
                             for (var a in doc.authors) {
-                                emit([doc.authors[a], doc.taxonomy[t], parseInt(doc.created, 10)], doc);
+                                emit([doc.authors[a].toLowerCase(), doc.taxonomy[t], parseInt(doc.created, 10)], doc);
                             }
                         }
                     }

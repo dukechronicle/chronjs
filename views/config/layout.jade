@@ -4,11 +4,7 @@ include ../mixins/layout-helpers
 html
   head
     title The Chronicle
-
     mixin stylesheet(isProduction, "config")
-
-    script var CHRONICLE = { onload: [] }
-
     !=partial("code/google-analytics")
   body
     #main

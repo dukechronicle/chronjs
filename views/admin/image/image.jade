@@ -1,6 +1,6 @@
 h1 Crop
 - if(url)
-  img#toCrop(src=url)
+  img#crop(src=url)
 p
   select#sizes(data-sizes=JSON.stringify(imageDetails))
     - each name in imageTypes
@@ -58,7 +58,3 @@ p
     #versions!= partial('version', {locals: {afterUrl: afterUrl, docId: docId, imageTypes: imageTypes, cropSizes: imageDetails, allVersions: versions}})
   - each version in versions
     #versions!= partial('version', {locals: {afterUrl: afterUrl, docId: docId, imageTypes: imageTypes, cropSizes: imageDetails, version: version}})
-
-script(type="text/javascript")
-    CHRONICLE.onload.push(function(){prettifyDate()}, function(){cropImage()},
-                          function(){deleteImage()})

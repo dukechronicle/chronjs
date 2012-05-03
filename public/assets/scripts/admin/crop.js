@@ -1,5 +1,3 @@
-var cropImage;
-
 define(['jquery', 'libs/jquery.Jcrop'], function ($) {
 
     var sizes;
@@ -10,22 +8,20 @@ define(['jquery', 'libs/jquery.Jcrop'], function ($) {
         onRelease: clearCoords
     };
 
-    cropImage = function () {
+    return { "#crop": cropImage }
+
+    function cropImage () {
         sizes = $("#sizes").data('sizes');
-        if (sizes) {
-            updateCropSize();
-            $("#sizes").change(updateCropSize);
-            $("a.help").click(showDescriptions);
-        }
+        updateCropSize();
+        $("#sizes").change(updateCropSize);
+        $("a.help").click(showDescriptions);
     };
 
     function crop(dim) {
         cropOptions.aspectRatio = dim.width / dim.height;
         cropOptions.minSize = [dim.width, dim.height];
         cropOptions.setSelect = [0, 0, dim.width, dim.height];
-        jQuery(function() {
-            jQuery('#toCrop').Jcrop(cropOptions);
-        });
+        $("#crop").Jcrop(cropOptions);
     }
 
     function currentSize() {
@@ -36,8 +32,7 @@ define(['jquery', 'libs/jquery.Jcrop'], function ($) {
     }
 
     function updateCropSize() {
-        var size = currentSize();
-        crop(size);
+        crop(currentSize());
     }
 
     function showCoords(c) {

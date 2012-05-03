@@ -160,8 +160,6 @@ function buildJavascriptFile(src, callback) {
             jquery: 'require-jquery'
         }
     };
-    if (process.env.NODE_ENV != 'production')
-        config.optimize = 'none';
 
     requirejs.optimize(config, function (buildResponse) {
         callback(null, '/dist/' + src + '.js');

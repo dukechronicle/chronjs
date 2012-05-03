@@ -62,6 +62,7 @@ function buildCSS(callback) {
                 else if (process.env.NODE_ENV == 'production')
                     buildCSSFile(file, function (err, path) {
                         paths[file] = [path];
+                        log.warning(paths[file]);
                         cb(err);
                     });
                 else getCSSFiles(file, function (err, filepaths) {

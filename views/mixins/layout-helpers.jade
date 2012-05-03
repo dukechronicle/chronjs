@@ -5,5 +5,5 @@ mixin require-script(production, src)
     script(src="/assets/scripts/require-jquery.js", type="text/javascript", data-main=paths.js[src])
 
 mixin stylesheet(production, src)
-  - each file in paths.css[src]
-    link(rel="stylesheet", href=file)
+//  - each file in paths.css[src]
+  link(rel="stylesheet", href=paths.css[src])

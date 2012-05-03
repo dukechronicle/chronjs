@@ -1,31 +1,25 @@
-var deleteImage;
-
 define(['jquery', 'libs/jquery-ui'], function ($) {
 
-    deleteImage = function() {
+    return {
+        
+        ".delete-image": function () {
 
-        $(".delete-image").click(function(event) {
-            event.preventDefault();
+            $(".delete-image").click(function(event) {
+                event.preventDefault();
 
-            var anchor = $(event.target);
-            var params = {};
-            params.id = anchor.attr('data-id');
-            params.orig = anchor.attr('data-orig');
-            
-            $.getJSON(
-                '/admin/image/articles',
-                params,
-                function(data) {
-                    
+                var anchor = $(event.target);
+                var params = {};
+                params.id = anchor.attr('data-id');
+                params.orig = anchor.attr('data-orig');
+                
+                $.getJSON('/admin/image/articles', params, function(data) {
                     var msg = '<div id="dialog-confirm">This image will be removed from the following articles:<ul>';
                     $.each(data, function(index, value) {
                         msg += '<li>' + value.title || 'Non-article object' + '</li>';
                     });
                     msg += '</ul></div>';
                     
-                    $(msg).appendTo('body');
-
-                    $("#dialog-confirm").dialog({
+                    $(msg).appendTo('body').dialog({
                         dialogClass: 'delete-confirmation-dialog',
                         title: 'Delete Image',
                         resizable: false,
@@ -33,7 +27,7 @@ define(['jquery', 'libs/jquery-ui'], function ($) {
                         height:140,
                         modal: true,
                         buttons: {
-                            "Delete": function() {
+                            Delete: function() {
                                 $.getJSON(
                                     '/admin/image/delete',
                                     params,
@@ -47,9 +41,10 @@ define(['jquery', 'libs/jquery-ui'], function ($) {
                             }
                         }
                     });
-                }
-            );
-        });
-    };
+                });
+            });
+        }
+
+    }
 
 });

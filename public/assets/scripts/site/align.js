@@ -10,15 +10,12 @@ define(["jquery", "libs/underscore"], function($) {
     }
 
     function loadAfterTypekit(callback) {
-        return function () {
+        var retry;
+        return retry = function () {
             if ($('html').hasClass("wf-active") ||
-                $('html').hasClass("wf-inactive")) {
+                $('html').hasClass("wf-inactive"))
                 callback();
-            }
-            else {
-                var retry = function() {loadAfterTypekit(callback)};
-                setTimeout(retry, 300)
-            }
+            else setTimeout(retry, 300)
         }
     }
 

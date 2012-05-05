@@ -58,16 +58,13 @@ function buildCSS(callback) {
         async.forEachSeries(files, function (file, cb) {
             fs.stat(STYLE_DIR + file, function (err, stats) {
                 if (err) cb(err);
-                else if (!stats.isDirectory()) cb();
-                else if (process.env.NODE_ENV == 'production')
+                else if (stats.isDirectory()) // &&
+//                         process.env.NODE_ENV == 'production')
                     buildCSSFile(file, function (err, path) {
                         paths[file] = path;
                         cb(err);
                     });
-                else getCSSFiles(file, function (err, filepaths) {
-                    paths[file] = filepaths;
-                    cb(err);
-                });
+                else cb();
             });
         }, function (err) {
             callback(err, paths);
@@ -76,60 +73,25 @@ function buildCSS(callback) {
 }
 
 function buildCSSFile(path, callback) {
-    var style = "";
+    var filepath = STYLE_DIR + path + '/main.styl';
+    fs.readFile(filepath, function (err, contents) {
+        if (err) return callback(err);
 
-    var options = {
-        styl: function (data, path, callback) {
-            stylus(data).set('compress', true).set('filename', path)
-                .render(callback);
-        },
-        css: function (data, path, callback) { callback(null, data) }
-    };
-
-    var walker = walk.walk(STYLE_DIR + path);
-    
-    walker.on('file', function (name, stats, next) {
-        var extension = stats.name.match(/\.([a-z]+)$/);
-        if (extension && extension[1] in options) {
-            var compile = options[extension[1]];
-            var filepath = name + '/' + stats.name;
-            fs.readFile(filepath, function (err, contents) {
-                if (err) callback(err);
-                else compile(contents.toString(), filepath, function(err, data) {
-                    if (err) {
-                        log.error(err);
-                        next(err);
-                    }
-                    else {
-                        style += cleanCSS.process(data);
-                        next();
-                    }
-                });
-            });
-        }
-        else next();
-    });
-    
-    walker.on('end', function (err) {
-        if (err) callback(err);
-        else {
+        var renderer = stylus(data)
+            .set('filename', path)
+            .set('compress', true)
+            .set('include css', true);
+        renderer.render(contents.toString(), filepath, function(err, data) {
+            if (err) {
+                log.error(err);
+                return callback(err);
+            }
+            
+            var style = cleanCSS.process(data);
             fs.writeFile(DIST_DIR + path + '.css', style, function (err) {
                 callback(err, '/dist/' + path + '.css');
             });
-        }
-    });
-}
-
-function getCSSFiles(path, callback) {
-    var files = [];
-    var walker = walk.walk(STYLE_DIR + path);
-    walker.on('file', function (name, stats, next) {
-        var file = name.replace(STYLE_DIR, '/assets/styles/') + '/' + stats.name;
-        files.push(file.replace(/\.styl$/, '.css'));
-        next();
-    });
-    walker.on('end', function (err) {
-        callback(err, files);
+        });
     });
 }
 

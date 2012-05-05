@@ -58,8 +58,8 @@ function buildCSS(callback) {
         async.forEachSeries(files, function (file, cb) {
             fs.stat(STYLE_DIR + file, function (err, stats) {
                 if (err) cb(err);
-                else if (stats.isDirectory()) // &&
-//                         process.env.NODE_ENV == 'production')
+                else if (stats.isDirectory() &&
+                         process.env.NODE_ENV == 'production')
                     buildCSSFile(file, function (err, path) {
                         paths[file] = path;
                         cb(err);
@@ -77,11 +77,11 @@ function buildCSSFile(path, callback) {
     fs.readFile(filepath, function (err, contents) {
         if (err) return callback(err);
 
-        var renderer = stylus(data)
-            .set('filename', path)
+        var renderer = stylus(contents.toString())
+            .set('filename', filepath)
             .set('compress', true)
             .set('include css', true);
-        renderer.render(contents.toString(), filepath, function(err, data) {
+        renderer.render(function(err, data) {
             if (err) {
                 log.error(err);
                 return callback(err);

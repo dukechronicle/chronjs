@@ -1,10 +1,10 @@
 require.config({
-    baseUrl: '/assets/scripts'
+    baseUrl: '/scripts',
 });
 
-require(['site/align','site/article','site/opinion','site/scrollLoad',
-         'site/slideshow/frontpage-slideshow','site/slideshow/slideshow-right',
-         'site/openx', 'libs/jquery.cookie', 'facebook'],
+require(['admin/crop','admin/delete-article','admin/html5upload',
+         'admin/delete-image','admin/json-to-form','admin/k4export',
+         'admin/layout','admin/newsletter','admin/nicedate'],
         function () {
             var args = Array.prototype.slice.call(arguments);
             $(function () {

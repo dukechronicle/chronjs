@@ -105,7 +105,7 @@ function buildJavascript(callback) {
             });
         }
         else {
-            paths[src] = '/assets/scripts/' + src + '/main';
+            paths[src] = '/scripts/' + src + '/main';
             cb();
         }
     }, function (err) {
@@ -115,7 +115,7 @@ function buildJavascript(callback) {
 
 function buildJavascriptFile(src, callback) {
     var config = { 
-        baseUrl: 'public/assets/scripts',
+        baseUrl: 'public/scripts',
         name: src + '/main',
         out: 'public/dist/' + src + '.js',
         paths: {

@@ -13,7 +13,7 @@
             .ads-row.clearfix
                 if (model.printEdition)
                     .image-container.print-edition.lighten!=partial('../container/image', model.printEdition)
-                .image-container.full-banner.lighten!=partial('ad/full-banner', {title: "AD"})
+                .image-container.full-banner.lighten!=partial('../container/ad/full-banner', {title: "AD"})
 
         .sidebar
             //
@@ -23,7 +23,7 @@
                 .most-popular!=partial('../container/articles-with-subhead', {title: "What's Hot", stories: model.popular})
             if (model.Opinion)
                 .opinion!=partial('../container/articles-with-subhead', {title: "Opinion", stories: model.Opinion})
-            .image-container.medium-rectangle.lighten!=partial('ad/medium-rect', {title: "Advertisement"})
+            .image-container.medium-rectangle.lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
 
     #middle
         #news-sports.clearfix.align-group

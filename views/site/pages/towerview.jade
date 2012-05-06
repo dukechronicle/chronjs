@@ -26,7 +26,7 @@
         if (model["Editors Note"])
             .editorsNote!=partial('../container/block.jade', {title: "Letter from the Editor", story: model["Editors Note"][0]})
         if (model.adFullRectangle)
-            .image-container.medium-rectangle.lighten!=partial('ad/medium-rect', {title: "Advertisement"})
+            .image-container.medium-rectangle.lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
         // prefix
         if (model.Prefix)
             - each story in model.Prefix

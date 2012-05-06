@@ -2,7 +2,7 @@
 
 #search
     .sidebar
-        .sort.container.clearfix
+        .sort.clearfix
             .vertical-container
                 h2.vertical Sort
             .rounded
@@ -13,7 +13,7 @@
         - if(currentFacets.length > 0)
             - currentFacets += ',';
         for facet,facetName in facets
-            .container.clearfix(class=facetName)
+            .clearfix(class=facetName)
                 .vertical-container
                     h2.vertical By #{facetName}
                 .rounded

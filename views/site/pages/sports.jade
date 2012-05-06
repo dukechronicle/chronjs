@@ -33,20 +33,3 @@
                     if (model.Stories[7])
                         .last!=partial('../container/row-2', {story: model.Stories[7], tax: true})
             .multimedia!=partial('../container/multimedia', {title: "Multimedia", multimedia: model.multimedia.Sports})
-
-    .bottom
-        .row.clearfix
-            if (model.Football)
-                .football.first!=partial('../container/sports-block.jade', {title: "Football", stories: model.Football})
-            if (model.MSoccer)
-                .m-soccer!=partial('../container/sports-block.jade', {title: "Men's Soccer", stories: model.MSoccer})
-            if (model.WSoccer)
-                .w-soccer.last!=partial('../container/sports-block.jade', {title: "Women's Soccer, stories: model.WSoccer"})
-        //
-            .row.clearfix.last
-                if (model.WBasketball)
-                    .w-basketball!=partial('../container/sports-block.jade', {title: "Women's Basketball"})
-                if (model.WSoccer)
-                    .w-soccer!=partial('../container/sports-block.jade', {title: "Women's Soccer"})
-                if (model.WTennis)
-                    .w-tennis.last!=partial('../container/sports-block.jade', {title: "Women's Tennis"})

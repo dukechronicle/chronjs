@@ -1,13 +1,12 @@
 #page
-
-    .content.rounded.subscribe
-
+    .content-container.rounded
         h1 Online Subscription Order Form
-            h2 Money-Back Guarantee
-            p 100% unconditional guarantee for a full refund on all unmailed issues if you are not satisfied
-            
-            h2 DAILY Chronicle and Towerview - $295
-            .description Annual subscription to receive all Chronicles published including special sections. You will also receive all 7 issues of Towerview magazine.
+            h2.nospace Money-Back Guarantee
+            p.nospace 100% unconditional guarantee for a full refund on all unmailed issues if you are not satisfied
+            hr.space
+
+            h2.nospace DAILY Chronicle and Towerview - $295
+            p.nospace Annual subscription to receive all Chronicles published including special sections. You will also receive all 7 issues of Towerview magazine.
             form(name="_xclick", action="https://www.paypal.com/cgi-bin/webscr", method="post")
                 input(type="hidden", name="cmd", value="_xclick")
                 input(type="hidden", name="business", value="jcangier@gmail.com")
@@ -15,9 +14,10 @@
                 input(type="hidden", name="item_name", value="DAILY Chronicle and Towerview")
                 input(type="hidden", name="amount", value="295.00")
                 input(type="image", src="http://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif", border="0", name="submit", alt="Make payments with PayPal - it's fast, free and secure!")
+            hr.space
 
-            h2 DAILY Chronicle ONLY - $285
-            .description Annual subscription to receive all Chronicles published including special sections.
+            h2.nospace DAILY Chronicle ONLY - $285
+            p.nospace Annual subscription to receive all Chronicles published including special sections.
             form(name="_xclick", action="https://www.paypal.com/cgi-bin/webscr", method="post")
                 input(type="hidden", name="cmd", value="_xclick")
                 input(type="hidden", name="business", value="jcangier@gmail.com")
@@ -25,10 +25,10 @@
                 input(type="hidden", name="item_name", value="DAILY Chronicle ONLY")
                 input(type="hidden", name="amount", value="285.00")
                 input(type="image", src="http://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif", border="0", name="submit", alt="Make payments with PayPal - it's fast, free and secure!")
+            hr.space
 
-
-            h2 Monday Chronicle and Towerview - $138
-            .description Annual subscription to receive all MONDAY issues of The Chronicle during the fall and spring semesters. Monday issues contain weekend Sportswrap. You will also receive all 7 issues of Towerview magazine
+            h2.nospace Monday Chronicle and Towerview - $138
+            p.nospace Annual subscription to receive all MONDAY issues of The Chronicle during the fall and spring semesters. Monday issues contain weekend Sportswrap. You will also receive all 7 issues of Towerview magazine
             form(name="_xclick", action="https://www.paypal.com/cgi-bin/webscr", method="post")
                 input(type="hidden", name="cmd", value="_xclick")
                 input(type="hidden", name="business", value="jcangier@gmail.com")
@@ -36,9 +36,10 @@
                 input(type="hidden", name="item_name", value="Monday Chronicle and Towerview")
                 input(type="hidden", name="amount", value="138.00")
                 input(type="image", src="http://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif", border="0", name="submit", alt="Make payments with PayPal - it's fast, free and secure!")
+            hr.space
 
-            h2 Monday Chronicle Only - $120
-            .description Annual subscription to receive all MONDAY issues of The Chronicle during the fall and spring semesters. Monday issues contain weekend Sportswrap.
+            h2.nospace Monday Chronicle Only - $120
+            p.nospace Annual subscription to receive all MONDAY issues of The Chronicle during the fall and spring semesters. Monday issues contain weekend Sportswrap.
             form(name="_xclick", action="https://www.paypal.com/cgi-bin/webscr", method="post")
                 input(type="hidden", name="cmd", value="_xclick")
                 input(type="hidden", name="business", value="jcangier@gmail.com")
@@ -46,9 +47,10 @@
                 input(type="hidden", name="item_name", value="Monday Chronicle Only")
                 input(type="hidden", name="amount", value="120.00")
                 input(type="image", src="http://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif", border="0", name="submit", alt="Make payments with PayPal - it's fast, free and secure!")
+            hr.space
 
-            h2 Towerview Only - $28
-            .description Annual subscription to 7 issues of Towerview magazine.
+            h2.nospace Towerview Only - $28
+            p.nospace Annual subscription to 7 issues of Towerview magazine.
             form(name="_xclick", action="https://www.paypal.com/cgi-bin/webscr", method="post")
                 input(type="hidden", name="cmd", value="_xclick")
                 input(type="hidden", name="business", value="jcangier@gmail.com")
@@ -56,5 +58,3 @@
                 input(type="hidden", name="item_name", value="Towerview Only")
                 input(type="hidden", name="amount", value="28.00")
                 input(type="image", src="http://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif", border="0", name="submit", alt="Make payments with PayPal - it's fast, free and secure!")
-
-

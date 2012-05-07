@@ -5,13 +5,15 @@
 //img#header-overlay(src=static_cdn + '/images/header-overlay.png')
 
 #header-top
-    a.content.span-8(href='/')
-        //p.date January 30, 2012
+    a.content.span-12(href='/')
+        p.date Monday, May 7, 2012
         h1.brand The Chronicle
         p.tagline The Independent Daily at Duke University
 
-    .links.span-4
-        .icons
+    .leaderboard.span-12.last.clearfix
+        .full-banner-raw.advertising.right.openx-ad(class="{zoneID: 308}")
+
+        .icons.left
             a(href="http://www.facebook.com/dukechronicle")
                 img(src=static_cdn + '/images/icons/facebook.png')
             a(href="http://twitter.com/dukechronicle")
@@ -25,14 +27,11 @@
             a(href="/page/newsletter")
                 img(src=static_cdn + '/images/icons/email.png')
 
-        .advertising-links.clearfix
-            a.left(href="/page/subscribe") Print Sub
-            a.right(href="/page/advertising") Advertising
-            a.left(href="http://dukechronicle.campusave.com") Classifieds
-            a.right(href="http://chroniclehousing.com") Housing
-
-    .leaderboard.span-12.last.clearfix
-        .full-banner-raw.advertising.right.openx-ad(class="{zoneID: 308}")
+        .advertising-links.right
+            a(href="/page/subscribe") Print Subscription
+            a(href="/page/advertising") Advertising
+            a(href="http://dukechronicle.campusave.com") Classifieds
+            a(href="http://chroniclehousing.com") Housing
 
 br
 

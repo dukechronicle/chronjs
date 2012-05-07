@@ -7,15 +7,17 @@ header
     box-shadow rgba(0,0,0,0.40) 0 1px 3px
     color #EEE
   
-    #header-overlay
-        position absolute
-        z-index 1
-        height 100%
-
     #header-top
 
         .content
+            position relative
             color #EEE
+
+            #header-overlay
+                position absolute
+                z-index 1
+                left 50px
+                top -40px
 
             .brand
                 text-align right
@@ -68,6 +70,7 @@ header
 
     #header-bottom
         nav
+            position relative
             z-index 2
             vertical-align bottom
             padding-top 7px

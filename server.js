@@ -14,6 +14,7 @@ var log = require('./thechronicle_modules/log');
 var redisClient = require('./thechronicle_modules/redisclient');
 var route = require('./thechronicle_modules/route');
 var sitemap = require('./thechronicle_modules/sitemap');
+var util = require('./thechronicle_modules/util');
 
 // Heroku requires the use of process.env.PORT to dynamically configure port
 var PORT = process.env.PORT || process.env.CHRONICLE_PORT || 4000;
@@ -23,7 +24,10 @@ var SERVER = this;
 var app = null;
 var viewOptions = {
     isProduction: process.env.NODE_ENV === 'production',
-    static_cdn: ''
+    static_cdn: '',
+    currentDate: function () {
+        return util.formatTimestamp(util.unixTimestamp(),"dddd, mmmm dS, yyyy");
+    }
 };
 
 log.init(function (err) {

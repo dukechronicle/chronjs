@@ -1,165 +1,103 @@
 header
-    position relative
-    background-color #006699
-    color white
-    padding-bottom 2px
+    background-color #069
     border-bottom-right-radius 4px
     border-bottom-left-radius 4px
     box-shadow rgba(0,0,0,0.40) 0 1px 3px
-
-    .content
-        width 490px
-        float left
-        position relative
-        z-index 0
-        padding-left 7px
-
-    .leaderboard
-        float right
-        margin-top 1px
-        margin-bottom 3px
-        padding-right 7px
-        //border-left 1px solid #ddd
-   
-        img
-            border-radius 5px
-            display block
-            box-shadow 0px 0px 3px #CCC
-            opacity 0.8
-            transition opacity 0.25s linear
-    
-        a:hover img
-            opacity 1
+    color #EEE
   
     #header-overlay
         position absolute
-        z-index 0
-        left 50px
-        top -28px
+        z-index 1
+        height 100%
 
     #header-top
-        height header-height
-    
-        //box-shadow 0 1px 3px rgba(0,0,0,.4);
-        //border-bottom 2px solid white
-        p.tagline
-            position absolute
-            line-height 1.2em
-            left 340px
-            top 34px
-            text-shadow 0 1px 2px rgba(0,0,0,.4);
-            font-size 0.75em
-            color white
-            float left
-            margin-right 10px
-        h1
-            position relative
-            z-index 2
-            margin-top 11px
-            font-weight bold
-            float left
-            font-size 1.2em
-            line-height 2em
-            margin-bottom -3px
-            a
-                //color #111
-                color #EEE
+
+        .content
+            color #EEE
+
+            .brand
+                text-align center
                 font-family didot
-                font-size 2.5em
+                font-size 3.7em
                 font-weight normal
                 letter-spacing -1px
-                padding-left 0px
-                //text-shadow: 0px 1px 1px white
-                transition text-shadow .2s linear
-                transition color .25s linear
+                line-height 100%
                 text-shadow 0 1px 3px rgba(0,0,0,.4);
-        p.date
-            font-weight bold
-            text-shadow 0 1px 2px rgba(0,0,0,.4);
-            letter-spacing 1px
-            font-size 0.8em
-            margin-top 42px
-            //color #333
-            color #EEE
-            margin-left 348px
-    
-    
-        .social-media
-            position absolute
-            top 6px
-            left 340px
-            .inner
-                .icons
-                    text-align left
-                    img
-                        opacity .7
-                        padding-right 9px
-                        width 15px
-                        height 15px
-                        transition opacity, .25s linear
-                    a:hover img
-                        opacity 1
+            .tagline
+                text-shadow 0 1px 2px rgba(0,0,0,.4);
+                line-height 100%
+                font-style italic
+                text-align center
+            .date
+                text-shadow 0 1px 2px rgba(0,0,0,.4);
+        
+        .links
+            .icons
+                a img
+                    opacity .7
+                    width 20px
+                    height 20px
+                    transition opacity, .25s linear
+                    padding 5px 3px 0px 3px
+                a:hover img
+                    opacity 1
+                a:first-child img
+                    padding-left 0px
+                a:last-child img
+                    padding-right 0px
 
-                    img.last
-                        padding-right 0px
+            .advertising-links
+                padding-top 2px
+                a
+                    text-shadow 0 1px 2px rgba(0,0,0,.4);
+                    font-size 1em
+                    color #EEE
+                    line-height 100%
+
+        .leaderboard
+            img
+                border-bottom-left-radius 5px
+                display block
+                box-shadow 0px 0px 3px #CCC
+                opacity 0.8
+                transition opacity 0.25s linear
+        
+            a:hover img
+                opacity 1
 
     #header-bottom
-        .advertising-links
-            margin-top -2px
-            position relative
-            top -18px
-            left -145px
-            z-index 6
-            a
-                text-shadow 0 1px 2px rgba(0,0,0,.4);
-                font-size 0.75em
-                color white
-                float left
-                margin-right 8px
-
         nav
-            position relative
             z-index 2
-            clear both
-            width 636px
-            padding-left 7px
-            padding-top 3px
-    
+            vertical-align bottom
+            padding-top 7px
+
             h2
-                float left
-    
+                display inline-block
+                vertical-align bottom
+
                 a
                     font-weight 600
                     text-shadow 0 1px 2px rgba(0,0,0,.4);
                     letter-spacing 1px
-                    border-bottom 1px solid transparent
-                    font-size 0.8em
+                    font-size 1em
                     text-transform uppercase
-                    //color #333
                     color #EEE
-                    display block
-                    padding-left 12px
-                    padding-right 8px
-                    padding-bottom 2px
-                    margin-bottom -2px
+                    border-bottom 1px solid transparent
                     transition(border-bottom-color, .25s, linear)
+                    padding 0px 10px
+
                 a:hover, a.active
                     border-bottom-color #DDD
-            h2:first-child a
-                padding-left 3px
-            a
-                color #333
 
     #search-box
-        position absolute
-        padding-right 7px
-        top header-height - 4
-        right 0px
+        box-sizing border-box
+        padding 2px 4px
+
         input
             background #fff url('/images/search-button.png') no-repeat
             background-position 2px 1px
             border-radius 10px
             border 1px inset
-            width 120px
             font-size 12px
             padding-left 20px
+            width 100%

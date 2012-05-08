@@ -2,18 +2,18 @@
     #top.clearfix
         .content.span-8
             if (model["Top Headline"])
-                .top-headline!=partial('../container/story-list', {stories: model["Top Headline"]})
+                #top-headline!=partial('../container/story-list', {stories: model["Top Headline"]})
             if (model.Breaking)
-                !=partial('../container/breaking', {stories: model.Breaking})
+                #breaking!=partial('../container/breaking', {stories: model.Breaking})
             if (model.Slideshow)
-                !=partial('slideshow', {stories: model.Slideshow})
+                #slideshow!=partial('slideshow', {stories: model.Slideshow})
             if (model["Left Headlines"] && model["Right Headlines"])
-                .top-news.align-group!=partial('../container/top-news', {title: "Top Stories", left: model["Left Headlines"], right: model["Right Headlines"]})
+                .align-group#slideshow!=partial('../container/top-news', {title: "Top Stories", left: model["Left Headlines"], right: model["Right Headlines"]})
 
             .ads-row.clearfix
                 if (model.printEdition)
                     .lighten.span-2#print-edition!=partial('../container/image', model.printEdition)
-                .lighten.span-4.last!=partial('../container/ad/full-banner', {title: "AD"})
+                .lighten.span-6.last!=partial('../container/ad/full-banner', {title: "AD"})
 
         .sidebar.span-4.last
             //
@@ -23,4 +23,4 @@
                 .most-popular!=partial('../container/articles-with-subhead', {title: "What's Hot", stories: model.popular})
             if (model.Opinion)
                 .opinion!=partial('../container/articles-with-subhead', {title: "Opinion", stories: model.Opinion})
-            .image-container.medium-rectangle.lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
+            .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})

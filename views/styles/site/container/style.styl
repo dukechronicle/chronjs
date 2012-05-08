@@ -5,20 +5,9 @@ corner-radius = 4px
 border-color-grey = #DDD
 highlight-color = #4D90F0
 
-.content-container
-    padding 5px
-
-    h1, h2, h3, h4, h5
-        color black
-        margin-bottom 3px
-
-    p, span, li
-        color #444
-        font-size 1.1em
-        margin-bottom 0px
 
 a.highlight-left:hover, a.highlight-left.selected
-    border-left-color hightlight-color
+    border-left-color highlight-color
 a.highlight-right:hover, a.highlight-right.selected
     border-right-color highlight-color
 a.highlight-bottom
@@ -31,7 +20,6 @@ a.highlight-top:hover, a.highlight-top.selected
     border-top-color #4D90F0
 
 .rounded
-    padding 3px
     box-sizing border-box
     border-radius corner-radius
     black-box-shadow 0.4 0px 1px 3px
@@ -39,9 +27,32 @@ a.highlight-top:hover, a.highlight-top.selected
     background-linear-gradient bottom, whiteSmoke 0%, white 33%
     margin-bottom 20px
 
-.image-container img
-    border-radius corner-radius
-    display block
+.content-container
+    padding 8px
+    box-sizing border-box
+
+    h1, h2, h3, h4, h5
+        color black
+        margin-bottom 3px
+
+    p, span, li
+        color #444
+        font-size 1.1em
+        margin-bottom 0px
+
+    .highlight-left
+        margin-left -9px
+        padding-left 9px
+    .highlight-right
+        padding-right 9px
+        margin-right -9px
+
+.image-container
+    padding 3px
+
+    img
+        border-radius corner-radius
+        display block
 
 .lighten
     img

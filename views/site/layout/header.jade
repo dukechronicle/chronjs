@@ -3,14 +3,15 @@
 - if (typeof section == 'undefined') var section = undefined
 
 #header-top
-    .span-3
-        a.content.clearfix(href="/")
-            img#header-overlay(src=static_cdn + '/images/header-overlay.png')
-            p.date #{currentDate()}
-            h1.brand The Chronicle
-            p.tagline The Independent Daily at Duke University
+    .span-1 &nbsp;
+    a.content.clearfix.span-4(href="/")
+        img#header-overlay(src=static_cdn + '/images/header-overlay.png')
+        p.date #{currentDate()}
+        h1.brand The Chronicle
+        p.tagline The Independent Daily at Duke University
+    .span-1 &nbsp;
 
-    .leaderboard.span-3.last.clearfix
+    .leaderboard.span-6.last.clearfix
         .full-banner-raw.advertising.openx-ad(class="{zoneID: 308}")
 
         .icons.left
@@ -36,7 +37,7 @@
 br
 
 #header-bottom
-    nav.span-5#nav
+    nav.span-10#nav
         a(href="/news", class=(section == 'News') ? "active" : "") News
         a(href="/sports", class=(section == 'Sports') ? "active" : "") Sports
         a(href="/opinion", class=(section == 'Opinion') ? "active" : "") Opinion
@@ -45,5 +46,5 @@ br
         a(href="http://chronicleblogs.com") Blogs
         a(href="http://shutter.dukechronicle.com") Photos
 
-    form.span-1.last#search-box(action='/search/', method='GET')
+    form.span-2.last#search-box(action='/search/', method='GET')
         input(type='search', name='q', placeholder='Search archives', results='5', value=query)

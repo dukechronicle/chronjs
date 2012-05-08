@@ -40,3 +40,28 @@ a.highlight-top:hover, a.highlight-top.selected
 .image-container img
     border-radius corner-radius
     display block
+
+.lighten
+    img
+        opacity 0.8
+        transition opacity 0.25s linear
+
+    img:hover
+        opacity 1        
+
+.vertical-container
+    transform rotate(-90deg)
+    transform-origin 0px 1em
+    white-space nowrap
+    display block
+    position relative
+
+    .vertical
+        position absolute
+        visibility hidden
+        color #444
+        font-size 1em
+        line-height 100%
+        letter-spacing 1px
+        text-shadow 0px 1px 1px white
+        text-transform uppercase

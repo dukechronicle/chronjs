@@ -1,11 +1,12 @@
-.container.clearfix.story-list-teaser
-    .vertical-container
-        h2.vertical #{title}
+.story-list-teaser
+    - if (typeof title != "undefined")
+        .vertical-container
+            .vertical #{title}
 
     .rounded
         .content-container
             - if (stories)
                 - each story in stories
-                    a.hover.highlight-right(href='#{story.url}')
+                    a.list-story.hover(href='#{story.url}')
                         h3 #{story.title}
-                        p.teaser #{story.teaser}
+                        p #{story.teaser}

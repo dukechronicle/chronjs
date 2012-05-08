@@ -49,11 +49,18 @@ body
         text-decoration none
         color link-color
 
+    a.hover
+        display block
+        border-right 1px solid transparent
+        border-left 1px solid transparent
+        transition border-color .25s linear
+    
+        h1, h2, h3, h4, h5, p
+            transition color .25s linear
+    
+    a.hover:hover, a.hover.selected
+        h1, h2, h3, h4
+            color link-color
+
     section
         margin-top 20px
-
-.container
-    margin-bottom 20px
-
-.clear-both
-    clear both

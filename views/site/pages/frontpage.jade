@@ -2,7 +2,7 @@
     #top.clearfix
         .content.span-8
             if (model["Top Headline"])
-                !=partial('../container/top-headline', {stories: model["Top Headline"]})
+                .top-headline!=partial('../container/story-list', {stories: model["Top Headline"]})
             if (model.Breaking)
                 !=partial('../container/breaking', {stories: model.Breaking})
             if (model.Slideshow)

@@ -1,11 +1,11 @@
-.clearfix.story-list
-    .vertical-container
-        h2.vertical #{title}
+.story-list
+    - if (typeof title != "undefined")
+        .vertical-container
+            .vertical #{title}
 
     .rounded
         .content-container
             - if (stories)
                 - each story in stories
-                    h2
-                        a.list-story.hover.highlight-right(href='#{story.url}', class='#{story.cssClass}')
-                            #{story.title}
+                    a.list-story.hover(href='#{story.url}')
+                        h2 #{story.title}

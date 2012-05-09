@@ -1,33 +1,34 @@
-.clearfix
+.news-box
     .vertical-container
-        h2.vertical #{title}
-
+        .vertical #{title}
+    
     .rounded
-        .content-container
-            .top
-                a.hover.highlight-left.clearfix(href='#{stories[0].url}')
-                    - if (stories[0].images && stories[0].images.ThumbRect)
-                        img(src=stories[0].images.ThumbRect.url)
-                    .text
-                        h2 #{stories[0].title}
-                        p.teaser #{stories[0].teaser}
-
-            .bottom.clearfix
-                .left
-                    if (typeof stories[1] != 'undefined')
-                        a.hover.highlight-left.first(href='#{stories[1].url}')
-                            h3 #{stories[1].title}
-                            p.teaser #{stories[1].teaser}
-
-                    if (typeof stories[2] != 'undefined')
-                        a.hover.highlight-left.last(href='#{stories[2].url}')
-                            h3 #{stories[2].title}
-                            p.teaser #{stories[2].teaser}
-
-                .right
-                    ul
-                        - each story, index in stories
-                            - if (index > 2)
-                                li
-                                    a.hover.highlight-right(href='#{story.url}')
-                                        h4 #{story.title}
+        .top
+            a.hover.highlight-left.clearfix(href='#{stories[0].url}')
+                .content-container.left-column.span-3
+                    h4 #{stories[0].title}
+                    p.teaser #{stories[0].teaser}
+                - if (stories[0].images && stories[0].images.ThumbRect)
+                    .content-container.clearfix.span-3.last
+                        img.right(src=stories[0].images.ThumbRect.url)
+    
+    
+        .bottom.clearfix
+            .span-3.left-column.content-container
+                if (typeof stories[1] != 'undefined')
+                    a.hover.highlight-left.first(href='#{stories[1].url}')
+                        h4 #{stories[1].title}
+                        p.teaser #{stories[1].teaser}
+    
+                if (typeof stories[2] != 'undefined')
+                    a.hover.highlight-left.last(href='#{stories[2].url}')
+                        h4 #{stories[2].title}
+                        p.teaser #{stories[2].teaser}
+    
+            .span-3.last.content-container
+                ul.stories
+                    - each story, index in stories
+                        - if (index > 2)
+                            li
+                                a.hover.highlight-right(href='#{story.url}')
+                                    h4.title #{story.title}

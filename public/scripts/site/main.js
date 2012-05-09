@@ -2,7 +2,7 @@ require.config({
     baseUrl: '/scripts'
 });
 
-require(['site/article','site/opinion','site/scrollLoad',
+require(['site/align','site/article','site/opinion','site/scrollLoad',
          'site/slideshow/frontpage-slideshow','site/slideshow/slideshow-right',
          'site/openx', 'libs/jquery.cookie', 'facebook'],
         function () {

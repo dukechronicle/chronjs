@@ -6,20 +6,20 @@
         - each story, index in stories
             - if (index == 0)
                 .content-container.span-4
-                    a.hover.highlight-bottom(href='#{story.url}')
+                    a.list-story.hover.highlight-bottom(href='#{story.url}')
                         h3.title #{story.title}
                         - if (story.images && story.images.ThumbRectL)
                             img(src=story.images.ThumbRectL.url)
             - else if (index == stories.length - 1)
                 .content-container.span-2.last
-                    a.hover.highlight-bottom(href='#{story.url}')
+                    a.list-story.hover.highlight-bottom(href='#{story.url}')
                         h4.title #{story.title}
                         - if (story.images && story.images.ThumbRect)
                             img(src="#{story.images.ThumbRect.url}")
                         p.teaser #{story.teaser}
             - else
                 .content-container.span-2
-                    a.hover.highlight-bottom(href='#{story.url}')
+                    a.list-story.hover.highlight-bottom(href='#{story.url}')
                         h4.title #{story.title}
                         - if (story.images && story.images.ThumbRect)
                             img(src="#{story.images.ThumbRect.url}")

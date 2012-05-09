@@ -1,11 +1,11 @@
-.clearfix.featured
+.featured
     .vertical-container
-        h2.vertical #{title}
+        .vertical #{title}
 
-    a.rounded-hover.hover.highlight-bottom(href=story.url)
-        .content-container
+    .rounded
+        a.hover.highlight-bottom.content-container(href=story.url)
             - if (story.images && story.images.LargeRect)
-                img(src=story.images.LargeRect.url)
-            .text-
-                h2 #{story.title}
+                img.fit-image(src=story.images.LargeRect.url)
+            .text
+                h2.title #{story.title}
                 p.teaser #{story.teaser}

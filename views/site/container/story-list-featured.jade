@@ -1,18 +1,15 @@
-.container.clearfix
-    .vertical-container
-        if (typeof title != 'undefined')
-                h2.vertical #{title}
-            else
-                h2.vertical &nbsp;
+.story-list-featured
+    if (typeof title != "undefined")
+        .vertical-container
+            .vertical #{title}
 
     .rounded
         .content-container
-
-            a.hover.highlight-right.first.teaser(href='#{stories[0].url}')
-                h2 #{stories[0].title}
+            a.hover.highlight-right.teaser(href='#{stories[0].url}')
+                h4 #{stories[0].title}
                 p #{stories[0].teaser}
 
-                - each story, index in stories
-                    - if (index > 0)
-                        a.hover.highlight-right(href='#{story.url}')
-                            h3 #{story.title}
+            - each story, index in stories
+                - if (index > 0)
+                    a.hover.highlight-right(href='#{story.url}')
+                        h4 #{story.title}

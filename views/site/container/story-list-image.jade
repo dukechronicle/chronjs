@@ -1,16 +1,13 @@
-.container.clearfix.story-list
+.story-list.story-list-image
     .vertical-container
-        h2.vertical #{title}
+        .vertical #{title}
 
     .rounded
         .content-container
-            - if (image)
-                - if (imageHref)
-                    a(href=imageHref)
-
-                        img(src=image, style='border-radius: 4px; margin-left: -2px; margin-top: -1px; margin-bottom: 5px')
+            - if (image && imageHref)
+                a(href=imageHref)
+                    img.fit-image(src=image)
             - if (stories)
                 - each story in stories
-                    h2
-                        a.list-story.hover.highlight-right(href='#{story.url}', class='#{story.cssClass}')
-                            #{story.title}
+                    a.list-story.hover.highlight-right(href='#{story.url}')
+                        h4 #{story.title}

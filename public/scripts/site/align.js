@@ -4,7 +4,7 @@ define(["jquery", "libs/underscore"], function($) {
         
         "#not .align-group": loadAfterTypekit(pageAlign),
         ".block-row .list-story": loadAfterTypekit(truncateTeaser),
-        "#not .vertical-container": loadAfterTypekit(verticalAlign),
+        ".vertical-container": loadAfterTypekit(verticalAlign),
         "#not #frontpage": loadAfterTypekit(frontpageAlign)
 
     }
@@ -90,19 +90,19 @@ define(["jquery", "libs/underscore"], function($) {
 
     // position vertical labels
     function verticalAlign() {
-        $(".vertical-container").each(function() {
-            var height = $(this).css('width');
-            var topSpacing = 3;
-            height = parseInt(height.substring(0, height.length - 2), 10) + topSpacing;
-            $(this).css('top', height + "px");
+        var extra = 10;
+        $(".vertical-container .vertical").each(function() {
+            var height = $(this).width();
+            $(this).css('left', -height + extra + "px");
             $(this).css('visibility', 'visible');
-
+            /*
             var rounded = $(this).siblings(".rounded");
             if (rounded &&
                 rounded.css('height') &&
                 (rounded.css('height').substring(0, rounded.css('height').length - 2) < height)) {
                 rounded.css('height', height + "px");
             }
+            */
         });
     }
 

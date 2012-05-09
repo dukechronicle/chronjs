@@ -1,25 +1,26 @@
-.clearfix.block-row.large-first
+.block-row.large-first
     .vertical-container
-        h2.vertical #{title}
+        .vertical #{title}
 
-    .rounded
-        .content-container.clearfix
-            - each story, index in stories
-                a.list-story.hover.highlight-bottom(href='#{story.url}', class='#{story.cssClass}')
-                    - if (story.cssClass !== "first")
-                        h3 #{story.title}
-
-                        - if (story.images && story.images.ThumbRect)
-                            img(src="#{story.images.ThumbRect.url}")
-                        p.teaser
-                            #{story.teaser}
-                    - else
-                        h2 #{story.title}
+    .rounded.clearfix
+        - each story, index in stories
+            - if (index == 0)
+                .content-container.span-4
+                    a.hover.highlight-bottom(href='#{story.url}')
+                        h3.title #{story.title}
                         - if (story.images && story.images.ThumbRectL)
                             img(src=story.images.ThumbRectL.url)
-                        else
-                            p.teaser #{story.teaser}
-
-
-
-
+            - else if (index == stories.length - 1)
+                .content-container.span-2.last
+                    a.hover.highlight-bottom(href='#{story.url}')
+                        h4.title #{story.title}
+                        - if (story.images && story.images.ThumbRect)
+                            img(src="#{story.images.ThumbRect.url}")
+                        p.teaser #{story.teaser}
+            - else
+                .content-container.span-2
+                    a.hover.highlight-bottom(href='#{story.url}')
+                        h4.title #{story.title}
+                        - if (story.images && story.images.ThumbRect)
+                            img(src="#{story.images.ThumbRect.url}")
+                        p.teaser #{story.teaser}

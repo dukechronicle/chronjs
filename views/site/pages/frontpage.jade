@@ -24,3 +24,19 @@
             if (model.Opinion)
                 .opinion!=partial('../container/articles-with-subhead', {title: "Opinion", stories: model.Opinion})
             .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
+
+    br
+
+    #middle.clearfix.align-group
+        if (model.News)
+            #news.span-6.align-element(data-alignTarget='div.rounded')!=partial('../container/news', {title: "News", stories: model.News})
+        if (model.Sports)
+            #sports.span-6.last.align-element(data-alignTarget='div.rounded')!=partial('../container/news', {title: "Sports", stories: model.Sports})
+    
+    br
+
+    #bottom
+        if (model.Recess)
+            #recess!=partial('../container/block-row', {title: "Recess", stories: model.Recess})
+        if (model.Towerview)
+            #towerview!=partial('../container/block-row', {title: "Towerview", stories: model.Towerview})

@@ -2,7 +2,7 @@
     #top.clearfix
         .content.span-8
             if (model["Top Headline"])
-                #top-headline!=partial('../container/story-list', {stories: model["Top Headline"]})
+                #top-headline!=partial('../container/story-list-teaser', {stories: model["Top Headline"]})
             if (model.Breaking)
                 #breaking!=partial('../container/breaking', {stories: model.Breaking})
             if (model.Slideshow)
@@ -25,16 +25,12 @@
                 .opinion!=partial('../container/articles-with-subhead', {title: "Opinion", stories: model.Opinion})
             .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
 
-    br
-
     #middle.clearfix.align-group
         if (model.News)
             #news.span-6.align-element(data-alignTarget='div.rounded')!=partial('../container/news', {title: "News", stories: model.News})
         if (model.Sports)
             #sports.span-6.last.align-element(data-alignTarget='div.rounded')!=partial('../container/news', {title: "Sports", stories: model.Sports})
     
-    br
-
     #bottom
         if (model.Recess)
             #recess!=partial('../container/block-row', {title: "Recess", stories: model.Recess})

@@ -1,24 +1,5 @@
 @import '../../mixins'
-
-link-color = #36c
-corner-radius = 4px
-border-color-grey = #DDD
-highlight-color = #4D90F0
-rounded-vertical-spacing = 20px
-
-
-a.highlight-left:hover, a.highlight-left.selected
-    border-left-color highlight-color
-a.highlight-right:hover, a.highlight-right.selected
-    border-right-color highlight-color
-a.highlight-bottom
-    border-bottom 1px solid transparent
-a.highlight-bottom:hover, a.highlight-bottom.selected
-    border-bottom-color highlight-color
-a.highlight-top
-    border-top 1px solid transparent
-a.highlight-top:hover, a.highlight-top.selected
-    border-top-color #4D90F0
+@import '../variables'
 
 .rounded
     box-sizing border-box
@@ -27,6 +8,11 @@ a.highlight-top:hover, a.highlight-top.selected
     background-color white
     background-linear-gradient bottom, whiteSmoke 0%, white 33%
     margin-bottom rounded-vertical-spacing
+
+    .highlight-left
+        margin-left -1px
+    .highlight-right
+        margin-right -1px
 
 .content-container
     padding 8px
@@ -50,6 +36,7 @@ a.highlight-top:hover, a.highlight-top.selected
 
 .image-container
     padding 3px
+    box-sizing border-box
 
     img
         border-radius corner-radius

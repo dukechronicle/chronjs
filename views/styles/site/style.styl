@@ -1,8 +1,6 @@
-link-color = #36c
-text-color = #333
-bg-color = #F5F6F7
-bg-top-color = #E6E6E8
-header-height = 70px
+@import 'variables'
+@import '../mixins'
+
 
 input, textarea, select
     font-family inherit
@@ -45,14 +43,15 @@ body
     h1, h2, h3, h4, h5, h6
         font-family skolar, Georgia,"Century Schoolbook","Times New Roman",Times,serif
 
+    section
+        margin-top 20px
+
     a
         text-decoration none
         color link-color
 
     a.hover
         display block
-        border-right 1px solid transparent
-        border-left 1px solid transparent
         transition border-color .25s linear
     
         h1, h2, h3, h4, h5, p
@@ -62,5 +61,19 @@ body
         h1, h2, h3, h4
             color link-color
 
-    section
-        margin-top 20px
+    a.highlight-left
+        border-left 1px solid transparent
+    a.highlight-left:hover, a.highlight-left.selected
+        border-left-color highlight-color
+    a.highlight-right
+        border-right 1px solid transparent
+    a.highlight-right:hover, a.highlight-right.selected
+        border-right-color highlight-color
+    a.highlight-bottom
+        border-bottom 1px solid transparent
+    a.highlight-bottom:hover, a.highlight-bottom.selected
+        border-bottom-color highlight-color
+    a.highlight-top
+        border-top 1px solid transparent
+    a.highlight-top:hover, a.highlight-top.selected
+        border-top-color highlight-color

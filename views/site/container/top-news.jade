@@ -1,27 +1,28 @@
-.vertical-container
-    .vertical #{title}
+.top-news
+    .vertical-container
+        .vertical #{title}
+        
+    .rounded.clearfix
+        .top
+            .span-4.content-container
+                a.hover.highlight-left.teaser(href='#{left[0].url}')
+                    h4 #{left[0].title}
+                    p #{left[0].teaser}
+        
+            .span-4.content-container.last
+                a.hover.highlight-right.teaser(href='#{right[0].url}')
+                    h4 #{right[0].title}
+                    p #{right[0].teaser}
     
-.rounded.clearfix
-    .span-4.content-container
-        a.hover.highlight-left.teaser(href='#{left[0].url}')
-            h4 #{left[0].title}
-            p #{left[0].teaser}
-
-    .span-4.content-container.last
-        a.hover.highlight-right.teaser(href='#{right[0].url}')
-            h4 #{right[0].title}
-            p #{right[0].teaser}
-
-    br
-
-    .span-4.content-container
-        - each story, index in left
-            - if (index > 0)
-                a.hover.highlight-left(href='#{story.url}')
-                    h4 #{story.title}
-
-    .span-4.content-container.last
-        - each story, index in right
-            - if (index > 0)
-                a.hover.highlight-right(href='#{story.url}')
-                    h4 #{story.title}
+        .bottom
+            .span-4.content-container
+                - each story, index in left
+                    - if (index > 0)
+                        a.hover.highlight-left(href='#{story.url}')
+                            h4 #{story.title}
+        
+            .span-4.content-container.last
+                - each story, index in right
+                    - if (index > 0)
+                        a.hover.highlight-right(href='#{story.url}')
+                            h4 #{story.title}

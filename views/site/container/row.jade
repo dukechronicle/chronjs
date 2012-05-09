@@ -5,8 +5,9 @@
 
     .rounded
         .content-container
-            a.hover.hover.highlight-right(href=story.url)
-                if (story.images && story.images.ThumbRect)
-                    img.thumb(src=story.images.ThumbRect.url)
-                h4.title #{story.title}
-                p.teaser #{story.teaser}
+            a.clearfix.hover.highlight-right(href=story.url)
+                - if (story.images && story.images.ThumbRect)
+                    img.left(src=story.images.ThumbRect.url)
+                .story.right
+                    h4.title #{story.title}
+                    p.teaser #{story.teaser}

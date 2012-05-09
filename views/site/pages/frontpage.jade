@@ -20,16 +20,16 @@
                 if (model.twitter)
                     .twitter!=partial('../container/twitter', model.twitter)
             if (model.popular)
-                .most-popular!=partial('../container/articles-with-subhead', {title: "What's Hot", stories: model.popular})
+                #most-popular!=partial('../container/story-list-subhead', {title: "What's Hot", stories: model.popular})
             if (model.Opinion)
-                .opinion!=partial('../container/articles-with-subhead', {title: "Opinion", stories: model.Opinion})
+                #opinion!=partial('../container/story-list-subhead', {title: "Opinion", stories: model.Opinion})
             .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
 
     #middle.clearfix.align-group
         if (model.News)
-            #news.span-6.align-element(data-alignTarget='div.rounded')!=partial('../container/news', {title: "News", stories: model.News})
+            #news.span-6.align-element(data-alignTarget=".rounded")!=partial('../container/news', {title: "News", stories: model.News})
         if (model.Sports)
-            #sports.span-6.last.align-element(data-alignTarget='div.rounded')!=partial('../container/news', {title: "Sports", stories: model.Sports})
+            #sports.span-6.last.align-element(data-alignTarget=".rounded")!=partial('../container/news', {title: "Sports", stories: model.Sports})
     
     #bottom
         if (model.Recess)

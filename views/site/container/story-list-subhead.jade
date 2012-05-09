@@ -1,4 +1,4 @@
-.articles-with-subhead
+.story-list-subhead
     .vertical-container
         .vertical #{title}
 
@@ -6,7 +6,7 @@
         .content-container
             - each story in stories
                 a.list-story.hover.highlight-right(href='#{story.url || ('article/' + story.urls[story.urls.length-1])}')
-                    h4.title #{story.title}
+                    h5.title #{story.title}
                     p.subhead
                         - if (story.info || story.authors)
                             span #{story.info || story.authors}

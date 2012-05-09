@@ -1,16 +1,21 @@
-.clearfix.block-row.same
+.block-row.same
     .vertical-container
-        h2.vertical #{title}
+        .vertical #{title}
 
-    .rounded
-        .content-container.clearfix
-            - if (stories)
-                - each story, index in stories
-                    a.list-story.hover.highlight-bottom(href='#{story.url}', class='#{story.cssClass}')
-                        h3 #{story.title}
-
-                        - if (story.images && story.images.ThumbRect)
-                            img(src="#{story.images.ThumbRect.url}")
-                        p.teaser
-                            #{story.teaser}
-
+    .rounded.clearfix
+        - if (stories)
+            - each story, index in stories
+              - if (index == stories.length - 1)
+                    .content-container.span-2.last
+                        a.list-story.hover.highlight-bottom(href='#{story.url}')
+                            h4.title #{story.title}
+                            - if (story.images && story.images.ThumbRect)
+                                img(src="#{story.images.ThumbRect.url}")
+                            p.teaser #{story.teaser}
+                - else
+                    .content-container.span-2
+                        a.list-story.hover.highlight-bottom(href='#{story.url}')
+                            h4.title #{story.title}
+                            - if (story.images && story.images.ThumbRect)
+                                img(src="#{story.images.ThumbRect.url}")
+                            p.teaser #{story.teaser}

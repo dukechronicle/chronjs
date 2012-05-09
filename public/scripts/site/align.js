@@ -2,10 +2,10 @@ define(["jquery", "libs/underscore"], function($) {
 
     return {
         
-        "#not .align-group": loadAfterTypekit(pageAlign),
-        "#not .block-row .list-story": loadAfterTypekit(truncateTeaser),
-        "#not .vertical-container": loadAfterTypekit(verticalAlign),
-        "#frontpage": loadAfterTypekit(frontpageAlign)
+        ".align-group": loadAfterTypekit(pageAlign),
+        ".block-row .list-story": loadAfterTypekit(truncateTeaser),
+        ".vertical-container": loadAfterTypekit(verticalAlign),
+        "#not #frontpage": loadAfterTypekit(frontpageAlign)
 
     }
 

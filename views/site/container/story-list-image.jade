@@ -3,11 +3,12 @@
         .vertical #{title}
 
     .rounded
-        .content-container
+        .image-container
             - if (image && imageHref)
                 a(href=imageHref)
                     img.fit-image(src=image)
+        .content-container
             - if (stories)
                 - each story in stories
                     a.list-story.hover.highlight-right(href='#{story.url}')
-                        h4 #{story.title}
+                        h5 #{story.title}

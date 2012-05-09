@@ -1,12 +1,11 @@
-.clearfix.numbered-articles
+.numbered-articles
     .vertical-container
-        h2.vertical #{title}
+        .vertical #{title}
 
     .rounded
         .content-container
             ol
                 - each story, id in stories
-                    li
-                        h2
-                            a.list-story.hover.highlight-right(href='#{story.url || story.urls[0]}')
-                                #{'&nbsp;' + story.title}
+                    a.list-story.hover.highlight-right(href='#{story.url || story.urls[0]}')
+                        li
+                            h5.title #{story.title}

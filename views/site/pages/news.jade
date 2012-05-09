@@ -4,19 +4,18 @@
     .top.clearfix
         .main.span-6
             - if (model.Featured && model.Featured[0])
-                !=partial('../container/featured-image', {title: "", story: model.Featured[0]});
+                #featured!=partial('../container/featured-image', {title: "", story: model.Featured[0]});
 
-            - if (model.Headlines && model.Headlines[0])
-                .span-6!=partial('../container/row', {title: "", story: model.Headlines[0]})
-            - if (model.Headlines && model.Headlines[1])
-                .headline!=partial('../container/row', {title: "", story: model.Headlines[1]})
+            - if (model.Headlines)
+                - each story in model.Headlines
+                    !=partial('../container/row', {title: "", story: story})
 
         .sidebar.span-6.last
-            .top
+            .top.align-group
                 - if (model["Right Headlines"])
-                    .span-3!=partial('../container/story-list-featured', {title: "Headlines", stories: model["Right Headlines"]})
+                    .span-3.align-element(data-alignTarget=".rounded")!=partial('../container/story-list-featured', {title: "Headlines", stories: model["Right Headlines"]})
                 - if (model.Blog)
-                    .span-3.last!=partial('../container/story-list-image', {title: "News Blog", stories: model.Blog, image:'http://d2sug25c5hnh7r.cloudfront.net/images/blogs/newsblog.jpg', imageHref:'http://bigblog.chronicleblogs.com/news'})
+                    .span-3.last.align-element(data-alignTarget=".rounded")!=partial('../container/story-list-image', {title: "News Blog", stories: model.Blog, image:'http://d2sug25c5hnh7r.cloudfront.net/images/blogs/newsblog.jpg', imageHref:'http://bigblog.chronicleblogs.com/news'})
 
             .middle
                 - if (model.popular)

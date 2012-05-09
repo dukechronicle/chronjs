@@ -2,10 +2,10 @@ define(["jquery", "libs/underscore"], function($) {
 
     return {
         
-        ".align-group": loadAfterTypekit(pageAlign),
+        "#not .align-group": loadAfterTypekit(pageAlign),
         ".block-row .list-story": loadAfterTypekit(truncateTeaser),
-        ".vertical-container": loadAfterTypekit(verticalAlign),
-        "#frontpage": loadAfterTypekit(frontpageAlign)
+        "#not .vertical-container": loadAfterTypekit(verticalAlign),
+        "#not #frontpage": loadAfterTypekit(frontpageAlign)
 
     }
 
@@ -88,9 +88,9 @@ define(["jquery", "libs/underscore"], function($) {
         });
     }
 
+    // position vertical labels
     function verticalAlign() {
-        // position vertical labels
-        $(".vertical-container").each(function(i) {
+        $(".vertical-container").each(function() {
             var height = $(this).css('width');
             var topSpacing = 3;
             height = parseInt(height.substring(0, height.length - 2), 10) + topSpacing;

@@ -2,10 +2,10 @@ define(["jquery", "libs/underscore"], function($) {
 
     return {
         
-        "#not .align-group": loadAfterTypekit(pageAlign),
+        ".align-group": loadAfterTypekit(pageAlign),
         ".block-row .list-story": loadAfterTypekit(truncateTeaser),
         ".vertical-container": loadAfterTypekit(verticalAlign),
-        "#not #frontpage": loadAfterTypekit(frontpageAlign)
+        "#frontpage": loadAfterTypekit(frontpageAlign)
 
     }
 
@@ -95,14 +95,10 @@ define(["jquery", "libs/underscore"], function($) {
             var height = $(this).width();
             $(this).css('left', -height + extra + "px");
             $(this).css('visibility', 'visible');
-            /*
-            var rounded = $(this).siblings(".rounded");
-            if (rounded &&
-                rounded.css('height') &&
-                (rounded.css('height').substring(0, rounded.css('height').length - 2) < height)) {
+
+            var rounded = $(this).parent().siblings(".rounded");
+            if (rounded && rounded.height() < height)
                 rounded.css('height', height + "px");
-            }
-            */
         });
     }
 

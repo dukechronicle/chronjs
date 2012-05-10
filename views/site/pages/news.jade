@@ -1,5 +1,5 @@
 #news
-    !=partial('subnav', {subsections: subsections})
+    !=partial('../layout/subnav', {subsections: subsections})
 
     .top.clearfix
         .main.span-6
@@ -19,7 +19,7 @@
 
             .middle
                 - if (model.popular)
-                    .span-2!=partial('../container/numbered-articles', {title: "Popular", stories: model.popular})
+                    .span-2!=partial('../container/story-list-numbered', {title: "Popular", stories: model.popular})
                 - if (model.adFullRectangle)
                     .span-4.last.lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
 

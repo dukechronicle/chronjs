@@ -1,4 +1,4 @@
-table.article-index(border=1)
+table.table.table-striped.article-index
     - each doc in docs
         tr
             td
@@ -9,15 +9,13 @@ table.article-index(border=1)
                 a.delete-article(href='#', data-docid=doc._id, data-title=doc.title, data-rev=doc._rev, data-dest='') Delete
             td
                 a(href=db_url + '/' + doc._id) #{doc._id}
-
+    
 if (docs.length == 0)
     h1 No Articles Available
-
+    
 if (hasPrevious)
     a(onClick="history.go(-1);") Previous
     br
-
+    
 if (docs.length != 0)
     a(href='/admin/manage?beforeKey=' + docs[docs.length - 1].created + '&beforeID=' + docs[docs.length - 1]._id) Next
-
-script CHRONICLE.onload.push(function(){deleteArticle()})

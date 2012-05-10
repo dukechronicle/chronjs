@@ -41,11 +41,11 @@
                     a.site(href='http://ollywilson.tumblr.com/') Site
                     a.app(href='http://issuu.com/olly4yt/docs/oliver_wilson__yt_applicaton/3') App
 
-        .endorsements!=partial('container/two-column', {title: "Endorsements", stories: data[0]})
+        .endorsements!=partial('../container/two-column', {title: "Endorsements", stories: data[0]})
 
         .sidebar
             .ad-rect!=partial('ad/medium-rect', {title: "Advertising"})
-            .pastYts.clearfix!=partial('container/story-list-teaser', {title: "Past Young Trustees", stories: data[1]})
+            .pastYts.clearfix!=partial('../container/story-list-teaser', {title: "Past Young Trustees", stories: data[1]})
 
             //
                 .container.clearfix.block.last

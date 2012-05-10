@@ -1,0 +1,115 @@
+@import '../../mixins'
+
+page-width = 972px
+link-color = #36c
+container-padding = 4px
+top-content-width =  642px
+container-vertical-spacing = 23px
+
+body section > #sports
+    width = 636px
+    height = 393px
+
+    .top
+        margin-bottom 5px
+
+    .medium-rectangle
+        .rounded-hover
+            width 306px
+            height 256px
+            img
+
+                padding-left 3px
+                padding-top 3px
+
+    .middle
+        margin-bottom 6px
+        .left
+            float left
+            .container .rounded
+                width 305px
+                height 297px
+
+                h2
+                    font-size 1em
+                    margin-bottom 10px
+        .right
+            .column.first
+                margin-right 14px
+            .column
+                thumb-dim = 70px
+                float left
+                .container.row
+                    width 314px
+                    margin-bottom 14px
+
+                    .rounded-hover
+                        width 312px
+                        padding 0px
+                        height 124px
+
+                        :hover
+                            h2
+                                color link-color
+                    img
+                        border-radius 4px
+                        width thumb-dim
+                        height thumb-dim
+                        float right
+                        margin-top 4px
+
+                    h2
+                        transition(color, .25s, linear)
+                        font-size 1.2em
+                        color black
+                        line-height 1.2em
+                        margin-bottom 5px
+                        height 36px
+                        padding-left 5px
+                        padding-top 2px
+
+                    p
+                        color #444
+                        font-size 0.9em
+                        line-height 1.4em
+                        width 221px
+                        padding-left 5px
+                        float left
+
+    .blog
+        .rounded
+            width 306px
+            height 211px
+
+    .multimedia
+        clear both
+        .rounded-hover
+            width 636px
+            height 211px
+
+            .element
+                width 205px
+                float left
+                margin-right 7px
+            .element.last
+                margin-right 0px
+    .sport-block
+        width 311px
+        float left
+        margin-right 19px
+
+    .sport-block .rounded-hover
+        width 305px
+        height 305px
+
+
+    
+    .last > .sport-block
+        margin-right 0px
+
+    .bottom
+        .row
+            margin-bottom 6px
+        .row.last
+            margin-bottom 0px
+

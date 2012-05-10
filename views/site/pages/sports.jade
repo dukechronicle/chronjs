@@ -3,7 +3,7 @@
 #sports
     .top.clearfix
         if (model.Slideshow)
-            .slideshow-wrapper.right-select!=partial('../slideshow/slideshow-right', {stories: model.Slideshow})
+            !=partial('../slideshow/slideshow-right', {stories: model.Slideshow})
     .middle.clearfix
         .left
             if (model.adFullRectangle)

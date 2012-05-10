@@ -443,7 +443,7 @@ site.getAuthorContent = function(name, callback) {
                 if(err)
                     cb(err);
                 else
-                    callback(null, modifyArticlesForDisplay(docs));
+                    cb(null, modifyArticlesForDisplay(docs));
             });
         },
         function(cb) {

@@ -1,39 +1,40 @@
-h1 Editing a Document
-form(action='', method='POST')
-    input(type="hidden", name="_method", value="put")
-    p(style="margin-bottom: 2em")
-        label(for='title') Title&nbsp;
-        input#title(type='text', name='doc[title]', value=doc.title, style='width:600px')
-    p(style="margin-bottom: 2em")
-        label(for='title') Subhead&nbsp;
-        input#title(type='text', name='doc[subhead]', value=doc.subhead, style='width:600px')
-    p(style="margin-bottom: 2em")
-        label(for='section') Section&nbsp;
-        select(name='doc[taxonomy]', style='width: 600px')
-          option(value='') Select a section
-           - each subsections, section in taxonomy
-              - each key, value in subsections
-                - if (JSON.stringify(doc.taxonomy) == value)
-                    option(value=value, selected='selected') #{key}
-                - else
-                    option(value=value) #{key}
-    p(style="margin-bottom: 2em")
-        label(for='author') Authors&nbsp;
-        input#author(type='text', name='doc[authors]', value=doc.authors, style='width:600px')
-    p(style="margin-bottom: 2em")
-        label(for='teaser') Teaser&nbsp;
-        textarea#teaser(rows=3, cols=50, name='doc[teaser]', value, style='width:600px; height: 2.5em')
-            #{doc.teaser}
-    p(style="margin-bottom: 2em")
+.container
+    h1 Editing a Document
+    form.well(action='', method='POST')
+        input(type="hidden", name="_method", value="put")
+        label(for='title') Title
+        input.span4#title(type='text', name='doc[title]', value=doc.title)
+        label(for='subhead') Subhead
+        input.span4#subhead(type='text', name='doc[subhead]', value=doc.subhead)
+        label(for='section') Section
+        select.span4#section(name='doc[taxonomy]')
+            option(value='') Select a section
+            - each subsections, section in taxonomy
+                - each key, value in subsections
+                    - if (JSON.stringify(doc.taxonomy) == value)
+                        option(value=value, selected='selected') #{key}
+                    - else
+                        option(value=value) #{key}
+        label(for='author') Authors
+        input.span4#author(type='text', name='doc[authors]', value=doc.authors)
+        label(for='teaser') Teaser
+        textarea.span8#teaser(rows=3, name='doc[teaser]') #{doc.teaser}
         label(for='body') Article&nbsp;
-        textarea#body(rows=5, cols=50, name='doc[body]', value, style='width:600px; height: 40em')
-            #{doc.body}
+        textarea.span8#body(rows=10, name='doc[body]') #{doc.body}
+        input(type="hidden", name='doc[id]', value=doc._id);
+        p
+            a(href='/admin/image/manage?afterUrl=' + afterAddImageUrl + '&forDocument=' + doc._id) Add images
+        - if(images)
+            p
+            table.table
+                - each image, imageType in images
+                    tr
+                        td #{imageType}
+                        td
+                            img(src=image.url)
+                        td
+                            a(href='/article/' + url + '/edit/?removeImage=' + image._id) Remove
 
-    input(type="hidden", name='doc[id]', value=doc._id);
-    !=partial("admin/container/images")
-    p
-        input(type='submit', value='Submit Changes')
+        input.btn-large(type='submit', value='Submit Changes')
         &nbsp;&nbsp;
-        input.delete-article(type='button', value='Delete Article', data-docid=doc._id, data-rev=doc._rev, data-title=doc.title, data-dest='/admin')
-
-script CHRONICLE.onload.push(function(){deleteArticle()})
+        input.btn-large.delete-article(type='button', value='Delete Article', data-docid=doc._id, data-rev=doc._rev, data-title=doc.title, data-dest='/admin')

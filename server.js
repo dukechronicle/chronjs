@@ -87,9 +87,15 @@ function configureApp(sessionInfo, port) {
 
     app.configure('development', function () {
         app.use(stylus.middleware({
-            src: 'public',
+            src: 'views',
             dest: 'public',
-            force: true
+            force: true,
+            compile: function (str, path) {
+                return stylus(str)
+                    .set('filename', path)
+                    .set('compress', true)
+                    .set('include css', true);
+            }
         }));
         app.use(express.static(__dirname + '/public'));
         app.error(express.errorHandler({ dumpExceptions:true, showStack:true }));

@@ -3,9 +3,10 @@
         .vertical #{title}
 
     .rounded
-        a.hover.highlight-bottom.content-container(href=story.url)
-            - if (story.images && story.images.LargeRect)
-                img.fit-image(src=story.images.LargeRect.url)
-            .text
+        a.hover.highlight-bottom(href=story.url)
+            .image-container
+                - if (story.images && story.images.LargeRect)
+                    img.fit-image(src=story.images.LargeRect.url)
+            .content-container
                 h3.title #{story.title}
                 p.teaser #{story.teaser}

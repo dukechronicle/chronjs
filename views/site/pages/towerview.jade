@@ -1,15 +1,17 @@
-!=partial('subnav', {subsections: subsections})
-
 #towerview.clearfix
+    !=partial('../layout/subnav', {subsections: subsections})
+
     .main.span-8
         // towerview features
         if (model.Featured)
             if (model.Featured[0])
                 !=partial('../container/featured-image.jade', {title: 'Features', story: model.Featured[0]})
-            if (model.Featured[1])
-                !=partial('../container/block-square-image', {story: model.Featured[1]})
-            if (model.Featured[2])
-                !=partial('../container/block-square-image', {story: model.Featured[2]})
+
+            .featured-row.clearfix
+                if (model.Featured[1])
+                    .span-4!=partial('../container/row-square', {story: model.Featured[1]})
+                if (model.Featured[2])
+                    .span-4.last!=partial('../container/row-square', {story: model.Featured[2]})
                 
             if (model.Savvy)
                 #savvy!=partial('../container/block-row.jade', {title: 'Savvy', stories: model.Savvy})

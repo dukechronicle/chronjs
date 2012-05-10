@@ -6,7 +6,7 @@
             if (model.Breaking)
                 #breaking!=partial('../container/breaking', {stories: model.Breaking})
             if (model.Slideshow)
-                #slideshow!=partial('slideshow', {stories: model.Slideshow})
+                #slideshow!=partial('../container/slideshow', {stories: model.Slideshow})
             if (model["Left Headlines"] && model["Right Headlines"])
                 .align-group#slideshow!=partial('../container/top-news', {title: "Top Stories", left: model["Left Headlines"], right: model["Right Headlines"]})
 

@@ -1,11 +1,13 @@
-.clearfix.block
-    .vertical-container
-        h2.vertical #{title}
+.block
+    if (typeof title != 'undefined')
+        .vertical-container
+            .vertical #{title}
 
-    a.rounded-hover.hover.highlight-right(href=story.url)
-        .content-container
-
-            if (story.images && story.images.ThumbWide)
-                img.thumb(src=story.images.ThumbWide.url)
-            h2 #{story.title}
-            p.teaser #{story.teaser}
+    .rounded
+        a.hover.highlight-bottom(href=story.url)
+            .image-container
+                - if (story.images && story.images.ThumbWide)
+                    img.fit-image(src=story.images.ThumbWide.url)
+            .content-container
+                h4 #{story.title}
+                p.teaser #{story.teaser}

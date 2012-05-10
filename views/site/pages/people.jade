@@ -6,7 +6,7 @@ script(type='text/javascript')
 #people
     if (authorInfo)
         h1 #{authorInfo.name}
-        .authorInfo
+        .sidebar.authorInfo
             .container.clearfix
                 .vertical-container
                     h2.vertical Profile
@@ -23,13 +23,14 @@ script(type='text/javascript')
         h1 #{name}
 
     .main
-        .rounded.result
-            for doc in docs
-                .document
-                    h3
-                        a.title.url(href=doc.url) #{doc.title}
-                    .date #{doc.date}
+        .authors-articles
+            .rounded.result
+                for doc in docs
+                    .document
+                        h3
+                            a.title.url(href=doc.url) #{doc.title}
+                        .date #{doc.date}
             - if(docs.length == 0)
                 div No articles found
-            div#loadImage(style="height: 300px;", data-key="2")
-                img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto")
+                div#loadImage(style="height: 300px;", data-key="2")
+                    img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto")

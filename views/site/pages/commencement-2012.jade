@@ -11,7 +11,7 @@
             .vertical-container
                 h2.vertical Calendar
         
-            a.rounded-hover.hover.highlight-right(href="/")
+            a.rounded-hover.hover.highlight-right(href="/article/commencement-2012-event-calendar")
                 .content-container
                     ul
                         - each events, day in data.events
@@ -25,4 +25,4 @@
     .bottom.clearfix
         - each story in data.articles
             !=partial('../container/block-wide-image', { title: "", story: story })
-        .lighten!=partial('ad/medium-rect', { title: "" })
+        .lighten.advertisement!=partial('ad/medium-rect', { title: "" })

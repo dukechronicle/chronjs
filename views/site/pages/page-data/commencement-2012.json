@@ -33,6 +33,29 @@
         ]
     },
     "articles": [
-        { }, {}
+        { 
+            "title": "Roshan Sadanani: student commencement speaker",
+            "teaser": "When delivering a speech to his entire academic class before everyone accepts a degree and goes off into the world, Senior Roshan Sadanani will remember to stay calm.",
+            "images": {
+                "ThumbWide": {
+                    "url": "http://d2770i1y1fck5h.cloudfront.net/300x120-0-0-im86mTuU-Sadanani_special.jpg",
+                    "width": "300",
+                    "height": "120",
+                    "type": "imageVersion",
+                    "original": "15ab06838061d3f74805e6f01c6dec0f"
+                }
+            },
+            "url": "/article/roshan-sadanani-student-commencement-speaker"
+        },
+        {
+            "title": "Zakaria to communicate optimism, opportunity in globalized ‘new world’",
+            "teaser":"More than two years following his first visit to Duke, renowned journalist and author Fareed Zakaria will return to encourage Duke’s graduating seniors in an interconnected world.",
+            "images": {
+                "ThumbWide": {
+                    "url":"http://d2770i1y1fck5h.cloudfront.net/300x120-0-25-ixFtT5dt-Zakaria_special.jpg","width":"300","height":"120"
+                }
+            },
+            "url":"/article/zakaria-communicate-optimism-opportunity-globalized-new-world"
+        }
     ]
 }

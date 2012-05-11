@@ -1,0 +1,5 @@
+#commencement-2012
+
+    .lookbacks.clearfix
+        - each story, year in data.lookbacks
+            !=partial('../container/block', { story: story, title: year, imageType: "rect" })

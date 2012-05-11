@@ -1,0 +1,20 @@
+{
+    "lookbacks": {
+        "freshman": {
+            "title": "Freshman Year",
+            "teaser": "Remember all the crazy shit that happened freshman year?"
+        },
+        "sophomore": {
+            "title": "Sophomore Year",
+            "teaser": "Remember all the crazy shit that happened sophomore year?"
+        },
+        "junior": {
+            "title": "Junior Year",
+            "teaser": "Remember all the crazy shit that happened junior year?"
+        },
+        "senior": {
+            "title": "Senior Year",
+            "teaser": "Remember all the crazy shit that happened senior year?"
+        }
+    }
+}

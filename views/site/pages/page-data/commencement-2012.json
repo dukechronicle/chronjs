@@ -16,5 +16,20 @@
             "title": "Senior Year",
             "teaser": "Remember all the crazy shit that happened senior year?"
         }
+    },
+    "events": {
+        "Friday, May 11": [
+            "4:30 p.m., Duke Chapel: Baccalaureate Service (last names A through G)"
+        ],
+        "Saturday, May 12": [
+            "11:30 a.m., Duke Chapel: Baccalaureate Service (last names H through O)",
+            "3:00 p.m., Duke Chapel: Baccalaureate Service (last names P through Z)",
+            "4:00 p.m. - 5:00 p.m., West Campus Quadrangle: President's Reception",
+            "8:30 p.m., Duke Chapel: Demonstration Organ Recital"
+        ],
+        "Sunday, May 13": [
+            "9:30 a.m., Football Practice Field: Procession of Candidates",
+            "10:00 a.m., Wallace Wade Stadium: Commencement Exercises"
+        ]
     }
 }

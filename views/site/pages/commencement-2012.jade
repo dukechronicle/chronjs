@@ -22,4 +22,7 @@
                                         li
                                             p #{event}
 
-        //.lighten.advertisement!=partial('ad/medium-rect', { title: "Advertisement"})
+    .bottom.clearfix
+        - each story in data.articles
+            !=partial('../container/block-wide-image', { title: "", story: story })
+        .lighten!=partial('ad/medium-rect', { title: "" })

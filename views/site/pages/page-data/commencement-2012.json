@@ -1,20 +1,44 @@
 {
     "lookbacks": {
         "freshman": {
-            "title": "Freshman Year",
-            "teaser": "Remember all the crazy shit that happened freshman year?"
+            "title": "Freshman Year '08-'09",
+            "teaser": "President Barack Obama stopped by the Triangle on his campaign trail for the Nov. 2008 elections.",
+            "url": "/article/freshman-year-08-09",
+            "images": {
+                "ThumbRect": {
+                    "url": "http://d2770i1y1fck5h.cloudfront.net/186x133-56-0-72m5r8bw-Obama_file.jpg"
+                }
+            }
         },
         "sophomore": {
-            "title": "Sophomore Year",
-            "teaser": "Remember all the crazy shit that happened sophomore year?"
+            "title": "Sophomore Year '09-'10",
+            "teaser": "The Duke men’s basketball team won the 2010 NCAA national championships against Butler University.",
+            "url": "/article/sophomore-year-09-10",
+            "images": {
+                "ThumbRect": {
+                    "url": "http://d2770i1y1fck5h.cloudfront.net/186x133-18-0-E6nGUqHZ-bballchampionship_File.jpg"
+                }
+            }
         },
         "junior": {
-            "title": "Junior Year",
-            "teaser": "Remember all the crazy shit that happened junior year?"
+            "title": "Junior Year '10-'11",
+            "teaser": "In the Fall of 2010, students celebrated their last Tailgate, canceled after a 14 year old was found unconcious in a Porta Potty.",
+            "url": "/article/junior-year-10-11",
+            "images": {
+                "ThumbRect": {
+                    "url": "http://d2770i1y1fck5h.cloudfront.net/186x133-78.42105263157896-0-tGBolawC-Tailgate2_ChrisDallfile.jpg"
+                }
+            }
         },
         "senior": {
-            "title": "Senior Year",
-            "teaser": "Remember all the crazy shit that happened senior year?"
+            "title": "Senior Year '11-'12",
+            "teaser": "Members of the Black Student Alliance march to the Allen Building with a list of demands regarding concerns of the black community.",
+            "url": "/article/senior-year-11-12",
+            "images": {
+                "ThumbRect": {
+                    "url": "http://d2770i1y1fck5h.cloudfront.net/186x133-56-29-l2dTHBoP-BSAMarch_JamesLee.jpg"
+                }
+            }
         }
     },
     "events": {

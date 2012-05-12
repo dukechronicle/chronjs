@@ -3,7 +3,7 @@ p
         a(href='/admin/image/manage?forDocument=' + doc._id) Add images
     - if(doc.images)
         p
-            table(border=1)
+            table.table
                 - each image, imageType in doc.images
                     tr
                         td #{imageType}

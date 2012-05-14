@@ -4,11 +4,11 @@
     
     - if (typeof url !='undefined')
         a.rounded.image-container.clearfix(href='#{url}')
-            img(src='#{imageUrl}', width='#{width}', height='#{height}')
+            img.fit-image(src='#{imageUrl}')
             - if (typeof caption != 'undefined')
-                .caption #{caption}
+                p #{caption}
     - else
         .rounded.image-container.clearfix
-            img(src='#{imageUrl}', width='#{width}', height='#{height}')
+            img.fit-image(src='#{imageUrl}')
             - if (typeof caption != 'undefined')
-                .caption #{caption}
+                p #{caption}

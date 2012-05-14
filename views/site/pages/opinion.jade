@@ -1,40 +1,21 @@
-!=partial('subnav', {subsections: subsections})
-
 #opinion
-    .top.clearfix
-        .main
+    !=partial('../layout/subnav', {subsections: subsections})
+
+    .clearfix
+        .span-6
             if (model.Featured)
-                .columns-today!=partial('../container/main-opinion', {title: "Today's Columns", stories: model.Featured})
+                #columns-today!=partial('../container/main-opinion', {title: "Today's Columns", stories: model.Featured})
             if (model.EditorialBoard)
-                .editorial-board!=partial('../container/teaser-with-date.jade', {title: "Editorial Board", stories: model.EditorialBoard})
-        .right
-            if (model.Blog)
-                .blog!=partial('../container/story-list', {title: "Backpages", stories: model.Blog})
-            if (model.Popular)
-                .popular!=partial('../container/story-list', {title: "Popular", stories: model.Popular})
-            if (model.adFullRectangle)
-                .image-container.medium-rectangle.lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
+                #editorial-board!=partial('../container/teaser-with-date.jade', {title: "Editorial Board", stories: model.EditorialBoard})
+
+        .span-6.last
+            .clearfix
+                if (model.Blog)
+                    #blog.span-2!=partial('../container/story-list', {title: "Backpages", stories: model.Blog})
+                if (model.adFullRectangle)
+                    .lighten.span-4.last!=partial('../container/ad/medium-rect', {title: "Advertisement"})
             if (model.adFullBanner)
-                .image-container.full-banner.lighten!=partial('../container/ad/full-banner', {title: "AD"})
-            .cartoon!=partial('../container/image.jade', {title: "Cartoon", url:"http://d2770i1y1fck5h.cloudfront.net/sSAM0S4m-cartoon-large.jpg", imageUrl:"http://d2770i1y1fck5h.cloudfront.net/CrFcgRQM-cartoon.jpg", width: "462px", height: "236px", caption: "Mariah Hukins, Trinity '13"})
+                .lighten!=partial('../container/ad/full-banner', {title: "Ad"})
+            #cartoon!=partial('../container/image.jade', {title: "Cartoon", url:"http://d2770i1y1fck5h.cloudfront.net/sSAM0S4m-cartoon-large.jpg", imageUrl:"http://d2770i1y1fck5h.cloudfront.net/CrFcgRQM-cartoon.jpg", caption: "Mariah Hukins, Trinity '13"})
             if (model.Columnists)
-                #columnists
-                    #columnist-list
-                        .clearfix.story-list
-                            .vertical-container
-                                h2.vertical Columnists
-                            .rounded
-                                .content-container
-                                    - each columnist, index in model.Columnists
-                                        h2
-                                            a.list-story.hover.highlight-left(data-index=index, href="#")
-                                                #{columnist.name}
-                    #columnist-articles.clearfix
-                        .vertical-container
-                            if (typeof title != 'undefined')
-                                    h2.vertical #{title}
-                                else
-                                    h2.vertical &nbsp;
-                        .rounded
-                            - each columnist, index in model.Columnists
-                                .columnist-stories(id="columnist-story-#{index}")!=partial('../container/opinion-story-list.jade', columnist)
+                #columnists!=partial('../container/category-box', {title: "Columnists", categories: model.Columnists})

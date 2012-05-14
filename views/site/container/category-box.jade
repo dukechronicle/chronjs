@@ -1,0 +1,15 @@
+.category-box
+    if (typeof title != 'undefined')
+        .vertical-container
+            .vertical #{title}
+
+    .category-list
+        .rounded
+            .content-container
+                - each columnist, index in categories
+                    a.hover.highlight-left(data-index=index, href="#")
+                        h2 #{columnist.name}
+    .category-articles
+        .rounded
+            - each columnist, index in model.Columnists
+                .columnist-stories(id="columnist-story-#{index}")!=partial('opinion-story-list', columnist)

@@ -1,14 +1,7 @@
-.story-list.story-list-image
-    .vertical-container
-        .vertical #{title}
+extends story-list
 
-    .rounded
-        .image-container
-            - if (image && imageHref)
-                a(href=imageHref)
-                    img.fit-image(src=image)
-        .content-container
-            - if (stories)
-                - each story in stories
-                    a.list-story.hover.highlight-right(href='#{story.url}')
-                        h5 #{story.title}
+block prepend stories
+    .image-container
+        - if (image && imageHref)
+            a(href=imageHref)
+                img.fit-image(src=image)

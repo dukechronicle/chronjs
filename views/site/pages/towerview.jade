@@ -1,7 +1,7 @@
 #towerview.clearfix
     !=partial('../layout/subnav', {subsections: subsections})
 
-    .main.span-8
+    .span-8
         // towerview features
         if (model.Featured)
             if (model.Featured[0])
@@ -20,7 +20,7 @@
         .issuu
             <object style="width:642px;height:418px" ><param name="movie" value="http://static.issuu.com/webembed/viewers/style1/v2/IssuuReader.swf?mode=mini&amp;backgroundColor=%23222222&amp;documentId=120419050106-1cfbf5164058440db797264928906b2b" /><param name="allowfullscreen" value="true"/><param name="menu" value="false"/><param name="wmode" value="transparent"/><embed src="http://static.issuu.com/webembed/viewers/style1/v2/IssuuReader.swf" type="application/x-shockwave-flash" allowfullscreen="true" menu="false" wmode="transparent" style="width:642px;height:418px" flashvars="mode=mini&amp;backgroundColor=%23222222&amp;documentId=120419050106-1cfbf5164058440db797264928906b2b" /></object>
 
-    .sidebar.span-4.last
+    .span-4.last
         if (model["Editors Note"])
             #editors-note!=partial('../container/block.jade', {title: "Letter from the Editor", story: model["Editors Note"][0]})
         if (model.adFullRectangle)

@@ -2,7 +2,6 @@
 @import '../variables'
 
 .rounded
-    box-sizing border-box
     border-radius corner-radius
     black-box-shadow 0.4 0px 1px 3px
     background-color white
@@ -18,7 +17,7 @@
         margin-right -1px
 
 .content-container
-    padding 8px
+    padding content-padding
     box-sizing border-box
 
     h1, h2, h3, h4, h5
@@ -26,24 +25,25 @@
         margin-bottom 3px
 
     p, span, li
-        color #444
+        color text-color
         font-size 1.1em
         margin-bottom 0px
         line-height 1.4em
 
     .highlight-left
-        margin-left -9px
-        padding-left 9px
+        margin-left -(content-padding + 1px)
+        padding-left (content-padding + 1px)
     .highlight-right
-        padding-right 9px
-        margin-right -9px
+        margin-right -(content-padding + 1px)
+        padding-right (content-padding + 1px)
 
 .image-container
-    padding 3px
+    padding image-padding
     box-sizing border-box
 
     img
         display block
+        width 100%
 
 .lighten
     img
@@ -63,12 +63,16 @@
 
     .vertical
         position absolute
-        color #444
+        color text-color
         font-size 1em
         line-height 100%
         letter-spacing 1px
         text-shadow 0px 1px 1px white
         text-transform uppercase
 
-img.fit-image
-    width 100%
+.title-small .title
+    font-size 1.1em
+    line-height 100%
+
+.title-medium .title
+    font-size 1.3em

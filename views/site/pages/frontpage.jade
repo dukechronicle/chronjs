@@ -20,9 +20,9 @@
                 if (model.twitter)
                     .twitter!=partial('../container/twitter', model.twitter)
             if (model.popular)
-                #most-popular!=partial('../container/story-list-subhead', {title: "What's Hot", stories: model.popular})
+                #most-popular.title-small!=partial('../container/story-list-subhead', {title: "What's Hot", stories: model.popular})
             if (model.Opinion)
-                #opinion!=partial('../container/story-list-subhead', {title: "Opinion", stories: model.Opinion})
+                #opinion.title-small!=partial('../container/story-list-subhead', {title: "Opinion", stories: model.Opinion})
             .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
 
     #middle.clearfix.align-group

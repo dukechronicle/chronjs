@@ -1,28 +1,28 @@
 #news
     !=partial('../layout/subnav', {subsections: subsections})
-
-    .top.clearfix
-        .main.span-6
+      
+    .clearfix
+        .span-6
             - if (model.Featured && model.Featured[0])
                 #featured!=partial('../container/featured-image', {title: "", story: model.Featured[0]});
 
             - if (model.Headlines)
-                - each story in model.Headlines
-                    !=partial('../container/row', {title: "", story: story})
+                  - each story in model.Headlines
+                      !=partial('../container/row', {title: "", story: story})
 
-        .sidebar.span-6.last
+        .span-6.last
             .top.align-group
                 - if (model["Right Headlines"])
-                    .span-3.align-element(data-alignTarget=".rounded")!=partial('../container/story-list-featured', {title: "Headlines", stories: model["Right Headlines"]})
+                    .span-3.title-medium.align-element(data-alignTarget=".rounded")!=partial('../container/story-list-featured', {title: "Headlines", stories: model["Right Headlines"]})
                 - if (model.Blog)
-                    .span-3.last.align-element(data-alignTarget=".rounded")!=partial('../container/story-list-image', {title: "News Blog", stories: model.Blog, image:'http://d2sug25c5hnh7r.cloudfront.net/images/blogs/newsblog.jpg', imageHref:'http://bigblog.chronicleblogs.com/news'})
+                    .span-3.last.title-small.align-element(data-alignTarget=".rounded")!=partial('../container/story-list-image', {title: "News Blog", stories: model.Blog, image:'http://d2sug25c5hnh7r.cloudfront.net/images/blogs/newsblog.jpg', imageHref:'http://bigblog.chronicleblogs.com/news'})
 
             .middle
                 - if (model.popular)
-                    .span-2!=partial('../container/story-list-numbered', {title: "Popular", stories: model.popular})
+                    .span-2.title-small!=partial('../container/story-list-numbered', {title: "Popular", stories: model.popular})
                 - if (model.adFullRectangle)
                     .span-4.last.lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
 
-    .bottom.span-12.last
+    .span-12.last
         !=partial('../container/multimedia', {title: "Multimedia", multimedia: model.multimedia.News})
         !=partial('../container/block-row-same', {title: "More News", stories: model.Stories, sameSize: true})

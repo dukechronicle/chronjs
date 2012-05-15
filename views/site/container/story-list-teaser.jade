@@ -1,12 +1,5 @@
-.story-list.story-list-teaser
-    - if (typeof title != "undefined")
-        .vertical-container
-            .vertical #{title}
+extends story-list
 
-    .rounded
-        .content-container
-            - if (stories)
-                - each story in stories
-                    a.list-story.hover(href='#{story.url}')
-                        h3.title #{story.title}
-                        p.teaser #{story.teaser}
+block story
+    h3.title #{story.title}
+    p.teaser #{story.teaser}

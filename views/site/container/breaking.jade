@@ -1,9 +1,13 @@
-.breaking.story-list
+include container-helpers
+
+.story-list.breaking
+    mixin vertical-label
     .rounded
         .content-container
             - if (stories)
-                - each story in stories
+                - each story, index in stories
                     a.list-story.hover(href='#{story.url}')
-                        h3 #{story.title}
-                            span.label Breaking
-                        p.teaser #{story.teaser}
+                        block story
+                            h3.title #{story.title}
+                                span.breaking-label Breaking
+                            p.teaser #{story.teaser}

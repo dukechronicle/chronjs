@@ -1,15 +1,6 @@
-.story-list.story-list-featured
-    if (typeof title != "undefined")
-        .vertical-container
-            .vertical #{title}
+extends story-list
 
-    .rounded
-        .content-container
-            a.list-story.hover.highlight-right.teaser(href='#{stories[0].url}')
-                h4.title #{stories[0].title}
-                p #{stories[0].teaser}
-
-            - each story, index in stories
-                - if (index > 0)
-                    a.list-story.hover.highlight-right(href='#{story.url}')
-                        h4.title #{story.title}
+block story
+    h3.title #{story.title}
+    - if (index == 0)
+        p #{story.teaser}

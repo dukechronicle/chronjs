@@ -1,11 +1,11 @@
-.story-list
-    - if (typeof title != "undefined")
-        .vertical-container
-            .vertical #{title}
+include container-helpers
 
+.story-list
+    mixin vertical-label
     .rounded
-        .content-container
-            - if (stories)
-                - each story in stories
-                    a.list-story.hover(href='#{story.url}')
-                        h2 #{story.title}
+        block stories
+            .content-container
+                - each story, index in stories
+                    a.list-story.hover.highlight-right(href='#{story.url}')
+                        block story
+                            h3.title #{story.title}

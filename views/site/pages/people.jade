@@ -1,6 +1,9 @@
 #people
     if (authorInfo)
         h1 #{authorInfo.name}
+            if (typeof isAdmin != 'undefined' && isAdmin)
+                a.edit(href="/admin/author?name="+authorInfo.name) &nbsp;&nbsp;Edit        
+
         .sidebar.authorInfo
             .container.clearfix
                 .vertical-container
@@ -16,6 +19,8 @@
                             .bio !{authorInfo.renderedBio}
     else
         h1 #{name}
+            if (typeof isAdmin != 'undefined' && isAdmin)
+                a.edit(href="/admin/author?name="+name) &nbsp;&nbsp;Edit        
 
     .main
         .authors-articles
@@ -25,7 +30,7 @@
                         h3
                             a.title.url(href=doc.url) #{doc.title}
                         .date #{doc.date}
-            - if(docs.length == 0)
-                div No articles found
-            div#loadImage(style="height: 300px;", data-key="2", data-url="/api/staff/#{name}")
-                img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto")
+                - if(docs.length == 0)
+                    div No articles found
+                div#loadImage(style="height: 150px;", data-key="2", data-url="/api/staff/#{name}")
+                    img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto")

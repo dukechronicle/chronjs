@@ -146,7 +146,8 @@ site.staff = function (req, res) {
                 pageTitle: util.capitalizeWords(name),
                 docs: docs,
                 name: util.capitalizeWords(name), 
-                authorInfo: info
+                authorInfo: info,
+                isAdmin: api.accounts.isAdmin(req)
             }
         });
     });

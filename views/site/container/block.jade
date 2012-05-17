@@ -1,8 +1,7 @@
-.block
-    if (typeof title != 'undefined')
-        .vertical-container
-            .vertical #{title}
+include container-helpers
 
+.block
+    mixin vertical-label
     .rounded
         a.content-container.hover.highlight-right(href=story.url)
             h4.title #{story.title}

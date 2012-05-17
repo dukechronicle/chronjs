@@ -73,11 +73,6 @@ exports.init = function (app) {
     // Makes search url more readable
     app.get('/search', site.search);
 
-    app.get('/users/:query', function (req, res) {
-        res.redirect('/staff/' + req.params.query);
-    });
-    app.get('/staff/:query', site.staff);
-
     app.get('/login', site.login);
 
     // Webmaster tools stuff -- don't delete
@@ -86,12 +81,21 @@ exports.init = function (app) {
     });
 
     app.namespace('/article', function () {
+        app.get('/new', api.site.checkAdmin, admin.addArticle);
+        app.post('/', api.site.checkAdmin, admin.addArticleData);
         app.get('/:url', site.article);
         app.get('/:url/print', site.articlePrint);
         app.get('/:url/edit', api.site.checkAdmin, admin.editArticle);
-        app.get('/new', api.site.checkAdmin, admin.addArticle);
-        app.post('/', api.site.checkAdmin, admin.addArticleData);
         app.put('/:url/edit', api.site.checkAdmin, admin.editArticleData);
+    });
+
+    app.namespace('/staff', function () {
+        app.get('/:name', site.staff);
+        app.get('/:name/edit', api.site.checkAdmin, admin.editAuthor);
+        app.put('/:name/edit', api.site.checkAdmin, admin.editAuthorData);
+    });
+    app.get('/users/:query', function (req, res) {
+        res.redirect('/staff/' + req.params.query);
     });
 
     app.namespace('/admin', function () {
@@ -103,10 +107,8 @@ exports.init = function (app) {
         app.post('/newsletter', api.site.checkAdmin, admin.newsletterData);
         app.get('/layout/group/:group', api.site.checkAdmin, admin.layout);
         app.get('/duplicates', api.site.checkAdmin, admin.duplicates);
-
-        app.get('/system/memory', api.site.checkAdmin, admin.memory);
         app.get('/author', api.site.checkAdmin, admin.author);
-        app.post('/author', api.site.checkAdmin, admin.editAuthorData);
+        app.get('/system/memory', api.site.checkAdmin, admin.memory);
     });
     
     app.namespace('/admin/image', function () {

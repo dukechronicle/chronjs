@@ -3,6 +3,8 @@ br
 p
     - if(doc._id)
         a(href='/admin/image/manage?forDocument=' + doc._id) Add images
+    - else
+        | Note: You must save once first before you are able to add images.
     - if(doc.images)
         p
             table.table

@@ -69,8 +69,8 @@ article.edit = function (id, article, callback) {
     });
 };
 
-article.delete = function (id, callback) {
-    db.remove(id, function (err) {
+article.delete = function (id, rev, callback) {
+    db.remove(id, rev, function (err) {
         if (err) callback(err);
         else api.search.unindexArticle(id, callback);
     });

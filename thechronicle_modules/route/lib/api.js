@@ -135,7 +135,7 @@ siteApi.updateArticle = function (req, res, next) {
 };
 
 siteApi.deleteArticle =  function (req, res, next) {
-    api.article.delete(req.params.id, function (err) {
+    api.article.delete(req.params.id, req.body.rev, function (err) {
         if (err) res.send(err, 500);
         else res.send({status: 'success'});
     });

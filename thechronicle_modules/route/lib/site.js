@@ -280,7 +280,7 @@ site.newsletterData = function (req, res) {
 };
 
 site.rss = function (req, res, next) {
-    api.docsByDate(50, null, function (err, docs) {
+    api.article.getByDate(50, null, function (err, docs) {
         if (err) next(err);
         else {
             res.render('rss', {
@@ -296,7 +296,7 @@ site.rss = function (req, res, next) {
 
 site.rssSection = function (req, res, next) {
     var taxonomy = req.params.toString().split('/');
-    api.taxonomy.docs(taxonomy, 50, null, function (err, docs) {
+    api.article.getByTaxonomy(taxonomy, 50, null, function (err, docs) {
         if (err) next(err);
         else {
             res.render('rss', {

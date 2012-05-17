@@ -406,7 +406,7 @@ site.getSectionContent = function (params, callback) {
             popular.getPopularArticles(params, 5, cb);
         },
         function (cb) {
-            api.taxonomy.docs(params, 20, null, function (err, docs, next) {
+            api.article.getByTaxonomy(params, 20, null, function (err, docs, next) {
                 if (err) cb(err)
                 else cb(null, {docs:modifyArticlesForDisplay(docs), next:next});
             });
@@ -458,7 +458,7 @@ site.getSearchContent = function (wordsQuery, query, callback) {
 };
 
 site.getArticleContent = function(url, callback) {
-    api.articleForUrl(url, function(err, doc) {
+    api.article.getByUrl(url, function(err, doc) {
         if (err) callback('not found');
         else {
             var displayDoc = modifyArticleForDisplay(doc);

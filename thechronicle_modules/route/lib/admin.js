@@ -59,11 +59,11 @@ admin.manage = function (req, res, next) {
     var port = api.getDatabasePort() || "80";
     var db_url = 'http://' + host + ':' + port + '/_utils/document.html?' + db;
 
-    var query = {};
-    if (req.query.beforeKey) query.startkey = parseInt(req.query.beforeKey);
-    if (req.query.beforeID) query.start_docid = req.query.beforeID;
+    var start = {};
+    if (req.query.beforeKey) start.key = parseInt(req.query.beforeKey);
+    if (req.query.beforeID) start.id = req.query.beforeID;
 
-    api.docsByDate(null, query, function (err, docs) {
+    api.article.getByDate(null, start, function (err, docs) {
         if (err) next(err);
         else res.render('admin/article', {
             layout: 'admin/layout',
@@ -121,7 +121,7 @@ admin.addArticleData = function (req, res, next) {
 
 admin.editArticle = function (req, res, next) {
     var url = req.params.url;
-    api.articleForUrl(url, function (err, doc) {
+    api.article.getByUrl(url, function (err, doc) {
         if (err)
             next(err);
         else if (req.query.removeImage)

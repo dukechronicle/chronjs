@@ -1,13 +1,38 @@
 #people
-    h1 #{name}
+    if (authorInfo)
+        h1 #{authorInfo.name}
+            if (typeof isAdmin != 'undefined' && isAdmin)
+                a.edit(href="/admin/author?name="+authorInfo.name) &nbsp;&nbsp;Edit        
+
+        .sidebar.authorInfo
+            .container.clearfix
+                .vertical-container
+                    h2.vertical Profile
+                .rounded
+                    .content-container
+                        if (authorInfo.images && authorInfo.images.StaffHeadshot)
+                            img(src=authorInfo.images.StaffHeadshot.url)
+                        .author-inner-container
+                            h1 #{authorInfo.name}
+                            .affiliation #{authorInfo.affiliation}
+                            if (authorInfo.twitter)
+                                a.twitter(href="http://twitter.com/#{authorInfo.twitter}") @#{authorInfo.twitter}
+                            .tagline #{authorInfo.tagline}
+                            .bio !{authorInfo.renderedBio}
+    else
+        h1 #{name}
+            if (typeof isAdmin != 'undefined' && isAdmin)
+                a.edit(href="/admin/author?name="+name) &nbsp;&nbsp;Edit        
+
     .main
-        .rounded.result
-            for doc in docs
-                .document
-                    h3
-                        a.title.url(href=doc.url) #{doc.title}
-                    .date #{doc.date}
-            - if(docs.length == 0)
-                div No articles found
-            div#loadImage(style="height: 300px;", data-key="2", data-url="/api/staff/#{name}")
-                img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto")
+        .authors-articles
+            .rounded.result
+                for doc in docs
+                    .document
+                        h3
+                            a.title.url(href=doc.url) #{doc.title}
+                        .date #{doc.date}
+                - if(docs.length == 0)
+                    div No articles found
+                div#loadImage(style="height: 150px;", data-key="2", data-url="/api/staff/#{name}")
+                    img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto")

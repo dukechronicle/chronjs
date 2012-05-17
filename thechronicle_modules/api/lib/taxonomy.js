@@ -9,9 +9,6 @@ var _ = require('underscore');
 var async = require('async');
 
 
-// get all document under given taxonomy path ex. ["News", "University"]
-taxonomy.docs = api.article.getByTaxonomy;
-
 taxonomy.getTaxonomyTree = function(taxonomyPath) {
     var tree = config.get("TAXONOMY");
     if (taxonomyPath) {

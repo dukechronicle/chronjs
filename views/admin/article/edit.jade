@@ -22,18 +22,8 @@
         label(for='body') Article&nbsp;
         textarea.span8#body(rows=10, name='doc[body]') #{doc.body}
         input(type="hidden", name='doc[id]', value=doc._id);
-        p
-            a(href='/admin/image/manage?afterUrl=' + afterAddImageUrl + '&forDocument=' + doc._id) Add images
-        - if(images)
-            p
-            table.table
-                - each image, imageType in images
-                    tr
-                        td #{imageType}
-                        td
-                            img(src=image.url)
-                        td
-                            a(href='/article/' + url + '/edit/?removeImage=' + image._id) Remove
+
+        !=partial("admin/container/images")
 
         input.btn-large(type='submit', value='Submit Changes')
         &nbsp;&nbsp;

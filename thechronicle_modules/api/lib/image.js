@@ -38,12 +38,17 @@ image.IMAGE_TYPES = {
     ThumbSquareM: {
         width: 200, // 183
         height: 200, // 183
-        description: "Used for articles on the towerview layout that are in the featured group in position 2 or 3, and for articles in the sports layout in the stories group. Also used as the picture facebook shows when people like or share articles."
+        description: "Used for articles on the towerview layout that are in the featured group in position 2 or 3, and for articles in the sports layout in the stories group. Used as the columnist image on the opinion page. Also used as the picture facebook shows when people like or share articles."
     },
     ThumbWide: {
         width: 300,
         height: 120,
         description: "Used for articles on the towerview layout that are in the prefix group."
+    },
+    StaffHeadshot: {
+        width: 300,
+        height: 225,
+        description: "Used on staff author pages for the staff profile. Staff pictures only need this format, and this format should only be used for staff pictures."
     }
 };
 
@@ -72,6 +77,8 @@ image.addVersionsToDoc = function(docId, originalImageId, versionImageIds, image
     
     api.docsById(docId,
     function (err, doc) {
+        if(err) return callback(err);
+
         var images = doc.images || {};
 
         for(var i = 0; i < versionImageIds.length; i ++) {        
@@ -79,7 +86,7 @@ image.addVersionsToDoc = function(docId, originalImageId, versionImageIds, image
         }
         images["Original"] = originalImageId;
 
-        api.article.edit(doc._id, { images:images }, callback);
+        db.merge(doc._id, { images:images }, callback);
     });
 };
 

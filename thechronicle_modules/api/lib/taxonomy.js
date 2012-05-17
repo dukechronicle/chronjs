@@ -92,3 +92,26 @@ function getTaxonomyListingHelper(tree, listing, path, depth) {
     });
     return listing;
 }
+
+taxonomy.getHierarchy = function (callback) {
+    db.taxonomy.getHierarchy(function (err, res) {
+        if (err) return callback(err);
+        callback(null, _.map(res, function (entry) { return entry.key }));
+    });
+};
+
+taxonomy.getHierarchyTree = function (callback) {
+    taxonomy.getHierarchy(function (err, res) {
+        if (err) return callback(err);
+        var root = {};
+        _.each(res, function (tax) {
+            var top = root;
+            _.each(tax, function (node) {
+                if (!(node in top))
+                    top[node] = {};
+                top = top[node];
+            });
+        });
+        callback(null, root);
+    });
+};

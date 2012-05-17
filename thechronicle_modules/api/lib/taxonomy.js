@@ -1,34 +1,16 @@
 var taxonomy = exports;
 
-var _ = require('underscore');
-var async = require('async');
+var api = require('../../api');
 var config = require('../../config');
 var db = require('../../db-abstract');
-var fs = require('fs');
 var log = require('../../log');
 
-var RESULTS_PER_PAGE = 25;
+var _ = require('underscore');
+var async = require('async');
 
 
 // get all document under given taxonomy path ex. ["News", "University"]
-// startDoc specifies the document within the taxonomy to start returning data at, for pagination.
-taxonomy.docs = function (taxonomyPath, limit, start, callback) {
-    // get extra document for pagination
-    limit = (limit || RESULTS_PER_PAGE) + 1;
-    taxonomyPath = _.map(taxonomyPath, function (s) { return s.toLowerCase() });
-    db.taxonomy.docs(taxonomyPath, limit, start, function (err, docs) {
-        if (err) callback(err);
-        else {
-            var lastDoc;
-            if (docs.length == limit) {
-                lastDoc = docs.pop();
-                delete lastDoc.value;
-            }
-            var docValues = _.map(docs, function (doc) { return doc.value });
-            callback(null, docValues, lastDoc);
-        }
-    });
-};
+taxonomy.docs = api.article.getByTaxonomy;
 
 taxonomy.getTaxonomyTree = function(taxonomyPath) {
     var tree = config.get("TAXONOMY");

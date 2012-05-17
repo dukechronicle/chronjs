@@ -1,6 +1,7 @@
 var article = exports;
 
-var config = require("../../config");
+var api = require('../../api')
+var config = require('../../config');
 var db = require('../../db-abstract');
 var redis = require('../../redisclient');
 var util = require("../../util");
@@ -19,6 +20,61 @@ var VIDEO_PLAYERS = {
 };
 var VIDEO_REGEX_FORMAT = "(\{%s:)([^}]+)(\})";
 
+
+article.add = function (article, callback) { // api.addDoc
+    getAvailableUrl(_URLify(article.title), 0, function(err, url) {
+        if (err) return callback(err);
+
+        var unix_timestamp = util.unixTimestamp();
+        article.created = article.created || unix_timestamp;
+        article.updated = article.created || unix_timestamp;
+        article.urls = [ url ];
+        article.indexedBySolr = api.search.getIndexVersion();
+        article.renderedBody = renderBody(article.body);
+
+        // strip all html tags from the teaser
+        article.teaser = article.teaser.replace(/<(.|\n)*?>/g,"");
+
+        db.save(article, function(err, res) {
+            if (err) return callback(err);
+            api.search.indexArticle(res.id, article.title, article.renderedBody,
+                                    article.taxonomy, article.authors,
+                                    article.created, function (err) {
+                                        if (err) callback(err);
+                                        else callback(null, url, res.id);
+                                    });
+        });
+    });
+};
+
+article.edit = function (id, article, callback) { // api.editDoc
+    api.docsById(id, function(err, res) {
+        if (err) return callback(err);
+
+        if (article.body)
+            article.renderedBody = renderBody(article.body);
+        article.updated = util.unixTimestamp();            
+        
+        if (article.title && (_URLify(article.title) !=  _URLify(res.title))) {
+            getAvailableUrl(_URLify(article.title), 0, function(err, url) {
+                if (err) return callback(err);
+                
+                article.urls = res.urls;
+                article.urls.push(url);
+                
+                saveEditedDoc(id, article, res.created, url, callback);
+            });
+        }
+        else saveEditedDoc(id, article, res.created, _.last(res.urls), callback);
+    });
+};
+
+article.delete = function (id, callback) {
+    db.remove(id, function (err) {
+        if (err) callback(err);
+        else api.search.unindexArticle(id, callback);
+    });
+};
 
 article.getDuplicates = function (limit, callback) {
     db.article.getDuplicates(limit, function(err, docs) {
@@ -44,67 +100,10 @@ article.getDuplicates = function (limit, callback) {
     });
 };
 
-api.addDoc = function(fields, callback) {
-    if (fields.type === 'article') {
-        getAvailableUrl(_URLify(fields.title), 0, function(err, url) {
-            if (err) return callback(err);
-
-            var unix_timestamp = util.unixTimestamp();
-            fields.created = fields.created || unix_timestamp;
-            fields.updated = fields.created || unix_timestamp;
-            fields.urls = [url];
-            fields.indexedBySolr = api.search.getIndexVersion();
-            fields.renderedBody = renderBody(fields.body);
-
-            // strip all html tags from the teaser
-            fields.teaser = fields.teaser.replace(/<(.|\n)*?>/g,"");
-
-            db.save(fields, function(err, res) {
-                if (err) return callback(err);
-                api.search.indexArticle(res.id, fields.title, fields.renderedBody,
-                                        fields.taxonomy, fields.authors,
-                                        fields.created, function (err) {
-                                            if (err) callback(err);
-                                            else callback(null, url, res.id);
-                                        });
-            });
-        });
-    }
-    else callback("Unknown document type");
+article.getByAuthor = function(author, callback) {
 };
 
-api.editDoc = function(docid, fields, callback) {
-    api.docsById(docid, function(err, res) {
-        if (err) callback(err);
-        else {
-            if (fields.body) fields.renderedBody = renderBody(fields.body);
-            fields.updated = util.unixTimestamp();            
-            
-            if (fields.title && (_URLify(fields.title) !=  _URLify(res.title))){
-                getAvailableUrl(_URLify(fields.title), 0, function(err, url) {
-                    if (err) return callback(err);
-                   
-                    fields.urls = res.urls;
-                    fields.urls.push(url);
-                    
-                    saveEditedDoc(docid, fields, res.created, url, callback);
-                });
-            }
-            else saveEditedDoc(docid, fields, res.created, _.last(res.urls), callback);
-        }
-    });
-};
-
-api.docsByAuthor = function(author, callback) {
-    var decodeAuthor = decodeURIComponent(author);
-    var query = {descending: true, startkey:decodeAuthor, endkey: decodeAuthor};
-    db.view("articles/authors", query, function(err, docs) {
-        if (err) callback(err);
-        else callback(null, _.map(docs, function(doc){return doc.value}));
-    });
-};
-
-api.articleForUrl = function(url, callback) {
+article.getByUrl = function(url, callback) {
     var query = {
         startkey: [url],
         endkey: [url, {}],
@@ -142,26 +141,7 @@ api.articleForUrl = function(url, callback) {
     });
 };
 
-api.docForUrl = function(url, callback) {
-    var query = {
-        startkey: [url],
-        endkey: [url, {}],
-        include_docs: true,
-        limit: 20
-    };
-
-    db.view("articles/urls", query, function(err, docs) {
-        if (err) return callback(err);
-        var docTypeKey = 1;
-
-        docs.forEach(function(key, doc) {
-            var docType = key[docTypeKey];
-            if (docType === 'article') return callback(null, doc);
-        });
-    });
-};
-
-api.docsByDate = function(limit, query, callback) {
+article.getByDate = function (limit, start, callback) {
     query = _.defaults(query || {}, {
         descending: true,
         limit: limit || RESULTS_PER_PAGE
@@ -173,23 +153,34 @@ api.docsByDate = function(limit, query, callback) {
     });
 };
 
-api.deleteDoc = function(docId, rev, callback) {
-    db.remove(docId, rev, function (err) {
+article.getByTaxonomy = function (taxonomyPath, limit, start, callback) {
+    // get extra document for pagination
+    limit = (limit || RESULTS_PER_PAGE) + 1;
+    taxonomyPath = _.map(taxonomyPath, function (s) { return s.toLowerCase() });
+    db.taxonomy.docs(taxonomyPath, limit, start, function (err, docs) {
         if (err) callback(err);
-        else api.search.unindexArticle(docId, callback);
+        else {
+            var lastDoc;
+            if (docs.length == limit) {
+                lastDoc = docs.pop();
+                delete lastDoc.value;
+            }
+            var docValues = _.map(docs, function (doc) { return doc.value });
+            callback(null, docValues, lastDoc);
+        }
     });
 };
 
-function saveEditedDoc(docid, doc, docCreatedDate, url, callback) {
+function saveEditedDoc(id, doc, docCreatedDate, url, callback) {
     // reset redis cache
     redis.client.del("article:" + url);
 
-    db.merge(docid, doc, function(err, res) {
+    db.merge(id, doc, function(err, res) {
          if (err) callback(err);
         
         // only reindex the article if they edited the search fields
         else if (doc.title && doc.body) {
-            api.search.indexArticle(docid, doc.title, doc.renderedBody, doc.taxonomy, doc.authors, docCreatedDate, function (err) {
+            api.search.indexArticle(id, doc.title, doc.renderedBody, doc.taxonomy, doc.authors, docCreatedDate, function (err) {
                 if (err) callback(err);
                 else callback(null, url);
             });
@@ -216,6 +207,7 @@ function URLify(s, maxChars) {
     s = s.toLowerCase();             // convert to lowercase
     return s.substring(0, maxChars);// trim to first num_chars chars
 }
+
 function renderBody(body) {
     _.each(VIDEO_PLAYERS, function (tag, name) {
         var pattern = new RegExp(sprintf(VIDEO_REGEX_FORMAT, name), 'g');

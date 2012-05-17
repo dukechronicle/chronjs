@@ -1,15 +1,14 @@
 .content-container
     .columnist-info.clearfix
-        - if (typeof headshot != 'undefined')
-            img.headshot(src=headshot)
+        - if (typeof images != 'undefined' && typeof images.ThumbSquareM != 'undefined')
+            img.headshot(src=images.ThumbSquareM.url)
         - if (typeof name != 'undefined')
             h3.name
                 | #{name}&nbsp;
                 - if (typeof twitter != 'undefined')
-
                     a.twitter(href="http://twitter.com/#{twitter}") @#{twitter}
-        - if (typeof year != 'undefined')
-            p.year #{year}
+        - if (typeof affiliation != 'undefined')
+            p.year #{affiliation}
         - if (typeof tagline != 'undefined')
             p.tagline #{tagline}
 

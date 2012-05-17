@@ -41,7 +41,7 @@ admin.author = function (req, res, next) {
     if (!name) {
         renderFunc();
     } else {
-        adminApi.getAuthorInfo(name, function (err, docs) {
+        api.authors.getInfo(name, function (err, docs) {
             if (docs.length == 0) renderFunc({name: name});
             else renderFunc(docs[0]);
         });
@@ -50,7 +50,7 @@ admin.author = function (req, res, next) {
 };
 
 admin.editAuthorData = function (req, res, next) {
-    adminApi.saveAuthorInfo(req.body, function (err, response) {
+    api.authors.setInfo(req.body, function (err, response) {
         if (err) next(err);
         else res.redirect('/admin/author?name=' + req.body.name);
     });

@@ -36,13 +36,11 @@ authors.setInfo = function(doc, callback) {
         name: doc.name,
         bio: doc.bio,
         affiliation: doc.affiliation,
-        currentColumnist: false,
+        currentColumnist: doc.currentColumnist == "on",
         tagline: doc.tagline,
         twitter: doc.twitter,
         type: "author-node"
     };
-    if (doc.currentColumnist == "on")
-        fields.currentColumnist = true;
     fields.renderedBio = md(fields.bio);
     db.authors.setInfo(id, fields, callback);
 };

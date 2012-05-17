@@ -1,5 +1,10 @@
 .container
     h1 Add Author Info
+    - if (newAuthor)
+      .alert.alert-info
+          | #{doc.name} is not a known author. Submitting this page will create
+          | a new record of him/her. If this is not what you intend, try
+          | searching the exact name.
     form.well(action="", method="POST")
         input(type="hidden", name="_method", value="put")
         label(for='name') Name

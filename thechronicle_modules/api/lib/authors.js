@@ -38,6 +38,7 @@ authors.setInfo = function(doc, callback) {
         affiliation: doc.affiliation,
         currentColumnist: false,
         tagline: doc.tagline,
+        twitter: doc.twitter,
         type: "author-node"
     };
     if (doc.currentColumnist == "on")

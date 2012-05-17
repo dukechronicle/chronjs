@@ -42,12 +42,16 @@ admin.author = function (req, res, next) {
 };
 
 admin.editAuthor = function (req, res, next) {
-    var name = req.params.name;
+    var name = req.params.name.replace(/-/g, ' ');
     api.authors.getInfo(name, function (err, docs) {
-        var doc = docs.length == 0 ? {name: name} : docs[0];
+        var newAuthor = docs.length == 0;
+        var doc = 
         res.render('admin/author/edit', {
             layout: 'admin/layout',
-            locals: { doc: doc }
+            locals: {
+                newAuthor: newAuthor,
+                doc: newAuthor ? {name: name} : docs[0],
+            }
         });
     });
 };
@@ -55,7 +59,7 @@ admin.editAuthor = function (req, res, next) {
 admin.editAuthorData = function (req, res, next) {
     api.authors.setInfo(req.body, function (err, response) {
         if (err) next(err);
-        else res.redirect('/admin/author?name=' + req.body.name);
+        else res.redirect('/staff/' + req.body.name);
     });
 };
 

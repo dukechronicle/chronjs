@@ -1,21 +1,20 @@
-.block-row.same
-    .vertical-container
-        .vertical #{title}
+include container-helpers
 
+.block-row.same
+    mixin vertical-label
     .rounded.clearfix
-        - if (stories)
-            - each story, index in stories
-              - if (index == stories.length - 1)
-                    .content-container.span-2.last
-                        a.list-story.hover.highlight-bottom(href='#{story.url}')
-                            h4.title #{story.title}
-                            - if (story.images && story.images.ThumbRect)
-                                img(src="#{story.images.ThumbRect.url}")
-                            p.teaser #{story.teaser}
-                - else
-                    .content-container.span-2
-                        a.list-story.hover.highlight-bottom(href='#{story.url}')
-                            h4.title #{story.title}
-                            - if (story.images && story.images.ThumbRect)
-                                img(src="#{story.images.ThumbRect.url}")
-                            p.teaser #{story.teaser}
+        - each story, index in stories
+            - if (index == stories.length - 1)
+                .content-container.span-2.last
+                    a.row-story.hover.highlight-bottom(href='#{story.url}')
+                        h4.title #{story.title}
+                        - if (story.images && story.images.ThumbRect)
+                            img.fit-image(src="#{story.images.ThumbRect.url}")
+                        p.teaser #{story.teaser}
+            - else
+                .content-container.span-2
+                    a.row-story.hover.highlight-bottom(href='#{story.url}')
+                        h4.title #{story.title}
+                        - if (story.images && story.images.ThumbRect)
+                            img.fit-image(src="#{story.images.ThumbRect.url}")
+                        p.teaser #{story.teaser}

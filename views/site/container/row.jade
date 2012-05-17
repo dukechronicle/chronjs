@@ -1,8 +1,7 @@
-.row
-    if (typeof title != 'undefined')
-        .vertical-container
-            .vertical #{title}
+include container-helpers
 
+.row
+    mixin vertical-label
     .rounded
         .content-container
             a.clearfix.hover.highlight-right(href=story.url)

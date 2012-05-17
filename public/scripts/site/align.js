@@ -3,7 +3,7 @@ define(["jquery", "libs/underscore"], function($) {
     return {
         
         ".align-group": loadAfterTypekit(pageAlign),
-        ".block-row .list-story": loadAfterTypekit(truncateTeaser),
+        ".block-row .row-story": loadAfterTypekit(truncateTeaser),
         ".vertical-container": loadAfterTypekit(verticalAlign),
         "#not #frontpage": loadAfterTypekit(frontpageAlign)
 
@@ -103,7 +103,7 @@ define(["jquery", "libs/underscore"], function($) {
     }
 
     function truncateTeaser() {
-        $(".block-row .list-story").each(function () {
+        $(".block-row .row-story").each(function () {
             while ($(this)[0].scrollHeight > $(this).outerHeight()) {
                 $(this).children("p").text(function (index, text) {
                     return text.replace(/\s+\S*\.*$/, "...");

@@ -21,7 +21,7 @@ var VIDEO_PLAYERS = {
 var VIDEO_REGEX_FORMAT = "(\{%s:)([^}]+)(\})";
 
 
-article.add = function (article, callback) { // api.addDoc
+article.add = function (article, callback) {
     getAvailableUrl(_URLify(article.title), 0, function(err, url) {
         if (err) return callback(err);
 
@@ -47,7 +47,7 @@ article.add = function (article, callback) { // api.addDoc
     });
 };
 
-article.edit = function (id, article, callback) { // api.editDoc
+article.edit = function (id, article, callback) {
     api.docsById(id, function(err, res) {
         if (err) return callback(err);
 
@@ -100,9 +100,6 @@ article.getDuplicates = function (limit, callback) {
     });
 };
 
-article.getByAuthor = function(author, callback) {
-};
-
 article.getByUrl = function(url, callback) {
     var query = {
         startkey: [url],
@@ -141,23 +138,24 @@ article.getByUrl = function(url, callback) {
     });
 };
 
-article.getByDate = function (limit, start, callback) {
-    query = _.defaults(query || {}, {
-        descending: true,
-        limit: limit || RESULTS_PER_PAGE
-    });
+article.getByAuthor = function (author, limit, start, callback) {
+    limit = (limit || RESULTS_PER_PAGE) + 1;
+    db.article.getByAuthor(author, limit, start, callbackLastKey(limit, callback));
+};
 
-    db.view("articles/all_by_date", query, function(err, results) {
-        if (err) callback(err);
-        else callback(null, _.map(results, function(doc){return doc.value}));
-    });
+article.getByDate = function (limit, start, callback) {
+    limit = (limit || RESULTS_PER_PAGE) + 1;
+    db.article.getByDate(limit, start, callbackLastKey(limit, callback));
 };
 
 article.getByTaxonomy = function (taxonomyPath, limit, start, callback) {
-    // get extra document for pagination
     limit = (limit || RESULTS_PER_PAGE) + 1;
     taxonomyPath = _.map(taxonomyPath, function (s) { return s.toLowerCase() });
-    db.taxonomy.docs(taxonomyPath, limit, start, function (err, docs) {
+    db.article.getByTaxonomy(taxonomyPath, limit, start, callbackLastKey(limit, callback));
+};
+
+function callbackLastKey (limit, callback) {
+    return function (err, docs) {
         if (err) callback(err);
         else {
             var lastDoc;
@@ -168,8 +166,8 @@ article.getByTaxonomy = function (taxonomyPath, limit, start, callback) {
             var docValues = _.map(docs, function (doc) { return doc.value });
             callback(null, docValues, lastDoc);
         }
-    });
-};
+    }
+}
 
 function saveEditedDoc(id, doc, docCreatedDate, url, callback) {
     // reset redis cache

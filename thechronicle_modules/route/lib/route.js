@@ -105,6 +105,8 @@ exports.init = function (app) {
         app.get('/duplicates', api.site.checkAdmin, admin.duplicates);
 
         app.get('/system/memory', api.site.checkAdmin, admin.memory);
+        app.get('/author', api.site.checkAdmin, admin.author);
+        app.post('/author', api.site.checkAdmin, admin.editAuthorData);
     });
     
     app.namespace('/admin/image', function () {
@@ -116,7 +118,8 @@ exports.init = function (app) {
         app.get('/:imageName', api.site.checkAdmin, admin.image.renderImage);
         app.post('/info', api.site.checkAdmin, admin.image.info);
         app.post('/crop', api.site.checkAdmin, admin.image.crop);
-        app.post('/add', api.site.checkAdmin, admin.addImageToArticle);
+        app.post('/add', api.site.checkAdmin, admin.image.addImageToDoc);
+        app.get('/remove/:imageId', api.site.checkAdmin, admin.image.removeImageFromDoc);
     });
 
     app.namespace('/xhrproxy', function() {

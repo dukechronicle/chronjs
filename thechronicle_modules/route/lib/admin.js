@@ -27,6 +27,33 @@ admin.duplicates = function (req, res, next) {
             });
         }
     });
+}
+
+admin.author = function (req, res, next) {
+    var name = req.query.name;
+    var renderFunc = function (doc) {
+        res.render('admin/author', {
+            locals:{
+                doc:doc
+            }
+        });
+    }
+    if (!name) {
+        renderFunc();
+    } else {
+        api.authors.getInfo(name, function (err, docs) {
+            if (docs.length == 0) renderFunc({name: name});
+            else renderFunc(docs[0]);
+        });
+    }
+
+};
+
+admin.editAuthorData = function (req, res, next) {
+    api.authors.setInfo(req.body, function (err, response) {
+        if (err) next(err);
+        else res.redirect('/admin/author?name=' + req.body.name);
+    });
 };
 
 admin.index = function (req, res, next) {
@@ -124,11 +151,6 @@ admin.editArticle = function (req, res, next) {
     api.articleForUrl(url, function (err, doc) {
         if (err)
             next(err);
-        else if (req.query.removeImage)
-            api.image.removeVersionFromDocument(doc._id, null, req.query.removeImage, function(err, doc) {
-                if (err) next(err);
-                else res.redirect('/article/' + url + '/edit');
-            });
         else
             api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
                 if (doc.authors)
@@ -139,9 +161,6 @@ admin.editArticle = function (req, res, next) {
                     locals:{
                         doc:doc,
                         groups:[],
-                        images:doc.images || {},
-                        url:url,
-                        afterAddImageUrl: '/article/' + url + '/edit',
                         taxonomy:taxonomy
                     }
                 });
@@ -154,16 +173,6 @@ admin.editArticleData = function (req, res, next) {
         if (err) next(err);
         else res.redirect('/article/' + url);
     });
-};
-
-admin.addImageToArticle = function (req, res, next) {
-    var afterUrl = req.body.afterUrl || '/admin';
-    api.image.addVersionsToDoc(req.body.docId, req.body.original,
-                               req.body.imageVersionId, req.body.imageType,
-                               function (err) {
-                                   if (err) next(err);
-                                   else res.redirect(afterUrl);
-                               });
 };
 
 admin.layout = function (req, res, next) {

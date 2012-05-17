@@ -16,7 +16,7 @@ var THUMB_DIMENSIONS = '100x100';
 exports.manage = function (req, httpRes) {
     var beforeKey = req.query.beforeKey;
     var beforeID = req.query.beforeID;
-    var afterUrl = req.query.afterUrl;
+    var afterUrl = req.query.afterUrl || req.headers.referer || '/admin';
     var forDocument = req.query.forDocument;
 
     api.image.getOriginals(25, beforeKey, beforeID, function (err, origs) {
@@ -182,4 +182,24 @@ exports.crop = function (req, httpRes, next) {
             }
         });
     }
+};
+
+exports.removeImageFromDoc = function (req, res, next) {
+    var imageId = req.params.imageId;
+    var docId = req.query.fromDoc;   
+    var afterUrl = req.query.afterUrl || req.headers.referer || '/admin';
+
+    api.image.removeVersionFromDocument(docId, null, imageId, function(err, doc) {
+        if (err) next(err);
+        else res.redirect(afterUrl);
+    });
+};
+
+exports.addImageToDoc = function (req, res, next) {
+    var afterUrl = req.body.afterUrl || '/admin';
+    
+    api.image.addVersionsToDoc(req.body.docId, req.body.original, req.body.imageVersionId, req.body.imageType, function (err) {
+        if (err) next(err);
+        else res.redirect(afterUrl);
+    });
 };

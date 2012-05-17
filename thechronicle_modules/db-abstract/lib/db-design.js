@@ -6,7 +6,7 @@ exports.doc = {
         views: {
             author_info:{
                 map:function (doc) {
-                    if (doc.type == "author-node") {
+                    if (doc.type == "author") {
                         emit(doc.name.toLowerCase(), doc);
                         if (doc.images) {
                             for (var type in doc.images) {
@@ -18,7 +18,7 @@ exports.doc = {
             },
             columnists_info:{
                 map:function (doc) {
-                    if (doc.type == "author-node" && doc.currentColumnist) {
+                    if (doc.type == "author" && doc.currentColumnist) {
                         emit(doc.name.toLowerCase(), doc);
                         if (doc.images) {
                             for (var type in doc.images) {

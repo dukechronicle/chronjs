@@ -39,7 +39,7 @@ authors.setInfo = function(doc, callback) {
         currentColumnist: doc.currentColumnist == "on",
         tagline: doc.tagline,
         twitter: doc.twitter,
-        type: "author-node"
+        type: "author"
     };
     fields.renderedBio = md(fields.bio);
     db.authors.setInfo(id, fields, callback);

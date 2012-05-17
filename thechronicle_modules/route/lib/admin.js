@@ -31,22 +31,25 @@ admin.duplicates = function (req, res, next) {
 
 admin.author = function (req, res, next) {
     var name = req.query.name;
-    var renderFunc = function (doc) {
+    if (name) {
+        res.redirect('/staff/' + name + '/edit');
+    }
+    else {
         res.render('admin/author', {
-            locals:{
-                doc:doc
-            }
+            layout: 'admin/layout'
         });
     }
-    if (!name) {
-        renderFunc();
-    } else {
-        api.authors.getInfo(name, function (err, docs) {
-            if (docs.length == 0) renderFunc({name: name});
-            else renderFunc(docs[0]);
-        });
-    }
+};
 
+admin.editAuthor = function (req, res, next) {
+    var name = req.params.name;
+    api.authors.getInfo(name, function (err, docs) {
+        var doc = docs.length == 0 ? {name: name} : docs[0];
+        res.render('admin/author/edit', {
+            layout: 'admin/layout',
+            locals: { doc: doc }
+        });
+    });
 };
 
 admin.editAuthorData = function (req, res, next) {

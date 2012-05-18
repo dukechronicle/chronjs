@@ -138,15 +138,19 @@ site.search = function (req, res, next) {
 };
 
 site.staff = function (req, res) {
-    var name = req.params.name.replace(/-/g, ' ');
-    api.site.getAuthorContent(name, function (err, docs, info) {
+    var name = util.capitalizeWords(req.params.name.replace(/-/g, ' '));
+    api.site.getAuthorContent(name, function (err, docs, info, nextDoc) {
+        if (info && info.name)
+            name = info.name;
+
         res.render('site/pages/people', {
             layout: 'site/layout',
             locals: {
                 pageTitle: util.capitalizeWords(name),
                 docs: docs,
-                name: util.capitalizeWords(name), 
+                nextDoc: nextDoc,
                 authorInfo: info,
+                name: name,
                 isAdmin: api.accounts.isAdmin(req)
             }
         });

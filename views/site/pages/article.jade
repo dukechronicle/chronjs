@@ -40,7 +40,7 @@
             // social media, print and comments
             .social-media
                 .comments
-                    a(id='commentLink', href='#dsq-content') Comments
+                    a(id='commentLink', href='#disqus_thread') Comments
                 .print
                     a(href=doc.url + '/print') Print
                 .facebook
@@ -78,3 +78,5 @@ script(type="text/javascript")
     po.src = 'https://apis.google.com/js/plusone.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
     })();
+// Anayltics Article Taxonomy
+!=partial("code/ga-customVar-articleTaxonomy");

@@ -194,25 +194,29 @@ exports.doc = {
         language: "javascript",
         
         views: {
-            author_info:{
-                map:function (doc) {
+            author_info: {
+                map: function (doc) {
                     if (doc.type == "author") {
-                        emit(doc.name.toLowerCase(), doc);
+                        var name = doc.name.toLowerCase();
+                        name = name.replace(/-/g, ' ');
+                        emit(name, doc);
                         if (doc.images) {
                             for (var type in doc.images) {
-                                emit(doc.name.toLowerCase(), {_id:doc.images[type]});
+                                emit(name, {_id:doc.images[type]});
                             }
                         }
                     }
                 }
             },
-            columnists_info:{
-                map:function (doc) {
+            columnists_info: {
+                map: function (doc) {
                     if (doc.type == "author" && doc.currentColumnist) {
-                        emit(doc.name.toLowerCase(), doc);
+                        var name = doc.name.toLowerCase();
+                        name = name.replace(/-/g, ' ');
+                        emit(name, doc);
                         if (doc.images) {
                             for (var type in doc.images) {
-                                emit(doc.name.toLowerCase(), {_id:doc.images[type]});
+                                emit(name, {_id:doc.images[type]});
                             }
                         }
                     }

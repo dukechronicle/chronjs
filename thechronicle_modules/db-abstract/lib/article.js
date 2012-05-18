@@ -51,6 +51,7 @@ article.getByTaxonomy = function (taxonomyTerm, limit, start, callback) {
 };
 
 article.getByAuthor = function (author, limit, start, callback) {
+    author = author.toLowerCase().replace(/-/g, ' ');
     var query = {
         descending: true,
         startkey: [author, {}],

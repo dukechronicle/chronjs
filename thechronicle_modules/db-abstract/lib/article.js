@@ -30,7 +30,7 @@ article.getByDate = function (limit, start, callback) {
     if (start && _.isString(start))
         query.startkey = start;
 
-    db.view('articles/all_by_date', query, callback);
+    db.view('articles/date', query, callback);
 };
 
 article.getByTaxonomy = function (taxonomyTerm, limit, start, callback) {

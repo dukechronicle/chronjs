@@ -30,5 +30,5 @@
                         .date #{doc.date}
                 - if(docs.length == 0)
                     div No articles found
-                div#loadImage(style="height: 150px;", data-key="2", data-url="/api/staff/#{name}")
+                div#loadImage(style="height: 150px;", data-key=JSON.stringify(next), data-url="/api/staff/#{name}")
                     img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto")

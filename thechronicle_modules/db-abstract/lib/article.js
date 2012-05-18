@@ -1,4 +1,5 @@
 var db = require('./db-abstract');
+var log = require('../../log');
 
 var _ = require('underscore');
 

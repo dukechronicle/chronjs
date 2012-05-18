@@ -148,7 +148,7 @@ site.staff = function (req, res) {
             locals: {
                 pageTitle: util.capitalizeWords(name),
                 docs: docs,
-                nextDoc: nextDoc,
+                next: nextDoc,
                 authorInfo: info,
                 name: name,
                 isAdmin: api.accounts.isAdmin(req)

@@ -408,7 +408,7 @@ site.getSectionContent = function (params, callback) {
             popular.getPopularArticles(params, 5, cb);
         },
         function (cb) {
-            api.taxonomy.docs(params, 20, null, function (err, docs, next) {
+            api.article.getByTaxonomy(params, 20, null, function (err, docs, next) {
                 if (err) cb(err)
                 else cb(null, {docs:modifyArticlesForDisplay(docs), next:next});
             });
@@ -439,11 +439,9 @@ site.getSectionContent = function (params, callback) {
 site.getAuthorContent = function(name, callback) {
     async.parallel([
         function(cb) {
-            api.search.docsByAuthor(name, 'desc', '', 1, function(err, docs) {
-                if(err)
-                    cb(err);
-                else
-                    cb(null, modifyArticlesForDisplay(docs));
+            api.article.getByAuthor(name, null, null, function(err, docs, next) {
+                if(err) cb(err);
+                else cb(null, {docs:modifyArticlesForDisplay(docs), next:next});
             });
         },
         function(cb) {
@@ -452,9 +450,10 @@ site.getAuthorContent = function(name, callback) {
             if (err)
                 callback(err);
             else {
-                var docs = results[0];
+                var docs = results[0].docs;
+                var next = results[0].next
                 var info = results[1][0];
-                callback(null, docs, info);
+                callback(null, docs, info, next);
             }
         }
     );
@@ -477,7 +476,7 @@ site.getSearchContent = function (wordsQuery, query, callback) {
 };
 
 site.getArticleContent = function(url, callback) {
-    api.articleForUrl(url, function(err, doc) {
+    api.article.getByUrl(url, function(err, doc) {
         if (err) callback('not found');
         else {
             var displayDoc = modifyArticleForDisplay(doc);

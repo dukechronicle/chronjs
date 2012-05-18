@@ -211,7 +211,7 @@ function addFakeArticles(images, callback) {
     async.forEachSeries(fakeArticles, function(article, cb) {
         console.log("adding article with title: '" + article.title + "'...");
         
-        api.addDoc(article, function(err, url, articleID) {
+        api.article.add(article, function(err, url, articleID) {
             if(err) console.log("article could not be added - " + err);
             else {
                 console.log("article with url: '" + url + "' added.");

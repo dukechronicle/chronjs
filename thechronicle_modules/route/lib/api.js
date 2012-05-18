@@ -76,11 +76,11 @@ siteApi.search = function (req, res, next) {
 };
 
 siteApi.staff = function (req, res, next) {
-    var nameQuery = req.params.query.replace('-', ' ');
-    var page = (req.query.start && parseInt(req.query.start)) || 1;
-    api.search.docsByAuthor(nameQuery, 'desc', '', page, function (err, docs, facets) {
+    var name = req.params.query;
+    var start = req.query.start && JSON.parse(req.query.start);
+    api.article.getByAuthor(name, 1, start, function (err, docs, nextDoc) {
         if (err) next(err);
-        else res.json({docs: docs, facets: facets, next: page + 1});
+        else res.json({docs: docs, next: nextDoc});
     });
 };
 

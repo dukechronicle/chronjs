@@ -279,8 +279,8 @@ site.getOpinionPageContent = function(callback) {
                 results[4].forEach(function(columnist) {
                     var name = columnist.name.toLowerCase();
                     columnistHeadshots[name] = {tagline : columnist.tagline};
-                    if (columnist.images && columnist.images.ThumbSquareM)
-                        columnistHeadshots[name].headshot = columnist.images.ThumbSquareM.url;
+                    if (columnist.images && columnist.images.StaffHeadshot)
+                        columnistHeadshots[name].headshot = columnist.images.StaffHeadshot.url;
                 });
 
 

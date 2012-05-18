@@ -3,6 +3,7 @@ var article = exports;
 var api = require('../../api')
 var config = require('../../config');
 var db = require('../../db-abstract');
+var log = require('../../log');
 var redis = require('../../redisclient');
 var util = require("../../util");
 

@@ -133,15 +133,19 @@ admin.editArticle = function (doc, callback) {
 
 admin.layout = function (section, group, layoutConfig, callback) {
     async.parallel({
-        sectionDocs:function (cb) {
-            if (section)
+        sectionDocs: function (cb) {
+            if (section) {
                 api.article.getByTaxonomy([section], 30, null, function (err, docs) {
                     cb(err, docs); // need to ignore last callback argument
                 });
-            else
-                api.article.getByDate(30, null, cb);
+            }
+            else {
+                api.article.getByDate(30, null, function (err, docs) {
+                    cb(err, docs); // need to ignore last callback argument
+                });
+            }
         },
-        groupDocs  :function (cb) {
+        groupDocs: function (cb) {
             api.group.docs(layoutConfig[group].namespace, null, cb);
         }
     }, function (err, results) {

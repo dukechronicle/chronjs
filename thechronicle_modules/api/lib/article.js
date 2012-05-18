@@ -22,7 +22,7 @@ var VIDEO_REGEX_FORMAT = "(\{%s:)([^}]+)(\})";
 
 
 article.add = function (article, callback) {
-    getAvailableUrl(_URLify(article.title), 0, function(err, url) {
+    getAvailableUrl(URLify(article.title), 0, function(err, url) {
         if (err) return callback(err);
 
         var unix_timestamp = util.unixTimestamp();
@@ -55,8 +55,8 @@ article.edit = function (id, article, callback) {
             article.renderedBody = renderBody(article.body);
         article.updated = util.unixTimestamp();            
         
-        if (article.title && (_URLify(article.title) !=  _URLify(res.title))) {
-            getAvailableUrl(_URLify(article.title), 0, function(err, url) {
+        if (article.title && (URLify(article.title) !=  URLify(res.title))) {
+            getAvailableUrl(URLify(article.title), 0, function(err, url) {
                 if (err) return callback(err);
                 
                 article.urls = res.urls;

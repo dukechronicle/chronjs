@@ -1,10 +1,40 @@
 exports.doc = {
 
+    authors: {
+        language: "javascript",
+        
+        views: {
+            author_info:{
+                map:function (doc) {
+                    if (doc.type == "author") {
+                        emit(doc.name.toLowerCase(), doc);
+                        if (doc.images) {
+                            for (var type in doc.images) {
+                                emit(doc.name.toLowerCase(), {_id:doc.images[type]});
+                            }
+                        }
+                    }
+                }
+            },
+            columnists_info:{
+                map:function (doc) {
+                    if (doc.type == "author" && doc.currentColumnist) {
+                        emit(doc.name.toLowerCase(), doc);
+                        if (doc.images) {
+                            for (var type in doc.images) {
+                                emit(doc.name.toLowerCase(), {_id:doc.images[type]});
+                            }
+                        }
+                    }
+                }
+            },
+        }
+    },
+
     articles: {
         language: "javascript",
         
         views: {
-
             taxonomy:{
                 map:function (doc) {
                     if (doc.taxonomy) {
@@ -34,10 +64,8 @@ exports.doc = {
             duplicates:{
                 map:function (doc) {
                     if (doc.type == "article") {
-                        for (var i in doc.urls) {
-                            // sort by created day and then by title                            
-                            emit([Math.floor(doc.created/86400), doc.title], doc);
-                        }
+                        // sort by created day and then by title                            
+                        emit([Math.floor(doc.created/86400), doc.title], doc);
                     }
                 }
             },
@@ -81,7 +109,7 @@ exports.doc = {
                     if (doc.authors && doc.taxonomy) {
                         for (var t in doc.taxonomy) {
                             for (var a in doc.authors) {
-                                emit([doc.authors[a], doc.taxonomy[t], parseInt(doc.created, 10)], doc);
+                                emit([doc.authors[a].toLowerCase(), doc.taxonomy[t], parseInt(doc.created, 10)], doc);
                             }
                         }
                     }

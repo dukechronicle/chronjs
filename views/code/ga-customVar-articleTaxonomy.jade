@@ -1,0 +1,5 @@
+if(isProduction)
+    - var fullTax = doc.taxonomy.join("/");
+    script
+        _gaq.push(['_setCustomVar', 2, 'Section', '!{doc.taxonomy[0]}', 3]);
+        _gaq.push(['_setCustomVar', 3, 'Taxonomy', '!{fullTax}', 3]);

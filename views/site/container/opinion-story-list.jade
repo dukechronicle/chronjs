@@ -2,14 +2,14 @@
     .columnist-info.clearfix
         - if (typeof images != 'undefined' && typeof images.ThumbSquareM != 'undefined')
             img.headshot(src=images.ThumbSquareM.url)
-        - if (typeof name != 'undefined')
+        - if (name)
             h3.name
                 | #{name}&nbsp;
-                - if (typeof twitter != 'undefined')
+                - if (twitter)
                     a.twitter(href="http://twitter.com/#{twitter}") @#{twitter}
-        - if (typeof affiliation != 'undefined')
+        - if (affiliation)
             p.year #{affiliation}
-        - if (typeof tagline != 'undefined')
+        - if (tagline)
             p.tagline #{tagline}
 
     - each story in stories

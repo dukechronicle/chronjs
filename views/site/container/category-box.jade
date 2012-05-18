@@ -1,15 +1,15 @@
-.category-box
-    if (typeof title != 'undefined')
-        .vertical-container
-            .vertical #{title}
+include container-helpers
 
+.category-box.clearfix
+    mixin vertical-label
     .category-list
         .rounded
             .content-container
-                - each columnist, index in categories
+                - each category, index in categories
                     a.hover.highlight-left(data-index=index, href="#")
-                        h2 #{columnist.name}
+                        h2 #{category.name}
     .category-articles
-        .rounded
-            - each columnist, index in model.Columnists
-                .columnist-stories(id="columnist-story-#{index}")!=partial('opinion-story-list', columnist)
+        - each category, index in categories
+            .rounded(class="category-#{index}")
+                block category
+                    p #{category.name}

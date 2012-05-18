@@ -1,7 +1,7 @@
+include container-helpers
+
 .top-news
-    .vertical-container
-        .vertical #{title}
-        
+    mixin vertical-label
     .rounded.clearfix
         .top
             .span-4.content-container
@@ -14,15 +14,15 @@
                     h4 #{right[0].title}
                     p #{right[0].teaser}
     
-        .bottom
+        .bottom.story-list
             .span-4.content-container
                 - each story, index in left
                     - if (index > 0)
-                        a.hover.highlight-left(href='#{story.url}')
+                        a.hover.list-story.highlight-left(href='#{story.url}')
                             h4 #{story.title}
         
             .span-4.content-container.last
                 - each story, index in right
                     - if (index > 0)
-                        a.hover.highlight-right(href='#{story.url}')
+                        a.hover.list-story.highlight-right(href='#{story.url}')
                             h4 #{story.title}

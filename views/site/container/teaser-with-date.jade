@@ -1,13 +1,6 @@
-.clearfix.teaser-with-date
-    .vertical-container
-        if (typeof title !== 'undefined')
-                h2.vertical #{title}
-            else
-                h2.vertical &nbsp;
-    .rounded
-        .content-container
-            - each story in stories
-                a.hover.highlight-right.first.teaser(href='#{story.url}')
-                    h2 #{story.title}
-                    p.date #{story.date}
-                    p #{story.teaser}
+extends story-list
+
+block story
+    h3.title #{story.title}
+    p.date #{story.date}
+    p.teaser #{story.teaser}

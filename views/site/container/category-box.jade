@@ -2,15 +2,13 @@ include container-helpers
 
 .category-box.clearfix.align-group
     mixin vertical-label
-    .category-list.align-element(data-alignTarget=".rounded", data-alignPrimary="true")
-        .rounded
-            .content-container
-                - each category, index in categories
-                    a.hover.highlight-left(data-index=index, href="#")
-                        h2 #{category.name}
-    .categories.align-element(data-alignTarget=".rounded")
-        .rounded
+    .rounded.category-list.align-element(data-alignPrimary="true")
+        .content-container
             - each category, index in categories
-                .category
-                    block category
-                        p #{category.name}
+                a.hover.highlight-left(data-index=index, href="#")
+                    h2 #{category.name}
+    .rounded.categories.align-element
+        - each category, index in categories
+            .category
+                block category
+                    p #{category.name}

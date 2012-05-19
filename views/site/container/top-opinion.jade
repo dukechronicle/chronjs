@@ -1,13 +1,10 @@
 include container-helpers
 
 mixin story-view(story)
-    .subhead
-        - if (story.tagline)
-            span #{story.tagline}
-        - else
-            span #{story.taxonomy[1]}
+    .subtitle
+        span #{story.taxonomy[1]}
     h3 #{story.title}
-    .subhead
+    .subtitle
         span By #{story.author}
     - if (story.thumb)
         img.thumb(src=story.thumb)

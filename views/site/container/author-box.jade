@@ -3,22 +3,21 @@ extends category-box
 block category
     - var author = category
     .content-container.author-listing
-        .columnist-info.clearfix
+        .author-info.clearfix
             - if (author.images && author.images.StaffHeadshot)
                 img.headshot(src=author.images.StaffHeadshot.url)
-            - if (author.name)
-                h3.name
-                    | #{author.name}&nbsp;
-                    - if (typeof twitter != 'undefined' && twitter)
-                        a.twitter(href="http://twitter.com/#{twitter}") @#{twitter}
-            - if (author.affiliation)
-                p.year #{author.affiliation}
-            - if (author.tagline)
-                p.tagline #{author.tagline}
+            a.hover.name(href="/staff/#{author.name}")
+                h3 #{author.name}
+            p.subtitle
+                span.year #{author.affiliation}
+                - if (author.twitter)
+                    span.twitter
+                        a(href="http://twitter.com/#{author.twitter}") @#{author.twitter}
+            p.tagline #{author.tagline}
     
         .story-list
             - each story in author.stories
-                a.hover.highlight-right(href='#{story.url}')
+                a.hover.list-story.highlight-right(href="#{story.url}")
                     h3.title #{story.title}
                     p.date #{story.date}
                     p.teaser #{story.teaser}

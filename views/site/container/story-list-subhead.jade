@@ -2,7 +2,7 @@ extends story-list
 
 block story
     h3.title.nospace #{story.title}
-    p.subhead
+    p.subtitle
         - if (story.info || story.authors)
             span #{story.info || story.authors}
         - if (story.date)

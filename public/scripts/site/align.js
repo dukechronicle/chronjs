@@ -28,16 +28,11 @@ define(["jquery", "libs/underscore"], function($) {
             $(this).children('.align-element').each(function () {
                 var alignTarget = $(this).data('aligntarget');
                 var isPrimary = $(this).data('alignprimary');
-
-                if (!alignTarget) {
-                    console.log("Align target missing for ");
-                    console.log($(this));
-                    return;
-                }
+                var element = alignTarget ? $(this).find(alignTarget) : $(this);
 
                 if (isPrimary)
-                    primary = $(this).find(alignTarget);
-                groups.push($(this).find(alignTarget));
+                    primary = element
+                groups.push(element);
             });
 
             if (groups.length === 0) return;

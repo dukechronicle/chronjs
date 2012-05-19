@@ -6,7 +6,7 @@
             if (model.Featured)
                 #columns-today!=partial('../container/top-opinion', {title: "Today's Columns", stories: model.Featured})
             if (model.EditorialBoard)
-                #editorial-board.title-medium!=partial('../container/teaser-with-date.jade', {title: "Editorial Board", stories: model.EditorialBoard})
+                #editorial-board.title-medium!=partial('../container/story-list-teaser-date.jade', {title: "Editorial Board", stories: model.EditorialBoard})
 
         .span-6.last
             .clearfix.align-group

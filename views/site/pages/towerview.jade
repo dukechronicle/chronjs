@@ -9,9 +9,9 @@
 
             .featured-row.clearfix
                 if (model.Featured[1])
-                    .span-4!=partial('../container/row-square', {story: model.Featured[1]})
+                    .span-4!=partial('../container/block-square', {story: model.Featured[1]})
                 if (model.Featured[2])
-                    .span-4.last!=partial('../container/row-square', {story: model.Featured[2]})
+                    .span-4.last!=partial('../container/block-square', {story: model.Featured[2]})
                 
             if (model.Savvy)
                 #savvy!=partial('../container/block-row.jade', {title: 'Savvy', stories: model.Savvy})
@@ -22,9 +22,9 @@
 
     .span-4.last
         if (model["Editors Note"])
-            #editors-note!=partial('../container/block.jade', {title: "Letter from the Editor", story: model["Editors Note"][0]})
+            #editors-note!=partial('../container/block-teaser', {title: "Letter from the Editor", story: model["Editors Note"][0]})
         if (model.adFullRectangle)
             .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
         if (model.Prefix)
             - each story in model.Prefix
-                .prefix!=partial('../container/block-wide-image.jade', {story: story})
+                .prefix!=partial('../container/block-wide', {story: story})

@@ -1,52 +1,37 @@
 @import '../../mixins'
 
-block-height = 250px
 
-.block-row
+.block-horizontal .rounded
+    height 139px
+    a, a .content-container
+        height 100%
+
+    .image-container
+        float left
+        img
+            width 186px
+            margin-right 10px
+
+.block-square .rounded
+    height 156px
+    a, a .content-container
+        height 100%
+
+    .image-container
+        float left
+        img
+            width 150px
+            margin-right 10px
+
+.block-thumb .content-container
+    padding 5px
+    height 119px
+
+    .title
+        height 2.5em
+
+    .teaser
+        width 222px
+
     img
-        box-shadow 0px 0px 4px #999
-        transition box-shadow 0.25s linear
-    a.hover:hover img
-        box-shadow 0px 0px 4px black
-
-    .content-container
-        height block-height
-        padding-left 0px
-        padding-right 0px
-
-        a.hover
-            height 100%
-            margin-bottom -9px
-            padding-bottom 9px
-
-            .title
-                height 50px
-            
-            .teaser
-                line-height 1.2em
-        
-            h3.title
-                font-size 1.6em
-                line-height 1.2em
-        
-            h4.title
-                font-size 1.1em
-                line-height 1.2em
-
-    .content-container:first-child
-        padding-left 10px
-
-    .content-container:last-child
-        padding-right 10px
-
-.span-12 > .multimedia-bar
-    .element
-        margin-right 8px
-    .element:last-child
-        margin-right 0px
-
-.span-8 > .multimedia-bar
-    .element
-        margin-right 5px
-    .element:last-child
-        margin-right 0px
+        height 70px

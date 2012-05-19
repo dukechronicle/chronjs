@@ -8,7 +8,7 @@
             if (model.Slideshow)
                 #slideshow!=partial('../container/slideshow', {stories: model.Slideshow})
             if (model["Left Headlines"] && model["Right Headlines"])
-                .align-group#slideshow!=partial('../container/top-news', {title: "Top Stories", left: model["Left Headlines"], right: model["Right Headlines"]})
+                #headlines!=partial('../container/top-news', {title: "Top Stories", left: model["Left Headlines"], right: model["Right Headlines"]})
 
             .ads-row.clearfix
                 if (model.printEdition)
@@ -20,7 +20,7 @@
                 if (model.twitter)
                     .twitter!=partial('../container/twitter', model.twitter)
             if (model.popular)
-                #most-popular.title-small!=partial('../container/story-list-subhead', {title: "What's Hot", stories: model.popular})
+                #popular.title-small!=partial('../container/story-list-subhead', {title: "What's Hot", stories: model.popular})
             if (model.Opinion)
                 #opinion.title-small!=partial('../container/story-list-subhead', {title: "Opinion", stories: model.Opinion})
             .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})

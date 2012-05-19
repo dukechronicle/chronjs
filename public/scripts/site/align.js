@@ -22,16 +22,21 @@ define(["jquery", "libs/underscore"], function($) {
     function pageAlign() {
         $(".align-group").each(function () {
             var groups = [];
+            var primary = null;
             // find all elements of align group and add it to group array
 
-            $(this).find('> .align-element').each(function () {
-                var alignTarget = $(this).attr('data-alignTarget');
+            $(this).children('.align-element').each(function () {
+                var alignTarget = $(this).data('aligntarget');
+                var isPrimary = $(this).data('alignprimary');
 
                 if (!alignTarget) {
-                    console.log("Aligntarget missing for ");
+                    console.log("Align target missing for ");
                     console.log($(this));
                     return;
                 }
+
+                if (isPrimary)
+                    primary = $(this).find(alignTarget);
                 groups.push($(this).find(alignTarget));
             });
 
@@ -39,15 +44,11 @@ define(["jquery", "libs/underscore"], function($) {
 
             _.each(_.zip.apply(this, groups), function (row) {
                 // get max height of current row
-                var maxHeight = 0;
-                _.each(row, function (element) {
-                    var height = $(element).height();
-                    if (height > maxHeight) {
-                        maxHeight = height;
-                    }
+                var primary = primary || _.max(row, function (element) {
+                    return $(element).height();
                 });
                 _.each(row, function (element) {
-                    $(element).height(maxHeight);
+                    $(element).height($(primary).height());
                 });
             });
         });

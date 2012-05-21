@@ -2,7 +2,7 @@
 
 block-height = 250px
 
-.block-row
+.row
     img
         box-shadow 0px 0px 4px #999
         transition box-shadow 0.25s linear
@@ -39,14 +39,20 @@ block-height = 250px
     .content-container:last-child
         padding-right 10px
 
-.span-12 > .multimedia-bar
+.multimedia
+    .rounded
+        padding 6px
     .element
-        margin-right 8px
+        float left
+
+.span-12 > .multimedia
+    .element
+        margin-right 10px
     .element:last-child
         margin-right 0px
 
-.span-8 > .multimedia-bar
+.span-8 > .multimedia
     .element
-        margin-right 5px
+        margin-right 7px
     .element:last-child
         margin-right 0px

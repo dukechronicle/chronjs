@@ -3,7 +3,7 @@ include container-helpers
 .block
     mixin vertical-label
     .rounded
-        a.hover.highlight-right(href=story.url)
+        a.hover.highlight-bottom(href=story.url)
             - if (story.images && story.images.ThumbRect)
                 .image-container
                     img.fit-image(src=story.images.ThumbRect.url)

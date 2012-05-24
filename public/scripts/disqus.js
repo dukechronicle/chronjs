@@ -10,6 +10,15 @@ define(function () {
         this.callbacks.afterRender = disqusCallbacks;
     }
 
+    loadFromDisqus = function(filename) {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/'+filename;
+        (document.getElementsByTagName('head')[0] ||
+        document.getElementsByTagName('body')[0]).appendChild(dsq);        
+    }
+
     return {
 
         loadForArticle: function (prod, shortName, articleID, title, url) {
@@ -19,12 +28,8 @@ define(function () {
             disqus_url = "http://dukechronicle.com" + url;
             disqus_developer = prod ? 0 : 1;
 
-            var dsq = document.createElement('script');
-            dsq.type = 'text/javascript';
-            dsq.async = true;
-            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-            (document.getElementsByTagName('head')[0] ||
-             document.getElementsByTagName('body')[0]).appendChild(dsq);
+            loadFromDisqus('embed.js');
+            loadFromDisqus('count.js');
         },
 
         addCallback: function (callback) {

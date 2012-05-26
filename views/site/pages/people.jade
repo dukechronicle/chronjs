@@ -1,9 +1,9 @@
 #people
-    if (authorInfo)
-        h1 #{authorInfo.name}
-            if (typeof isAdmin != 'undefined' && isAdmin)
-                a.edit(href="/admin/author?name="+authorInfo.name) &nbsp;&nbsp;Edit        
+    h1 #{name}
+        if (typeof isAdmin != 'undefined' && isAdmin)
+            a.edit(href="/staff/"+name+"/edit") &nbsp;&nbsp;Edit
 
+    if (authorInfo)
         .sidebar.authorInfo
             .container.clearfix
                 .vertical-container
@@ -19,10 +19,6 @@
                                 a.twitter(href="http://twitter.com/#{authorInfo.twitter}") @#{authorInfo.twitter}
                             .tagline #{authorInfo.tagline}
                             .bio !{authorInfo.renderedBio}
-    else
-        h1 #{name}
-            if (typeof isAdmin != 'undefined' && isAdmin)
-                a.edit(href="/admin/author?name="+name) &nbsp;&nbsp;Edit        
 
     .main
         .authors-articles
@@ -34,5 +30,5 @@
                         .date #{doc.date}
                 - if(docs.length == 0)
                     div No articles found
-                div#loadImage(style="height: 150px;", data-key="2", data-url="/api/staff/#{name}")
+                div#loadImage(style="height: 150px;", data-key=JSON.stringify(next), data-url="/api/staff/#{name}")
                     img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto")

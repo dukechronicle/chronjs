@@ -97,7 +97,7 @@ admin.addArticle = function (doc, callback) {
         callback('No section selected for article');
     }
     else {
-        var fields = {
+        var article = {
             body    :doc.body,
             authors :doc.authors.split(", "),
             title   :doc.title,
@@ -107,7 +107,7 @@ admin.addArticle = function (doc, callback) {
             taxonomy:JSON.parse(doc.taxonomy)
         };
 
-        api.addDoc(fields, callback);
+        api.article.add(article, callback);
     }
 };
 
@@ -127,21 +127,25 @@ admin.editArticle = function (doc, callback) {
             taxonomy:JSON.parse(doc.taxonomy)
         };
 
-        api.editDoc(id, fields, callback);
+        api.article.edit(id, fields, callback);
     }
 };
 
 admin.layout = function (section, group, layoutConfig, callback) {
     async.parallel({
-        sectionDocs:function (cb) {
-            if (section)
-                api.taxonomy.docs([section], 30, null, function (err, docs) {
+        sectionDocs: function (cb) {
+            if (section) {
+                api.article.getByTaxonomy([section], 30, null, function (err, docs) {
                     cb(err, docs); // need to ignore last callback argument
                 });
-            else
-                api.docsByDate(30, null, cb);
+            }
+            else {
+                api.article.getByDate(30, null, function (err, docs) {
+                    cb(err, docs); // need to ignore last callback argument
+                });
+            }
         },
-        groupDocs  :function (cb) {
+        groupDocs: function (cb) {
             api.group.docs(layoutConfig[group].namespace, null, cb);
         }
     }, function (err, results) {

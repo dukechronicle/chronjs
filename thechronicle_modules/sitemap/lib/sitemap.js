@@ -68,7 +68,7 @@ function latestFullSitemapHelper(path, number, start, files, callback) {
 }
 
 function latestSitemap(path, query, news, callback) {
-    api.docsByDate(SITEMAP_URL_LIMIT, query, function(err, results) {
+    api.article.getByDate(SITEMAP_URL_LIMIT, query, function(err, results) {
         if (err) callback(err);
         else if (results.length == 0) callback("No new articles for sitemap");
     else {

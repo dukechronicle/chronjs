@@ -17,11 +17,11 @@ image.listOriginalsByDate = function (limit, beforeKey, beforeID, callback) {
     if(beforeKey) query.startkey = parseInt(beforeKey);
     if(beforeID) query.startkey_docid = beforeID;
 
-    db.view('articles/image_originals', query, callback);
+    db.view('images/originals', query, callback);
 };
 
 image.originalsIndex = function (options, callback) {
-    db.view('articles/image_originals_index', options, callback);
+    db.view('images/originals_index', options, callback);
 };
 
 image.createOriginal = function (name, options, callback) {
@@ -116,13 +116,13 @@ image.edit = function (imageID, data, callback) {
 };
 
 image.originalsForPhotographer = function (photog, callback) {
-    db.view('articles/photographers', {
+    db.view('images/photographers', {
         key:photog
     }, callback);
 };
 
 image.docsForVersion = function(versionId, callback) {
-    db.view('articles/doc_images', {
+    db.view('articles/images', {
         key: versionId
     }, callback);
 };

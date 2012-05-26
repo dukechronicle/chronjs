@@ -44,7 +44,7 @@ article.getByDate = function (limit, start, callback) {
     db.view('articles/date', query, callback);
 };
 
-article.getByTaxonomy = function (taxonomyTerm, limit, start, callback) {
+article.getByTaxonomy = function (taxonomyTerm, limit, params, callback) {
     var query = {
         descending: true,
         startkey: [taxonomyTerm, {}],
@@ -53,10 +53,14 @@ article.getByTaxonomy = function (taxonomyTerm, limit, start, callback) {
 
     if (limit)
         query.limit = limit;
-    if (start && start.key)
-        query.startkey = start.key;
-    if (start && start.id)
-        query.startkey_docid = start.id;
+    if (params && params.key)
+        query.startkey = params.key;
+    if (params && params.id)
+        query.startkey_docid = params.id;
+
+    // params.last may be an ending date -- used by news sitemap
+    if (params && params.last)
+        query.endkey = [taxonomyTerm, params.last]
 
     db.view('articles/taxonomy', query, callback);
 };

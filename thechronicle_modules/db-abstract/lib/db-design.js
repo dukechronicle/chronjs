@@ -6,22 +6,6 @@ exports.doc = {
         views: {
 
             /*
-             * Returns all articles keyed by authors' names, lowercased and
-             * hypens removed, as well as date created.
-             */
-            authors: {
-                map: function (doc) {
-                    if (doc.type == "article" && doc.authors) {
-                        for (var i in doc.authors) {
-                            var name = doc.authors[i].toLowerCase();
-                            name = name.replace(/-/g, ' ');
-                            emit([name, doc.created], doc);
-                        }
-                    }
-                }
-            },
-
-            /*
              * Returns all articles keyed by each author's name, taxonomy, and
              * date created. Used, for example, to find all opinion columns by
              * an author.
@@ -33,22 +17,12 @@ exports.doc = {
                             var name = doc.authors[a].toLowerCase();
                             name = name.replace(/-/g, ' ');
                             var path = [];
+                            emit([name, [], parseInt(doc.created)], doc);
                             for (var t in doc.taxonomy) {
                                 path.push(doc.taxonomy[t].toLowerCase());
                                 emit([name, eval(uneval(path)), parseInt(doc.created)], doc);
                             }
                         }
-                    }
-                }
-            },
-
-            /*
-             * Returns all articles keyed by creation date.
-             */
-            date: {
-                map: function (doc) {
-                    if (doc.type == "article" && doc.created) {
-                        emit(parseInt(doc.created), doc);
                     }
                 }
             },
@@ -126,6 +100,7 @@ exports.doc = {
                 map: function (doc) {
                     if (doc.type == "article" && doc.taxonomy) {
                         var path = [];
+                        emit([[], parseInt(doc.created)], doc);
                         for (var i in doc.taxonomy) {
                             path.push(doc.taxonomy[i].toLowerCase());
                             emit([eval(uneval(path)), parseInt(doc.created)], doc);

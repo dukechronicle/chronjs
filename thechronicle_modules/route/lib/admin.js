@@ -88,23 +88,21 @@ admin.newsletterData = function(req, res, next) {
 };
 
 admin.manage = function (req, res, next) {
-    var db = api.getDatabaseName();
-    var host = api.getDatabaseHost();
-    var port = api.getDatabasePort() || "80";
-    var db_url = 'http://' + host + ':' + port + '/_utils/document.html?' + db;
+    var dbName = api.getDatabaseName();
+    var dbUrl = api.getDatabaseUrl() + '/_utils/document.html?' + dbName;
 
-    var start = {};
-    if (req.query.beforeKey) start.key = parseInt(req.query.beforeKey);
-    if (req.query.beforeID) start.id = req.query.beforeID;
+    var section = req.params.section && [ req.params.section ];
+    var start = req.query.start && JSON.parse(req.query.start);
 
-    api.article.getByDate(null, start, function (err, docs) {
+    api.article.getByTaxonomy(section, null, start, function (err, docs, nextKey) {
         if (err) next(err);
         else res.render('admin/article', {
             layout: 'admin/layout',
             locals:{
-                docs:docs,
-                hasPrevious:(req.query.beforeID != null),
-                db_url: db_url
+                docs: docs,
+                next: nextKey,
+                hasPrevious: start != null,
+                db_url: dbUrl
             }
         });
     });

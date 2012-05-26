@@ -18,4 +18,4 @@ if (hasPrevious)
     br
     
 if (docs.length != 0)
-    a(href='/admin/manage?beforeKey=' + docs[docs.length - 1].created + '&beforeID=' + docs[docs.length - 1]._id) Next
+    a(href='?start=' + JSON.stringify(next)) Next

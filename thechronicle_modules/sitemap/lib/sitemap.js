@@ -2,13 +2,14 @@ var sitemap = exports;
 
 var async = require('async');
 var builder = require('xmlbuilder');
+var dateFormat = require('dateformat');
 var gzip = require('gzip');
 var _ = require('underscore');
 
 var api = require('../../api');
-var config = require("../../config");
+var config = require('../../config');
 var log = require('../../log');
-var util = require("../../util");
+var util = require('../../util');
 
 var SITEMAP_URL_LIMIT = 10000;
 var NEWS_URL_LIMIT = 1000;
@@ -17,32 +18,49 @@ var NEWS_URL_LIMIT = 1000;
 sitemap.generateAllSitemaps = function (callback) {
     async.parallel([
         function (cb) {
-            sitemap.latestFullSitemap('public/sitemaps/sitemap', function (err) {
+            sitemap.latestFullSitemap('/sitemaps/sitemap', function (err) {
                 if (err) log.warning("Couldn't build full sitemap: " + err);
                 cb(err);
             });
         },
         function (cb) {
-            sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
+            sitemap.latestNewsSitemap('/sitemaps/news_sitemap', function (err) {
                 if (err) log.warning("Couldn't build news sitemap: " + err);
                 cb(err);
             });
-        }], callback);
+        }
+    ], callback);
 };
 
 sitemap.latestFullSitemap = function (path, callback) {
     latestSitemaps(SITEMAP_URL_LIMIT, {}, false, [], function (err, sitemaps) {
         if (err) return callback(err);
-        log.debug(sitemaps);
+        else pushSitemaps(path, sitemaps, callback);
     });
 };
 
 sitemap.latestNewsSitemap = function (path, callback) {
     var query = { last: (new Date()).getTime() / 1000 - 2 * 24 * 60 * 60 };
-    latestSitemaps(NEWS_URL_LIMIT, query, true, [], function () {
-        
+    latestSitemaps(NEWS_URL_LIMIT, query, true, [], function (err, sitemaps) {
+        if (err) return callback(err);
+        else pushSitemaps(path, sitemaps, callback);
     });
-}
+};
+
+function pushSitemaps(path, sitemaps, callback) {
+    var bucket = config.get("S3_BUCKET");
+    async.map(_.range(sitemaps.length), function (i, cb) {
+        var s3path = path + i + ".xml.gz";
+        api.s3.put(bucket, sitemaps[i], s3path, "text/xml", "gzip", function (err) {
+            cb(err, s3path);
+        });
+    }, function (err, paths) {
+        if (err) return callback(err);
+
+        var sitemapIndex = generateSitemapIndex(paths, new Date());
+        api.s3.put(bucket, sitemapIndex, path + ".xml", "text/xml", null, callback);
+    });
+};
 
 function latestSitemaps(limit, query, news, partials, callback) {
     api.article.getByDate(limit, query, function (err, results, nextKey) {
@@ -65,19 +83,18 @@ function latestSitemaps(limit, query, news, partials, callback) {
     });
 }
 
-function generateSitemapIndex(files, date, callback) {
+function generateSitemapIndex(files, date) {
     var doc = builder.create();
     var root = doc.begin("sitemapindex", { version: "1.0", encoding: "UTF-8" }).
         att("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9");
-    async.forEach(files, function (path, cb) {
-        var prefix = "http://www." + config.get('DOMAIN_NAME') + "/";
+    var prefix = config.get("CLOUDFRONT_DISTRIBUTION");
+
+    _.each(files, function (path) {
         root.ele("sitemap").
-            ele("loc", prefix + path.replace(/public\//g,"") + ".gz").up().
+            ele("loc", prefix + path).up().
             ele("lastmod", dateFormat(date, "yyyy-mm-dd"));
-        cb();
-    }, function (err) {
-        callback(err, doc.toString());
     });
+    return doc.toString();
 }
 
 function generateSitemap(docs, news) {

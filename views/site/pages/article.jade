@@ -22,12 +22,14 @@
                         img.main-image(src=doc.images.LargeRect.url)
         
                     - if (doc.images && doc.images.LargeRect && doc.images.Original)
-                        p.photo-credit #{doc.images.Original.photographer}
-                        p.photo-caption #{doc.images.Original.caption}
+                        .clearfix
+                            p.photo-credit #{doc.images.Original.photographer}
+                            p.photo-caption #{doc.images.Original.caption}
         
-                    .metadata
-                        span.credit
-                            | By !{doc.authorsHtml} &nbsp; | &nbsp; #{doc.date}
+                    p.byline
+                        span.author By !{doc.authorsHtml} 
+                        span.sep |
+                        span.date #{doc.date}
         
                     .article-body
                         .social-media

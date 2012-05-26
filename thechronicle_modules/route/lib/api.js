@@ -10,7 +10,7 @@ var _ = require('underscore');
 *@params http request, http response
 */
 siteApi.listAll = function (req, res, next) {
-    api.docsByDate(null, null, function(err, docs) {
+    api.article.getByDate(null, null, function(err, docs) {
         if (err) next(err);
         else {
             var result = _.map(docs, function (doc) {
@@ -28,7 +28,7 @@ siteApi.listAll = function (req, res, next) {
 siteApi.listSection = function (req, res, next) {
     var sectionArray = req.params.toString().split('/');
     var start = req.query.start && JSON.parse(req.query.start);
-    api.taxonomy.docs(sectionArray, 15, start, function (err, docs, nextKey) {
+    api.article.getByTaxonomy(sectionArray, 15, start, function (err, docs, nextKey) {
         if (err) next(err);
         else {
             docs = _.map(docs, function (doc) {
@@ -45,7 +45,7 @@ siteApi.listSection = function (req, res, next) {
 *@params http request, http response
 */
 siteApi.articleByUrl = function (req, res, next) {
-    api.articleForUrl(req.params.url, function (err, doc) {
+    api.article.getByUrl(req.params.url, function (err, doc) {
         if (err) next(err);
         else {
             var result = { 
@@ -76,11 +76,11 @@ siteApi.search = function (req, res, next) {
 };
 
 siteApi.staff = function (req, res, next) {
-    var nameQuery = req.params.query.replace('-', ' ');
-    var page = (req.query.start && parseInt(req.query.start)) || 1;
-    api.search.docsByAuthor(nameQuery, 'desc', '', page, function (err, docs, facets) {
+    var name = req.params.query;
+    var start = req.query.start && JSON.parse(req.query.start);
+    api.article.getByAuthor(name, 1, start, function (err, docs, nextDoc) {
         if (err) next(err);
-        else res.json({docs: docs, facets: facets, next: page + 1});
+        else res.json({docs: docs, next: nextDoc});
     });
 };
 
@@ -121,21 +121,21 @@ siteApi.readArticle = function (req, res, next) {
 };
 
 siteApi.createArticle = function (req, res, next) {
-    api.addDoc(req.body, function (err, _res) {
+    api.article.add(req.body, function (err, _res) {
         if (err) res.send(err, 500);
         else res.send({url: _res});
     });
 };
 
 siteApi.updateArticle = function (req, res, next) {
-    api.editDoc(req.body.id, req.body, function (err, _res) {
+    api.article.edit(req.body.id, req.body, function (err, _res) {
         if (err) res.send(err, 500);
         else res.send({url: _res});
     });
 };
 
 siteApi.deleteArticle =  function (req, res, next) {
-    api.deleteDoc(req.params.id, req.body.rev, function (err) {
+    api.article.delete(req.params.id, req.body.rev, function (err) {
         if (err) res.send(err, 500);
         else res.send({status: 'success'});
     });

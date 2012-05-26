@@ -20,19 +20,16 @@ exports.preinit = function (app) {
 exports.init = function (app) {
 
     app.namespace('/api', function () {
-        app.get('/all', siteApi.listAll);
-        app.get('/section/*', siteApi.listSection);
+        app.get('/all', siteApi.articlesBySection);
+        app.get('/section/*', siteApi.articlesBySection);
         app.get('/article/url/:url', siteApi.articleByUrl);
-        app.get('/search', siteApi.search);
-        app.get('/staff/:query', siteApi.staff);
+        app.get('/search', siteApi.searchArticles);
+        app.get('/staff/:query', siteApi.articlesByAuthor);
 
         app.get('/article/:id', siteApi.readArticle);
         app.post('/article', api.site.checkAdmin, siteApi.createArticle);
         app.put('/article/:id', api.site.checkAdmin, siteApi.updateArticle);
         app.del('/article/:id', api.site.checkAdmin, siteApi.deleteArticle);
-
-        app.post('/group/add', api.site.checkAdmin, siteApi.addGroup);
-        app.post('/group/remove', api.site.checkAdmin, siteApi.removeGroup);
     });
 
     app.get('/m/*', site.mobile);

@@ -91,8 +91,8 @@ admin.manage = function (req, res, next) {
     var dbName = api.getDatabaseName();
     var dbUrl = api.getDatabaseUrl() + '/_utils/document.html?' + dbName;
 
-    var section = req.params.section ? [ req.params.section ] : null;
-    var start = req.query.start ? JSON.parse(req.query.start) : null;
+    var section = req.params.section && [ req.params.section ];
+    var start = req.query.start && JSON.parse(req.query.start);
 
     api.article.getByTaxonomy(section, null, start, function (err, docs, nextKey) {
         if (err) next(err);

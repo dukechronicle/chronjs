@@ -17,6 +17,16 @@ article.getDuplicates = function (limit, callback) {
     db.view("articles/duplicates", query, callback);
 };
 
+article.getByUrl = function (url, callback) {
+    var query = {
+        startkey: [url],
+        endkey: [url, {}],
+        include_docs: true
+    };
+
+    db.view("articles/urls", query, callback);
+};
+
 article.getByDate = function (limit, start, callback) {
     var query = {
         descending: true,

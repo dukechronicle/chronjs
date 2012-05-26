@@ -581,6 +581,7 @@ function modifyArticleForDisplay(doc) {
             }
         }
     }
+    doc.renderedBody = api.article.renderBody(doc.body);
     
     return doc;
 }

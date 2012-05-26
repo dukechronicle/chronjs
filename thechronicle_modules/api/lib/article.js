@@ -31,10 +31,6 @@ article.add = function (article, callback) {
         article.updated = article.created || unix_timestamp;
         article.urls = [ url ];
         article.indexedBySolr = api.search.getIndexVersion();
-        article.renderedBody = renderBody(article.body);
-
-        // strip all html tags from the teaser
-        article.teaser = article.teaser.replace(/<(.|\n)*?>/g,"");
 
         db.save(article, function(err, res) {
             if (err) return callback(err);
@@ -83,7 +79,7 @@ article.getDuplicates = function (limit, callback) {
         var lastDoc = {};
         var addedLastDoc = false;
 
-        for(var i = 0; i < docs.length; i ++) {
+        for (var i = 1; i < docs.length; i++) {
             var doc = docs[i].value;
             
             // if the titles are the same, and the documents were created within a day of eachother
@@ -102,40 +98,30 @@ article.getDuplicates = function (limit, callback) {
 };
 
 article.getByUrl = function(url, callback) {
-    var query = {
-        startkey: [url],
-        endkey: [url, {}],
-        include_docs: true,
-        limit: 20
-    };
-
-    db.view("articles/urls", query, function(err, docs) {
-
+    db.article.getByUrl(url, function(err, res) {
         if (err) return callback(err);
-        if (docs.length === 0) {
+
+        if (res.length == 0) {
             return callback("Article does not exist");
         }
-        var docTypeKey = 1;
-        var aggregateDoc = {};
 
-        docs.forEach(function(key, doc) {
-            var docType = key[docTypeKey];
+        var doc = {};
+        res.forEach(function (key, value) {
+            var docType = key[1];
 
-            if (docType === 'article') {
-                aggregateDoc = doc;
-                aggregateDoc.images = {};
-            } else if (docType === 'images') {
-                if(doc.url) doc.url = api.s3.getCloudFrontUrl(doc.url);
-                else if(doc._id.url) doc._id.url = api.s3.getCloudFrontUrl(doc._id.url);                     
-
-                var imageType = key[docTypeKey+ 1];
-                // TODO this should NEVER happen
-
-                aggregateDoc.images[imageType] = doc;
+            if (docType === "article") {
+                doc = value;
+                doc.images = {};
+            }
+            else if (docType === "images") {
+                if (value.url) {
+                    value.url = api.s3.getCloudFrontUrl(value.url);
+                }
+                var imageType = key[2];
+                doc.images[imageType] = value;
             }
         });
-
-        callback(null, aggregateDoc);
+        callback(null, doc);
     });
 };
 
@@ -153,6 +139,16 @@ article.getByTaxonomy = function (taxonomyPath, limit, start, callback) {
     taxonomyPath = taxonomyPath || [];
     taxonomyPath = _.map(taxonomyPath, function (s) { return s.toLowerCase() });
     db.article.getByTaxonomy(taxonomyPath, limit, start, callbackLastKey(limit, callback));
+};
+
+article.renderBody = function (body) {
+    _.each(VIDEO_PLAYERS, function (tag, name) {
+        var pattern = new RegExp(sprintf(VIDEO_REGEX_FORMAT, name), 'g');
+        body = body.replace(pattern, function(match) {
+            return sprintf(tag, RegExp.$2);
+        });
+    });
+    return md(body);
 };
 
 function callbackLastKey (limit, callback) {
@@ -205,16 +201,6 @@ function URLify(s, maxChars) {
     s = s.replace(/[-\s]+/g, "-");   // convert spaces to hyphens
     s = s.toLowerCase();             // convert to lowercase
     return s.substring(0, maxChars);// trim to first num_chars chars
-}
-
-function renderBody(body) {
-    _.each(VIDEO_PLAYERS, function (tag, name) {
-        var pattern = new RegExp(sprintf(VIDEO_REGEX_FORMAT, name), 'g');
-        body = body.replace(pattern, function(match) {
-            return sprintf(tag, RegExp.$2);
-        });
-    });
-    return md(body);
 }
 
 function getAvailableUrl(url, n, callback) {

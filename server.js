@@ -144,8 +144,8 @@ function runSite(callback) {
         }
         else {
             if (process.env.NODE_ENV === 'production') {
-                sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
-                    if (err) log.error("Couldn't build news sitemap: " + err);
+                sitemap.latestNewsSitemap('/sitemaps/news_sitemap', function (err) {
+                    if (err) log.warning("Couldn't build news sitemap: " + err);
                 });
 
                 builder.pushAssets(viewOptions.paths, function (err, paths) {

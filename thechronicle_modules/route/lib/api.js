@@ -78,9 +78,9 @@ siteApi.search = function (req, res, next) {
 siteApi.staff = function (req, res, next) {
     var name = req.params.query;
     var start = req.query.start && JSON.parse(req.query.start);
-    api.article.getByAuthor(name, 1, start, function (err, docs, nextDoc) {
+    api.article.getByAuthor(name, 10, start, function (err, docs, nextKey) {
         if (err) next(err);
-        else res.json({docs: docs, next: nextDoc});
+        else res.json({docs: docs, next: JSON.stringify(nextKey)});
     });
 };
 

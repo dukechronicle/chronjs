@@ -17,24 +17,19 @@ article.getDuplicates = function (limit, callback) {
     db.view("articles/duplicates", query, callback);
 };
 
-article.getByDate = function (limit, start, callback) {
+article.getByUrl = function (url, callback) {
     var query = {
-        descending: true,
+        startkey: [url],
+        endkey: [url, {}],
+        include_docs: true
     };
 
-    if (limit)
-        query.limit = limit;
-    if (start && _.isObject(start) && start.key)
-        query.startkey = start.key;
-    if (start && _.isObject(start) && start.id)
-        query.startkey_docid = start.id;
-    if (start && _.isString(start))
-        query.startkey = start;
-
-    db.view('articles/date', query, callback);
+    db.view("articles/urls", query, callback);
 };
 
-article.getByTaxonomy = function (taxonomyTerm, limit, start, callback) {
+article.getByTaxonomy = function (taxonomyTerm, limit, params, callback) {
+    taxonomyTerm = _.map(taxonomyTerm, function (s) { return s.toLowerCase() });
+
     var query = {
         descending: true,
         startkey: [taxonomyTerm, {}],
@@ -43,20 +38,26 @@ article.getByTaxonomy = function (taxonomyTerm, limit, start, callback) {
 
     if (limit)
         query.limit = limit;
-    if (start && start.key)
-        query.startkey = start.key;
-    if (start && start.id)
-        query.startkey_docid = start.id;
+    if (params && params.key)
+        query.startkey = params.key;
+    if (params && params.id)
+        query.startkey_docid = params.id;
+
+    // params.last may be an ending date -- used by news sitemap
+    if (params && params.last)
+        query.endkey = [taxonomyTerm, params.last]
 
     db.view('articles/taxonomy', query, callback);
 };
 
-article.getByAuthor = function (author, limit, start, callback) {
+article.getByAuthor = function (author, taxonomy, limit, start, callback) {
+    taxonomy = _.map(taxonomy, function (s) { return s.toLowerCase() });
     author = author.toLowerCase().replace(/-/g, ' ');
+
     var query = {
         descending: true,
-        startkey: [author, {}],
-        endkey: [author]
+        startkey: [author, taxonomy, {}],
+        endkey: [author, taxonomy]
     };
 
     if (limit)
@@ -66,5 +67,5 @@ article.getByAuthor = function (author, limit, start, callback) {
     if (start && start.id)
         query.startkey_docid = start.id;
 
-    db.view('articles/authors', query, callback);
+    db.view('articles/authors_and_taxonomy', query, callback);
 };

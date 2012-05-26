@@ -29,7 +29,7 @@
         "hiredis":"*",
         "connect-redis":"*",
 
-        "discount":"*",
+        "discount": "0.2.x",
 
         "solr":"0.2.x",
 

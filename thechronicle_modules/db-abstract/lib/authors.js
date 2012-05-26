@@ -1,12 +1,14 @@
 var db = require('./db-abstract');
+var log = require('../../log');
+
 var _ = require('underscore');
 
 var authors = exports;
 
 authors.getInfo = function(authorName, callback) {
-
+    authorName = authorName.toLowerCase().replace(/-/g, ' ');
     var query = {
-        key:authorName.toLowerCase(),
+        key:authorName,
         include_docs:true
     };
 
@@ -40,7 +42,7 @@ authors.getColumnists = function(callback) {
 };
 
 authors.getLatest = function (authorName, taxonomy, count, callback) {
-    authorName = authorName.toLowerCase();
+    authorName = authorName.toLowerCase().replace(/-/g, ' ');
 
     var query = {
         startkey:[authorName, {}],

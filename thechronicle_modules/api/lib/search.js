@@ -148,7 +148,8 @@ search.unindexArticle = function(id, callback) {
 // don't call this. only used by environment maker
 // removes all indexes from solr for the db we are using and sets all documents in the db we are using to not being indexed by solr
 search.removeAllDocsFromSearch = function(callback) {
-    api.docsByDate(null, null, function(err, response) {
+    // TODO: we should probably think about a better way of getting all docs (null as the limit defaults to 25)
+    api.article.getByDate(1000000, null, function(err, response) {
         response = response || {};
         async.forEach(response, function(row, cb) {
             client.del(createSolrIDFromDBID(row._id), null, function(err, resp) {

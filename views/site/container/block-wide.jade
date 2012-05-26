@@ -4,9 +4,9 @@ include container-helpers
     mixin vertical-label
     .rounded
         a.hover.highlight-bottom(href=story.url)
-            - if (story.images && story.images.ThumbRect)
+            - if (story.images && story.images.ThumbWide)
                 .image-container
-                    img.fit-image(src=story.images.ThumbRect.url)
+                    img.fit-image(src=story.images.ThumbWide.url)
             .content-container
                 h4.title #{story.title}
                 p.teaser #{story.teaser}

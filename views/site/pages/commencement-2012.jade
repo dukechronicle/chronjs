@@ -1,28 +1,31 @@
 #commencement-2012
 
-    .lookbacks.clearfix
+    .lookbacks.clearfix.align-group
         - each story, year in data.lookbacks
-            !=partial('../container/block', { story: story, title: year, imageType: "rect" })
+            - if (year == "senior")
+                .span-3.last.align-element(data-aligntarget=".rounded")!=partial('../container/block-teaser', { story: story, title: year })
+            - else
+                .span-3.align-element(data-aligntarget=".rounded")!=partial('../container/block-teaser', { story: story, title: year })
 
     .middle.clearfix
-        <object class="embed-slideshow" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="400" height="300"><param name="movie" value="http://www.photoshelter.com/swf/CSlideShow.swf?feedSRC=http%3A//dukechronicle.photoshelter.com/gallery/2012-05-11-Decades-at-Duke/G0000pLV_hDu21UY%3Ffeed%3Djson"></param><param name="wmode" value="opaque"></param><param name="allowScriptAccess" value="always"></param><param name="allowFullScreen" value="true"></param><param name="bgColor" value="#AAAAAA"></param><param name="flashvars" value="target=_self&f_l=f&f_fscr=t&f_tb=t&f_bb=t&f_bbl=f&f_fss=f&f_2up=t&f_crp=t&f_wm=t&f_s2f=t&f_emb=t&f_cap=t&f_sln=t&imgT=iptct&cred=iptc&trans=xfade&f_link=t&f_smooth=f&f_mtrx=t&tbs=5000&f_ap=t&f_up=f&btype=old&bcolor=%23CCCCCC"></param><!--[if !IE]><!--><object type="application/x-shockwave-flash" data="http://www.photoshelter.com/swf/CSlideShow.swf?feedSRC=http%3A//dukechronicle.photoshelter.com/gallery/2012-05-11-Decades-at-Duke/G0000pLV_hDu21UY%3Ffeed%3Djson" width="400" height="300" ><param name="wmode" value="opaque"></param><param name="allowScriptAccess" value="always"></param><param name="allowFullScreen" value="true"></param><param name="bgColor" value="#AAAAAA"></param><param name="flashvars" value="target=_self&f_l=f&f_fscr=t&f_tb=t&f_bb=t&f_bbl=f&f_fss=f&f_2up=t&f_crp=t&f_wm=t&f_s2f=t&f_emb=t&f_cap=t&f_sln=t&imgT=iptct&cred=iptc&trans=xfade&f_link=t&f_smooth=f&f_mtrx=t&tbs=5000&f_ap=t&f_up=f&btype=old&bcolor=%23CCCCCC"></param><!--<![endif]--><a href="http://dukechronicle.photoshelter.com/gallery/2012-05-11-Decades-at-Duke/G0000pLV_hDu21UY"><img src="http://www.photoshelter.com/gal-kimg-get/G0000pLV_hDu21UY/s/400/300" alt="" /></a><!--[if !IE]><!--></object><!--<![endif]--></object>
+        .rounded.left
+            .image-container
+                <object class="embed-slideshow" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="400" height="300"><param name="movie" value="http://www.photoshelter.com/swf/CSlideShow.swf?feedSRC=http%3A//dukechronicle.photoshelter.com/gallery/2012-05-11-Decades-at-Duke/G0000pLV_hDu21UY%3Ffeed%3Djson"></param><param name="wmode" value="opaque"></param><param name="allowScriptAccess" value="always"></param><param name="allowFullScreen" value="true"></param><param name="bgColor" value="#AAAAAA"></param><param name="flashvars" value="target=_self&f_l=f&f_fscr=t&f_tb=t&f_bb=t&f_bbl=f&f_fss=f&f_2up=t&f_crp=t&f_wm=t&f_s2f=t&f_emb=t&f_cap=t&f_sln=t&imgT=iptct&cred=iptc&trans=xfade&f_link=t&f_smooth=f&f_mtrx=t&tbs=5000&f_ap=t&f_up=f&btype=old&bcolor=%23CCCCCC"></param><!--[if !IE]><!--><object type="application/x-shockwave-flash" data="http://www.photoshelter.com/swf/CSlideShow.swf?feedSRC=http%3A//dukechronicle.photoshelter.com/gallery/2012-05-11-Decades-at-Duke/G0000pLV_hDu21UY%3Ffeed%3Djson" width="400" height="300" ><param name="wmode" value="opaque"></param><param name="allowScriptAccess" value="always"></param><param name="allowFullScreen" value="true"></param><param name="bgColor" value="#AAAAAA"></param><param name="flashvars" value="target=_self&f_l=f&f_fscr=t&f_tb=t&f_bb=t&f_bbl=f&f_fss=f&f_2up=t&f_crp=t&f_wm=t&f_s2f=t&f_emb=t&f_cap=t&f_sln=t&imgT=iptct&cred=iptc&trans=xfade&f_link=t&f_smooth=f&f_mtrx=t&tbs=5000&f_ap=t&f_up=f&btype=old&bcolor=%23CCCCCC"></param><!--<![endif]--><a href="http://dukechronicle.photoshelter.com/gallery/2012-05-11-Decades-at-Duke/G0000pLV_hDu21UY"><img src="http://www.photoshelter.com/gal-kimg-get/G0000pLV_hDu21UY/s/400/300" alt="" /></a><!--[if !IE]><!--></object><!--<![endif]--></object>
 
-        .container.clearfix.calendar
+        .calendar.left(style="margin-left:30px;")
             .vertical-container
                 h2.vertical Calendar
         
-            a.rounded-hover.hover.highlight-right(href="/article/commencement-2012-event-calendar")
+            .rounded(style="width:542px;height:306px;")
                 .content-container
-                    ul
-                        - each events, day in data.events
-                            li.day
-                                h2.date #{day}
-                                ul.events
-                                    - each event in events
-                                        li
-                                            p #{event}
+                    - each events, day in data.events
+                        a.hover.highlight-right(href="/article/commencement-2012-event-calendar")
+                            h3.date= day
+                            ul.events
+                                - each event in events
+                                    li: p= event
 
     .bottom.clearfix
         - each story in data.articles
-            !=partial('../container/block-wide-image', { title: "", story: story })
-        .lighten.advertisement!=partial('ad/medium-rect', { title: "" })
+            .span-4!=partial('../container/block-wide', { story: story })
+        .lighten.span-4.last!=partial('../container/ad/medium-rect', { title: "Advertisement" })

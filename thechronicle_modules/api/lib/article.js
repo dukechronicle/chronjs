@@ -7,7 +7,7 @@ var log = require('../../log');
 var redis = require('../../redisclient');
 var util = require("../../util");
 
-var md = require('node-markdown').Markdown;
+var md = require('discount');
 var sprintf = require('sprintf').sprintf;
 var _ = require("underscore");
 
@@ -149,7 +149,7 @@ article.renderBody = function (body) {
             return sprintf(tag, RegExp.$2);
         });
     });
-    return md(body);
+    return md.parse(body);
 };
 
 function callbackLastKey (limit, callback) {

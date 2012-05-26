@@ -258,14 +258,16 @@ site.getOpinionPageContent = function(callback) {
     },
 
     function(cb) {// 3
-        api.authors.getLatest("Editorial Board", "Opinion", 5, cb);
+        api.article.getByTaxonomy(['Opinion', 'Editorial Board'], 5, null, function (err, res) {
+            cb(err, res);
+        });
     },
 
     function(cb) {//4
         api.authors.getColumnists(function(err, columnists) {
             async.map(columnists, function(columnist, _callback) {
-                api.authors.getLatest(columnist.user || columnist.name, "Opinion", 7, function(err, res) {
-                    columnist.stories = res;
+                api.authors.getLatest(columnist.user || columnist.name, ['Opinion'], 7, function(err, res) {
+                    columnist.stories = modifyArticlesForDisplay(res);
                     _callback(err, columnist);
                 })
             }, cb);
@@ -298,7 +300,7 @@ site.getOpinionPageContent = function(callback) {
                     });
                 }
                 model.Blog = results[2];
-                model.EditorialBoard = results[3];
+                model.EditorialBoard = modifyArticlesForDisplay(results[3]);
                 model.Columnists = {};
                 // assign each columnist an object containing name and stories to make output jade easier
                 results[4].forEach(function(columnist, index) {
@@ -439,7 +441,7 @@ site.getSectionContent = function (params, callback) {
 site.getAuthorContent = function(name, callback) {
     async.parallel([
         function(cb) {
-            api.article.getByAuthor(name, null, null, function(err, docs, next) {
+            api.article.getByAuthor(name, null, null, null, function(err, docs, next) {
                 if(err) cb(err);
                 else cb(null, {docs:modifyArticlesForDisplay(docs), next:next});
             });

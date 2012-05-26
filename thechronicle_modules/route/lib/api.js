@@ -56,7 +56,7 @@ siteApi.searchArticles = function (req, res, next) {
 siteApi.articlesByAuthor = function (req, res, next) {
     var name = req.params.query;
     var start = req.query.start && JSON.parse(req.query.start);
-    api.article.getByAuthor(name, RESULTS_LIMIT, start, function (err, docs, nextKey) {
+    api.article.getByAuthor(name, null, RESULTS_LIMIT, start, function (err, docs, nextKey) {
         if (err) next(err);
         else res.json({docs: docs, next: JSON.stringify(nextKey)});
     });

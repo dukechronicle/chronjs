@@ -27,24 +27,9 @@ article.getByUrl = function (url, callback) {
     db.view("articles/urls", query, callback);
 };
 
-article.getByDate = function (limit, start, callback) {
-    var query = {
-        descending: true,
-    };
-
-    if (limit)
-        query.limit = limit;
-    if (start && _.isObject(start) && start.key)
-        query.startkey = start.key;
-    if (start && _.isObject(start) && start.id)
-        query.startkey_docid = start.id;
-    if (start && _.isString(start))
-        query.startkey = start;
-
-    db.view('articles/date', query, callback);
-};
-
 article.getByTaxonomy = function (taxonomyTerm, limit, params, callback) {
+    taxonomyTerm = _.map(taxonomyTerm, function (s) { return s.toLowerCase() });
+
     var query = {
         descending: true,
         startkey: [taxonomyTerm, {}],
@@ -65,12 +50,14 @@ article.getByTaxonomy = function (taxonomyTerm, limit, params, callback) {
     db.view('articles/taxonomy', query, callback);
 };
 
-article.getByAuthor = function (author, limit, start, callback) {
+article.getByAuthor = function (author, taxonomy, limit, start, callback) {
+    taxonomy = _.map(taxonomy, function (s) { return s.toLowerCase() });
     author = author.toLowerCase().replace(/-/g, ' ');
+
     var query = {
         descending: true,
-        startkey: [author, {}],
-        endkey: [author]
+        startkey: [author, taxonomy, {}],
+        endkey: [author, taxonomy]
     };
 
     if (limit)
@@ -80,5 +67,5 @@ article.getByAuthor = function (author, limit, start, callback) {
     if (start && start.id)
         query.startkey_docid = start.id;
 
-    db.view('articles/authors', query, callback);
+    db.view('articles/authors_and_taxonomy', query, callback);
 };

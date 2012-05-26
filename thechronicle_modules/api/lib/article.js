@@ -30,7 +30,8 @@ article.add = function (article, callback) {
         article.created = article.created || unix_timestamp;
         article.updated = article.created || unix_timestamp;
         article.urls = [ url ];
-        article.indexedBySolr = api.search.getIndexVersion();
+        article.indexedBySolr = api.search.getIndexVersion()
+        article.renderedBody = api.article.renderBody(article.body);
 
         db.save(article, function(err, res) {
             if (err) return callback(err);
@@ -48,8 +49,7 @@ article.edit = function (id, article, callback) {
     api.docsById(id, function(err, res) {
         if (err) return callback(err);
 
-        if (article.body)
-            article.renderedBody = renderBody(article.body);
+        article.renderedBody = api.article.renderBody(article.body);
         article.updated = util.unixTimestamp();            
         
         if (article.title && (URLify(article.title) !=  URLify(res.title))) {
@@ -125,9 +125,10 @@ article.getByUrl = function(url, callback) {
     });
 };
 
-article.getByAuthor = function (author, limit, start, callback) {
+article.getByAuthor = function (author, taxonomy, limit, start, callback) {
     limit = (limit || RESULTS_PER_PAGE) + 1;
-    db.article.getByAuthor(author, limit, start, callbackLastKey(limit, callback));
+    taxonomy = taxonomy || [];
+    db.article.getByAuthor(author, taxonomy, limit, start, callbackLastKey(limit, callback));
 };
 
 article.getByDate = function (limit, start, callback) {

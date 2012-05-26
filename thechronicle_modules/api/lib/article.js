@@ -145,12 +145,12 @@ article.getByAuthor = function (author, limit, start, callback) {
 };
 
 article.getByDate = function (limit, start, callback) {
-    limit = (limit || RESULTS_PER_PAGE) + 1;
-    db.article.getByDate(limit, start, callbackLastKey(limit, callback));
+    article.getByTaxonomy([], limit, start, callback);
 };
 
 article.getByTaxonomy = function (taxonomyPath, limit, start, callback) {
     limit = (limit || RESULTS_PER_PAGE) + 1;
+    taxonomyPath = taxonomyPath || [];
     taxonomyPath = _.map(taxonomyPath, function (s) { return s.toLowerCase() });
     db.article.getByTaxonomy(taxonomyPath, limit, start, callbackLastKey(limit, callback));
 };

@@ -102,6 +102,7 @@ exports.init = function (app) {
         app.get('/', api.site.checkAdmin, admin.index);
         app.get('/newsletter', api.site.checkAdmin, admin.newsletter);
         app.get('/manage', api.site.checkAdmin, admin.manage);
+        app.get('/manage/:section', api.site.checkAdmin, admin.manage);
         app.get('/k4export', api.site.checkAdmin, admin.k4export);
         app.post('/k4export', api.site.checkAdmin, admin.k4exportData);
         app.post('/newsletter', api.site.checkAdmin, admin.newsletterData);

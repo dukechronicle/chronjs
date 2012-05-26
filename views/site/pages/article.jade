@@ -2,7 +2,7 @@
     nav.subnav.clearfix
         - each parent in parentPaths
             a.hover(href='/section'+parent.path+'/'+parent.name)
-                h2 #{parent.name}
+                h2= parent.name
 
     article.clearfix
         .span-8
@@ -23,13 +23,13 @@
         
                     - if (doc.images && doc.images.LargeRect && doc.images.Original)
                         .clearfix
-                            p.photo-credit #{doc.images.Original.photographer}
-                            p.photo-caption #{doc.images.Original.caption}
+                            p.photo-credit= doc.images.Original.photographer
+                            p.photo-caption= doc.images.Original.caption
         
                     p.byline
-                        span.author By !{doc.authorsHtml} 
+                        span.author By !{doc.authorsHtml}
                         span.sep |
-                        span.date #{doc.date}
+                        span.date= doc.date
         
                     .article-body
                         .social-media

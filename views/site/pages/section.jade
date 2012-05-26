@@ -9,18 +9,21 @@ nav.subnav.clearfix
                 h2 #{subsectionName}
 #section
     .span-8
-        for doc in docs
+        - each doc in docs
             .rounded.document
                 a.hover(href=doc.url)
                     .content-container
-                        h3.title !{doc.title}
+                        h3.title!= doc.title
                         .dateline.subtitle
-                            span.date !{doc.date}
-                            span.author !{doc.authors}
-                        p.teaser !{doc.teaser}
-        - if(docs.length > 0)
-            div.result.rounded-hover#loadImage(style="height:300px;", data-key=JSON.stringify(next), data-url="/api/section/#{taxonomyPath}")
-                img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto;")
+                            span.date!= doc.date
+                            span.author!= doc.authors
+                        p.teaser!= doc.teaser
+
+        - if (docs.length == 0)
+            div No articles found
+        - else
+            #loadImage(style="height: 150px;", data-key="2", data-url="/api/search/?q=#{query}&sort=#{sort}&order=#{order}&facets=#{currentFacets}")
+                img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto")
 
     .span-4.last
         - if (typeof popular != 'undefined' && popular.length > 0)

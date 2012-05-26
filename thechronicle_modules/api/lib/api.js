@@ -62,3 +62,6 @@ api.recreateDatabase = function(confirmCode, callback) {
 api.getDatabaseName = db.getDatabaseName;
 api.getDatabaseHost = db.getDatabaseHost;
 api.getDatabasePort = db.getDatabasePort;
+api.getDatabaseUrl = function () {
+    return 'http://' + api.getDatabaseHost() + ':' + api.getDatabasePort();
+};

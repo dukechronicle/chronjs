@@ -1,6 +1,6 @@
 #frontpage
-    #top.clearfix
-        .content.span-8
+    #top.clearfix.align-group
+        .content.span-8.align-element(data-aligntarget="#headlines .rounded")
             if (model["Top Headline"])
                 #top-headline!=partial('../container/story-list/teaser', {stories: model["Top Headline"]})
             if (model.Breaking)
@@ -15,10 +15,7 @@
                     .lighten.span-2#print-edition!=partial('../container/image', model.printEdition)
                 .lighten.span-6.last!=partial('../container/ad/full-banner', {title: "Ad"})
 
-        .sidebar.span-4.last
-            //
-                if (model.twitter)
-                    .twitter!=partial('../container/twitter', model.twitter)
+        .sidebar.span-4.last.align-element(data-aligntarget="#popular .rounded")
             if (model.popular)
                 #popular.title-small!=partial('../container/story-list/subhead', {title: "What's Hot", stories: model.popular})
             if (model.Opinion)

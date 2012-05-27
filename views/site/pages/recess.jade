@@ -5,25 +5,20 @@
         .span-6
             if (model.Featured && model.Featured[0])
                 !=partial('../container/featured-image.jade', {title: "", story: model.Featured[0]})
-        .span-6.last
-            .clearfix.align-group
-                if (model.Featured[1])
-                    .span-3.align-element(data-aligntarget=".rounded")!=partial('../container/block', {title: "", story: model.Featured[1], imageType: "rect"})
-                if (model.Featured[2])
-                    .span-3.last.align-element(data-aligntarget=".rounded")!=partial('../container/block', {title: "", story: model.Featured[2], imageType: "rect"})
             .lighten!=partial('../container/ad/full-banner', {title: "Ad"})
+        .span-3
+            if (model.Featured[1])
+                !=partial('../container/block', {title: "", story: model.Featured[1]})
+            if (model.Featured[2])
+                !=partial('../container/block', {title: "", story: model.Featured[2]})
+        .span-3.last
+            if (model.Blog)
+                .title-small!=partial('../container/story-list', {title: "Recess Blog", stories: model.Blog})
+            if (model.Stories)
+                - each story in model.Stories
+                    !=partial('../container/block-teaser', {story:story})
 
     #middle.clearfix
-        if (model.Stories)
-            .bottom.clearfix.align-group
-                if (model.Stories[0])
-                    .span-3.align-element(data-aligntarget=".rounded")!=partial('../container/block-teaser', {story:model.Stories[0]})
-                if (model.Stories[1])
-                    .span-3.align-element(data-aligntarget=".rounded")!=partial('../container/block-teaser', {story:model.Stories[1]})
-                if (model.Stories[2])
-                    .span-3.align-element(data-aligntarget=".rounded")!=partial('../container/block-teaser', {story:model.Stories[2]})
-                if (model.Stories[3])
-                    .span-3.last.align-element(data-aligntarget=".rounded")!=partial('../container/block-teaser', {story:model.Stories[3]})
         if (model.Music)
              #reviews!=partial('../container/row-feature', {title: 'Music', stories: model.Music})
         if (model.Film)

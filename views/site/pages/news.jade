@@ -11,17 +11,18 @@
                       !=partial('../container/block-horizontal', {title: "", story: story})
 
         .span-6.last
-            .top.align-group
+            .top.align-group.clearfix
                 - if (model["Right Headlines"])
                     .span-3.title-medium.align-element(data-alignTarget=".rounded")!=partial('../container/story-list-featured', {title: "Headlines", stories: model["Right Headlines"]})
                 - if (model.Blog)
                     .span-3.last.title-small.align-element(data-alignTarget=".rounded")!=partial('../container/story-list-image', {title: "News Blog", stories: model.Blog, image:'http://d2sug25c5hnh7r.cloudfront.net/images/blogs/newsblog.jpg', imageHref:'http://bigblog.chronicleblogs.com/news'})
 
-            .middle
+            .middle.clearfix
                 - if (model.popular)
                     .span-2.title-small!=partial('../container/story-list-numbered', {title: "Popular", stories: model.popular})
                 - if (model.adFullRectangle)
                     .span-4.last.lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
+            .lighten!=partial('../container/ad/full-banner', {title: "Ad"})
 
     .span-12.last
         !=partial('../container/row-multimedia', {title: "Multimedia", multimedia: model.multimedia.News})

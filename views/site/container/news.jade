@@ -5,13 +5,11 @@
     .rounded
         .top
             a.hover.highlight-left.clearfix(href='#{stories[0].url}')
-                .content-container.left-column.span-3
+                .content-container
+                    - if (stories[0].images && stories[0].images.ThumbRect)
+                        img(src=stories[0].images.ThumbRect.url)
                     h4 #{stories[0].title}
                     p.teaser #{stories[0].teaser}
-                - if (stories[0].images && stories[0].images.ThumbRect)
-                    .content-container.clearfix.span-3.last
-                        img.right(src=stories[0].images.ThumbRect.url)
-    
     
         .bottom.clearfix
             .span-3.left-column.content-container

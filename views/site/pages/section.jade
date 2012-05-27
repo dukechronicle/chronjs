@@ -11,7 +11,7 @@ nav.subnav.clearfix
     .span-8
         - each doc in docs
             .rounded.document
-                a.hover(href=doc.url)
+                a.hover.url(href=doc.url)
                     .content-container
                         h3.title!= doc.title
                         .dateline.subtitle
@@ -22,7 +22,7 @@ nav.subnav.clearfix
         - if (docs.length == 0)
             div No articles found
         - else
-            #loadImage(style="height: 150px;", data-key="2", data-url="/api/search/?q=#{query}&sort=#{sort}&order=#{order}&facets=#{currentFacets}")
+            #loadImage(style="height: 150px;", data-key=JSON.stringify(next), data-url="/api/section/#{taxonomyPath}")
                 img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto")
 
     .span-4.last

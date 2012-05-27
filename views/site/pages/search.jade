@@ -4,7 +4,7 @@
     .span-8
         - each doc in docs
             .rounded.document
-                a.hover(href=doc.url)
+                a.hover.url(href=doc.url)
                     .content-container
                         h3.title!= doc.title
                         .dateline.subtitle

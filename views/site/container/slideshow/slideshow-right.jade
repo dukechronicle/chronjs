@@ -1,22 +1,18 @@
 .slideshow-right
-    .caret
-        b.caret-shadow
-        b.caret-white
-    .slides
-        .slides-inner
-            for story, index in stories
-                a(href=story.url)
-                    if (story && story.images && story.images.LargeRect)
-                        if (index == 0)
-                            img(src=story.images.LargeRect.url)
-                        else
-                            img(src=story.images.LargeRect.url, style="display: none")
-
-    .headlines
+    .span-4.headlines
         for story in stories
-            .container
-                a.page.hover.highlight-right.rounded-hover(href=story.url)
-                    if (story && story.images && story.images.ThumbSquareM)
-                        img(src=story.images.ThumbSquareM.url)
-                    h2 #{story.title}
-                    p.teaser #{story.teaser}
+            !=partial('../block/square', {story: story})
+
+    .span-8.last.slides
+        .caret
+            b.caret-shadow
+            b.caret-white
+        .rounded
+            .image-container.slides-inner
+                for story, index in stories
+                    a(href=story.url)
+                        if (story && story.images && story.images.LargeRect)
+                            if (index == 0)
+                                img(src=story.images.LargeRect.url)
+                            else
+                                img(src=story.images.LargeRect.url, style="display: none")

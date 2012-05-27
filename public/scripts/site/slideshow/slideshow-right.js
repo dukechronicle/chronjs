@@ -11,7 +11,7 @@ define(['jquery'], function($) {
 
 
     function initSlideshow () {
-        $('.slideshow-right .headlines a:eq(0)').addClass('active');
+        $('.slideshow-right .headlines a:eq(0)').addClass('selected');
 
         // TODO cross browser compatibility
         // bind headlines to slideshow switches
@@ -38,8 +38,8 @@ define(['jquery'], function($) {
         $('.slideshow-right .slides img:eq(' + currentSlide + ')').fadeOut('slow');
         $('.slideshow-right .slides img:eq(' + newSlide + ')').fadeIn('slow');
 
-        $('.slideshow-right .slides .text a:eq(' + currentSlide + ')').fadeOut('active');
-        $('.slideshow-right .slides .text a:eq(' + newSlide + ')').fadeIn('active');
+        $('.slideshow-right .slides .text a:eq(' + currentSlide + ')').fadeOut('selected');
+        $('.slideshow-right .slides .text a:eq(' + newSlide + ')').fadeIn('selected');
         
         $('.slideshow-right .slides .text h1:eq(' + currentSlide + ')').fadeOut('slow');
         $('.slideshow-right .slides .text h1:eq(' + newSlide + ')').fadeIn('slow');
@@ -48,9 +48,9 @@ define(['jquery'], function($) {
         $('.slideshow-right .slides .text h2:eq(' + newSlide + ')').fadeIn('slow');
 
         var previousLink = $('.slideshow-right .headlines a:eq(' + currentSlide + ')');
-        previousLink.removeClass('active');
+        previousLink.removeClass('selected');
         var nextLink = $('.slideshow-right .headlines a:eq(' + newSlide + ')')
-        nextLink.addClass('active');
+        nextLink.addClass('selected');
         
         currentSlide = newSlide;
     }

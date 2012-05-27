@@ -19,9 +19,15 @@ define(["jquery", "libs/underscore"], function($) {
     }
 
     function pageAlign() {
-        $(".align-group").each(function () {
+        // Iterate through align groups in reverse order so nested groups
+        // get aligned first
+        var groups = $(".align-group").get().reverse();
+        $(groups).each(function () {
+            // Align inner elements first
             var elements = $(this).children('.align-element');
             var primary = _.max(elements, function (element) {
+                if ($(element).data('alignprimary'))
+                    return Infinity;
                 return $(element).height();
             });
 

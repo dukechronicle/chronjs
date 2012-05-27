@@ -1,8 +1,8 @@
 #news
     !=partial('../layout/subnav', {subsections: subsections})
       
-    .clearfix
-        .span-6
+    .clearfix.align-group
+        .span-6.align-element(data-aligntarget="#featured .rounded")
             - if (model.Featured && model.Featured[0])
                 #featured!=partial('../container/featured-image', {title: "", story: model.Featured[0]});
 
@@ -10,18 +10,18 @@
                   - each story in model.Headlines
                       !=partial('../container/block/horizontal', {title: "", story: story})
 
-        .span-6.last
+        .span-6.last.align-element(data-aligntarget="#headlines .rounded, #blog .rounded")
             .top.align-group.clearfix
                 - if (model["Right Headlines"])
-                    .span-3.title-medium.align-element(data-alignTarget=".rounded")!=partial('../container/story-list/featured', {title: "Headlines", stories: model["Right Headlines"]})
+                    #headlines.span-3.title-medium.align-element(data-alignTarget=".rounded")!=partial('../container/story-list/featured', {title: "Headlines", stories: model["Right Headlines"]})
                 - if (model.Blog)
-                    .span-3.last.title-small.align-element(data-alignTarget=".rounded")!=partial('../container/story-list/image', {title: "News Blog", stories: model.Blog, image:'http://d2sug25c5hnh7r.cloudfront.net/images/blogs/newsblog.jpg', imageHref:'http://bigblog.chronicleblogs.com/news'})
+                    #blog.span-3.last.title-small.align-element(data-alignTarget=".rounded")!=partial('../container/story-list/image', {title: "News Blog", stories: model.Blog, image: static_cdn + "/images/blogs/newsblog.jpg", imageHref:"http://bigblog.chronicleblogs.com/news"})
 
-            .middle.clearfix
+            .middle.clearfix.align-group
                 - if (model.popular)
-                    .span-2.title-small!=partial('../container/story-list/numbered', {title: "Popular", stories: model.popular})
+                    .span-2.title-small.align-element(data-aligntarget=".rounded")!=partial('../container/story-list/numbered', {title: "Popular", stories: model.popular})
                 - if (model.adFullRectangle)
-                    .span-4.last.lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
+                    .span-4.last.lighten.align-element(data-alignprimary=true)!=partial('../container/ad/medium-rect', {title: "Advertisement"})
             .lighten!=partial('../container/ad/full-banner', {title: "Ad"})
 
     .span-12.last

@@ -40,6 +40,9 @@ define(["jquery", "libs/underscore"], function($) {
                     return height + delta;
                 });
             });
+
+            // In case any story lists boxes were made smaller
+            truncateStoryList();
         });
     }
 
@@ -54,6 +57,14 @@ define(["jquery", "libs/underscore"], function($) {
             var rounded = $(this).parent().siblings(".rounded");
             if (rounded && rounded.height() < height)
                 rounded.css('height', height + "px");
+        });
+    }
+
+    function truncateStoryList() {
+        $(".story-list").each(function () {
+            while ($(this)[0].scrollHeight > $(this).outerHeight()) {
+                $(this).find(".list-story:last").remove();
+            }
         });
     }
 

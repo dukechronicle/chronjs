@@ -1,7 +1,7 @@
 #sports
     !=partial('../layout/subnav', {subsections: subsections})
 
-    #top
+    #top.clearfix
         if (model.Slideshow)
             !=partial('../container/slideshow/slideshow-right', {stories: model.Slideshow})
     #bottom.clearfix
@@ -17,9 +17,9 @@
                     .span-4
                         - each story, index in model.Stories
                             - if (index % 2 == 0)
-                                !=partial('../container/block/thumb', {story: story, tax: true})
+                                !=partial('../container/block/thumbnail', {story: story, tax: true})
                     .span-4.last
                         - each story, index in model.Stories
                             - if (index % 2 == 1)
-                                !=partial('../container/block/thumb', {story: story, tax: true})
+                                !=partial('../container/block/thumbnail', {story: story, tax: true})
             !=partial('../container/row/multimedia', {title: "Multimedia", multimedia: model.multimedia.Sports})

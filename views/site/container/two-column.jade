@@ -1,17 +1,18 @@
-.clearfix
-    .vertical-container
-        h2.vertical #{title}
+include container-helpers
 
-    .rounded
-        .content-container.align-group.clearfix
+.clearfix
+    mixin vertical-label
+    .rounded.clearfix.title-medium
+        .content-container.span-4.story-list
             - each story, index in stories
                 - if (index % 2 === 0)
-                    a.hover.highlight-left(href='#{story.url}')
-                        h3 #{story.title}
+                    a.hover.list-story.highlight-left(href='#{story.url}')
+                        h3.title #{story.title}
                         p.teaser #{story.teaser}
-                - else
-                    a.hover.highlight-right(href='#{story.url}')
-                        h3 #{story.title}
-                        p.teaser #{story.teaser}
-                    div(style='clear:both; height: 25px')
 
+        .content-container.span-4.last.story-list
+            - each story, index in stories
+                - if (index % 2 === 1)
+                    a.hover.list-story.highlight-right(href='#{story.url}')
+                        h3.title #{story.title}
+                        p.teaser #{story.teaser}

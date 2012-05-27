@@ -14,7 +14,7 @@
                     h1.title= doc.title
         
                     - if (doc.subhead)
-                        p: i= doc.subhead
+                        p.subtitle: i= doc.subhead
                    
                     - if (doc.embed)
                         .main-image!=doc.embed

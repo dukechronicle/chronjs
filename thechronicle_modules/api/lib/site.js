@@ -279,6 +279,7 @@ site.getOpinionPageContent = function(callback) {
                 // maps columnist headshots to name for use on rest of page
                 columnistHeadshots = {};
                 results[4].forEach(function(columnist) {
+                    columnist.url = '/staff/' + columnist.name;
                     var name = columnist.name.toLowerCase();
                     columnistHeadshots[name] = {tagline : columnist.tagline};
                     if (columnist.images && columnist.images.StaffHeadshot)

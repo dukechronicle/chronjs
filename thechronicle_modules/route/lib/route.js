@@ -1,5 +1,6 @@
 var api = require('../../api');
 var admin = require('./admin');
+var config = require('../../config');
 var siteApi = require('./api');
 var log = require('../../log');
 var site = require('./site');
@@ -126,6 +127,11 @@ exports.init = function (app) {
         app.get('/openx/:path', xhrproxy.openx);
         app.get('/delete_activity', xhrproxy.delete_activity);
     })
+
+    app.get('/sitemaps/:query', function (req, res, next) {
+        res.redirect(config.get("CLOUDFRONT_DISTRIBUTION") + req.url);
+    });
+
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);
 

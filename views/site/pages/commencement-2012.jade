@@ -3,9 +3,9 @@
     .lookbacks.clearfix.align-group
         - each story, year in data.lookbacks
             - if (year == "senior")
-                .span-3.last.align-element(data-aligntarget=".rounded")!=partial('../container/block-teaser', { story: story, title: year })
+                .span-3.last.align-element(data-aligntarget=".rounded")!=partial('../container/block/teaser', { story: story, title: year })
             - else
-                .span-3.align-element(data-aligntarget=".rounded")!=partial('../container/block-teaser', { story: story, title: year })
+                .span-3.align-element(data-aligntarget=".rounded")!=partial('../container/block/teaser', { story: story, title: year })
 
     .middle.clearfix
         .rounded.left
@@ -27,5 +27,5 @@
 
     .bottom.clearfix
         - each story in data.articles
-            .span-4!=partial('../container/block-wide', { story: story })
+            .span-4!=partial('../container/block/wide', { story: story })
         .lighten.span-4.last!=partial('../container/ad/medium-rect', { title: "Advertisement" })

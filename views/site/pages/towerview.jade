@@ -9,22 +9,22 @@
 
             .featured-row.clearfix
                 if (model.Featured[1])
-                    .span-4!=partial('../container/block-square', {story: model.Featured[1]})
+                    .span-4!=partial('../container/block/square', {story: model.Featured[1]})
                 if (model.Featured[2])
-                    .span-4.last!=partial('../container/block-square', {story: model.Featured[2]})
+                    .span-4.last!=partial('../container/block/square', {story: model.Featured[2]})
                 
             if (model.Savvy)
-                #savvy!=partial('../container/row-feature', {title: 'Savvy', stories: model.Savvy})
+                #savvy!=partial('../container/row/feature', {title: 'Savvy', stories: model.Savvy})
             if (model.Wisdom)
-                #wisdom!=partial('../container/row-feature', {title: 'Wisdom', stories: model.Wisdom})
+                #wisdom!=partial('../container/row/feature', {title: 'Wisdom', stories: model.Wisdom})
         .issuu
             <object style="width:642px;height:418px" ><param name="movie" value="http://static.issuu.com/webembed/viewers/style1/v2/IssuuReader.swf?mode=mini&amp;backgroundColor=%23222222&amp;documentId=120419050106-1cfbf5164058440db797264928906b2b" /><param name="allowfullscreen" value="true"/><param name="menu" value="false"/><param name="wmode" value="transparent"/><embed src="http://static.issuu.com/webembed/viewers/style1/v2/IssuuReader.swf" type="application/x-shockwave-flash" allowfullscreen="true" menu="false" wmode="transparent" style="width:642px;height:418px" flashvars="mode=mini&amp;backgroundColor=%23222222&amp;documentId=120419050106-1cfbf5164058440db797264928906b2b" /></object>
 
     .span-4.last
         if (model["Editors Note"])
-            #editors-note!=partial('../container/block-teaser', {title: "Letter from the Editor", story: model["Editors Note"][0]})
+            #editors-note!=partial('../container/block/teaser', {title: "Letter from the Editor", story: model["Editors Note"][0]})
         if (model.adFullRectangle)
             .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
         if (model.Prefix)
             - each story in model.Prefix
-                .prefix!=partial('../container/block-wide', {story: story})
+                .prefix!=partial('../container/block/wide', {story: story})

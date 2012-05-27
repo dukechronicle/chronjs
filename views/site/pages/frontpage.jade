@@ -2,7 +2,7 @@
     #top.clearfix
         .content.span-8
             if (model["Top Headline"])
-                #top-headline!=partial('../container/story-list-teaser', {stories: model["Top Headline"]})
+                #top-headline!=partial('../container/story-list/teaser', {stories: model["Top Headline"]})
             if (model.Breaking)
                 #breaking!=partial('../container/breaking', {stories: model.Breaking})
             if (model.Slideshow)
@@ -20,9 +20,9 @@
                 if (model.twitter)
                     .twitter!=partial('../container/twitter', model.twitter)
             if (model.popular)
-                #popular.title-small!=partial('../container/story-list-subhead', {title: "What's Hot", stories: model.popular})
+                #popular.title-small!=partial('../container/story-list/subhead', {title: "What's Hot", stories: model.popular})
             if (model.Opinion)
-                #opinion.title-small!=partial('../container/story-list-subhead', {title: "Opinion", stories: model.Opinion})
+                #opinion.title-small!=partial('../container/story-list/subhead', {title: "Opinion", stories: model.Opinion})
             .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
 
     #middle.clearfix.align-group
@@ -33,6 +33,6 @@
     
     #bottom
         if (model.Recess)
-            #recess!=partial('../container/row-feature', {title: "Recess", stories: model.Recess})
+            #recess!=partial('../container/row/feature', {title: "Recess", stories: model.Recess})
         if (model.Towerview)
-            #towerview!=partial('../container/row-feature', {title: "Towerview", stories: model.Towerview})
+            #towerview!=partial('../container/row/feature', {title: "Towerview", stories: model.Towerview})

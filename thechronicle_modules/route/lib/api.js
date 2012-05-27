@@ -35,7 +35,7 @@ siteApi.articlesBySection = function (req, res, next) {
 siteApi.articleByUrl = function (req, res, next) {
     api.article.getByUrl(req.params.url, function (err, doc) {
         if (err) next(err);
-        else res.json(result);
+        else res.json(doc);
     });
 };
 

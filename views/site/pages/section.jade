@@ -27,7 +27,7 @@ nav.subnav.clearfix
 
     .span-4.last
         - if (typeof popular != 'undefined' && popular.length > 0)
-            #popular.title-small!=partial('../container/story-list-numbered', {title: "Popular", stories: popular})
+            #popular.title-small!=partial('../container/story-list/numbered', {title: "Popular", stories: popular})
         .lighten!=partial('../container/ad/medium-rect', { title: "Advertisement" })
         !=partial('../container/facebook')
         .lighten!=partial('../container/ad/medium-rect', { title: "Advertisement" })

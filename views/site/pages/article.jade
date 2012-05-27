@@ -49,14 +49,14 @@
 
         .span-4.last
             - if (model.related && model.related.length > 0)
-                #related.title-small!=partial('../container/story-list-subhead', {title: "Related", stories: model.related})
+                #related.title-small!=partial('../container/story-list/subhead', {title: "Related", stories: model.related})
 
             .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
 
             #recommendations!=partial('../container/facebook')
 
             - if (model.popular && model.popular.length > 0)
-                #popular.title-small!=partial('../container/story-list-numbered', {title: "Popular", stories: model.popular})
+                #popular.title-small!=partial('../container/story-list/numbered', {title: "Popular", stories: model.popular})
 
             .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
 

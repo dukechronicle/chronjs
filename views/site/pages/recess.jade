@@ -16,13 +16,13 @@
                 .title-small!=partial('../container/story-list', {title: "Recess Blog", stories: model.Blog})
             if (model.Stories)
                 - each story in model.Stories
-                    !=partial('../container/block-teaser', {story:story})
+                    !=partial('../container/block/teaser', {story:story})
 
     #middle.clearfix
         if (model.Music)
-             #reviews!=partial('../container/row-feature', {title: 'Music', stories: model.Music})
+             #reviews!=partial('../container/row/feature', {title: 'Music', stories: model.Music})
         if (model.Film)
-            #interviews!=partial('../container/row-feature', {title: 'Film', stories: model.Film})
+            #interviews!=partial('../container/row/feature', {title: 'Film', stories: model.Film})
         if (model.Art)
-            #sandbox!=partial('../container/row-feature', {title: 'Art', stories: model.Art})
-        .span-12.last!=partial('../container/row-multimedia', {title: "Multimedia", multimedia: model.multimedia.Recess})
+            #sandbox!=partial('../container/row/feature', {title: 'Art', stories: model.Art})
+        .span-12.last!=partial('../container/row/multimedia', {title: "Multimedia", multimedia: model.multimedia.Recess})

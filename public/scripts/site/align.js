@@ -61,7 +61,7 @@ define(["jquery", "libs/underscore"], function($) {
     }
 
     function truncateStoryList() {
-        $(".story-list").each(function () {
+        $(".story-list .rounded").each(function () {
             while ($(this)[0].scrollHeight > $(this).outerHeight()) {
                 $(this).find(".list-story:last").remove();
             }

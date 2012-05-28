@@ -1,6 +1,6 @@
 #frontpage
     #top.clearfix.align-group
-        .content.span-8.align-element(data-aligntarget="#headlines .rounded", data-alignprimary=true)
+        .content.span-8.align-element(data-alignprimary=true)
             if (model["Top Headline"])
                 #top-headline!=partial('../container/story-list/teaser', {stories: model["Top Headline"]})
             if (model.Breaking)

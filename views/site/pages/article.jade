@@ -27,7 +27,11 @@
                             p.photo-caption= doc.images.Original.caption
         
                     p.byline
-                        span.author By !{doc.authorsHtml}
+                        span.author By &nbsp;
+                            - each author, index in doc.authors
+                                - if (index > 0)
+                                    span , &nbsp;
+                                a(href="/staff/#{author}")= author
                         span.sep |
                         span.date= doc.date
         
@@ -42,7 +46,7 @@
                             #plus-one
                                 g:plusone(size="medium")
 
-                        !{doc.renderedBody}
+                        !{doc.body}
 
             // The text for the comment count link can be modified at disqus.com/admin/settings/appearance/
             #disqus_thread.rounded(data-disqus=JSON.stringify(disqusData), data-disqus-identifier=disqusData.id)

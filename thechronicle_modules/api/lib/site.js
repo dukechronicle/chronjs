@@ -508,7 +508,7 @@ site.getArticleContentUncached = function(doc, callback) {
         api.taxonomy.getParents(doc.taxonomy, cb);
     },
     function(cb) {
-        api.authors.getInfo(doc.authorsArray[0], cb);
+        api.authors.getInfo(doc.authors[0], cb);
     }
     ], 
     function(err, results) {
@@ -571,20 +571,7 @@ function modifyArticleForDisplay(doc) {
     if(doc.created)
         doc.date = util.formatTimestamp(doc.created, "mmmm d, yyyy");
 
-    doc.authorsArray = _.clone(doc.authors);
-    doc.authors = "";
-    doc.authorsHtml = "";
-    if(doc.authorsArray && doc.authorsArray.length > 0) {
-        for(var i = 0; i < doc.authorsArray.length; i++) {
-            doc.authorsHtml += "<a href='/staff/" + doc.authorsArray[i].replace(/ /g, '-') + "'>" + doc.authorsArray[i] + "</a>";
-            doc.authors += doc.authorsArray[i];
-            if(i < (doc.authorsArray.length - 1)) {
-                doc.authors += ", ";
-                doc.authorsHtml += ", ";
-            }
-        }
-    }
-    doc.renderedBody = api.article.renderBody(doc.body);
+    doc.body = api.article.renderBody(doc.body);
     
     return doc;
 }

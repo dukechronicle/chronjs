@@ -9,7 +9,7 @@
                         h3.title!= doc.title
                         .dateline.subtitle
                             span.date!= doc.date
-                            span.author!= doc.authors
+                            span.author!= doc.authors.join(", ")
                         p.teaser!= doc.teaser
 
         - if (docs.length == 0)

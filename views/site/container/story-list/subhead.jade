@@ -4,6 +4,6 @@ block story
     h3.title.nospace #{story.title}
     p.subtitle
         - if (story.info || story.authors)
-            span #{story.info || story.authors}
+            span= story.info || story.authors.join(", ")
         - if (story.date)
-            span #{story.date}
+            span= story.date

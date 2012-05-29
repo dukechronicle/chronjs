@@ -506,9 +506,6 @@ site.getArticleContentUncached = function(doc, callback) {
     },
     function(cb) {
         api.taxonomy.getParents(doc.taxonomy, cb);
-    },
-    function(cb) {
-        api.authors.getInfo(doc.authors[0], cb);
     }
     ], 
     function(err, results) {
@@ -525,8 +522,7 @@ site.getArticleContentUncached = function(doc, callback) {
                 },
                 popular: results[0],
                 related: results[1],
-                parents: results[2],
-                authorInfo: results[3][0]
+                parents: results[2]
             };
             callback(null, model);
         }
@@ -564,6 +560,7 @@ function modifyArticlesForDisplay(docs) {
 }
 
 function modifyArticleForDisplay(doc) {
+    log.debug(doc);
     if(doc.urls) {
         doc.url = '/article/' + _.last(doc.urls);
         doc.fullUrl = "http://" + config.get('DOMAIN_NAME') + doc.url;

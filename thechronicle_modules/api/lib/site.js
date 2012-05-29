@@ -560,7 +560,6 @@ function modifyArticlesForDisplay(docs) {
 }
 
 function modifyArticleForDisplay(doc) {
-    log.debug(doc);
     if(doc.urls) {
         doc.url = '/article/' + _.last(doc.urls);
         doc.fullUrl = "http://" + config.get('DOMAIN_NAME') + doc.url;

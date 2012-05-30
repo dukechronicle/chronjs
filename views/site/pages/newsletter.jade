@@ -1,31 +1,25 @@
-.rounded
-  -if(typeof action == "undefined")
-      .description(style='padding: 15px; float: left; width: 400px; margin-right: 30px')
-          h1(style='font-size: 1.3em; margin-bottom: 0.5em') Subscribe to our daily newsletter
-          p Receive an email containing the latest news from each Chronicle issue!
-
-  -else if(action == "subscribe")
-      .description(style='padding: 15px; float: left; width: 400px; margin-right: 30px')
-          h1(style='font-size: 1.3em; margin-bottom: 0.5em') Thank You for Subscribing!
-          p You should be receiving an email at #{email} to confirm your subscription.
-
-  -else
-      .description(style='padding: 15px; float: left; width: 400px; margin-right: 30px')
-          h1(style='font-size: 1.3em; margin-bottom: 0.5em') We're Sorry to See You Go!
-          p You should no longer receive our newsletter at #{email}.
-
-
-  .subscribe(style='float: left; padding: 10px; margin-bottom: 19px; width: 300px')
-      form(method="post", action="")
-          input(type="text", name="email", placeholder='Your email address')
-          input(type="hidden", name="action", value="subscribe")
-          input(type="submit", value="Subscribe", style='float: right; width: 100px; margin-top: 2px')
-
-
-  .unsubscribe(style='float: left; padding: 10px; width: 300px')
-      form(method="post", action="")
-          input(type="text", name="email", placeholder='Your email address')
-          input(type="hidden", name="action", value="unsubscribe")
-          input(type="submit", value="Unsubscribe", style='float: right; width: 100px; margin-top: 2px')
-
-div(style='clear: both; height: 25px')
+#page
+    .content-container.rounded.clearfix
+        .description
+            - if(typeof action == "undefined")
+                h2 Subscribe to our daily newsletter
+                p Receive an email containing the latest news from each Chronicle issue!
+            - else if(action == "subscribe")
+                h2 Thank You for Subscribing!
+                p You should be receiving an email at #{email} to confirm your subscription.
+            - else
+                h2 We're Sorry to See You Go!
+                p You should no longer receive our newsletter at #{email}.
+    
+        br
+        .span-4
+            form.subscribe.inline.clearfix(method="post", action="")
+                input.left(type="text", name="email", placeholder='Your email address')
+                input(type="hidden", name="action", value="subscribe")
+                input.right(type="submit", value="Subscribe")
+        
+        
+            form.unsubscribe.inline.clearfix(method="post", action="")
+                input.left(type="text", name="email", placeholder='Your email address')
+                input(type="hidden", name="action", value="unsubscribe")
+                input.right(type="submit", value="Unsubscribe")

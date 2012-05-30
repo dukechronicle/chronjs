@@ -1,0 +1,11 @@
+include ../container-helpers
+
+.story-list
+    mixin vertical-label
+    .rounded
+        block stories
+            .content-container
+                - each story, index in stories
+                    a.list-story.hover.highlight-right(href='#{story.url}')
+                        block story
+                            h3.title #{story.title}

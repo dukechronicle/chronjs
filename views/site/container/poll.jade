@@ -1,4 +1,4 @@
-.container.clearfix(id=model.poll._id)
+.poll(id=model.poll._id)
   .vertical-container
       h2.vertical Poll
 
@@ -10,5 +10,3 @@
               il.choice(id=choice, votes=votes)
                   a.hover(href="#")
                       h2 &#187; #{choice}
-
-script CHRONICLE.onload.push(function(){displayPoll(#{poll.voted})})

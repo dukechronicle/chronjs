@@ -1,69 +1,50 @@
 - if(query == null) var query = ""
 - query = query.replace(/-/g, ' ');
-
-.div
-    img(src=static_cdn + '/images/header-overlay.png', id='header-overlay', width='100px', height='122px')
-
-#header-top
-    .content
-
-        h1
-            a(href='/') The Chronicle |
-        p.tagline The Independent Daily at<br /> Duke University
-
-    .social-media
-        .inner
-            .icons
-                a(href='http://www.facebook.com/dukechronicle')
-                    img.first(src=static_cdn + '/images/icons/facebook.png')
-                a(href='http://twitter.com/dukechronicle')
-                    img(src=static_cdn + '/images/icons/twitter.png')
-                a(href='http://youtube.com/user/DukeChronicle')
-                    img(src=static_cdn + '/images/icons/youtube.png')
-                a(href='http://foursquare.com/dukechronicle')
-                    img(src=static_cdn + '/images/icons/foursquare.png')
-                a(href='/rss')
-                    img(src=static_cdn + '/images/icons/rss.png')
-                a(href='/page/newsletter')
-                    img.last(src=static_cdn + '/images/icons/email.png')
-
-    .leaderboard
-        .full-banner-raw.advertising.openx-ad(class="{zoneID: 308}")
-
-
-
 - if (typeof section == 'undefined') var section = undefined
 
+#header-top
+    .span-1 &nbsp;
+    a.content.clearfix.span-4(href="/")
+        img#header-overlay(src=static_cdn + '/images/header-overlay.png')
+        p.date #{currentDate()}
+        h1.brand The Chronicle
+        p.tagline The Independent Daily at Duke University
+    .span-1 &nbsp;
+
+    .leaderboard.span-6.last.clearfix
+        .full-banner-raw.advertising.openx-ad(class="{zoneID: 308}")
+
+        .icons.left
+            a(href="http://www.facebook.com/dukechronicle")
+                img(src=static_cdn + '/images/icons/facebook.png')
+            a(href="http://twitter.com/dukechronicle")
+                img(src=static_cdn + '/images/icons/twitter.png')
+            a(href="http://youtube.com/user/DukeChronicle")
+                img(src=static_cdn + '/images/icons/youtube.png')
+            a(href="http://foursquare.com/dukechronicle")
+                img(src=static_cdn + '/images/icons/foursquare.png')
+            a(href="/rss")
+                img(src=static_cdn + '/images/icons/rss.png')
+            a(href="/page/newsletter")
+                img(src=static_cdn + '/images/icons/email.png')
+
+        .advertising-links.right
+            a(href="/page/subscribe") Print Subscription
+            a(href="/page/advertising") Advertising
+            a(href="http://dukechronicle.campusave.com") Classifieds
+            a(href="http://chroniclehousing.com") Housing
+
+br
+
 #header-bottom
-    nav#nav.clearfix
-        h2
-            a(href='/news',
-              class=(section == 'News') ? "active" : "") News
-        h2
-            a(href='/sports',
-              class=(section == 'Sports') ? "active" : "") Sports
-        h2
-            a(href='/opinion',
-              class=(section == 'Opinion') ? "active" : "") Opinion
-        h2
-            a(href='/recess',
-              class=(section == 'Recess') ? "active" : "") Recess
-        h2
-            a(href='/towerview',
-              class=(section == 'Towerview') ? "active" : "") Towerview
-        h2
-            a(href='http://chronicleblogs.com') Blogs
-        h2
-            a(href='http://shutter.dukechronicle.com/') Photos
+    nav.span-10#nav
+        a(href="/news", class=(section == 'News') ? "active" : "") News
+        a(href="/sports", class=(section == 'Sports') ? "active" : "") Sports
+        a(href="/opinion", class=(section == 'Opinion') ? "active" : "") Opinion
+        a(href="/recess", class=(section == 'Recess') ? "active" : "") Recess
+        a(href="/towerview", class=(section == 'Towerview') ? "active" : "") Towerview
+        a(href="http://chronicleblogs.com") Blogs
+        a(href="http://shutter.dukechronicle.com") Photos
 
-    .advertising.advertising-links(style='float: right')
-        a(href='/page/subscribe') Print Sub
-        a(href='/page/advertising') Advertising
-        a(href='http://dukechronicle.campusave.com/') Classifieds
-        a(href='http://chroniclehousing.com/') Housing
-
-
-
-
-    form#search-box(action='/search/', method='GET')
+    form.span-2.last#search-box(action='/search/', method='GET')
         input(type='search', name='q', placeholder='Search archives', results='5', value=query)

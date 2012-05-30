@@ -1,0 +1,14 @@
+include container-helpers
+
+.category-box.clearfix.align-group
+    mixin vertical-label
+    .rounded.category-list.align-element(data-alignPrimary="true")
+        .content-container
+            - each category, index in categories
+                a.hover.highlight-left(data-index=index, href=category.url)
+                    h2 #{category.name}
+    .rounded.categories.align-element
+        - each category, index in categories
+            .category
+                block category
+                    p #{category.name}

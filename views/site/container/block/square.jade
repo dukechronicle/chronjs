@@ -1,0 +1,12 @@
+include ../container-helpers
+
+.block.block-square
+    mixin vertical-label
+    .rounded
+        a.hover.clearfix.highlight-right(href=story.url)
+            .image-container
+                - if (story.images && story.images.ThumbSquareM)
+                    img(src=story.images.ThumbSquareM.url)
+            .content-container
+                h4.title #{story.title}
+                p.teaser #{story.teaser}

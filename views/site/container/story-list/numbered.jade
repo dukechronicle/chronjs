@@ -1,0 +1,10 @@
+extends index
+
+block stories
+    .content-container
+        ol
+            - each story, index in stories
+                a.list-story.hover.highlight-right(href='#{story.url}')
+                    li
+                        block story
+                            h3.title #{story.title}

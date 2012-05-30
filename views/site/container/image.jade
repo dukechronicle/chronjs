@@ -1,18 +1,14 @@
-.container.clearfix.image
+.image
     .vertical-container
-        h2.vertical #{title}
-
+        .vertical #{title}
+    
     - if (typeof url !='undefined')
-        a.rounded-hover(href='#{url}')
-            .content-container
-                img(src='#{imageUrl}', width='#{width}', height='#{height}')
-                - if (typeof caption != 'undefined')
-                    .caption #{caption}
+        a.rounded.image-container.clearfix(href='#{url}')
+            img(src='#{imageUrl}')
+            - if (typeof caption != 'undefined')
+                p.caption #{caption}
     - else
-        .rounded-hover
-            .content-container
-                img(src='#{imageUrl}', width='#{width}', height='#{height}')
-                - if (typeof caption != 'undefined')
-                    .caption #{caption}
-
-
+        .rounded.image-container.clearfix
+            img(src='#{imageUrl}')
+            - if (typeof caption != 'undefined')
+                p.caption #{caption}

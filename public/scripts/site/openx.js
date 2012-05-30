@@ -1,4 +1,4 @@
-define(["jquery", "libs/jquery.metadata", "libs/jquery.openxtag.min"], function($) {
+define(["jquery", "libs/jquery.metadata", "libs/jquery.openxtag"], function($) {
 
     return {
 

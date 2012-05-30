@@ -1,0 +1,6 @@
+nav.subnav.clearfix
+    if (typeof subsections != 'undefined')
+        for subsection in subsections
+            for subsectionName,subsectionPath in subsection
+                a.hover(href='/section/' + subsectionPath)
+                    h2= subsectionName

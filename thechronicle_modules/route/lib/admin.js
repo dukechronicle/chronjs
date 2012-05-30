@@ -102,6 +102,7 @@ admin.manage = function (req, res, next) {
                 docs: docs,
                 next: nextKey,
                 hasPrevious: start != null,
+                sections: config.get("TAXONOMY_MAIN_SECTIONS"),
                 db_url: dbUrl
             }
         });

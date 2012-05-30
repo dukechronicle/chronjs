@@ -49,7 +49,8 @@ article.edit = function (id, article, callback) {
     api.docsById(id, function(err, res) {
         if (err) return callback(err);
 
-        article.renderedBody = api.article.renderBody(article.body);
+        if (article.body)
+            article.renderedBody = api.article.renderBody(article.body);
         article.updated = util.unixTimestamp();            
         
         if (article.title && (URLify(article.title) !=  URLify(res.title))) {

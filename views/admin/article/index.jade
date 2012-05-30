@@ -1,3 +1,11 @@
+.navbar
+    .navbar-inner
+        .container
+            ul.nav
+                li: a(href="/admin/manage") All
+                - each section in sections
+                    li: a(href="/admin/manage/#{section}")= section
+
 table.table.table-striped.article-index
     - each doc in docs
         tr

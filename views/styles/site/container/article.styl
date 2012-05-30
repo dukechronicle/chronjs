@@ -1,0 +1,63 @@
+@import '../../mixins'
+@import '../variables'
+
+
+.article-container
+    padding 1.2em 1.5em
+
+
+    .title
+        font-size 2.4em
+        line-height 1.2em
+
+    .subtitle
+        font-size 1.5em
+        margin-top -10px
+
+    .edit
+        float right
+
+    .main-image
+        width 100%
+
+    .photo-credit
+        float right
+        margin-left 2em
+        font-size .8em
+        color #777
+
+    .photo-caption
+        color caption-color
+
+    .byline
+        color caption-color
+
+    .article-body
+        font-size 1.2em
+        line-height 1.6em
+        
+        .social-media
+            float right
+            margin-left 10px
+            a
+                display block
+            #comment-link
+                background-image url(/images/icons/article_comment.gif)
+                background-repeat no-repeat
+                background-position 0px 3px
+                padding-left 20px
+                color black
+            #print-link
+                background-image url(/images/icons/article_print.gif)
+                background-repeat no-repeat
+                background-position 0px 3px
+                padding-left 20px
+                color black
+            #facebook-like
+                margin-bottom 2px
+            #twitter
+                margin-bottom 3px
+
+#disqus_thread
+    padding 5px
+    box-sizing border-box

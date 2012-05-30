@@ -279,6 +279,7 @@ site.getOpinionPageContent = function(callback) {
                 // maps columnist headshots to name for use on rest of page
                 columnistHeadshots = {};
                 results[4].forEach(function(columnist) {
+                    columnist.url = '/staff/' + columnist.name;
                     var name = columnist.name.toLowerCase();
                     columnistHeadshots[name] = {tagline : columnist.tagline};
                     if (columnist.images && columnist.images.StaffHeadshot)
@@ -513,9 +514,6 @@ site.getArticleContentUncached = function(doc, callback) {
     },
     function(cb) {
         api.taxonomy.getParents(doc.taxonomy, cb);
-    },
-    function(cb) {
-        api.authors.getInfo(doc.authorsArray[0], cb);
     }
     ], 
     function(err, results) {
@@ -532,8 +530,7 @@ site.getArticleContentUncached = function(doc, callback) {
                 },
                 popular: results[0],
                 related: results[1],
-                parents: results[2],
-                authorInfo: results[3][0]
+                parents: results[2]
             };
             callback(null, model);
         }
@@ -578,20 +575,7 @@ function modifyArticleForDisplay(doc) {
     if(doc.created)
         doc.date = util.formatTimestamp(doc.created, "mmmm d, yyyy");
 
-    doc.authorsArray = _.clone(doc.authors);
-    doc.authors = "";
-    doc.authorsHtml = "";
-    if(doc.authorsArray && doc.authorsArray.length > 0) {
-        for(var i = 0; i < doc.authorsArray.length; i++) {
-            doc.authorsHtml += "<a href='/staff/" + doc.authorsArray[i].replace(/ /g, '-') + "'>" + doc.authorsArray[i] + "</a>";
-            doc.authors += doc.authorsArray[i];
-            if(i < (doc.authorsArray.length - 1)) {
-                doc.authors += ", ";
-                doc.authorsHtml += ", ";
-            }
-        }
-    }
-    doc.renderedBody = api.article.renderBody(doc.body);
+    doc.body = api.article.renderBody(doc.body);
     
     return doc;
 }

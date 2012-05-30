@@ -1,0 +1,26 @@
+include container-helpers
+
+mixin story-view(story)
+    .subtitle
+        span #{story.taxonomy[1]}
+    h3 #{story.title}
+    .subtitle
+        span By #{story.author}
+    - if (story.thumb)
+        img.thumb(src=story.thumb)
+    p.teaser #{story.teaser}
+
+.top-opinion
+    mixin vertical-label
+    .rounded.clearfix
+        .span-3.story-list.content-container
+            - each story, index in stories
+                - if (index % 2 == 0)
+                    a.hover.list-story.highlight-left(href='#{story.url}')
+                        mixin story-view(story)
+    
+        .span-3.story-list.content-container.last
+            - each story, index in stories
+                - if (index % 2 == 1)
+                    a.hover.list-story.highlight-right(href='#{story.url}')
+                        mixin story-view(story)

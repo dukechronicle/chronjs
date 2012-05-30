@@ -1,0 +1,71 @@
+@import '../../mixins'
+
+width = 636px
+height = 400px
+right-width = 330px
+textHeight = 80px
+link-color = #36C
+
+.slideshow-right
+    .slides
+        position relative
+        .rounded
+            height height
+            img
+                position absolute
+                z-index 2
+
+    .block-square .rounded
+        height 120px
+        a.selected:hover h4
+            text-decoration underline
+        img
+            width 114px
+
+    .caret
+        transform rotate(45deg)
+        position absolute
+        margin-top 55px
+        -webkit-transition -webkit-transform linear 0.4s
+        // TODO cross browser compatibility
+        b.caret-shadow
+            position absolute
+            width 10px
+            background white
+            height 10px
+            black-box-shadow 0.3 0 1px 3px
+            margin 0 0 0 0px
+            z-index 1
+        b.caret-white
+            position absolute
+            width 11px
+            background white
+            height 11px
+            left 1px
+            top -1px
+            z-index 1
+
+.slideshow
+    width width + 6
+    border-radius  4px
+    black-box-shadow 0.398438 0px 1px 3px
+
+    font-size  0.9em
+    font-family  Georgia,"Century Schoolbook","Times New Roman",Times,serif
+    padding 0
+    margin-bottom 20px
+
+    background-color white
+
+    #slides
+        height 393px
+        padding 3px
+        overflow hidden
+        img
+            border-radius 4px
+
+        .galleria-info-title a
+            color black
+            font-size 1.4em
+        .galleria-info-title a:hover
+            color link-color

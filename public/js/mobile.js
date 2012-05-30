@@ -15,6 +15,19 @@ var ARTICLE_LIST_CACHE_TIMEOUT = 100000;
 
 // Cache the articles. Shouldn't be cleared.
 var articleCache = [];
+
+function showFullSite() {
+    setCookie("forceFullSite", "true", 1, '/');
+    window.location = "/";
+}
+
+function setCookie(c_name, value, exdays, path)
+{
+    var exdate=new Date();
+    exdate.setDate(exdate.getDate() + exdays);
+    var c_value=escape(value) + ((path==null) ? "" : "; path="+path)  +  ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+    document.cookie=c_name + "=" + c_value;
+}
         
 function getDateString(time)
 {

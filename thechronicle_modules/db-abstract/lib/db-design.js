@@ -5,91 +5,42 @@ exports.doc = {
         
         views: {
 
-            taxonomy:{
-                map:function (doc) {
-                    if (doc.type == 'article' && doc.taxonomy) {
-                        var path = [];
-                        for (var i in doc.taxonomy) {
-                            path.push(doc.taxonomy[i].toLowerCase());
-                            emit([eval(uneval(path)), parseInt(doc.created, 10)], doc);
-                        }
-                    }
-                }
-            },
-            // return all doc ids keyed by doc url if one exists
-            urls:{
-                map:function (doc) {
-                    if (doc.urls) {
-                        for (var i in doc.urls) {
-                            emit([doc.urls[i], "article"], doc);
-                            if (doc.images) {
-                                for (var type in doc.images) {
-                                    emit([doc.urls[i], "images", type], {_id:doc.images[type]});
-                                }
+            /*
+             * Returns all articles keyed by each author's name, taxonomy, and
+             * date created. Used, for example, to find all opinion columns by
+             * an author.
+             */
+            authors_and_taxonomy: {
+                map: function(doc) {
+                    if (doc.type == "article" && doc.authors && doc.taxonomy) {
+                        for (var a in doc.authors) {
+                            var name = doc.authors[a].toLowerCase();
+                            name = name.replace(/-/g, ' ');
+                            var path = [];
+                            emit([name, [], parseInt(doc.created)], doc);
+                            for (var t in doc.taxonomy) {
+                                path.push(doc.taxonomy[t].toLowerCase());
+                                emit([name, eval(uneval(path)), parseInt(doc.created)], doc);
                             }
                         }
                     }
                 }
             },
-            duplicates:{
-                map:function (doc) {
-                    if (doc.type == "article") {
-                        for (var i in doc.urls) {
-                            // sort by created day and then by title                            
-                            emit([Math.floor(doc.created/86400), doc.title], doc);
-                        }
+
+            /*
+             * Returns all articles keyed by the day created and title
+             */
+            duplicates: {
+                map: function (doc) {
+                    if (doc.type == "article" && doc.title) {
+                        emit([Math.floor(doc.created/86400), doc.title], doc);
                     }
                 }
             },
-            // return all doc ids keyed by doc url if one exists
-            duplicate_urls:{
-                map:function (doc) {
-                    if (doc.urls) {
-                        for (var i in doc.urls) {
-                            emit(doc.urls[i], null);
-                        }
-                    }
-                },
-                reduce:function (keys, values, rereduce) {
-                    if (rereduce) {
-                        return sum(values);
-                    } else {
-                        return 1;
-                    }
-                }
-            },
-            // return all node page documents
-            nodes:{
-                map:function (doc) {
-                    if (doc.node_title) {
-                        emit(doc.node_title, doc._id);
-                    }
-                }
-            },
-            // return all doc ids keyed by document author name if one exists
-            authors:{
-                map:function (doc) {
-                    if (doc.authors) {
-                        for (var i in doc.authors) {
-                            emit([doc.authors[i], doc.created], doc._id);
-                        }
-                    }
-                }
-            },
-            authors_and_taxonomy:{
-                map:function(doc) {
-                    if (doc.authors && doc.taxonomy) {
-                        for (var t in doc.taxonomy) {
-                            for (var a in doc.authors) {
-                                emit([doc.authors[a], doc.taxonomy[t], parseInt(doc.created, 10)], doc);
-                            }
-                        }
-                    }
-                }
-            },
+
             // get the uuid of all children keyed by fully qualified group name
-            groups:{
-                map:function (doc) {
+            groups: {
+                map: function (doc) {
                     if (doc.groups) {
                         doc.groups.forEach(function (group) {
                             emit(group.concat("article"), {title:doc.title});
@@ -104,7 +55,7 @@ exports.doc = {
                         });
                     }
                 },
-                reduce:function (keys, values, rereduce) {
+                reduce: function (keys, values, rereduce) {
                     if (rereduce) {
                         return sum(values);
                     } else {
@@ -112,74 +63,79 @@ exports.doc = {
                     }
                 }
             },
-            // return articles keyed by date
-            all_by_date:{
-                map:function (doc) {
-                    if (doc.urls) {
-                        emit(parseInt(doc.created, 10), doc);
-                    }
-                }
-            },
-            image_originals:{
-                map:function (doc) {
-                    if (doc.imageVersions) {
-                        var date = parseInt(doc.date);
-                        if(isNaN(date)) date = 0;                
-                        emit(date, doc);
-                    }
-                }
-            },
-            image_originals_index:{
-                map:function (doc) {
-                    if (doc.imageVersions) {
-                        emit(doc.name, doc);
-                    }
-                }
-            },
-            image_versions:{
-                map:function (doc) {
-                    if (doc.original) {
-                        emit(doc.original, doc);
-                    }
-                }
-            },
-            doc_images:{
-                map:function (doc) {
-                    if (doc.images) {
+
+            /*
+             * Returns all articles with images keyed by image id.
+             */
+            images: {
+                map: function (doc) {
+                    if (doc.type == "article" && doc.images) {
                         for (var type in doc.images) {
                             emit(doc.images[type], doc);
                         }
                     }
                 }
             },
-            photographers:{
-                map:function (doc) {
-                    if (doc.photographer) {
-                        emit(doc.photographer, doc);
-                    }
-                }
-            },
 
-
-            // return all articles and the version of their index in Solr
-            indexed_by_solr:{
-                map:function (doc) {
-                    if (doc.title && doc.body) {
-                        if (doc.indexedBySolr == null || typeof(doc.indexedBySolr) != 'number') emit(-1, doc);
+            /*
+             * Returns all articles and the version of their index in Solr.
+             */
+            indexed_by_solr: {
+                map: function (doc) {
+                    if (doc.type == "article" && doc.title && doc.body) {
+                        if (doc.indexedBySolr == null ||
+                            typeof doc.indexedBySolr != 'number')
+                            emit(-1, doc);
                         else emit(doc.indexedBySolr, doc);
                     }
                 }
             },
 
-            // builds the taxonomy tree from each's docs taxonomy
-            taxonomy_tree:{
-                map:function (doc) {
-                    if (doc.taxonomy) {
-                        emit(doc.taxonomy, null);
+            /*
+             * Returns all articles keyed by the taxonomy. Emits a document for
+             * each parent taxonomy of the article as well. Keys also contain
+             * article's creation timestamp.
+             */
+            taxonomy: {
+                map: function (doc) {
+                    if (doc.type == "article" && doc.taxonomy) {
+                        var path = [];
+                        emit([[], parseInt(doc.created)], doc);
+                        for (var i in doc.taxonomy) {
+                            path.push(doc.taxonomy[i].toLowerCase());
+                            emit([eval(uneval(path)), parseInt(doc.created)], doc);
+                        }
                     }
-                },
-                reduce:function (keys, vals) {
-                    return null;
+                }
+            },
+
+            /*
+             * Returns all taxonomies of the articles in the database.
+             */
+            taxonomy_tree: {
+                map: function (doc) {
+                    if (doc.type == "article" && doc.taxonomy) {
+                        emit(doc.taxonomy);
+                    }
+                }
+            },
+
+            /*
+             * Returns all articles and associated images keyed by each of the
+             * article's urls.
+             */
+            urls: {
+                map:function (doc) {
+                    if (doc.type == "article" && doc.urls) {
+                        for (var i in doc.urls) {
+                            emit([doc.urls[i], "article"], {_id:doc.id});
+                            if (doc.images) {
+                                for (var type in doc.images) {
+                                    emit([doc.urls[i], "images", type], {_id:doc.images[type]});
+                                }
+                            }
+                        }
+                    }
                 }
             }
 
@@ -208,22 +164,92 @@ exports.doc = {
         }
     },
 
+    authors: {
+        language: "javascript",
+        
+        views: {
+            author_info: {
+                map: function (doc) {
+                    if (doc.type == "author") {
+                        var name = doc.name.toLowerCase();
+                        name = name.replace(/-/g, ' ');
+                        emit(name, doc);
+                        if (doc.images) {
+                            for (var type in doc.images) {
+                                emit(name, {_id:doc.images[type]});
+                            }
+                        }
+                    }
+                }
+            },
+            columnists_info: {
+                map: function (doc) {
+                    if (doc.type == "author" && doc.currentColumnist) {
+                        var name = doc.name.toLowerCase();
+                        name = name.replace(/-/g, ' ');
+                        emit(name, doc);
+                        if (doc.images) {
+                            for (var type in doc.images) {
+                                emit(name, {_id:doc.images[type]});
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+
+    images: {
+        language: "javascript",
+        
+        views: {
+
+            originals: {
+                map: function (doc) {
+                    if (doc.imageVersions) {
+                        var date = parseInt(doc.date);
+                        if(isNaN(date)) date = 0;                
+                        emit(date, doc);
+                    }
+                }
+            },
+
+            originals_index: {
+                map: function (doc) {
+                    if (doc.imageVersions) {
+                        emit(doc.name, doc);
+                    }
+                }
+            },
+
+            versions: {
+                map: function (doc) {
+                    if (doc.type == "imageVersion" && doc.original) {
+                        emit(doc.original, doc);
+                    }
+                }
+            },
+
+            photographers: {
+                map: function (doc) {
+                    if (doc.photographer) {
+                        emit(doc.photographer, doc);
+                    }
+                }
+            }
+        }
+    },
+
     polls: {
         language: "javascript",
         
         views: {
 
-            date: {
-                map: function (doc) {
-                    if (doc.type == 'poll' && doc.created)
-                        emit(parseInt(doc.created), doc);
-                }
-            },
-
             taxonomy: {
                 map: function (doc) {
-                    if (doc.type == 'poll' && doc.taxonomy) {
+                    if (doc.type == 'poll' && doc.taxonomy && doc.created) {
                         var path = [];
+                        emit([[], parseInt(doc.created)], doc);
                         for (var i in doc.taxonomy) {
                             path.push(doc.taxonomy[i]);
                             emit([eval(uneval(path)), parseInt(doc.created)], doc);
@@ -250,7 +276,6 @@ exports.doc = {
                 }
             }
         }
-
     }
 
 };

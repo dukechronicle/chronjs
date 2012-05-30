@@ -13,22 +13,12 @@ var _ = require("underscore");
 var async = require('async');
 var nimble = require('nimble');
 
-var LAYOUT_GROUPS, COLUMNISTS_DATA, COLUMNIST_HEADSHOTS;
+var LAYOUT_GROUPS;
 var twitterFeeds = [];
 var BENCHMARK = false;
 
 site.init = function () {
     LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
-
-    COLUMNISTS_DATA = config.get("COLUMNISTS_DATA");
-    COLUMNIST_HEADSHOTS = {};
-
-    COLUMNISTS_DATA.forEach(function(columnist) {
-        COLUMNIST_HEADSHOTS[columnist.name] = {
-            headshot : columnist.headshot,
-            tagline : columnist.tagline
-        };
-    });
 
     twitterFeeds = _.filter(config.get("RSS_FEEDS"), function(rssFeed) {
         return rssFeed.url.indexOf("api.twitter.com") !== -1;
@@ -268,26 +258,40 @@ site.getOpinionPageContent = function(callback) {
     },
 
     function(cb) {// 3
-        api.authors.getLatest("Editorial Board", "Opinion", 5, cb);
+        api.article.getByTaxonomy(['Opinion', 'Editorial Board'], 5, null, function (err, res) {
+            cb(err, res);
+        });
     },
 
     function(cb) {//4
-        async.map(COLUMNISTS_DATA, function(columnist, _callback) {
-            api.authors.getLatest(columnist.user || columnist.name, "Opinion", 7, function(err, res) {
-                columnist.stories = res;
-                _callback(err, columnist);
-            })
-        }, cb);
+        api.authors.getColumnists(function(err, columnists) {
+            async.map(columnists, function(columnist, _callback) {
+                api.authors.getLatest(columnist.user || columnist.name, ['Opinion'], 7, function(err, res) {
+                    columnist.stories = modifyArticlesForDisplay(res);
+                    _callback(err, columnist);
+                })
+            }, cb);
+        });
     }], function(err, results) {
             if(err)
                 callback(err);
             else {
+                // maps columnist headshots to name for use on rest of page
+                columnistHeadshots = {};
+                results[4].forEach(function(columnist) {
+                    var name = columnist.name.toLowerCase();
+                    columnistHeadshots[name] = {tagline : columnist.tagline};
+                    if (columnist.images && columnist.images.StaffHeadshot)
+                        columnistHeadshots[name].headshot = columnist.images.StaffHeadshot.url;
+                });
+
+
                 var model = results[0];
                 if (model.Featured) {
                     model.Featured.forEach(function(article) {
                         article.author = article.authors[0];
                         var columnistObj = null;
-                        if( columnistObj = COLUMNIST_HEADSHOTS[article.author]) {
+                        if( columnistObj = columnistHeadshots[article.author.toLowerCase()]) {
                             if(columnistObj.headshot)
                                 article.thumb = columnistObj.headshot;
                             if(columnistObj.tagline)
@@ -296,7 +300,7 @@ site.getOpinionPageContent = function(callback) {
                     });
                 }
                 model.Blog = results[2];
-                model.EditorialBoard = results[3];
+                model.EditorialBoard = modifyArticlesForDisplay(results[3]);
                 model.Columnists = {};
                 // assign each columnist an object containing name and stories to make output jade easier
                 results[4].forEach(function(columnist, index) {
@@ -406,7 +410,7 @@ site.getSectionContent = function (params, callback) {
             popular.getPopularArticles(params, 5, cb);
         },
         function (cb) {
-            api.taxonomy.docs(params, 20, null, function (err, docs, next) {
+            api.article.getByTaxonomy(params, 20, null, function (err, docs, next) {
                 if (err) cb(err)
                 else cb(null, {docs:modifyArticlesForDisplay(docs), next:next});
             });
@@ -435,10 +439,26 @@ site.getSectionContent = function (params, callback) {
 };
 
 site.getAuthorContent = function(name, callback) {
-    api.search.docsByAuthor(name, 'desc', '', 1, function(err, docs) {
-        if(err) callback(err);
-        else callback(null, modifyArticlesForDisplay(docs));
-    });
+    async.parallel([
+        function(cb) {
+            api.article.getByAuthor(name, null, null, null, function(err, docs, next) {
+                if(err) cb(err);
+                else cb(null, {docs:modifyArticlesForDisplay(docs), next:next});
+            });
+        },
+        function(cb) {
+            api.authors.getInfo(name, cb);
+        }], function (err, results) {
+            if (err)
+                callback(err);
+            else {
+                var docs = results[0].docs;
+                var next = results[0].next
+                var info = results[1][0];
+                callback(null, docs, info, next);
+            }
+        }
+    );
 };
 
 site.getSearchContent = function (wordsQuery, query, callback) {
@@ -458,7 +478,7 @@ site.getSearchContent = function (wordsQuery, query, callback) {
 };
 
 site.getArticleContent = function(url, callback) {
-    api.articleForUrl(url, function(err, doc) {
+    api.article.getByUrl(url, function(err, doc) {
         if (err) callback('not found');
         else {
             var displayDoc = modifyArticleForDisplay(doc);
@@ -493,6 +513,9 @@ site.getArticleContentUncached = function(doc, callback) {
     },
     function(cb) {
         api.taxonomy.getParents(doc.taxonomy, cb);
+    },
+    function(cb) {
+        api.authors.getInfo(doc.authorsArray[0], cb);
     }
     ], 
     function(err, results) {
@@ -501,17 +524,17 @@ site.getArticleContentUncached = function(doc, callback) {
         else {
             var model = {
             adFullRectangle : {
-                "title" : "Advertisement",
-                "imageUrl" : "/images/ads/monster.png",
-                "url" : "http://google.com",
-                "width" : "300px",
-                "height" : "250px"
-            },
-                    popular: results[0],
-            related: results[1],
-                    parents: results[2]
+                    "title" : "Advertisement",
+                    "imageUrl" : "/images/ads/monster.png",
+                    "url" : "http://google.com",
+                    "width" : "300px",
+                    "height" : "250px"
+                },
+                popular: results[0],
+                related: results[1],
+                parents: results[2],
+                authorInfo: results[3][0]
             };
-
             callback(null, model);
         }
     });
@@ -567,10 +590,8 @@ function modifyArticleForDisplay(doc) {
                 doc.authorsHtml += ", ";
             }
         }
-    
-        if(COLUMNIST_HEADSHOTS[doc.authorsArray[0]])
-            doc.subhead = doc.subhead || COLUMNIST_HEADSHOTS[doc.authorsArray[0]].tagline;
     }
+    doc.renderedBody = api.article.renderBody(doc.body);
     
     return doc;
 }

@@ -1,4 +1,4 @@
-/* require npm nodejs modules */ 
+/* require npm nodejs modules */
 var async = require('async');
 var express = require('express');
 require('express-namespace');
@@ -86,6 +86,17 @@ function configureApp(sessionInfo, port) {
     // these app.configure calls need to come before app.use(app.router)!
 
     app.configure('development', function () {
+        app.use(stylus.middleware({
+            src: 'views',
+            dest: 'public',
+            force: true,
+            compile: function (str, path) {
+                return stylus(str)
+                    .set('filename', path)
+                    .set('compress', true)
+                    .set('include css', true);
+            }
+        }));
         app.use(express.static(__dirname + '/public'));
         app.error(express.errorHandler({ dumpExceptions:true, showStack:true }));
     });
@@ -133,8 +144,8 @@ function runSite(callback) {
         }
         else {
             if (process.env.NODE_ENV === 'production') {
-                sitemap.latestNewsSitemap('public/sitemaps/news_sitemap', function (err) {
-                    if (err) log.error("Couldn't build news sitemap: " + err);
+                sitemap.latestNewsSitemap('/sitemaps/news_sitemap', function (err) {
+                    if (err) log.warning("Couldn't build news sitemap: " + err);
                 });
 
                 builder.pushAssets(viewOptions.paths, function (err, paths) {

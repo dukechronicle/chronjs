@@ -138,14 +138,20 @@ site.search = function (req, res, next) {
 };
 
 site.staff = function (req, res) {
-    var name = req.params.query.replace(/-/g, ' ');
-    api.site.getAuthorContent(name, function (err, docs) {
+    var name = util.capitalizeWords(req.params.name.replace(/-/g, ' '));
+    api.site.getAuthorContent(name, function (err, docs, info, nextDoc) {
+        if (info && info.name)
+            name = info.name;
+
         res.render('site/pages/people', {
             layout: 'site/layout',
             locals: {
                 pageTitle: util.capitalizeWords(name),
                 docs: docs,
-                name: util.capitalizeWords(name)
+                next: nextDoc,
+                authorInfo: info,
+                name: name,
+                isAdmin: api.accounts.isAdmin(req)
             }
         });
     });
@@ -174,7 +180,9 @@ site.article = function (req, res, next) {
                 model:model,
                 parentPaths: model.parents,
                 section: doc.taxonomy[0],
+                article: true,
                 disqusData: {
+                    production: process.env.NODE_ENV == 'production',
                     shortname: config.get('DISQUS_SHORTNAME'),
                     id: doc.nid || doc._id,
                     title: doc.title,
@@ -186,8 +194,6 @@ site.article = function (req, res, next) {
                 locals.pageImage = doc.images.ThumbSquareM.url;
             if (model.poll && model.poll._id in req.session.polls)
                 model.poll.voted = true;
-
-            locals.article = true;
 
             res.render('site/pages/article', {
                 layout: 'site/layout',
@@ -284,7 +290,7 @@ site.newsletterData = function (req, res) {
 };
 
 site.rss = function (req, res, next) {
-    api.docsByDate(50, null, function (err, docs) {
+    api.article.getByDate(50, null, function (err, docs) {
         if (err) next(err);
         else {
             res.render('rss', {
@@ -300,7 +306,7 @@ site.rss = function (req, res, next) {
 
 site.rssSection = function (req, res, next) {
     var taxonomy = req.params.toString().split('/');
-    api.taxonomy.docs(taxonomy, 50, null, function (err, docs) {
+    api.article.getByTaxonomy(taxonomy, 50, null, function (err, docs) {
         if (err) next(err);
         else {
             res.render('rss', {

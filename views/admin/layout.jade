@@ -1,15 +1,13 @@
+include ../mixins/layout-helpers
+
 !!! 5
 html
   head
     title The Chronicle
-
-    link(rel='stylesheet', href=paths.css.admin)
-
-    script var CHRONICLE = { onload: [] }
-
+    mixin stylesheet(isProduction, "admin")
     !=partial("code/google-analytics")
   body
     #main
       #container!= body
-
-      script(src=paths.js.admin, type="text/javascript")
+      #scripts
+        mixin require-script(isProduction, "admin")

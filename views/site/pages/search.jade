@@ -1,12 +1,5 @@
 - var monthArray = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-script(type='text/javascript')
-    CHRONICLE.onload.push(function () {
-        var scrollLoadUrl = "search/#{query}?sort=#{sort}&order=#{order}&facets=#{currentFacets}";
-        var scrollLoadHTML = '<a href="/article/URL_REPLACE" class="addedArticle result rounded-hover"><h3>HEADER_REPLACE</h3><div class="date">DATE_REPLACE<span class="sep">&nbsp;|&nbsp;</span>AUTHOR_REPLACE</div><div class="teaser">TEASER_REPLACE</div></a>';
-        scrollLoadPage(scrollLoadUrl, 2, scrollLoadHTML);
-    });
-
 #search
     .sidebar
         .sort.container.clearfix
@@ -43,7 +36,7 @@ script(type='text/javascript')
                 .teaser !{doc.teaser}
         - if(docs.length == 0)
             div No articles found
-        div.result.rounded-hover(id='loadImage')
+        div.result.rounded-hover#loadImage(style="height: 150px;", data-key="2", data-url="/api/search/?q=#{query}&sort=#{sort}&order=#{order}&facets=#{currentFacets}")
             img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto")
             br
             br

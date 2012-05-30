@@ -1,5 +1,6 @@
 var api = require('../../api');
 var admin = require('./admin');
+var config = require('../../config');
 var siteApi = require('./api');
 var log = require('../../log');
 var site = require('./site');
@@ -20,13 +21,13 @@ exports.preinit = function (app) {
 exports.init = function (app) {
 
     app.namespace('/api', function () {
-        app.get('/all', siteApi.listAll);
-        app.get('/section/*', siteApi.listSection);
+        app.get('/all', siteApi.articlesBySection);
+        app.get('/section/*', siteApi.articlesBySection);
         app.get('/article/url/:url', siteApi.articleByUrl);
 
         app.post('/poll/:id/vote', siteApi.votePoll);
-        app.get('/search', siteApi.search);
-        app.get('/staff/:query', siteApi.staff);
+        app.get('/search', siteApi.searchArticles);
+        app.get('/staff/:query', siteApi.articlesByAuthor);
 
         app.get('/article/:id', siteApi.readArticle);
         app.post('/article', api.site.checkAdmin, siteApi.createArticle);
@@ -62,6 +63,7 @@ exports.init = function (app) {
         app.get('/subscribe', site.staticPage);
         app.get('/user-guidelines', site.staticPage);
         app.get('/young-trustee-2012', site.staticPage);
+        app.get('/commencement-2012', site.staticPage);
         
         app.post('/newsletter', site.newsletterData);
     });
@@ -71,11 +73,6 @@ exports.init = function (app) {
     // Makes search url more readable
     app.get('/search', site.search);
 
-    app.get('/users/:query', function (req, res) {
-        res.redirect('/staff/' + req.params.query);
-    });
-    app.get('/staff/:query', site.staff);
-
     app.get('/login', site.login);
 
     // Webmaster tools stuff -- don't delete
@@ -84,24 +81,34 @@ exports.init = function (app) {
     });
 
     app.namespace('/article', function () {
+        app.get('/new', api.site.checkAdmin, admin.addArticle);
+        app.post('/', api.site.checkAdmin, admin.addArticleData);
         app.get('/:url', site.article);
         app.get('/:url/print', site.articlePrint);
         app.get('/:url/edit', api.site.checkAdmin, admin.editArticle);
-        app.get('/new', api.site.checkAdmin, admin.addArticle);
-        app.post('/', api.site.checkAdmin, admin.addArticleData);
         app.put('/:url/edit', api.site.checkAdmin, admin.editArticleData);
+    });
+
+    app.namespace('/staff', function () {
+        app.get('/:name', site.staff);
+        app.get('/:name/edit', api.site.checkAdmin, admin.editAuthor);
+        app.put('/:name/edit', api.site.checkAdmin, admin.editAuthorData);
+    });
+    app.get('/users/:query', function (req, res) {
+        res.redirect('/staff/' + req.params.query);
     });
 
     app.namespace('/admin', function () {
         app.get('/', api.site.checkAdmin, admin.index);
         app.get('/newsletter', api.site.checkAdmin, admin.newsletter);
         app.get('/manage', api.site.checkAdmin, admin.manage);
+        app.get('/manage/:section', api.site.checkAdmin, admin.manage);
         app.get('/k4export', api.site.checkAdmin, admin.k4export);
         app.post('/k4export', api.site.checkAdmin, admin.k4exportData);
         app.post('/newsletter', api.site.checkAdmin, admin.newsletterData);
         app.get('/layout/group/:group', api.site.checkAdmin, admin.layout);
         app.get('/duplicates', api.site.checkAdmin, admin.duplicates);
-
+        app.get('/author', api.site.checkAdmin, admin.author);
         app.get('/system/memory', api.site.checkAdmin, admin.memory);
     });
     
@@ -114,7 +121,8 @@ exports.init = function (app) {
         app.get('/:imageName', api.site.checkAdmin, admin.image.renderImage);
         app.post('/info', api.site.checkAdmin, admin.image.info);
         app.post('/crop', api.site.checkAdmin, admin.image.crop);
-        app.post('/add', api.site.checkAdmin, admin.addImageToArticle);
+        app.post('/add', api.site.checkAdmin, admin.image.addImageToDoc);
+        app.get('/remove/:imageId', api.site.checkAdmin, admin.image.removeImageFromDoc);
     });
    
     app.namespace('/admin/poll', function () {
@@ -127,7 +135,12 @@ exports.init = function (app) {
     
     app.namespace('/xhrproxy', function() {
         app.get('/openx/:path', xhrproxy.openx);
+        app.get('/delete_activity', xhrproxy.delete_activity);
     })
+
+    app.get('/sitemaps/:query', function (req, res, next) {
+        res.redirect(config.get("CLOUDFRONT_DISTRIBUTION") + req.url);
+    });
 
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);

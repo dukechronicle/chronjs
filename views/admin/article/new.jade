@@ -1,27 +1,22 @@
-h1 Add a Document
-form(action='/article', method='POST')
-    input(type='hidden', name='doc[type]', value='article')
-    p(style="margin-bottom: 2em")
-        label(for='title') Title&nbsp;
-        input#title(type='text', name='doc[title]', style='width:600px')
-    p(style="margin-bottom: 2em")
-        label(for='title') Subhead&nbsp;
-        input#title(type='text', name='doc[subhead]', style='width:600px')
-    p(style="margin-bottom: 2em")
-        label(for='section') Section&nbsp;
-        select(name='doc[taxonomy]', style='width: 600px')
-          option(value='') Select a section
-           - each subsections, section in taxonomy
-              - each key, value in subsections
-                  option(value=value) #{key}
-    p(style="margin-bottom: 2em")
-        label(for='author') Authors&nbsp;
-        input#author(type='text', name='doc[authors]', style='width:600px')
-    p(style="margin-bottom: 2em")
-        label(for='teaser') Teaser&nbsp;
-        textarea#teaser(rows=3, cols=50, name='doc[teaser]', style='width:600px; height: 2.5em')
-    p(style="margin-bottom: 2em")
-        label(for='body') Article&nbsp;
-        textarea#body(rows=5, cols=50, name='doc[body]', style='width:600px; height: 40em')
-    p
-        input(type='submit', value='add')
+.container
+    h1 Add a Document
+    form.well(action='/article', method='POST')
+        input(type='hidden', name='doc[type]', value='article')
+        label(for='title') Title
+        input.span4#title(type='text', name='doc[title]')
+        label(for='subhead') Subhead
+        input.span4#subhead(type='text', name='doc[subhead]')
+        label(for='section') Section
+        select.span4#section(name='doc[taxonomy]')
+            option(value='') Select a section
+            - each subsections, section in taxonomy
+                - each key, value in subsections
+                    option(value=value) #{key}
+        label(for='author') Authors
+        input.span4#author(type='text', name='doc[authors]')
+        label(for='teaser') Teaser
+        textarea.span8#teaser(rows=3, name='doc[teaser]')
+        label(for='article-body') Article
+        textarea.span8#article-body(rows=10, name='doc[body]')
+        br
+        input.btn-primary.btn-large(type='submit', value='Add')

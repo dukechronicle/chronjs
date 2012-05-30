@@ -5,35 +5,23 @@ var log = require('../../log')
 
 var _ = require('underscore');
 
-/**
-* Gets top articles of the day.
-*@params http request, http response
-*/
-siteApi.listAll = function (req, res, next) {
-    api.docsByDate(null, null, function(err, docs) {
-        if (err) next(err);
-        else {
-            var result = _.map(docs, function (doc) {
-                return {"title":doc.title, "teaser":doc.teaser, "urls":doc.urls, "_id":doc._id, "created":doc.created};
-            });
-            res.json({docs: result});
-        }
-    });
-};
+var RESULTS_LIMIT = 20;
+
 
 /**
-* Gets articles within a section.
-*@params http request, http response
-*/
-siteApi.listSection = function (req, res, next) {
-    var sectionArray = req.params.toString().split('/');
+ * Responds with most recent articles within a section. If no section is given,
+ * it will respond will the most recent from all sections. A start key can be
+ * given for pagination.
+ */
+siteApi.articlesBySection = function (req, res, next) {
+    var taxonomy = req.params.length && req.params.toString().split('/');
     var start = req.query.start && JSON.parse(req.query.start);
-    api.taxonomy.docs(sectionArray, 15, start, function (err, docs, nextKey) {
+    api.article.getByTaxonomy(taxonomy, RESULTS_LIMIT, start, function (err, docs, nextKey) {
         if (err) next(err);
         else {
             docs = _.map(docs, function (doc) {
                 return _.pick(doc, 'title', 'teaser', 'urls', '_id', 'created',
-                              'authors', 'query_key');
+                              'authors');
             });
             res.json({docs: docs, next: JSON.stringify(nextKey)});
         }
@@ -41,23 +29,13 @@ siteApi.listSection = function (req, res, next) {
 };
 
 /**
-* Grabs the article for a given url
-*@params http request, http response
-*/
+ * Responds with the article for a given url. Images associated with the article
+ * are included with the URLs to them.
+ */
 siteApi.articleByUrl = function (req, res, next) {
-    api.articleForUrl(req.params.url, function (err, doc) {
+    api.article.getByUrl(req.params.url, function (err, doc) {
         if (err) next(err);
-        else {
-            var result = { 
-                "title": doc.title,
-                "urls": doc.urls,
-                "renderedBody": doc.renderedBody,
-                "author": doc.author,
-                 "_id":doc._id,
-                 "images": doc.images
-            };
-            res.json(result);
-        }
+        else res.json(doc);
     });
 };
 
@@ -66,7 +44,7 @@ siteApi.articleByUrl = function (req, res, next) {
 * Sorts by either relavence or date (ascending or descending)
 *@params req, http response
 */
-siteApi.search = function (req, res, next) {
+siteApi.searchArticles = function (req, res, next) {
     var query = req.query.q.replace(/-/g, ' ');
     var page = (req.query.start && parseInt(req.query.start)) || 1;
     api.search.docsBySearchQuery(query, req.query.sort, req.query.order, req.query.facets, page, true, function (err, docs, facets) {
@@ -75,41 +53,12 @@ siteApi.search = function (req, res, next) {
     });
 };
 
-siteApi.staff = function (req, res, next) {
-    var nameQuery = req.params.query.replace('-', ' ');
-    var page = (req.query.start && parseInt(req.query.start)) || 1;
-    api.search.docsByAuthor(nameQuery, 'desc', '', page, function (err, docs, facets) {
+siteApi.articlesByAuthor = function (req, res, next) {
+    var name = req.params.query;
+    var start = req.query.start && JSON.parse(req.query.start);
+    api.article.getByAuthor(name, null, RESULTS_LIMIT, start, function (err, docs, nextKey) {
         if (err) next(err);
-        else res.json({docs: docs, facets: facets, next: page + 1});
-    });
-};
-
-siteApi.addGroup = function (req, res, next) {
-    var docId = req.body.docId;
-    var nameSpace = req.body.nameSpace;
-    var groupName = req.body.groupName;
-    var weight = req.body.weight;
-
-    api.group.add(nameSpace, groupName, docId, weight, function (err, _res) {
-        if (err) {
-            log.warning(err);
-            _res.err = err;
-        }
-        res.send(_res);
-    });
-};
-
-siteApi.removeGroup = function (req, res, next) {
-    var docId = req.body.docId;
-    var nameSpace = req.body.nameSpace;
-    var groupName = req.body.groupName;
-
-    api.group.remove(nameSpace, groupName, docId, function (err, _res) {
-        if (err) {
-            log.warning(err);
-            _res.err = err;
-        }
-        res.send(_res);
+        else res.json({docs: docs, next: JSON.stringify(nextKey)});
     });
 };
 
@@ -121,21 +70,21 @@ siteApi.readArticle = function (req, res, next) {
 };
 
 siteApi.createArticle = function (req, res, next) {
-    api.addDoc(req.body, function (err, _res) {
+    api.article.add(req.body, function (err, _res) {
         if (err) res.send(err, 500);
         else res.send({url: _res});
     });
 };
 
 siteApi.updateArticle = function (req, res, next) {
-    api.editDoc(req.body.id, req.body, function (err, _res) {
+    api.article.edit(req.body.id, req.body, function (err, _res) {
         if (err) res.send(err, 500);
         else res.send({url: _res});
     });
 };
 
 siteApi.deleteArticle =  function (req, res, next) {
-    api.deleteDoc(req.params.id, req.body.rev, function (err) {
+    api.article.delete(req.params.id, req.body.rev, function (err) {
         if (err) res.send(err, 500);
         else res.send({status: 'success'});
     });

@@ -1,0 +1,7 @@
+.container
+    h1 Search Authors
+    form.well(action='/admin/author', method='GET')
+        label(for='name') Name
+        input.span4#name(type='text', name='name')
+        br
+        input.btn-primary.btn-large(type='submit', value='Find Author')

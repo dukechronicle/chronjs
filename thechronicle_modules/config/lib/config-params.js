@@ -156,261 +156,78 @@ var configParams = [
     {
         name: 'TAXONOMY',
         description: 'Taxonomy tree for the site, used for categorizing articles and navigation',
-        defaultValue: [
-        {
-        "News": [
-            {
-            "University": [
-                {
-                "Academics": []
+        defaultValue: {
+            News: {
+                University: {
+                    Academics: {},
+                    'Board of Trustees': {},
+                    'Campus Crime': {},
+                    Dining: {},
+                    DSG: {},
+                    'Graduate and Professional Schools': {},
+                    'Residence Life': {},
+                    'Student Life': {}
                 },
-                {
-                "Board of Trustees": []
+                'Local & National': {
+                    'City of Durham': {},
+                    'Durham Crime': {},
+                    'Higher Education': {},
+                    'National News and Politics': {},
+                    'North Carolina': {}
                 },
-                {
-                "Campus Crime": []
-                },
-                {
-                "Dining": []
-                },
-                {
-                "DSG": []
-                },
-                {
-                "Graduate and Professional Schools": []
-                },
-                {
-                "Residence Life": []
-                },
-                {
-                "Student Life": []
+                'Health & Science': {
+                    DUHS: {},
+                    'Environment & Sustainability': {},
+                    Pratt: {},
+                    Research: {},
+                    'School of Medicine': {},
+                    'Student Health': {}
                 }
-            ]
             },
-            {
-            "Local & National": [
-                {
-                "City of Durham": []
-                },
-                {
-                "Durham Crime": []
-                },
-                {
-                "Higher Education": []
-                },
-                {
-                "National News and Politics": []
-                },
-                {
-                "North Carolina": []
-                }
-            ]
+            Sports: {
+                Column: {},
+                Baseball: {},
+                Basketball: { Men: {}, Women: {} },
+                'Cross Country': { Men: {}, Women: {} },
+                Fencing: { Men: {}, Women: {} },
+                'Field Hockey': {},
+                Football: {},
+                Golf: { Men: {}, Women: {} },
+                Lacrosse: { Men: {}, Women: {} },
+                Rowing: {},
+                Soccer: { Men: {}, Women: {} },
+                'Swimming & Diving': { Men: {}, Women: {} },
+                Tennis: { Men: {}, Women: {} },
+                'Track & Field': { Men: {}, Women: {} },
+                Volleyball: {},
+                Wrestling: {}
             },
-            {
-            "Health & Science": [
-                {
-                "DUHS": []
-                },
-                {
-                "Environment & Sustainability": []
-                },
-                {
-                "Pratt": []
-                },
-                {
-                "Research": []
-                },
-                {
-                "School of Medicine": []
-                },
-                {
-                "Student Health": []
-                }
-            ]
+            Opinion: {
+                'Letter to the Editor': {},
+                'Editorial Board': {},
+                Column: {},
+                'Guest Commentary': {},
+                'Editor\'s Note': {}
+            },
+            Recess: {
+                'Page Two': {},
+                Arts: {},
+                Music: {},
+                Film: {},
+                Literature: {},
+                Column: {}
+            },
+            Towerview: {
+                Savvy: {},
+                Prefix: {},
+                Wisdom: {},
+                Feature: {},
+                Column: {},
+                'Editor\'s Note': {}
             }
-        ]
         },
-        {
-        "Sports": [
-                    {
-                        "Column": []
-                    },
-            {
-            "Baseball": []
-            },
-            {
-            "Basketball": [
-                            {
-                                "Men": []
-                            },
-                            {
-                                "Women": []
-                            }
-                        ]
-            },
-            {
-            "Cross Country": [
-                            {
-                                "Men": []
-                            },
-                            {
-                                "Women": []
-                            }
-                        ]
-            },
-            {
-            "Fencing": [
-                            {
-                                "Men": []
-                            },
-                            {
-                                "Women": []
-                            }
-                        ]
-            },
-            {
-            "Field Hockey": []
-            },
-            {
-            "Football": []
-            },
-            {
-            "Golf": [
-                            {
-                                "Men": []
-                            },
-                            {
-                                "Women": []
-                            }
-                        ]
-            },
-            {
-            "Lacrosse": [
-                            {
-                                "Men": []
-                            },
-                            {
-                                "Women": []
-                            }
-                        ]
-            },
-            {
-            "Rowing": []
-            },
-            {
-            "Soccer": [
-                            {
-                                "Men": []
-                            },
-                            {
-                                "Women": []
-                            }
-                        ]
-            },
-            {
-            "Swimming & Diving": [
-                            {
-                                "Men": []
-                            },
-                            {
-                                "Women": []
-                            }
-                        ]
-            },
-            {
-            "Tennis": [
-                            {
-                                "Men": []
-                            },
-                            {
-                                "Women": []
-                            }
-                        ]
-            },
-            {
-            "Track & Field": [
-                            {
-                                "Men": []
-                            },
-                            {
-                                "Women": []
-                            }
-                        ]
-            },
-            {
-            "Volleyball": []
-            },
-            {
-            "Wrestling": []
-            }
-        ]
-        },
-        {
-        "Opinion": [
-            {
-            "Letter to the Editor": []
-            },
-            {
-            "Editorial Board": []
-            },
-            {
-            "Column": []
-            },
-            {
-            "Guest Commentary": []
-            },
-            {
-            "Editor's Note": []
-            }
-        ]
-        },
-        {
-        "Recess": [
-            {
-            "Page Two": []
-            },
-            {
-            "Arts": []
-            },
-            {
-            "Music": []
-            },
-            {
-            "Film": []
-            },
-            {
-            "Literature": []
-            },
-                    {
-                        "Column": []
-                    }
-        ]
-        },
-        {
-        "Towerview": [
-                    {
-                        "Savvy": []
-                    },
-                    {
-                        "Prefix": []
-                    },
-                    {
-                        "Wisdom": []
-                    },
-                    {
-                        "Feature": []
-                    },
-                    {
-                        "Column": []
-                    },
-                    {
-                        "Editor's Note": []
-                    }
-                ]
-        }
-        ],
         schema: {
-            type: "array",
+            type: "object",
             id: "taxonomyLevel",
             items: {
                 type: "object",
@@ -644,56 +461,6 @@ var configParams = [
             items: {type : "string"}
           }
        }
-    },
-    {
-        name: 'COLUMNISTS_DATA',
-        description: 'Information for all columnists',
-        defaultValue: [
-            {"name":"Abdullah Antepli", "year":"the Muslim Chaplain and an adjunct faculty of Islamic Studies", "tagline":"blue devil imam", "day": "Tuesday", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/AntepliAbdullah.jpg"},
-            {"name":"Darren Beattie", "year":"Ph.D. Candidate", "tagline":"oy weber", "day": "Monday", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/BeattieDarren.jpg"},
-            {"name":"Priya Bhat", "year":"Trinity 2011", "tagline":"life as ms. b.", "day": "Thursday", "twitter":"tbpriya", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/BhatPriya.jpg"},
-            {"name":"Elena Botella", "year":"Trinity 2013", "tagline":"duke's biggest party", "day": "Monday", "twitter":"dukedemocrats", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/BotellaElena.jpg"},
-            {"name":"Scott Briggs", "year":"Trinity 2014", "tagline":"as i see it", "day": "Wednesday", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/BriggsScott.jpg"},
-            {"name":"Ellie Bullard", "year":"Trinity 2013", "tagline":"", "day": "Wednesday", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/BullardEllie.jpg"},
-            {"name":"Ashley Camano", "year":"Trinity 2014", "tagline":"going camando", "day": "Tuesday", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/CamanoAshley.jpg"},
-            {"name":"Rajlakshmi De", "year":"Trinity 2013", "tagline":"minority report", "day": "Friday", "twitter":"RajDe4", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/DeRajlakshmi.jpg"},
-            {"name":"dPS", "user": "Duke Partnership for Service", "year":"Trinity 2014", "tagline":"think globally, act locally", "day": "Tuesday", "twitter": "dukePS", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/dPS_logo.jpg"},
-            {"name":"Caleb Duncanson", "year":"Pratt 2012", "tagline":"news flash", "day": "Friday", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/DuncansonCaleb.jpg"},
-            {"name":"Amanda Garfinkel", "year":"Trinity 2013", "tagline":"a closer look", "day": "Tuesday", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/GarfinkelAmanda.jpg"},
-            {"name":"Roshni Jain", "year":"Trinity 2015", "tagline":"muddled and befuddled", "day": "Thursday", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/JainRoshni.jpg"},
-            {"name":"Ahmad Jitan", "year":"Trinity 2013", "tagline":"indecent family man", "day": "Thursday", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/JitanAhmad.jpg"},
-            {"name":"Sam Lachman", "user": "Samantha Lachman", "year":"Trinity 2013", "tagline":"what's our age again?", "day": "Thursday", "twitter":"SamLachman", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/LachmanSamantha.jpg"},
-            {"name":"Kristen Lee", "year":"Trinity 2013", "tagline":"between worlds", "day": "Monday", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/LeeKristen.jpg"},
-            {"name":"Mia Lehrer", "year":"Trinity 2012", "tagline":"but actually", "day": "Thursday", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/LehrerMia.jpg"},
-            {"name":"Harry Liberman", "year":"Trinity 2013", "tagline":"", "day": "Friday", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/LibermanHarry.jpg"},
-            {"name":"Monday Monday", "year":"Undergrad", "tagline":"the devil", "day": "Friday", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/monday monday.jpg"},
-            {"name":"Tegan Joseph Mosugu", "year":"Trinity 2014", "tagline":"be fierce, be real", "day": "Friday", "twitter":"tjcaliboy", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/MosuguTegan.jpg"},
-            {"name":"Indu Ramesh", "year":"Trinity 2013", "tagline":"walk the walk, talk the talk", "day": "Friday", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/RameshIndu.jpg"},
-            {"name":"Sonul Rao", "user":"Sony Rao", "year":"Trinity 2013", "tagline":"that's what she said", "day": "Tuesday", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/RaoSony.jpg"},
-            {"name":"Lillie Reed", "year":"Trinity 2014", "tagline":"wumbology", "day": "Wednesday", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/elliereed.jpg"},
-            {"name":"Jeremy Ruch", "year":"Trinity 2013", "tagline":"run and tell that", "day": "Wednesday", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/RuchJeremy.jpg"},
-            {"name":"Antonio Segalini", "year":"Trinity 2013", "tagline":"musings", "day": "Monday", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/SegaliniAntonio.jpg"},
-            {"name":"Travis Smith", "year":"Trinity 2013", "tagline":"It’s all in the game", "day": "Thursday", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/SmithTravis.jpg"},
-            {"name":"Connor Southard", "year":"Trinity 2012", "tagline":"dead poet", "day": "Wednesday", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/SouthardConnor.jpg"},
-            {"name":"Lindsay Tomson", "year":"Trinity 2012", "tagline":"middle child syndrome", "day": "Wednesday", "twitter":"elle4tee", "headshot":"http://d2sug25c5hnh7r.cloudfront.net/images/columnist-headshots/TomsonLindsay.jpg"}
-        ],
-        schema: {
-            type: "array",
-            id: "columnists",
-            items: {
-                type: "object",
-                properties: {
-                    name: {type: "string", required: true},
-                    user: {type: "string", required: false},
-                    year: {type: "string", required: true},
-                    tagline: {type: "string", required: false},
-                    day: {type: "string", required: true},
-                    headshot: {type: "string", required: true},
-                    twitter: {type: "string", required: false}
-                }
-            },
-            required: true
-        }
     }
 ];
 

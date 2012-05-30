@@ -1,10 +1,12 @@
+include ../mixins/layout-helpers
+
 !!! 5
 html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
     - if (typeof article !== undefined)
         prefix = "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#";
 
     head(prefix=prefix)
-        script(src="/js/mobile-redirect.js?v=3")
+        script(src="/js/mobile-redirect.js?v=4")
 
         if (typeof pageTitle != 'undefined')
             title #{pageTitle} | The Chronicle
@@ -18,18 +20,16 @@ html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
 
         link(rel="icon", href=static_cdn + "/images/favicon.ico")
 
-        link(rel="stylesheet", href=static_cdn + "/css/reset.css")
-        link(rel="stylesheet", href=paths.css.site)
+        mixin stylesheet(isProduction, "site")
         //if lt IE 9
-            link(rel="stylesheet", href=paths.css['style-ie'])
+            mixin stylesheet(isProduction, "style-ie")
 
         // typekitload code should always load first because it will cause a relayout of dom
         script(src="http://use.typekit.com/dwv2bjy.js")
         script try{Typekit.load()}catch(e){}
 
-        script var CHRONICLE = { onload: [] }
-
         !=partial("code/google-analytics")
+        !=partial("code/feedback")
 
         - if (typeof article !== "undefined")
             // opengraph
@@ -63,4 +63,4 @@ html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
                 script(type='text/javascript') var curvyCornersVerbose = false
                 script(src="/js/curvycorners.js")
 
-            script(src=paths.js.site, type="text/javascript")
+            mixin require-script(isProduction, "site")

@@ -17,11 +17,11 @@ image.listOriginalsByDate = function (limit, beforeKey, beforeID, callback) {
     if(beforeKey) query.startkey = parseInt(beforeKey);
     if(beforeID) query.startkey_docid = beforeID;
 
-    db.view('articles/image_originals', query, callback);
+    db.view('images/originals', query, callback);
 };
 
 image.originalsIndex = function (options, callback) {
-    db.view('articles/image_originals_index', options, callback);
+    db.view('images/originals_index', options, callback);
 };
 
 image.createOriginal = function (name, options, callback) {
@@ -116,13 +116,41 @@ image.edit = function (imageID, data, callback) {
 };
 
 image.originalsForPhotographer = function (photog, callback) {
-    db.view('articles/photographers', {
+    db.view('images/photographers', {
         key:photog
     }, callback);
 };
 
 image.docsForVersion = function(versionId, callback) {
-    db.view('articles/doc_images', {
+    db.view('articles/images', {
         key: versionId
     }, callback);
 };
+
+/*
+** Combines a db response that contains documents and images so that the document contains the image objects instead of just image IDs
+*/
+image.dereferenceDocumentImages = function(dbres) {
+    var imageMap = {};
+    var retArray = [];
+
+    dbres.forEach(function(doc){
+        var tempDoc = doc;
+        if (tempDoc.type == "image" || tempDoc.type == "imageVersion") 
+            imageMap[tempDoc._id] = tempDoc;
+    });
+
+    dbres.forEach(function(doc){
+        var tempDoc = doc;
+        if (tempDoc.type != "image" && tempDoc.type != "imageVersion") {
+            if (tempDoc.images) {
+                Object.keys(tempDoc.images).forEach(function(imageType){
+                    var imageID = tempDoc.images[imageType];
+                    tempDoc.images[imageType] = imageMap[imageID];
+                });
+            }
+            retArray.push(tempDoc);
+        }
+    });
+    return retArray;
+}

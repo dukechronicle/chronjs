@@ -15,14 +15,14 @@ var sitemap = require('../../sitemap');
 admin.image = require('./image');
 
 
-admin.sendNewsletter = function(testEmail, campaignID, callback) {
+admin.sendNewsletter = function (testEmail, campaignID, callback) {
     if (testEmail) {
         api.newsletter.sendTestNewsletter(campaignID, testEmail, callback);
     }
     else {
         api.newsletter.sendNewsletter(campaignID, function (err) {
             callback(err);
-            if(process.env.NODE_ENV === 'production') {
+            if (process.env.NODE_ENV === 'production') {
                 log.notice("Building sitemaps...");
                 sitemap.generateAllSitemaps(function (err) {
                     if (err) log.warning(err);
@@ -30,17 +30,17 @@ admin.sendNewsletter = function(testEmail, campaignID, callback) {
             }
         });
     }
-};
+}
 
 admin.k4export = function (filepath, callback) {
     async.parallel({
-        k4: function(callback) {
+        k4      :function (callback) {
             k4export.runExporter(filepath, function (failed, success) {
-            fs.unlink(filepath);
-                callback(null, {failed: failed, success: success});
+                fs.unlink(filepath);
+                callback(null, {failed:failed, success:success});
             });
         },
-        images: function(callback) {
+        images  :function (callback) {
             var imageTypes = api.image.IMAGE_TYPES;
 
             api.image.getOriginals(50, null, null, function (err, origs) {
@@ -48,44 +48,44 @@ admin.k4export = function (filepath, callback) {
                     return image.displayName.toLowerCase();
                 });
 
-                
+
                 var imageVersionIds = [];
-                origs.forEach(function(image) {
-                    image.imageVersions.forEach(function(versionId) {
+                origs.forEach(function (image) {
+                    image.imageVersions.forEach(function (versionId) {
                         imageVersionIds.push(versionId);
                     });
                 });
 
-                api.docsById(imageVersionIds, function(err, versions) {
+                api.docsById(imageVersionIds, function (err, versions) {
                     var toReturn = [];
                     var i = 0;
 
-                    origs.forEach(function(image) {
-                        var temp = {    
-                            originalId: image._id,
-                            displayName: image.displayName,
-                            thumbUrl: image.thumbUrl,
-                            imageVersions: image.imageVersions,
-                            imageVersionTypes: []
+                    origs.forEach(function (image) {
+                        var temp = {
+                            originalId       :image._id,
+                            displayName      :image.displayName,
+                            thumbUrl         :image.thumbUrl,
+                            imageVersions    :image.imageVersions,
+                            imageVersionTypes:[]
                         };
 
-                        temp.imageVersions.forEach(function(imageVersion) {
-                            Object.keys(imageTypes).forEach(function(type) {
-                                if(imageTypes[type].width == versions[i].doc.width && imageTypes[type].height == versions[i].doc.height) {
+                        temp.imageVersions.forEach(function (imageVersion) {
+                            Object.keys(imageTypes).forEach(function (type) {
+                                if (imageTypes[type].width == versions[i].doc.width && imageTypes[type].height == versions[i].doc.height) {
                                     temp.imageVersionTypes.push(type);
                                 }
                             });
-                            i ++;
+                            i++;
                         });
                         toReturn.push(temp);
                     });
-                                
+
                     callback(err, toReturn);
                 });
             });
         },
-        taxonomy: function(callback) {
-            api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
+        taxonomy:function (callback) {
+            api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
                 callback(err, taxonomy);
             });
         }
@@ -97,17 +97,17 @@ admin.addArticle = function (doc, callback) {
         callback('No section selected for article');
     }
     else {
-        var fields = {
-            body:doc.body,
-            authors:doc.authors.split(", "),
-            title:doc.title,
-            subhead:doc.subhead,
-            teaser:doc.teaser,
-            type:doc.type,
+        var article = {
+            body    :doc.body,
+            authors :doc.authors.split(", "),
+            title   :doc.title,
+            subhead :doc.subhead,
+            teaser  :doc.teaser,
+            type    :doc.type,
             taxonomy:JSON.parse(doc.taxonomy)
         };
 
-        api.addDoc(fields, callback);
+        api.article.add(article, callback);
     }
 };
 
@@ -119,15 +119,15 @@ admin.editArticle = function (doc, callback) {
         var id = doc.id;
 
         var fields = {
-            title: doc.title,
-            body: doc.body,
-            subhead: doc.subhead,
-            teaser: doc.teaser,
-            authors: doc.authors.split(", "),
-            taxonomy: JSON.parse(doc.taxonomy)
+            title   :doc.title,
+            body    :doc.body,
+            subhead :doc.subhead,
+            teaser  :doc.teaser,
+            authors :doc.authors.split(", "),
+            taxonomy:JSON.parse(doc.taxonomy)
         };
 
-        api.editDoc(id, fields, callback);
+        api.article.edit(id, fields, callback);
     }
 };
 
@@ -174,12 +174,10 @@ admin.getPoll = function (id, callback) {
 admin.layout = function (section, group, layoutConfig, callback) {
     async.parallel({
         sectionDocs: function (cb) {
-            if (section)
-                api.taxonomy.docs([section], 30, null, function (err, docs) {
-                    cb(err, docs); // need to ignore last callback argument
-                });
-            else
-                api.docsByDate(30, null, cb);
+            var taxonomy = section ? [ section ] : [];
+            api.article.getByTaxonomy(taxonomy, 30, null, function (err, docs) {
+                cb(err, docs); // need to ignore last callback argument
+            });
         },
         groupDocs: function (cb) {
             api.group.docs(layoutConfig[group].namespace, null, cb);

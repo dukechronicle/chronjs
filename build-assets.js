@@ -12,7 +12,7 @@ var api = require('./thechronicle_modules/api');
 var config = require('./thechronicle_modules/config');
 var log = require('./thechronicle_modules/log');
 
-var STYLE_DIR = __dirname + '/assets/styles/';
+var STYLE_DIR = __dirname + '/views/styles/';
 var DIST_DIR = __dirname + '/public/dist/';
 var JS_SOURCES = [ 'site', 'admin' ];
 
@@ -58,11 +58,13 @@ function buildCSS(callback) {
         async.forEachSeries(files, function (file, cb) {
             fs.stat(STYLE_DIR + file, function (err, stats) {
                 if (err) cb(err);
-                else if (!stats.isDirectory()) cb();
-                else buildCSSFile(file, function (err, path) {
-                    paths[file] = path;
-                    cb(err);
-                });
+                else if (stats.isDirectory() &&
+                         process.env.NODE_ENV == 'production')
+                    buildCSSFile(file, function (err, path) {
+                        paths[file] = path;
+                        cb(err);
+                    });
+                else cb();
             });
         }, function (err) {
             callback(err, paths);
@@ -71,57 +73,41 @@ function buildCSS(callback) {
 }
 
 function buildCSSFile(path, callback) {
-    var style = "";
+    var filepath = STYLE_DIR + path + '/main.styl';
+    fs.readFile(filepath, function (err, contents) {
+        if (err) return callback(err);
 
-    var options = {
-        styl: function (data, path, callback) {
-            stylus(data).set('compress', true).set('filename', path)
-                .render(callback);
-        },
-        css: function (data, path, callback) { callback(null, data) }
-    };
-
-    var walker = walk.walk(STYLE_DIR + path);
-    
-    walker.on('file', function (name, stats, next) {
-        var extension = stats.name.match(/\.([a-z]+)$/);
-        if (extension && extension[1] in options) {
-            var compile = options[extension[1]];
-            var filepath = name + '/' + stats.name;
-            fs.readFile(filepath, function (err, contents) {
-                if (err) callback(err);
-                else compile(contents.toString(), filepath, function(err, data) {
-                    if (err) {
-                        log.error(err);
-                        next(err);
-                    }
-                    else {
-                        style += cleanCSS.process(data);
-                        next();
-                    }
-                });
-            });
-        }
-        else next();
-    });
-    
-    walker.on('end', function (err) {
-        if (err) callback(err);
-        else {
+        var renderer = stylus(contents.toString())
+            .set('filename', filepath)
+            .set('compress', true)
+            .set('include css', true);
+        renderer.render(function(err, data) {
+            if (err) {
+                log.error(err);
+                return callback(err);
+            }
+            
+            var style = cleanCSS.process(data);
             fs.writeFile(DIST_DIR + path + '.css', style, function (err) {
                 callback(err, '/dist/' + path + '.css');
             });
-        }
+        });
     });
 }
 
 function buildJavascript(callback) {
     var paths = {};
     async.forEachSeries(JS_SOURCES, function (src, cb) {
-        buildJavascriptFile(src, function (err, path) {
-            paths[src] = path;
-            cb(err);
-        });
+        if (process.env.NODE_ENV === 'production') {
+            buildJavascriptFile(src, function (err, path) {
+                paths[src] = path;
+                cb(err);
+            });
+        }
+        else {
+            paths[src] = '/scripts/' + src + '/main';
+            cb();
+        }
     }, function (err) {
         callback(err, paths);
     });
@@ -129,15 +115,13 @@ function buildJavascript(callback) {
 
 function buildJavascriptFile(src, callback) {
     var config = { 
-        baseUrl: 'assets/scripts',
+        baseUrl: 'public/scripts',
         name: src + '/main',
         out: 'public/dist/' + src + '.js',
         paths: {
             jquery: 'require-jquery'
         }
     };
-    if (process.env.NODE_ENV != 'production')
-        config.optimize = 'none';
 
     requirejs.optimize(config, function (buildResponse) {
         callback(null, '/dist/' + src + '.js');

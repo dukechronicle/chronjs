@@ -1,0 +1,175 @@
+@import '../../mixins'
+
+width = 636px
+height = 393px
+right-width = 330px
+textHeight = 80px
+link-color = #36C
+
+
+.slideshow-right
+    box-shadow none
+    width width + 6 + right-width
+    position relative
+    padding 0
+    margin-bottom 20px
+    float right
+
+    font-size  0.9em
+    font-family  Georgia,"Century Schoolbook","Times New Roman",Times,serif
+
+    .slides
+        border-radius 4px
+        width width
+        float right
+        height height
+        background-linear-gradient bottom, whiteSmoke 0%, white 33%
+        black-box-shadow 0.3 0 1px 3px
+        border 3px solid white
+        text-align left
+        overflow hidden
+        position relative
+
+        img
+            margin-top 0px
+            border-radius 4px
+            width width
+            height height
+            border-bottom 1px solid #ccc
+            position absolute
+            left 0
+            top 0
+            margin-bottom textHeight
+            z-index 5
+
+        a:hover  h1
+            color link-color
+
+        .text
+            margin-top 400px
+            margin-left 10px
+            position absolute
+            h1
+                transition color .25s linear
+                font-size 1.5em
+                line-height 1.1em
+                margin-bottom 2px
+
+    .headlines
+        float left
+        width right-width
+        height height + 6px
+        display block
+        background transparent
+        text-align center
+
+        div
+            width 630px margin 0 auto
+
+        a.page
+            padding-left = 3px
+            padding-right = 8px
+            margin = 20px + padding-left + padding-right
+                     
+            text-align left
+            cursor pointer
+            width right-width - margin
+            display inline-block
+            margin 0px 0px 13px 0px
+            padding 3px padding-right 6px padding-left
+            font-size 1.2em
+
+            height 115px
+            color #444
+            line-height 1.3em
+
+            text-shadow 0px 1px 1px white
+            float left
+            transition border-right-color, .25s, linear
+            transition color linear .2s
+
+            h2
+                font-size 1.2em
+                line-height 1.2em
+                margin-bottom 8px
+
+             p.teaser
+                 font-size 0.85em
+                 line-height 1.2em
+                 color #444
+             img
+                 border-radius 4px
+                 height 118px
+                 width 118px
+                 float left
+                 margin-right 10px
+
+         a.page.last
+             margin-bottom 0px
+
+         a.page:hover
+             color black
+             text-decoration none
+
+         a.page.active
+             border-right-color #4D90F0
+             h2
+                color link-color
+
+         a.page.active:hover
+             h2
+                text-decoration underline
+
+         a.page.rounded
+             box-shadow rgba(0,0,0,0.30) 0 1px 3px
+             background-linear-gradient bottom #EDEDED white
+
+    .caret
+        transform rotate(45deg)
+        position absolute
+        margin-top 55px
+        left 330px
+        z-index 5
+        -webkit-transition -webkit-transform linear 0.4s
+        // TODO cross browser compatibility
+        b.caret-shadow
+            position absolute
+            width 10px
+            background white
+            height 10px
+            black-box-shadow 0.3 0 1px 3px
+            margin 0 0 0 0px
+            z-index 0
+        b.caret-white
+            position absolute
+            width 11px
+            background white
+            height 11px
+            left 1px
+            top -1px
+            z-index 1
+
+.slideshow
+    width width + 6
+    border-radius  4px
+    black-box-shadow 0.398438 0px 1px 3px
+
+    font-size  0.9em
+    font-family  Georgia,"Century Schoolbook","Times New Roman",Times,serif
+    padding 0
+    margin-bottom 20px
+
+    background-color white
+
+    #slides
+        width width
+        height height
+        padding 3px
+        overflow hidden
+        img
+            border-radius 4px
+
+        .galleria-info-title a
+            color black
+        .galleria-info-title a:hover
+            color link-color

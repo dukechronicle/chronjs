@@ -27,6 +27,40 @@ admin.duplicates = function (req, res, next) {
             });
         }
     });
+}
+
+admin.author = function (req, res, next) {
+    var name = req.query.name;
+    if (name) {
+        res.redirect('/staff/' + name + '/edit');
+    }
+    else {
+        res.render('admin/author', {
+            layout: 'admin/layout'
+        });
+    }
+};
+
+admin.editAuthor = function (req, res, next) {
+    var name = req.params.name.replace(/-/g, ' ');
+    api.authors.getInfo(name, function (err, docs) {
+        var newAuthor = docs.length == 0;
+        var doc = 
+        res.render('admin/author/edit', {
+            layout: 'admin/layout',
+            locals: {
+                newAuthor: newAuthor,
+                doc: newAuthor ? {name: name} : docs[0],
+            }
+        });
+    });
+};
+
+admin.editAuthorData = function (req, res, next) {
+    api.authors.setInfo(req.body, function (err, response) {
+        if (err) next(err);
+        else res.redirect('/staff/' + req.body.name);
+    });
 };
 
 admin.index = function (req, res, next) {
@@ -54,23 +88,22 @@ admin.newsletterData = function(req, res, next) {
 };
 
 admin.manage = function (req, res, next) {
-    var db = api.getDatabaseName();
-    var host = api.getDatabaseHost();
-    var port = api.getDatabasePort() || "80";
-    var db_url = 'http://' + host + ':' + port + '/_utils/document.html?' + db;
+    var dbName = api.getDatabaseName();
+    var dbUrl = api.getDatabaseUrl() + '/_utils/document.html?' + dbName;
 
-    var query = {};
-    if (req.query.beforeKey) query.startkey = parseInt(req.query.beforeKey);
-    if (req.query.beforeID) query.start_docid = req.query.beforeID;
+    var section = req.params.section && [ req.params.section ];
+    var start = req.query.start && JSON.parse(req.query.start);
 
-    api.docsByDate(null, query, function (err, docs) {
+    api.article.getByTaxonomy(section, null, start, function (err, docs, nextKey) {
         if (err) next(err);
         else res.render('admin/article', {
             layout: 'admin/layout',
             locals:{
-                docs:docs,
-                hasPrevious:(req.query.beforeID != null),
-                db_url: db_url
+                docs: docs,
+                next: nextKey,
+                hasPrevious: start != null,
+                sections: config.get("TAXONOMY_MAIN_SECTIONS"),
+                db_url: dbUrl
             }
         });
     });
@@ -121,14 +154,9 @@ admin.addArticleData = function (req, res, next) {
 
 admin.editArticle = function (req, res, next) {
     var url = req.params.url;
-    api.articleForUrl(url, function (err, doc) {
+    api.article.getByUrl(url, function (err, doc) {
         if (err)
             next(err);
-        else if (req.query.removeImage)
-            api.image.removeVersionFromDocument(doc._id, null, req.query.removeImage, function(err, doc) {
-                if (err) next(err);
-                else res.redirect('/article/' + url + '/edit');
-            });
         else
             api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
                 if (doc.authors)
@@ -139,9 +167,6 @@ admin.editArticle = function (req, res, next) {
                     locals:{
                         doc:doc,
                         groups:[],
-                        images:doc.images || {},
-                        url:url,
-                        afterAddImageUrl: '/article/' + url + '/edit',
                         taxonomy:taxonomy
                     }
                 });
@@ -154,16 +179,6 @@ admin.editArticleData = function (req, res, next) {
         if (err) next(err);
         else res.redirect('/article/' + url);
     });
-};
-
-admin.addImageToArticle = function (req, res, next) {
-    var afterUrl = req.body.afterUrl || '/admin';
-    api.image.addVersionsToDoc(req.body.docId, req.body.original,
-                               req.body.imageVersionId, req.body.imageType,
-                               function (err) {
-                                   if (err) next(err);
-                                   else res.redirect(afterUrl);
-                               });
 };
 
 admin.addPoll = function(req, res, next) {

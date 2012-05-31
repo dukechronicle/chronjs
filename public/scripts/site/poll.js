@@ -1,13 +1,14 @@
-var displayPoll;
-
 define(['jquery'], function ($) {
 
     var total = 0;
+    var voted = false;
 
-    displayPoll = function (voted) {
+    return { ".poll": displayPoll }
+
+    function displayPoll() {
 
         $(".poll .choice").each(function () {
-            total += parseInt($(this).attr("votes"));
+            total += $(this).data("votes");
         });
 
         $(".poll .choice > a").click(function(e) {
@@ -18,13 +19,11 @@ define(['jquery'], function ($) {
             if (!voted) {
                 voted = true;
 
-                var id = $(".poll > .container").attr("id");
+                var id = $(".poll").attr("id");
                 var answer = $choice.attr("id");
-                $choice.attr("votes", function (index, votes) {
-                    total++;
-                    return parseInt(votes) + 1;
-                });
 
+                $choice.data('votes', $choice.data('votes') + 1);
+                total++;
                 $.post('/api/poll/' + id + '/vote', { answer: answer });
                 
                 showResults();
@@ -32,20 +31,19 @@ define(['jquery'], function ($) {
         });
 
         if (voted) showResults();
-
     }
 
     function showResults() {
         $(".poll .choice").each(function () {
-            var percent = parseInt($(this).attr("votes")) / total;
-            $(this).append("<p>"+Math.round(percent * 100) + "%</p>");
-            $(this).append("<div>");
-            $(this).children(":last")
+            var percent = $(this).data('votes') / total;
+            $(this).append('<span class="vote-count">'+Math.round(percent * 100) + '%</span>');
+            var $bar = $('<div>')
                 .addClass("bar")
                 .css("width", 0)
                 .animate({
                     width: $(this).width() * percent
                 }, 1000);
+            $(this).append($bar);
         });
     }
 

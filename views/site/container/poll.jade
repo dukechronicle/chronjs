@@ -4,9 +4,8 @@
 
   .rounded
       .content-container
-          h1 #{poll.title}
-          ul.choices
+          h3= poll.title
           - each votes, choice in poll.answers
-              il.choice(id=choice, votes=votes)
+              .choice(id=choice, data-votes=votes)
                   a.hover(href="#")
-                      h2 &#187; #{choice}
+                      h4 &#187; #{choice}

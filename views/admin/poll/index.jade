@@ -1,10 +1,12 @@
-table.poll-index(border=1)
-    - each doc in docs
+.container
+    table.table.table-striped.poll-index
         tr
-            td
-                a(href='/admin/') #{doc.title}
-            td
-                a(href='/admin/poll/' + doc._id) Edit
-              
-if (docs.length == 0)
-    h1 No Polls Available
+            th Title
+            th Section
+        - each doc in docs
+            tr
+                td: a(href='/admin/poll/' + doc._id)= doc.title
+                td= doc.taxonomy.join(', ')
+                  
+    if (docs.length == 0)
+        h1 No Polls Available

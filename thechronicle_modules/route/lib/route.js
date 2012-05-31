@@ -126,11 +126,11 @@ exports.init = function (app) {
     });
    
     app.namespace('/admin/poll', function () {
+    	app.get('/', api.site.checkAdmin, admin.managePoll);
     	app.get('/new', api.site.checkAdmin, admin.addPoll);
-    	app.get('/manage', api.site.checkAdmin, admin.managePoll);
     	app.get('/:id', api.site.checkAdmin, admin.editPoll);
     	app.post('/', api.site.checkAdmin, admin.addPollData);
-    	app.post('/edit', api.site.checkAdmin, admin.editPollData);
+    	app.post('/:id', api.site.checkAdmin, admin.editPollData);
     });
     
     app.namespace('/xhrproxy', function() {

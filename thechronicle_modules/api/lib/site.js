@@ -486,7 +486,7 @@ site.getArticleContent = function(url, callback) {
             async.parallel({
                 model: cache(site.getArticleContentUncached, 600, displayDoc),
                 poll: function (cb) {
-                    api.poll.getBySection(doc.taxonomy, 1, function (err, res) {
+                    api.poll.getByTaxonomy(doc.taxonomy, 1, function (err, res) {
                         if (err) cb(err);
                         else if (res.length == 0) cb();
                         else cb(null, res[0]);

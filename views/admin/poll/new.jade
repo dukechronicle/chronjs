@@ -1,23 +1,18 @@
-h1 Add a Poll    
-form(action='/admin/poll', method='POST')
-    input(type='hidden', name='doc[type]', value='poll')
-    p(style="margin-bottom: 2em")
-        label(for='title') Title&nbsp;
-        input#title(type='text', name='doc[title]', style='width:600px')
-    p(style="margin-bottom: 2em")
-        label(for='section') Section&nbsp;
-        select(name='doc[taxonomy]', style='width: 600px')
-          option(value='') Select a section
-           - each subsections, section in taxonomy
-              - each key, value in subsections
-                  option(value=value) #{key}
-    p#answers(style="margin-bottom: 2em")
-        label(for='answers') Answers&nbsp;
-        input(type='text', id="answer0", name='doc[answers][0]', style='width:600px')
+.container
+    h1 Add a Poll    
+    form.well(action='/admin/poll', method='POST')
+        label(for='title') Title
+        input.span4#title(type='text', name='doc[title]')
+        label(for='section') Section
+        select.span4#section(name='doc[taxonomy]')
+            option(value='') Select a section
+            - each subsections, section in taxonomy
+                - each key, value in subsections
+                    option(value=value) #{key}
+        label Answers
+        ol
+            li: input.span4(type='text', name='doc[answers][0]')
+            li: input.span4(type='text', name='doc[answers][1]')
+            li: button.btn.add-field(data-name='doc[answers]') Add answer field
         br
-        label
-        input(type='text', id="answer1", name='doc[answers][1]', style='width:600px')
-        br
-    input#add(type='button', name='add', value='Add answer field')
-    p
-        input(type="submit", class="btn", value="Add")
+        input.btn-primary.btn-large(type='submit')

@@ -22,8 +22,8 @@ poll.add = function (fields, callback) {
     db.poll.add(poll, callback);
 };
 
-poll.edit = function (fields, callback) {
-    db.poll.edit(fields.id, poll, callback);
+poll.edit = function (id, fields, callback) {
+    db.poll.edit(id, fields, callback);
 }
 
 poll.vote = function (id, answer, callback) {

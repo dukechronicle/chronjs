@@ -1,4 +1,7 @@
 .container
+    - if (flash)
+      .alert.alert-success= flash
+
     h1 Edit a Poll
     form(action='', method='POST')
         label(for='title') Title
@@ -14,14 +17,15 @@
                           option(value=value) #{key}
         label Answers
         ol
-            - var i = 0;
+            - var i = 0
             - each count, answer in doc.answers
                  li
-                     input.span4(type='text', name="doc[answers][#{i++}]", value=answer)
+                     input.span4(type='text', name="doc[answers][#{i}]", value=answer)
+                     input.span4(type='hidden', name="doc[count][#{i++}]", value=count)
                      span.offset1 #{count} Votes
             li: button.btn.add-field(data-name='doc[answers]') Add answer field
         p
             span Reset Votes? &nbsp;
-            input#reset(type='checkbox', name='reset')
+            input#reset(type='checkbox', name='doc[reset]')
         br
         input.btn-primary.btn-large(type='submit')

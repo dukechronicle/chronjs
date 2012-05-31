@@ -4,8 +4,8 @@ var db = require('./db-abstract');
 var log = require('../../log');
 
 
-poll.add = function (poll, callback) {
-    db.save(poll, callback);
+poll.add = function (fields, callback) {
+    db.save(fields, callback);
 };
 
 poll.edit = function (id, fields, callback) {

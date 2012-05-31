@@ -155,22 +155,20 @@ admin.addArticleData = function (req, res, next) {
 admin.editArticle = function (req, res, next) {
     var url = req.params.url;
     api.article.getByUrl(url, function (err, doc) {
-        if (err)
-            next(err);
-        else
-            api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
-                if (doc.authors)
-                    doc.authors = doc.authors.join(", ");
+        if (err) next(err);
+        else api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
+            if (doc.authors)
+                doc.authors = doc.authors.join(", ");
 
-                res.render('admin/article/edit', {
-                    layout: 'admin/layout',
-                    locals:{
-                        doc:doc,
-                        groups:[],
-                        taxonomy:taxonomy
-                    }
-                });
+            res.render('admin/article/edit', {
+                layout: 'admin/layout',
+                locals:{
+                    doc:doc,
+                    groups:[],
+                    taxonomy:taxonomy
+                }
             });
+        });
     });
 };
 
@@ -193,9 +191,8 @@ admin.addPoll = function(req, res, next) {
     });
 };
 
-
 admin.managePoll = function(req, res, next) {
-	adminApi.getPolls(function(err, docs) {
+	api.poll.getByDate(null, function(err, docs) {
 		api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
 			res.render('admin/poll', {
 				layout : 'admin/layout',
@@ -208,32 +205,34 @@ admin.managePoll = function(req, res, next) {
 };
 
 admin.editPoll = function(req, res, next) {
-	adminApi.getPoll(req.params.id, function(err, doc) {
+	api.poll.getPoll(req.params.id, function(err, doc) {
 		api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
 			res.render('admin/poll/edit', {
 				layout : 'admin/layout',
 				locals : {
 					taxonomy : taxonomy,
-					doc : doc
+                    flash: req.flash('info').pop(),
+                    doc: doc
 				}
 			});
 		});
 	});
 };
 
-
-
 admin.addPollData = function (req, res, next) {
     adminApi.addPoll(req.body.doc, function (err) {
         if (err) next(err);
-        else res.redirect('/admin/poll/manage');
+        else res.redirect('/admin/poll');
     });
 };
 
 admin.editPollData = function (req, res, next) {
-    adminApi.editPoll(req.body.doc, function (err) {
+    adminApi.editPoll(req.params.id, req.body.doc, function (err) {
         if (err) next(err);
-        else res.redirect('/admin/poll/manage');
+        else {
+            req.flash('info', 'Update sucessful');
+            admin.editPoll(req, res, next);
+        }
     });
 };
 

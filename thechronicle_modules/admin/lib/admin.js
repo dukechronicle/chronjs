@@ -146,29 +146,27 @@ admin.addPoll = function (doc, callback) {
     }
 };
 
-admin.editPoll = function (doc, callback) {
+admin.editPoll = function (id, doc, callback) {
 	if (doc.taxonomy == '') {
         callback('No section selected for poll');
     }
     else {
+        var answers = {};
+        for (var i = 0; i < doc.answers.length; i++) {
+            if (doc.answers[i]) {
+                answers[doc.answers[i]] = !doc.reset && i < doc.count.length ?
+                    doc.count[i] : 0;
+            }
+        }
+
         var fields = {
-        	id:doc.id,
             title:doc.title,
             taxonomy:JSON.parse(doc.taxonomy),
-            answers: doc.answers,
-            count: doc.count
+            answers: answers
         };
 
-        api.poll.edit(fields, callback);
+        api.poll.edit(id, fields, callback);
     }
-}
-
-admin.getPolls = function (callback) {
-	api.poll.getByDate('', callback);
-}
-
-admin.getPoll = function (id, callback) {
-	api.poll.getPoll(id, callback);
 }
 
 admin.layout = function (section, group, layoutConfig, callback) {

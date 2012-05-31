@@ -16,31 +16,27 @@ poll.getPoll = function (id, callback) {
     db.get(id, callback);
 };
 
-poll.getBySection = function (taxonomy, query, callback) {
-    query = query || {};
-    if (query.descending) {
-        query.startkey = [taxonomy, {}];
-        query.endkey = [taxonomy];
-    }
-    else {
-        query.startkey = [taxonomy];
-        query.endkey = [taxonomy, {}];
-    }
+poll.getBySection = function (taxonomy, limit, callback) {
+    query = {
+        descending: true,
+        startkey: [taxonomy, {}],
+        endkey: [taxonomy]
+    };
+    if (limit) query.limit = limit;
+
     db.view('polls/taxonomy', query, callback);
 };
 
-poll.getByTitle = function (title, query, callback) {
-    query = query || {};
-    query.key = title;
-    db.view('polls/title', query, callback);
+poll.getByTitle = function (title, callback) {
+    db.view('polls/title', { key: title }, callback);
 };
 
-poll.getByVotes = function (query, callback) {
-    query = query || {};
+poll.getByVotes = function (descending, limit, callback) {
+    var query = {};
+    if (descending)
+        query.descending = true;
+    if (limit)
+        query.limit = limit;
+
     db.view('polls/votes', query, callback);
-};
-
-poll.getByDate = function (query, callback) {
-    query = query || {};
-    db.view('polls/date', query, callback);
 };

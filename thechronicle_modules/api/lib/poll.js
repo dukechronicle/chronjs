@@ -77,6 +77,14 @@ poll.getByDate = function (limit, callback) {
 function callbackDocumentValues(callback) {
     return function (err, res) {
         if (err) callback(err);
-        else callback(null, _.map(res, function (doc) { return doc.value }));
+        else {
+            var values = _.map(res, function (doc) {
+                doc.value.total = 0;
+                for (var answer in doc.value.answers)
+                    doc.value.total += parseInt(doc.value.answers[answer]);
+                return doc.value;
+            });
+            callback(null, values);
+        }
     }
 }

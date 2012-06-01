@@ -29,7 +29,8 @@ define(['jquery'], function ($) {
                 showResults();
             }
         });
-
+        
+        voted = $(".poll").data('voted');
         if (voted) showResults();
     }
 

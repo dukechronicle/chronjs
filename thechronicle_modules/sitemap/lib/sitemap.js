@@ -106,7 +106,7 @@ function generateSitemap(docs, news) {
     }
 
     _.each(docs, function (doc, cb) {
-        var prefix = "http://www." + config.get('DOMAIN_NAME') + "/article/";
+        var prefix = "http://" + config.get('DOMAIN_NAME') + "/article/";
         var date = getDate(doc);
         var url = root.ele('url');
         url.ele('loc', prefix + _.last(doc.urls)).up().

@@ -8,39 +8,38 @@ var client = null;
 var redisUrl;
 
 exports.init = function (forceReinit, callback) {
-        if (!client || forceReinit) {
-            redis.debug_mode = false;
-            
-            // Grab redis URL from config settings.
-            redisUrl = config.get("REDIS_URL");
+    if (client && !forceReinit) return callback();
 
-            if(!redisUrl) return callback("redis server not defined");
-            redisUrl = url.parse(redisUrl);
+    redis.debug_mode = false;
+    
+    // Grab redis URL from config settings.
+    redisUrl = config.get("REDIS_URL");
 
-            // close old connection if it exists            
-            if(client) client.end();
-            
-            // create redis client and authenticate            
-            client = redis.createClient(redisUrl.port, redisUrl.hostname);
+    if(!redisUrl) return callback("redis server not defined");
+    redisUrl = url.parse(redisUrl);
 
-            client.on("error", function (err) {
-                log.error(err);
-            });
+    // close old connection if it exists            
+    if(client) client.end();
+    
+    // create redis client and authenticate            
+    client = redis.createClient(redisUrl.port, redisUrl.hostname);
 
-            if (redisUrl.auth) {
-                redisUrl.auth = redisUrl.auth.split(":");
+    client.on("error", function (err) {
+        log.error(err);
+    });
 
-                client.auth(redisUrl.auth[1], function (err, reply) {
-                    if (err) {
-                        log.error("Error connecting to redis: " + err);
-                        return callback(err);
-                    }
-                    callback(null);
-                });
+    if (redisUrl.auth) {
+        redisUrl.auth = redisUrl.auth.split(":");
+
+        client.auth(redisUrl.auth[1], function (err, reply) {
+            if (err) {
+                log.error("Error connecting to redis: " + err);
+                return callback(err);
             }
-            exports.client = client;
-        }
-        else return callback(null);
+            callback(null);
+        });
+    }
+    exports.client = client;
 };
 
 exports.getHostname = function () {

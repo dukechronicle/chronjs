@@ -2,7 +2,7 @@ var util = require('util');
 var winston = require('winston');
 var config = require('../../config');
 var CustomConsole = require('./console').CustomConsole;
-//var CustomLoggly = require('./loggly').CustomLoggly;
+var CustomLoggly = require('./loggly').CustomLoggly;
 
 
 exports.init = function (callback) {
@@ -15,17 +15,15 @@ exports.init = function (callback) {
         handleExceptions: true
     });
 
-    /*
-      if (process.env.NODE_ENV === 'production' && process.env.CHRONICLE_LOGGLY_SUBDOMAIN && process.env.CHRONICLE_LOGGLY_TOKEN) {
-      logger.add(CustomLoggly, {
-      subdomain: process.env.CHRONICLE_LOGGLY_SUBDOMAIN,
-      inputToken: process.env.CHRONICLE_LOGGLY_TOKEN,
-      level: 'warning',
-      json: true,
-      handleExceptions: true
-      });
-      }
-    */
+    if (process.env.NODE_ENV === 'production') {
+        logger.add(CustomLoggly, {
+            subdomain: config.get('LOGGLY_SUBDOMAIN'),
+            inputToken: config.get('LOGGLY_TOKEN'),
+            level: 'warning',
+            json: true,
+            handleExceptions: true
+        });
+    }
 
     logger.handleExceptions();
 

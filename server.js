@@ -19,7 +19,7 @@ var sitemap = require('./thechronicle_modules/sitemap');
 var PORT = process.env.PORT || process.env.CHRONICLE_PORT || 4000;
 var SECRET = "i'll make you my dirty little secret";
 
-var app, viewOptions, sessionInfo;
+var app, viewOptions, sessionManager;
 
 
 log.init();
@@ -32,10 +32,7 @@ config.init(runSite, function (err) {
         is_production: process.env.NODE_ENV === 'production'
     };
 
-    sessionInfo = {
-        secret: SECRET,
-        cookie: { maxAge: 1800000 } // Expire after 30 minutes
-    };
+    sessionManager = new SessionManager();
 
     configureApp();
     route.preinit(app);
@@ -99,7 +96,7 @@ function configureApp() {
 
         // set up session
         app.use(express.cookieParser());
-        app.use(express.session(sessionInfo));
+        app.use(sessionManager.session);
 
         // set http cache to 30 minutes by default for each response
         app.use(function (req, res, next) {
@@ -145,12 +142,9 @@ function runSite(callback) {
             });
         }
 
-        sessionInfo.store = new RedisStore({
-            host:redisClient.getHostname(),
-            port:redisClient.getPort(),
-            pass:redisClient.getPassword(),
-        });
-        app.use(express.session(sessionInfo));
+        sessionManager.useRedisStore(redisClient.getHostname(),
+                                     redisClient.getPort(),
+                                     redisClient.getPassword());
 
         route.init(app);
         log.notice(sprintf("Site configured and listening on port %d in %s mode",
@@ -158,4 +152,32 @@ function runSite(callback) {
 
         if (callback) callback();
     });
+}
+
+/**
+ * Wraps express session middleware in a way such that the underlying
+ * session store can be changed dynamically from MemoryStore to RedisStore.
+ * This class encapsulates all session options.
+ */
+function SessionManager() {
+    var self = this;
+
+    this.sessionInfo = {
+        secret: SECRET,
+        cookie: { maxAge: 1800000 } // Expire after 30 minutes
+    };
+    this.expressSession = express.session(this.sessionInfo);
+
+    this.useRedisStore = function (host, port, password) {
+        self.sessionInfo.store = new RedisStore({
+            host: host,
+            port: port,
+            pass: password
+        });
+        self.expressSession = express.session(self.sessionInfo);
+    };
+
+    this.session = function (req, res, next) {
+        self.expressSession.call({}, req, res, next);
+    };
 }

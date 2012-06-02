@@ -1,4 +1,4 @@
-var util = require('util');
+var util = require('../../util');
 var winston = require('winston');
 var Transport = winston.transports.Transport;
 var Console = winston.transports.Console;

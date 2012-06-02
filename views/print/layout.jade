@@ -3,7 +3,7 @@ include ../mixins/layout-helpers
 !!! 5
 html
   head
-    mixin stylesheet(isProduction, "print")
+    mixin stylesheet("print")
     title The Chronicle
     !=partial("code/google-analytics")
   body!= body

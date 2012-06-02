@@ -28,7 +28,8 @@ config.init(runSite, function (err) {
 
     viewOptions = {
         static_cdn: '',
-        use_compiled_static_files: false
+        use_compiled_static_files: false,
+        is_production: process.env.NODE_ENV === 'production'
     };
 
     sessionInfo = {
@@ -55,6 +56,21 @@ function configureApp() {
         next(err);
     });
 
+    // the middleware itself does not serve the static
+    // css files, so we need to expose them with staticProvider
+    // these app.configure calls need to come before app.use(app.router)!
+    app.use(stylus.middleware({
+        src: 'views',
+        dest: 'public',
+        force: true,
+        compile: function (str, path) {
+            return stylus(str)
+                .set('filename', path)
+                .set('compress', true)
+                .set('include css', true);
+        }
+    }));
+
     app.configure('development', function () {
         app.use(express.static(__dirname + '/public'));
         app.error(express.errorHandler({ dumpExceptions:true, showStack:true }));
@@ -73,6 +89,7 @@ function configureApp() {
     });
 
     app.configure(function () {
+
         app.set('view options', viewOptions);
         app.set('views', __dirname + '/views');
         app.set('view engine', 'jade');
@@ -91,21 +108,6 @@ function configureApp() {
             }
             next();
         });
-
-        // the middleware itself does not serve the static
-        // css files, so we need to expose them with staticProvider
-        // these app.configure calls need to come before app.use(app.router)!
-        app.use(stylus.middleware({
-            src: 'views',
-            dest: 'public',
-            force: true,
-            compile: function (str, path) {
-                return stylus(str)
-                    .set('filename', path)
-                    .set('compress', true)
-                    .set('include css', true);
-            }
-        }));
 
         app.use(app.router);
     });

@@ -20,7 +20,10 @@ exports.buildAssets = buildAssets;
 
 
 function buildAssets(callback) {
-    async.parallel({css: buildCSS, js: buildJavascript}, pushAssets);
+    async.parallel({css: buildCSS, js: buildJavascript}, function (err, paths) {
+        if (err) callback(err);
+        else pushAssets(paths, callback);
+    });
 }
 
 function pushAssets(paths, callback) {
@@ -57,8 +60,7 @@ function buildCSS(callback) {
         async.forEachSeries(files, function (file, cb) {
             fs.stat(STYLE_DIR + file, function (err, stats) {
                 if (err) cb(err);
-                else if (stats.isDirectory() &&
-                         process.env.NODE_ENV == 'production')
+                else if (stats.isDirectory())
                     buildCSSFile(file, function (err, path) {
                         paths[file] = path;
                         cb(err);
@@ -97,16 +99,10 @@ function buildCSSFile(path, callback) {
 function buildJavascript(callback) {
     var paths = {};
     async.forEachSeries(JS_SOURCES, function (src, cb) {
-        if (process.env.NODE_ENV === 'production') {
-            buildJavascriptFile(src, function (err, path) {
-                paths[src] = path;
-                cb(err);
-            });
-        }
-        else {
-            paths[src] = '/scripts/' + src + '/main';
-            cb();
-        }
+        buildJavascriptFile(src, function (err, path) {
+            paths[src] = path;
+            cb(err);
+        });
     }, function (err) {
         callback(err, paths);
     });

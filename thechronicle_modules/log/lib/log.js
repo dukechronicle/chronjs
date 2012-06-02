@@ -1,3 +1,5 @@
+var log = exports;
+
 var util = require('util');
 var winston = require('winston');
 var config = require('../../config');
@@ -5,7 +7,7 @@ var CustomConsole = require('./console').CustomConsole;
 var CustomLoggly = require('./loggly').CustomLoggly;
 
 
-exports.init = function (callback) {
+log.init = function (callback) {
     var logger = new (winston.Logger)();
 
     logger.setLevels(winston.config.syslog.levels);
@@ -16,13 +18,7 @@ exports.init = function (callback) {
     });
 
     if (process.env.NODE_ENV === 'production') {
-        logger.add(CustomLoggly, {
-            subdomain: config.get('LOGGLY_SUBDOMAIN'),
-            inputToken: config.get('LOGGLY_TOKEN'),
-            level: 'warning',
-            json: true,
-            handleExceptions: true
-        });
+
     }
 
     logger.handleExceptions();
@@ -34,6 +30,22 @@ exports.init = function (callback) {
     });
 
     logger.info('Logger is up');
-    logger.extend(exports);
-    callback();
+    logger.extend(log);
+};
+
+log.writeToLoggly = function () {
+    var subdomain = config.get('LOGGLY_SUBDOMAIN');
+    var inputKey = config.get('LOGGLY_TOKEN');
+    if (subdomain && inputKey) {
+        log.add(CustomLoggly, {
+            subdomain: config.get('LOGGLY_SUBDOMAIN'),
+            inputToken: config.get('LOGGLY_TOKEN'),
+            level: 'warning',
+            json: true,
+            handleExceptions: true
+        });
+    }
+    else {
+        log.error("Couldn't add loggly transport. Check config parameters.")
+    }
 };

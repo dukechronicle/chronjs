@@ -1,7 +1,9 @@
+var config = exports;
+
 var configParams = require('./config-params.js');
 
 var _ = require('underscore');
-var jsonSchemaValidator = require("JSV").JSV.createEnvironment();
+var validator = require("JSV").JSV.createEnvironment();
 var db = require('../../db-abstract');
 var url = require('url');
 var log = require('../../log');
@@ -12,7 +14,7 @@ var COUCHDB_CONFIG_HOST = process.env.CHRONICLE_CONFIG_DB;
 var DOCUMENT_CONFIG_KEY = "configParams";
 var CONFIG_DB_NAME_SUFFIX = "-config-profile";
 
-// the keys that the config profile name and revision should by keyed to in the params object passed into exports.setUp()
+// the keys that the config profile name and revision should by keyed to in the params object passed into config.setUp()
 var PROFILE_NAME_KEY = "profile_name";
 var REVISION_KEY = "rev";
 
@@ -23,28 +25,34 @@ var configRevision = null;
 
 var afterConfigChangeFunction = function(callback) { callback(); };
 
-exports.runAfterConfigChangeFunction = function(callback) {
+config.runAfterConfigChangeFunction = function(callback) {
     afterConfigChangeFunction(callback);
 };
 
-exports.init = function(func, callback)
+config.init = function(func, callback)
 {
-    afterConfigChangeFunction = func;
+    if (!COUCHDB_CONFIG_HOST)
+        return callback('No config database defined! Please set your ' +
+                        'CHRONICLE_CONFIG_DB environment var to the CouchDB ' +
+                        'host that stores site config info');
 
-    if(!COUCHDB_CONFIG_HOST) return callback('No config database defined! Please set your CHRONICLE_CONFIG_DB environment var to the CouchDB host that stores site config info');
+
+    afterConfigChangeFunction = func;
     
     log.info("Connecting to config database '" + PROFILE_NAME + "'");
-    configDB = db.connect(COUCHDB_CONFIG_HOST,PROFILE_NAME+CONFIG_DB_NAME_SUFFIX);
+    configDB = db.connect(COUCHDB_CONFIG_HOST,
+                          PROFILE_NAME + CONFIG_DB_NAME_SUFFIX);
 
-    configDB.exists(function (error,exists) {
-        if(error) return callback(error);
+    configDB.exists(function (err, exists) {
+        if (err) return callback(error);
        
         // initialize database if it doesn't already exist
-        if(!exists) {
-            log.alert("Database for config profile '" + PROFILE_NAME + "' does not exist. Creating...");
+        if (!exists) {
+            log.notice("Database for config profile '" + PROFILE_NAME +
+                       "' does not exist. Creating...");
             configDB.create(function(err, response) {
-                if(err) return callback(err);
-                getConfig(callback);
+                if (err) callback(err);
+                else getConfig(callback);
             });
         }
         else {
@@ -75,20 +83,20 @@ function getConfigParamObjectWithName(name) {
     return null;
 }
 
-exports.checkForUpdatedConfig = function(callback) {
+config.checkForUpdatedConfig = function(callback) {
     var prevRev = configRevision;
     getConfig(function() {
         callback(prevRev != configRevision);
     });
 }
 
-exports.get = function(variable) {
+config.get = function(variable) {
     if (!configProfile) {
         log.alert('Configuration is not defined!');
         return null;
     }
     else if(!configProfile[variable]) {
-        log.alert('Configuration property: "' + variable + '" not defined!');
+        log.warning('Configuration property: "' + variable + '" not defined!');
         return null;
     }
     else {
@@ -96,11 +104,11 @@ exports.get = function(variable) {
     }
 };
 
-exports.isSetUp = function () {
-    return exports.getUndefinedParameters().length == 0; // if all config params are defined, it is set up
+config.isSetUp = function () {
+    return config.getUndefinedParameters().length == 0; // if all config params are defined, it is set up
 };
 
-exports.setUp = function (params, callback) {
+config.setUp = function (params, callback) {
     var jsonError = null;
         
     if(params[REVISION_KEY] !== configRevision && configRevision != null) {
@@ -130,7 +138,7 @@ exports.setUp = function (params, callback) {
                 }
             }
 
-            var report = jsonSchemaValidator.validate(params[key], configParamObj.schema);            
+            var report = validator.validate(params[key], configParamObj.schema);
             if (report.errors.length === 0) {
                 //JSON is valid against the schema
                 configProfile[key] = params[key];
@@ -151,7 +159,7 @@ exports.setUp = function (params, callback) {
         
         configRevision = res.rev;
         documentExistsInDB = true;
-        if (exports.getUndefinedParameters().length == 0) return callback(null);
+        if (config.getUndefinedParameters().length == 0) return callback(null);
         else return callback('Some parameters still undefined. Please define all parameters.');
     }
 
@@ -167,7 +175,7 @@ exports.setUp = function (params, callback) {
     }
 };
 
-exports.getUndefinedParameters = function () {
+config.getUndefinedParameters = function () {
     if (configProfile == null) return configParams.getParameters();
 
     var parameters = configParams.getParameters();
@@ -181,10 +189,10 @@ exports.getUndefinedParameters = function () {
     return undefinedParameters;
 };
 
-exports.getParameters = function () {
+config.getParameters = function () {
     if(configProfile == null) return configParams.getParameters();
     
-    var returnParams = exports.getUndefinedParameters();
+    var returnParams = config.getUndefinedParameters();
 
     Object.keys(configProfile).forEach(function(key) {
         var configParam = getConfigParamObjectWithName(key);
@@ -198,18 +206,18 @@ exports.getParameters = function () {
     return returnParams;
 };
 
-exports.getActiveProfileName = function() {
+config.getActiveProfileName = function() {
     return PROFILE_NAME;
 };
 
-exports.getProfileNameKey = function() {
+config.getProfileNameKey = function() {
     return PROFILE_NAME_KEY;
 };
 
-exports.getRevisionKey = function() {
+config.getRevisionKey = function() {
     return REVISION_KEY;
 };
 
-exports.getConfigRevision = function() {
+config.getConfigRevision = function() {
     return configRevision;
 };

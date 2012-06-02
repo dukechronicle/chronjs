@@ -22,12 +22,12 @@ var SECRET = "i'll make you my dirty little secret";
 var app, viewOptions, sessionInfo;
 
 
+log.init();
 config.init(runSite, function (err) {
-    if (err) return console.err("Configuration failed: " + err);
+    if (err) return log.error("Configuration failed: " + err);
 
     viewOptions = {
         static_cdn: '',
-        is_production: process.env.NODE_ENV === 'production',
         use_compiled_static_files: false
     };
 
@@ -113,45 +113,42 @@ function configureApp() {
 }
 
 function runSite() {
-    log.init(function (err) {
-        if (err) return console.err("Logger couldn't be initialized: " + err);
-        
-        async.waterfall([
-            api.init,
-            redisClient.init
-        ], function (err) {
-            if (err) {
-                log.error(err);
-                app.close();
-                return
-            }
+    log.writeToLoggly();
+    async.waterfall([
+        api.init,
+        redisClient.init
+    ], function (err) {
+        if (err) {
+            log.error(err);
+            app.close();
+            return
+        }
 
-            if (process.env.NODE_ENV === 'production') {
-                sitemap.latestNewsSitemap('/sitemaps/news_sitemap', function (err) {
-                    if (err) log.warning("Couldn't build news sitemap: " + err);
-                });
-
-                builder.buildAssets(function(err, paths) {
-                    if (err) log.warning('Failed to build assets: ' + err);
-                    else log.notice('Built assets');
-
-                    viewOptions.paths =  paths;
-                    viewOptions.static_cdn = config.get('CLOUDFRONT_STATIC');
-                    viewOptions.use_compiled_static_files = true;
-                    app.set('view options', viewOptions);
-                });
-            }
-
-            sessionInfo.store = new RedisStore({
-                host:redisClient.getHostname(),
-                port:redisClient.getPort(),
-                pass:redisClient.getPassword(),
+        if (process.env.NODE_ENV === 'production') {
+            sitemap.latestNewsSitemap('/sitemaps/news_sitemap', function (err) {
+                if (err) log.warning("Couldn't build news sitemap: " + err);
             });
-            app.use(express.session(sessionInfo));
 
-            route.init(app);
-            log.notice(sprintf("Site configured and listening on port %d in %s mode",
-                               app.address().port, app.settings.env));
+            builder.buildAssets(function(err, paths) {
+                if (err) log.warning('Failed to build assets: ' + err);
+                else log.notice('Built assets');
+
+                viewOptions.paths =  paths;
+                viewOptions.static_cdn = config.get('CLOUDFRONT_STATIC');
+                viewOptions.use_compiled_static_files = true;
+                app.set('view options', viewOptions);
+            });
+        }
+
+        sessionInfo.store = new RedisStore({
+            host:redisClient.getHostname(),
+            port:redisClient.getPort(),
+            pass:redisClient.getPassword(),
         });
+        app.use(express.session(sessionInfo));
+
+        route.init(app);
+        log.notice(sprintf("Site configured and listening on port %d in %s mode",
+                           app.address().port, app.settings.env));
     });
 }

@@ -114,8 +114,11 @@ function configureApp() {
     app.listen(PORT);
 }
 
-function runSite() {
-    log.writeToLoggly();
+function runSite(callback) {
+    if (process.env.NODE_ENV === 'production') {
+        log.writeToLoggly();
+    }
+    
     async.waterfall([
         api.init,
         redisClient.init
@@ -152,5 +155,7 @@ function runSite() {
         route.init(app);
         log.notice(sprintf("Site configured and listening on port %d in %s mode",
                            app.address().port, app.settings.env));
+
+        if (callback) callback();
     });
 }

@@ -191,20 +191,15 @@ config.getUndefinedParameters = function () {
 };
 
 config.getParameters = function () {
-    if(configProfile == null) return configParams.getParameters();
-    
-    var returnParams = config.getUndefinedParameters();
-
-    Object.keys(configProfile).forEach(function(key) {
-        var configParam = getConfigParamObjectWithName(key);
-        
-        if(configParam != null) {
-            configParam.defaultValue = configProfile[key];
-            returnParams.push(configParam);
+    var params = [];
+    _.each(configParams.getParameters(), function (parameter) {
+        if (configProfile && (parameter.name in configProfile)) {
+            parameter.defaultValue = configProfile[parameter.name];
+            params.push(parameter);
         }
+        else params.unshift(parameter);
     });
-
-    return returnParams;
+    return params;
 };
 
 config.getActiveProfileName = function() {

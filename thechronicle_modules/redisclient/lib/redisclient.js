@@ -7,9 +7,7 @@ var _ = require("underscore");
 var client = null;
 var redisUrl;
 
-exports.init = function (forceReinit, callback) {
-    if (client && !forceReinit) return callback();
-
+exports.init = function (callback) {
     redis.debug_mode = false;
     
     // Grab redis URL from config settings.

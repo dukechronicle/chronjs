@@ -17,11 +17,10 @@ var DIST_DIR = __dirname + '/public/dist/';
 var JS_SOURCES = [ 'site', 'admin' ];
 
 exports.buildAssets = buildAssets;
-exports.pushAssets = pushAssets;
 
 
 function buildAssets(callback) {
-    async.parallel({css: buildCSS, js: buildJavascript}, callback);
+    async.parallel({css: buildCSS, js: buildJavascript}, pushAssets);
 }
 
 function pushAssets(paths, callback) {

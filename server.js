@@ -52,7 +52,7 @@ function configureApp() {
     app = express.createServer();
 
     app.error(function (err, req, res, next) {
-        log.error(err);
+        log.error(err.stack);
         next(err);
     });
 
@@ -73,7 +73,7 @@ function configureApp() {
 
     app.configure('development', function () {
         app.use(express.static(__dirname + '/public'));
-        app.error(express.errorHandler({ dumpExceptions:true, showStack:true }));
+        app.error(express.errorHandler({ showStack:true }));
     });
 
     app.configure('production', function () {
@@ -82,7 +82,7 @@ function configureApp() {
 
         app.error(function (err, req, res, next) {
             var errOptions = api.accounts.isAdmin(req) ?
-                {dumpExceptions:true, showStack:true} : {};
+                { showStack:true } : {};
             var errHandler = express.errorHandler(errOptions);
             errHandler(err, req, res, next);
         });

@@ -178,14 +178,15 @@ config.setUp = function (params, callback) {
 config.getUndefinedParameters = function () {
     if (configProfile == null) return configParams.getParameters();
 
-    var parameters = configParams.getParameters();
-
-    // find the undefined params and return them
-    var undefinedParameters = _.filter(parameters, function (parameter) {
-        return configProfile[parameter.name] == null;
+    var allParameters = configParams.getParameters();
+    var undefinedParameters = _.reject(allParameters, function (parameter) {
+        return (parameter.name in configProfile) || !parameter.schema.required;
     });
 
-    if (undefinedParameters.length > 0) log.warning("Undefined parameters: " + JSON.stringify(undefinedParameters));
+    if (undefinedParameters.length > 0)
+        log.warning("Undefined parameters: " +
+                    JSON.stringify(undefinedParameters));
+
     return undefinedParameters;
 };
 

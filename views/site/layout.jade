@@ -20,9 +20,9 @@ html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
 
         link(rel="icon", href=static_cdn + "/images/favicon.ico")
 
-        mixin stylesheet(use_compiled_static_files, "site")
+        mixin stylesheet("site")
         //if lt IE 9
-            mixin stylesheet(use_compiled_static_files, "style-ie")
+            mixin stylesheet("style-ie")
 
         // typekitload code should always load first because it will cause a relayout of dom
         script(src="http://use.typekit.com/dwv2bjy.js")
@@ -63,4 +63,4 @@ html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
                 script(type='text/javascript') var curvyCornersVerbose = false
                 script(src="/js/curvycorners.js")
 
-            mixin require-script(use_compiled_static_files, "site")
+            mixin require-script("site")

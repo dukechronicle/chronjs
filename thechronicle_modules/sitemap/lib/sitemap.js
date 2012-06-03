@@ -87,7 +87,7 @@ function generateSitemapIndex(files, date) {
     var doc = builder.create();
     var root = doc.begin("sitemapindex", { version: "1.0", encoding: "UTF-8" }).
         att("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9");
-    var prefix = config.get("CLOUDFRONT_DISTRIBUTION");
+    var prefix = "http://" + config.get("DOMAIN_NAME");
 
     _.each(files, function (path) {
         root.ele("sitemap").

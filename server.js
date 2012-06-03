@@ -27,9 +27,9 @@ config.init(runSite, function (err) {
     if (err) return log.error("Configuration failed: " + err);
 
     viewOptions = {
-        static_cdn: '',
-        use_compiled_static_files: false,
-        is_production: process.env.NODE_ENV === 'production'
+        staticCdn: '',
+        useCompiledStaticFiles: false,
+        isProduction: process.env.NODE_ENV === 'production'
     };
 
     sessionManager = new SessionManager();

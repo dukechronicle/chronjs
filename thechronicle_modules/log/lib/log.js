@@ -2,7 +2,7 @@ var util = require('util');
 var winston = require('winston');
 var config = require('../../config');
 var CustomConsole = require('./console').CustomConsole;
-var CustomLoggly = require('./loggly').CustomLoggly;
+//var CustomLoggly = require('./loggly').CustomLoggly;
 
 
 exports.init = function (callback) {
@@ -10,20 +10,22 @@ exports.init = function (callback) {
 
     logger.setLevels(winston.config.syslog.levels);
     logger.add(CustomConsole, {
-    level: 'debug',
-    msgStringify: function (msg) { return util.inspect(msg, false, null); },
-    handleExceptions: true
+        level: 'debug',
+        msgStringify: function (msg) { return util.inspect(msg, false, null); },
+        handleExceptions: true
     });
 
-    if (process.env.NODE_ENV === 'production' && process.env.CHRONICLE_LOGGLY_SUBDOMAIN && process.env.CHRONICLE_LOGGLY_TOKEN) {
-        logger.add(CustomLoggly, {
-                subdomain: process.env.CHRONICLE_LOGGLY_SUBDOMAIN,
-                inputToken: process.env.CHRONICLE_LOGGLY_TOKEN,
-                level: 'warning',
-                json: true,
-                handleExceptions: true
-        });
-    }
+    /*
+      if (process.env.NODE_ENV === 'production' && process.env.CHRONICLE_LOGGLY_SUBDOMAIN && process.env.CHRONICLE_LOGGLY_TOKEN) {
+      logger.add(CustomLoggly, {
+      subdomain: process.env.CHRONICLE_LOGGLY_SUBDOMAIN,
+      inputToken: process.env.CHRONICLE_LOGGLY_TOKEN,
+      level: 'warning',
+      json: true,
+      handleExceptions: true
+      });
+      }
+    */
 
     logger.handleExceptions();
 

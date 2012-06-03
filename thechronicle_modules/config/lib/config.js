@@ -95,13 +95,17 @@ config.get = function(variable) {
         log.alert('Configuration is not defined!');
         return null;
     }
-    else if(!configProfile[variable]) {
+    else if (variable in configProfile) {
+        // return a deep copy of the parameter
+        return JSON.parse(JSON.stringify(configProfile[variable]));
+    }
+
+    var param = getConfigParamObjectWithName(variable);
+    if (!param)
+        log.warning('Unknown configuration property: "' + variable + '"');
+    else if (param.schema.required)
         log.warning('Configuration property: "' + variable + '" not defined!');
-        return null;
-    }
-    else {
-        return JSON.parse(JSON.stringify(configProfile[variable])); // perform a deep copy and return that
-    }
+    return null;
 };
 
 config.isSetUp = function () {

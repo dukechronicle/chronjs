@@ -49,7 +49,7 @@ function configureApp() {
     app = express.createServer();
 
     app.error(function (err, req, res, next) {
-        log.error(err.stack);
+        log.error(err.stack || err);
         next(err);
     });
 
@@ -149,7 +149,7 @@ function runSite(callback) {
         route.init(app);
         log.notice(sprintf("Site configured and listening on port %d in %s mode",
                            app.address().port, app.settings.env));
-
+        
         if (callback) callback();
     });
 }

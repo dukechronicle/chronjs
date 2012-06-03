@@ -178,6 +178,6 @@ function SessionManager() {
     };
 
     this.session = function (req, res, next) {
-        self.expressSession.call({}, req, res, next);
+        self.expressSession(req, res, next);
     };
 }

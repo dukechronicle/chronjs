@@ -138,6 +138,22 @@ var configParams = [
         }
     },
     {
+        name: 'LOGGLY_SUBDOMAIN',
+        description: 'Loggly Subdomain',
+        schema: {
+          type: "string",
+          required: false
+        }
+    },
+    {
+        name: 'LOGGLY_TOKEN',
+        description: 'Loggly Input Key',
+        schema: {
+          type: "string",
+          required: false
+        }
+    },
+    {
         name: 'TAXONOMY_MAIN_SECTIONS',
         description: 'Main sections of the taxonomy',
         defaultValue: [

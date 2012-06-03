@@ -1,11 +1,11 @@
-mixin require-script(production, src)
-  - if (production)
+mixin require-script(src)
+  - if (useCompiledStaticFiles)
     script(src=paths.js[src], type="text/javascript")
   - else
-    script(src="/scripts/require-jquery.js", type="text/javascript", data-main=paths.js[src])
+    script(src="/scripts/require-jquery.js", type="text/javascript", data-main="/scripts/#{src}/main")
 
-mixin stylesheet(production, src)
-  - if (production)
+mixin stylesheet(src)
+  - if (useCompiledStaticFiles)
     link(rel="stylesheet", href=paths.css[src])
   - else
-    link(rel="stylesheet", href="/styles/" + src + "/main.css")
+    link(rel="stylesheet", href="/styles/#{src}/main.css")

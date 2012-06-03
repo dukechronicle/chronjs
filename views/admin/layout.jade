@@ -4,10 +4,10 @@ include ../mixins/layout-helpers
 html
   head
     title The Chronicle
-    mixin stylesheet(isProduction, "admin")
+    mixin stylesheet("admin")
     !=partial("code/google-analytics")
   body
     #main
       #container!= body
       #scripts
-        mixin require-script(isProduction, "admin")
+        mixin require-script("admin")

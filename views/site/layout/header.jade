@@ -38,13 +38,13 @@ br
 
 #header-bottom
     nav.span-10#nav
-        a(href="/news", class=(section == 'News') ? "active" : "") News
-        a(href="/sports", class=(section == 'Sports') ? "active" : "") Sports
-        a(href="/opinion", class=(section == 'Opinion') ? "active" : "") Opinion
-        a(href="/recess", class=(section == 'Recess') ? "active" : "") Recess
-        a(href="/towerview", class=(section == 'Towerview') ? "active" : "") Towerview
-        a(href="http://chronicleblogs.com") Blogs
-        a(href="http://shutter.dukechronicle.com") Photos
+        a(href="/news", class=(section == 'News') ? "active" : ""): h2 News
+        a(href="/sports", class=(section == 'Sports') ? "active" : ""): h2 Sports
+        a(href="/opinion", class=(section == 'Opinion') ? "active" : ""): h2 Opinion
+        a(href="/recess", class=(section == 'Recess') ? "active" : ""): h2 Recess
+        a(href="/towerview", class=(section == 'Towerview') ? "active" : ""): h2 Towerview
+        a(href="http://chronicleblogs.com"): h2 Blogs
+        a(href="http://shutter.dukechronicle.com"): h2 Photos
 
     form.span-2.last#search-box(action='/search/', method='GET')
         input(type='search', name='q', placeholder='Search archives', results='5', value=query)

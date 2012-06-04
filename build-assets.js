@@ -5,7 +5,6 @@ var requirejs = require('requirejs');
 var fs = require('fs');
 var gzip = require('gzip');
 var stylus = require('stylus');
-var walk = require('walk');
 var _ = require('underscore');
 
 var api = require('./thechronicle_modules/api');

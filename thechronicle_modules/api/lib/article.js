@@ -8,7 +8,6 @@ var redis = require('../../redisclient');
 var util = require("../../util");
 
 var md = require('discount');
-var sprintf = require('sprintf').sprintf;
 var _ = require("underscore");
 
 
@@ -145,9 +144,9 @@ article.getByTaxonomy = function (taxonomyPath, limit, start, callback) {
 
 article.renderBody = function (body) {
     _.each(VIDEO_PLAYERS, function (tag, name) {
-        var pattern = new RegExp(sprintf(VIDEO_REGEX_FORMAT, name), 'g');
+        var pattern = new RegExp(util.format(VIDEO_REGEX_FORMAT, name), 'g');
         body = body.replace(pattern, function(match) {
-            return sprintf(tag, RegExp.$2);
+            return util.format(tag, RegExp.$2);
         });
     });
     return md.parse(body);

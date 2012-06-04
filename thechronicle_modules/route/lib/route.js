@@ -12,6 +12,8 @@ var async = require('async');
 // assigns the functionality needed before different modules are ready to be
 // initilized (before config settings have been set)
 exports.preinit = function (app) {
+    app.get('/', site.checkConfig);
+    app.get('/login', site.login);
     app.post('/login', site.loginData);
     app.get('/logout', site.logout);
     app.get('/config', site.config);
@@ -70,8 +72,6 @@ exports.init = function (app) {
 
     // Makes search url more readable
     app.get('/search', site.search);
-
-    app.get('/login', site.login);
 
     // Webmaster tools stuff -- don't delete
     app.get('/mu-7843c2b9-3b9490d6-8f535259-e645b756', function (req, res) {

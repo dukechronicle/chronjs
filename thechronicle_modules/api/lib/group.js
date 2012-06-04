@@ -1,5 +1,6 @@
-var nimble = require('nimble');
 var _ = require('underscore');
+var async = require('async');
+
 var db = require('../../db-abstract');
 var log = require('../../log');
 var redis = require('../../redisclient');
@@ -25,7 +26,7 @@ group.list = function (namespace, callback) {
             callback(err, null);
         } else {
             // do not return the fully qualified, only the name/path after the namespace
-            nimble.map(res, function (val, cbck) {
+            async.map(res, function (val, cbck) {
                 cbck(null, val.key[1]);
             }, callback);
         }

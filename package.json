@@ -6,37 +6,31 @@
         "url":"git@github.com:thechronicle/website.git"
     },
     "engines": {
-        "node": "0.6.x",
-        "npm":  "1.1.x"
+        "node":"0.6.x",
+        "npm":"1.1.x"
     },
     "dependencies":{
-        "express":"2.x",
+        "express":"2.5.x",
         "express-namespace":"0.1.x",
         "express-resource":"0.2.x",
         "jade":"0.24.x",
-        "stylus":"0.25.0",
+        "stylus":"0.25.x",
 
         "async":"0.1.x",
-        "nimble":"0.0.2",
         "underscore":"1.x",
 
-        "cradle":"0.6",
+        "cradle":"0.6.x",
 
         "knox":"0.0.x",
-        "imagemagick":"0.1",
+        "imagemagick":"0.1.x",
 
-        "redis":"*",
-        "hiredis":"*",
-        "connect-redis":"*",
+        "redis":"0.7.x",
+        "hiredis":"0.1.x",
+        "connect-redis":"1.3.x",
 
         "discount": "0.2.x",
 
         "solr":"0.2.x",
-
-        "nodemailer":"0.3.x",
-        "jsdom":"0.2.x",
-        "jquery":"1.6.x",
-        "sprintf":"0.1.x",
 
         "cron":"0.2.x",
         "dateformat":"1.x",
@@ -50,9 +44,8 @@
         "mailchimp":"0.x",
         "xmlbuilder":"0.x",
         "JSV":"4.x",
-        "requirejs":"1.x",
-        "gzip":"0.x",
-        "walk":"2.x",
+        "requirejs":"1.0.x",
+        "gzip":"0.1.x",
         "clean-css":"0.x"
     }
 }

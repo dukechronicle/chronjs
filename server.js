@@ -1,12 +1,9 @@
-/* require npm nodejs modules */
 var async = require('async');
 var express = require('express');
 require('express-namespace');
 var RedisStore = require('connect-redis')(express);
 var stylus = require('stylus');
-var sprintf = require('sprintf').sprintf;
 
-/* require internal modules */
 var api = require('./thechronicle_modules/api');
 var builder = require('./build-assets');
 var config = require('./thechronicle_modules/config');
@@ -14,6 +11,7 @@ var log = require('./thechronicle_modules/log');
 var redisClient = require('./thechronicle_modules/redisclient');
 var route = require('./thechronicle_modules/route');
 var sitemap = require('./thechronicle_modules/sitemap');
+var util = require('./thechronicle_modules/util');
 
 // Heroku requires the use of process.env.PORT to dynamically configure port
 var PORT = process.env.PORT || process.env.CHRONICLE_PORT || 4000;
@@ -147,8 +145,8 @@ function runSite(callback) {
                                      redisClient.getPassword());
 
         route.init(app);
-        log.notice(sprintf("Site configured and listening on port %d in %s mode",
-                           app.address().port, app.settings.env));
+        log.notice(util.format("Site configured and listening on port %d in %s mode",
+                               app.address().port, app.settings.env));
         
         if (callback) callback();
     });

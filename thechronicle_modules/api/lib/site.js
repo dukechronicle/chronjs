@@ -11,7 +11,6 @@ var util = require('../../util');
 
 var _ = require("underscore");
 var async = require('async');
-var nimble = require('nimble');
 
 var LAYOUT_GROUPS;
 var twitterFeeds = [];

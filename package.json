@@ -42,10 +42,12 @@
         "dateformat":"1.x",
         "htmlparser":"1.7.x",
 
+        "winston":"0.6.x",
+        "winston-loggly":"0.6.x",
+
         "zipfile":"0.3.x",
         "sax":"0.x",
         "mailchimp":"0.x",
-        "winston":"0.6.x",
         "xmlbuilder":"0.x",
         "JSV":"4.x",
         "requirejs":"1.x",

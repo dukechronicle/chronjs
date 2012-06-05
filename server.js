@@ -136,8 +136,8 @@ function runSite(callback) {
                 else log.notice('Built assets');
 
                 viewOptions.paths =  paths;
-                viewOptions.static_cdn = config.get('CLOUDFRONT_STATIC');
-                viewOptions.use_compiled_static_files = true;
+                viewOptions.staticCdn = config.get('CLOUDFRONT_STATIC');
+                viewOptions.useCompiledStaticFiles = true;
                 app.set('view options', viewOptions);
             });
         }

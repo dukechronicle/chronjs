@@ -2,7 +2,7 @@
 - query = query.replace(/-/g, ' ');
 - if (typeof section == 'undefined') var section = undefined
 
-#header-top
+#header-top.clearfix
     .span-1 &nbsp;
     a.content.clearfix.span-4(href="/")
         img#header-overlay(src=staticCdn + '/images/header-overlay.png')
@@ -34,9 +34,7 @@
             a(href="http://dukechronicle.campusave.com") Classifieds
             a(href="http://chroniclehousing.com") Housing
 
-br
-
-#header-bottom
+#header-bottom.clearfix
     nav.span-10#nav
         a(href="/news", class=(section == 'News') ? "active" : ""): h2 News
         a(href="/sports", class=(section == 'Sports') ? "active" : ""): h2 Sports

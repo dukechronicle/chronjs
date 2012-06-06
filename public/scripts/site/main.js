@@ -12,7 +12,7 @@ require(['site/align','site/article','site/category-box','site/scrollLoad',
                     var functions = args[i];
                     for (var selector in functions)
                         if (!selector || $(selector).length > 0)
-                            functions[selector]();
+                            functions[selector]($(selector));
                 }
             });
         });

@@ -63,7 +63,8 @@ define(["jquery", "libs/underscore", "libs/jquery-ui"], function($) {
 
     function truncateStoryList() {
         $(".story-list .rounded").each(function () {
-            while ($(this)[0].scrollHeight > $(this).outerHeight()) {
+            // check for overflow, the +1 is a hack for IE. Oh IE...
+            while ($(this)[0].scrollHeight > $(this).outerHeight() + 1) {
                 $(this).find(".list-story:last").remove();
             }
         });
@@ -71,8 +72,8 @@ define(["jquery", "libs/underscore", "libs/jquery-ui"], function($) {
 
     function truncateTeaser() {
         $(".row .row-story").each(function () {
-            while ($(this)[0].scrollHeight > $(this).outerHeight()) {
-                $(this).children("p").text(function (index, text) {
+            while ($(this)[0].scrollHeight > $(this).outerHeight() + 1) {
+                $(this).children("p:last").text(function (index, text) {
                     return text.replace(/\s+\S*\.*$/, "...");
                 });
             }

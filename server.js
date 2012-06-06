@@ -54,7 +54,9 @@ function configureApp() {
     app = express.createServer();
 
     app.error(function (err, req, res, next) {
-        log.error(err.stack || err);
+        if (err.message == 'URI malformed')
+            log.error(err.message + ": " + req.url);
+        else log.error(err.stack || err);
         next(err);
     });
 

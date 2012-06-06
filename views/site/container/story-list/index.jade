@@ -6,6 +6,6 @@ include ../container-helpers
         block stories
             .content-container
                 - each story, index in stories
-                    a.list-story.hover.highlight-right(href='#{story.url}')
+                    a.list-story.hover.highlight-right(href=story.url)
                         block story
-                            h3.title #{story.title}
+                            h3.title= story.title

@@ -4,6 +4,7 @@ define(["jquery", "libs/underscore", "libs/jquery-ui"], function($) {
         
         ".align-group": loadAfterTypekit(pageAlign),
         ".row .row-story": loadAfterTypekit(truncateTeaser),
+        ".block .rounded": loadAfterTypekit(truncateTeaser),
         ".vertical-container": loadAfterTypekit(verticalAlign),
         "header .date": displayDate
 
@@ -14,7 +15,7 @@ define(["jquery", "libs/underscore", "libs/jquery-ui"], function($) {
         return retry = function () {
             if ($('html').hasClass("wf-active") ||
                 $('html').hasClass("wf-inactive"))
-                callback();
+                callback.apply(this, arguments);
             else setTimeout(retry, 300)
         }
     }
@@ -70,10 +71,10 @@ define(["jquery", "libs/underscore", "libs/jquery-ui"], function($) {
         });
     }
 
-    function truncateTeaser() {
-        $(".row .row-story").each(function () {
+    function truncateTeaser($elements) {
+        $elements.each(function () {
             while ($(this)[0].scrollHeight > $(this).outerHeight() + 1) {
-                $(this).children("p:last").text(function (index, text) {
+                $(this).find("p:last").text(function (index, text) {
                     return text.replace(/\s+\S*\.*$/, "...");
                 });
             }

@@ -3,12 +3,3 @@
         h2.vertical Facebook Recommended
     .rounded(style="padding:3px;height:306px;")
         .fb-recommendations(data-site="dukechronicle.com", data-border-color="white", data-width="300", data-height="300", data-font="lucida grande", data-header="true", max-age="7")
-
-script
-    (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
-        fjs.parentNode.insertBefore(js, fjs);
-     }(document, 'script', 'facebook-jssdk'));

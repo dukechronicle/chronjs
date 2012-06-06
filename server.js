@@ -31,10 +31,7 @@ config.init(runSite, function (err) {
     };
 
     viewHelpers = {
-        currentDate: function () {
-            return util.formatTimestamp(util.unixTimestamp(),
-                                        "dddd, mmmm dS, yyyy");
-        }
+
     };
 
     sessionManager = new SessionManager();

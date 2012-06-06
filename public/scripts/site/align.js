@@ -1,10 +1,11 @@
-define(["jquery", "libs/underscore"], function($) {
+define(["jquery", "libs/underscore", "libs/jquery-ui"], function($) {
 
     return {
         
         ".align-group": loadAfterTypekit(pageAlign),
         ".row .row-story": loadAfterTypekit(truncateTeaser),
-        ".vertical-container": loadAfterTypekit(verticalAlign)
+        ".vertical-container": loadAfterTypekit(verticalAlign),
+        "header .date": displayDate
 
     }
 
@@ -76,6 +77,11 @@ define(["jquery", "libs/underscore"], function($) {
                 });
             }
         });
+    }
+
+    function displayDate() {
+        var date = $.datepicker.formatDate('DD, MM d, yy', new Date());
+        $("header .date").text(date);
     }
 
 });

@@ -17,7 +17,7 @@ var util = require('./thechronicle_modules/util');
 var PORT = process.env.PORT || process.env.CHRONICLE_PORT || 4000;
 var SECRET = "i'll make you my dirty little secret";
 
-var app, viewOptions, sessionManager;
+var app, viewOptions, viewHelpers, sessionManager;
 
 
 log.init();
@@ -28,6 +28,10 @@ config.init(runSite, function (err) {
         staticCdn: '',
         useCompiledStaticFiles: false,
         isProduction: process.env.NODE_ENV === 'production'
+    };
+
+    viewHelpers = {
+
     };
 
     sessionManager = new SessionManager();
@@ -86,7 +90,7 @@ function configureApp() {
     });
 
     app.configure(function () {
-
+        app.helpers(viewHelpers);
         app.set('view options', viewOptions);
         app.set('views', __dirname + '/views');
         app.set('view engine', 'jade');
@@ -181,3 +185,5 @@ function SessionManager() {
         self.expressSession(req, res, next);
     };
 }
+
+

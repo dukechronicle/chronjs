@@ -5,6 +5,6 @@
         h1 #{doc.title}
         .metadata
             span.credit
-                | By #{doc.authors} &nbsp; | &nbsp; #{doc.date}
+                | By #{doc.authors.join(", ")} &nbsp; | &nbsp; #{doc.date}
 
         !=doc.body

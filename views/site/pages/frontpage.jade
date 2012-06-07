@@ -1,38 +1,35 @@
 #frontpage
-    #top.clearfix
-        .content
+    #top.clearfix.align-group
+        .content.span-8.align-element(data-alignprimary=true)
             if (model["Top Headline"])
-                #top-headline!=partial('../container/top-headline', {stories: model["Top Headline"]})
+                #top-headline!=partial('../container/story-list/teaser', {stories: model["Top Headline"]})
             if (model.Breaking)
                 #breaking!=partial('../container/breaking', {stories: model.Breaking})
             if (model.Slideshow)
-                #slideshow!=partial('slideshow', {stories: model.Slideshow})
+                #slideshow!=partial('../container/slideshow', {stories: model.Slideshow})
             if (model["Left Headlines"] && model["Right Headlines"])
-                .top-news.align-group!=partial('../container/top-news', {title: "Top Stories", left: model["Left Headlines"], right: model["Right Headlines"]})
+                #headlines!=partial('../container/top-news', {title: "Top Stories", left: model["Left Headlines"], right: model["Right Headlines"]})
 
             .ads-row.clearfix
                 if (model.printEdition)
-                    .image-container.print-edition.lighten!=partial('../container/image', model.printEdition)
-                .image-container.full-banner.lighten!=partial('ad/full-banner', {title: "AD"})
+                    .lighten.span-2#print-edition!=partial('../container/image', model.printEdition)
+                .lighten.span-6.last!=partial('../container/ad/full-banner', {title: "Ad"})
 
-        .sidebar
-            //
-                if (model.twitter)
-                    .twitter!=partial('../container/twitter', model.twitter)
+        .sidebar.span-4.last.align-element(data-aligntarget="#popular .rounded")
             if (model.popular)
-                .most-popular!=partial('../container/articles-with-subhead', {title: "What's Hot", stories: model.popular})
+                #popular.title-small!=partial('../container/story-list/subhead', {title: "What's Hot", stories: model.popular})
             if (model.Opinion)
-                .opinion!=partial('../container/articles-with-subhead', {title: "Opinion", stories: model.Opinion})
-            .image-container.medium-rectangle.lighten!=partial('ad/medium-rect', {title: "Advertisement"})
+                #opinion.title-small!=partial('../container/story-list/subhead', {title: "Opinion", stories: model.Opinion})
+            .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
 
-    #middle
-        #news-sports.clearfix.align-group
-            if (model.News)
-                #news.align-element(data-alignTarget='div.rounded')!=partial('../container/news', {title: "News", stories: model.News})
-            if (model.Sports)
-                #sports.align-element(data-alignTarget='div.rounded')!=partial('../container/news', {title: "Sports", stories: model.Sports})
+    #middle.clearfix.align-group
+        if (model.News)
+            #news.span-6.align-element(data-alignTarget=".rounded")!=partial('../container/news', {title: "News", stories: model.News})
+        if (model.Sports)
+            #sports.span-6.last.align-element(data-alignTarget=".rounded")!=partial('../container/news', {title: "Sports", stories: model.Sports})
+    
     #bottom
         if (model.Recess)
-            #recess!=partial('../container/block-row', {title: "Recess", stories: model.Recess})
+            #recess!=partial('../container/row/feature', {title: "Recess", stories: model.Recess})
         if (model.Towerview)
-            #towerview!=partial('../container/block-row', {title: "Towerview", stories: model.Towerview})
+            #towerview!=partial('../container/row/feature', {title: "Towerview", stories: model.Towerview})

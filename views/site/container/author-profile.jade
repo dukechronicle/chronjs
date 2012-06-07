@@ -1,0 +1,15 @@
+include container-helpers
+
+.author-profile
+    mixin vertical-label
+    .rounded
+        .content-container
+            - if (author.images && author.images.StaffHeadshot)
+                img.headshot(src=author.images.StaffHeadshot.url)
+            .author-info
+                h2= author.name
+                p.affiliation= author.affiliation
+                - if (author.twitter)
+                    a.twitter(href="http://twitter.com/#{author.twitter}") @#{author.twitter}
+                p.tagline= author.tagline
+            p.bio!= author.renderedBio

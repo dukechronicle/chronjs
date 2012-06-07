@@ -1,119 +1,93 @@
-define(["jquery", "libs/underscore"], function($) {
+define(["jquery", "libs/underscore", "libs/jquery-ui"], function($) {
 
     return {
         
         ".align-group": loadAfterTypekit(pageAlign),
-        ".block-row .list-story": loadAfterTypekit(truncateTeaser),
+        ".row .row-story": loadAfterTypekit(truncateTeaser),
+        ".block .rounded": loadAfterTypekit(truncateTeaser),
         ".vertical-container": loadAfterTypekit(verticalAlign),
-        "#frontpage": loadAfterTypekit(frontpageAlign)
+        "header .date": displayDate
 
     }
 
     function loadAfterTypekit(callback) {
-        var retry;
-        return retry = function () {
+        return function () {
+            var args = arguments;
+            var execute = function () {
+                callback.apply(this, args);
+            }
+
             if ($('html').hasClass("wf-active") ||
                 $('html').hasClass("wf-inactive"))
-                callback();
-            else setTimeout(retry, 300)
+                execute();
+            else setTimeout(execute, 300);
         }
     }
 
     function pageAlign() {
-        $(".align-group").each(function () {
-            var groups = [];
-            // find all elements of align group and add it to group array
-
-            $(this).find('> .align-element').each(function () {
-                var alignTarget = $(this).attr('data-alignTarget');
-
-                if (!alignTarget) {
-                    console.log("Aligntarget missing for ");
-                    console.log($(this));
-                    return;
-                }
-                groups.push($(this).find(alignTarget));
+        // Iterate through align groups in reverse order so nested groups
+        // get aligned first
+        var groups = $(".align-group").get().reverse();
+        $(groups).each(function () {
+            // Align inner elements first
+            var elements = $(this).children('.align-element');
+            var primary = _.max(elements, function (element) {
+                if ($(element).data('alignprimary'))
+                    return Infinity;
+                return $(element).height();
             });
 
-            if (groups.length === 0) return;
+            _.each(elements, function (element) {
+                var target = $(element).data('aligntarget');
+                target = target ? $(element).find(target) : element;
 
-            _.each(_.zip.apply(this, groups), function (row) {
-                // get max height of current row
-                var maxHeight = 0;
-                _.each(row, function (element) {
-                    var height = $(element).height();
-                    if (height > maxHeight) {
-                        maxHeight = height;
-                    }
-                });
-                _.each(row, function (element) {
-                    $(element).height(maxHeight);
+                var delta = $(primary).height() - $(element).height();
+                $(target).height(function (index, height) {
+                    return height + delta;
                 });
             });
+
+            // In case any story lists boxes were made smaller
+            truncateStoryList();
         });
     }
 
-    function frontpageAlign() {
-        // align main and sidebar height
-        var popularLiHeight = 40;
-
-        var extraHeight = $('#top > .sidebar').height() - $('#top > .content').height() + 3;
-        var contentContainer = $('#top > .content .top-news .content-container');
-        var popularContainer = $('#top > .sidebar .most-popular .content-container');
-
-        if (popularContainer.length > 0) {
-            //console.log(extraHeight);
-            if (extraHeight > 0) {
-                var lisToRemove = Math.floor(extraHeight / popularLiHeight);
-                //console.log(lisToRemove);
-
-                var removeIndex = $("li", popularContainer).size() - lisToRemove - 1;
-                if (removeIndex < 2) {
-                    removeIndex = 2;
-                    lisToRemove = $("li", popularContainer).size() - removeIndex - 1;
-                }
-                //console.log(removeIndex);
-                $("li:gt(" + removeIndex + ")", popularContainer).hide();
-                extraHeight -= lisToRemove * popularLiHeight;
-            }
-        }
-        //console.log("extra height: " + extraHeight);
-        contentContainer.css('padding-bottom', extraHeight);
-        //console.log($('#top > .sidebar').height() - $('#top > .content').height());
-    }
-
-    function overflowFix() {
-        $('.auto-fix-overflow').each(function(index) {
-            $(this);
-        });
-    }
-
+    // position vertical labels
     function verticalAlign() {
-        // position vertical labels
-        $(".vertical-container").each(function(i) {
-            var height = $(this).css('width');
-            var topSpacing = 3;
-            height = parseInt(height.substring(0, height.length - 2), 10) + topSpacing;
-            $(this).css('top', height + "px");
+        var extra = 10;
+        $(".vertical-container .vertical").each(function() {
+            var height = $(this).width();
+            $(this).css('left', -height + extra + "px");
             $(this).css('visibility', 'visible');
 
-            var rounded = $(this).siblings(".rounded");
-            if (rounded &&
-                rounded.css('height') &&
-                (rounded.css('height').substring(0, rounded.css('height').length - 2) < height)) {
+            var rounded = $(this).parent().siblings(".rounded");
+            if (rounded && rounded.height() < height)
                 rounded.css('height', height + "px");
+        });
+    }
+
+    function truncateStoryList() {
+        $(".story-list .rounded").each(function () {
+            // check for overflow, the +1 is a hack for IE. Oh IE...
+            while ($(this)[0].scrollHeight > $(this).outerHeight() + 1) {
+                $(this).find(".list-story:last").remove();
             }
         });
     }
 
-    function truncateTeaser() {
-        $(".block-row .list-story").each(function () {
-            while ($(this)[0].scrollHeight > $(this).outerHeight()) {
-                $(this).children("p").text(function (index, text) {
+    function truncateTeaser($elements) {
+        $elements.each(function () {
+            while ($(this)[0].scrollHeight > $(this).outerHeight() + 1) {
+                $(this).find("p:last").text(function (index, text) {
                     return text.replace(/\s+\S*\.*$/, "...");
                 });
             }
         });
+    }
+
+    function displayDate() {
+        var date = $.datepicker.formatDate('DD, MM d, yy', new Date());
+        $("header .date").text(date);
     }
 
 });

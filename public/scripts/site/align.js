@@ -11,12 +11,16 @@ define(["jquery", "libs/underscore", "libs/jquery-ui"], function($) {
     }
 
     function loadAfterTypekit(callback) {
-        var retry;
-        return retry = function () {
+        return function () {
+            var args = arguments;
+            var execute = function () {
+                callback.apply(this, args);
+            }
+
             if ($('html').hasClass("wf-active") ||
                 $('html').hasClass("wf-inactive"))
-                callback.apply(this, arguments);
-            else setTimeout(retry, 300)
+                execute();
+            else setTimeout(execute, 300);
         }
     }
 

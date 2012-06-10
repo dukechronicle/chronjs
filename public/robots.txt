@@ -1,6 +1,5 @@
 User-agent: *
 Disallow: /admin
-Disallow: /css
-Disallow: /slideshow
-Disallow: /mobile-api
-Sitemap: http://dukechronicle.com/sitemaps/sitemap.xml
+Disallow: /api
+Sitemap: http://www.dukechronicle.com/sitemaps/sitemap.xml
+Sitemap: http://www.dukechronicle.com/sitemaps/news_sitemap.xml

@@ -1,18 +1,19 @@
 var html = require('htmlparser');
-var url = require('url');
 var http = require('http');
+var url = require('url');
+
+var log = require('../../log');
 var redis = require('../../redisclient');
+
 
 exports.parseRSS = function (feed, callback) {
     var urlobj = url.parse(feed);
 
     var options = {
         host:urlobj.hostname,
-        port:urlobj.path,
-        path:urlobj.pathname
+        port:urlobj.port,
+        path:urlobj.path
     };
-
-    if (urlobj.search) options.path += urlobj.search;
 
     http.get(options, function (res) {
         var data = "";

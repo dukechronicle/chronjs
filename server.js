@@ -10,7 +10,6 @@ var config = require('./thechronicle_modules/config');
 var log = require('./thechronicle_modules/log');
 var redisClient = require('./thechronicle_modules/redisclient');
 var route = require('./thechronicle_modules/route');
-var sitemap = require('./thechronicle_modules/sitemap');
 var util = require('./thechronicle_modules/util');
 
 // Heroku requires the use of process.env.PORT to dynamically configure port
@@ -127,10 +126,6 @@ function runSite(callback) {
         }
 
         if (process.env.NODE_ENV === 'production') {
-            sitemap.latestNewsSitemap('/sitemaps/news_sitemap', function (err) {
-                if (err) log.warning("Couldn't build news sitemap: " + err);
-            });
-
             builder.buildAssets(function(err, paths) {
                 if (err) log.warning('Failed to build assets: ' + err);
                 else log.notice('Built assets');

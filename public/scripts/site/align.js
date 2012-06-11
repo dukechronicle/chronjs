@@ -78,9 +78,13 @@ define(["jquery", "libs/underscore", "libs/jquery-ui"], function($) {
     function truncateTeaser($elements) {
         $elements.each(function () {
             while ($(this)[0].scrollHeight > $(this).outerHeight() + 1) {
-                $(this).find("p:last").text(function (index, text) {
-                    return text.replace(/\s+\S*\.*$/, "...");
-                });
+                var $text = $(this).find("p:last");
+                if ($text.length > 0) {
+                    $text.text(function (index, text) {
+                        return text.replace(/\s+\S*\.*$/, "...");
+                    });
+                }
+                else break;
             }
         });
     }

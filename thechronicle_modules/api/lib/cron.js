@@ -1,7 +1,9 @@
 var cron = require('cron');
 var rss = require('./rss');
-var log = require('../../log');
+
 var config = require('../../config');
+var log = require('../../log');
+var sitemap = require('../../sitemap');
 
 var initialized = false;
 
@@ -15,9 +17,22 @@ exports.init = function () {
         // instances. Runs every half hour.
         new cron.CronJob('0 0,30 * * * *', loadConfiguration).start();
 
-        if(process.env.NODE_ENV === 'production') {
-            new cron.CronJob('0 * * * * *', loadRSSFeeds).start();
-        }
+        // Every half hour
+        new cron.CronJob('0 0,30 * * * *', loadRSSFeeds).start();
+
+        // Build full sitemap at 5AM every day
+        new cron.CronJob('0 0 5 * * *', function () {
+            sitemap.latestFullSitemap('/sitemaps/sitemap', function (err) {
+                if (err) log.warning("Couldn't build full sitemap: " + err);
+            });
+        }).start();
+
+        // Build news sitemap every hour
+        new cron.CronJob('0 0 * * * *', function () {
+            sitemap.latestNewsSitemap('/sitemaps/news_sitemap', function (err) {
+                if (err) log.warning("Couldn't build news sitemap: " + err);
+            });
+        }).start();
     }
 };
 
@@ -46,4 +61,8 @@ function loadRSSFeeds() {
             }
         });
     });
+}
+
+function generateFullSitemap() {
+
 }

@@ -2,7 +2,7 @@ require.config({
     baseUrl: '/scripts'
 });
 
-require(['site/align','site/article','site/opinion','site/scrollLoad',
+require(['site/align','site/article','site/category-box','site/scrollLoad',
          'site/slideshow/frontpage-slideshow','site/slideshow/slideshow-right',
          'site/openx', 'site/facebook', 'libs/jquery.cookie'],
         function () {
@@ -12,7 +12,7 @@ require(['site/align','site/article','site/opinion','site/scrollLoad',
                     var functions = args[i];
                     for (var selector in functions)
                         if (!selector || $(selector).length > 0)
-                            functions[selector]();
+                            functions[selector]($(selector));
                 }
             });
         });

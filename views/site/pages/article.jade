@@ -1,76 +1,68 @@
 #article
-    section
-        .nav.clearfix
-            - each parent in parentPaths
-                h2
-                    a(href='/section'+parent.path+'/'+parent.name) #{parent.name}
+    nav.subnav.clearfix
+        - each parent in parentPaths
+            a.hover(href='/section'+parent.path+'/'+parent.name)
+                h2= parent.name
 
-    article
-        .content.rounded
-            // edit button
-            if (typeof isAdmin != 'undefined' && isAdmin)
-                a.edit(href=doc.url + "/edit") Edit
-            h1 #{doc.title}
+    article.clearfix
+        .span-8
+            .rounded
+                .article-container
+                    - if (isAdmin)
+                        a.edit(href=doc.url + "/edit") Edit
 
-            if (doc.subhead)
-                p
-                    i #{doc.subhead}
-           
-            if (doc.embed)
-                .embed!=doc.embed
-            else
-                // article image
-                if (doc.images && doc.images.LargeRect && doc.images.LargeRect.url)
-                    if (typeof isAdmin != 'undefined' && isAdmin && doc.images.Original)
-                        a(href="/admin/image/"+doc.images.Original.name)
-                            img.article(src=doc.images.LargeRect.url)
-                    else
-                        img.article(src=doc.images.LargeRect.url)
+                    h1.title= doc.title
+        
+                    - if (doc.subhead)
+                        p.subtitle: i= doc.subhead
+                   
+                    - if (doc.embed)
+                        .main-image!=doc.embed
+                    - else if (doc.images && doc.images.LargeRect && doc.images.LargeRect.url)
+                        img.main-image(src=doc.images.LargeRect.url)
+        
+                    - if (doc.images && doc.images.LargeRect && doc.images.Original)
+                        .clearfix
+                            p.photo-credit= doc.images.Original.photographer
+                            p.photo-caption= doc.images.Original.caption
+        
+                    p.byline
+                        span.author By &nbsp;
+                            - each author, index in doc.authors
+                                - if (index > 0)
+                                    span , &nbsp;
+                                a(href="/staff/#{author}")= author
+                        span.sep |
+                        span.date= doc.date
+        
+                    .article-body
+                        .social-media
+                            a#comment-link(href="#disqus_thread") Comments
+                            a#print-link(href="#{doc.url}/print") Print
+                            #facebook-like
+                                fb:like(href=doc.fullUrl, send="false", layout="button_count", width="130", show_faces="false", action="recommend", font="lucida grande")
+                            #twitter
+                                a.twitter-share-button(href="http://twitter.com/share?via=dukechronicle" ) Tweet
+                            #plus-one
+                                g:plusone(size="medium")
 
-            // caption
-            if (doc.images && doc.images.Original && doc.images.LargeRect)
-                p.photo-credit #{doc.images.Original.photographer}
-                p.photo-caption #{doc.images.Original.caption}
+                        !{doc.body}
 
-            // author and date
-            .metadata
-                span.credit
-                    | By !{doc.authorsHtml} &nbsp; | &nbsp; #{doc.date}
+            // The text for the comment count link can be modified at disqus.com/admin/settings/appearance/
+            #disqus_thread.rounded(data-disqus=JSON.stringify(disqusData), data-disqus-identifier=disqusData.id)
 
-            // social media, print and comments
-            .social-media
-                .comments
-                    // The text for the comment count link can be modified at disqus.com/admin/settings/appearance/ 
-                    a(id='commentLink', href='#disqus_thread', data-disqus-identifier=disqusData.id) Comments
-                .print
-                    a(href=doc.url + '/print') Print
-                .facebook
-                    fb:like(href=doc.fullUrl, send="false", layout="button_count", width="130", show_faces="false", action="recommend", font="lucida grande", style="margin-bottom: -5px")
-                .twitter
-                    a.twitter-share-button(href="http://twitter.com/share?via=dukechronicle" )
-                        | Tweet
-                .google
-                    g:plusone(size="medium")
-            .article-body!=doc.renderedBody
-
-        .sidebar
+        .span-4.last
             - if (model.related && model.related.length > 0)
-                .related!=partial('../container/articles-with-subhead', {title: "Related", stories: model.related})
+                #related.title-small!=partial('../container/story-list/subhead', {title: "Related", stories: model.related})
 
-             // advertising
-            .image-container.medium-rectangle!=partial('ad/medium-rect', {title: "Advertisement"})
+            .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
 
-            .container.clearfix.facebook-recommendations(style="margin-bottom: 20px")
-                .vertical-container
-                    h2.vertical Facebook Recommended
-                .rounded(style="width: 300px; height: 300px; background: white")
-                    fb:recommendations(site="www.dukechronicle.com", border-color="white", width="300", height="300", font="lucida grande", header="false", max-age="7")
+            #recommendations!=partial('../container/facebook')
 
             - if (model.popular && model.popular.length > 0)
-                .numbered-articles.most-popular!=partial('../container/numbered-articles', {title: "Popular", stories: model.popular})
+                #popular.title-small!=partial('../container/story-list/numbered', {title: "Popular", stories: model.popular})
 
-    // comments
-    #disqus_thread.rounded(data-disqus=JSON.stringify(disqusData))
+            .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
 
 #social-share
     .activities

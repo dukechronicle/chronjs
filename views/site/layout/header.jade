@@ -1,69 +1,48 @@
 - if(query == null) var query = ""
 - query = query.replace(/-/g, ' ');
-
-.div
-    img(src=staticCdn + '/images/header-overlay.png', id='header-overlay', width='100px', height='122px')
-
-#header-top
-    .content
-
-        h1
-            a(href='/') The Chronicle |
-        p.tagline The Independent Daily at<br /> Duke University
-
-    .social-media
-        .inner
-            .icons
-                a(href='http://www.facebook.com/dukechronicle')
-                    img.first(src=staticCdn + '/images/icons/facebook.png')
-                a(href='http://twitter.com/dukechronicle')
-                    img(src=staticCdn + '/images/icons/twitter.png')
-                a(href='http://youtube.com/user/DukeChronicle')
-                    img(src=staticCdn + '/images/icons/youtube.png')
-                a(href='http://foursquare.com/dukechronicle')
-                    img(src=staticCdn + '/images/icons/foursquare.png')
-                a(href='/rss')
-                    img(src=staticCdn + '/images/icons/rss.png')
-                a(href='/page/newsletter')
-                    img.last(src=staticCdn + '/images/icons/email.png')
-
-    .leaderboard
-        .full-banner-raw.advertising.openx-ad(class="{zoneID: 308}")
-
-
-
 - if (typeof section == 'undefined') var section = undefined
 
-#header-bottom
-    nav#nav.clearfix
-        h2
-            a(href='/news',
-              class=(section == 'News') ? "active" : "") News
-        h2
-            a(href='/sports',
-              class=(section == 'Sports') ? "active" : "") Sports
-        h2
-            a(href='/opinion',
-              class=(section == 'Opinion') ? "active" : "") Opinion
-        h2
-            a(href='/recess',
-              class=(section == 'Recess') ? "active" : "") Recess
-        h2
-            a(href='/towerview',
-              class=(section == 'Towerview') ? "active" : "") Towerview
-        h2
-            a(href='http://chronicleblogs.com') Blogs
-        h2
-            a(href='http://shutter.dukechronicle.com/') Photos
+#header-top.clearfix
+    .span-1 &nbsp;
+    a.content.clearfix.span-4(href="/")
+        img#header-overlay(src=staticCdn + '/images/header-overlay.png')
+        p.date &nbsp;
+        h1.brand The Chronicle
+        p.tagline The Independent Daily at Duke University
+    .span-1 &nbsp;
 
-    .advertising.advertising-links(style='float: right')
-        a(href='/page/subscribe') Print Sub
-        a(href='/page/advertising') Advertising
-        a(href='http://dukechronicle.campusave.com/') Classifieds
-        a(href='http://chroniclehousing.com/') Housing
+    .leaderboard.span-6.last.clearfix
+        .full-banner-raw.advertising.openx-ad(class="{zoneID: 308}")
 
+        .icons.left
+            a(href="http://www.facebook.com/dukechronicle")
+                img(src=staticCdn + '/images/icons/facebook.png')
+            a(href="http://twitter.com/dukechronicle")
+                img(src=staticCdn + '/images/icons/twitter.png')
+            a(href="http://youtube.com/user/DukeChronicle")
+                img(src=staticCdn + '/images/icons/youtube.png')
+            a(href="http://foursquare.com/dukechronicle")
+                img(src=staticCdn + '/images/icons/foursquare.png')
+            a(href="/rss")
+                img(src=staticCdn + '/images/icons/rss.png')
+            a(href="/page/newsletter")
+                img(src=staticCdn + '/images/icons/email.png')
 
+        .advertising-links.right
+            a(href="/page/subscribe") Print Subscription
+            a(href="/page/advertising") Advertising
+            a(href="http://dukechronicle.campusave.com") Classifieds
+            a(href="http://chroniclehousing.com") Housing
 
+#header-bottom.clearfix
+    nav.span-10#nav
+        a(href="/news", class=(section == 'News') ? "active" : ""): h2 News
+        a(href="/sports", class=(section == 'Sports') ? "active" : ""): h2 Sports
+        a(href="/opinion", class=(section == 'Opinion') ? "active" : ""): h2 Opinion
+        a(href="/recess", class=(section == 'Recess') ? "active" : ""): h2 Recess
+        a(href="/towerview", class=(section == 'Towerview') ? "active" : ""): h2 Towerview
+        a(href="http://chronicleblogs.com"): h2 Blogs
+        a(href="http://shutter.dukechronicle.com"): h2 Photos
 
-    form#search-box(action='/search/', method='GET')
+    form.span-2.last#search-box(action='/search/', method='GET')
         input(type='search', name='q', placeholder='Search archives', results='5', value=query)

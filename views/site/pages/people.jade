@@ -3,32 +3,19 @@
         if (typeof isAdmin != 'undefined' && isAdmin)
             a.edit(href="/staff/"+name+"/edit") &nbsp;&nbsp;Edit
 
-    if (authorInfo)
-        .sidebar.authorInfo
-            .container.clearfix
-                .vertical-container
-                    h2.vertical Profile
-                .rounded
-                    .content-container
-                        if (authorInfo.images && authorInfo.images.StaffHeadshot)
-                            img(src=authorInfo.images.StaffHeadshot.url)
-                        .author-inner-container
-                            h1 #{authorInfo.name}
-                            .affiliation #{authorInfo.affiliation}
-                            if (authorInfo.twitter)
-                                a.twitter(href="http://twitter.com/#{authorInfo.twitter}") @#{authorInfo.twitter}
-                            .tagline #{authorInfo.tagline}
-                            .bio !{authorInfo.renderedBio}
-
-    .main
-        .authors-articles
-            .rounded.result
-                for doc in docs
-                    .document
-                        h3
-                            a.title.url(href=doc.url) #{doc.title}
-                        .date #{doc.date}
-                - if(docs.length == 0)
+    .span-7.title-medium
+        .rounded.story-list
+            .content-container
+                - each doc in docs
+                    .document.list-story
+                        a.hover.highlight-left.url(href=doc.url)
+                            h3.title= doc.title
+                            .subtitle
+                                span.date= doc.date
+                - if (docs.length == 0)
                     div No articles found
-                div#loadImage(style="height: 150px;", data-key=JSON.stringify(next), data-url="/api/staff/#{name}")
-                    img(src='http://d2sug25c5hnh7r.cloudfront.net/images/loading.gif', style="display: block; margin-left: auto; margin-right: auto")
+                - else
+                    #loadImage(data-key=JSON.stringify(next), data-url="/api/staff/#{name}")
+
+    - if (authorInfo)
+        .sidebar.span-5.last!=partial('../container/author-profile', {title: "Profile", author: authorInfo})

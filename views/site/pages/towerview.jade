@@ -1,33 +1,31 @@
-!=partial('subnav', {subsections: subsections})
+#towerview.clearfix
+    !=partial('../layout/subnav', {subsections: subsections})
 
-#towerview
-    .main.clearfix
+    .span-8
         // towerview features
         if (model.Featured)
             if (model.Featured[0])
-                .row.first!=partial('../container/featured-image.jade', {title: 'Features', story: model.Featured[0]})
-            .row.feature.clearfix
-                if (model.Featured[1])
-                    .first!=partial('../container/block-square-image', {title: 'Features', story: model.Featured[1]})
-                if (model.Featured[2])
-                    .last!=partial('../container/block-square-image',{title: '', story: model.Featured[2]})
-                
-            .row.last
-                // savvy
-                if (model.Savvy)
-                    .savvy!=partial('../container/block-row.jade', {title: '', stories: model.Savvy})
-                // wisdom
-                if (model.Wisdom)
-                    .wisdom!=partial('../container/block-row.jade', {title: 'Wisdom', stories: model.Wisdom})
-        .row.issuu
-            <object style="width:642px;height:418px" ><param name="movie" value="http://static.issuu.com/webembed/viewers/style1/v2/IssuuReader.swf?mode=mini&amp;backgroundColor=%23222222&amp;documentId=120419050106-1cfbf5164058440db797264928906b2b" /><param name="allowfullscreen" value="true"/><param name="menu" value="false"/><param name="wmode" value="transparent"/><embed src="http://static.issuu.com/webembed/viewers/style1/v2/IssuuReader.swf" type="application/x-shockwave-flash" allowfullscreen="true" menu="false" wmode="transparent" style="width:642px;height:418px" flashvars="mode=mini&amp;backgroundColor=%23222222&amp;documentId=120419050106-1cfbf5164058440db797264928906b2b" /></object>
+                !=partial('../container/featured-image', {title: 'Features', story: model.Featured[0]})
 
-    .sidebar.clearfix
+            .featured-row.clearfix
+                if (model.Featured[1])
+                    .span-4!=partial('../container/block/square', {story: model.Featured[1]})
+                if (model.Featured[2])
+                    .span-4.last!=partial('../container/block/square', {story: model.Featured[2]})
+                
+            if (model.Savvy)
+                #savvy!=partial('../container/row/feature', {title: 'Savvy', stories: model.Savvy})
+            if (model.Wisdom)
+                #wisdom!=partial('../container/row/feature', {title: 'Wisdom', stories: model.Wisdom})
+        #issuu.rounded
+            .image-container
+                <object style="width:636px;height:418px" ><param name="movie" value="http://static.issuu.com/webembed/viewers/style1/v2/IssuuReader.swf?mode=mini&amp;backgroundColor=%23222222&amp;documentId=120419050106-1cfbf5164058440db797264928906b2b" /><param name="allowfullscreen" value="true"/><param name="menu" value="false"/><param name="wmode" value="transparent"/><embed src="http://static.issuu.com/webembed/viewers/style1/v2/IssuuReader.swf" type="application/x-shockwave-flash" allowfullscreen="true" menu="false" wmode="transparent" style="width:642px;height:418px" flashvars="mode=mini&amp;backgroundColor=%23222222&amp;documentId=120419050106-1cfbf5164058440db797264928906b2b" /></object>
+
+    .span-4.last
         if (model["Editors Note"])
-            .editorsNote!=partial('../container/block.jade', {title: "Letter from the Editor", story: model["Editors Note"][0]})
+            #editors-note!=partial('../container/block/teaser', {title: "Letter from the Editor", story: model["Editors Note"][0]})
         if (model.adFullRectangle)
-            .image-container.medium-rectangle.lighten!=partial('ad/medium-rect', {title: "Advertisement"})
-        // prefix
+            .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
         if (model.Prefix)
             - each story in model.Prefix
-                .prefix!=partial('../container/block-wide-image.jade', {title: '', story: story})
+                .prefix!=partial('../container/block/wide', {story: story})

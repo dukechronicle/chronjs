@@ -1,0 +1,18 @@
+.slideshow-right
+    .span-4.headlines
+        for story in stories
+            !=partial('../block/square', {story: story})
+
+    .span-8.last.slides
+        .caret
+            b.caret-shadow
+            b.caret-white
+        .rounded
+            .image-container.slides-inner
+                for story, index in stories
+                    a(href=story.url)
+                        if (story && story.images && story.images.LargeRect)
+                            if (index == 0)
+                                img(src=story.images.LargeRect.url)
+                            else
+                                img(src=story.images.LargeRect.url, style="display: none")

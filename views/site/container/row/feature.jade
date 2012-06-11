@@ -1,0 +1,26 @@
+include ../container-helpers
+
+.row.row-feature
+    mixin vertical-label
+    .rounded.clearfix
+        - each story, index in stories
+            - if (index == 0)
+                .content-container.image-shadow.span-4
+                    a.row-story.hover.highlight-bottom(href='#{story.url}')
+                        h3.title #{story.title}
+                        - if (story.images && story.images.ThumbRectL)
+                            img.fit-image(src=story.images.ThumbRectL.url)
+            - else if (index == stories.length - 1)
+                .content-container.image-shadow.span-2.last
+                    a.row-story.hover.highlight-bottom(href='#{story.url}')
+                        h4.title #{story.title}
+                        - if (story.images && story.images.ThumbRect)
+                            img.fit-image(src="#{story.images.ThumbRect.url}")
+                        p.teaser #{story.teaser}
+            - else
+                .content-container.image-shadow.span-2
+                    a.row-story.hover.highlight-bottom(href='#{story.url}')
+                        h4.title #{story.title}
+                        - if (story.images && story.images.ThumbRect)
+                            img.fit-image(src="#{story.images.ThumbRect.url}")
+                        p.teaser #{story.teaser}

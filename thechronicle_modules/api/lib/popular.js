@@ -64,7 +64,7 @@ popular.getPopularArticles = function(taxonomy, count, callback) {
             callback(null, popular.map(function(str) {
                 var parts = str.split('||');
                 return {
-                    urls : ['/article/' + parts[0]],
+                    url : '/article/' + parts[0],
                     title : parts[1]
                 };
             }));

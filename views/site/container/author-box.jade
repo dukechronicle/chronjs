@@ -7,17 +7,18 @@ block category
             - if (author.images && author.images.StaffHeadshot)
                 img.headshot(src=author.images.StaffHeadshot.url)
             a.hover.name(href="/staff/#{author.name}")
-                h3 #{author.name}
+                h3= author.name
             p.subtitle
-                span.year #{author.affiliation}
+                span.year= author.affiliation
                 - if (author.twitter)
                     span.twitter
                         a(href="http://twitter.com/#{author.twitter}") @#{author.twitter}
-            p.tagline #{author.tagline}
-    
-        .story-list
+            p.tagline= author.tagline
+
+        .story-list.title-medium
             - each story in author.stories
-                a.hover.list-story.highlight-right(href="#{story.url}")
-                    h3.title #{story.title}
-                    p.date #{story.date}
-                    p.teaser #{story.teaser}
+                a.hover.list-story.highlight-right(href=story.url)
+                    h3.title= story.title
+                    p.subtitle
+                        span.date= story.date
+                    p.teaser= story.teaser

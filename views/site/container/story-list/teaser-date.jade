@@ -1,6 +1,7 @@
 extends index
 
 block story
-    h3.title #{story.title}
-    p.date #{story.date}
-    p.teaser #{story.teaser}
+    h3.title= story.title
+    p.subtitle
+        span.date= story.date
+    p.teaser= story.teaser

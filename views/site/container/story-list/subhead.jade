@@ -1,7 +1,7 @@
 extends index
 
 block story
-    h3.title.nospace #{story.title}
+    h3.title= story.title
     p.subtitle
         - if (story.info || story.authors)
             span= story.info || story.authors.join(", ")

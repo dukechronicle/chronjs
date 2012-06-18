@@ -1,13 +1,11 @@
 define(["jquery", "libs/underscore", "libs/jquery-ui"], function($) {
 
     return {
-        
         ".align-group": loadAfterTypekit(pageAlign),
         ".row .row-story": loadAfterTypekit(truncateTeaser),
         ".block .rounded": loadAfterTypekit(truncateTeaser),
         ".vertical-container": loadAfterTypekit(verticalAlign),
         "header .date": displayDate
-
     }
 
     function loadAfterTypekit(callback) {

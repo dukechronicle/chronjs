@@ -1,11 +1,11 @@
 include ../container-helpers
 
-.block-thumb
+.block-thumb.block
     mixin vertical-label
     .rounded
         a.hover.highlight-right(href=story.url)
-            .content-container.clearfix
-                h4.title #{story.title}
-                p.teaser.left #{story.teaser}
+            .content-container
+                h4.title= story.title
                 - if (story.images && story.images.ThumbSquareM)
                     img.right(src=story.images.ThumbSquareM.url)
+                p.teaser= story.teaser

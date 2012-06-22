@@ -17,6 +17,7 @@ var ARTICLE_LIST_CACHE_TIMEOUT = 100000;
 var articleCache = [];
 
 function showFullSite() {
+    _gaq.push(['_trackEvent', 'Mobile', 'OptOut']);
     setCookie("forceFullSite", "true", 1, '/');
     window.location = "/";
 }
@@ -284,8 +285,6 @@ function search(eventObject)
 
     return false;
 }
-
-
 
 
 

@@ -87,7 +87,7 @@ function generateSitemapIndex(files, date) {
     var doc = builder.create();
     var root = doc.begin("sitemapindex", { version: "1.0", encoding: "UTF-8" }).
         att("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9");
-    var prefix = config.get("CLOUDFRONT_DISTRIBUTION");
+    var prefix = "http://" + config.get("DOMAIN_NAME");
 
     _.each(files, function (path) {
         root.ele("sitemap").
@@ -106,7 +106,7 @@ function generateSitemap(docs, news) {
     }
 
     _.each(docs, function (doc, cb) {
-        var prefix = "http://www." + config.get('DOMAIN_NAME') + "/article/";
+        var prefix = "http://" + config.get('DOMAIN_NAME') + "/article/";
         var date = getDate(doc);
         var url = root.ele('url');
         url.ele('loc', prefix + _.last(doc.urls)).up().

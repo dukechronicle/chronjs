@@ -1,5 +1,5 @@
 var db = require('./db-abstract');
-var nimble = require('nimble');
+var async = require('async');
 var _ = require("underscore");
 var util = require('util');
 
@@ -54,12 +54,12 @@ group.docsN = function (namespace, groupName, baseDocNum, numDocs, callback) {
                         counter++;
                     }
 
-                    nimble.map(resN, function (docId, cbck) {
+                    async.map(resN, function (docId, cbck) {
                         cbck(null, function (acallback) {
                             db.get(docId.value, acallback);
                         });
                     }, function (map_err, map_res) {
-                        nimble.parallel(map_res, callback);
+                        async.parallel(map_res, callback);
                     });
                 } else {
                     callback(null, []);

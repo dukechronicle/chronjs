@@ -2,11 +2,11 @@
 - query = query.replace(/-/g, ' ');
 - if (typeof section == 'undefined') var section = undefined
 
-#header-top
+#header-top.clearfix
     .span-1 &nbsp;
     a.content.clearfix.span-4(href="/")
-        img#header-overlay(src=static_cdn + '/images/header-overlay.png')
-        p.date #{currentDate()}
+        img#header-overlay(src=staticCdn + '/images/header-overlay.png')
+        p.date &nbsp;
         h1.brand The Chronicle
         p.tagline The Independent Daily at Duke University
     .span-1 &nbsp;
@@ -16,17 +16,17 @@
 
         .icons.left
             a(href="http://www.facebook.com/dukechronicle")
-                img(src=static_cdn + '/images/icons/facebook.png')
+                img(src=staticCdn + '/images/icons/facebook.png')
             a(href="http://twitter.com/dukechronicle")
-                img(src=static_cdn + '/images/icons/twitter.png')
+                img(src=staticCdn + '/images/icons/twitter.png')
             a(href="http://youtube.com/user/DukeChronicle")
-                img(src=static_cdn + '/images/icons/youtube.png')
+                img(src=staticCdn + '/images/icons/youtube.png')
             a(href="http://foursquare.com/dukechronicle")
-                img(src=static_cdn + '/images/icons/foursquare.png')
+                img(src=staticCdn + '/images/icons/foursquare.png')
             a(href="/rss")
-                img(src=static_cdn + '/images/icons/rss.png')
+                img(src=staticCdn + '/images/icons/rss.png')
             a(href="/page/newsletter")
-                img(src=static_cdn + '/images/icons/email.png')
+                img(src=staticCdn + '/images/icons/email.png')
 
         .advertising-links.right
             a(href="/page/subscribe") Print Subscription
@@ -34,17 +34,15 @@
             a(href="http://dukechronicle.campusave.com") Classifieds
             a(href="http://chroniclehousing.com") Housing
 
-br
-
-#header-bottom
+#header-bottom.clearfix
     nav.span-10#nav
-        a(href="/news", class=(section == 'News') ? "active" : "") News
-        a(href="/sports", class=(section == 'Sports') ? "active" : "") Sports
-        a(href="/opinion", class=(section == 'Opinion') ? "active" : "") Opinion
-        a(href="/recess", class=(section == 'Recess') ? "active" : "") Recess
-        a(href="/towerview", class=(section == 'Towerview') ? "active" : "") Towerview
-        a(href="http://chronicleblogs.com") Blogs
-        a(href="http://shutter.dukechronicle.com") Photos
+        a(href="/news", class=(section == 'News') ? "active" : ""): h2 News
+        a(href="/sports", class=(section == 'Sports') ? "active" : ""): h2 Sports
+        a(href="/opinion", class=(section == 'Opinion') ? "active" : ""): h2 Opinion
+        a(href="/recess", class=(section == 'Recess') ? "active" : ""): h2 Recess
+        a(href="/towerview", class=(section == 'Towerview') ? "active" : ""): h2 Towerview
+        a(href="http://chronicleblogs.com"): h2 Blogs
+        a(href="http://shutter.dukechronicle.com"): h2 Photos
 
     form.span-2.last#search-box(action='/search/', method='GET')
         input(type='search', name='q', placeholder='Search archives', results='5', value=query)

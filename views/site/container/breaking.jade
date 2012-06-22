@@ -4,10 +4,9 @@ include container-helpers
     mixin vertical-label
     .rounded
         .content-container
-            - if (stories)
-                - each story, index in stories
-                    a.list-story.hover(href='#{story.url}')
-                        block story
-                            h3.title #{story.title}
-                                span.breaking-label Breaking
-                            p.teaser #{story.teaser}
+            - each story, index in stories
+                a.list-story.hover(href=story.url)
+                    block story
+                        h3.title= story.title
+                            span.breaking-label Breaking
+                        p.teaser= story.teaser

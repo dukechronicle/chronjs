@@ -243,6 +243,12 @@ site.logout = function (req, res) {
     });
 };
 
+site.checkConfig = function (req, res, next) {
+    if (!config.isSetUp())
+        res.redirect('/config');
+    else next();
+};
+
 site.config = function (req, res) {
     if (api.accounts.isAdmin(req))
         api.site.renderConfigPage(req, res);
@@ -261,10 +267,9 @@ site.configData = function (req, res) {
                     if (err) log.error(err);
                     res.redirect('/');
                 });
-            }   
+            }
         });
-    else
-        api.site.askForLogin(res, '/config');
+    else api.site.askForLogin(res, '/config');
 };
 
 site.newsletterData = function (req, res) {

@@ -10,7 +10,6 @@ var config = require("../../config");
 var db = require('../../db-abstract');
 var k4export = require('./k4export');
 var log = require('../../log');
-var sitemap = require('../../sitemap');
 
 admin.image = require('./image');
 
@@ -20,15 +19,7 @@ admin.sendNewsletter = function (testEmail, campaignID, callback) {
         api.newsletter.sendTestNewsletter(campaignID, testEmail, callback);
     }
     else {
-        api.newsletter.sendNewsletter(campaignID, function (err) {
-            callback(err);
-            if (process.env.NODE_ENV === 'production') {
-                log.notice("Building sitemaps...");
-                sitemap.generateAllSitemaps(function (err) {
-                    if (err) log.warning(err);
-                });
-            }
-        });
+        api.newsletter.sendNewsletter(campaignID, callback);
     }
 }
 

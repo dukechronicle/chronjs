@@ -1,20 +1,24 @@
-define(["jquery", "libs/underscore"], function($) {
+define(["jquery", "libs/underscore", "libs/jquery-ui"], function($) {
 
     return {
-        
         ".align-group": loadAfterTypekit(pageAlign),
         ".row .row-story": loadAfterTypekit(truncateTeaser),
-        ".vertical-container": loadAfterTypekit(verticalAlign)
-
+        ".block .rounded": loadAfterTypekit(truncateTeaser),
+        ".vertical-container": loadAfterTypekit(verticalAlign),
+        "header .date": displayDate
     }
 
     function loadAfterTypekit(callback) {
-        var retry;
-        return retry = function () {
+        return function () {
+            var args = arguments;
+            var execute = function () {
+                callback.apply(this, args);
+            }
+
             if ($('html').hasClass("wf-active") ||
                 $('html').hasClass("wf-inactive"))
-                callback();
-            else setTimeout(retry, 300)
+                execute();
+            else setTimeout(execute, 300);
         }
     }
 
@@ -62,20 +66,30 @@ define(["jquery", "libs/underscore"], function($) {
 
     function truncateStoryList() {
         $(".story-list .rounded").each(function () {
-            while ($(this)[0].scrollHeight > $(this).outerHeight()) {
+            // check for overflow, the +1 is a hack for IE. Oh IE...
+            while ($(this)[0].scrollHeight > $(this).outerHeight() + 1) {
                 $(this).find(".list-story:last").remove();
             }
         });
     }
 
-    function truncateTeaser() {
-        $(".row .row-story").each(function () {
-            while ($(this)[0].scrollHeight > $(this).outerHeight()) {
-                $(this).children("p").text(function (index, text) {
-                    return text.replace(/\s+\S*\.*$/, "...");
-                });
+    function truncateTeaser($elements) {
+        $elements.each(function () {
+            while ($(this)[0].scrollHeight > $(this).outerHeight() + 1) {
+                var $text = $(this).find("p:last");
+                if ($text.length > 0) {
+                    $text.text(function (index, text) {
+                        return text.replace(/\s+\S*\.*$/, "...");
+                    });
+                }
+                else break;
             }
         });
+    }
+
+    function displayDate() {
+        var date = $.datepicker.formatDate('DD, MM d, yy', new Date());
+        $("header .date").text(date);
     }
 
 });

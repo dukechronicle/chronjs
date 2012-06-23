@@ -192,7 +192,6 @@ site.article = function (req, res, next) {
                 locals.pageImage = doc.images.ThumbSquareM.url;
 
             res.render('site/pages/article', {
-                layout: 'site/layout',
                 locals: locals
             });
         }

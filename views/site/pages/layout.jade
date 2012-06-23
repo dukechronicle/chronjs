@@ -13,11 +13,7 @@ html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
         block head
             script(src="/js/mobile-redirect.js?v=4")
 
-            - if (typeof pageTitle != 'undefined')
-                title #{pageTitle} | The Chronicle
-            - else
-                title The Chronicle | Duke University's Daily Independent Newspaper
-
+            mixin title
             link(rel="icon", href=staticCdn + "/images/favicon.ico")
             link(rel="image_src", href=pageImage)
 

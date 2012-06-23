@@ -4,7 +4,8 @@ include ../mixins/layout-helpers
 html
   head
     title The Chronicle
-    mixin stylesheet("admin")
+    block stylesheet
+      mixin stylesheet("admin")
     !=partial("code/google-analytics")
   body
     block header

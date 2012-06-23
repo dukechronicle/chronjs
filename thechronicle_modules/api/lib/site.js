@@ -61,7 +61,7 @@ site.renderConfigPage = function(req, res, err) {
         err += "<br /><br />The live site was not updated to use the new configuration due to errors."
     }
 
-    res.render('config', {
+    res.render('admin/config', {
         locals : {
             configParams : config.getParameters(),
             profileName : config.getProfileNameKey(),

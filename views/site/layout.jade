@@ -15,7 +15,7 @@ html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
 
         link(rel="icon", href=staticCdn + "/images/favicon.ico")
 
-        - if (typeof pageImage != 'undefined')
+        - if (typeof pageImage == 'undefined')
           - var pageImage = staticCdn + "/images/favicon.png"
         link(rel="image_src", href=pageImage)
 

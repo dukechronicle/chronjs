@@ -384,7 +384,7 @@ site.getTowerviewPageContent = function(callback) {
 
     function(cb) {
         api.taxonomy.getChildren(['Towerview'], cb);
-    }], 
+    }],
     function(err, results) {
         if(err)
             callback(err);
@@ -567,7 +567,7 @@ function modifyArticleForDisplay(doc) {
         doc.date = util.formatTimestamp(doc.created, "mmmm d, yyyy");
 
     doc.body = api.article.renderBody(doc.body);
-    
+
     return doc;
 }
 

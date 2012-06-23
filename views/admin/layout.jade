@@ -7,7 +7,7 @@ html
     mixin stylesheet("admin")
     !=partial("code/google-analytics")
   body
-    #main
-      #container!= body
-      #scripts
-        mixin require-script("admin")
+    block header
+    block content
+    #scripts
+      mixin require-script("admin")

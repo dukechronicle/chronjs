@@ -1,21 +1,24 @@
-#people
-    h1 #{name}
-        if (typeof isAdmin != 'undefined' && isAdmin)
-            a.edit(href="/staff/"+name+"/edit") &nbsp;&nbsp;Edit
+extends layout
 
-    .span-7.title-medium
-        .rounded.story-list
-            .content-container
-                - each doc in docs
-                    .document.list-story
-                        a.hover.highlight-left.url(href=doc.url)
-                            h3.title= doc.title
-                            .subtitle
-                                span.date= doc.date
-                - if (docs.length == 0)
-                    div No articles found
-                - else
-                    #loadImage(data-key=JSON.stringify(next), data-url="/api/staff/#{name}")
+block content
+    #people
+        h1= name
+            if (typeof isAdmin != 'undefined' && isAdmin)
+                a.edit(href="/staff/"+name+"/edit") &nbsp;&nbsp;Edit
 
-    - if (authorInfo)
-        .sidebar.span-5.last!=partial('../container/author-profile', {title: "Profile", author: authorInfo})
+        .span-7.title-medium
+            .rounded.story-list
+                .content-container
+                    - each doc in docs
+                        .document.list-story
+                            a.hover.highlight-left.url(href=doc.url)
+                                h3.title= doc.title
+                                .subtitle
+                                    span.date= doc.date
+                    - if (docs.length == 0)
+                        div No articles found
+                    - else
+                        #loadImage(data-key=JSON.stringify(next), data-url="/api/staff/#{name}")
+
+        - if (authorInfo)
+            .sidebar.span-5.last!=partial('../container/author-profile', {title: "Profile", author: authorInfo})

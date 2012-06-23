@@ -197,7 +197,7 @@ site.articlePrint = function (req, res, next) {
         else {
             doc.url += '/print';
             doc.fullUrl += '/print';
-            res.render('print/article', {
+            res.render('site/print/article', {
                 locals: {
                     doc:doc
                 }

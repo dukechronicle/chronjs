@@ -6,12 +6,13 @@ header
     border-bottom-left-radius 4px
     box-shadow rgba(0,0,0,0.40) 0 1px 3px
     color #EEE
-  
-    #header-top
 
-        .content
-            position relative
-            color #EEE
+    #header-top
+        position relative
+        #home-link
+            display inline-block
+            position absolute
+            left 70px
 
             #header-overlay
                 position absolute
@@ -19,27 +20,22 @@ header
                 left 50px
                 top -37px
 
-            .brand
+            h1, h2, h3
                 text-align right
-                font-family didot
-                font-size 4em
-                letter-spacing -1px
                 line-height 100%
                 text-shadow 0 1px 3px rgba(0,0,0,.4);
                 margin 0px
                 color #EEE
+
+            .brand
+                padding-top 6px
+                font-family didot
+                font-size 4.7em
+                letter-spacing -1px
+
             .tagline
-                text-shadow 0 1px 2px rgba(0,0,0,.4);
-                line-height 100%
-                font-style italic
-                text-align center
-                font-size 1.3em
-                margin 0px
-            .date
-                text-align right
-                text-shadow 0 1px 2px rgba(0,0,0,.4);
-                margin 0px
-        
+                font-size 1.6em
+
         .leaderboard
             .openx-ad
                 height 65px
@@ -51,7 +47,7 @@ header
                     transition opacity 0.25s linear
                     margin-bottom 5px
                     float right
-        
+
             a:hover img
                 opacity 1
 
@@ -102,7 +98,7 @@ header
 
         input
             background #fff url('/images/search-button.png') no-repeat
-            background-position 2px 1px
+            background-position 2px 2px
             border-radius 10px
             border 1px inset
             font-size 12px

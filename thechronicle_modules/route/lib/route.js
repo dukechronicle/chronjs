@@ -26,6 +26,8 @@ exports.init = function (app) {
         app.get('/all', siteApi.articlesBySection);
         app.get('/section/*', siteApi.articlesBySection);
         app.get('/article/url/:url', siteApi.articleByUrl);
+
+        app.post('/poll/:id/vote', siteApi.votePoll);
         app.get('/search', siteApi.searchArticles);
         app.get('/staff/:query', siteApi.articlesByAuthor);
 
@@ -122,7 +124,15 @@ exports.init = function (app) {
         app.post('/add', api.site.checkAdmin, admin.image.addImageToDoc);
         app.get('/remove/:imageId', api.site.checkAdmin, admin.image.removeImageFromDoc);
     });
-
+   
+    app.namespace('/admin/poll', function () {
+    	app.get('/', api.site.checkAdmin, admin.managePoll);
+    	app.get('/new', api.site.checkAdmin, admin.addPoll);
+    	app.get('/:id', api.site.checkAdmin, admin.editPoll);
+    	app.post('/', api.site.checkAdmin, admin.addPollData);
+    	app.post('/:id', api.site.checkAdmin, admin.editPollData);
+    });
+    
     app.namespace('/xhrproxy', function() {
         app.get('/openx/:path', xhrproxy.openx);
         app.get('/delete_activity', xhrproxy.delete_activity);
@@ -134,7 +144,6 @@ exports.init = function (app) {
 
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);
-
 };
 
 function redirect (url) {

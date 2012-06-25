@@ -58,6 +58,8 @@
             .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
 
             #recommendations!=partial('../container/facebook')
+            - if (model.poll)
+                #poll!=partial('../container/poll', {poll: model.poll})
 
             - if (model.popular && model.popular.length > 0)
                 #popular.title-small!=partial('../container/story-list/numbered', {title: "Popular", stories: model.popular})

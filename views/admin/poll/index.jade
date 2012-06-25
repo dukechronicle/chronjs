@@ -1,0 +1,14 @@
+.container
+    table.table.table-striped.poll-index
+        tr
+            th Title
+            th Section
+            th Total Votes
+        - each doc in docs
+            tr
+                td: a(href='/admin/poll/' + doc._id)= doc.title
+                td= doc.taxonomy.join(', ')
+                td= doc.total
+                  
+    if (docs.length == 0)
+        h1 No Polls Available

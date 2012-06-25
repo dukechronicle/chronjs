@@ -1,0 +1,11 @@
+.poll(id=model.poll._id, data-voted=poll.voted)
+  .vertical-container
+      h2.vertical Poll
+
+  .rounded
+      .content-container
+          h3= poll.title
+          - each votes, choice in poll.answers
+              .choice(id=choice, data-votes=votes)
+                  a.hover(href="#")
+                      h4 &#187; #{choice}

@@ -171,6 +171,8 @@ site.article = function (req, res, next) {
         else if ('/article/' + url != doc.url)
             res.redirect(doc.url);
         else {
+            req.session.polls = req.session.polls || {};
+
             var locals = {
                 doc:doc,
                 pageTitle: doc.title,
@@ -190,6 +192,8 @@ site.article = function (req, res, next) {
 
             if (doc.images.ThumbSquareM)
                 locals.pageImage = doc.images.ThumbSquareM.url;
+            if (model.poll && model.poll._id in req.session.polls)
+                model.poll.voted = true;
 
             res.render('site/pages/article', {
                 layout: 'site/layout',
@@ -226,9 +230,9 @@ site.loginData = function (req, res) {
     var body = req.body;
     api.accounts.login(req, body.username, body.password, function (err) {
         if (err)
-        api.site.askForLogin(res, body.afterLogin, body.username, err);
+            api.site.askForLogin(res, body.afterLogin, body.username, err);
         else
-        res.redirect(req.body.afterLogin);
+            res.redirect(req.body.afterLogin);
     });
 };
 
@@ -336,7 +340,7 @@ site.staticPage = function (req, res, next) {
 site.pageNotFound = function(req, res) {
     res.render('site/pages/404', {
         layout: 'site/layout',
-    status: 404,
+        status: 404,
         url: req.url
     });
 };

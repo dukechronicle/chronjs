@@ -128,7 +128,7 @@ admin.k4exportData = function (req, res, next) {
                 succeeded: results.k4.success,
                 taxonomy: results.taxonomy,
                 imageData: results.images
-        }
+            }
         });
     });
 };
@@ -155,22 +155,20 @@ admin.addArticleData = function (req, res, next) {
 admin.editArticle = function (req, res, next) {
     var url = req.params.url;
     api.article.getByUrl(url, function (err, doc) {
-        if (err)
-            next(err);
-        else
-            api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
-                if (doc.authors)
-                    doc.authors = doc.authors.join(", ");
+        if (err) next(err);
+        else api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
+            if (doc.authors)
+                doc.authors = doc.authors.join(", ");
 
-                res.render('admin/article/edit', {
-                    layout: 'admin/layout',
-                    locals:{
-                        doc:doc,
-                        groups:[],
-                        taxonomy:taxonomy
-                    }
-                });
+            res.render('admin/article/edit', {
+                layout: 'admin/layout',
+                locals:{
+                    doc:doc,
+                    groups:[],
+                    taxonomy:taxonomy
+                }
             });
+        });
     });
 };
 
@@ -178,6 +176,63 @@ admin.editArticleData = function (req, res, next) {
     adminApi.editArticle(req.body.doc, function (err, url) {
         if (err) next(err);
         else res.redirect('/article/' + url);
+    });
+};
+
+admin.addPoll = function(req, res, next) {
+	api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
+        res.render('admin/poll/new', {
+            layout: 'admin/layout',
+            locals:{
+                groups:[],
+                taxonomy:taxonomy
+            }
+        });
+    });
+};
+
+admin.managePoll = function(req, res, next) {
+	api.poll.getByDate(null, function(err, docs) {
+		api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
+			res.render('admin/poll', {
+				layout : 'admin/layout',
+				locals : {
+					docs : docs
+				}
+			});
+		});
+	});
+};
+
+admin.editPoll = function(req, res, next) {
+	api.poll.getPoll(req.params.id, function(err, doc) {
+		api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
+			res.render('admin/poll/edit', {
+				layout : 'admin/layout',
+				locals : {
+					taxonomy : taxonomy,
+                    flash: req.flash('info').pop(),
+                    doc: doc
+				}
+			});
+		});
+	});
+};
+
+admin.addPollData = function (req, res, next) {
+    adminApi.addPoll(req.body.doc, function (err) {
+        if (err) next(err);
+        else res.redirect('/admin/poll');
+    });
+};
+
+admin.editPollData = function (req, res, next) {
+    adminApi.editPoll(req.params.id, req.body.doc, function (err) {
+        if (err) next(err);
+        else {
+            req.flash('info', 'Update sucessful');
+            admin.editPoll(req, res, next);
+        }
     });
 };
 

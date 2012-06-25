@@ -158,7 +158,6 @@ exports.doc = {
                         }
                     }
                 }
-
                 send(JSON.stringify(rows));
             }
 
@@ -196,7 +195,7 @@ exports.doc = {
                         }
                     }
                 }
-            },
+            }
         }
     },
 
@@ -238,7 +237,44 @@ exports.doc = {
                     }
                 }
             }
+        }
+    },
 
+    polls: {
+        language: "javascript",
+        
+        views: {
+
+            taxonomy: {
+                map: function (doc) {
+                    if (doc.type == 'poll' && doc.taxonomy && doc.created) {
+                        var path = [];
+                        emit([[], parseInt(doc.created)], doc);
+                        for (var i in doc.taxonomy) {
+                            path.push(doc.taxonomy[i]);
+                            emit([eval(uneval(path)), parseInt(doc.created)], doc);
+                        }
+                    }
+                }
+            },
+
+            title: {
+                map: function (doc) {
+                    if (doc.type == 'poll' && doc.title)
+                        emit(doc.title, doc);
+                }
+            },
+
+            votes: {
+                map: function (doc) {
+                    if (doc.type == 'poll' && doc.answers) {
+                        var sum = 0;
+                        for (var i in doc.answers)
+                            sum += doc.answers[i];
+                        emit(sum, doc);
+                    }
+                }
+            }
         }
     }
 

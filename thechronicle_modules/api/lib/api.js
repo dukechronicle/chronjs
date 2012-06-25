@@ -18,6 +18,7 @@ api.database = require("./database");
 api.s3 = require('./s3');
 api.disqus = require('./disqus');
 api.site = require('./site');
+api.poll = require('./poll');
 api.page = require('./page');
 api.article = require('./article');
 

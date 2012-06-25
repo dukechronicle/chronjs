@@ -122,6 +122,44 @@ admin.editArticle = function (doc, callback) {
     }
 };
 
+admin.addPoll = function (doc, callback) {
+    if (doc.taxonomy == '') {
+        callback('No section selected for poll');
+    }
+    else {
+        var fields = {
+            title:doc.title,
+            taxonomy:JSON.parse(doc.taxonomy),
+            answers: doc.answers
+        };
+
+        api.poll.add(fields, callback);
+    }
+};
+
+admin.editPoll = function (id, doc, callback) {
+	if (doc.taxonomy == '') {
+        callback('No section selected for poll');
+    }
+    else {
+        var answers = {};
+        for (var i = 0; i < doc.answers.length; i++) {
+            if (doc.answers[i]) {
+                answers[doc.answers[i]] = !doc.reset && i < doc.count.length ?
+                    doc.count[i] : 0;
+            }
+        }
+
+        var fields = {
+            title:doc.title,
+            taxonomy:JSON.parse(doc.taxonomy),
+            answers: answers
+        };
+
+        api.poll.edit(id, fields, callback);
+    }
+}
+
 admin.layout = function (section, group, layoutConfig, callback) {
     async.parallel({
         sectionDocs: function (cb) {

@@ -89,3 +89,18 @@ siteApi.deleteArticle =  function (req, res, next) {
         else res.send({status: 'success'});
     });
 };
+
+siteApi.votePoll = function (req, res, next) {
+    if (! ('polls' in req.session))
+        res.send("Must vote from a browser", 403);
+    else if (req.params.id in req.session.polls)
+        res.send("Already voted", 403);
+    else
+        api.poll.vote(req.params.id, req.body.answer, function (err, _res) {
+            if (err) res.send(err, 500);
+            else {
+                req.session.polls[req.params.id] = true;
+                res.send(_res);
+            }
+        });
+};

@@ -1,0 +1,6 @@
+.poll h1{font-size:1.3em}
+.poll ul.choices{margin:5px;list-style-type:circle}
+.poll .choice{display:block;}
+.poll .choice a.hover{margin:0;display:inline-block}
+.poll .choice p{display:inline-block;margin:0 4px}
+.poll .bar{background-color:#069;height:5px}

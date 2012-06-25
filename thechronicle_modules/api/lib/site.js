@@ -482,12 +482,20 @@ site.getArticleContent = function(url, callback) {
         if (err) callback('not found');
         else {
             var displayDoc = modifyArticleForDisplay(doc);
-            cache(site.getArticleContentUncached, 600, displayDoc)(
-                function (err, model) {
-                    if(model.authorInfo) displayDoc.subhead = displayDoc.subhead || model.authorInfo.tagline;
-                    callback(err, displayDoc, model);
-                    popular.registerArticleView(doc, function(err,res){});
-                });
+            async.parallel({
+                model: cache(site.getArticleContentUncached, 600, displayDoc),
+                poll: function (cb) {
+                    api.poll.getByTaxonomy(doc.taxonomy, 1, function (err, res) {
+                        if (err) cb(err);
+                        else if (res.length == 0) cb();
+                        else cb(null, res[0]);
+                    });
+                }
+            }, function (err, results) {
+                results.model.poll = results.poll;
+                popular.registerArticleView(doc, function(err,res){});
+                callback(err, displayDoc, results.model);
+            });
         }
     });
 };

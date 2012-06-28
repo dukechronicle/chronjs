@@ -65,7 +65,6 @@ function pushSitemaps(path, sitemaps, callback) {
 function latestSitemaps(limit, query, news, partials, callback) {
     api.article.getByDate(limit, query, function (err, results, nextKey) {
         if (err) callback(err);
-        else if (results.length == 0) callback("No new articles for sitemap");
         else {
             gzip(generateSitemap(results, news), function (err, buffer) {
                 if (err) return callback(err);
@@ -116,7 +115,7 @@ function generateSitemap(docs, news) {
         if (news)
             url.ele('news:news').
             ele('news:publication').
-            ele('news:name', 'The Chronicle').up().
+            ele('news:name', 'Duke Chronicle').up().
             ele('news:language', 'en').up().up().
             ele('news:publication_date', date).up().
             ele('news:title', doc.title);

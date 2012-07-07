@@ -3,6 +3,7 @@ var express = require('express');
 require('express-namespace');
 var RedisStore = require('connect-redis')(express);
 var stylus = require('stylus');
+var _ = require('underscore');
 
 var api = require('./thechronicle_modules/api');
 var builder = require('./build-assets');
@@ -141,13 +142,27 @@ function newServer() {
     server.set('view options', viewOptions);
     server.set('views', __dirname + '/views');
     server.set('view engine', 'jade');
-    return server
+    return server;
+}
+
+function redirectServer(src, dest) {
+    var server = express.createServer();
+    server.use(function (req, res) {
+        res.redirect(req.headers.host.replace(src, dest) + req.url);
+    });
+    return server;
 }
 
 function configureVirtualHosts() {
     app.configure(function () {
-        app.use(express.vhost(config.get('DOMAIN_NAME'),
-                              route.init(newServer())));
+        var siteDomainName = config.get('DOMAIN_NAME');
+        app.use(express.vhost(siteDomainName, route.init(newServer())));
+        if (config.get('ALTERNATE_DOMAIN_NAMES')) {
+            _.each(config.get('ALTERNATE_DOMAIN_NAMES'), function (domain) {
+                app.use(express.vhost(
+                    domain, redirectServer(domain, siteDomainName)));
+            });
+        }
     });
 }
 

@@ -30,6 +30,16 @@ var configParams = [
         }
     },
     {
+        name: 'ALTERNATE_DOMAIN_NAMES',
+        description: 'Alternate Site Domain Names',
+        defaultValue: [],
+        schema: {
+            type: "array",
+            required: false,
+            items: {type: "string"}
+        }
+    },
+    {
         name: 'DISQUS_SHORTNAME',
         description: 'Disqus Shortname',
         defaultValue: 'chronicletest',

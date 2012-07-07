@@ -20,7 +20,7 @@ exports.preinit = function (app) {
     app.post('/config', site.configData);
 };
 
-exports.init = function (app) {
+exports.siteInit = function (app) {
 
     app.namespace('/api', function () {
         app.get('/all', siteApi.articlesBySection);
@@ -34,8 +34,6 @@ exports.init = function (app) {
         app.put('/article/:id', api.site.checkAdmin, siteApi.updateArticle);
         app.del('/article/:id', api.site.checkAdmin, siteApi.deleteArticle);
     });
-
-    app.get('/m/*', site.mobile);
 
     app.get('/', site.frontpage);
     app.get('/news', site.news);
@@ -135,6 +133,11 @@ exports.init = function (app) {
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);
 
+    return app;
+};
+
+exports.mobileInit = function (app) {
+    app.get('/m/*', site.mobile);
     return app;
 };
 

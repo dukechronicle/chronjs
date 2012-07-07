@@ -1,0 +1,35 @@
+mixin plusOne
+    script(type="text/javascript")
+        (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+        })();
+
+mixin googleAnalytics
+    - if (isProduction)
+        script(type="text/javascript")
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-5900287-12']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+              var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+              ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+              var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+
+mixin googleAnalyticsTaxonomy(fullTax)
+    - if (isProduction)
+        script(type="text/javascript")
+            _gaq.push(['_setCustomVar', 2, 'Section', '!{doc.taxonomy[0]}', 3]);
+            _gaq.push(['_setCustomVar', 3, 'Taxonomy', '!{fullTax}', 3]);
+
+mixin feedback
+    script(type="text/javascript")
+        var uvOptions = {};
+          (function() {
+            var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+            uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/XGb8L7wNjbhxOjoDQZkg.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+          })();

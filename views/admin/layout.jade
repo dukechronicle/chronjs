@@ -1,13 +1,15 @@
 include ../mixins/layout-helpers
+include ../mixins/code
 
 !!! 5
 html
   head
     title The Chronicle
-    mixin stylesheet("admin")
-    !=partial("code/google-analytics")
+    block stylesheet
+      mixin stylesheet("admin")
+    mixin googleAnalytics
   body
-    #main
-      #container!= body
-      #scripts
-        mixin require-script("admin")
+    block header
+    block content
+    #scripts
+      mixin require-script("admin")

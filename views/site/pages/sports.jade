@@ -1,25 +1,28 @@
-#sports
-    !=partial('../layout/subnav', {subsections: subsections})
+extends layout
 
-    #top.clearfix
-        if (model.Slideshow)
-            !=partial('../container/slideshow/slideshow-right', {stories: model.Slideshow})
-    #bottom.clearfix
-        .span-4
-            if (model.adFullRectangle)
-                .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
-            if (model.Blog)
-                #blog.title-medium!=partial('../container/story-list/image', {locals: {title: "The Blue Zone", image: "http://d2sug25c5hnh7r.cloudfront.net/images/blogs/sportsblog-banner.jpg", imageHref:'http://sports.chronicleblogs.com', stories:model.Blog}})
+block content
+    #sports
+        !=partial('../layout/subnav', {subsections: subsections})
 
-        .span-8.last.clearfix
-            - if (model.Stories)
-                #middle.clearfix
-                    .span-4
-                        - each story, index in model.Stories
-                            - if (index % 2 == 0)
-                                !=partial('../container/block/thumbnail', {story: story, tax: true})
-                    .span-4.last
-                        - each story, index in model.Stories
-                            - if (index % 2 == 1)
-                                !=partial('../container/block/thumbnail', {story: story, tax: true})
-            !=partial('../container/row/multimedia', {title: "Multimedia", multimedia: model.multimedia.Sports})
+        #top.clearfix
+            if (model.Slideshow)
+                !=partial('../container/slideshow/slideshow-right', {stories: model.Slideshow})
+        #bottom.clearfix
+            .span-4
+                if (model.adFullRectangle)
+                    .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
+                if (model.Blog)
+                    #blog.title-medium!=partial('../container/story-list/image', {locals: {title: "The Blue Zone", image: "http://d2sug25c5hnh7r.cloudfront.net/images/blogs/sportsblog-banner.jpg", imageHref:'http://sports.chronicleblogs.com', stories:model.Blog}})
+
+            .span-8.last.clearfix
+                - if (model.Stories)
+                    #middle.clearfix
+                        .span-4
+                            - each story, index in model.Stories
+                                - if (index % 2 == 0)
+                                    !=partial('../container/block/thumbnail', {story: story, tax: true})
+                        .span-4.last
+                            - each story, index in model.Stories
+                                - if (index % 2 == 1)
+                                    !=partial('../container/block/thumbnail', {story: story, tax: true})
+                !=partial('../container/row/multimedia', {title: "Multimedia", multimedia: model.multimedia.Sports})

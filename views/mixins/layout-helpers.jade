@@ -9,3 +9,9 @@ mixin stylesheet(src)
     link(rel="stylesheet", href=paths.css[src])
   - else
     link(rel="stylesheet", href="/styles/#{src}/main.css")
+
+mixin title
+  - if (typeof pageTitle != 'undefined')
+    title #{pageTitle} | The Chronicle
+  - else
+    title The Chronicle | Duke University's Daily Independent Newspaper

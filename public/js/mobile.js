@@ -1,3 +1,5 @@
+var CHRONICLE_DOMAIN = 'http://www.dukechronicle.com';
+
 var ARTICLE_LIST = "#ARTICLE_LIST";
 var ARTICLE_CONTENT = "#ARTICLE_CONTENT";
 var HEADER_TITLE = "#HEADER_TITLE";
@@ -106,7 +108,7 @@ function getArticleList(category, title, forced)
         }
         //console.log(url);
         $.ajax({
-            url: url,
+            url: CHRONICLE_DOMAIN + url,
             cache: false,
             dataType: "jsonp",
             success: function(data){
@@ -179,7 +181,7 @@ function getArticle(articleURL)
     {
         //console.log("article cache: cachemiss");
         $.ajax({
-            url: "/api/article/url/" + articleURL,
+            url: CHRONICLE_DOMAIN + "/api/article/url/" + articleURL,
             dataType: "jsonp",
             cache: false,
             success: function(data){
@@ -193,7 +195,7 @@ function getArticle(articleURL)
                 articleCache[articleURL] = {data: data};
                 $(ARTICLE_CONTENT).empty();
                 $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL].data));
-                 $.mobile.changePage($("#Article"),{transition:"slide", dataUrl:"/m/article/"+articleURL});
+                 $.mobile.changePage($("#Article"),{transition:"slide", dataUrl:"/article/"+articleURL});
                 
             },
             error: function (jqXHR, textStatus, errorThrown) {

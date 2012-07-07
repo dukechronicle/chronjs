@@ -16,7 +16,7 @@ var util = require('./thechronicle_modules/util');
 var PORT = process.env.PORT || process.env.CHRONICLE_PORT || 4000;
 var SECRET = "i'll make you my dirty little secret";
 
-var app, viewOptions, viewHelpers, sessionManager;
+var app, viewOptions, sessionManager;
 
 
 config.init(runSite, function (err) {
@@ -26,10 +26,6 @@ config.init(runSite, function (err) {
         staticCdn: '',
         useCompiledStaticFiles: false,
         isProduction: process.env.NODE_ENV === 'production'
-    };
-
-    viewHelpers = {
-
     };
 
     sessionManager = new SessionManager();
@@ -46,29 +42,41 @@ config.init(runSite, function (err) {
 
 function configureApp() {
     /* express configuration */
-    app = express.createServer();
+    app = newServer();
 
-    app.error(function (err, req, res, next) {
-        if (err.message == 'URI malformed')
-            log.error(err.message + ": " + req.url);
-        else log.error(err.stack || err);
-        next(err);
+    app.configure(function () {
+        app.error(function (err, req, res, next) {
+            log.error(err.stack || err);
+            next(err);
+        });
+
+        app.use(express.bodyParser({uploadDir:__dirname + '/uploads'}));
+        app.use(express.methodOverride());
+
+        // set up session
+        app.use(express.cookieParser());
+        app.use(sessionManager.session);
+
+        // set http cache to 30 minutes by default for each response
+        app.use(function (req, res, next) {
+            if (!api.accounts.isAdmin(req)) {
+                res.header('Cache-Control', 'public, max-age=1800');
+            }
+            next();
+        });
+
+        app.use(stylus.middleware({
+            src: 'views',
+            dest: 'public',
+            force: true,
+            compile: function (str, path) {
+                return stylus(str)
+                    .set('filename', path)
+                    .set('compress', true)
+                    .set('include css', true);
+            }
+        }));
     });
-
-    // the middleware itself does not serve the static
-    // css files, so we need to expose them with staticProvider
-    // these app.configure calls need to come before app.use(app.router)!
-    app.use(stylus.middleware({
-        src: 'views',
-        dest: 'public',
-        force: true,
-        compile: function (str, path) {
-            return stylus(str)
-                .set('filename', path)
-                .set('compress', true)
-                .set('include css', true);
-        }
-    }));
 
     app.configure('development', function () {
         app.use(express.static(__dirname + '/public'));
@@ -87,29 +95,6 @@ function configureApp() {
         });
     });
 
-    app.configure(function () {
-        app.helpers(viewHelpers);
-        app.set('view options', viewOptions);
-        app.set('views', __dirname + '/views');
-        app.set('view engine', 'jade');
-        app.enable('jsonp callback');
-        app.use(express.bodyParser({uploadDir:__dirname + '/uploads'}));
-        app.use(express.methodOverride());
-
-        // set up session
-        app.use(express.cookieParser());
-        app.use(sessionManager.session);
-
-        // set http cache to 30 minutes by default for each response
-        app.use(function (req, res, next) {
-            if (!api.accounts.isAdmin(req)) {
-                res.header('Cache-Control', 'public, max-age=1800');
-            }
-            next();
-        });
-
-        app.use(app.router);
-    });
     app.listen(PORT);
 }
 
@@ -117,7 +102,7 @@ function runSite(callback) {
     if (process.env.NODE_ENV === 'production') {
         log.writeToLoggly();
     }
-    
+
     async.waterfall([
         api.init,
         redisClient.init
@@ -136,7 +121,6 @@ function runSite(callback) {
                 viewOptions.paths =  paths;
                 viewOptions.staticCdn = config.get('CLOUDFRONT_STATIC');
                 viewOptions.useCompiledStaticFiles = true;
-                app.set('view options', viewOptions);
             });
         }
 
@@ -144,13 +128,29 @@ function runSite(callback) {
                                      redisClient.getPort(),
                                      redisClient.getPassword());
 
-        route.init(app);
+        configureVirtualHosts();
         log.notice(util.format("Site configured and listening on port %d in %s mode",
                                app.address().port, app.settings.env));
-        
+
         if (callback) callback();
     });
 }
+
+function newServer() {
+    var server = express.createServer();
+    server.set('view options', viewOptions);
+    server.set('views', __dirname + '/views');
+    server.set('view engine', 'jade');
+    return server
+}
+
+function configureVirtualHosts() {
+    app.configure(function () {
+        app.use(express.vhost(config.get('DOMAIN_NAME'),
+                              route.init(newServer())));
+    });
+}
+
 
 /**
  * Wraps express session middleware in a way such that the underlying

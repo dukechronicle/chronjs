@@ -135,6 +135,7 @@ exports.init = function (app) {
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);
 
+    return app;
 };
 
 function redirect (url) {

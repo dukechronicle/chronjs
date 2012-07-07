@@ -142,6 +142,7 @@ function newServer() {
     server.set('view options', viewOptions);
     server.set('views', __dirname + '/views');
     server.set('view engine', 'jade');
+    server.enable('jsonp callback');
     return server;
 }
 

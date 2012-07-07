@@ -137,7 +137,7 @@ exports.siteInit = function (app) {
 };
 
 exports.mobileInit = function (app) {
-    app.get('/m/*', site.mobile);
+    app.get('*', site.mobile);
     return app;
 };
 

@@ -19,7 +19,6 @@ var SECRET = "i'll make you my dirty little secret";
 var app, viewOptions, viewHelpers, sessionManager;
 
 
-log.init();
 config.init(runSite, function (err) {
     if (err) return log.error("Configuration failed: " + err);
 

@@ -23,7 +23,7 @@ var configParams = [
     {
         name: 'DOMAIN_NAME',
         description: 'Site Domain Name',
-        defaultValue: 'www.dukechronicle.com',
+        defaultValue: 'localhost',
         schema: {
           type: "string",
           required: true
@@ -37,6 +37,15 @@ var configParams = [
             type: "array",
             required: false,
             items: {type: "string"}
+        }
+    },
+    {
+        name: 'MOBILE_DOMAIN_NAME',
+        description: 'Mobile Site Domain Name',
+        defaultValue: 'm.dukechronicle.com',
+        schema: {
+          type: "string",
+          required: true
         }
     },
     {

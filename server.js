@@ -156,7 +156,9 @@ function redirectServer(src, dest) {
 function configureVirtualHosts() {
     app.configure(function () {
         var siteDomainName = config.get('DOMAIN_NAME');
-        app.use(express.vhost(siteDomainName, route.init(newServer())));
+        var mobileDomainName = config.get('MOBILE_DOMAIN_NAME');
+        app.use(express.vhost(siteDomainName, route.siteInit(newServer())));
+        app.use(express.vhost(mobileDomainName, route.mobileInit(newServer())));
         if (config.get('ALTERNATE_DOMAIN_NAMES')) {
             _.each(config.get('ALTERNATE_DOMAIN_NAMES'), function (domain) {
                 app.use(express.vhost(

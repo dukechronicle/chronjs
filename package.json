@@ -11,7 +11,7 @@
     },
     "dependencies":{
         "express":"2.5.x",
-        "express-namespace":"0.1.x",
+        "express-namespace":"0.1.0",
         "express-resource":"0.2.x",
         "jade":"0.24.x",
         "stylus":"0.25.x",

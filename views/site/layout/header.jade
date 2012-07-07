@@ -3,13 +3,11 @@
 - if (typeof section == 'undefined') var section = undefined
 
 #header-top.clearfix
-    .span-1 &nbsp;
-    a.content.clearfix.span-4(href="/")
-        img#header-overlay(src=staticCdn + '/images/header-overlay.png')
-        p.date &nbsp;
-        h1.brand The Chronicle
-        p.tagline The Independent Daily at Duke University
-    .span-1 &nbsp;
+    .span-6 &nbsp
+        a#home-link(href="/")
+            img#header-overlay(src=staticCdn + '/images/header-overlay.png')
+            h1.brand The Chronicle
+            h3.tagline The Independent Daily at Duke University
 
     .leaderboard.span-6.last.clearfix
         .full-banner-raw.advertising.openx-ad(class="{zoneID: 308}")

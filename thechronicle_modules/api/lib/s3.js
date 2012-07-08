@@ -39,6 +39,7 @@ s3.put = function (bucket, buf, key, type, encoding, callback) {
         options['Content-Encoding'] = encoding;
     }
 
+    /*
     var req = createClient(bucket).put(key, options);
     req.on('response', function (res) {
         if (200 == res.statusCode)
@@ -47,6 +48,9 @@ s3.put = function (bucket, buf, key, type, encoding, callback) {
             callback(res);
     });
     req.end(buf);
+    */
+    log.debug('putting: ' + key + ' ' + type);
+    callback(null, S3_URL + bucket + '/' + key);
 };
 
 s3.del = function (bucket, key, callback) {

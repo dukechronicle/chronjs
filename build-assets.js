@@ -25,8 +25,8 @@ program
     .command('push')
     .description('Push source static files (eg. images) to S3.')
     .option('--all', 'Push css/, js/, and img/ directories.')
-    .option('--dir <dir>', 'Push all files in given directory.')
-    .option('--file <file>', 'Push given file.');
+    .option('--directory <dir>', 'Push all files in given directory.')
+    .option('--file <file>', 'Push given file.')
     .action(pushAssets);
 
 program.parse(process.argv);
@@ -49,12 +49,40 @@ function init(callback) {
     ], callback);
 }
 
-function buildAssets(command) {
+function exit(err) {
+    if (err) {
+        log.error(err);
+        process.exit(1);
+    }
+    else {
+        process.exit();
+    }
+}
 
+function buildAssets(command) {
+    init(function (err) {
+        if (err) return exit(err);
+
+    });
 }
 
 function pushAssets(command) {
-
+    init(function (err) {
+        if (err) return exit(err);
+        if (command.all) {
+            var sourceDirs = ['public/css', 'public/js', 'public/img'];
+            async.forEach(sourceDirs, build.pushSourceDirectory, exit);
+        }
+        else if (command.directory) {
+            build.pushSourceDirectory(command.directory, exit);
+        }
+        else if (command.file) {
+            build.pushSourceFile(command.file, exit);
+        }
+        else {
+            exit('Must specify one of --all, --directory, or --file.');
+        }
+    });
 }
 
 /*

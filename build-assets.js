@@ -15,8 +15,24 @@ var STYLE_DIR = __dirname + '/views/styles/';
 var DIST_DIR = __dirname + '/public/dist/';
 var JS_SOURCES = [ 'site', 'admin' ];
 
-exports.buildAssets = buildAssets;
 
+config.init(null, function (err) {
+    if (err)
+        log.error("Configuration failed: " + err);
+    else if (!config.isSetUp())
+        log.error("Configuration is not set up. Cannot continue.");
+    else {
+        api.init(function (err) {
+            if (err) log.error("API init failed: " + err);
+            else {
+                buildAssets(function (err, paths) {
+                    if (err) log.error(err);
+                    else log.debug(JSON.stringify(paths));
+                });
+            }
+        });
+    }
+});
 
 function buildAssets(callback) {
     async.parallel({css: buildCSS, js: buildJavascript}, function (err, paths) {

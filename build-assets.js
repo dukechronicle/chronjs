@@ -38,9 +38,9 @@ async.waterfall([
     }
     */
     function (callback) {
-        build.buildAllCSS(function (err, res) {
+        build.buildAllCSS(function (err, paths) {
             if (err) callback(err);
-            else log.debug(res);
+            else build.pushGeneratedFiles('css', paths, 'text/css', callback);
         });
     }
 ], function (err) {
@@ -64,21 +64,4 @@ function pushAssets(paths, callback) {
 
 
 
-function pushAll(paths, type) {
-    return function (callback) {
-        async.forEach(_.keys(paths), function (src, callback) {
-            fs.readFile('public' + paths[src], 'utf8', function (err, data) {
-                if (err) callback(err);
-                else {
-                    storeS3(data.toString(), type, function (err, path) {
-                        if (err) callback(err);
-                        else {
-                            paths[src] = path;
-                            callback();
-                        }
-                    });
-                }
-            });
-        }, callback);
-    };
-}
+

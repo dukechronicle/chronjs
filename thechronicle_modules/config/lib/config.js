@@ -112,6 +112,21 @@ config.isSetUp = function () {
     return config.getUndefinedParameters().length == 0; // if all config params are defined, it is set up
 };
 
+config.setConfigProfile = function (params, callback) {
+    configProfile = _.extend(configProfile || {}, params);
+
+    var newInfo = {};
+    newInfo[DOCUMENT_CONFIG_KEY] = configProfile;
+
+    // save the config file
+    if (documentExistsInDB) {
+        configDB.merge(DB_CONFIG_DOCUMENT_NAME, newInfo, callback);
+    }
+    else {
+        configDB.save(DB_CONFIG_DOCUMENT_NAME, newInfo, callback);
+    }
+};
+
 config.setUp = function (params, callback) {
     var jsonError = null;
         
@@ -167,16 +182,7 @@ config.setUp = function (params, callback) {
         else return callback('Some parameters still undefined. Please define all parameters.');
     }
 
-    var newInfo = {};
-    newInfo[DOCUMENT_CONFIG_KEY] = configProfile;
-
-    // save the config file
-    if(documentExistsInDB) {
-        configDB.merge(DB_CONFIG_DOCUMENT_NAME, newInfo, afterUpdate);
-    }   
-    else {
-        configDB.save(DB_CONFIG_DOCUMENT_NAME, newInfo, afterUpdate);
-    }
+    config.setConfigProfile(configProfile, afterUpdate);
 };
 
 config.getUndefinedParameters = function () {

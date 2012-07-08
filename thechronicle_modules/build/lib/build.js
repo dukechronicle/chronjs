@@ -9,6 +9,7 @@ var pathutil = require('path');
 var requirejs = require('requirejs');
 var stylus = require('stylus');
 var walk = require('walk');
+var _ = require('underscore');
 
 var api = require('../../api');
 var config = require('../../config');
@@ -59,7 +60,28 @@ build.pushSourceFile = function (filepath, callback) {
         if (err) return callback(err);
         api.s3.put(STATIC_BUCKET, data, key, type, null, callback);
     });
-}
+};
+
+build.pushGeneratedFiles = function (configKey, paths, type, callback) {
+    async.forEach(_.keys(paths), function (src, callback) {
+        fs.readFile(paths[src], function (err, data) {
+            if (err) return callback(err);
+            var key = '/' + pathutil.relative(PUBLIC_DIR, paths[src]);
+            api.s3.put(STATIC_BUCKET, data, key, type, 'gzip', function (err) {
+                if (err) callback(err);
+                else {
+                    paths[src] = config.get('CLOUDFRONT_STATIC') + key;
+                    callback();
+                }
+            });
+        });
+    }, function (err) {
+        if (err) return callback(err);
+        var configPaths = config.get('ASSET_PATHS') || {};
+        configPaths[configKey] = paths;
+        config.setConfigProfile({'ASSET_PATHS': paths}, callback);
+    });
+};
 
 build.buildAllCSS = function (callback) {
     var paths = {};

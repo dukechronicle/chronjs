@@ -47,6 +47,7 @@
         "requirejs":"1.0.x",
         "gzip":"0.1.x",
         "clean-css":"0.x",
-        "walk":"2.2.x"
+        "walk":"2.2.x",
+        "commander":"1.0.x"
     }
 }

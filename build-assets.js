@@ -16,22 +16,23 @@ var DIST_DIR = __dirname + '/public/dist/';
 var JS_SOURCES = [ 'site', 'admin' ];
 
 
-config.init(null, function (err) {
-    if (err)
-        log.error("Configuration failed: " + err);
-    else if (!config.isSetUp())
-        log.error("Configuration is not set up. Cannot continue.");
-    else {
-        api.init(function (err) {
-            if (err) log.error("API init failed: " + err);
-            else {
-                buildAssets(function (err, paths) {
-                    if (err) log.error(err);
-                    else log.debug(JSON.stringify(paths));
-                });
-            }
-        });
+async.waterfall([
+    function (callback) {
+        config.init(null, callback);
+    },
+    function (callback) {
+        if (config.isSetUp())
+            api.init(callback);
+        else
+            log.error("Configuration is not set up. Cannot continue.");
+    },
+    buildAssets,
+    function (paths, callback) {
+        config.setConfigProfile({'ASSET_PATHS': paths}, callback);
     }
+], function (err) {
+    if (err) log.error(err);
+    else log.notice('Build was successful');
 });
 
 function buildAssets(callback) {

@@ -32,8 +32,7 @@ build.pushSourceDirectory = function (dir, callback) {
 
     walker.on('file', function (root, stats, next) {
         var filepath = pathutil.join(root, stats.name);
-        log.debug(filepath);
-        pushSourceFile(filepath, function (err) {
+        build.pushSourceFile(filepath, function (err) {
             if (err) {
                 errors.push('Error pushing ' + filepath + ': ' + err);
             }
@@ -50,7 +49,7 @@ build.pushSourceDirectory = function (dir, callback) {
 };
 
 build.pushSourceFile = function (filepath, callback) {
-    var key = pathutil.relative(PUBLIC_DIR, filepath);
+    var key = '/' + pathutil.relative(PUBLIC_DIR, filepath);
     var type = getMimeType(pathutil.extname(filepath));
     if (!type) {
         return callback('Cannot determine file type: ' + path);

@@ -46,6 +46,7 @@
         "JSV":"4.x",
         "requirejs":"1.0.x",
         "gzip":"0.1.x",
-        "clean-css":"0.x"
+        "clean-css":"0.x",
+        "walk":"2.2.x"
     }
 }

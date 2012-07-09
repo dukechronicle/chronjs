@@ -1,140 +1,176 @@
+#!/usr/bin/env node
+
 var async = require('async');
-var cleanCSS = require('clean-css');
-var crypto = require('crypto');
-var requirejs = require('requirejs');
-var fs = require('fs');
-var gzip = require('gzip');
-var stylus = require('stylus');
+var path = require('path');
+var program = require('commander');
 var _ = require('underscore');
 
 var api = require('./thechronicle_modules/api');
+var build = require('./thechronicle_modules/build');
 var config = require('./thechronicle_modules/config');
 var log = require('./thechronicle_modules/log');
 
-var STYLE_DIR = __dirname + '/views/styles/';
-var DIST_DIR = __dirname + '/public/dist/';
-var JS_SOURCES = [ 'site', 'admin' ];
 
-exports.buildAssets = buildAssets;
+program
+    .command('build')
+    .description('Build CSS and/or Javascript from source and push to S3.')
+    .option('--css [dir]', 'Build CSS files from stylus. Optionally specify ' +
+            'subdirectory of views/styles, otherwise builds all.')
+    .option('--js [dir]', 'Build Javascript files from source. Optionally ' +
+            'specify "site" or "admin", otherwise builds both.')
+    .option('--nopush', 'Only build files without pushing to S3.')
+    .action(buildAssets);
 
+program
+    .command('push')
+    .description('Push source static files (eg. images) to S3.')
+    .option('--all', 'Push css/, js/, and img/ directories.')
+    .option('--directory <dir>', 'Push all files in given directory.')
+    .option('--file <file>', 'Push given file.')
+    .action(pushAssets);
+
+program.parse(process.argv);
+
+
+function init(callback) {
+    async.waterfall([
+        function (callback) {
+            config.init(null, callback);
+        },
+        function (callback) {
+            if (config.isSetUp()) {
+                build.init(__dirname);
+                api.init(callback);
+            }
+            else {
+                callback("Configuration is not set up. Cannot continue.");
+            }
+        },
+    ], callback);
+}
+
+function exit(err) {
+    if (err) {
+        log.error(err);
+        process.exit(1);
+    }
+    else {
+        process.exit();
+    }
+}
+
+function buildAssets(command) {
+    init(function (err) {
+        if (err) return exit(err);
+
+        if (command.css && command.js) {
+            async.parallel([
+                function (callback) {
+                    buildCSS(command.css, command.nopush, callback);
+                },
+                function (callback) {
+                    buildJavascript(command.js, command.push, callback);
+                }
+            ], exit);
+        }
+        else if (command.css) {
+            buildCSS(command.css, command.nopush, exit);
+        }
+        else if (command.js) {
+            buildCSS(command.js, command.nopush, exit);
+        }
+        else {
+            exit('Must specify either of --css or --js.');
+        }
+    });
+}
+
+function buildCSS(cssOption, noPush, callback) {
+    if (cssOption === true) {
+        build.buildAllCSS(function (err, paths) {
+            if (err) callback(err);
+            else if (noPush) callback();
+            else {
+                build.pushGeneratedFiles('css', paths, 'text/css', callback);
+            }
+        });
+    }
+    else {
+        build.buildCSSFile(cssOption, function (err, filepath) {
+            if (err) callback(err);
+            else if (noPush) callback();
+            else {
+                var paths = {};
+                paths[cssOption] = filepath;
+                build.pushGeneratedFiles('css', paths, 'text/css', callback);
+            }
+        });
+    }
+}
+
+function buildJavascript(jsOption, noPush, callback) {
+    if (jsOption === true) {
+        build.buildAllJavascript(function (err, paths) {
+            if (err) callback(err);
+            else if (noPush) callback();
+            else {
+                var type = 'application/javascript';
+                build.pushGeneratedFiles('js', paths, type, callback);
+            }
+        });
+    }
+    else {
+        build.buildJavascriptFile(jsOption, function (err, filepath) {
+            if (err) callback(err);
+            else if (noPush) callback();
+            else {
+                var paths = {};
+                paths[jsOption] = filepath;
+                var type = 'application/javascript';
+                build.pushGeneratedFiles('js', paths, type, callback);
+            }
+        });
+    }
+}
+
+function pushAssets(command) {
+    init(function (err) {
+        if (err) return exit(err);
+        if (command.all) {
+            var sourceDirs = ['public/css', 'public/js', 'public/img'];
+            async.forEach(sourceDirs, build.pushSourceDirectory, exit);
+        }
+        else if (command.directory) {
+            build.pushSourceDirectory(command.directory, exit);
+        }
+        else if (command.file) {
+            build.pushSourceFile(command.file, exit);
+        }
+        else {
+            exit('Must specify one of --all, --directory, or --file.');
+        }
+    });
+}
+
+/*
+    function (callback) {
+        build.buildAllCSS(function (err, paths) {
+            if (err) callback(err);
+            else build.pushGeneratedFiles('css', paths, 'text/css', callback);
+        });
+    }
 
 function buildAssets(callback) {
-    async.parallel({css: buildCSS, js: buildJavascript}, function (err, paths) {
-        if (err) callback(err);
-        else pushAssets(paths, callback);
-    });
+    async.parallel({css: buildCSS, js: buildJavascript}, callback);
 }
 
 function pushAssets(paths, callback) {
     async.parallel({
         css: pushAll(paths.css, "text/css"),
-        js: pushAll(paths.js, "application/javascript")
+        js: pushAll(paths.js, "application/javascript"),
+        src: pushSource(['css', 'js', 'img']),
     }, function (err) {
         callback(err, paths);
     });
 }
-
-function pushAll(paths, type) {
-    return function (callback) {
-        async.forEach(_.keys(paths), function (src, callback) {
-            fs.readFile('public' + paths[src], 'utf8', function (err, data) {
-                if (err) callback(err);
-                else {
-                    storeS3(data.toString(), type, function (err, path) {
-                        if (err) callback(err);
-                        else {
-                            paths[src] = path;
-                            callback();
-                        }
-                    });
-                }
-            });
-        }, callback);
-    };
-}
-
-function buildCSS(callback) {
-    var paths = {};
-    fs.readdir(STYLE_DIR, function (err, files) {
-        async.forEachSeries(files, function (file, cb) {
-            fs.stat(STYLE_DIR + file, function (err, stats) {
-                if (err) cb(err);
-                else if (stats.isDirectory())
-                    buildCSSFile(file, function (err, path) {
-                        paths[file] = path;
-                        cb(err);
-                    });
-                else cb();
-            });
-        }, function (err) {
-            callback(err, paths);
-        });
-    });
-}
-
-function buildCSSFile(path, callback) {
-    var filepath = STYLE_DIR + path + '/main.styl';
-    fs.readFile(filepath, function (err, contents) {
-        if (err) return callback(err);
-
-        var renderer = stylus(contents.toString())
-            .set('filename', filepath)
-            .set('compress', true)
-            .set('include css', true);
-        renderer.render(function(err, data) {
-            if (err) {
-                log.error(err);
-                return callback(err);
-            }
-            
-            var style = cleanCSS.process(data);
-            fs.writeFile(DIST_DIR + path + '.css', style, function (err) {
-                callback(err, '/dist/' + path + '.css');
-            });
-        });
-    });
-}
-
-function buildJavascript(callback) {
-    var paths = {};
-    async.forEachSeries(JS_SOURCES, function (src, cb) {
-        buildJavascriptFile(src, function (err, path) {
-            paths[src] = path;
-            cb(err);
-        });
-    }, function (err) {
-        callback(err, paths);
-    });
-}
-
-function buildJavascriptFile(src, callback) {
-    var config = { 
-        baseUrl: 'public/scripts',
-        name: src + '/main',
-        out: 'public/dist/' + src + '.js',
-        paths: {
-            jquery: 'require-jquery'
-        }
-    };
-
-    requirejs.optimize(config, function (buildResponse) {
-        callback(null, '/dist/' + src + '.js');
-    });
-}
-
-function storeS3(data, type, callback) {
-    var bucket = config.get('S3_STATIC_BUCKET');
-
-    var md5sum = crypto.createHash('md5');
-    md5sum.update(data);
-    var path = '/dist/' + md5sum.digest('hex');
-
-    gzip(data, function (err, buffer) {
-        if (err) callback(err);
-        else {
-            api.s3.put(bucket, buffer, path, type, "gzip", function(err) {
-                callback(err, config.get('CLOUDFRONT_STATIC') + path);
-            });
-        }
-    });
-}
+*/

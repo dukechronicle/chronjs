@@ -68,7 +68,7 @@
     padding-bottom: 3px;
 }
 .onde-panel .field-name.collapser {
-    background-image: url(/images/treeDownTriangleBlack.png);
+    background-image: url(/img/onde/treeDownTriangleBlack.png);
     background-repeat: no-repeat;
     background-position: 5px 8px;
 /*    background-color: #f3f3f3; */
@@ -90,7 +90,7 @@
 /*    min-width: 80px; */
 }
 .onde-panel .field-name.collapser.collapsed {
-    background-image: url(/images/treeRightTriangleBlack.png);
+    background-image: url(/img/onde/treeRightTriangleBlack.png);
     border-bottom: none;
     margin-bottom: 0;
 }
@@ -221,7 +221,7 @@
     overflow: hidden;
     width: 16px;
     height: 16px;
-    background-image: url(/images/delete.png);
+    background-image: url(/img/onde/delete.png);
 /*    padding-left: 10px; */
 }
 .onde-panel button.field-delete:hover {

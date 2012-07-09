@@ -63,7 +63,74 @@ function buildAssets(command) {
     init(function (err) {
         if (err) return exit(err);
 
+        if (command.css && command.js) {
+            async.parallel([
+                function (callback) {
+                    buildCSS(command.css, command.nopush, callback);
+                },
+                function (callback) {
+                    buildJavascript(command.js, command.push, callback);
+                }
+            ], exit);
+        }
+        else if (command.css) {
+            buildCSS(command.css, command.nopush, exit);
+        }
+        else if (command.js) {
+            buildCSS(command.js, command.nopush, exit);
+        }
+        else {
+            exit('Must specify either of --css or --js.');
+        }
     });
+}
+
+function buildCSS(cssOption, noPush, callback) {
+    if (cssOption === true) {
+        build.buildAllCSS(function (err, paths) {
+            if (err) callback(err);
+            else if (noPush) callback();
+            else {
+                build.pushGeneratedFiles('css', paths, 'text/css', callback);
+            }
+        });
+    }
+    else {
+        build.buildCSSFile(cssOption, function (err, filepath) {
+            if (err) callback(err);
+            else if (noPush) callback();
+            else {
+                var paths = {};
+                paths[cssOption] = filepath;
+                build.pushGeneratedFiles('css', paths, 'text/css', callback);
+            }
+        });
+    }
+}
+
+function buildJavascript(jsOption, noPush, callback) {
+    if (jsOption === true) {
+        build.buildAllJavascript(function (err, paths) {
+            if (err) callback(err);
+            else if (noPush) callback();
+            else {
+                var type = 'application/javascript';
+                build.pushGeneratedFiles('js', paths, type, callback);
+            }
+        });
+    }
+    else {
+        build.buildJavascriptFile(jsOption, function (err, filepath) {
+            if (err) callback(err);
+            else if (noPush) callback();
+            else {
+                var paths = {};
+                paths[jsOption] = filepath;
+                var type = 'application/javascript';
+                build.pushGeneratedFiles('js', paths, type, callback);
+            }
+        });
+    }
 }
 
 function pushAssets(command) {

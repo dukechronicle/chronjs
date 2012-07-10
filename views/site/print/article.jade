@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    #article-print
+        #mast
+            h1 The Chronicle
+        #content
+            h1= doc.title
+            .metadata
+                span.credit
+                    | By #{doc.authors.join(", ")} &nbsp; | &nbsp; #{doc.date}
+
+            !=doc.body

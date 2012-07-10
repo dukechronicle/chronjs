@@ -10,15 +10,12 @@ var _ = require('underscore');
 
 
 site.mobile = function (req, res, next) {
-    res.render('mobile', {
-        layout: false
-    });
+    res.render('mobile');
 };
 
 site.frontpage = function (req, res) {
     api.site.getFrontPageContent(function (err, model) {
         res.render('site/pages/frontpage', {
-            layout: 'site/layout',
             locals: {
                 model:model,
                 frontpage: true
@@ -30,7 +27,6 @@ site.frontpage = function (req, res) {
 site.news = function (req, res) {
     api.site.getNewsPageContent(function (err, model, children) {
         res.render('site/pages/news', {
-            layout: 'site/layout',
             pageTitle: "News",
             locals: {
                 subsections:children,
@@ -44,7 +40,6 @@ site.news = function (req, res) {
 site.sports = function (req, res) {
     api.site.getSportsPageContent(function (err, model, children) {
         res.render('site/pages/sports', {
-            layout: 'site/layout',
             pageTitle: "Sports",
             locals: {
                 subsections: children,
@@ -58,7 +53,6 @@ site.sports = function (req, res) {
 site.opinion = function (req, res) {
     api.site.getOpinionPageContent(function (err, model, children) {
         res.render('site/pages/opinion', {
-            layout: 'site/layout',
             pageTitle: "Opinion",
             locals: {
                 subsections:children,
@@ -72,7 +66,6 @@ site.opinion = function (req, res) {
 site.recess = function (req, res) {
     api.site.getRecessPageContent(function (err, model, children) {
         res.render('site/pages/recess', {
-            layout: 'site/layout',
             pageTitle: "Recess",
             locals: {
                 subsections:children,
@@ -86,7 +79,6 @@ site.recess = function (req, res) {
 site.towerview = function (req, res) {
     api.site.getTowerviewPageContent(function (err, model, children) {
         res.render('site/pages/towerview', {
-            layout: 'site/layout',
             pageTitle: "Towerview",
             locals: {
                 subsections:children,
@@ -103,7 +95,6 @@ site.section = function (req, res, next) {
         if (err) next();
         else {
             res.render('site/pages/section', {
-                layout: 'site/layout',
                 locals: {
                     pageTitle: section,
                     docs:docs,
@@ -124,7 +115,6 @@ site.search = function (req, res, next) {
     api.site.getSearchContent(query, req.query, function (err, docs, facets) {
         if (err) next(err);
         else res.render('site/pages/search', {
-            layout: 'site/layout',
             locals: {
                 docs: docs,
                 currentFacets: req.query.facets || '',
@@ -144,7 +134,6 @@ site.staff = function (req, res) {
             name = info.name;
 
         res.render('site/pages/people', {
-            layout: 'site/layout',
             locals: {
                 pageTitle: util.capitalizeWords(name),
                 docs: docs,
@@ -192,7 +181,6 @@ site.article = function (req, res, next) {
                 locals.pageImage = doc.images.ThumbSquareM.url;
 
             res.render('site/pages/article', {
-                layout: 'site/layout',
                 locals: locals
             });
         }
@@ -209,7 +197,7 @@ site.articlePrint = function (req, res, next) {
         else {
             doc.url += '/print';
             doc.fullUrl += '/print';
-            res.render('print/article', {
+            res.render('site/print/article', {
                 locals: {
                     doc:doc
                 }
@@ -274,14 +262,13 @@ site.newsletterData = function (req, res) {
 
     var afterFunc = function() {
         res.render('site/pages/newsletter', {
-            layout: 'site/layout',
             locals: {
                 email: email,
                 action: action
             }
         });
     };
-    
+
     if (action == "subscribe")
         api.newsletter.addSubscriber(email, afterFunc);
     else if(action == "unsubscribe")
@@ -295,7 +282,6 @@ site.rss = function (req, res, next) {
         if (err) next(err);
         else {
             res.render('rss', {
-                layout: false,
                 locals: {
                     docs: docs,
                     section: []
@@ -311,7 +297,6 @@ site.rssSection = function (req, res, next) {
         if (err) next(err);
         else {
             res.render('rss', {
-                layout: false,
                 locals: {
                     docs: docs,
                     section: taxonomy
@@ -327,7 +312,6 @@ site.staticPage = function (req, res, next) {
     fs.readFile('views/site/pages/page-data/' + url + '.json', function (err, data) {
         var data = (!err && data) ? JSON.parse(data.toString()) : null;
         res.render(filename, {
-            layout: 'site/layout',
             data: data
         });
     });
@@ -335,8 +319,7 @@ site.staticPage = function (req, res, next) {
 
 site.pageNotFound = function(req, res) {
     res.render('site/pages/404', {
-        layout: 'site/layout',
-    status: 404,
+        status: 404,
         url: req.url
     });
 };

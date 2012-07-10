@@ -1,30 +1,33 @@
-.container
-    h1 Add Author Info
-    - if (newAuthor)
-      .alert.alert-info
-          | #{doc.name} is not a known author. Submitting this page will create
-          | a new record of him/her. If this is not what you intend, try
-          | searching the exact name.
-    form.well(action="", method="POST")
-        input(type="hidden", name="_method", value="put")
-        label(for='name') Name
-        input.span4#name(type='text', value=doc.name, name="name")
-        label(for='affiliation') Year / Affiliation
-        input.span4#affiliation(type='text', value=doc.affiliation, name="affiliation")
-        label(for='tagline') Tagline
-        input.span4#tagline(type='text', value=doc.tagline, name="tagline")
-        label(for='twitter') Twitter (omit '@')
-        input.span4#twitter(type='text', value=doc.twitter, name="twitter")
-        br
-        br
-        span Current Columnist? &nbsp;
-        input#currentColumnist(type='checkbox', checked=doc.currentColumnist, name="currentColumnist")
-        br
-        br
-        label(for='bio') Bio
-        textarea.span8#bio(rows=10, name="bio") #{doc.bio}
-        input(type="hidden", name='id', value=doc._id);
-            
-        !=partial("admin/container/images")
+extends ../layout
 
-        input.btn-large(type='submit', value='Submit Changes')
+block content
+    .container
+        h1 Add Author Info
+        - if (newAuthor)
+          .alert.alert-info
+              | #{doc.name} is not a known author. Submitting this page will create
+              | a new record of him/her. If this is not what you intend, try
+              | searching the exact name.
+        form.well(action="", method="POST")
+            input(type="hidden", name="_method", value="put")
+            label(for='name') Name
+            input.span4#name(type='text', value=doc.name, name="name")
+            label(for='affiliation') Year / Affiliation
+            input.span4#affiliation(type='text', value=doc.affiliation, name="affiliation")
+            label(for='tagline') Tagline
+            input.span4#tagline(type='text', value=doc.tagline, name="tagline")
+            label(for='twitter') Twitter (omit '@')
+            input.span4#twitter(type='text', value=doc.twitter, name="twitter")
+            br
+            br
+            span Current Columnist? &nbsp;
+            input#currentColumnist(type='checkbox', checked=doc.currentColumnist, name="currentColumnist")
+            br
+            br
+            label(for='bio') Bio
+            textarea.span8#bio(rows=10, name="bio") #{doc.bio}
+            input(type="hidden", name='id', value=doc._id);
+
+            !=partial("admin/container/images")
+
+            input.btn-large(type='submit', value='Submit Changes')

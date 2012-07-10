@@ -21,7 +21,6 @@ exports.manage = function (req, httpRes) {
 
     api.image.getOriginals(25, beforeKey, beforeID, function (err, origs) {
         httpRes.render('admin/image', {
-            layout: 'admin/layout',
             locals:{
                 origs:origs,
                 afterUrl:afterUrl,
@@ -33,9 +32,7 @@ exports.manage = function (req, httpRes) {
 };
 
 exports.upload = function (req, res) {
-    res.render('admin/image/upload', {
-        layout: 'admin/layout'
-    });
+    res.render('admin/image/upload');
 };
 
 exports.uploadData = function (req, httpRes) {
@@ -116,7 +113,6 @@ exports.renderImage = function (req, httpRes, next) {
                 else {
                     var imageTypes = api.image.IMAGE_TYPES;
                     httpRes.render('admin/image/image', {
-                        layout: 'admin/layout',
                         locals: {
                             url:orig.value.url,
                             name:imageName,

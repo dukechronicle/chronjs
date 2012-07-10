@@ -1,54 +1,54 @@
-.link-listing.container
+extends layout
 
-  .link-block
-    h1 Articles
-    a(href='/article/new') Add
-    span.link-sep |
-    a(href='/admin/manage') Manage
-    span.link-sep |
-    a(href='/admin/duplicates') View Duplicates
+block content
+  .link-listing.container
 
-  .link-block
-    h1 Images
-    a(href='/admin/image/upload') Upload
-    span.link-sep |
-    a(href='/admin/image/manage') Manage
+    .link-block
+      h1 Articles
+      a(href='/article/new') Add
+      span.link-sep |
+      a(href='/admin/manage') Manage
+      span.link-sep |
+      a(href='/admin/duplicates') View Duplicates
 
-  .link-block
-    h1 Layouts
-    a(href='/admin/layout/group/frontpage') Homepage
-    span.link-sep |
-    a(href='/admin/layout/group/news') News
-    span.link-sep |
-    a(href='/admin/layout/group/sports') Sports
-    span.link-sep |
-    a(href='/admin/layout/group/opinion') Opinion
-    span.link-sep |
-    a(href='/admin/layout/group/recess') Recess
-    span.link-sep |
-    a(href='/admin/layout/group/towerview') Towerview
+    .link-block
+      h1 Images
+      a(href='/admin/image/upload') Upload
+      span.link-sep |
+      a(href='/admin/image/manage') Manage
 
-  .link-block
-    h1 K4
-    a(href='/admin/k4export') Upload Export
+    .link-block
+      h1 Layouts
+      a(href='/admin/layout/group/frontpage') Homepage
+      span.link-sep |
+      a(href='/admin/layout/group/news') News
+      span.link-sep |
+      a(href='/admin/layout/group/sports') Sports
+      span.link-sep |
+      a(href='/admin/layout/group/opinion') Opinion
+      span.link-sep |
+      a(href='/admin/layout/group/recess') Recess
+      span.link-sep |
+      a(href='/admin/layout/group/towerview') Towerview
 
-  .link-block
-    h1 Newsletter
-    a(href='/admin/layout/group/newsletter') Change Articles
-    span.link-sep |
-    a(href='/admin/newsletter') Send Newsletter
-    <br>
-    <br>
-    <br>
-    h1 Authors
-    a(href='/admin/author') Manage
-    <br>
-    <br>
-    <br>
-    h1 Config
-    a(href='/config?showOnly=MULTIMEDIA_HTML') Change Multimedia
-    <br>
-    <br>
-    <br>
-    <br>
+    .link-block
+      h1 K4
+      a(href='/admin/k4export') Upload Export
+
+    .link-block
+      h1 Newsletter
+      a(href='/admin/layout/group/newsletter') Change Articles
+      span.link-sep |
+      a(href='/admin/newsletter') Send Newsletter
+
+    .link-block
+      h1 Authors
+      a(href='/admin/author') Manage
+
+    .link-block
+      h1 Config
+      a(href='/config?showOnly=MULTIMEDIA_HTML') Change Multimedia
+
+    br
+    br
     a(href='/logout') Log Out, Bro

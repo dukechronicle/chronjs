@@ -150,7 +150,7 @@ function newServer() {
 function redirectServer(src, dest) {
     var server = express.createServer();
     server.use(function (req, res) {
-        res.redirect(req.headers.host.replace(src, dest) + req.url);
+        res.redirect('http://' + req.headers.host.replace(src, dest) + req.url);
     });
     return server;
 }
@@ -161,12 +161,9 @@ function configureVirtualHosts() {
         var mobileDomainName = config.get('MOBILE_DOMAIN_NAME');
         app.use(express.vhost(siteDomainName, route.siteInit(newServer())));
         app.use(express.vhost(mobileDomainName, route.mobileInit(newServer())));
-        if (config.get('ALTERNATE_DOMAIN_NAMES')) {
-            _.each(config.get('ALTERNATE_DOMAIN_NAMES'), function (domain) {
-                app.use(express.vhost(
-                    domain, redirectServer(domain, siteDomainName)));
-            });
-        }
+        _.each(config.get('REDIRECT_DOMAIN_NAMES'), function(dest, origin) {
+            app.use(express.vhost(origin, redirectServer(origin, dest)));
+        });
     });
 }
 

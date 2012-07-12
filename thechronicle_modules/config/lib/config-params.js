@@ -30,13 +30,12 @@ var configParams = [
         }
     },
     {
-        name: 'ALTERNATE_DOMAIN_NAMES',
-        description: 'Alternate Site Domain Names',
-        defaultValue: [],
+        name: 'REDIRECT_DOMAIN_NAMES',
+        description: 'Subdomains that Redirect',
+        defaultValue: {},
         schema: {
-            type: "array",
-            required: false,
-            items: {type: "string"}
+            type: "object",
+            required: true,
         }
     },
     {
@@ -437,7 +436,7 @@ var configParams = [
                 title: {type: "string", required: true},
                 url: {type: "string", required: true}
             }
-          }          
+          }
        }
     },
     {

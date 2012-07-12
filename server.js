@@ -24,6 +24,7 @@ config.init(runSite, function (err) {
     if (err) return log.error("Configuration failed: " + err);
 
     viewOptions = {
+        layout: false,
         staticCdn: '',
         useCompiledStaticFiles: false,
         isProduction: process.env.NODE_ENV === 'production'

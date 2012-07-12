@@ -1,48 +1,50 @@
 - var monthArray = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+extends layout
 
-#search
-    .span-8
-        - each doc in docs
-            .rounded.document
-                a.hover.url(href=doc.url)
-                    .content-container
-                        h3.title!= doc.title
-                        .dateline.subtitle
-                            span.date!= doc.date
-                            span.author!= doc.authors.join(", ")
-                        p.teaser!= doc.teaser
+block content
+    #search
+        .span-8
+            - each doc in docs
+                .rounded.document
+                    a.hover.url(href=doc.url)
+                        .content-container
+                            h3.title!= doc.title
+                            .dateline.subtitle
+                                span.date!= doc.date
+                                span.author!= doc.authors.join(", ")
+                            p.teaser!= doc.teaser
 
-        - if (docs.length == 0)
-            div No articles found
-        - else
-            #loadImage(data-key="2", data-url="/api/search/?q=#{query}&sort=#{sort}&order=#{order}&facets=#{currentFacets}")
+            - if (docs.length == 0)
+                div No articles found
+            - else
+                #loadImage(data-key="2", data-url="/api/search/?q=#{query}&sort=#{sort}&order=#{order}&facets=#{currentFacets}")
 
-    .sidebar.span-4.last
-        .sort
-            .vertical-container
-                h2.vertical Sort
-            .rounded
-                .content-container
-                    a.hover(href='?q=' + query +'&sort=relevance&order=desc'+'&facets='+currentFacets)
-                        h4 Relevance
-                    a.hover(href='?q=' + query +'&sort=date&order=desc'+'&facets='+currentFacets)
-                        h4 Newest First
-                    a.hover(href='?q=' + query +'&sort=date&order=asc'+'&facets='+currentFacets)
-                        h4 Oldest First
-
-        - if(currentFacets.length > 0)
-            - currentFacets += ',';
-        - each facet, facetName in facets
-            div(class=facetName)
+        .sidebar.span-4.last
+            .sort
                 .vertical-container
-                    h2.vertical By #{facetName}
+                    h2.vertical Sort
                 .rounded
                     .content-container
-                        - each value, key in facet
-                            a.hover(href='?q=' + query + '&sort='+sort+'&order='+order+'&facets='+currentFacets+facetName+':'+key)
-                                - if (facetName == 'Month')
-                                    h4 #{monthArray[key-1]} (#{value})
-                                - else
-                                    h4 #{key} (#{value})
-        .lighten!=partial('../container/ad/medium-rect', { title: "Advertisement" })
+                        a.hover(href='?q=' + query +'&sort=relevance&order=desc'+'&facets='+currentFacets)
+                            h4 Relevance
+                        a.hover(href='?q=' + query +'&sort=date&order=desc'+'&facets='+currentFacets)
+                            h4 Newest First
+                        a.hover(href='?q=' + query +'&sort=date&order=asc'+'&facets='+currentFacets)
+                            h4 Oldest First
+
+            - if(currentFacets.length > 0)
+                - currentFacets += ',';
+            - each facet, facetName in facets
+                div(class=facetName)
+                    .vertical-container
+                        h2.vertical By #{facetName}
+                    .rounded
+                        .content-container
+                            - each value, key in facet
+                                a.hover(href='?q=' + query + '&sort='+sort+'&order='+order+'&facets='+currentFacets+facetName+':'+key)
+                                    - if (facetName == 'Month')
+                                        h4 #{monthArray[key-1]} (#{value})
+                                    - else
+                                        h4 #{key} (#{value})
+            .lighten!=partial('../container/ad/medium-rect', { title: "Advertisement" })
 

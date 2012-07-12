@@ -1,0 +1,11 @@
+include ../../mixins/layout-helpers
+include ../../mixins/code
+
+!!! 5
+html
+  head
+    title The Chronicle
+    mixin stylesheet("print")
+    mixin googleAnalytics
+  body
+    block content

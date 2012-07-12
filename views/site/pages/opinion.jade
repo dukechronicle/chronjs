@@ -1,21 +1,24 @@
-#opinion
-    !=partial('../layout/subnav', {subsections: subsections})
+extends layout
 
-    .clearfix
-        .span-6
-            if (model.Featured)
-                #columns-today!=partial('../container/top-opinion', {title: "Today's Columns", stories: model.Featured})
-            if (model.EditorialBoard)
-                #editorial-board.title-medium!=partial('../container/story-list/teaser-date', {title: "Editorial Board", stories: model.EditorialBoard})
+block content
+    #opinion
+        !=partial('../layout/subnav', {subsections: subsections})
 
-        .span-6.last
-            .clearfix.align-group
-                if (model.Blog)
-                    #blog.title-small.span-2.align-element(data-alignTarget=".rounded")!=partial('../container/story-list', {title: "Backpages", stories: model.Blog})
-                if (model.adFullRectangle)
-                    .lighten.span-4.last.align-element(data-alignTarget=".rounded")!=partial('../container/ad/medium-rect', {title: "Advertisement"})
-            if (model.adFullBanner)
-                .lighten!=partial('../container/ad/full-banner', {title: "Ad"})
-            #cartoon!=partial('../container/image.jade', {title: "Cartoon", url:"http://d2770i1y1fck5h.cloudfront.net/sSAM0S4m-cartoon-large.jpg", imageUrl:"http://d2770i1y1fck5h.cloudfront.net/CrFcgRQM-cartoon.jpg", caption: "Mariah Hukins, Trinity '13"})
-            if (model.Columnists)
-                #columnists!=partial('../container/author-box', {title: "Columnists", categories: model.Columnists})
+        .clearfix
+            .span-6
+                if (model.Featured)
+                    #columns-today!=partial('../container/top-opinion', {title: "Today's Columns", stories: model.Featured})
+                if (model.EditorialBoard)
+                    #editorial-board.title-medium!=partial('../container/story-list/teaser-date', {title: "Editorial Board", stories: model.EditorialBoard})
+
+            .span-6.last
+                .clearfix.align-group
+                    if (model.Blog)
+                        #blog.title-small.span-2.align-element(data-alignTarget=".rounded")!=partial('../container/story-list', {title: "Backpages", stories: model.Blog})
+                    if (model.adFullRectangle)
+                        .lighten.span-4.last.align-element(data-alignTarget=".rounded")!=partial('../container/ad/medium-rect', {title: "Advertisement"})
+                if (model.adFullBanner)
+                    .lighten!=partial('../container/ad/full-banner', {title: "Ad"})
+                #cartoon!=partial('../container/image.jade', {title: "Cartoon", url:"http://d2770i1y1fck5h.cloudfront.net/sSAM0S4m-cartoon-large.jpg", imageUrl:"http://d2770i1y1fck5h.cloudfront.net/CrFcgRQM-cartoon.jpg", caption: "Mariah Hukins, Trinity '13"})
+                if (model.Columnists)
+                    #columnists!=partial('../container/author-box', {title: "Columnists", categories: model.Columnists})

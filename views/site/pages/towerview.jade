@@ -1,31 +1,34 @@
-#towerview.clearfix
-    !=partial('../layout/subnav', {subsections: subsections})
+extends layout
 
-    .span-8
-        // towerview features
-        if (model.Featured)
-            if (model.Featured[0])
-                !=partial('../container/featured-image', {title: 'Features', story: model.Featured[0]})
+block content
+    #towerview.clearfix
+        !=partial('../layout/subnav', {subsections: subsections})
 
-            .featured-row.clearfix
-                if (model.Featured[1])
-                    .span-4!=partial('../container/block/square', {story: model.Featured[1]})
-                if (model.Featured[2])
-                    .span-4.last!=partial('../container/block/square', {story: model.Featured[2]})
+        .span-8
+            // towerview features
+            if (model.Featured)
+                if (model.Featured[0])
+                    !=partial('../container/featured-image', {title: 'Features', story: model.Featured[0]})
 
-            if (model.Savvy)
-                #savvy!=partial('../container/row/feature', {title: 'Savvy', stories: model.Savvy})
-            if (model.Wisdom)
-                #wisdom!=partial('../container/row/feature', {title: 'Wisdom', stories: model.Wisdom})
-        #issuu.rounded
-            .image-container
-                <object style="width:636px;height:418px" ><param name="movie" value="http://static.issuu.com/webembed/viewers/style1/v2/IssuuReader.swf?mode=mini&amp;backgroundColor=%23222222&amp;documentId=120701220930-01100b4f091d41b29538a0256756d40f" /><param name="allowfullscreen" value="true"/><param name="menu" value="false"/><param name="wmode" value="transparent"/><embed src="http://static.issuu.com/webembed/viewers/style1/v2/IssuuReader.swf" type="application/x-shockwave-flash" allowfullscreen="true" menu="false" wmode="transparent" style="width:420px;height:274px" flashvars="mode=mini&amp;backgroundColor=%23222222&amp;documentId=120701220930-01100b4f091d41b29538a0256756d40f" /></object>
+                .featured-row.clearfix
+                    if (model.Featured[1])
+                        .span-4!=partial('../container/block/square', {story: model.Featured[1]})
+                    if (model.Featured[2])
+                        .span-4.last!=partial('../container/block/square', {story: model.Featured[2]})
 
-    .span-4.last
-        if (model["Editors Note"])
-            #editors-note!=partial('../container/block/teaser', {title: "Letter from the Editor", story: model["Editors Note"][0]})
-        if (model.adFullRectangle)
-            .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
-        if (model.Prefix)
-            - each story in model.Prefix
-                .prefix!=partial('../container/block/wide', {story: story})
+                if (model.Savvy)
+                    #savvy!=partial('../container/row/feature', {title: 'Savvy', stories: model.Savvy})
+                if (model.Wisdom)
+                    #wisdom!=partial('../container/row/feature', {title: 'Wisdom', stories: model.Wisdom})
+            #issuu.rounded
+                .image-container
+                    <object style="width:636px;height:418px" ><param name="movie" value="http://static.issuu.com/webembed/viewers/style1/v2/IssuuReader.swf?mode=mini&amp;backgroundColor=%23222222&amp;documentId=120701220930-01100b4f091d41b29538a0256756d40f" /><param name="allowfullscreen" value="true"/><param name="menu" value="false"/><param name="wmode" value="transparent"/><embed src="http://static.issuu.com/webembed/viewers/style1/v2/IssuuReader.swf" type="application/x-shockwave-flash" allowfullscreen="true" menu="false" wmode="transparent" style="width:420px;height:274px" flashvars="mode=mini&amp;backgroundColor=%23222222&amp;documentId=120701220930-01100b4f091d41b29538a0256756d40f" /></object>
+
+        .span-4.last
+            if (model["Editors Note"])
+                #editors-note!=partial('../container/block/teaser', {title: "Letter from the Editor", story: model["Editors Note"][0]})
+            if (model.adFullRectangle)
+                .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
+            if (model.Prefix)
+                - each story in model.Prefix
+                    .prefix!=partial('../container/block/wide', {story: story})

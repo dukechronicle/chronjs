@@ -1,29 +1,32 @@
-#news
-    !=partial('../layout/subnav', {subsections: subsections})
-      
-    .clearfix.align-group
-        .span-6.align-element(data-aligntarget="#featured .rounded")
-            - if (model.Featured && model.Featured[0])
-                #featured!=partial('../container/featured-image', {title: "", story: model.Featured[0]});
+extends layout
 
-            - if (model.Headlines)
-                  - each story in model.Headlines
-                      !=partial('../container/block/horizontal', {title: "", story: story})
+block content
+    #news
+        !=partial('../layout/subnav', {subsections: subsections})
 
-        .span-6.last.align-element(data-aligntarget="#headlines .rounded, #blog .rounded")
-            .top.align-group.clearfix
-                - if (model["Right Headlines"])
-                    #headlines.span-3.title-medium.align-element(data-alignTarget=".rounded")!=partial('../container/story-list/featured', {title: "Headlines", stories: model["Right Headlines"]})
-                - if (model.Blog)
-                    #blog.span-3.last.title-small.align-element(data-alignTarget=".rounded")!=partial('../container/story-list/image', {title: "News Blog", stories: model.Blog, image: staticCdn + "/images/blogs/newsblog.jpg", imageHref:"http://bigblog.chronicleblogs.com/news"})
+        .clearfix.align-group
+            .span-6.align-element(data-aligntarget="#featured .rounded")
+                - if (model.Featured && model.Featured[0])
+                    #featured!=partial('../container/featured-image', {title: "", story: model.Featured[0]});
 
-            .middle.clearfix.align-group
-                - if (model.popular)
-                    .span-2.title-small.align-element(data-aligntarget=".rounded")!=partial('../container/story-list/numbered', {title: "Popular", stories: model.popular})
-                - if (model.adFullRectangle)
-                    .span-4.last.lighten.align-element(data-alignprimary=true)!=partial('../container/ad/medium-rect', {title: "Advertisement"})
-            .lighten!=partial('../container/ad/full-banner', {title: "Ad"})
+                - if (model.Headlines)
+                      - each story in model.Headlines
+                          !=partial('../container/block/horizontal', {title: "", story: story})
 
-    .span-12.last
-        !=partial('../container/row/multimedia', {title: "Multimedia", multimedia: model.multimedia.News})
-        !=partial('../container/row', {title: "More News", stories: model.Stories, sameSize: true})
+            .span-6.last.align-element(data-aligntarget="#headlines .rounded, #blog .rounded")
+                .top.align-group.clearfix
+                    - if (model["Right Headlines"])
+                        #headlines.span-3.title-medium.align-element(data-alignTarget=".rounded")!=partial('../container/story-list/featured', {title: "Headlines", stories: model["Right Headlines"]})
+                    - if (model.Blog)
+                        #blog.span-3.last.title-small.align-element(data-alignTarget=".rounded")!=partial('../container/story-list/image', {title: "News Blog", stories: model.Blog, image: staticCdn + "/images/blogs/newsblog.jpg", imageHref:"http://bigblog.chronicleblogs.com/news"})
+
+                .middle.clearfix.align-group
+                    - if (model.popular)
+                        .span-2.title-small.align-element(data-aligntarget=".rounded")!=partial('../container/story-list/numbered', {title: "Popular", stories: model.popular})
+                    - if (model.adFullRectangle)
+                        .span-4.last.lighten.align-element(data-alignprimary="true")!=partial('../container/ad/medium-rect', {title: "Advertisement"})
+                .lighten!=partial('../container/ad/full-banner', {title: "Ad"})
+
+        .span-12.last
+            !=partial('../container/row/multimedia', {title: "Multimedia", multimedia: model.multimedia.News})
+            !=partial('../container/row', {title: "More News", stories: model.Stories, sameSize: true})

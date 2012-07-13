@@ -4,7 +4,7 @@ include ../../mixins/code
 block variables
   - var prefix = null
   - if (typeof pageImage == 'undefined')
-      - var pageImage = staticCdn + "/images/favicon.png"
+      - var pageImage = staticCdn + "/img/favicon.png"
 
 
 !!! 5
@@ -14,7 +14,7 @@ html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
             script(src="/js/mobile-redirect.js?v=5")
 
             mixin title
-            link(rel="icon", href=staticCdn + "/images/favicon.ico")
+            link(rel="icon", href=staticCdn + "/img/favicon.ico")
             link(rel="image_src", href=pageImage)
 
             // typekitload code should always load first because it will cause a relayout of dom

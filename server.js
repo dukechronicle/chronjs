@@ -6,7 +6,6 @@ var stylus = require('stylus');
 var _ = require('underscore');
 
 var api = require('./thechronicle_modules/api');
-var builder = require('./build-assets');
 var config = require('./thechronicle_modules/config');
 var log = require('./thechronicle_modules/log');
 var redisClient = require('./thechronicle_modules/redisclient');
@@ -115,15 +114,13 @@ function runSite(callback) {
             return
         }
 
-        if (process.env.NODE_ENV === 'production') {
-            builder.buildAssets(function(err, paths) {
-                if (err) log.warning('Failed to build assets: ' + err);
-                else log.notice('Built assets');
-
-                viewOptions.paths =  paths;
-                viewOptions.staticCdn = config.get('CLOUDFRONT_STATIC');
-                viewOptions.useCompiledStaticFiles = true;
-            });
+        if (config.get('ASSET_PATHS')) {
+            viewOptions.paths = config.get('ASSET_PATHS');
+            viewOptions.staticCdn = config.get('CLOUDFRONT_STATIC');
+            viewOptions.useCompiledStaticFiles = true;
+        }
+        else {
+            log.notice('Remote asset paths not set. Using local files.');
         }
 
         sessionManager.useRedisStore(redisClient.getHostname(),

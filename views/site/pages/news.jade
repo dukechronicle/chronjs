@@ -18,7 +18,7 @@ block content
                     - if (model["Right Headlines"])
                         #headlines.span-3.title-medium.align-element(data-alignTarget=".rounded")!=partial('../container/story-list/featured', {title: "Headlines", stories: model["Right Headlines"]})
                     - if (model.Blog)
-                        #blog.span-3.last.title-small.align-element(data-alignTarget=".rounded")!=partial('../container/story-list/image', {title: "News Blog", stories: model.Blog, image: staticCdn + "/images/blogs/newsblog.jpg", imageHref:"http://bigblog.chronicleblogs.com/news"})
+                        #blog.span-3.last.title-small.align-element(data-alignTarget=".rounded")!=partial('../container/story-list/image', {title: "News Blog", stories: model.Blog, image: staticCdn + "/img/blogs/newsblog-banner.jpg", imageHref:"http://bigblog.chronicleblogs.com/news"})
 
                 .middle.clearfix.align-group
                     - if (model.popular)

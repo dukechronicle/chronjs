@@ -138,6 +138,19 @@ var configParams = [
         }
     },
     {
+        name: 'ASSET_PATHS',
+        description: 'Paths to built and minified assets',
+        defaultValue: {},
+        schema: {
+            type: 'object',
+            required: false,
+            properties: {
+                css: {type: 'object'},
+                js: {type: 'object'}
+            }
+        }
+    },
+    {
         name: 'REDIS_URL',
         description: 'Redis Server URL',
         defaultValue: 'redis://jodoglevy:2b258cbdcbbce003452a0ff4279d8701@barreleye.redistogo.com:9148/',

@@ -31,12 +31,13 @@ s3.get = function (bucket, key, callback) {
 
 s3.put = function (bucket, buf, key, type, encoding, callback) {
     var options = {
-        'Content-Length':buf.length,
-        'Content-Type':type,
-        'Cache-Control': 'public, max-age=86400'
+        'Content-Length': buf.length,
+        'Content-Type': type,
+        'Cache-Control': 'public, max-age=31536000'
     };
-    if (encoding)
+    if (encoding) {
         options['Content-Encoding'] = encoding;
+    }
 
     var req = createClient(bucket).put(key, options);
     req.on('response', function (res) {
@@ -45,7 +46,7 @@ s3.put = function (bucket, buf, key, type, encoding, callback) {
         else
             callback(res);
     });
-    req.end(buf);    
+    req.end(buf);
 };
 
 s3.del = function (bucket, key, callback) {

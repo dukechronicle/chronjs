@@ -77,7 +77,7 @@ function buildAssets(command) {
             buildCSS(command.css, command.nopush, exit);
         }
         else if (command.js) {
-            buildCSS(command.js, command.nopush, exit);
+            buildJavascript(command.js, command.nopush, exit);
         }
         else {
             exit('Must specify either of --css or --js.');

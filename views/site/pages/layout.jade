@@ -11,7 +11,7 @@ block variables
 html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
     head(prefix=prefix)
         block head
-            script(src="/js/mobile-redirect.js?v=5")
+            script(src=staticCdn + "/js/mobile-redirect.js")
 
             mixin title
             link(rel="icon", href=staticCdn + "/img/favicon.ico")

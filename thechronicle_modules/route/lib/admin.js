@@ -175,7 +175,6 @@ admin.editArticleData = function (req, res, next) {
 admin.addPoll = function(req, res, next) {
 	api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
         res.render('admin/poll/new', {
-            layout: 'admin/layout',
             locals:{
                 groups:[],
                 taxonomy:taxonomy
@@ -188,7 +187,6 @@ admin.managePoll = function(req, res, next) {
 	api.poll.getByDate(null, function(err, docs) {
 		api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
 			res.render('admin/poll', {
-				layout : 'admin/layout',
 				locals : {
 					docs : docs
 				}
@@ -201,7 +199,6 @@ admin.editPoll = function(req, res, next) {
 	api.poll.getPoll(req.params.id, function(err, doc) {
 		api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
 			res.render('admin/poll/edit', {
-				layout : 'admin/layout',
 				locals : {
 					taxonomy : taxonomy,
                     flash: req.flash('info').pop(),

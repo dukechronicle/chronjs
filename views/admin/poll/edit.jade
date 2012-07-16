@@ -1,31 +1,34 @@
-.container
-    - if (flash)
-      .alert.alert-success= flash
+extends ../layout
 
-    h1 Edit a Poll
-    form(action='', method='POST')
-        label(for='title') Title
-        input.span4#title(type='text', name='doc[title]', value=doc.title)
-        label(for='section') Section
-        select.span4#section(name='doc[taxonomy]')
-            option(value='') Select a section
-            - each subsections, section in taxonomy
-                - each key, value in subsections
-                      - if (JSON.stringify(doc.taxonomy) == value)
-                          option(value=value, selected='selected') #{key}
-                      - else
-                          option(value=value) #{key}
-        label Answers
-        ol
-            - var i = 0
-            - each count, answer in doc.answers
-                 li
-                     input.span4(type='text', name="doc[answers][#{i}]", value=answer)
-                     input.span4(type='hidden', name="doc[count][#{i++}]", value=count)
-                     span.offset1 #{count} Votes
-            li: button.btn.add-field(data-name='doc[answers]') Add answer field
-        p
-            span Reset Votes? &nbsp;
-            input#reset(type='checkbox', name='doc[reset]')
-        br
-        input.btn-primary.btn-large(type='submit')
+block content
+    .container
+        - if (flash)
+          .alert.alert-success= flash
+
+        h1 Edit a Poll
+        form(action='', method='POST')
+            label(for='title') Title
+            input.span4#title(type='text', name='doc[title]', value=doc.title)
+            label(for='section') Section
+            select.span4#section(name='doc[taxonomy]')
+                option(value='') Select a section
+                - each subsections, section in taxonomy
+                    - each key, value in subsections
+                          - if (JSON.stringify(doc.taxonomy) == value)
+                              option(value=value, selected='selected') #{key}
+                          - else
+                              option(value=value) #{key}
+            label Answers
+            ol
+                - var i = 0
+                - each count, answer in doc.answers
+                     li
+                         input.span4(type='text', name="doc[answers][#{i}]", value=answer)
+                         input.span4(type='hidden', name="doc[count][#{i++}]", value=count)
+                         span.offset1 #{count} Votes
+                li: button.btn.add-field(data-name='doc[answers]') Add answer field
+            p
+                span Reset Votes? &nbsp;
+                input#reset(type='checkbox', name='doc[reset]')
+            br
+            input.btn-primary.btn-large(type='submit')

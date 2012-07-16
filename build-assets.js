@@ -64,7 +64,7 @@ function buildAssets(command) {
         if (err) return exit(err);
 
         if (command.css && command.js) {
-            async.parallel([
+            async.series([
                 function (callback) {
                     buildCSS(command.css, command.nopush, callback);
                 },

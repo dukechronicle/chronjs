@@ -114,13 +114,10 @@ function runSite(callback) {
             return
         }
 
-        if (config.get('ASSET_PATHS')) {
+        if (process.env.NODE_ENV === 'production') {
             viewOptions.paths = config.get('ASSET_PATHS');
             viewOptions.staticCdn = config.get('CLOUDFRONT_STATIC');
             viewOptions.useCompiledStaticFiles = true;
-        }
-        else {
-            log.notice('Remote asset paths not set. Using local files.');
         }
 
         sessionManager.useRedisStore(redisClient.getHostname(),

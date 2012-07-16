@@ -62,7 +62,7 @@ exports.siteInit = function (app) {
         app.get('/user-guidelines', site.staticPage);
         app.get('/young-trustee-2012', site.staticPage);
         app.get('/commencement-2012', site.staticPage);
-        
+
         app.post('/newsletter', site.newsletterData);
     });
 

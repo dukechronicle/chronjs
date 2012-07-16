@@ -23,7 +23,25 @@ var configParams = [
     {
         name: 'DOMAIN_NAME',
         description: 'Site Domain Name',
-        defaultValue: 'www.dukechronicle.com',
+        defaultValue: 'localhost',
+        schema: {
+          type: "string",
+          required: true
+        }
+    },
+    {
+        name: 'REDIRECT_DOMAIN_NAMES',
+        description: 'Subdomains that Redirect',
+        defaultValue: {},
+        schema: {
+            type: "object",
+            required: true,
+        }
+    },
+    {
+        name: 'MOBILE_DOMAIN_NAME',
+        description: 'Mobile Site Domain Name',
+        defaultValue: 'm.dukechronicle.com',
         schema: {
           type: "string",
           required: true
@@ -117,6 +135,19 @@ var configParams = [
         schema: {
             type: "string",
             required: true
+        }
+    },
+    {
+        name: 'ASSET_PATHS',
+        description: 'Paths to built and minified assets',
+        defaultValue: {},
+        schema: {
+            type: 'object',
+            required: false,
+            properties: {
+                css: {type: 'object'},
+                js: {type: 'object'}
+            }
         }
     },
     {
@@ -418,7 +449,7 @@ var configParams = [
                 title: {type: "string", required: true},
                 url: {type: "string", required: true}
             }
-          }          
+          }
        }
     },
     {

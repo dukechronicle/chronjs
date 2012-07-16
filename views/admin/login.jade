@@ -1,12 +1,15 @@
-.container
-  h1 Login
-  form.well.form-vertical(action='/login', method='POST')
-    - if (error)
-      #error.alert.alert-error #{error}
-    label(for="username") User Name
-    input#username(type='text', name='username', value=username)
-    label(for="password") Password
-    input#password(type='password', name='password')
-    input(type='hidden', name='afterLogin', value=afterLogin)
-    br
-    input.btn-primary.btn-large(type='submit', value='Login')
+extends layout
+
+block content
+  .container
+    h1 Login
+    form.well.form-vertical(action='/login', method='POST')
+      - if (error)
+        #error.alert.alert-error #{error}
+      label(for="username") User Name
+      input#username(type='text', name='username', value=username)
+      label(for="password") Password
+      input#password(type='password', name='password')
+      input(type='hidden', name='afterLogin', value=afterLogin)
+      br
+      input.btn-primary.btn-large(type='submit', value='Login')

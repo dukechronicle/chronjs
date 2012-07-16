@@ -1,22 +1,25 @@
-.container
-    h1 Add a Document
-    form.well(action='/article', method='POST')
-        input(type='hidden', name='doc[type]', value='article')
-        label(for='title') Title
-        input.span4#title(type='text', name='doc[title]')
-        label(for='subhead') Subhead
-        input.span4#subhead(type='text', name='doc[subhead]')
-        label(for='section') Section
-        select.span4#section(name='doc[taxonomy]')
-            option(value='') Select a section
-            - each subsections, section in taxonomy
-                - each key, value in subsections
-                    option(value=value) #{key}
-        label(for='author') Authors
-        input.span4#author(type='text', name='doc[authors]')
-        label(for='teaser') Teaser
-        textarea.span8#teaser(rows=3, name='doc[teaser]')
-        label(for='article-body') Article
-        textarea.span8#article-body(rows=10, name='doc[body]')
-        br
-        input.btn-primary.btn-large(type='submit')
+extends ../layout
+
+block content
+    .container
+        h1 Add a Document
+        form.well(action='/article', method='POST')
+            input(type='hidden', name='doc[type]', value='article')
+            label(for='title') Title
+            input.span4#title(type='text', name='doc[title]')
+            label(for='subhead') Subhead
+            input.span4#subhead(type='text', name='doc[subhead]')
+            label(for='section') Section
+            select.span4#section(name='doc[taxonomy]')
+                option(value='') Select a section
+                - each subsections, section in taxonomy
+                    - each key, value in subsections
+                        option(value=value)= key
+            label(for='author') Authors
+            input.span4#author(type='text', name='doc[authors]')
+            label(for='teaser') Teaser
+            textarea.span8#teaser(rows=3, name='doc[teaser]')
+            label(for='article-body') Article
+            textarea.span8#article-body(rows=10, name='doc[body]')
+            br
+            input.btn-primary.btn-large(type='submit', value='Add')

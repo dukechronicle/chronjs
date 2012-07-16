@@ -3,30 +3,28 @@
 - if (typeof section == 'undefined') var section = undefined
 
 #header-top.clearfix
-    .span-1 &nbsp;
-    a.content.clearfix.span-4(href="/")
-        img#header-overlay(src=staticCdn + '/images/header-overlay.png')
-        p.date &nbsp;
-        h1.brand The Chronicle
-        p.tagline The Independent Daily at Duke University
-    .span-1 &nbsp;
+    .span-6 &nbsp
+        a#home-link(href="/")
+            img#header-overlay(src=staticCdn + "/img/header-overlay.png")
+            h1.brand The Chronicle
+            h3.tagline The Independent Daily at Duke University
 
     .leaderboard.span-6.last.clearfix
         .full-banner-raw.advertising.openx-ad(class="{zoneID: 308}")
 
         .icons.left
             a(href="http://www.facebook.com/dukechronicle")
-                img(src=staticCdn + '/images/icons/facebook.png')
+                img(src=staticCdn + "/img/icons/facebook.png")
             a(href="http://twitter.com/dukechronicle")
-                img(src=staticCdn + '/images/icons/twitter.png')
+                img(src=staticCdn + "/img/icons/twitter.png")
             a(href="http://youtube.com/user/DukeChronicle")
-                img(src=staticCdn + '/images/icons/youtube.png')
+                img(src=staticCdn + "/img/icons/youtube.png")
             a(href="http://foursquare.com/dukechronicle")
-                img(src=staticCdn + '/images/icons/foursquare.png')
+                img(src=staticCdn + "/img/icons/foursquare.png")
             a(href="/rss")
-                img(src=staticCdn + '/images/icons/rss.png')
+                img(src=staticCdn + "/img/icons/rss.png")
             a(href="/page/newsletter")
-                img(src=staticCdn + '/images/icons/email.png')
+                img(src=staticCdn + "/img/icons/email.png")
 
         .advertising-links.right
             a(href="/page/subscribe") Print Subscription

@@ -1,32 +1,35 @@
-nav.subnav.clearfix
-    - each parent in parentPaths
-        a.hover.selected(href='/section' + parent.path)
-            h2
-                #{parent.name} |
-    - each subsection in subsections
-        - each subsectionName,subsectionPath in subsection
-            a.hover(href='/section/' + subsectionPath)
-                h2 #{subsectionName}
-#section
-    .span-8
-        - each doc in docs
-            .rounded.document
-                a.hover.url(href=doc.url)
-                    .content-container
-                        h3.title!= doc.title
-                        .dateline.subtitle
-                            span.date!= doc.date
-                            span.author!= doc.authors.join(", ")
-                        p.teaser!= doc.teaser
+extends layout
 
-        - if (docs.length == 0)
-            div No articles found
-        - else
-            #loadImage(data-key=JSON.stringify(next), data-url="/api/section/#{taxonomyPath}")
+block content
+    nav.subnav.clearfix
+        - each parent in parentPaths
+            a.hover.selected(href='/section' + parent.path)
+                h2
+                    #{parent.name} |
+        - each subsection in subsections
+            - each subsectionName,subsectionPath in subsection
+                a.hover(href='/section/' + subsectionPath)
+                    h2 #{subsectionName}
+    #section
+        .span-8
+            - each doc in docs
+                .rounded.document
+                    a.hover.url(href=doc.url)
+                        .content-container
+                            h3.title!= doc.title
+                            .dateline.subtitle
+                                span.date!= doc.date
+                                span.author!= doc.authors.join(", ")
+                            p.teaser!= doc.teaser
 
-    .span-4.last
-        - if (typeof popular != 'undefined' && popular.length > 0)
-            #popular.title-small!=partial('../container/story-list/numbered', {title: "Popular", stories: popular})
-        .lighten!=partial('../container/ad/medium-rect', { title: "Advertisement" })
-        !=partial('../container/facebook')
-        .lighten!=partial('../container/ad/medium-rect', { title: "Advertisement" })
+            - if (docs.length == 0)
+                div No articles found
+            - else
+                #loadImage(data-key=JSON.stringify(next), data-url="/api/section/#{taxonomyPath}")
+
+        .span-4.last
+            - if (typeof popular != 'undefined' && popular.length > 0)
+                #popular.title-small!=partial('../container/story-list/numbered', {title: "Popular", stories: popular})
+            .lighten!=partial('../container/ad/medium-rect', { title: "Advertisement" })
+            !=partial('../container/facebook')
+            .lighten!=partial('../container/ad/medium-rect', { title: "Advertisement" })

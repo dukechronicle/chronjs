@@ -1,17 +1,15 @@
-var log = exports;
-
 var util = require('util');
 var winston = require('winston');
+
 var config = require('../../config');
 var CustomConsole = require('./console').CustomConsole;
 var CustomLoggly = require('./loggly').CustomLoggly;
 
-var logger;
+var log = module.exports = createLogger();
 
 
-log.init = function (callback) {
-    logger = new (winston.Logger)();
-
+function createLogger() {
+    var logger = new winston.Logger;
     logger.setLevels(winston.config.syslog.levels);
     logger.add(CustomConsole, {
         level: 'debug',
@@ -19,12 +17,7 @@ log.init = function (callback) {
         handleExceptions: true
     });
 
-    if (process.env.NODE_ENV === 'production') {
-
-    }
-
     logger.handleExceptions();
-
 
     // TODO: Handle logging errors with email alert
     logger.on('error', function(err) {
@@ -32,14 +25,14 @@ log.init = function (callback) {
     });
 
     logger.info('Logger is up');
-    logger.extend(log);
-};
+    return logger;
+}
 
 log.writeToLoggly = function () {
     var subdomain = config.get('LOGGLY_SUBDOMAIN');
     var inputKey = config.get('LOGGLY_TOKEN');
     if (subdomain && inputKey) {
-        logger.add(CustomLoggly, {
+        log.add(CustomLoggly, {
             subdomain: config.get('LOGGLY_SUBDOMAIN'),
             inputToken: config.get('LOGGLY_TOKEN'),
             level: 'warning',

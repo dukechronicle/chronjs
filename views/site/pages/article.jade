@@ -1,84 +1,99 @@
-#article
-    nav.subnav.clearfix
-        - each parent in parentPaths
-            a.hover(href='/section'+parent.path+'/'+parent.name)
-                h2= parent.name
+include ../../mixins/code
+extends layout
 
-    article.clearfix
-        .span-8
-            .rounded
-                .article-container
-                    - if (isAdmin)
-                        a.edit(href=doc.url + "/edit") Edit
+block append variables
+  - var prefix = "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#"
 
-                    h1.title= doc.title
-        
-                    - if (doc.subhead)
-                        p.subtitle: i= doc.subhead
-                   
-                    - if (doc.embed)
-                        .main-image!=doc.embed
-                    - else if (doc.images && doc.images.LargeRect && doc.images.LargeRect.url)
-                        img.main-image(src=doc.images.LargeRect.url)
-        
-                    - if (doc.images && doc.images.LargeRect && doc.images.Original)
-                        .clearfix
-                            p.photo-credit= doc.images.Original.photographer
-                            p.photo-caption= doc.images.Original.caption
-        
-                    p.byline
-                        span.author By &nbsp;
-                            - each author, index in doc.authors
-                                - if (index > 0)
-                                    span , &nbsp;
-                                a(href="/staff/#{author}")= author
-                        span.sep |
-                        span.date= doc.date
-        
-                    .article-body
-                        .social-media
-                            a#comment-link(href="#disqus_thread") Comments
-                            a#print-link(href="#{doc.url}/print") Print
-                            #facebook-like
-                                fb:like(href=doc.fullUrl, send="false", layout="button_count", width="130", show_faces="false", action="recommend", font="lucida grande")
-                            #twitter
-                                a.twitter-share-button(href="http://twitter.com/share?via=dukechronicle" ) Tweet
-                            #plus-one
-                                g:plusone(size="medium")
+block content
+    #article
+        nav.subnav.clearfix
+            - each parent in parentPaths
+                a.hover(href='/section'+parent.path+'/'+parent.name)
+                    h2= parent.name
 
-                        !{doc.body}
+        article.clearfix
+            .span-8
+                .rounded
+                    .article-container
+                        - if (isAdmin)
+                            a.edit(href=doc.url + "/edit") Edit
 
-            // The text for the comment count link can be modified at disqus.com/admin/settings/appearance/
-            #disqus_thread.rounded(data-disqus=JSON.stringify(disqusData), data-disqus-identifier=disqusData.id)
+                        h1.title= doc.title
 
-        .span-4.last
-            - if (model.related && model.related.length > 0)
-                #related.title-small!=partial('../container/story-list/subhead', {title: "Related", stories: model.related})
+                        - if (doc.subhead)
+                            p.subtitle: i= doc.subhead
 
-            .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
+                        - if (doc.embed)
+                            .main-image!=doc.embed
+                        - else if (doc.images && doc.images.LargeRect && doc.images.LargeRect.url)
+                            img.main-image(src=doc.images.LargeRect.url)
 
-            #recommendations!=partial('../container/facebook')
-            - if (model.poll)
-                #poll!=partial('../container/poll', {poll: model.poll})
+                        - if (doc.images && doc.images.LargeRect && doc.images.Original)
+                            .clearfix
+                                p.photo-credit= doc.images.Original.photographer
+                                p.photo-caption= doc.images.Original.caption
 
-            - if (model.popular && model.popular.length > 0)
-                #popular.title-small!=partial('../container/story-list/numbered', {title: "Popular", stories: model.popular})
+                        p.byline
+                            span.author By &nbsp;
+                                - each author, index in doc.authors
+                                    - if (index > 0)
+                                        span , &nbsp;
+                                    a(href="/staff/#{author}")= author
+                            span.sep |
+                            span.date= doc.date
 
-            .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
+                        .article-body
+                            .social-media
+                                a#comment-link(href="#disqus_thread") Comments
+                                a#print-link(href="#{doc.url}/print") Print
+                                #facebook-like
+                                    fb:like(href=doc.fullUrl, send="false", layout="button_count", width="130", show_faces="false", action="recommend", font="lucida grande")
+                                #twitter
+                                    a.twitter-share-button(href="http://twitter.com/share?via=dukechronicle" ) Tweet
+                                #plus-one
+                                    g:plusone(size="medium")
 
-#social-share
-    .activities
-    a.share-button(href="#") Sharing is 
-        u.status on
-    a.activity-button(href="#")
-        img.activity-icon(src="/images/icons/social-activity-icon.png")
+                            !{doc.body}
 
-script(src="http://platform.twitter.com/widgets.js", type="text/javascript")
-script(type="text/javascript")
-    (function() {
-    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/plusone.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-    })();
-// Anayltics Article Taxonomy
-!=partial("code/ga-customVar-articleTaxonomy");
+                // The text for the comment count link can be modified at disqus.com/admin/settings/appearance/
+                #disqus_thread.rounded(data-disqus=JSON.stringify(disqusData), data-disqus-identifier=disqusData.id)
+
+            .span-4.last
+                - if (model.related && model.related.length > 0)
+                    #related.title-small!=partial('../container/story-list/subhead', {title: "Related", stories: model.related})
+
+                .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
+
+                #recommendations!=partial('../container/facebook')
+                - if (model.poll)
+                    #poll!=partial('../container/poll', {poll: model.poll})
+
+                - if (model.popular && model.popular.length > 0)
+                    #popular.title-small!=partial('../container/story-list/numbered', {title: "Popular", stories: model.popular})
+
+                .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
+
+    #social-share
+        .activities
+        a.share-button(href="#") Sharing is 
+            u.status on
+        a.activity-button(href="#")
+            img.activity-icon(src=staticCdn + "/img/icons/social-activity-icon.png")
+
+block append head
+    // opengraph
+    meta(property="og:title", content=doc.title)
+    //meta(property="og:published_time", content=published_time)
+    meta(property="og:type", content="article")
+    meta(property="og:url", content=doc.fullUrl)
+    meta(property="og:description", content=doc.teaser)
+    meta(property="og:image", content=pageImage)
+    meta(property="og:image:width", content="200")
+    meta(property-"og:image:height", content="200")
+    meta(property="og:site_name", content="The Chronicle")
+    meta(property="fb:app_id", content="335954613131615")
+
+block append scripts
+    script(src="http://platform.twitter.com/widgets.js", type="text/javascript")
+    mixin plusOne
+    mixin googleAnalyticsTaxonomy(doc.taxonomy.join("/"))

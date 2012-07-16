@@ -1,25 +1,28 @@
-.container
-    div.alert.alert-info
-        strong Heads Up!
-        br
-        span Below shows all articles that have one or more duplicates within the latest 50 articles.
-        br
-        span Please remove all versions of the duplicate article but the one that should go on the site.
-    
-    table.table.article-index
-        - each doc in docs
-            tr
-                td
-                    a(href='/article/' + doc.urls[doc.urls.length - 1]) #{doc.title}
-                td
-                    if(doc.groups && doc.groups.length > 0)
-                        span.alert.alert-error This article is in the layout!
-                td
-                    a(href='/article/' + doc.urls[doc.urls.length - 1] + '/edit') Edit
-                td
-                    a.delete-article(href='#', data-docid=doc._id, data-title=doc.title, data-rev=doc._rev, data-dest='') Delete
-                td
-                    a(href=db_url + '/' + doc._id) #{doc._id}
-    
-    if (docs.length == 0)
-        h1 No Duplicates Found
+extends ../layout
+
+block content
+    .container
+        div.alert.alert-info
+            strong Heads Up!
+            br
+            span Below shows all articles that have one or more duplicates within the latest 50 articles.
+            br
+            span Please remove all versions of the duplicate article but the one that should go on the site.
+
+        table.table.article-index
+            - each doc in docs
+                tr
+                    td
+                        a(href='/article/' + doc.urls[doc.urls.length - 1]) #{doc.title}
+                    td
+                        if(doc.groups && doc.groups.length > 0)
+                            span.alert.alert-error This article is in the layout!
+                    td
+                        a(href='/article/' + doc.urls[doc.urls.length - 1] + '/edit') Edit
+                    td
+                        a.delete-article(href='#', data-docid=doc._id, data-title=doc.title, data-rev=doc._rev, data-dest='') Delete
+                    td
+                        a(href=db_url + '/' + doc._id) #{doc._id}
+
+        - if (docs.length == 0)
+            h1 No Duplicates Found

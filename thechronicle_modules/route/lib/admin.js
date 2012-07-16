@@ -18,7 +18,6 @@ admin.duplicates = function (req, res, next) {
         if (err) next(err);
         else {
             res.render('admin/article/duplicates', {
-                layout: 'admin/layout',
                 locals:{
                     docs: duplicateDocs,
                     hasPrevious: false,
@@ -36,7 +35,6 @@ admin.author = function (req, res, next) {
     }
     else {
         res.render('admin/author', {
-            layout: 'admin/layout'
         });
     }
 };
@@ -44,10 +42,8 @@ admin.author = function (req, res, next) {
 admin.editAuthor = function (req, res, next) {
     var name = req.params.name.replace(/-/g, ' ');
     api.authors.getInfo(name, function (err, docs) {
-        var newAuthor = docs.length == 0;
-        var doc = 
+        var newAuthor = (docs.length == 0);
         res.render('admin/author/edit', {
-            layout: 'admin/layout',
             locals: {
                 newAuthor: newAuthor,
                 doc: newAuthor ? {name: name} : docs[0],
@@ -97,7 +93,6 @@ admin.manage = function (req, res, next) {
     api.article.getByTaxonomy(section, null, start, function (err, docs, nextKey) {
         if (err) next(err);
         else res.render('admin/article', {
-            layout: 'admin/layout',
             locals:{
                 docs: docs,
                 next: nextKey,
@@ -136,9 +131,8 @@ admin.k4exportData = function (req, res, next) {
 admin.addArticle = function (req, res, next) {
     api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
         res.render('admin/article/new', {
-            layout: 'admin/layout',
-            locals:{
-                groups:[],
+            locals: {
+                groups: [],
                 taxonomy:taxonomy
             }
         });
@@ -161,7 +155,6 @@ admin.editArticle = function (req, res, next) {
                 doc.authors = doc.authors.join(", ");
 
             res.render('admin/article/edit', {
-                layout: 'admin/layout',
                 locals:{
                     doc:doc,
                     groups:[],
@@ -252,7 +245,7 @@ admin.layout = function (req, res, next) {
                     groupDocs: results.groupDocs,
                     nameSpace: layoutConfig[group].namespace
                 }
-            });      
+            });
         }
     });
 };

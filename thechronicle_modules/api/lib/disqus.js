@@ -39,6 +39,10 @@ function getArticlesFromDisqusData(disqusData, callback) {
             else return null;
         });
         res = _.compact(res);
+        res = _.sortBy(res, function (article) {
+            return article.numComments;
+        });
+        res.reverse();
 
         return callback(null, res);
     });

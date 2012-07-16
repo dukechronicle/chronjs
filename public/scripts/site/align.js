@@ -60,7 +60,7 @@ define(["jquery", "libs/underscore", "libs/jquery-ui"], function($) {
 
             var rounded = $(this).parent().siblings(".rounded");
             if (rounded && rounded.height() < height)
-                rounded.css('height', height + "px");
+                rounded.css('min-height', height + "px");
         });
     }
 

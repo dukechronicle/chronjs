@@ -1,17 +1,20 @@
-#newsletter.container
-  h1 Newsletter
-    
-  #message.alert
-  
-  form.form-inline#test
-    label(for='testEmail') Test Email Address:
-    input(type='text', name='testEmail')
-    input(type='hidden', name='campaignID', value=campaignID)
-    input.btn(type='submit', value='Send Test Newsletter')
-    
-  form.form-inline#send
-    input(type='hidden', name='campaignID', value=campaignID)
-    input.btn(type='submit', value='Send Newsletter')
-  
-  #confirm(title="Send newsletter?")
-    p Are you sure you want to send the newsletter to everyone?
+extends layout
+
+block content
+  #newsletter.container
+    h1 Newsletter
+
+    #message.alert
+
+    form.form-inline#test
+      label(for='testEmail') Test Email Address:
+      input(type='text', name='testEmail')
+      input(type='hidden', name='campaignID', value=campaignID)
+      input.btn(type='submit', value='Send Test Newsletter')
+
+    form.form-inline#send
+      input(type='hidden', name='campaignID', value=campaignID)
+      input.btn(type='submit', value='Send Newsletter')
+
+    #confirm(title="Send newsletter?")
+      p Are you sure you want to send the newsletter to everyone?

@@ -1,0 +1,45 @@
+include ../../mixins/layout-helpers
+include ../../mixins/code
+
+block variables
+  - var prefix = null
+  - if (typeof pageImage == 'undefined')
+      - var pageImage = staticCdn + "/img/favicon.png"
+
+
+!!! 5
+html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
+    head(prefix=prefix)
+        block head
+            script(src=staticCdn + "/js/mobile-redirect.js")
+
+            mixin title
+            link(rel="icon", href=staticCdn + "/img/favicon.ico")
+            link(rel="image_src", href=pageImage)
+
+            // typekitload code should always load first because it will cause a relayout of dom
+            script(src="http://use.typekit.com/dwv2bjy.js")
+            script try{Typekit.load()}catch(e){}
+
+            mixin stylesheet("site")
+            //if lt IE 9
+                script(type="text/javascript", src="//html5shim.googlecode.com/svn/trunk/html5.js")
+                mixin stylesheet("style-ie")
+    body
+        // required for facebook javascript sdk
+        #fb-root
+        .container
+            header.clearfix!=partial('../layout/header')
+            section.clearfix#content
+                block content
+            footer!=partial('../layout/footer')
+        #scripts
+            block scripts
+                // border-radius support in ie
+                //if lt IE 9
+                    script(type="text/javascript") var curvyCornersVerbose = false
+                    script(type="text/javascript", src="/js/curvycorners.js")
+
+                mixin require-script("site")
+                mixin googleAnalytics
+                mixin feedback

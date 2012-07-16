@@ -20,7 +20,7 @@ exports.preinit = function (app) {
     app.post('/config', site.configData);
 };
 
-exports.init = function (app) {
+exports.siteInit = function (app) {
 
     app.namespace('/api', function () {
         app.get('/all', siteApi.articlesBySection);
@@ -36,8 +36,6 @@ exports.init = function (app) {
         app.put('/article/:id', api.site.checkAdmin, siteApi.updateArticle);
         app.del('/article/:id', api.site.checkAdmin, siteApi.deleteArticle);
     });
-
-    app.get('/m/*', site.mobile);
 
     app.get('/', site.frontpage);
     app.get('/news', site.news);
@@ -66,7 +64,7 @@ exports.init = function (app) {
         app.get('/user-guidelines', site.staticPage);
         app.get('/young-trustee-2012', site.staticPage);
         app.get('/commencement-2012', site.staticPage);
-        
+
         app.post('/newsletter', site.newsletterData);
     });
 
@@ -111,7 +109,7 @@ exports.init = function (app) {
         app.get('/author', api.site.checkAdmin, admin.author);
         app.get('/system/memory', api.site.checkAdmin, admin.memory);
     });
-    
+
     app.namespace('/admin/image', function () {
         app.get('/manage', api.site.checkAdmin, admin.image.manage);
         app.get('/upload', api.site.checkAdmin, admin.image.upload);
@@ -124,7 +122,7 @@ exports.init = function (app) {
         app.post('/add', api.site.checkAdmin, admin.image.addImageToDoc);
         app.get('/remove/:imageId', api.site.checkAdmin, admin.image.removeImageFromDoc);
     });
-   
+
     app.namespace('/admin/poll', function () {
     	app.get('/', api.site.checkAdmin, admin.managePoll);
     	app.get('/new', api.site.checkAdmin, admin.addPoll);
@@ -132,7 +130,7 @@ exports.init = function (app) {
     	app.post('/', api.site.checkAdmin, admin.addPollData);
     	app.post('/:id', api.site.checkAdmin, admin.editPollData);
     });
-    
+
     app.namespace('/xhrproxy', function() {
         app.get('/openx/:path', xhrproxy.openx);
         app.get('/delete_activity', xhrproxy.delete_activity);
@@ -144,6 +142,13 @@ exports.init = function (app) {
 
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);
+
+    return app;
+};
+
+exports.mobileInit = function (app) {
+    app.get('*', site.mobile);
+    return app;
 };
 
 function redirect (url) {

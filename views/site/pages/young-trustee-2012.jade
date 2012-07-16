@@ -1,44 +1,47 @@
-#page.young-trustees-2012
-    .clearfix
-        .span-4
-            .rounded
-                a.hover(href="/article/danesh-advocates-merge-academics-culture")
-                    .image-container
-                        img.thumb(src="http://d2sug25c5hnh7r.cloudfront.net/images/page/young-trustee-2012/kaveh.jpg")
-                    .content-container
-                        h3.title Kaveh Danesh
-                        p.teaser Senior Kaveh Danesh emphasizes an interdisciplinary and international Duke as he campaigns for Young Trustee.
-                .content-container.clearfix
-                    a.left(href="http://kavehforyt.com") Site
-                    a.right(href="https://docs.google.com/open?id=0B8ZKzQ_b-qmAYTQ2N2UwNDItNTIwNy00MzhmLWE4YjAtZTU4ODIwY2UwM2Q5") App
+extends layout
 
-        .span-4
-            .rounded
-                a.hover(href="/article/mandl-stresses-business-approach-campus-issues")
-                    .image-container
-                        img.thumb(src="http://d2sug25c5hnh7r.cloudfront.net/images/page/young-trustee-2012/michael.jpg")
-                    .content-container
-                        h3.title Michael Mandl
-                        p.teaser Senior Michael Mandl highlights his breadth of business experience and passion for Duke as he vies to become Young Trustee.
-                .content-container.clearfix
-                    a.left(href="http://michaelmandlforyt.wordpress.com/") Site
-                    a.right(href="http://michaelmandlforyt.files.wordpress.com/2012/01/mandl-young-trustee-application.pdf") App
+block content
+    #page.young-trustees-2012
+        .clearfix
+            .span-4
+                .rounded
+                    a.hover(href="/article/danesh-advocates-merge-academics-culture")
+                        .image-container
+                            img.thumb(src=staticCdn + "/img/page/young-trustee-2012/kaveh.jpg")
+                        .content-container
+                            h3.title Kaveh Danesh
+                            p.teaser Senior Kaveh Danesh emphasizes an interdisciplinary and international Duke as he campaigns for Young Trustee.
+                    .content-container.clearfix
+                        a.left(href="http://kavehforyt.com") Site
+                        a.right(href="https://docs.google.com/open?id=0B8ZKzQ_b-qmAYTQ2N2UwNDItNTIwNy00MzhmLWE4YjAtZTU4ODIwY2UwM2Q5") App
 
-        .span-4.last
-            .rounded
-                a.hover(href="/article/wilson-desires-give-back-university-yt")
-                    .image-container
-                        img.thumb(src="http://d2sug25c5hnh7r.cloudfront.net/images/page/young-trustee-2012/olly.jpg")
-                    .content-container
-                        h3.title Olly Wilson
-                        p.teaser Native New Zealander Olly Wilson, a senior, wants to emphasize the importance of a global Duke in his campaign for Young Trustee.
-                .content-container.clearfix
-                    a.left(href="http://ollywilson.tumblr.com/") Site
-                    a.right(href="http://issuu.com/olly4yt/docs/oliver_wilson__yt_applicaton/3") App
+            .span-4
+                .rounded
+                    a.hover(href="/article/mandl-stresses-business-approach-campus-issues")
+                        .image-container
+                            img.thumb(src=staticCdn + "/img/page/young-trustee-2012/michael.jpg")
+                        .content-container
+                            h3.title Michael Mandl
+                            p.teaser Senior Michael Mandl highlights his breadth of business experience and passion for Duke as he vies to become Young Trustee.
+                    .content-container.clearfix
+                        a.left(href="http://michaelmandlforyt.wordpress.com/") Site
+                        a.right(href="http://michaelmandlforyt.files.wordpress.com/2012/01/mandl-young-trustee-application.pdf") App
 
-    .clearfix
-        #endorsements.span-8!=partial('../container/two-column', {title: "Endorsements", stories: data[0]})
+            .span-4.last
+                .rounded
+                    a.hover(href="/article/wilson-desires-give-back-university-yt")
+                        .image-container
+                            img.thumb(src=staticCdn + "/img/page/young-trustee-2012/olly.jpg")
+                        .content-container
+                            h3.title Olly Wilson
+                            p.teaser Native New Zealander Olly Wilson, a senior, wants to emphasize the importance of a global Duke in his campaign for Young Trustee.
+                    .content-container.clearfix
+                        a.left(href="http://ollywilson.tumblr.com/") Site
+                        a.right(href="http://issuu.com/olly4yt/docs/oliver_wilson__yt_applicaton/3") App
 
-        .span-4.last
-            .lighten!=partial('../container/ad/medium-rect', {title: "Advertising"})
-            #pastYts.title-medium!=partial('../container/story-list/teaser', {title: "Past Young Trustees", stories: data[1]})
+        .clearfix
+            #endorsements.span-8!=partial('../container/two-column', {title: "Endorsements", stories: data[0]})
+
+            .span-4.last
+                .lighten!=partial('../container/ad/medium-rect', {title: "Advertising"})
+                #pastYts.title-medium!=partial('../container/story-list/teaser', {title: "Past Young Trustees", stories: data[1]})

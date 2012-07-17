@@ -1,11 +1,11 @@
-.featured
-    .vertical-container
-        .vertical #{title}
+include ../container-helpers
 
+.block
+    mixin vertical-label
     .rounded
         a.hover.highlight-bottom(href=story.url)
-            .image-container
-                - if (story.images && story.images.LargeRect)
+            - if (story.images && story.images.LargeRect)
+                .image-container
                     img.fit-image(src=story.images.LargeRect.url)
             .content-container
                 h3.title #{story.title}

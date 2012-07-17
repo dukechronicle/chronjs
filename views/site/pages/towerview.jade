@@ -8,7 +8,7 @@ block content
             // towerview features
             if (model.Featured)
                 if (model.Featured[0])
-                    !=partial('../container/featured-image', {title: 'Features', story: model.Featured[0]})
+                    !=partial('../container/block/featured', {title: 'Features', story: model.Featured[0]})
 
                 .featured-row.clearfix
                     if (model.Featured[1])

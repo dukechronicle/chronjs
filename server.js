@@ -189,5 +189,3 @@ function SessionManager() {
         self.expressSession(req, res, next);
     };
 }
-
-

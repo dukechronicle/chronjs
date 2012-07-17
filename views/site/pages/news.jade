@@ -7,7 +7,7 @@ block content
         .clearfix.align-group
             .span-6.align-element(data-aligntarget="#featured .rounded")
                 - if (model.Featured && model.Featured[0])
-                    #featured!=partial('../container/featured-image', {title: "", story: model.Featured[0]});
+                    #featured!=partial('../container/block/featured', {story: model.Featured[0]});
 
                 - if (model.Headlines)
                       - each story in model.Headlines

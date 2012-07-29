@@ -66,3 +66,61 @@ group.docsN = function (namespace, groupName, baseDocNum, numDocs, callback) {
                 }
             });
 };
+
+/**
+ * Add a document to a group with the given namespace and group name. The
+ * document's weight in the group is specified as a parameter.
+ */
+group.add = function (nameSpace, groupName, docId, weight, callback) {
+    db.get(docId, function (err, doc) {
+        if (err)
+            callback(err);
+        else {
+            var groups = doc.groups || [];
+
+            // update existing entry
+            var updated = false;
+            groups.forEach(function (groupEntry) {
+                if (groupMatch(nameSpace, groupName, groupEntry)) {
+                    groupEntry[2] = weight;
+                    updated = true;
+                }
+            });
+            if (!updated)
+                groups.push([nameSpace, groupName, weight]);
+
+            db.merge(docId, {groups: groups}, callback);
+        }
+    });
+};
+
+/**
+ * Remove a document from a group with the given namespace and group name.
+ */
+group.remove = function (nameSpace, groupName, docId, callback) {
+    db.get(docId, function (err, doc) {
+        if (err)
+            callback(err);
+        else {
+            var groups = doc.groups || [];
+
+            // remove existing entry
+            var updated = false;
+            groups = _.filter(groups, function (groupEntry) {
+                var matches = groupMatch(nameSpace, groupName, groupEntry);
+                updated = updated || matches;
+                return !matches;
+            });
+
+            if (updated)
+                db.merge(docId, {groups: groups}, callback);
+        }
+    });
+};
+
+function groupMatch(namespace, groupName, groupEntry) {
+    // groupEntry is [nameSpace, groupName, weight]
+    // need toString to compare arrays
+    return groupEntry[0].toString() == namespace.toString() &&
+        groupEntry[1] == groupName;
+};

@@ -1,4 +1,4 @@
-var util = require('../../util');
+var util = require('util');
 var winston = require('winston');
 require('winston-loggly')
 var Transport = winston.transports.Transport;

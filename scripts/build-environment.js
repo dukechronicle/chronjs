@@ -1,15 +1,18 @@
+#!/usr/bin/env node
+
 /* require internal modules */
-var config = require('../thechronicle_modules/config');
 var api = require('../thechronicle_modules/api');
-var s3 = require('../thechronicle_modules/api');
-var util = require('../thechronicle_modules/util');
+var config = require('../thechronicle_modules/config');
 var log = require('../thechronicle_modules/log');
+var util = require('../thechronicle_modules/util');
 
 var async = require('async');
 
 var FAKE_WORDS = [
-    'lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipisicing', 'elit', 'sed', 'do', 'eiusmod', 'tempor', 'incididunt', 'ut',
-    'labore', 'et', 'dolore', 'magna', 'aliqua', 'enim', 'ad', 'minim', 'veniam', 'quis', 'nostrud', 'exercitation', 'ullamco', 'laboris', 'nisi'
+    'lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipisicing',
+    'elit', 'sed', 'do', 'eiusmod', 'tempor', 'incididunt', 'ut', 'labore',
+    'et', 'dolore', 'magna', 'aliqua', 'enim', 'ad', 'minim', 'veniam', 'quis',
+    'nostrud', 'exercitation', 'ullamco', 'laboris', 'nisi'
 ];
 
 var IMAGES = [
@@ -45,71 +48,85 @@ var ARTICLES_PER_LAYOUT_GROUP = 4;
 // holds the IDs of the articles, once they have been found
 var articleIDs = [];
 
-log.init(function (err) {
-    config.init(function(){}, function(err) {
-        if(err) {
-            console.log(err);
-        }
-        else if(!config.isSetUp()) {
-            console.log('You must run server.js to set up config options before you can generate an environment');
-        }
-        else if(config.get('COUCHDB_URL').indexOf("heroku") != -1 || config.get('COUCHDB_URL').indexOf("cloudant") != -1 || config.get('S3_BUCKET').indexOf("production") != -1) {
-            console.log("You can't create an environment using the production config options. Recommend use of db server chrondev.iriscouch.com and S3 bucket chron_dev");
-        }
-        else {
-            console.log('creating environment...this could take a few minutes');
-        
-            async.waterfall([
-                function(callback) {
-                    api.init(callback);
-                },
-                function(callback) {
-                    console.log("creating database...");
-                
-                    // delete old version of db and then create it again to start the db fresh            
-                    api.recreateDatabase('dsfvblkjeiofkjd',callback);
-                },
-                function(callback) {
-                    console.log("assigning unique image names...");
-                    assignImageNames(callback);
-                },
-                function(callback) {
-                    console.log("deleting old images for this db from s3...");
-                    deleteOldImages(function(err) {
-                        callback(null);
-                    });
-                },
-                function(callback) {
-                    console.log("creating search index...");
-                   
-                    // delete all articles for this db in the search index to start the index fresh
-                    api.search.removeAllDocsFromSearch(function(err) {
-                        callback(err);
-                    });
-                },
-                function(callback) {
-                    console.log('creating image originals and versions...');
-                    createImages(callback);
-                },
-                function(images, callback) {
-                    console.log("populating site with fake articles...");
-                    addFakeArticles(images, callback);
-                },
-                function(callback) {
-                    console.log("creating layouts...");
-                    createLayoutGroups(callback);
-                },
-                function(callback) {
-                    console.log('environment created!');
-                    callback(null);
-                }],
-                function(err) {
-                      if (err) console.log(err);
-                }
-            );
-        }
-    });
-});
+main(); // Call main method
+
+
+function init(callback) {
+    async.waterfall([
+        function (callback) {
+            config.init(null, callback);
+        },
+        function (callback) {
+            if (!config.isSetUp()) {
+                callback('You must run server.js to set up config options before you can generate an environment');
+            }
+            else if (config.get('COUCHDB_URL').indexOf("heroku") != -1 ||
+                    config.get('COUCHDB_URL').indexOf("cloudant") != -1 ||
+                    config.get('S3_BUCKET').indexOf("production") != -1) {
+                callback("You can't create an environment using the production config options. Recommend use of db server chrondev.iriscouch.com and S3 bucket chron_dev");
+            }
+            else {
+                api.init(callback);
+            }
+        }], callback);
+}
+
+function main() {
+    console.log('creating environment...this could take a few minutes');
+
+    async.waterfall([
+        function(callback) {
+            init(callback);
+        },
+        function(callback) {
+            console.log("creating database...");
+
+            // delete old version of db and then create it again to start the db fresh
+            api.recreateDatabase('dsfvblkjeiofkjd',callback);
+        },
+        function(callback) {
+            console.log("assigning unique image names...");
+            assignImageNames(callback);
+        },
+        function(callback) {
+            console.log("deleting old images for this db from s3...");
+            deleteOldImages(function(err) {
+                callback(null);
+            });
+        },
+        function(callback) {
+            console.log("creating search index...");
+
+            // delete all articles for this db in the search index to start the index fresh
+            api.search.removeAllDocsFromSearch(function(err) {
+                callback(err);
+            });
+        },
+        function(callback) {
+            console.log('creating image originals and versions...');
+            createImages(callback);
+        },
+        function(images, callback) {
+            console.log("populating site with fake articles...");
+            addFakeArticles(images, callback);
+        },
+        function(callback) {
+            console.log("creating layouts...");
+            createLayoutGroups(callback);
+        },
+        function(callback) {
+            callback(null);
+        }], function(err) {
+            if (err) {
+                log.error(err);
+                process.exit(1);
+            }
+            else {
+                log.notice('environment created!');
+                process.exit(0);
+            }
+        });
+}
 
 function _getCropFunc(img, newImage, imgTypes, key) {
     return function (cb) {
@@ -204,13 +221,13 @@ function addFakeArticles(images, callback) {
         article.type = "article";
         article.taxonomy = generateTaxonomy();
         article.images = images[getRandomNumber(images.length)];
-        
+
         fakeArticles[i] = article;
     }
 
     async.forEachSeries(fakeArticles, function(article, cb) {
         console.log("adding article with title: '" + article.title + "'...");
-        
+
         api.article.add(article, function(err, url, articleID) {
             if(err) console.log("article could not be added - " + err);
             else {
@@ -224,28 +241,28 @@ function addFakeArticles(images, callback) {
 }
 
 function createLayoutGroups(callback) {
-    var layoutGroups = api.group.getLayoutGroups();    
+    var layoutGroups = api.group.getLayoutGroups();
     var layoutPages = Object.keys(layoutGroups);
 
     async.forEachSeries(layoutPages,
         function(layoutPage, cb) {
             console.log('generating layout for ' + layoutPage);
-            
+
             var namespace = layoutGroups[layoutPage].namespace;
             var groups = layoutGroups[layoutPage].groups;
-            
+
             async.forEachSeries(groups,
                 function(group, cb2) {
                     console.log('generating layout for ' + layoutPage + ' group ' + group);
-                    
+
                     var articleIDsForThisGroup = []
                     for(var i = 0; i < ARTICLES_PER_LAYOUT_GROUP; i ++) {
                         var id = null;
                         while(true) {
                             id = articleIDs[getRandomNumber(articleIDs.length)];
-                            
+
                             if(articleIDsForThisGroup.indexOf(id) == -1) break;
-                        }                        
+                        }
                         articleIDsForThisGroup.push(id);
                     }
 
@@ -270,7 +287,7 @@ function createLayoutGroups(callback) {
 
 function generateSentence(numWords) {
     var string = "";
-    
+
     for(var i = 0; i < numWords; i ++) {
         if(i != 0) {
             string = string + " ";

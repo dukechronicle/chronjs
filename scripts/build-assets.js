@@ -5,10 +5,10 @@ var path = require('path');
 var program = require('commander');
 var _ = require('underscore');
 
-var api = require('./thechronicle_modules/api');
-var build = require('./thechronicle_modules/build');
-var config = require('./thechronicle_modules/config');
-var log = require('./thechronicle_modules/log');
+var api = require('../thechronicle_modules/api');
+var build = require('../thechronicle_modules/build');
+var config = require('../thechronicle_modules/config');
+var log = require('../thechronicle_modules/log');
 
 
 program
@@ -39,7 +39,7 @@ function init(callback) {
         },
         function (callback) {
             if (config.isSetUp()) {
-                build.init(__dirname);
+                build.init(__dirname + '/..');
                 api.init(callback);
             }
             else {
@@ -151,26 +151,3 @@ function pushAssets(command) {
         }
     });
 }
-
-/*
-    function (callback) {
-        build.buildAllCSS(function (err, paths) {
-            if (err) callback(err);
-            else build.pushGeneratedFiles('css', paths, 'text/css', callback);
-        });
-    }
-
-function buildAssets(callback) {
-    async.parallel({css: buildCSS, js: buildJavascript}, callback);
-}
-
-function pushAssets(paths, callback) {
-    async.parallel({
-        css: pushAll(paths.css, "text/css"),
-        js: pushAll(paths.js, "application/javascript"),
-        src: pushSource(['css', 'js', 'img']),
-    }, function (err) {
-        callback(err, paths);
-    });
-}
-*/

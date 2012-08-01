@@ -9,6 +9,9 @@ var fs = require('fs');
 var md = require('discount');
 var _ = require('underscore');
 
+site.qduke = function (req, res) {
+    res.render('qduke')
+}
 
 site.mobile = function (req, res, next) {
     res.render('mobile');

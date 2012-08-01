@@ -4,7 +4,7 @@ html
     head
         link(href='http://fonts.googleapis.com/css?family=Karla', rel='stylesheet', type='text/css')
         script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js', type='text/javascript')
-        script(src='ttps://raw.github.com/monkeecreate/jquery.simpleWeather/master/jquery.simpleWeather.js', type='text/javascript')
+        script(src='https://raw.github.com/monkeecreate/jquery.simpleWeather/master/jquery.simpleWeather.js', type='text/javascript')
         link(rel='stylesheet', type='text/css', href='/styles/qduke.css')
         title qDuke.com
         // TODO(rivkees): add ga tracking
@@ -123,3 +123,25 @@ html
                     a(href='http://dukechronicle.com/page/advertising') Advertising 
                     |
                     a(href='http://dukechronicle.com/page/contact') Contact 
+                script(type='text/javascript')
+                    // Weather
+                    // http://monkeecreate.github.com/jquery.simpleWeather/#docs
+                    $.simpleWeather({
+                            zipcode: '27708',
+                            unit: 'f',
+                            success: function(weather) {
+                                    html = "Now: ";
+                                    html += weather.currently + ", ";
+                                    html += weather.temp+'&deg; '+weather.units.temp;
+                                    $("#weather .element").html(html);
+                                    $("#weather .element").parent().css("background-image", "url("+weather.image+")").css("background-repeat", "no-repeat").css("background-position", "-5px -12px").css("background-size", "100%");  
+                            },
+                            error: function(error) {
+                                    $("#weather .element").html("Weather");
+                            }
+                    });
+                    // Date
+                    var myDate = new Date();
+                    var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+                    var dayNames = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
+                    $("#time .element").html( dayNames[myDate.getDay()] + ', <br />' + monthNames[myDate.getMonth()] + " " + myDate.getDate() + ', ' + myDate.getFullYear() );

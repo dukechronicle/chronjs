@@ -1,0 +1,125 @@
+//TODO(rivkees): add if ie
+!!! 5
+html
+    head
+        link(href='http://fonts.googleapis.com/css?family=Karla', rel='stylesheet', type='text/css')
+        script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js', type='text/javascript')
+        script(src='ttps://raw.github.com/monkeecreate/jquery.simpleWeather/master/jquery.simpleWeather.js', type='text/javascript')
+        link(rel='stylesheet', type='text/css', href='/styles/qduke.css')
+        title qDuke.com
+        // TODO(rivkees): add ga tracking
+    body
+        div#shell
+            div#header
+                div#logo
+                    p#title
+                        a(href='http://qduke.com') q
+                            span.strong Duke
+                            .com
+                    p#subtitle presented by 
+                        a#chrontitle(href='http://dukechronicle.com') The Chronicle
+            section#info
+                ul.button_bar.default_lightgrey.infobar.clearfix
+                    li
+                        a#time(href='http://google.com/calendar') 
+                            div.outerContainer
+                                div.innerContainer
+                                    div.element Calendar
+                    li
+                        a#weather(href='http://weather.com') 
+                            div.outerContainer
+                                div.innerContainer
+                                    div.element Weather
+                    li
+                        a#webmail(href='') 
+                            div.outerContainer
+                                div.innerContainer
+                                    div.element Webmail
+                    li
+                        a#gmail(href='http://gmail.com')
+                            div.outerContainer
+                                div.innerContainer
+                                    div.element Gmail
+                    li
+                        a#faceboook(href='http://facebook.com')
+                            div.outerContainer
+                                div.innerContainer
+                                    div.element Facebook
+                ul.button_bar.clearfix
+                    li.button_blue
+                        a(href='http://www.dukechronicle.com')
+                            div.outerContainer
+                                div.innerContainer
+                                    div.element The Chronicle
+                    li.button_arrownarrow.button_grey
+                            div.outerContainer
+                                div.innerContainer
+                                    div.element &laquo;
+                    li.newsbox.button_grey
+                            div.outerContainer
+                                div.innerContainer
+                                    div.element Headline: ‘New Tailgating’ to debut in a field
+                    li.button_arrownarrow.button_grey
+                            div.outerContainer
+                                div.innerContainer
+                                    div.element &raquo;
+            section#links
+                ul.button_bar.clearfix
+                    li.button_doublewide.button_grey.noHover.search
+                        div.outerContainer
+                            div.innerContainer
+                                div.element
+                                    input(name='query', type='text', style='background:transparent', onkeydown='if (event.keyCode == 13) search(event)')
+                    li.button_blue
+                        div.outerContainer
+                            div.innerContainer
+                                div.element
+                                    a Google
+                    li.button_blue
+                        div.outerContainer
+                            div.innerContainer
+                                div.element
+                                    a WolframAlpha
+                    li.button_blue
+                        div.outerContainer
+                            div.innerContainer
+                                div.element
+                                    a Duke
+                - each link, i in links
+                    - if (i==0) 
+                        | !{"<ul class='button_bar button_bar_tall default_lightblue clearfix'>"}
+                    - else if (i%5==0) 
+                        | !{"<ul class='button_bar default_lightblue clearfix'>"}
+                    li
+                        a(href=link.url) 
+                            div.outerContainer
+                                div.innerContainer
+                                    div.element #{link.title}
+                    - if ((i+1)%5==0) 
+                        | !{"</ul>"}
+            section#ads
+                - each ad, i in ads
+                    - if (i==0) 
+                        | !{"<ul class='button_bar default_lightgrey clearfix'>"}
+                    - else if (i%5==0) 
+                        | !{"<ul class='button_bar default_lightgrey clearfix'>"}
+                    li
+                        a(href=ad.url) 
+                            div.outerContainer
+                                div.innerContainer
+                                    div.element #{ad.title}
+                    - if (i==4)
+                        li.button_lightblue.vertical-container
+                            a.vertical(href='http://dukechronicle.com/page/advertising') 
+                                div.outerContainer
+                                    div.innerContainer
+                                        div.element Sponsored
+                    - if ((i+1)%5==0) 
+                        | !{"</ul>"}
+            div#footer
+                p &copy; 2012 
+                    a(href='http://dukechronicle.com') The Chronicle 
+                    |
+                    a(href='http://dukechronicle.com/page/advertising') Advertising 
+                    |
+                    a(href='http://dukechronicle.com/page/contact') Contact 

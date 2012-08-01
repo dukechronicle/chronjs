@@ -98,7 +98,7 @@ function runSite(callback) {
         if (err) {
             log.error(err);
             app.close();
-            return
+            return;
         }
 
         if (process.env.NODE_ENV === 'production') {

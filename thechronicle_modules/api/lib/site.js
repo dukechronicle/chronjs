@@ -50,7 +50,7 @@ site.renderConfigPage = function(req, res, err) {
     if(err) {
         if( typeof err === 'object')
             err = JSON.stringify(err);
-        err += "<br /><br />The live site was not updated to use the new configuration due to errors."
+        err += "<br /><br />The live site was not updated to use the new configuration due to errors.";
     }
 
     res.render('admin/config', {
@@ -189,7 +189,7 @@ site.getSportsPageContent = function(callback) {
                         return item;
                     });
                     Blog.splice(5, Blog.length - 5);
-                    cb(null, Blog)
+                    cb(null, Blog);
                 } else
                     cb(err, []);
             });
@@ -230,7 +230,7 @@ site.getOpinionPageContent = function(callback) {
                 return item;
             });
             Blog.splice(5, Blog.length - 5);
-            cb(null, Blog)
+            cb(null, Blog);
         } else
             cb(err, []);
         });
@@ -248,7 +248,7 @@ site.getOpinionPageContent = function(callback) {
                 api.authors.getLatest(columnist.user || columnist.name, ['Opinion'], 7, function(err, res) {
                     columnist.stories = modifyArticlesForDisplay(res);
                     _callback(err, columnist);
-                })
+                });
             }, cb);
         });
     }], function(err, results) {
@@ -271,7 +271,7 @@ site.getOpinionPageContent = function(callback) {
                     model.Featured.forEach(function(article) {
                         article.author = article.authors[0];
                         var columnistObj = null;
-                        if( columnistObj = columnistHeadshots[article.author.toLowerCase()]) {
+                        if( columnistObj == columnistHeadshots[article.author.toLowerCase()]) {
                             if(columnistObj.headshot)
                                 article.thumb = columnistObj.headshot;
                             if(columnistObj.tagline)
@@ -382,7 +382,7 @@ site.getSectionContent = function (params, callback) {
         },
         function (cb) {
             api.article.getByTaxonomy(params, 20, null, function (err, docs, next) {
-                if (err) cb(err)
+                if (err) cb(err);
                 else cb(null, {docs:modifyArticlesForDisplay(docs), next:next});
             });
         }], function (err, results) {
@@ -416,7 +416,7 @@ site.getAuthorContent = function(name, callback) {
                 callback(err);
             else {
                 var docs = results[0].docs;
-                var next = results[0].next
+                var next = results[0].next;
                 var info = results[1][0];
                 callback(null, docs, info, next);
             }
@@ -450,7 +450,7 @@ site.getArticleContent = function(url, callback) {
                 poll: function (cb) {
                     api.poll.getByTaxonomy(doc.taxonomy, 1, function (err, res) {
                         if (err) cb(err);
-                        else if (res.length == 0) cb();
+                        else if (res.length === 0) cb();
                         else cb(null, res[0]);
                     });
                 }
@@ -473,7 +473,11 @@ site.getArticleContentUncached = function(doc, callback) {
             if (err) cb(err);
             else cb(null, modifyArticlesForDisplay(relatedArticles));
         });
-    }],
+    },
+    function(cb) {
+        api.taxonomy.getParents(doc.taxonomy, cb);
+    }
+    ],
     function(err, results) {
         if(err)
             callback(err);
@@ -488,7 +492,7 @@ site.getArticleContentUncached = function(doc, callback) {
                 },
                 popular: results[0],
                 related: results[1],
-                parents: api.taxonomy.parents(doc.taxonomy),
+                parents: api.taxonomy.parents(doc.taxonomy)
             };
             callback(null, model);
         }
@@ -560,7 +564,7 @@ function cache() {
                             });
                             callback(null, result);
                         }
-                    })
+                    });
                     func.apply(this, args);
                 }
             });

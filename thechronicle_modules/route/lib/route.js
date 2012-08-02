@@ -60,7 +60,7 @@ exports.siteInit = function (app) {
         app.get('/advertising', site.staticPage);
         app.get('/contact', site.staticPage);
         app.get('/edit-board', site.staticPage);
-        app.get('/graduation', site.staticPage)
+        app.get('/graduation', site.staticPage);
         app.get('/letters', site.staticPage);
         app.get('/newsletter', site.staticPage);
         app.get('/privacy-policy', site.staticPage);
@@ -85,6 +85,11 @@ exports.siteInit = function (app) {
         app.get('/:url/print', site.articlePrint);
         app.get('/:url/edit', api.site.checkAdmin, admin.editArticle);
         app.put('/:url/edit', api.site.checkAdmin, admin.editArticleData);
+    });
+
+    app.namespace('/blogs', function () {
+        app.get('/:blog', site.blog);
+        app.get('/:blog/:url', site.blogPost);
     });
 
     app.namespace('/staff', function () {
@@ -124,11 +129,11 @@ exports.siteInit = function (app) {
     });
 
     app.namespace('/admin/poll', function () {
-    	app.get('/', api.site.checkAdmin, admin.managePoll);
-    	app.get('/new', api.site.checkAdmin, admin.addPoll);
-    	app.get('/:id', api.site.checkAdmin, admin.editPoll);
-    	app.post('/', api.site.checkAdmin, admin.addPollData);
-    	app.post('/:id', api.site.checkAdmin, admin.editPollData);
+        app.get('/', api.site.checkAdmin, admin.managePoll);
+        app.get('/new', api.site.checkAdmin, admin.addPoll);
+        app.get('/:id', api.site.checkAdmin, admin.editPoll);
+        app.post('/', api.site.checkAdmin, admin.addPollData);
+        app.post('/:id', api.site.checkAdmin, admin.editPollData);
     });
 
     app.namespace('/admin/page', function () {
@@ -139,7 +144,7 @@ exports.siteInit = function (app) {
     app.namespace('/xhrproxy', function() {
         app.get('/delete_activity', xhrproxy.delete_activity);
         app.get('/espn', xhrproxy.espn);
-    })
+    });
 
     app.get('/sitemaps/:query', function (req, res, next) {
         res.redirect(config.get("CLOUDFRONT_DISTRIBUTION") + req.url);
@@ -159,5 +164,5 @@ exports.mobileInit = function (app) {
 function redirect (url) {
     return function(req, res) {
         res.redirect(url, 301);
-    }
+    };
 }

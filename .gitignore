@@ -6,4 +6,5 @@ config.js
 public/dist
 tmp
 sitemaps/*
-
+*.sublime-project
+*.sublime-workspace

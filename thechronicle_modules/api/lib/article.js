@@ -1,6 +1,6 @@
 var article = exports;
 
-var api = require('../../api')
+var api = require('../../api');
 var config = require('../../config');
 var db = require('../../db-abstract');
 var log = require('../../log');
@@ -29,7 +29,7 @@ article.add = function (article, callback) {
         article.created = article.created || unix_timestamp;
         article.updated = article.created || unix_timestamp;
         article.urls = [ url ];
-        article.indexedBySolr = api.search.getIndexVersion()
+        article.indexedBySolr = api.search.getIndexVersion();
         article.renderedBody = api.article.renderBody(article.body);
 
         db.save(article, function(err, res) {
@@ -101,7 +101,7 @@ article.getByUrl = function(url, callback) {
     db.article.getByUrl(url, function(err, res) {
         if (err) return callback(err);
 
-        if (res.length == 0) {
+        if (res.length === 0) {
             return callback("Article '" + url + "' does not exist");
         }
 
@@ -138,7 +138,7 @@ article.getByDate = function (limit, start, callback) {
 article.getByTaxonomy = function (taxonomyPath, limit, start, callback) {
     limit = (limit || RESULTS_PER_PAGE) + 1;
     taxonomyPath = taxonomyPath || [];
-    taxonomyPath = _.map(taxonomyPath, function (s) { return s.toLowerCase() });
+    taxonomyPath = _.map(taxonomyPath, function (s) { return s.toLowerCase(); });
     db.article.getByTaxonomy(taxonomyPath, limit, start, callbackLastKey(limit, callback));
 };
 
@@ -161,10 +161,10 @@ function callbackLastKey (limit, callback) {
                 lastDoc = docs.pop();
                 delete lastDoc.value;
             }
-            var docValues = _.map(docs, function (doc) { return doc.value });
+            var docValues = _.map(docs, function (doc) { return doc.value; });
             callback(null, docValues, lastDoc);
         }
-    }
+    };
 }
 
 function saveEditedDoc(id, doc, docCreatedDate, url, callback) {
@@ -206,14 +206,14 @@ function URLify(s, maxChars) {
 
 function getAvailableUrl(url, n, callback) {
     var new_url = url;
-    if(n != 0) {
+    if(n !== 0) {
         new_url = new_url + "-" + n;
     }
     db.view("articles/urls", {key: [new_url, "article"]}, function(err, res) {
         if(err) {
             callback(err, null);
         }
-        else if(res.rows.length == 0) {
+        else if(res.rows.length === 0) {
             callback(null, new_url);
         }
         else {

@@ -21,6 +21,7 @@ api.site = require('./site');
 api.poll = require('./poll');
 api.page = require('./page');
 api.article = require('./article');
+api.blog = require('./blog');
 
 
 api.init = function(callback) {
@@ -43,7 +44,7 @@ api.init = function(callback) {
 // can take one id, or an array of ids
 api.docsById = function (id, callback) {
     db.get(id, callback);
-}
+};
 
 /**
     Destroys then recreates the database the server is using. Only should be used by the environment maker!

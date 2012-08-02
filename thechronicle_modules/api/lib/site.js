@@ -375,6 +375,28 @@ site.getTowerviewPageContent = function(callback) {
     });
 };
 
+site.getBlogContent = function(blog, callback) {
+    // Get frontpage content for specific blog here.
+    api.blog.getByBlog(blog, function(err, docs) {
+        callback(err, docs);
+    });
+};
+
+site.getBlogPostContent = function(blog, url, callback) {
+    api.blog.getByBlogAndUrl(blog, url, function(err, doc) {
+        if (err) callback('not found');
+        else {
+            var displayDoc = modifyArticleForDisplay(doc);
+            async.parallel({
+                model: cache(site.getArticleContentUncached, 600, displayDoc)
+            }, function (err, results) {
+                popular.registerArticleView(doc, function(err,res){});
+                callback(err, displayDoc, results.model);
+            });
+        }
+    });
+};
+
 site.getSectionContent = function (params, callback) {
     async.parallel([
         function(cb) {

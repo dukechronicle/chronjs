@@ -90,6 +90,54 @@ site.towerview = function (req, res) {
     });
 };
 
+site.blog = function (req, res) {
+    var blog = req.params.blog;
+    api.site.getBlogContent(blog, function(err, docs) {
+        res.render('site/blogs/' + blog, {
+            locals: {
+                blog: blog,
+                docs: docs
+            }
+        });
+    });
+};
+
+site.blogPost = function (req, res) {
+    var blog = req.params.blog,
+        url = req.params.url;
+    api.site.getBlogPostContent(blog, url, function(err, doc, model) {
+        // Copied from site.article for now
+        if (err === 'not found')
+            next();
+        else if (err)
+            next(err);
+        else if ('/blogs/' + blog + '/' + url != doc.url)
+            res.redirect(doc.url);
+        else {
+            var locals = {
+                doc:doc,
+                pageTitle: doc.title,
+                isAdmin:isAdmin,
+                model:model,
+                parentPaths: model.parents,
+                section: doc.taxonomy[0],
+                article: true,
+                disqusData: {
+                    production: process.env.NODE_ENV == 'production',
+                    shortname: config.get('DISQUS_SHORTNAME'),
+                    id: doc.nid || doc._id,
+                    title: doc.title,
+                    url: doc.url
+                }
+            };
+
+            res.render('site/blogs/' + blog + '/post', {
+                locals: locals
+            });
+        }
+    });
+};
+
 site.section = function (req, res, next) {
     var sectionArray = req.params.toString().split('/');
     api.site.getSectionContent(sectionArray, function (err, section, docs, nextDoc, children, parents, popular) {

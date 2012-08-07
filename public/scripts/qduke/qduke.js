@@ -12,7 +12,7 @@ _gaq.push(['_trackPageview']);
 
 
 function doMagic() {
-    $('search input').focus();
+    $('#search input').focus();
     addListeners();
     loadDynamics();
     

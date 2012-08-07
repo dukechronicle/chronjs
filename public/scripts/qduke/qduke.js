@@ -9,8 +9,6 @@ _gaq.push(['_trackPageview']);
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
 
-
-
 function doMagic() {
     $('#search input').focus();
     addListeners();
@@ -54,7 +52,7 @@ function addListeners() {
         var url = $(this).attr("href");
         var text = $(this).attr("id") || $(this).text() || url
         if (e.currentTarget.host != window.location.host) {
-            _gat._getTrackerByName()._trackEvent("Outbound Links", e.currentTarget.host, text, 0);
+            _gat._getTrackerByName()._trackEvent("Outbound Links", text, url);
             if (e.metaKey || e.ctrlKey) {
                  var newtab = true;
             }

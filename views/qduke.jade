@@ -15,7 +15,7 @@ html
                     p#title
                         a(href='http://qduke.com') q
                             span.strong Duke
-                            !{".com"}
+                            | .com
                     p#subtitle presented by 
                         a#chrontitle(href='http://dukechronicle.com') The Chronicle
             section#info
@@ -123,25 +123,4 @@ html
                     a(href='http://dukechronicle.com/page/advertising') Advertising 
                     |
                     a(href='http://dukechronicle.com/page/contact') Contact 
-                script(type='text/javascript')
-                    // Weather
-                    // http://monkeecreate.github.com/jquery.simpleWeather/#docs
-                    $.simpleWeather({
-                            zipcode: '27708',
-                            unit: 'f',
-                            success: function(weather) {
-                                    html = "Now: ";
-                                    html += weather.currently + ", ";
-                                    html += weather.temp+'&deg; '+weather.units.temp;
-                                    $("#weather .element").html(html);
-                                    $("#weather .element").parent().css("background-image", "url("+weather.image+")").css("background-repeat", "no-repeat").css("background-position", "-5px -12px").css("background-size", "100%");  
-                            },
-                            error: function(error) {
-                                    $("#weather .element").html("Weather");
-                            }
-                    });
-                    // Date
-                    var myDate = new Date();
-                    var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
-                    var dayNames = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
-                    $("#time .element").html( dayNames[myDate.getDay()] + ', <br />' + monthNames[myDate.getMonth()] + " " + myDate.getDate() + ', ' + myDate.getFullYear() );
+                script(src='scripts/qduke/qduke.js', type='text/javascript')

@@ -86,18 +86,22 @@ html
                             div.outerContainer
                                 div.innerContainer
                                     div.element Duke
-                - each link, i in links
-                    - if (i==0) 
-                        | !{"<ul class='button_bar button_bar_tall default_lightblue clearfix'>"}
-                    - else if (i%5==0) 
-                        | !{"<ul class='button_bar default_lightblue clearfix'>"}
-                    li
-                        a(href=link.url) 
-                            div.outerContainer
-                                div.innerContainer
-                                    div.element #{link.title}
-                    - if ((i+1)%5==0) 
-                        | !{"</ul>"}
+                - var rows = Math.ceil(links.length/5)
+                ul.button_bar.button_bar_tall.default_lightblue.clearfix
+                    -for (var i = 0; i < 5; i++)
+                        li 
+                            a(href=links[i].url) 
+                                div.outerContainer
+                                    div.innerContainer
+                                        div.element #{links[i].title}
+                - for (var row = 1; row < rows; row++)
+                    ul.button_bar.default_lightblue.clearfix
+                        -for (var i = row*5; i < row*5+5; i++)
+                            li 
+                                a(href=links[i].url) 
+                                    div.outerContainer
+                                        div.innerContainer
+                                            div.element #{links[i].title}
             section#ads
                 - each ad, i in ads
                     - if ((i+5)%5==0) 

@@ -13,6 +13,7 @@ function doMagic() {
     $('#search input').focus();
     addListeners();
     loadDynamics();
+    loadArticles();
     
     // Uservoice
     var uvOptions = {};
@@ -44,6 +45,23 @@ function loadDynamics() {
     var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
     var dayNames = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
     $("#time .element").html( dayNames[myDate.getDay()] + ', <br />' + monthNames[myDate.getMonth()] + " " + myDate.getDate() + ', ' + myDate.getFullYear() );
+}
+
+function loadArticles() {
+    $(document).ready(function() {
+        $.ajax({
+            url: 'http://www.dukechronicle.com/api/all',
+            dataType: "jsonp",
+            cache: false,
+            timeout: 5000,
+            success: function(data) {
+                console.log(data);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('error ' + textStatus + " " + errorThrown);
+            }
+        });
+    });
 }
 
 // http://wptheming.com/2012/01/tracking-outbound-links-with-google-analytics/

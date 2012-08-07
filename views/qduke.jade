@@ -99,9 +99,7 @@ html
                         | !{"</ul>"}
             section#ads
                 - each ad, i in ads
-                    - if (i==0) 
-                        | !{"<ul class='button_bar default_lightgrey clearfix'>"}
-                    - else if (i%5==0) 
+                    - if ((i+5)%5==0) 
                         | !{"<ul class='button_bar default_lightgrey clearfix'>"}
                     li
                         a(href=ad.url) 

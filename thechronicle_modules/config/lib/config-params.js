@@ -519,48 +519,6 @@ var configParams = [
     {
         name: 'QDUKE_ADS',
         description: 'QDUKE ADLINKS',
-        defaultValue: [
-                {
-                    "title": "Research Studies",
-                    "url": "http://dcru.org/volunteers"
-                },
-                {
-                    "title": "Taxi",
-                    "url": "http://rdutaxiride.com"
-                },
-                {
-                    "title": "The Blue Zone",
-                    "url": "http://sports.chronicleblogs.com"
-                },
-                {
-                    "title": "Charlene's Safe Ride",
-                    "url": "http://www.charlenesaferide.com"
-                },
-                {
-                    "title": "GoLive w/ GoTriangle",
-                    "url": "http://live.gotriangle.org"
-                },
-                {
-                    "title": "Housing",
-                    "url": "http://www.chroniclehousing.com"
-                },
-                {
-                    "title": "Taxicab Service",
-                    "url": "http://www.rduairportcarservice.com"
-                },
-                {
-                    "title": "Custom Apparel",
-                    "url": "http://campusenterprisesllc.com"
-                },
-                {
-                    "title": "Carolina Theatre",
-                    "url": "http://www.carolinatheatre.org/duke"
-                },
-                {
-                    "title": "Chronicle Newsletter",
-                    "url": "http://www.dukechronicle.com/page/newsletter"
-                }
-            ],
         schema: {
           type: "array",
           items: {
@@ -575,88 +533,6 @@ var configParams = [
     {
         name: 'QDUKE_LINKS',
         description: 'QDUKE LINKS',
-        defaultValue: [
-                {
-                    "title": "Sakai",
-                    "url": "https://sakai.duke.edu/"
-                },
-                {
-                    "title": "ACES",
-                    "url": "http://aces.duke.edu/"
-                },
-                {
-                    "title": "Bus Tracking",
-                    "url": "http://www.duke.transloc.com/"
-                },
-                {
-                    "title": "ePrint",
-                    "url": "https://swat.oit.duke.edu/status/"
-                },
-                {
-                    "title": "Food Delivery",
-                    "url": "http://dining.duke.edu/where/delivery/index.php"
-                },
-                {
-                    "title": "YouTube",
-                    "url": "http://youtube.com/"
-                },
-                {
-                    "title": "ESPN",
-                    "url": "http://espn.com/"
-                },
-                {
-                    "title": "Campus Map",
-                    "url": "http://map.duke.edu/"
-                },
-                {
-                    "title": "Library",
-                    "url": "http://www.lib.duke.edu/"
-                },
-                {
-                    "title": "Dining Hours",
-                    "url": "http://dining.duke.edu/where/oncampus/index.php"
-                },
-                {
-                    "title": "Academic Calendar",
-                    "url": "http://registrar.duke.edu/registrar/studentpages/student/acacad2013.html"
-                },
-                {
-                    "title": "Short Term Illness",
-                    "url": "http://trinity.duke.edu/academic-requirements?p=policy-short-term-illness-notification"
-                },
-                {
-                    "title": "eRecruiting",
-                    "url": "http://duke.experience.com/er/security/login.jsp"
-                },
-                {
-                    "title": "DukeList",
-                    "url": "http://dukelist.duke.edu/"
-                },
-                {
-                    "title": "DukeCard",
-                    "url": "https://dco3.auxserv.duke.edu/olco"
-                },
-                {
-                    "title": "CourseRank",
-                    "url": "https://duke.courserank.com/CourseRank/main"
-                },
-                {
-                    "title": "RateMyProfessors",
-                    "url": "http://ratemyprofessors.com/SelectTeacher.jsp?sid=1350"
-                },
-                {
-                    "title": "Schedulator",
-                    "url": "http://www.dukeschedulator.com/"
-                },
-                {
-                    "title": "+",
-                    "url": "http://dukechronicle.com"
-                },
-                {
-                    "title": "+",
-                    "url": "http://dukechronicle.com"
-                }
-            ],
         schema: {
           type: "array",
           items: {

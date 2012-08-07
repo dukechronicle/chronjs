@@ -47,21 +47,53 @@ function loadDynamics() {
     $("#time .element").html( dayNames[myDate.getDay()] + ', <br />' + monthNames[myDate.getMonth()] + " " + myDate.getDate() + ', ' + myDate.getFullYear() );
 }
 
+var articles;
+var articleIndex = -1;
+var timer;
+
 function loadArticles() {
     $(document).ready(function() {
         $.ajax({
             url: 'http://www.dukechronicle.com/api/all',
             dataType: "jsonp",
             cache: false,
-            timeout: 5000,
+            timeout: 10000,
             success: function(data) {
-                console.log(data);
+                articles = data.docs
+                next()
+                timer = setInterval(function(){next()},4000);
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                alert('error ' + textStatus + " " + errorThrown);
+                $("#newsbox .element").html("Error: Could not load articles.")
             }
         });
     });
+}
+
+function next() {
+    if (++articleIndex >= articles.length) {
+        articleIndex = 0
+    }
+    showArticle(articleIndex)
+}
+
+function nextArticle() {
+    clearInterval(timer)
+    next()
+}
+
+function prevArticle() {
+    clearInterval(timer)
+    if (--articleIndex < 0) {
+        articleIndex = articles.length - 1
+    }
+    showArticle(articleIndex)
+}
+
+function showArticle(index) {
+    $("#newsbox .element").html(articles[index].title)
+    urls = articles[index].urls
+    $("#newsbox a").attr("href", "http://dukechronicle.com/article/" + urls[urls.length-1])
 }
 
 // http://wptheming.com/2012/01/tracking-outbound-links-with-google-analytics/

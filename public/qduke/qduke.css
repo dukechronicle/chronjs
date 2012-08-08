@@ -21,11 +21,22 @@ input, button, textarea, select {*font-size: 100%;}
 /* Begin qDuke specific stuff. */
 .strong {font-weight: 700;}
 
-#shell {
+body {
     color: #001950;
+	font-family: 'Karla', Arial, Helvetica, sans-serif;
+}
+
+div#promobar {
+	width: 100%;
+	height: 45px;
+	text-align: center;
+	line-height: 39px;
+	font-size: 1.1em;
+}
+
+#shell {
     width: 890px;
     margin: 0px auto;
-    font-family: 'Karla', Arial, Helvetica, sans-serif;
 }
 
 #logo {
@@ -49,7 +60,8 @@ section {
 
 /* Button gradients, shadows, and text colors */
 ul.button_bar li.button_lightblue .outerContainer, 
-.default_lightblue li .outerContainer {
+.default_lightblue li .outerContainer, 
+div#promobar {
 	color: #001a57;
     text-shadow: #aaaaaa 0.1em 0.1em 0.2em;
 	

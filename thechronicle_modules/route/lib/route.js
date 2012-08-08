@@ -109,6 +109,7 @@ exports.siteInit = function (app) {
         app.get('/duplicates', api.site.checkAdmin, admin.duplicates);
         app.get('/author', api.site.checkAdmin, admin.author);
         app.get('/system/memory', api.site.checkAdmin, admin.memory);
+        app.get('/pushqduke', api.site.checkAdmin, admin.pushqduke);
     });
 
     app.namespace('/admin/image', function () {

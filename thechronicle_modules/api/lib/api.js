@@ -21,6 +21,7 @@ api.site = require('./site');
 api.poll = require('./poll');
 api.page = require('./page');
 api.article = require('./article');
+api.qduke = require('./qduke');
 
 
 api.init = function(callback) {

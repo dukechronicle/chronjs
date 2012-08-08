@@ -8,6 +8,12 @@ var util = require('../../util');
 
 admin.image = adminApi.image;
 
+admin.pushqduke = function (req, res, next) {
+    api.qduke.buildAndPush(function(err) {
+        console.log(err)
+    });
+}
+
 admin.duplicates = function (req, res, next) {
     var db = api.getDatabaseName();
     var host = api.getDatabaseHost();

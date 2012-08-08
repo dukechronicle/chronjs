@@ -109,7 +109,8 @@ exports.siteInit = function (app) {
         app.get('/duplicates', api.site.checkAdmin, admin.duplicates);
         app.get('/author', api.site.checkAdmin, admin.author);
         app.get('/system/memory', api.site.checkAdmin, admin.memory);
-        app.get('/pushqduke', api.site.checkAdmin, admin.pushqduke);
+        app.get('/qduke/push', api.site.checkAdmin, admin.qdukepush);
+        app.get('/qduke/preview', api.site.checkAdmin, admin.qdukepreview);
     });
 
     app.namespace('/admin/image', function () {
@@ -140,8 +141,6 @@ exports.siteInit = function (app) {
     app.get('/sitemaps/:query', function (req, res, next) {
         res.redirect(config.get("CLOUDFRONT_DISTRIBUTION") + req.url);
     });
-
-    app.get('/qduketest', site.qduke);
 
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);

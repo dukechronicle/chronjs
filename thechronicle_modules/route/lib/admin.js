@@ -8,9 +8,23 @@ var util = require('../../util');
 
 admin.image = adminApi.image;
 
-admin.pushqduke = function (req, res, next) {
+admin.qdukepush = function (req, res, next) {
     api.qduke.buildAndPush(function(err) {
-        console.log(err)
+        if (err) {
+            res.send("Something went wrong! Tell Glenn")
+        } else {
+            res.redirect("http://alpha.qduke.com")
+        }
+    });
+}
+
+admin.qdukepreview = function (req, res) {
+    res.render('qduke', {
+        locals: {
+            links: config.get('QDUKE_LINKS'),
+            ads: config.get('QDUKE_ADS'),
+            assetPath: "/qduke/"
+        }
     });
 }
 

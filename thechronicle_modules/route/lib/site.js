@@ -9,15 +9,6 @@ var fs = require('fs');
 var md = require('discount');
 var _ = require('underscore');
 
-site.qduke = function (req, res) {
-    res.render('qduke', {
-        locals: {
-            links: config.get('QDUKE_LINKS'),
-            ads: config.get('QDUKE_ADS')
-        }
-    })
-}
-
 site.mobile = function (req, res, next) {
     res.render('mobile');
 };

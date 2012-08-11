@@ -1,6 +1,7 @@
 extends ../layout
 
 block content
+    include ../../mixins/form-helpers
     .container
         h1 Editing a Document
         form.well(action='', method='POST')
@@ -9,13 +10,7 @@ block content
             input.span4#title(type='text', name='doc[title]', value=doc.title)
             label(for='subhead') Subhead
             input.span4#subhead(type='text', name='doc[subhead]', value=doc.subhead)
-            label(for='section0') Section
-            - each level, i in taxonomy
-                select.span3(name='doc[taxonomy][#{i}]', id='section#{i}')
-                    option(value='') --
-                    - each section in level
-                        - var selected = (doc.taxonomy[i] == section.name) ? 'selected' : undefined;
-                        option(value=section.name, class=section.parent, selected=selected)= section.name
+            mixin taxonomySelect(taxonomy, doc.taxonomy)
             label(for='author') Authors
             input.span4#author(type='text', name='doc[authors]', value=doc.authors.join(', '))
             label(for='teaser') Teaser

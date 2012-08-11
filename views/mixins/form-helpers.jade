@@ -1,0 +1,8 @@
+mixin taxonomySelect(levels, taxonomy)
+  label(for='section0') Section
+  - each level, i in levels
+    select.span3(name='doc[taxonomy][#{i}]', id='section#{i}')
+      option(value='') --
+        - each section in level
+          - var selected = (taxonomy && taxonomy[i] == section.name) ? 'selected' : undefined;
+            option(value=section.name, class=section.parent, selected=selected)= section.name

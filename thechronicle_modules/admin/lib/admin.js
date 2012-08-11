@@ -129,7 +129,7 @@ admin.addPoll = function (doc, callback) {
     else {
         var fields = {
             title:doc.title,
-            taxonomy:JSON.parse(doc.taxonomy),
+            taxonomy:doc.taxonomy,
             answers: doc.answers
         };
 
@@ -152,7 +152,7 @@ admin.editPoll = function (id, doc, callback) {
 
         var fields = {
             title:doc.title,
-            taxonomy:JSON.parse(doc.taxonomy),
+            taxonomy:doc.taxonomy,
             answers: answers
         };
 

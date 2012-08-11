@@ -166,38 +166,32 @@ admin.editArticleData = function (req, res, next) {
 };
 
 admin.addPoll = function(req, res, next) {
-	api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
-        res.render('admin/poll/new', {
-            locals:{
-                groups:[],
-                taxonomy:taxonomy
-            }
-        });
+    res.render('admin/poll/new', {
+        locals:{
+            groups:[],
+            taxonomy:api.taxonomy.levels(),
+        }
     });
 };
 
 admin.managePoll = function(req, res, next) {
 	api.poll.getByDate(null, function(err, docs) {
-		api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
-			res.render('admin/poll', {
-				locals : {
-					docs : docs
-				}
-			});
+		res.render('admin/poll', {
+			locals : {
+				docs : docs
+			}
 		});
 	});
 };
 
 admin.editPoll = function(req, res, next) {
 	api.poll.getPoll(req.params.id, function(err, doc) {
-		api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
-			res.render('admin/poll/edit', {
-				locals : {
-					taxonomy : taxonomy,
-                    flash: req.flash('info').pop(),
-                    doc: doc
-				}
-			});
+		res.render('admin/poll/edit', {
+			locals : {
+				taxonomy: api.taxonomy.levels(),
+                flash: req.flash('info').pop(),
+                doc: doc
+			}
 		});
 	});
 };

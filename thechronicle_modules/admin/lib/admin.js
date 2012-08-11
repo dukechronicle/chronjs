@@ -115,7 +115,7 @@ admin.editArticle = function (doc, callback) {
             subhead :doc.subhead,
             teaser  :doc.teaser,
             authors :doc.authors.split(", "),
-            taxonomy:JSON.parse(doc.taxonomy)
+            taxonomy:doc.taxonomy,
         };
 
         api.article.edit(id, fields, callback);

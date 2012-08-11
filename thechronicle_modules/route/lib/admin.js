@@ -147,18 +147,13 @@ admin.addArticleData = function (req, res, next) {
 admin.editArticle = function (req, res, next) {
     var url = req.params.url;
     api.article.getByUrl(url, function (err, doc) {
-        if (err) next(err);
-        else api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
-            if (doc.authors)
-                doc.authors = doc.authors.join(", ");
-
-            res.render('admin/article/edit', {
-                locals:{
-                    doc:doc,
-                    groups:[],
-                    taxonomy:taxonomy
-                }
-            });
+        if (err) return next(err);
+        res.render('admin/article/edit', {
+            locals:{
+                doc:doc,
+                groups:[],
+                taxonomy:api.taxonomy.levels(),
+            }
         });
     });
 };

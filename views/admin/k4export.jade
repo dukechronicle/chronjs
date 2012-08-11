@@ -1,6 +1,7 @@
 extends layout
 
 block content
+  include ../mixins/form-helpers
   #k4export.container
     h1 K4 Exporter
     form.well(action='/admin/k4export', method='post', enctype='multipart/form-data')
@@ -16,23 +17,13 @@ block content
         p #{article}
     - if (succeeded && succeeded.length)
       h2 The followed articles were uploaded successfully
-      - each article in succeeded
-        form.well.form-inline.article-form(data-article=JSON.stringify(article))
-          h3.title #{article.title}
-          select.taxonomy
-            - if (article.taxonomy && article.taxonomy[0] in taxonomy)
-              - each key, value in taxonomy[article.taxonomy[0]]
-                - if (JSON.stringify(article.taxonomy) == value)
-                    option(value=value, selected='selected') #{key}
-                - else
-                    option(value=value) #{key}
-            - else
-              option(value='') Select a section
-              - each subsections, section in taxonomy
-                - each key, value in subsections
-                    option(value=value) #{key}
+      - each article, i in succeeded
+        form.well.article-form(data-article=JSON.stringify(article))
+          h3.title= article.title
           select.image
             option(value='') Select an image
             - each image in imageData
               option(value=JSON.stringify(image), title=image.thumbUrl) #{image.displayName}
+          &nbsp;
+          mixin taxonomySelect(taxonomy, article.taxonomy, i)
           input.btn(type="submit") Submit

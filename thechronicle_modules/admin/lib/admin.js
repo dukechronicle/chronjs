@@ -74,11 +74,6 @@ admin.k4export = function (filepath, callback) {
                     callback(err, toReturn);
                 });
             });
-        },
-        taxonomy:function (callback) {
-            api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
-                callback(err, taxonomy);
-            });
         }
     }, callback);
 };

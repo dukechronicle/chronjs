@@ -7,6 +7,7 @@ block content
         form.well(action='/admin/poll', method='POST')
             label(for='title') Title
             input.span4#title(type='text', name='doc[title]')
+            label(for='section0') Section
             mixin taxonomySelect(taxonomy)
             label Answers
             ol

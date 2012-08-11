@@ -95,7 +95,7 @@ admin.addArticle = function (doc, callback) {
             subhead :doc.subhead,
             teaser  :doc.teaser,
             type    :doc.type,
-            taxonomy:JSON.parse(doc.taxonomy)
+            taxonomy:doc.taxonomy,
         };
 
         api.article.add(article, callback);

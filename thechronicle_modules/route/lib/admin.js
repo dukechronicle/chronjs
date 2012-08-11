@@ -97,7 +97,7 @@ admin.manage = function (req, res, next) {
                 docs: docs,
                 next: nextKey,
                 hasPrevious: start != null,
-                sections: config.get("TAXONOMY_MAIN_SECTIONS"),
+                sections: api.taxonomy.mainSections(),
                 db_url: dbUrl
             }
         });
@@ -237,7 +237,7 @@ admin.layout = function (req, res, next) {
                 locals:{
                     page: group,
                     groups: layoutConfig[group].groups,
-                    mainSections: config.get("TAXONOMY_MAIN_SECTIONS"),
+                    mainSections: api.taxonomy.mainSections(),
                     sectionDocs: results.sectionDocs,
                     groupDocs: results.groupDocs,
                     nameSpace: layoutConfig[group].namespace

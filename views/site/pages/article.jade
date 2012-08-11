@@ -8,7 +8,7 @@ block content
     #article
         nav.subnav.clearfix
             - each parent in parentPaths
-                a.hover(href='/section'+parent.path+'/'+parent.name)
+                a.hover(href='/section/'+parent.path)
                     h2= parent.name
 
         article.clearfix

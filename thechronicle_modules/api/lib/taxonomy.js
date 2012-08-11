@@ -49,7 +49,7 @@ taxonomy.children = function (tax) {
 };
 
 /**
- * Get the parent taxonomy nodes.
+ * Get the parent taxonomy nodes and the given node.
  *
  * @param {Array.<string>} taxonomy The taxonomy array.
  * @return {Array.<Object>} An array of parent taxonomy nodes in order.
@@ -58,7 +58,6 @@ taxonomy.parents = function (tax) {
     var node = getTaxonomyNode(tax);
     if (node) {
         tax = node.taxonomy;
-        tax.pop();
         var parents = [];
         while (tax.length > 0) {
             parents.unshift({

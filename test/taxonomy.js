@@ -62,6 +62,11 @@ describe('api.taxonomy', function () {
                         taxonomy: ['Sports', 'Basketball'],
                         path: 'sports/basketball',
                     },
+                    {
+                        name: 'Men',
+                        taxonomy: ['Sports', 'Basketball', 'Men'],
+                        path: 'sports/basketball/men',
+                    },
                 ]);
         });
     });

@@ -4,7 +4,8 @@ require.config({
 
 require(['admin/crop','admin/delete-article','admin/html5upload',
          'admin/delete-image','admin/json-to-form','admin/k4export',
-         'admin/layout','admin/newsletter','admin/nicedate','admin/form-field'],
+         'admin/layout','admin/newsletter','admin/nicedate','admin/form-field',
+         'admin/taxonomy'],
         function () {
             var args = Array.prototype.slice.call(arguments);
             $(function () {

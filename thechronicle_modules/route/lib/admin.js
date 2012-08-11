@@ -129,13 +129,11 @@ admin.k4exportData = function (req, res, next) {
 };
 
 admin.addArticle = function (req, res, next) {
-    api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
-        res.render('admin/article/new', {
-            locals: {
-                groups: [],
-                taxonomy:taxonomy
-            }
-        });
+    res.render('admin/article/new', {
+        locals: {
+            groups: [],
+            taxonomy: api.taxonomy.levels(),
+        }
     });
 };
 

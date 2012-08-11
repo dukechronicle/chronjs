@@ -437,7 +437,7 @@ site.getSearchContent = function (wordsQuery, query, callback) {
         if (err) callback(err);
         else {
             docs = modifyArticlesForDisplay(docs);
-            var validSections = config.get("TAXONOMY_MAIN_SECTIONS");
+            var validSections = api.taxonomy.mainSections();
             // filter out all sections other than main sections
             Object.keys(facets.Section).forEach(function(key) {
                 if (!_.include(validSections, key))

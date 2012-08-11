@@ -3,6 +3,7 @@ var admin = require('./admin');
 var config = require('../../config');
 var siteApi = require('./api');
 var log = require('../../log');
+var page = require('./page');
 var site = require('./site');
 var xhrproxy = require('./xhrproxy');
 
@@ -36,6 +37,8 @@ exports.siteInit = function (app) {
         app.put('/article/:id', api.site.checkAdmin, siteApi.updateArticle);
         app.del('/article/:id', api.site.checkAdmin, siteApi.deleteArticle);
     });
+
+    app.get('*', page.show);
 
     app.get('/', site.frontpage);
     app.get('/news', site.news);

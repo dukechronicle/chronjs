@@ -504,24 +504,7 @@ site.getArticleContentUncached = function(doc, callback) {
 };
 
 site.getPageContent = function(url, callback) {
-    api.page.getByUrl(url, function(err, doc) {
-        if(err)
-            callback(err);
-        else {
-            doc.path = "/page/" + url;
-            doc.fullUrl = "http://" + config.get('DOMAIN_NAME') + "/page/" + url;
-            var model = {
-                adFullRectangle : {
-                    "title" : "Advertisement",
-                    "imageUrl" : "/images/ads/monster.png",
-                    "url" : "http://google.com",
-                    "width" : "300px",
-                    "height" : "250px"
-                }
-            };
-            callback(null, doc, model);
-        }
-    });
+    cache(api.page.getByUrl, 3600, url)(callback);
 };
 
 function modifyArticlesForDisplay(docs) {

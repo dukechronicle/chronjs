@@ -1,4 +1,4 @@
-var util = require('../../util');
+var util = require('util');
 var winston = require('winston');
 var Transport = winston.transports.Transport;
 var Console = winston.transports.Console;
@@ -8,7 +8,7 @@ var CustomConsole = exports.CustomConsole = function (options) {
   Console.call(this, options);
 
   options = options || {};
-  
+
   this.name      = 'custom_console';
   this.msgStringify = options.msgStringify || function (obj) {
       return obj;

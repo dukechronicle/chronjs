@@ -74,11 +74,6 @@ admin.k4export = function (filepath, callback) {
                     callback(err, toReturn);
                 });
             });
-        },
-        taxonomy:function (callback) {
-            api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
-                callback(err, taxonomy);
-            });
         }
     }, callback);
 };
@@ -95,7 +90,7 @@ admin.addArticle = function (doc, callback) {
             subhead :doc.subhead,
             teaser  :doc.teaser,
             type    :doc.type,
-            taxonomy:JSON.parse(doc.taxonomy)
+            taxonomy:doc.taxonomy,
         };
 
         api.article.add(article, callback);
@@ -115,7 +110,7 @@ admin.editArticle = function (doc, callback) {
             subhead :doc.subhead,
             teaser  :doc.teaser,
             authors :doc.authors.split(", "),
-            taxonomy:JSON.parse(doc.taxonomy)
+            taxonomy:doc.taxonomy,
         };
 
         api.article.edit(id, fields, callback);
@@ -129,7 +124,7 @@ admin.addPoll = function (doc, callback) {
     else {
         var fields = {
             title:doc.title,
-            taxonomy:JSON.parse(doc.taxonomy),
+            taxonomy:doc.taxonomy,
             answers: doc.answers
         };
 
@@ -152,7 +147,7 @@ admin.editPoll = function (id, doc, callback) {
 
         var fields = {
             title:doc.title,
-            taxonomy:JSON.parse(doc.taxonomy),
+            taxonomy:doc.taxonomy,
             answers: answers
         };
 

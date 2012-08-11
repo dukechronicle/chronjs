@@ -4,9 +4,9 @@ var http = require('http');
 var urlModule = require('url');
 var _ = require('underscore');
 
-var log = require('../../log');
+var log = require('../../log/lib/log');
 
-var util = _.extend(exports, require('util'));
+var util = module.exports = require('util');
 
 
 util.unixTimestamp = function (date) {

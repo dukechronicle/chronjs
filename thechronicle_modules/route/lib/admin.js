@@ -97,13 +97,12 @@ admin.manage = function (req, res, next) {
                 docs: docs,
                 next: nextKey,
                 hasPrevious: start != null,
-                sections: config.get("TAXONOMY_MAIN_SECTIONS"),
+                sections: api.taxonomy.mainSections(),
                 db_url: dbUrl
             }
         });
     });
 };
-
 
 admin.k4export = function (req, res, next) {
     res.render('admin/k4export', {
@@ -121,7 +120,7 @@ admin.k4exportData = function (req, res, next) {
             locals:{
                 failed: results.k4.failed,
                 succeeded: results.k4.success,
-                taxonomy: results.taxonomy,
+                taxonomy: api.taxonomy.levels(),
                 imageData: results.images
             }
         });
@@ -129,13 +128,11 @@ admin.k4exportData = function (req, res, next) {
 };
 
 admin.addArticle = function (req, res, next) {
-    api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
-        res.render('admin/article/new', {
-            locals: {
-                groups: [],
-                taxonomy:taxonomy
-            }
-        });
+    res.render('admin/article/new', {
+        locals: {
+            groups: [],
+            taxonomy: api.taxonomy.levels(),
+        }
     });
 };
 
@@ -149,18 +146,13 @@ admin.addArticleData = function (req, res, next) {
 admin.editArticle = function (req, res, next) {
     var url = req.params.url;
     api.article.getByUrl(url, function (err, doc) {
-        if (err) next(err);
-        else api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
-            if (doc.authors)
-                doc.authors = doc.authors.join(", ");
-
-            res.render('admin/article/edit', {
-                locals:{
-                    doc:doc,
-                    groups:[],
-                    taxonomy:taxonomy
-                }
-            });
+        if (err) return next(err);
+        res.render('admin/article/edit', {
+            locals:{
+                doc:doc,
+                groups:[],
+                taxonomy:api.taxonomy.levels(),
+            }
         });
     });
 };
@@ -173,38 +165,32 @@ admin.editArticleData = function (req, res, next) {
 };
 
 admin.addPoll = function(req, res, next) {
-	api.taxonomy.getTaxonomyListing(function (err, taxonomy) {
-        res.render('admin/poll/new', {
-            locals:{
-                groups:[],
-                taxonomy:taxonomy
-            }
-        });
+    res.render('admin/poll/new', {
+        locals:{
+            groups:[],
+            taxonomy:api.taxonomy.levels(),
+        }
     });
 };
 
 admin.managePoll = function(req, res, next) {
 	api.poll.getByDate(null, function(err, docs) {
-		api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
-			res.render('admin/poll', {
-				locals : {
-					docs : docs
-				}
-			});
+		res.render('admin/poll', {
+			locals : {
+				docs : docs
+			}
 		});
 	});
 };
 
 admin.editPoll = function(req, res, next) {
 	api.poll.getPoll(req.params.id, function(err, doc) {
-		api.taxonomy.getTaxonomyListing(function(err, taxonomy) {
-			res.render('admin/poll/edit', {
-				locals : {
-					taxonomy : taxonomy,
-                    flash: req.flash('info').pop(),
-                    doc: doc
-				}
-			});
+		res.render('admin/poll/edit', {
+			locals : {
+				taxonomy: api.taxonomy.levels(),
+                flash: req.flash('info').pop(),
+                doc: doc
+			}
 		});
 	});
 };
@@ -237,7 +223,7 @@ admin.layout = function (req, res, next) {
                 locals:{
                     page: group,
                     groups: layoutConfig[group].groups,
-                    mainSections: config.get("TAXONOMY_MAIN_SECTIONS"),
+                    mainSections: api.taxonomy.mainSections(),
                     sectionDocs: results.sectionDocs,
                     groupDocs: results.groupDocs,
                     nameSpace: layoutConfig[group].namespace

@@ -8,8 +8,8 @@ var sitemap = require('../../sitemap');
 var initialized = false;
 
 
-exports.init = function () {  
-    if (!initialized) {
+exports.init = function () {
+    if (!initialized && process.env.NODE_ENV === 'production') {
         initialized = true;
 
         // In a multi-instance setup, it may be possible that the config was

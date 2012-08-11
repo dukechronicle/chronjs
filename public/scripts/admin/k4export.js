@@ -1,6 +1,6 @@
 define(['jquery', 'Article', 'libs/jquery.dd'], function ($, Article) {
 
-    return { 
+    return {
 
         "#k4export": function () {
 
@@ -36,11 +36,10 @@ define(['jquery', 'Article', 'libs/jquery.dd'], function ($, Article) {
     function editDocument($form, callback) {
         var article = new Article($form.data("article"));
 
-        article.set({
-            taxonomy: JSON.parse($form.children(".taxonomy").val())
-        });
-        if (!article.get('taxonomy'))
+        article.set({taxonomy: getTaxonomy($form)});
+        if (!article.get('taxonomy')) {
             return callback("Must select a section for article");
+        }
 
         try {
             var imageData = JSON.parse($form.find(".image").val());
@@ -49,6 +48,8 @@ define(['jquery', 'Article', 'libs/jquery.dd'], function ($, Article) {
                                      imageData.imageVersionTypes);
         }
         catch (e) {}
+
+        console.log(article.toJSON());
 
         article.save(null, {
             url: '/api/article',
@@ -59,6 +60,12 @@ define(['jquery', 'Article', 'libs/jquery.dd'], function ($, Article) {
                 callback(status.responseText);
             }
         });
+    }
+
+    function getTaxonomy($form) {
+        return $form.children('.taxonomy').map(function () {
+            return $(this).val() || undefined;
+        }).get();
     }
 
 });

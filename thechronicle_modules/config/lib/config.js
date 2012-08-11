@@ -19,7 +19,7 @@ var PROFILE_NAME_KEY = "profile_name";
 var REVISION_KEY = "rev";
 
 var configProfile = null;
-var configDB = null; 
+var configDB = null;
 var documentExistsInDB = false;
 var configRevision = null;
 
@@ -38,14 +38,14 @@ config.init = function(func, callback)
 
 
     afterConfigChangeFunction = func;
-    
+
     log.info("Connecting to config database '" + PROFILE_NAME + "'");
     configDB = db.connect(COUCHDB_CONFIG_HOST,
                           PROFILE_NAME + CONFIG_DB_NAME_SUFFIX);
 
     configDB.exists(function (err, exists) {
         if (err) return callback(error);
-       
+
         // initialize database if it doesn't already exist
         if (!exists) {
             log.notice("Database for config profile '" + PROFILE_NAME +
@@ -57,13 +57,13 @@ config.init = function(func, callback)
         }
         else {
             getConfig(callback);
-        }  
+        }
     });
 }
 
 function getConfig(callback) {
     configDB.get(DB_CONFIG_DOCUMENT_NAME, function(err, data) {
-        // err if the document doesn't exist yet 
+        // err if the document doesn't exist yet
         if(!err) {
             documentExistsInDB = true;
             configProfile = data[DOCUMENT_CONFIG_KEY];

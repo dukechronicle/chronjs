@@ -300,15 +300,12 @@ function generateSentence(numWords) {
 
 function generateTaxonomy() {
     var taxonomy = [];
-    var tree = api.taxonomy.getTaxonomyTree();
-    
-    while (true) {
-        var keys = Object.keys(tree);
-        if (keys.length == 0)
-            break;
-        var section = keys[getRandomNumber(keys.length)];
-        taxonomy.push(section);
-        tree = tree[section];
+    var tree = config.get('TAXONOMY');
+
+    while (tree.length) {
+        var section = tree[getRandomNumber(tree.length)];
+        taxonomy.push(section.name);
+        tree = section.children;
     }
 
     return taxonomy;

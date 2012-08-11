@@ -129,16 +129,29 @@ taxonomy.getHierarchyTree = function (callback) {
     });
 };
 
-taxonomy.getTaxonomyListing = function (callback) {
-    var tree = taxonomy.getTaxonomyTree();
-    var sections = {};
-    _.forEach(tree, function (value, key) {
-        var listing = {}, path = [key];
-        listing[JSON.stringify(path)] = key;
-        getTaxonomyListingHelper(value, listing, path, 1);
-        sections[key] = listing;
-    });
-    callback(null, sections);
+/**
+ * Get all taxonomy sections by level. Format is an array of levels, where each
+ * level is an array of taxonomy objects with a name and parent name.
+ *
+ * @return {Array.<Array.<{name: string, parent: string}>>} The levels array.
+ */
+taxonomy.levels = function (callback) {
+    var current = config.get('TAXONOMY');
+    var levels = [];
+    while (current.length) {
+        var next = [];
+        var level = [];
+        _.each(current, function (section) {
+            level.push(_.pick(section, 'name', 'parent'));
+            _.each(section.children, function (child) {
+                child.parent = section.name;
+            });
+            Array.prototype.push.apply(next, section.children);
+        });
+        levels.push(level);
+        current = next;
+    };
+    return levels;
 };
 
 function getTaxonomyNode(tax) {
@@ -161,16 +174,3 @@ function getTaxonomyNode(tax) {
         path: taxonomy.path(fullTaxonomy),
     });
 };
-
-function getTaxonomyListingHelper(tree, listing, path, depth) {
-    _.forEach(tree, function (value, key) {
-        var dashes = "";
-        for (var i = 0; i < depth; i++)
-            dashes += "-";
-        path.push(key);
-        listing[JSON.stringify(path)] = dashes + "  " + key;
-        getTaxonomyListingHelper(value, listing, path, depth + 1);
-        path.pop();
-    });
-    return listing;
-}

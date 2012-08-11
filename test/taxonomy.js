@@ -81,7 +81,7 @@ describe('api.taxonomy', function () {
         });
     });
 
-    describe('#getMainSections()', function () {
+    describe('#mainSections()', function () {
         it('should return names of top level sections', function () {
             var sections = ['News', 'Sports', 'Opinion', 'Recess', 'Towerview'];
             api.taxonomy.mainSections().should.deep.equal(sections);

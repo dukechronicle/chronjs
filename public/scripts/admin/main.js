@@ -13,7 +13,7 @@ require(['admin/crop','admin/delete-article','admin/html5upload',
                     var functions = args[i];
                     for (var selector in functions)
                         if (!selector || $(selector).length > 0)
-                            functions[selector]();
+                            functions[selector]($(selector));
                 }
             });
         });

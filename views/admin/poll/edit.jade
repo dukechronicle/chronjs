@@ -9,6 +9,7 @@ block content
         form(action='', method='POST')
             label(for='title') Title
             input.span4#title(type='text', name='doc[title]', value=doc.title)
+            label(for='section0') Section
             mixin taxonomySelect(taxonomy, doc.taxonomy)
             label Answers
             ol

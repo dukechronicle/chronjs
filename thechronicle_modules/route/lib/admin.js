@@ -104,7 +104,6 @@ admin.manage = function (req, res, next) {
     });
 };
 
-
 admin.k4export = function (req, res, next) {
     res.render('admin/k4export', {
         locals:{
@@ -121,7 +120,7 @@ admin.k4exportData = function (req, res, next) {
             locals:{
                 failed: results.k4.failed,
                 succeeded: results.k4.success,
-                taxonomy: results.taxonomy,
+                taxonomy: api.taxonomy.levels(),
                 imageData: results.images
             }
         });

@@ -10,6 +10,7 @@ block content
             input.span4#title(type='text', name='doc[title]', value=doc.title)
             label(for='subhead') Subhead
             input.span4#subhead(type='text', name='doc[subhead]', value=doc.subhead)
+            label(for='section0') Section
             mixin taxonomySelect(taxonomy, doc.taxonomy)
             label(for='author') Authors
             input.span4#author(type='text', name='doc[authors]', value=doc.authors.join(', '))

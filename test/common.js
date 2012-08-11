@@ -1,3 +1,7 @@
+var async = require('async');
+var config = require('../thechronicle_modules/config');
+var api = require('../thechronicle_modules/api');
+
 global.sinon = require('sinon');
 global.chai = require('chai');
 global.should = require('chai').should();

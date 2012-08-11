@@ -310,6 +310,20 @@ site.rssSection = function (req, res, next) {
     });
 };
 
+site.page = function (req, res, next) {
+    log.debug(req.params);
+    api.site.getPageContent(req.params, function (err, page) {
+        if (err) return next(err);
+        else if (!page) next();
+        else {
+            res.render('site/pages/' + page.template, {
+                pageTitle: page.title,
+                locals: page.model,
+            });
+        }
+    });
+};
+
 site.staticPage = function (req, res, next) {
     var url = _.last(req.route.path.split('/'));
     var filename = 'site/pages/' + url;

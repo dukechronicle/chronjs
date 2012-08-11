@@ -1,7 +1,7 @@
 define(['jquery', 'libs/jquery-ui'], function ($) {
 
     return {
-        
+
         ".delete-image": function () {
 
             $(".delete-image").click(function(event) {
@@ -11,7 +11,7 @@ define(['jquery', 'libs/jquery-ui'], function ($) {
                 var params = {};
                 params.id = anchor.attr('data-id');
                 params.orig = anchor.attr('data-orig');
-                
+
                 $.getJSON('/admin/image/articles', params, function(data) {
                     var msg = '<div id="dialog-confirm">This image will be removed from the following articles:<ul>';
                     $.each(data, function(index, value) {

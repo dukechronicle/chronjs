@@ -7,13 +7,14 @@ var log = require("../../log");
 page.getByUrl = function (url, callback) {
     db.page.getByUrl(url, function (err, res) {
         if (err) callback(err);
-        else if (res.length == 0) callback("Node not found: " + url);
-        else api.docsById(res[0].id, callback);
+        else if (res.length == 0) callback();
+        else if (res.length == 1) callback(null, res[0].value);
+        else callback('Multiple pages found with url: ' + url, res);
     });
 };
 
 page.add = function (data, callback) {
-    if (! ("node_title" in data)) callback("Title for page required");
+    if (!data.url) callback("URL for page required");
 
     data.type = "page";
 

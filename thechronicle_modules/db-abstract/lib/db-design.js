@@ -2,7 +2,7 @@ exports.doc = {
 
     articles: {
         language: "javascript",
-        
+
         views: {
 
             /*
@@ -166,7 +166,7 @@ exports.doc = {
 
     authors: {
         language: "javascript",
-        
+
         views: {
             author_info: {
                 map: function (doc) {
@@ -201,7 +201,7 @@ exports.doc = {
 
     images: {
         language: "javascript",
-        
+
         views: {
 
             originals: {
@@ -242,7 +242,7 @@ exports.doc = {
 
     polls: {
         language: "javascript",
-        
+
         views: {
 
             taxonomy: {
@@ -276,6 +276,34 @@ exports.doc = {
                 }
             }
         }
-    }
+    },
+
+    pages: {
+        language: 'javascript',
+
+        views: {
+
+            all: {
+                map: function (doc) {
+                    if (doc.type === 'page') {
+                        emit(doc._id, doc);
+                    }
+                }
+            },
+
+            byUrl: {
+                map: function (doc) {
+                    if (doc.type === 'page') {
+                        emit(doc.url, doc);
+                        if (doc.aliases) {
+                            for (var url in doc.aliases) {
+                                emit(url, doc);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
 
 };

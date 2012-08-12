@@ -11,6 +11,7 @@ var util = require('../../util');
 
 var _ = require("underscore");
 var async = require('async');
+var md = require('discount');
 
 var LAYOUT_GROUPS;
 var twitterFeeds = [];
@@ -504,7 +505,15 @@ site.getArticleContentUncached = function(doc, callback) {
 };
 
 site.getPageContent = function(url, callback) {
-    cache(api.page.getByUrl, 3600, url)(callback);
+    api.page.getByUrl(url, function (err, page) {
+        if (err) callback(err);
+        else if (!page) callback();
+        else {
+            page.model.body = md.parse(page.model.body);
+            log.debug(page.model.contents);
+            callback(null, page);
+        }
+    });
 };
 
 function modifyArticlesForDisplay(docs) {

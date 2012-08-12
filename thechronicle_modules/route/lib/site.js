@@ -311,8 +311,7 @@ site.rssSection = function (req, res, next) {
 };
 
 site.page = function (req, res, next) {
-    log.debug(req.params);
-    api.site.getPageContent(req.params, function (err, page) {
+    api.site.getPageContent(req.path, function (err, page) {
         if (err) return next(err);
         else if (!page) next();
         else {

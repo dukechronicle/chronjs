@@ -4,7 +4,7 @@ var db = require('./db-abstract');
 
 
 page.getByUrl = function (url, callback) {
-    db.view("articles/nodes", { key: url }, callback);
+    db.view('pages/byUrl', {key: url}, callback);
 };
 
 page.add = function (data, callback) {

@@ -315,7 +315,7 @@ site.page = function (req, res, next) {
         if (err) return next(err);
         else if (!page) next();
         else {
-            res.render('site/pages/' + page.template, {
+            res.render(page.view, {
                 pageTitle: page.title,
                 locals: page.model,
             });

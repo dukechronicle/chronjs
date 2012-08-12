@@ -11,7 +11,6 @@ var util = require('../../util');
 
 var _ = require("underscore");
 var async = require('async');
-var md = require('discount');
 
 var LAYOUT_GROUPS;
 var twitterFeeds = [];
@@ -509,8 +508,8 @@ site.getPageContent = function(url, callback) {
         if (err) callback(err);
         else if (!page) callback();
         else {
-            page.model.body = md.parse(page.model.body);
-            log.debug(page.model.contents);
+            page.view = api.page.view(page);
+            page.model = api.page.generateModel(page);
             callback(null, page);
         }
     });

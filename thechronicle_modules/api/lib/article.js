@@ -50,15 +50,15 @@ article.edit = function (id, article, callback) {
 
         if (article.body)
             article.renderedBody = api.article.renderBody(article.body);
-        article.updated = util.unixTimestamp();            
-        
+        article.updated = util.unixTimestamp();
+
         if (article.title && (URLify(article.title) !=  URLify(res.title))) {
             getAvailableUrl(URLify(article.title), 0, function(err, url) {
                 if (err) return callback(err);
-                
+
                 article.urls = res.urls;
                 article.urls.push(url);
-                
+
                 saveEditedDoc(id, article, res.created, url, callback);
             });
         }

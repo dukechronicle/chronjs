@@ -160,10 +160,6 @@ site.getNewsPageContent = function(callback) {
             } else
                 cb(err, []);
         });
-    },
-
-    function(cb) {
-        api.taxonomy.getChildren(['News'], cb);
     }], function(err, results) {
         if(err) {
             log.warning(err);
@@ -180,7 +176,7 @@ site.getNewsPageContent = function(callback) {
                 "width" : "300px",
                 "height" : "250px"
             };
-            var children = results[3];
+            var children = api.taxonomy.children(['News']);
             callback(null, model, children);
         }
     });
@@ -205,11 +201,7 @@ site.getSportsPageContent = function(callback) {
                 } else
                     cb(err, []);
             });
-        },
-        function(cb) {//2
-            api.taxonomy.getChildren(['Sports'], cb);
-        }
-    ], function(err, results) {
+        }], function(err, results) {
         if(err) {
             log.warning(err);
             callback(err);
@@ -224,7 +216,7 @@ site.getSportsPageContent = function(callback) {
                 "width" : "300px",
                 "height" : "250px"
             };
-            var children = results[2];
+            var children = api.taxonomy.children(['Sports']);
             callback(null, model, children);
         }
     });
@@ -237,10 +229,6 @@ site.getOpinionPageContent = function(callback) {
     },
 
     function(cb) {//1
-        api.taxonomy.getChildren(['Opinion'], cb);
-    },
-
-    function(cb) {//2
         rss.getRSS('blog-opinion', function(err, res) {
         if(!err && res && res.items && res.items.length > 0) {
             var Blog = res.items.map(function(item) {
@@ -256,13 +244,13 @@ site.getOpinionPageContent = function(callback) {
         });
     },
 
-    function(cb) {// 3
+    function(cb) {//2
         api.article.getByTaxonomy(['Opinion', 'Editorial Board'], 5, null, function (err, res) {
             cb(err, res);
         });
     },
 
-    function(cb) {//4
+    function(cb) {//3
         api.authors.getColumnists(function(err, columnists) {
             async.map(columnists, function(columnist, _callback) {
                 api.authors.getLatest(columnist.user || columnist.name, ['Opinion'], 7, function(err, res) {
@@ -277,7 +265,7 @@ site.getOpinionPageContent = function(callback) {
             else {
                 // maps columnist headshots to name for use on rest of page
                 columnistHeadshots = {};
-                results[4].forEach(function(columnist) {
+                results[3].forEach(function(columnist) {
                     columnist.url = '/staff/' + columnist.name;
                     var name = columnist.name.toLowerCase();
                     columnistHeadshots[name] = {tagline : columnist.tagline};
@@ -299,11 +287,11 @@ site.getOpinionPageContent = function(callback) {
                         }
                     });
                 }
-                model.Blog = results[2];
-                model.EditorialBoard = modifyArticlesForDisplay(results[3]);
+                model.Blog = results[1];
+                model.EditorialBoard = modifyArticlesForDisplay(results[2]);
                 model.Columnists = {};
                 // assign each columnist an object containing name and stories to make output jade easier
-                results[4].forEach(function(columnist, index) {
+                results[3].forEach(function(columnist, index) {
                     model.Columnists[index] = columnist;
                 });
                 // need to call compact to remove undefined entries in array
@@ -324,7 +312,7 @@ site.getOpinionPageContent = function(callback) {
                     "height" : "60px"
                 };
 
-                var children = results[1];
+                var children = api.taxonomy.children(['Opinion']);
                 callback(null, model, children);
             }
         });
@@ -334,10 +322,6 @@ site.getRecessPageContent = function(callback) {
     async.parallel([
     function(cb) {
         api.group.docs(LAYOUT_GROUPS.Recess.namespace, null, cb);
-    },
-
-    function(cb) {
-        api.taxonomy.getChildren(['Recess'], cb);
     },
 
     function(cb) {
@@ -354,13 +338,13 @@ site.getRecessPageContent = function(callback) {
             } else
                 cb(err, []);
         });
-    }], 
+    }],
     function(err, results) {
         if(err)
             callback(err);
         else {
             var model = results[0];
-            model.Blog = results[2];
+            model.Blog = results[1];
             model.multimedia = config.get('MULTIMEDIA_HTML');
             model.adMedRectangle = {
                 "title" : "Advertisement",
@@ -369,7 +353,7 @@ site.getRecessPageContent = function(callback) {
                 "width" : "250px",
                 "height" : "250px"
             };
-            var children = results[1];
+            var children = api.taxonomy.children(['Recess']);
 
             callback(null, model, children);
         }
@@ -380,10 +364,6 @@ site.getTowerviewPageContent = function(callback) {
     async.parallel([
     function(cb) {
         api.group.docs(LAYOUT_GROUPS.Towerview.namespace, null, cb);
-    },
-
-    function(cb) {
-        api.taxonomy.getChildren(['Towerview'], cb);
     }],
     function(err, results) {
         if(err)
@@ -397,14 +377,13 @@ site.getTowerviewPageContent = function(callback) {
                 "width" : "300px",
                 "height" : "250px"
             };
-            var children = results[1];
+            var children = api.taxonomy.children(['Towerview']);
             callback(null, model, children);
         }
     });
 };
 
 site.getSectionContent = function (params, callback) {
-    var section = _.last(params);
     async.parallel([
         function(cb) {
             popular.getPopularArticles(params, 5, cb);
@@ -414,24 +393,16 @@ site.getSectionContent = function (params, callback) {
                 if (err) cb(err)
                 else cb(null, {docs:modifyArticlesForDisplay(docs), next:next});
             });
-        },
-        function (cb) {
-            api.taxonomy.getParents(params, cb);
-        },
-        function (cb) {
-            api.taxonomy.getChildren(params, function (err, children) {
-                if (err) cb(null, {});
-                else cb(null, children);
-            });
         }], function (err, results) {
             if (err)
                 callback(err);
             else {
+                var section = api.taxonomy.getTaxonomy(params);
                 var popular = results[0];
                 var docs = results[1].docs;
                 var next = results[1].next;
-                var parents = results[2]
-                var children = results[3];
+                var parents = api.taxonomy.parents(params);
+                var children = api.taxonomy.children(params);
                 callback(null, section, docs, next, children, parents, popular);
             }
         }
@@ -466,7 +437,7 @@ site.getSearchContent = function (wordsQuery, query, callback) {
         if (err) callback(err);
         else {
             docs = modifyArticlesForDisplay(docs);
-            var validSections = config.get("TAXONOMY_MAIN_SECTIONS");
+            var validSections = api.taxonomy.mainSections();
             // filter out all sections other than main sections
             Object.keys(facets.Section).forEach(function(key) {
                 if (!_.include(validSections, key))
@@ -510,11 +481,7 @@ site.getArticleContentUncached = function(doc, callback) {
             if (err) cb(err);
             else cb(null, modifyArticlesForDisplay(relatedArticles));
         });
-    },
-    function(cb) {
-        api.taxonomy.getParents(doc.taxonomy, cb);
-    }
-    ], 
+    }],
     function(err, results) {
         if(err)
             callback(err);
@@ -529,7 +496,7 @@ site.getArticleContentUncached = function(doc, callback) {
                 },
                 popular: results[0],
                 related: results[1],
-                parents: results[2]
+                parents: api.taxonomy.parents(doc.taxonomy),
             };
             callback(null, model);
         }

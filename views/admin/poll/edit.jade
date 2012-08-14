@@ -9,15 +9,8 @@ block content
         form(action='', method='POST')
             label(for='title') Title
             input.span4#title(type='text', name='doc[title]', value=doc.title)
-            label(for='section') Section
-            select.span4#section(name='doc[taxonomy]')
-                option(value='') Select a section
-                - each subsections, section in taxonomy
-                    - each key, value in subsections
-                          - if (JSON.stringify(doc.taxonomy) == value)
-                              option(value=value, selected='selected') #{key}
-                          - else
-                              option(value=value) #{key}
+            label(for='section0') Section
+            mixin taxonomySelect(taxonomy, doc.taxonomy)
             label Answers
             ol
                 - var i = 0

@@ -1,6 +1,7 @@
 extends ../layout
 
 block content
+    include ../../mixins/form-helpers
     .container
         h1 Add a Document
         form.well(action='/article', method='POST')
@@ -9,12 +10,8 @@ block content
             input.span4#title(type='text', name='doc[title]')
             label(for='subhead') Subhead
             input.span4#subhead(type='text', name='doc[subhead]')
-            label(for='section') Section
-            select.span4#section(name='doc[taxonomy]')
-                option(value='') Select a section
-                - each subsections, section in taxonomy
-                    - each key, value in subsections
-                        option(value=value)= key
+            label(for='section0') Section
+            mixin taxonomySelect(taxonomy)
             label(for='author') Authors
             input.span4#author(type='text', name='doc[authors]')
             label(for='teaser') Teaser

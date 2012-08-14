@@ -1,0 +1,3 @@
+--reporter nyan
+--require test/common
+--globals should

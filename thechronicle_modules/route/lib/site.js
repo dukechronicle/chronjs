@@ -96,7 +96,7 @@ site.section = function (req, res, next) {
         else {
             res.render('site/pages/section', {
                 locals: {
-                    pageTitle: section,
+                    pageTitle: section.name,
                     docs:docs,
                     next:nextDoc,
                     subsections:children,

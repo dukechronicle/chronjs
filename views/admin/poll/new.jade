@@ -1,17 +1,14 @@
 extends ../layout
 
 block content
+    include ../../mixins/form-helpers
     .container
         h1 Add a Poll
         form.well(action='/admin/poll', method='POST')
             label(for='title') Title
             input.span4#title(type='text', name='doc[title]')
-            label(for='section') Section
-            select.span4#section(name='doc[taxonomy]')
-                option(value='') Select a section
-                - each subsections, section in taxonomy
-                    - each key, value in subsections
-                        option(value=value) #{key}
+            label(for='section0') Section
+            mixin taxonomySelect(taxonomy)
             label Answers
             ol
                 li: input.span4(type='text', name='doc[answers][0]')

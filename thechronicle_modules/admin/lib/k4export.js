@@ -77,7 +77,7 @@ function ArticleParser(articleCallback) {
      * ArticleParser's registered articleCallback on it. Returns the filename
      * as an error if given file is not an XML or if other error occurs during
      * parsing. If no error, calls callback on article object.
-     * 
+     *
      * @param{string} zipFile Path to zip archive
      * @param{string} name Name of the file in the archive
      * @param{function} callback Callback function taking error and
@@ -134,8 +134,8 @@ function ArticleParser(articleCallback) {
      * Eliminates unnecessary beginning parts of the article. Creates the
      * article teaser, which is the first sentence. Reduces the array of
      * paragraphs into the article body string. Returns an error if the article
-     * data isn't present. 
-     * 
+     * data isn't present.
+     *
      * @param{Article} article Raw article object from parseXML
      * @param{function} callback Callback taking the corrected article object
      */
@@ -148,7 +148,7 @@ function ArticleParser(articleCallback) {
         if (article.section == "Editorial")
         article.section = "Opinion";
 
-        if (article.taxonomy && api.taxonomy.getTaxonomyTree(article.taxonomy))
+        if (article.taxonomy && api.taxonomy.isValid(article.taxonomy))
             ; // keep taxonomy unchanged if it's set and valid
         else if (article.section)
             article.taxonomy = [ article.section ];
@@ -199,7 +199,7 @@ function ArticleParser(articleCallback) {
 
     function onMetadata(parser) {
         if (parser.metadataType == "Author") {
-            parser.article.authors = 
+            parser.article.authors =
                 _.map(parser.textNode.split(/\,\s*and\s|\sand\s|\,/), util.trim);
         }
         if (parser.metadataType == "Article Type") {

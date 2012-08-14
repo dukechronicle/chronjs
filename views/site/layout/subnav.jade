@@ -1,6 +1,5 @@
 nav.subnav
     - if (typeof subsections != 'undefined')
         - each subsection in subsections
-            - each subsectionName,subsectionPath in subsection
-                a.hover(href='/section/' + subsectionPath)
-                    h2= subsectionName
+            a.hover(href='/section/' + subsection.path)
+                h2= subsection.name

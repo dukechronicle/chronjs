@@ -185,101 +185,117 @@ var configParams = [
         }
     },
     {
-        name: 'TAXONOMY_MAIN_SECTIONS',
-        description: 'Main sections of the taxonomy',
-        defaultValue: [
-            "News",
-            "Sports",
-            "Opinion",
-            "Recess",
-            "Towerview"
-        ],
-        schema: {
-            type: "array",
-            required: true,
-            items: {type: "string"}
-        }
-    },
-    {
         name: 'TAXONOMY',
         description: 'Taxonomy tree for the site, used for categorizing articles and navigation',
-        defaultValue: {
-            News: {
-                University: {
-                    Academics: {},
-                    'Board of Trustees': {},
-                    'Campus Crime': {},
-                    Dining: {},
-                    DSG: {},
-                    'Graduate and Professional Schools': {},
-                    'Residence Life': {},
-                    'Student Life': {}
-                },
-                'Local & National': {
-                    'City of Durham': {},
-                    'Durham Crime': {},
-                    'Higher Education': {},
-                    'National News and Politics': {},
-                    'North Carolina': {}
-                },
-                'Health & Science': {
-                    DUHS: {},
-                    'Environment & Sustainability': {},
-                    Pratt: {},
-                    Research: {},
-                    'School of Medicine': {},
-                    'Student Health': {}
-                }
-            },
-            Sports: {
-                Column: {},
-                Baseball: {},
-                Basketball: { Men: {}, Women: {} },
-                'Cross Country': { Men: {}, Women: {} },
-                Fencing: { Men: {}, Women: {} },
-                'Field Hockey': {},
-                Football: {},
-                Golf: { Men: {}, Women: {} },
-                Lacrosse: { Men: {}, Women: {} },
-                Rowing: {},
-                Soccer: { Men: {}, Women: {} },
-                'Swimming & Diving': { Men: {}, Women: {} },
-                Tennis: { Men: {}, Women: {} },
-                'Track & Field': { Men: {}, Women: {} },
-                Volleyball: {},
-                Wrestling: {}
-            },
-            Opinion: {
-                'Letter to the Editor': {},
-                'Editorial Board': {},
-                Column: {},
-                'Guest Commentary': {},
-                'Editor\'s Note': {}
-            },
-            Recess: {
-                'Page Two': {},
-                Arts: {},
-                Music: {},
-                Film: {},
-                Literature: {},
-                Column: {}
-            },
-            Towerview: {
-                Savvy: {},
-                Prefix: {},
-                Wisdom: {},
-                Feature: {},
-                Column: {},
-                'Editor\'s Note': {}
-            }
-        },
+        defaultValue: [
+            { name: 'News',
+              children:
+              [ { name: 'University',
+                  children:
+                  [ { name: 'Academics', children: [] },
+                    { name: 'Board of Trustees', children: [] },
+                    { name: 'Campus Crime', children: [] },
+                    { name: 'Dining', children: [] },
+                    { name: 'DSG', children: [] },
+                    { name: 'Graduate and Professional Schools', children: [] },
+                    { name: 'Residence Life', children: [] },
+                    { name: 'Student Life', children: [] } ] },
+                { name: 'Local & National',
+                  children:
+                  [ { name: 'City of Durham', children: [] },
+                    { name: 'Durham Crime', children: [] },
+                    { name: 'Higher Education', children: [] },
+                    { name: 'National News and Politics', children: [] },
+                    { name: 'North Carolina', children: [] } ] },
+                { name: 'Health & Science',
+                  children:
+                  [ { name: 'DUHS', children: [] },
+                    { name: 'Environment & Sustainability', children: [] },
+                    { name: 'Pratt', children: [] },
+                    { name: 'Research', children: [] },
+                    { name: 'School of Medicine', children: [] },
+                    { name: 'Student Health', children: [] } ] } ] },
+            { name: 'Sports',
+              children:
+              [ { name: 'Column', children: [] },
+                { name: 'Baseball', children: [] },
+                { name: 'Basketball',
+                  children:
+                  [ { name: 'Men', children: [] },
+                    { name: 'Women', children: [] } ] },
+                { name: 'Cross Country',
+                  children:
+                  [ { name: 'Men', children: [] },
+                    { name: 'Women', children: [] } ] },
+                { name: 'Fencing',
+                  children:
+                  [ { name: 'Men', children: [] },
+                    { name: 'Women', children: [] } ] },
+                { name: 'Field Hockey', children: [] },
+                { name: 'Football', children: [] },
+                { name: 'Golf',
+                  children:
+                  [ { name: 'Men', children: [] },
+                    { name: 'Women', children: [] } ] },
+                { name: 'Lacrosse',
+                  children:
+                  [ { name: 'Men', children: [] },
+                    { name: 'Women', children: [] } ] },
+                { name: 'Rowing', children: [] },
+                { name: 'Soccer',
+                  children:
+                  [ { name: 'Men', children: [] },
+                    { name: 'Women', children: [] } ] },
+                { name: 'Swimming & Diving',
+                  children:
+                  [ { name: 'Men', children: [] },
+                    { name: 'Women', children: [] } ] },
+                { name: 'Tennis',
+                  children:
+                  [ { name: 'Men', children: [] },
+                    { name: 'Women', children: [] } ] },
+                { name: 'Track & Field',
+                  children:
+                  [ { name: 'Men', children: [] },
+                    { name: 'Women', children: [] } ] },
+                { name: 'Volleyball', children: [] },
+                { name: 'Wrestling', children: [] } ] },
+            { name: 'Opinion',
+              children:
+              [ { name: 'Letter to the Editor', children: [] },
+                { name: 'Editorial Board', children: [] },
+                { name: 'Column', children: [] },
+                { name: 'Guest Commentary', children: [] },
+                { name: 'Editor\'s Note', children: [] } ] },
+            { name: 'Recess',
+              children:
+              [ { name: 'Page Two', children: [] },
+                { name: 'Arts', children: [] },
+                { name: 'Music', children: [] },
+                { name: 'Film', children: [] },
+                { name: 'Literature', children: [] },
+                { name: 'Column', children: [] } ] },
+            { name: 'Towerview',
+              children:
+              [ { name: 'Savvy', children: [] },
+                { name: 'Prefix', children: [] },
+                { name: 'Wisdom', children: [] },
+                { name: 'Feature', children: [] },
+                { name: 'Column', children: [] },
+                { name: 'Editor\'s Note', children: [] } ] }
+        ],
         schema: {
-            type: "object",
-            id: "taxonomyLevel",
+            type: 'array',
+            required: true,
+            id: 'taxonomyLevel',
             items: {
-                type: "object",
-                additionalProperties: {
-                    "$ref": "taxonomyLevel"
+                type: 'object',
+                properties: {
+                    name: {
+                        required: true,
+                        type: 'string',
+                    },
+                    children: {'$ref': 'taxonomyLevel'},
                 }
             }
         }

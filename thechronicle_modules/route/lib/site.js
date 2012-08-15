@@ -283,7 +283,16 @@ site.newsletterData = function (req, res) {
 };
 
 site.rss = function (req, res, next) {
-    var taxonomy = req.params[0] && req.params[0].split('/');
+    var taxonomy = req.params[0];
+    if (taxonomy) {
+        var node = api.taxonomy.getTaxonomy(taxonomy.split('/'));
+        if (node) {
+            taxonomy = node.taxonomy;
+        }
+        else {
+            return next();
+        }
+    }
     api.article.getByTaxonomy(taxonomy, 50, null, function (err, docs) {
         if (err) next(err);
         else {

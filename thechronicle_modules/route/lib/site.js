@@ -167,7 +167,7 @@ site.article = function (req, res, next) {
                 pageTitle: doc.title,
                 isAdmin:isAdmin,
                 model:model,
-                parentPaths: model.parents,
+                parents: model.parents,
                 section: doc.taxonomy[0],
                 article: true,
                 disqusData: {

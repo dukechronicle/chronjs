@@ -6,10 +6,11 @@ block append variables
 
 block content
     #article
-        nav.subnav.clearfix
-            - each parent in parentPaths
-                a.hover(href='/section/'+parent.path)
-                    h2= parent.name
+        - if (parents)
+            nav.subnav.clearfix
+                - each parent in parents
+                    a.hover(href='/section/'+parent.path)
+                        h2= parent.name
 
         article.clearfix
             .span-8

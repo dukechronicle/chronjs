@@ -46,7 +46,7 @@ exports.siteInit = function (app) {
     app.get('/section/*', site.section);
 
     app.get('/rss-source', site.rss);
-    app.get('/rss-source/*', site.rssSection);
+    app.get('/rss-source/*', site.rss);
     app.get('/feed/all', redirect("/rss"));
     app.get('/rss', redirect("http://feeds.feedburner.com/thechronicle/all"));
     app.get('/rss/news', redirect("http://feeds.feedburner.com/thechronicle/news"));

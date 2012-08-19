@@ -30,15 +30,6 @@ var configParams = [
         }
     },
     {
-        name: 'REDIRECT_DOMAIN_NAMES',
-        description: 'Subdomains that Redirect',
-        defaultValue: {},
-        schema: {
-            type: "object",
-            required: true,
-        }
-    },
-    {
         name: 'MOBILE_DOMAIN_NAME',
         description: 'Mobile Site Domain Name',
         defaultValue: 'm.dukechronicle.com',

@@ -141,23 +141,12 @@ function newServer() {
     return server;
 }
 
-function redirectServer(src, dest) {
-    var server = express.createServer();
-    server.use(function (req, res) {
-        res.redirect('http://' + req.headers.host.replace(src, dest) + req.url);
-    });
-    return server;
-}
-
 function configureVirtualHosts() {
     app.configure(function () {
         var siteDomainName = config.get('DOMAIN_NAME');
         var mobileDomainName = config.get('MOBILE_DOMAIN_NAME');
         app.use(express.vhost(siteDomainName, route.siteInit(newServer())));
         app.use(express.vhost(mobileDomainName, route.mobileInit(newServer())));
-        _.each(config.get('REDIRECT_DOMAIN_NAMES'), function(dest, origin) {
-            app.use(express.vhost(origin, redirectServer(origin, dest)));
-        });
     });
 }
 

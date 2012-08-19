@@ -1,3 +1,203 @@
 {
-    "note": "Yeshwanth says something prolific here"
+    "note": "Yeshwanth says something prolific here",
+    "schedule": {
+        "21": [
+            {
+                "time": "8:30-10:00",
+                "title": "Aycock, Bell Tower, Brown, Gilbert-Addoms, Giles, Pegram move in"
+            },
+            {
+                "time": "10:30-12:00",
+                "title": "Blackwell and Southgate move in"
+            },
+            {
+                "time": "12:30-2:00",
+                "title": "Alspaugh, Bassett, Epworth, Jarvis, Randolph, Wilson move in"
+            },
+            {
+                "time": "2:30-3:15, 5:00-5:45",
+                "title": "The Tradition Continues",
+                "location": "White Lecture Hall"
+            },
+            {
+                "time": "4:00-7:00",
+                "title": "A Taste of Duke",
+                "location": "East Campus Quad"
+            },
+            {
+                "time": "7:00-8:00",
+                "title": "Resident Assistant Floor Meeting"
+            },
+            {
+                "time": "8:30",
+                "title": "Class of 2016 Welcome",
+                "location": "Williams Athletic Field"
+            },
+            {
+                "time": "10:00",
+                "title": "Evening Social",
+                "location": "East Campus Quad"
+            }
+        ],
+        "22": [
+            {
+                "time": "9:30-10:30",
+                "title": "Financial Aid and Student Employment Workshop",
+                "location": "Page Auditorium"
+            },
+            {
+                "time": "10:45-12:00",
+                "title": "New Student Convocation",
+                "location": "The Duke Chapel"
+            },
+            {
+                "time": "12:15-1:15",
+                "title": "President's Reception",
+                "location": "West Campus Main Quad"
+            },
+            {
+                "time": "12:30-2:30",
+                "title": "Departmental Resource Fair",
+                "location": "Bryan Center Plaza"
+            },
+            {
+                "time": "2:00-3:00",
+                "title": "Pratt School of Engineering Assembly",
+                "location": "Griffith Film Theater"
+            },
+            {
+                "time": "2:00-3:00",
+                "title": "Trinity College Group Advisory Meetings"
+            },
+            {
+                "time": "6:00",
+                "title": "FAC Chat I"
+            },
+            {
+                "time": "7:00",
+                "title": "Class Photo",
+                "location": "East Campus Quad"
+            },
+            {
+                "time": "9:00",
+                "title": "Duke University Union Concert",
+                "location": "East Campus Quad"
+            }
+        ],
+        "23": [
+            {
+                "time": "All Day",
+                "title": "Trinity and Pratt Advising"
+            },
+            {
+                "time": "10:00-12:00, 2:00-4:00",
+                "title": "True Blue",
+                "location": "Reynolds Theater"
+            },
+            {
+                "time": "12:00-2:00",
+                "title": "Multicultural Luncheon",
+                "location": "Von Canons"
+            },
+            {
+                "time": "12:00-2:00",
+                "title": "Lunch at the Great Hall"
+            },
+            {
+                "time": "5:00-10:00",
+                "title": "A Night on the Town",
+                "location": "Buses depart from East Campus bus stop"
+            },
+            {
+                "time": "10:45",
+                "title": "Target Run",
+                "location": "Buses depart from East Campus bus stop"
+            }
+        ],
+        "24": [
+            {
+                "time": "9:00-10:00, 4:00-5:00",
+                "title": "Academic Exploration Programs"
+            },
+            {
+                "time": "10:00-12:00, 2:00-4:00",
+                "title": "Duke Summer Reading",
+                "location": "Page Auditorium"
+            },
+            {
+                "time": "12:00-2:00",
+                "title": "Focus Program Luncheon",
+                "location": "Wilson Gym"
+            },
+            {
+                "time": "5:00",
+                "title": "New Devils' Night",
+                "location": "Chapel Steps"
+            },
+            {
+                "time": "6:00",
+                "title": "Dinner at Wallace Wade"
+            },
+            {
+                "time": "12:00",
+                "title": "Movie on the B.C. Plaza"
+            }
+        ],
+        "25": [
+            {
+                "time": "9:45",
+                "title": "Duke, Durham, and Beyond"
+            },
+            {
+                "time": "2:00-2:50, 3:00-3:50, 4:00-4:50",
+                "title": "Concurrent Sessions"
+            },
+            {
+                "time": "6:00",
+                "title": "FAC Chat II"
+            },
+            {
+                "time": "7:00",
+                "title": "FAC Dinner"
+            },
+            {
+                "time": "9:00",
+                "title": "Night at the Nasher Museum of Art"
+            },
+            {
+                "time": "11:00",
+                "title": "Lambda Jam",
+                "location": "West Campus Main Quad"
+            },
+            {
+                "time": "12:00-2:00",
+                "title": "Midnight at the Oasis",
+                "location": "Bell Tower"
+            }
+        ],
+        "26": [
+            {
+                "time": "2:00",
+                "title": "FAC Tours"
+            },
+            {
+                "time": "4:00",
+                "title": "Maya Angelou",
+                "location": "Duke Chapel"
+            },
+            {
+                "time": "5:00",
+                "title": "Cultural Center Open Houses"
+            },
+            {
+                "time": "7:00",
+                "title": "Tuning Up! A Capella Concert",
+                "location": "Page Auditorium"
+            },
+            {
+                "time": "10:00",
+                "title": "Faculty in Residence Open Houses"
+            }
+        ]
+    }
 }

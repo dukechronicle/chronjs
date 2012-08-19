@@ -6,8 +6,8 @@
         "url":"git@github.com:thechronicle/website.git"
     },
     "engines": {
-        "node":"0.6.x",
-        "npm":"1.1.39"
+        "node":"0.8.x",
+        "npm":"1.1.x"
     },
     "dependencies":{
         "async":"0.1.x",

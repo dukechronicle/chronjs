@@ -1,7 +1,4 @@
-include ../container-helpers
+extends index
 
-.full-banner.advertisement
-    mixin vertical-label
-    .rounded
-        .image-container
-            .advertising.openx-ad(class="{zoneID: 308}")
+block advertisement
+  .full-banner.openx-ad(class="{zoneID: 308}")

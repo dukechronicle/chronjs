@@ -1,10 +1,37 @@
 extends layout
 
 block content
-  #top.clearfix.align-group
-    .span-8.align-element(data-aligntarget=".rounded")
-      .rounded
-        h1 Freshman Orientation
+  mixin calendarDay(day)
+    p= day
+    - if (day.toString() in data.schedule)
+      ul
+        - each event in data.schedule[day.toString()]
+          li
+            span.date= event.time
+            | , 
+            span.title= event.title
+            - if (event.location)
+              | , 
+              span.location= event.location
 
-    .span-4.last.align-element(data-aligntarget=".rounded")
-      #editors-note!=partial('../container/block/text', {title: "Letter from the Editor", content: data.note})
+  #schedule
+    .rounded
+      .content-container
+        h1 Freshman Orientation
+        p.calendar-title August 2012
+        table.calendar
+          tr
+            th Tuesday
+            th Wednesday
+            th Thursday
+            th Friday
+            th Saturday
+            th Sunday
+          tr
+            td: mixin calendarDay(21)
+            td: mixin calendarDay(22)
+            td: mixin calendarDay(23)
+            td: mixin calendarDay(24)
+            td: mixin calendarDay(25)
+            td: mixin calendarDay(26)
+

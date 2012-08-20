@@ -132,7 +132,6 @@ exports.siteInit = function (app) {
     });
 
     app.namespace('/xhrproxy', function() {
-        app.get('/openx/:path', xhrproxy.openx);
         app.get('/delete_activity', xhrproxy.delete_activity);
     })
 

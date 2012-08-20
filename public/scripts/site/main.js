@@ -4,7 +4,7 @@ require.config({
 
 require(['site/align','site/article','site/category-box','site/scrollLoad',
          'site/slideshow/frontpage-slideshow','site/slideshow/slideshow-right',
-         'site/openx', 'site/poll', 'libs/jquery.cookie', 'site/facebook'],
+         'cs!site/openx', 'site/poll', 'libs/jquery.cookie', 'site/facebook'],
         function () {
             var args = Array.prototype.slice.call(arguments);
             $(function () {

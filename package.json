@@ -28,7 +28,7 @@
         "imagemagick":"0.1.x",
         "jade":"0.24.x",
         "JSV":"4.x",
-        "knox":"0.0.x",
+        "knox":"0.3.x",
         "mailchimp":"0.x",
         "mocha": "1.2.x",
         "redis":"0.7.x",

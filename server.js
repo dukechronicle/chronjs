@@ -146,6 +146,7 @@ function configureVirtualHosts() {
         var siteDomainName = config.get('DOMAIN_NAME');
         var mobileDomainName = config.get('MOBILE_DOMAIN_NAME');
         app.use(express.vhost(siteDomainName, route.siteInit(newServer())));
+        app.use(express.vhost('dukechronicle.com', route.siteInit(newServer())));
         app.use(express.vhost(mobileDomainName, route.mobileInit(newServer())));
     });
 }

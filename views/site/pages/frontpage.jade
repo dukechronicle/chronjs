@@ -13,17 +13,16 @@ block content
                 if (model["Left Headlines"] && model["Right Headlines"])
                     #headlines!=partial('../container/top-news', {title: "Top Stories", left: model["Left Headlines"], right: model["Right Headlines"]})
 
-                .ads-row.clearfix
-                    if (model.printEdition)
-                        .lighten.span-2#print-edition!=partial('../container/image', model.printEdition)
-                    .lighten.span-6.last!=partial('../container/ad/full-banner', {title: "Ad"})
-
             .sidebar.span-4.last.align-element(data-aligntarget="#popular .rounded")
                 if (model.popular)
                     #popular.title-small!=partial('../container/story-list/subhead', {title: "What's Hot", stories: model.popular})
                 if (model.Opinion)
                     #opinion.title-small!=partial('../container/story-list/subhead', {title: "Opinion", stories: model.Opinion})
                 .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
+
+        .leaderboard-row.clearfix
+            .lighten.filler-block#print-edition!=partial('../container/image', model.printEdition)
+            .lighten.leaderboard-block!=partial('../container/ad/atlas/leaderboard', {title: "Ad"})
 
         #middle.clearfix.align-group
             if (model.News)

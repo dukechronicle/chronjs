@@ -1,4 +1,4 @@
-define ['jquery', 'disqus'], ($, disqus) ->
+define ['jquery', 'common/disqus'], ($, disqus) ->
 
   '#disqus_thread': ->
     data = $('#disqus_thread').data('disqus')

@@ -1,4 +1,4 @@
-define(["jquery", "libs/underscore", "libs/jquery-ui"], function($) {
+define(["jquery", "lib/underscore", "lib/jquery-ui"], function($) {
 
     return {
         ".align-group": loadAfterTypekit(pageAlign),
@@ -10,9 +10,9 @@ define(["jquery", "libs/underscore", "libs/jquery-ui"], function($) {
 
     function loadAfterTypekit(callback) {
         return function () {
-            var args = arguments;
+            var that = this;
             var execute = function () {
-                callback.apply(this, args);
+                callback.call(that);
             }
 
             if ($('html').hasClass("wf-active") ||
@@ -73,8 +73,8 @@ define(["jquery", "libs/underscore", "libs/jquery-ui"], function($) {
         });
     }
 
-    function truncateTeaser($elements) {
-        $elements.each(function () {
+    function truncateTeaser() {
+        $(this).each(function () {
             while ($(this)[0].scrollHeight > $(this).outerHeight() + 1) {
                 var $text = $(this).find("p:last");
                 if ($text.length > 0) {

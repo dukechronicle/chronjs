@@ -1,8 +1,7 @@
 define ['jquery'], ($) ->
-  ->
-    args = Array.prototype.slice.call(arguments, 1)
+  (_main, modules...) ->
     $ ->
-      for module in args
+      for module in modules
         for selector, action of module
           if not selector or $(selector).length > 0
-            action.call(selector)
+            action.call $(selector)

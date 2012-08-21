@@ -1,4 +1,4 @@
-define(['jquery', 'Article'], function($, Article) {
+define(['jquery', 'common/article'], function($, Article) {
 
     var articles = {};
     var updated = [];

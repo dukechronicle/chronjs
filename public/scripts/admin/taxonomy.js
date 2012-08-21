@@ -1,8 +1,8 @@
-define(['jquery', 'libs/jquery.chained'], function ($) {
+define(['jquery', 'lib/jquery.chained'], function ($) {
 
     return {
-        'select[data-chain]': function ($elements) {
-            $elements.each(function () {
+        'select[data-chain]': function () {
+            $(this).each(function () {
                 $(this).chained('#' + $(this).data('chain'));
             });
         }

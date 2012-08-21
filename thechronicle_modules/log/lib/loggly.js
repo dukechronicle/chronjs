@@ -1,8 +1,6 @@
 var util = require('util');
 var winston = require('winston');
-require('winston-loggly')
-var Transport = winston.transports.Transport;
-var Loggly = winston.transports.Loggly;
+var Loggly = require('winston-loggly').Loggly;
 
 
 var CustomLoggly = exports.CustomLoggly = function(options) {
@@ -15,5 +13,5 @@ util.inherits(CustomLoggly, Loggly);
 CustomLoggly.prototype.name = 'custom_loggly';
 
 CustomLoggly.prototype.logException = function (msg, meta, callback) {
-    Loggly.prototype.logException(msg, {stack: meta.stack}, callback);
+    Loggly.prototype.logException.call(this, msg, {stack: meta.stack}, callback);
 };

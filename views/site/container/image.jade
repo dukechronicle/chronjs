@@ -1,14 +1,14 @@
+include container-helpers
+
 .image
-    .vertical-container
-        .vertical #{title}
-    
-    - if (typeof url !='undefined')
-        a.rounded.image-container.clearfix(href='#{url}')
-            img(src='#{imageUrl}')
-            - if (typeof caption != 'undefined')
-                p.caption #{caption}
-    - else
-        .rounded.image-container.clearfix
-            img(src='#{imageUrl}')
-            - if (typeof caption != 'undefined')
-                p.caption #{caption}
+  mixin vertical-label
+  - if (typeof url !='undefined')
+    a.rounded.image-container.clearfix(href=url)
+      img(src=imageUrl)
+      - if (typeof caption != 'undefined')
+        p.caption= caption
+  - else
+    .rounded.image-container.clearfix
+      img(src=imageUrl)
+      - if (typeof caption != 'undefined')
+        p.caption= caption

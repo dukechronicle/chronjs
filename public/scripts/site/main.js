@@ -6,5 +6,5 @@ require(['cs!common/main', 'site/align','cs!site/article','site/category-box','s
          'site/slideshow/frontpage-slideshow','site/slideshow/slideshow-right',
          'cs!site/openx', 'site/poll', 'lib/jquery.cookie', 'site/facebook'],
         function (main) {
-            main(arguments);
+            main.apply(this, arguments);
         });

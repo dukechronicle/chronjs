@@ -66,14 +66,14 @@ html
                                     a(href=links[i].url) #{links[i].title}
             section#ads
                 div.vertical-container.fake-button
-                    a Sponsored
+                    a(href="http://dukechronicle.com/page/advertising") Sponsored
                 table
                     - var adRows = Math.ceil(ads.length/5)
                     - for (var row = 0; row < adRows; row++)
                         tr.button_bar.default_lightgrey.clearfix
                             -for (var i = row*5; i < row*5+5; i++)
                                 td 
-                                    a(href=ads[i].url) #{ads[i].title}
+                                    a(href=ads[i].url, rel="nofollow") #{ads[i].title}
             div#footer
                 p &copy; 2012 
                     a(href='http://dukechronicle.com') The Chronicle 

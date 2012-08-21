@@ -1,0 +1,54 @@
+extends layout
+
+block append head
+  link(href="http://fonts.googleapis.com/css?family=Poiret+One", rel="stylesheet", type="text/css")
+
+block content
+  mixin calendarDay(day)
+    - if (day.toString() in data.schedule)
+      ul.events
+        - each event in data.schedule[day.toString()]
+          li
+            span.date= event.time
+            |  
+            span.title= event.title
+            - if (event.location)
+              | , 
+              span.location= event.location
+
+  #schedule
+    .rounded
+      .content-container
+        h1 Freshman Orientation
+        table.calendar
+          tr
+            th Tuesday, 21st
+            th Wednesday, 22nd
+            th Thursday, 23rd
+            th Friday, 24th
+            th Saturday, 25th
+            th Sunday, 26th
+          tr
+            td: mixin calendarDay(21)
+            td: mixin calendarDay(22)
+            td: mixin calendarDay(23)
+            td: mixin calendarDay(24)
+            td: mixin calendarDay(25)
+            td: mixin calendarDay(26)
+
+  #articles!=partial('../container/row/feature', {stories: data.articles})
+
+  .leaderboard-row.clearfix
+    .lighten.filler-block!=partial('../container/image', {url: "http://www.qduke.com", imageUrl: "http://d2sug25c5hnh7r.cloudfront.net/img/qduke.png", title: "qDuke"})
+    .lighten.leaderboard-block!=partial('../container/ad/leaderboard', {title: "Ad"})
+
+  #bottom.clearfix.align-group
+    .span-4.block.align-element(data-alignTarget=".rounded")!=partial('../container/block/teaser', {title: "Recruitment", story: data.recruitment})
+    .span-4.block.align-element(data-alignTarget=".rounded")
+      .rounded
+         .image-container
+           iframe(width="300", height="169", src="http://www.youtube.com/embed/DjUVopSOkRQ", frameborder="0", allowfullscreen)
+         .content-container
+           h3.title Check out last year's orientation video!
+
+    .span-4.last.lighten.align-element!=partial('../container/ad/medium-rect', {title: "Ad"})

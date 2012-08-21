@@ -46,11 +46,6 @@ function configureApp() {
     app = newServer();
 
     app.configure(function () {
-        app.error(function (err, req, res, next) {
-            log.error(err.stack || err);
-            next(err);
-        });
-
         app.use(express.bodyParser({uploadDir:__dirname + '/uploads'}));
         app.use(express.methodOverride());
 
@@ -81,19 +76,11 @@ function configureApp() {
 
     app.configure('development', function () {
         app.use(express.static(__dirname + '/public'));
-        app.error(express.errorHandler({ showStack:true }));
     });
 
     app.configure('production', function () {
         var oneYear = 31557600000;
         app.use(express.static(__dirname + '/public', {maxAge:oneYear}));
-
-        app.error(function (err, req, res, next) {
-            var errOptions = api.accounts.isAdmin(req) ?
-                { showStack:true } : {};
-            var errHandler = express.errorHandler(errOptions);
-            errHandler(err, req, res, next);
-        });
     });
 
     app.listen(PORT);
@@ -138,6 +125,13 @@ function newServer() {
     server.set('views', __dirname + '/views');
     server.set('view engine', 'jade');
     server.enable('jsonp callback');
+    server.error(function (err, req, res, next) {
+        log.error(err.stack || err);
+        var errOptions =
+            process.env.NODE_ENV !== 'production' || api.accounts.isAdmin(req)
+            ? {showStack: true} : {};
+        express.errorHandler(errOptions)(err, req, res, next);
+    });
     return server;
 }
 
@@ -146,6 +140,7 @@ function configureVirtualHosts() {
         var siteDomainName = config.get('DOMAIN_NAME');
         var mobileDomainName = config.get('MOBILE_DOMAIN_NAME');
         app.use(express.vhost(siteDomainName, route.siteInit(newServer())));
+        app.use(express.vhost('dukechronicle.com', route.siteInit(newServer())));
         app.use(express.vhost(mobileDomainName, route.mobileInit(newServer())));
     });
 }

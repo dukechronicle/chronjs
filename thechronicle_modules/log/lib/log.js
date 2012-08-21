@@ -14,10 +14,8 @@ function createLogger() {
     logger.add(CustomConsole, {
         level: 'debug',
         msgStringify: function (msg) { return util.inspect(msg, false, null); },
-        handleExceptions: true
+        handleExceptions: true,
     });
-
-    logger.handleExceptions();
 
     // TODO: Handle logging errors with email alert
     logger.on('error', function(err) {

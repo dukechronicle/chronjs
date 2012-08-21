@@ -6,10 +6,11 @@ block append variables
 
 block content
     #article
-        nav.subnav.clearfix
-            - each parent in parentPaths
-                a.hover(href='/section/'+parent.path)
-                    h2= parent.name
+        - if (parents)
+            nav.subnav.clearfix
+                - each parent in parents
+                    a.hover(href='/section/'+parent.path)
+                        h2= parent.name
 
         article.clearfix
             .span-8
@@ -42,7 +43,7 @@ block content
                             span.sep |
                             span.date= doc.date
 
-                        .article-body
+                        .article-body.clearfix
                             .social-media
                                 a#comment-link(href="#disqus_thread") Comments
                                 a#print-link(href="#{doc.url}/print") Print
@@ -71,6 +72,7 @@ block content
                 - if (model.popular && model.popular.length > 0)
                     #popular.title-small!=partial('../container/story-list/numbered', {title: "Popular", stories: model.popular})
 
+                .lighten!=partial('../container/ad/blog', {title: "Advertisement"})
                 .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
 
     #social-share

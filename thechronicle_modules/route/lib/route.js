@@ -48,7 +48,7 @@ exports.siteInit = function (app) {
     app.get('/section/*', site.section);
 
     app.get('/rss-source', site.rss);
-    app.get('/rss-source/*', site.rssSection);
+    app.get('/rss-source/*', site.rss);
     app.get('/feed/all', redirect("/rss"));
     app.get('/rss', redirect("http://feeds.feedburner.com/thechronicle/all"));
     app.get('/rss/news', redirect("http://feeds.feedburner.com/thechronicle/news"));
@@ -66,6 +66,7 @@ exports.siteInit = function (app) {
         app.get('/user-guidelines', site.staticPage);
         app.get('/young-trustee-2012', site.staticPage);
         app.get('/commencement-2012', site.staticPage);
+        app.get('/orientation-2012', site.staticPage);
 
         app.post('/newsletter', site.newsletterData);
     });
@@ -134,7 +135,6 @@ exports.siteInit = function (app) {
     });
 
     app.namespace('/xhrproxy', function() {
-        app.get('/openx/:path', xhrproxy.openx);
         app.get('/delete_activity', xhrproxy.delete_activity);
     })
 

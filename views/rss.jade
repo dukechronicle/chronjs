@@ -1,11 +1,13 @@
 !!! xml
 rss(version="2.0")
     channel
-        title The Chronicle #{section.join(", ")}
+        title The Chronicle
+            - if (section)
+                |  | #{section.join(", ")}
         link http://www.dukechronicle.com
         description The Independent Daily at Duke University
         - each article in docs
             item
-                title #{article.title}
+                title= article.title
                 link http://dukechronicle.com/article/#{article.urls[article.urls.length - 1]}
-                description #{article.renderedBody}
+                description= article.body

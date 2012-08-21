@@ -6,6 +6,7 @@ var log = require('../../log');
 var util = require('../../util');
 
 var fs = require('fs');
+var md = require('discount');
 var _ = require('underscore');
 
 
@@ -167,7 +168,7 @@ site.article = function (req, res, next) {
                 pageTitle: doc.title,
                 isAdmin:isAdmin,
                 model:model,
-                parentPaths: model.parents,
+                parents: model.parents,
                 section: doc.taxonomy[0],
                 article: true,
                 disqusData: {
@@ -282,24 +283,23 @@ site.newsletterData = function (req, res) {
 };
 
 site.rss = function (req, res, next) {
-    api.article.getByDate(50, null, function (err, docs) {
-        if (err) next(err);
-        else {
-            res.render('rss', {
-                locals: {
-                    docs: docs,
-                    section: []
-                }
-            });
+    var taxonomy = req.params[0];
+    if (taxonomy) {
+        var node = api.taxonomy.getTaxonomy(taxonomy.split('/'));
+        if (node) {
+            taxonomy = node.taxonomy;
         }
-    });
-};
-
-site.rssSection = function (req, res, next) {
-    var taxonomy = req.params.toString().split('/');
+        else {
+            return next();
+        }
+    }
     api.article.getByTaxonomy(taxonomy, 50, null, function (err, docs) {
         if (err) next(err);
         else {
+            _.each(docs, function (doc) {
+                // No one likes a smartypants
+                doc.body = md.parse(doc.body, md.flags.noPants);
+            });
             res.render('rss', {
                 locals: {
                     docs: docs,

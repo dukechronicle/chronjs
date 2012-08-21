@@ -1,0 +1,222 @@
+html {color: #000;background: #FFF;overflow-y: scroll;}
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, button, textarea, p, blockquote, th, td {margin: 0;padding: 0;}
+table {border-collapse: collapse;border-spacing: 0;}
+fieldset, img, button {border: 0;}
+address, caption, cite, code, dfn, em, strong, th, var, optgroup {font-style: inherit;font-weight: inherit;}
+del, ins {text-decoration: none;}
+li {list-style: none;}
+a {color: inherit;text-decoration: inherit;}
+caption, th {text-align: left;}
+h1, h2, h3, h4, h5, h6 {font-size: 100%;font-weight: normal;}
+q:before, q:after {content: '';}
+abbr, acronym {border: 0;font-variant: normal;}
+sup {vertical-align: baseline;}
+sub {vertical-align: baseline;}
+legend {color: #000;}
+input, button, textarea, select, optgroup, option {font-family: inherit;font-size: inherit;font-style: inherit;font-weight: inherit;color: inherit;cursor:inherit;}
+button {background-color:transparent;}
+input, button, textarea, select {*font-size: 100%;}
+*:focus {outline: none;}
+
+/* Begin qDuke specific stuff. */
+.strong {font-weight: 700;}
+
+body {
+    color: #001950;
+	font-family: 'Karla', Arial, Helvetica, sans-serif;
+}
+
+div#promobar {
+	width: 100%;
+	height: 45px;
+	text-align: center;
+	line-height: 39px;
+	font-size: 1.1em;
+}
+
+div#promobar a {
+	text-decoration: underline;
+}
+
+#shell {
+    width: 890px;
+    margin: 0px auto;
+}
+
+#logo {
+    text-align: center;
+    overflow: hidden;
+    margin: 15px auto;
+}
+
+p#title {
+	font-size: 49px;
+}
+
+a#chrontitle {
+	font-family: ;
+}
+
+section {
+	margin-bottom: 16px;
+	display: inline-block;
+}
+
+/* Button gradients, shadows, and text colors */
+tr.button_bar td.button_lightblue, 
+tr.default_lightblue td, 
+div#promobar ,
+div.fake-button a {
+	color: #001a57;
+    text-shadow: #aaaaaa 0.1em 0.1em 0.2em;
+	
+	background: #e1e3f0; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e1e3f0', endColorstr='#b1b3cb'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#e1e3f0), to(#b1b3cb)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #e1e3f0,  #b1b3cb); /* for firefox 3.6+ */ 
+}
+
+tr.button_bar td.button_lightgrey, 
+.default_lightgrey td {
+	color: #666666;
+	text-shadow: white 0.1em 0.1em 0.2em;
+
+	background: #f0f0fa; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f0f0fa', endColorstr='#e6e6eb'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#f0f0fa), to(#e6e6eb)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #f0f0fa,  #e6e6eb); /* for firefox 3.6+ */ 
+}
+
+tr.button_bar td.button_blue, 
+.default_blue td {
+	color: #ffffff;
+    text-shadow: black 0.1em 0.1em 0.2em;
+	
+	background: #235f98; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#235f98', endColorstr='#001a57'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#235f98), to(#001a57)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #235f98,  #001a57); /* for firefox 3.6+ */ 
+}
+
+tr.button_bar td.button_grey, 
+.default_grey td {
+	color: #666666;
+
+	background: #e5e5e5; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e5e5e5', endColorstr='#c9c9c9'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#e5e5e5), to(#c9c9c9)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #e5e5e5,  #c9c9c9); /* for firefox 3.6+ */ 
+}
+
+tr.infobar td, 
+li.button_lightgrey, 
+tr.button_bar td.newsbox {
+	color: #444444;
+}
+
+/* Search box */
+td#search input {
+    padding: 0 0 0 8px;
+	height: 100%; /* Hard coded to fit correctly*/
+	width: 100%; /* Hard coded to fit correctly*/
+    border: none;
+    font-size: 25px;
+    color: #666666;
+}
+
+/* Button heights and font sizes. */
+table {
+	border-collapse: separate;
+	border-spacing: 8px;
+}
+
+table.noVSpace {
+	border-spacing: 8px 0;
+}
+
+tr.button_bar td {
+	height: 50px;
+	width: 165px;
+}
+  
+tr.button_bar td:not([class~=noHover]),
+div.fake-button a {
+	cursor: pointer;
+}
+
+tr.button_bar td,
+div.fake-button a {
+	overflow: hidden;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #808080;
+}
+
+tr.button_bar td.button_doublewide {
+	width: 340px; /*button width * 2 + margin*/
+}
+
+tr.button_bar td.newsbox {
+	width: 618px;
+}
+
+tr.button_bar td.button_arrownarrow {
+	width: 26px;
+}
+
+tr.button_bar_tall td {
+	height: 100px;
+}
+  
+tr.button_bar td:not([class~=noHover]):Hover,
+div.fake-button a:Hover {
+	color: #ffffff;
+	text-shadow: #555599 0.1em 0.1em 0.2em;
+	background: #5985EE; /* for non-css3 browsers */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#A8BFF5', endColorstr='#5985EE'); /* for IE */
+	background: -webkit-gradient(linear, left top, left bottom, from(#A8BFF5), to(#5985EE)); /* for webkit browsers */
+	background: -moz-linear-gradient(top,  #A8BFF5,  #5985EE); /* for firefox 3.6+ */ 
+}
+
+.button_bar td {
+	vertical-align: middle;
+	text-align: center;
+}
+  
+.button_bar td {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.button_bar_tall td {
+	font-size: 21px;
+}
+
+/* Vertical Container, from dukechronicle.com */
+.vertical-container {
+	-webkit-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	-ms-transform: rotate(90deg);
+	-o-transform: rotate(90deg);
+	transform: rotate(90deg);
+	-webkit-transform-origin: 453px 461px;
+	-moz-transform-origin: 453px 461px;
+	-ms-transform-origin: 453px 461px;
+	-o-transform-origin: 453px 461px;
+	transform-origin: 453px 461px;
+	white-space: nowrap;
+	display: block;
+	position: absoluate;
+	visibility: visible;
+	height: 0px;
+	width: 0px;
+}
+
+.vertical-container a {
+	width: 110px;
+	height: 30px;
+	line-height: 27px;
+	text-align: center;
+	visibility: visible; 
+	position: absolute;
+}

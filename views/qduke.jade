@@ -1,0 +1,85 @@
+!!! 5
+html
+    head
+        link(href='http://fonts.googleapis.com/css?family=Karla', rel='stylesheet', type='text/css')
+        script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js', type='text/javascript')
+        script(src='https://raw.github.com/monkeecreate/jquery.simpleWeather/master/jquery.simpleWeather.js', type='text/javascript')
+        script(src='#{assetPath}qduke.js', type='text/javascript')
+        link(rel='stylesheet', type='text/css', href='#{assetPath}qduke.css')
+        title qDuke.com
+    body
+        div#promobar Welcome to the new qDuke.com! 
+            a(href="https://docs.google.com/spreadsheet/viewform?formkey=dHplTkN2SmdXZEhtZTF1SWRPdFlBM2c6MQ#gid=0") Let us know what you think.
+        div#shell
+            div#header
+                div#logo
+                    p#title
+                        a(href='http://qduke.com') q
+                            span.strong Duke
+                            | .com
+                    p#subtitle presented by 
+                        a#chrontitle(href='http://dukechronicle.com') The Chronicle
+            section#info
+                table.noVSpace
+                    tr.button_bar.default_lightgrey.infobar.clearfix
+                        td
+                            a#time(href='http://google.com/calendar') Calendar
+                        td
+                            a#weather(href='http://www.weather.com/weather/right-now/Durham+NC+27708') Weather
+                        td
+                            a#webmail(href='https://webmail.duke.edu') Webmail
+                        td
+                            a#gmail(href='http://gmail.com') Gmail
+                        td
+                            a#faceboook(href='http://facebook.com') Facebook
+                table
+                    tr.button_bar.clearfix
+                        td.button_blue
+                            a(href='http://www.dukechronicle.com') The Chronicle
+                        td.button_arrownarrow.button_grey
+                            a(href='javascript:prevArticle();') &laquo;
+                        td#newsbox.newsbox.button_grey
+                            a(href="#") Loading...
+                        td.button_arrownarrow.button_grey
+                            a(href='javascript:nextArticle();') &raquo;
+            section#links
+                table.noVSpace
+                    tr.button_bar.clearfix
+                        td.button_doublewide.button_grey.noHover#search
+                            input(name='query', type='text', style='background:transparent', onkeydown='searchOnEnter(event)')
+                        td.button_blue(onclick='search("Google")')
+                            button(type="submit", onclick='search("Google")') Google
+                        td.button_blue(onclick='search("WolframAlpha")')
+                            button(type='submit', onclick='search("WolframAlpha")') WolframAlpha
+                        td.button_blue(onclick='search("Duke")')
+                            button(type='submit', onclick='search("Duke")') Duke
+                table
+                    - var linkRows = Math.ceil(links.length/5)
+                    tr.button_bar.button_bar_tall.default_lightblue.clearfix
+                        -for (var i = 0; i < 5; i++)
+                            td 
+                                a(href=links[i].url) #{links[i].title}
+                    - for (var row = 1; row < linkRows; row++)
+                        tr.button_bar.default_lightblue.clearfix
+                            -for (var i = row*5; i < row*5+5; i++)
+                                td 
+                                    a(href=links[i].url) #{links[i].title}
+            section#ads
+                div.vertical-container.fake-button
+                    a Sponsored
+                table
+                    - var adRows = Math.ceil(ads.length/5)
+                    - for (var row = 0; row < adRows; row++)
+                        tr.button_bar.default_lightgrey.clearfix
+                            -for (var i = row*5; i < row*5+5; i++)
+                                td 
+                                    a(href=ads[i].url) #{ads[i].title}
+            div#footer
+                p &copy; 2012 
+                    a(href='http://dukechronicle.com') The Chronicle 
+                    |
+                    a(href='http://dukechronicle.com/page/advertising') Advertising 
+                    |
+                    a(href='http://dukechronicle.com/page/contact') Contact 
+                script(type='text/javascript')
+                    doMagic()

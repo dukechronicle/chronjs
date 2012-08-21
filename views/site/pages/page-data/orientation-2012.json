@@ -199,5 +199,35 @@
                 "title": "Faculty in Residence Open Houses"
             }
         ]
-    }
+    },
+    "articles": [
+        {
+            "title": "Stuff to do on campus",
+            "images": {"ThumbRectL": {"url": "http://d2770i1y1fck5h.cloudfront.net/276x165-0-20.826086956521692-QMTx4TqG-dukegardens_Special.jpg"}},
+            "url": "/article/stuff-do-campus"
+        },
+        {
+            "title": "Where to eat",
+            "images": {"ThumbRect": {"url": "http://d2770i1y1fck5h.cloudfront.net/186x133-135.75939849624058-0-aOsqLGCa-PlatePitchfork_ThanhHaFile.jpg"}},
+            "teaser": "Both on and off-campus, Duke and Durham offer a wide variety of delicious food options.",
+            "url": "/article/where-eat"
+        },
+        {
+            "title": "Where to go off campus",
+            "images": {"ThumbRect": {"url": "http://d2770i1y1fck5h.cloudfront.net/186x133-0-24.725806451612925-yaJwdpmP-StateFair_CRodFile.jpg"}},
+            "teaser": "Take a break from campus life and visit some of the many cultural venues Durham and the Triangle area have to offer.",
+            "url": "/article/where-go-campus"
+        },
+        {
+            "title": "Who's who at Duke",
+            "images": {"ThumbRect": {"url": "http://d2770i1y1fck5h.cloudfront.net/186x133-0-0-hacw0UPH-swain_ToriPowers.jpg"}},
+            "teaser": "These are the students and administrators who keep the university working and moving forward.",
+            "url": "/article/whos-who-duke"
+        },
+        {
+            "title": "Summer brings Law School gift, new Chapel Dean",
+            "teaser": "In mid-July, Duke Law School received a $5 million gift from Stanley Star, Law ’61, and his wife Elizabeth Star to fund student scholarships and a matching fund for donations.",
+            "url": "/article/summer-brings-law-school-gift-new-chapel-dean"
+        }
+    ]
 }

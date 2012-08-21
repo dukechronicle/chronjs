@@ -33,18 +33,18 @@ function loadDynamics() {
                     html = "Now: ";
                     html += weather.currently + ", ";
                     html += weather.temp+'&deg; '+weather.units.temp;
-                    $("#weather .element").html(html);
-                    $("#weather .element").parent().css("background-image", "url("+weather.image+")").css("background-repeat", "no-repeat").css("background-position", "-5px -12px").css("background-size", "100%");  
+                    $("a#weather").html(html);
+                    //$("a#weather").parent().css("background-image", "url("+weather.image+")").css("background-repeat", "no-repeat").css("background-position", "-5px -12px").css("background-size", "100%");
             },
             error: function(error) {
-                    $("#weather .element").html("Weather");
+                    $("#weather a").html("Weather");
             }
     });
     // Date
     var myDate = new Date();
     var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
     var dayNames = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
-    $("#time .element").html( dayNames[myDate.getDay()] + ', <br />' + monthNames[myDate.getMonth()] + " " + myDate.getDate() + ', ' + myDate.getFullYear() );
+    $("a#time").html( dayNames[myDate.getDay()] + ', <br />' + monthNames[myDate.getMonth()] + " " + myDate.getDate() + ', ' + myDate.getFullYear() );
 }
 
 var articles;
@@ -91,27 +91,35 @@ function prevArticle() {
 }
 
 function showArticle(index) {
-    $("#newsbox .element").html(articles[index].title)
+    $("#newsbox a").html(articles[index].title)
     urls = articles[index].urls
     $("#newsbox a").attr("href", "http://dukechronicle.com/article/" + urls[urls.length-1])
 }
 
 // http://wptheming.com/2012/01/tracking-outbound-links-with-google-analytics/
 function addListeners() {
-    $("a").on('click',function(e){
-        var url = $(this).attr("href");
-        var text = $(this).attr("id") || $(this).text() || url
-        if (e.currentTarget.host != window.location.host) {
-            _gat._getTrackerByName()._trackEvent("Outbound Links", text, url);
-            if (e.metaKey || e.ctrlKey) {
-                 var newtab = true;
-            }
-            if (!newtab) {
-                 e.preventDefault();
-                 setTimeout('document.location = "' + url + '"', 100);
-            }
-        }
+    $("td").has("a").on('click',function(e){
+        trackAndGo($("a", this), e)
     });
+    $("a").on('click',function(e){
+        trackAndGo($(this), e)
+    });
+}
+
+function trackAndGo(a, e) {
+    var url = a.attr("href");
+    var text = a.attr("id") || a.text() || url
+    console.log(text)
+    if (e.currentTarget.host != window.location.host) {
+        _gat._getTrackerByName()._trackEvent("Outbound Links", text, url);
+        if (e.metaKey || e.ctrlKey) {
+             var newtab = true;
+        }
+        if (!newtab) {
+             e.preventDefault();
+             setTimeout('document.location = "' + url + '"', 100);
+        }
+    }
 }
 
 function searchOnEnter(e) {
@@ -121,6 +129,7 @@ function searchOnEnter(e) {
 }
 
 function search(engine) {
+    console.log("search")
     var target = engine || "Google";
 
     var redirect;

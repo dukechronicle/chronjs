@@ -5,7 +5,7 @@ define(['jquery'], function ($) {
         '.add-field': function () {
             $('.add-field').click(function (e) {
                 e.preventDefault();
-                var $items = $(this).parent().parent().children("li");
+                var $items = $(this).parent().parent().children('li');
                 var index = $items.index($(this).parent());
                 var name = $(this).data('name') + '[' + index + ']';
 

@@ -2,7 +2,7 @@ nav.subnav.rounded
     - if (typeof parentPaths != 'undefined')
         - each parent in parentPaths
             a.hover.selected(href='/section/' + parent.path)
-                h2 #{parent.name} |
+                h2 #{parent.name} &raquo;
     - if (typeof subsections != 'undefined')
         - each subsection in subsections
             a.hover(href='/section/' + subsection.path)

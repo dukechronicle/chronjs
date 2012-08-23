@@ -31,7 +31,7 @@ site.news = function (req, res) {
             pageTitle: "News",
             locals: {
                 subsections:children,
-                section: 'News',
+                section: 'news',
                 model:model
             }
         });
@@ -45,7 +45,7 @@ site.sports = function (req, res) {
             locals: {
                 subsections: children,
                 model:model,
-                section: 'Sports'
+                section: 'sports'
             }
         });
     });
@@ -57,7 +57,7 @@ site.opinion = function (req, res) {
             pageTitle: "Opinion",
             locals: {
                 subsections:children,
-                section: 'Opinion',
+                section: 'opinion',
                 model:model
             }
         });
@@ -70,7 +70,7 @@ site.recess = function (req, res) {
             pageTitle: "Recess",
             locals: {
                 subsections:children,
-                section: 'Recess',
+                section: 'recess',
                 model:model
             }
         });
@@ -83,7 +83,7 @@ site.towerview = function (req, res) {
             pageTitle: "Towerview",
             locals: {
                 subsections:children,
-                section: 'Towerview',
+                section: 'towerview',
                 model:model
             }
         });

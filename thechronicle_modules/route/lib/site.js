@@ -31,7 +31,7 @@ site.news = function (req, res) {
             pageTitle: "News",
             locals: {
                 subsections:children,
-                section: 'news',
+                section: 'News',
                 model:model
             }
         });
@@ -44,8 +44,8 @@ site.sports = function (req, res) {
             pageTitle: "Sports",
             locals: {
                 subsections: children,
-                model:model,
-                section: 'sports'
+                section: 'Sports',
+                model:model
             }
         });
     });
@@ -57,7 +57,7 @@ site.opinion = function (req, res) {
             pageTitle: "Opinion",
             locals: {
                 subsections:children,
-                section: 'opinion',
+                section: 'Opinion',
                 model:model
             }
         });
@@ -70,7 +70,7 @@ site.recess = function (req, res) {
             pageTitle: "Recess",
             locals: {
                 subsections:children,
-                section: 'recess',
+                section: 'Recess',
                 model:model
             }
         });
@@ -83,7 +83,7 @@ site.towerview = function (req, res) {
             pageTitle: "Towerview",
             locals: {
                 subsections:children,
-                section: 'towerview',
+                section: 'Towerview',
                 model:model
             }
         });
@@ -163,7 +163,6 @@ site.article = function (req, res, next) {
             res.redirect(doc.url);
         else {
             req.session.polls = req.session.polls || {};
-
             var locals = {
                 doc:doc,
                 pageTitle: doc.title,

@@ -102,7 +102,7 @@ site.section = function (req, res, next) {
                     docs:docs,
                     next:nextDoc,
                     subsections:children,
-                    parentPaths:parents,
+                    parents:parents,
                     section: sectionArray[0],
                     popular: popular,
                     taxonomyPath: sectionArray.join('/')

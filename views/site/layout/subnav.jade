@@ -1,9 +1,9 @@
 nav.subnav
-    - if (typeof parents != 'undefined')
+    - if (parents)
         - each parent in parents
             a.hover.selected(href='/section/' + parent.path)
                 h2 #{parent.name} &raquo;
-    - if (typeof subsections != 'undefined')
+    - if (subsections)
         - each subsection in subsections
             a.hover(href='/section/' + subsection.path)
                 h2= subsection.name

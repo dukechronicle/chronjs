@@ -2,8 +2,6 @@ extends layout
 
 block content
     #sports
-        !=partial('../layout/subnav', {subsections: subsections})
-
         #top.clearfix
             if (model.Slideshow)
                 !=partial('../container/slideshow/slideshow-right', {stories: model.Slideshow})

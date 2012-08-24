@@ -508,9 +508,12 @@ site.getPageContent = function(url, callback) {
         if (err) callback(err);
         else if (!page) callback();
         else {
-            page.view = api.page.view(page);
-            page.model = api.page.generateModel(page);
-            callback(null, page);
+            api.page.generateModel(page, function (err, model) {
+                if (err) return callback(err);
+                page.view = api.page.view(page);
+                page.model = model;
+                callback(null, page);
+            });
         }
     });
 };

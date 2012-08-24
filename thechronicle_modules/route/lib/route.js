@@ -37,7 +37,7 @@ exports.siteInit = function (app) {
         app.del('/article/:id', api.site.checkAdmin, siteApi.deleteArticle);
     });
 
-    app.get('*', site.page);
+    app.get('/page/:url', site.page);
 
     app.get('/', site.frontpage);
     app.get('/news', site.news);
@@ -66,7 +66,6 @@ exports.siteInit = function (app) {
         app.get('/user-guidelines', site.staticPage);
         app.get('/young-trustee-2012', site.staticPage);
         app.get('/commencement-2012', site.staticPage);
-        app.get('/orientation-2012', site.staticPage);
 
         app.post('/newsletter', site.newsletterData);
     });

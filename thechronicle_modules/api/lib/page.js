@@ -1,28 +1,75 @@
-var page = exports;
-
 var api = require("../../api");
 var db = require("../../db-abstract");
 var log = require("../../log");
 
+var JSV = require('JSV').JSV;
 var md = require('discount');
 var _ = require('underscore');
 
+
+var validator = JSV.createEnvironment();
+validator.createSchema({
+    id: 'markdown',
+    extends: {type: 'string'},
+    description: 'Markdown text',
+});
 
 var GROUP_TYPES = {
     'markdown': md.parse,
 };
 
-page.schemata = {
+exports.schemata = {
     'Single Block': {
         view: 'site/pages/single-block',
         model: {
-            contents: 'markdown',
+            contents: {
+                extends: {'$ref': 'markdown'},
+                required: true,
+                name: 'Body Contents',
+            }
+        }
+    },
+    'Orientation': {
+        view: 'site/pages/orientation-2012',
+        model: {
+            schedule: {
+                type: 'object',
+                required: true,
+                additionalProperties: {
+                    type: 'array',
+                    items: {
+                        type: 'object',
+                        properties: {
+                            time: {
+                                type: 'string',
+                                required: true,
+                            },
+                            title: {
+                                type: 'string',
+                                required: true,
+                            },
+                            location: {
+                                type: 'string',
+                                required: false,
+                            }
+                        }
+                    }
+                }
+            },
+            articles: {
+                type: 'array',
+                required: true,
+                items: {type: 'string'},
+            },
+            recruitment: {
+                type: 'string',
+                required: true,
+            }
         }
     }
 };
 
-
-page.getByUrl = function (url, callback) {
+exports.getByUrl = function (url, callback) {
     db.page.getByUrl(url, function (err, res) {
         if (err) callback(err);
         else if (res.length == 0) callback();
@@ -31,20 +78,40 @@ page.getByUrl = function (url, callback) {
     });
 };
 
-page.generateModel = function (page) {
-    var template = page.schemata[page.template].model;
-    var model = {};
-    _.each(template, function (value, key) {
-        model[key] = GROUP_TYPES[value](page.model[key]);
+exports.generateModel = function (page) {
+    var schema = {
+        type: 'object',
+        required: true,
+        properties: exports.schemata[page.template].model,
+    };
+    var report = validator.validate(page.model, schema);
+    if (report.errors.length > 0) {
+        log.error(report.errors);
+        return null;
+    }
+
+    recurseInstances(report.instance, report.validated);
+    return page.model;
+};
+
+function recurseInstances(instance, validated) {
+    _.each(instance.getProperties(), function (child, key) {
+        _.each(validated[child.getURI()], function (schemaUri) {
+            var type = validator.findSchema(schemaUri).getAttribute('id');
+            if (type in GROUP_TYPES) {
+                instance.getValue()[key] = GROUP_TYPES[type](instance.getValue()[key]);
+            }
+        });
+
+        recurseInstances(child, validated);
     });
-    return model;
+}
+
+exports.view = function (page) {
+    return exports.schemata[page.template].view;
 };
 
-page.view = function (page) {
-    return page.schemata[page.template].view;
-};
-
-page.add = function (data, callback) {
+exports.add = function (data, callback) {
     if (!data.url) callback("URL for page required");
 
     data.type = "page";
@@ -55,7 +122,7 @@ page.add = function (data, callback) {
     });
 };
 
-page.edit = function (id, data, callback) {
+exports.edit = function (id, data, callback) {
     db.page.edit(id, data, function (err, res) {
         if (err) callback(err);
         else callback(null, data.node_title);

@@ -20,10 +20,11 @@ exports.templates = {
         }
     },
     'Orientation': {
-        view: 'site/pages/orientation-2012',
+        view: 'site/pages/orientation',
         model: {
             schedule: {
                 type: 'object',
+                name: 'Week Schedule',
                 required: true,
                 additionalProperties: {
                     type: 'array',
@@ -48,11 +49,13 @@ exports.templates = {
             },
             articles: {
                 type: 'array',
+                name: 'Orientation Articles',
                 required: true,
-                items: {type: 'string'},
+                items: {'$ref': 'article'},
             },
             recruitment: {
-                type: 'string',
+                extends: {'$ref': 'article'},
+                name: 'Recruitment Article',
                 required: true,
             }
         }
@@ -61,17 +64,26 @@ exports.templates = {
 
 var schemata = [
     {
+        id: 'article',
+        extends: {type: 'string'},
+        description: 'Article Relative URL',
+    },
+    {
         id: 'markdown',
         extends: {type: 'string'},
         description: 'Markdown text',
     }
 ];
+
 var validator = JSV.createEnvironment();
 _.each(schemata, function (schema) {
     validator.createSchema(schema);
 });
 
 var TRANSFORMATIONS = {
+    'article': function (url, callback) {
+        api.article.getByUrl(url, callback);
+    },
     'markdown': function (markdown, callback) {
         callback(null, md.parse(markdown));
     }

@@ -293,12 +293,9 @@ exports.doc = {
 
             byUrl: {
                 map: function (doc) {
-                    if (doc.type === 'page') {
-                        emit(doc.url, doc);
-                        if (doc.aliases) {
-                            for (var url in doc.aliases) {
-                                emit(url, doc);
-                            }
+                    if (doc.type === 'page' && doc.urls) {
+                        for (var i = 0; i < doc.urls.length; i++) {
+                            emit(doc.urls[i], doc);
                         }
                     }
                 }

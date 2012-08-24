@@ -2,23 +2,13 @@ var api = require("../../api");
 var db = require("../../db-abstract");
 var log = require("../../log");
 
+var async = require('async');
 var JSV = require('JSV').JSV;
 var md = require('discount');
 var _ = require('underscore');
 
 
-var validator = JSV.createEnvironment();
-validator.createSchema({
-    id: 'markdown',
-    extends: {type: 'string'},
-    description: 'Markdown text',
-});
-
-var GROUP_TYPES = {
-    'markdown': md.parse,
-};
-
-exports.schemata = {
+exports.templates = {
     'Single Block': {
         view: 'site/pages/single-block',
         model: {
@@ -69,6 +59,25 @@ exports.schemata = {
     }
 };
 
+var schemata = [
+    {
+        id: 'markdown',
+        extends: {type: 'string'},
+        description: 'Markdown text',
+    }
+];
+var validator = JSV.createEnvironment();
+_.each(schemata, function (schema) {
+    validator.createSchema(schema);
+});
+
+var TRANSFORMATIONS = {
+    'markdown': function (markdown, callback) {
+        callback(null, md.parse(markdown));
+    }
+};
+
+
 exports.getByUrl = function (url, callback) {
     db.page.getByUrl(url, function (err, res) {
         if (err) callback(err);
@@ -78,37 +87,48 @@ exports.getByUrl = function (url, callback) {
     });
 };
 
-exports.generateModel = function (page) {
+exports.generateModel = function (page, callback) {
     var schema = {
         type: 'object',
         required: true,
-        properties: exports.schemata[page.template].model,
+        properties: exports.templates[page.template].model,
     };
     var report = validator.validate(page.model, schema);
     if (report.errors.length > 0) {
-        log.error(report.errors);
-        return null;
+        return callback(report.errors);
     }
 
-    recurseInstances(report.instance, report.validated);
-    return page.model;
+    var operations = convertProperties(report.instance, report.validated);
+    async.parallel(operations, function (err) {
+        callback(err, page.model);
+    });
 };
 
-function recurseInstances(instance, validated) {
+function convertProperties(instance, validated) {
+    var operations = [];
     _.each(instance.getProperties(), function (child, key) {
         _.each(validated[child.getURI()], function (schemaUri) {
             var type = validator.findSchema(schemaUri).getAttribute('id');
-            if (type in GROUP_TYPES) {
-                instance.getValue()[key] = GROUP_TYPES[type](instance.getValue()[key]);
+            if (type in TRANSFORMATIONS) {
+                operations.push(function (callback) {
+                    var value = instance.getValue();
+                    var operation = TRANSFORMATIONS[type];
+                    operation(value[key], function (err, result) {
+                        value[key] = result;
+                        callback(err);
+                    });
+                });
             }
         });
 
-        recurseInstances(child, validated);
+        var childOperations = convertProperties(child, validated);
+        Array.prototype.push.apply(operations, childOperations);
     });
+    return operations;
 }
 
 exports.view = function (page) {
-    return exports.schemata[page.template].view;
+    return exports.templates[page.template].view;
 };
 
 exports.add = function (data, callback) {

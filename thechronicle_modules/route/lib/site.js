@@ -312,7 +312,7 @@ site.rss = function (req, res, next) {
 };
 
 site.page = function (req, res, next) {
-    api.site.getPageContent(req.path, function (err, page) {
+    api.site.getPageContent(req.params.url, function (err, page) {
         if (err) return next(err);
         else if (!page) next();
         else {
@@ -329,6 +329,7 @@ site.staticPage = function (req, res, next) {
     var filename = 'site/pages/' + url;
     fs.readFile('views/site/pages/page-data/' + url + '.json', function (err, data) {
         var data = (!err && data) ? JSON.parse(data.toString()) : null;
+        log.debug(data);
         res.render(filename, {
             data: data
         });

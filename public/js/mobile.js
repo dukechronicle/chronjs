@@ -64,7 +64,7 @@ function generateListItem(articleJSON)
     hyperlink.append($('<h2 />').html(article.title));
 
     // Article Date
-    hyperlink.append($('<h3 />').html(dateString));
+    hyperlink.append($('<h3 />').html(article.authors + dateString));
 
     // Article Synopsis
     hyperlink.append($('<p />').html(article.teaser));

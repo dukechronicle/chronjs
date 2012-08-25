@@ -21,7 +21,7 @@ var articleCache = [];
 function showFullSite() {
     _gaq.push(['_trackEvent', 'Mobile', 'OptOut']);
     setCookie("forceFullSite", "true", 1, '/');
-    window.location = "/";
+    window.location = "http://dukechronicle.com";
 }
 
 function setCookie(c_name, value, exdays, path)

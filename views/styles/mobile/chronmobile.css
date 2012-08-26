@@ -1,9 +1,27 @@
-#searchBox {
-    padding: 0 10px;
+#HEADER_TITLE {
+    margin: 0;
+    padding: .6em 0;
+    display: inline-block;
 }
 
-.ui-header .ui-fullsize .ui-btn-inner, .ui-footer .ui-fullsize .ui-btn-inner {
+#searchBox {
+    padding: 0 10px;
+    height: 0;
+    width: 50%;
+    float:right;
+}
+
+.ui-input-search {
+    margin: 0;
+}
+
+.ui-header .ui-fullsize .ui-btn-inner {
     padding: 0;
+}
+
+.ui-header {
+    padding: 10px;
+    width:auto;
 }
 
 .ui-li-heading  {

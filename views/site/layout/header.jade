@@ -46,8 +46,4 @@
 
     form.span-2.last#search-box(action='/search/', method='GET')
         input(type='search', name='q', placeholder='Search archives', results='5', value=query)
-- if (typeof parents != 'undefined')
-    - var parents = false
-- if (typeof subsections != 'undefined')
-    - var subsections = false
-!=partial('../layout/subnav', {parents: parents, subsections: subsections})
+!=partial('../layout/subnav', {parents: (typeof parents != "undefined") ? parents : [], subsections: (typeof subsections != "undefined") ? subsections : []})

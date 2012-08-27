@@ -20,7 +20,8 @@ var NEWSLETTER_FROM_NAME = 'The Chronicle';
 
 
 newsletter.init = function() {
-    NEWSLETTER_FROM_EMAIL = "no-reply@"+config.get('DOMAIN_NAME').replace("www.", "");
+    var domain = 'www.dukechronicle.com';
+    NEWSLETTER_FROM_EMAIL = 'no-reply@' + domain.replace('www.', '');
 
     var apiKey = config.get("MAILCHIMP_API_KEY");
     try {
@@ -35,10 +36,7 @@ newsletter.sendTestNewsletter = function (campaignID, emailToSendTo, callback) {
         test_emails: [emailToSendTo],
         cid: campaignID
     };
-    mcAPI.campaignSendTest(options, function (res) {
-        if (!res) callback("Sending Campaign failed!");
-        else callback();
-    });
+    mcAPI.campaignSendTest(options, callback);
 };
 
 newsletter.addSubscriber = function (subscriberEmail, callback) {
@@ -47,10 +45,7 @@ newsletter.addSubscriber = function (subscriberEmail, callback) {
         email_address: subscriberEmail,
         send_welcome: true
     };
-    mcAPI.listSubscribe(options, function (res) {
-        if (!res) callback("Adding subscriber to list failed!");
-        else callback();
-    });
+    mcAPI.listSubscribe(options, callback);
 };
 
 newsletter.removeSubscriber = function (subscriberEmail, callback) {
@@ -61,32 +56,47 @@ newsletter.removeSubscriber = function (subscriberEmail, callback) {
         send_welcome: true,
         send_goodbye: false
     };
-    mcAPI.listUnsubscribe(options, function (res) {
-        if (!res) callback("Removing subscriber to list failed!");
-        else callback();
-    });
+    mcAPI.listUnsubscribe(options, callback);
 };
 
 newsletter.sendNewsletter = function (campaignID, callback) {
-    mcAPI.campaignSendNow({cid:campaignID}, function (res) {
-        if (!res) callback("Sending Campaign failed!");
-        else callback(null);
-    });
+    mcAPI.campaignSendNow({cid:campaignID}, callback);
 };
 
 newsletter.createNewsletter = function (callback) {
-    var options = {
-        list_id: listID,
-        subject: getNewsletterSubject(),
-        from_email: newsletterFromEmail,
-        from_name: newsletterFromName,
-        title: getNewsletterSubject(),
-        template_id: config.get('MAILCHIMP_TEMPLATE_ID'),
-    };
+    getNewsletterContent(function (err, newsHTML, adHTML) {
+        if (err) return callback(err);
 
+        var options = {
+            type: 'regular',
+            options: {
+                list_id: config.get('MAILCHIMP_LIST_ID'),
+                subject: getNewsletterSubject(),
+                from_email: NEWSLETTER_FROM_EMAIL,
+                from_name: NEWSLETTER_FROM_NAME,
+                title: getNewsletterSubject(),
+                template_id: config.get('MAILCHIMP_TEMPLATE_ID'),
+            },
+            content: {
+                html_MAIN: newsHTML,
+                html_ADIMAGE: adHTML,
+                html_ISSUEDATE: getDate()
+            },
+        };
+        mcAPI.campaignCreate(options, function (err, res) {
+            if (err) return callback(err);
+            log.info('Campaign ID: ' + res);
+            callback(null, res);
+        });
+    });
+};
+
+function getNewsletterContent(callback) {
     var namespace = config.get('LAYOUT_GROUPS').Newsletter.namespace;
     api.group.docs(namespace, null, function (err, model) {
+        if (err) return callback(err);
         fs.readFile('views/newsletter.jade', function (err, data) {
+            if (err) return callback(err);
             var newsHTML = jade.compile(data)({
                 model: model
             });
@@ -94,27 +104,15 @@ newsletter.createNewsletter = function (callback) {
 
             // disable test ad
             adHTML = "";
-
-            var contentArr = {"html_MAIN":newsHTML, "html_ADIMAGE":adHTML, "html_ISSUEDATE":getDate()};
-            var params = {"type":"regular", "options":optArray, "content":contentArr};
-
-            mcAPI.campaignCreate(params, function (res) {
-                if (res.error) {
-                    callback('Error: ' + res.error + ' (' + res.code + ')');
-                }
-                else {
-                    log.info("Campaign ID: " + res);
-                    callback(null, res);
-                }
-            });
+            callback(null, newsHTML, adHTML);
         });
     });
-};
+}
 
 function getNewsletterSubject() {
     return "Duke Chronicle Daily Newsletter " + getDate();
 }
 
 function getDate() {
-    return dateFormat(newDate, 'm/d/yyyy');
+    return dateFormat(new Date, 'm/d/yyyy');
 }

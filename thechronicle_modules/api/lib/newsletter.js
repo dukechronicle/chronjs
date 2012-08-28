@@ -20,12 +20,12 @@ var NEWSLETTER_FROM_NAME = 'The Chronicle';
 
 
 newsletter.init = function() {
-    var domain = 'www.dukechronicle.com';
+    var domain = config.get('DOMAIN_NAME');
     NEWSLETTER_FROM_EMAIL = 'no-reply@' + domain.replace('www.', '');
 
     var apiKey = config.get("MAILCHIMP_API_KEY");
     try {
-        mcAPI = new mailchimp.MailChimpAPI(apiKey, {version : '1.3', secure : true});
+        mcAPI = new mailchimp.MailChimpAPI(apiKey, {version: '1.3', secure: true});
     } catch (error) {
         log.error(error);
     }
@@ -100,10 +100,11 @@ function getNewsletterContent(callback) {
             var newsHTML = jade.compile(data)({
                 model: model
             });
-            var adHTML = "<a href='www.google.com'><img src='https://www.google.com/help/hc/images/adsense_185666_adformat-display_160x600_en.jpg'></img></a>";
 
-            // disable test ad
-            adHTML = "";
+            var adImage = config.get('CLOUDFRONT_STATIC') + '/img/ad/belk_wide_skyscraper.jpg';
+            var adHref = 'http://clk.atdmt.com/COM/go/412687593/direct/01/';
+            var adHTML = '<a href="' + adHref + '"><img src="' + adImage + '"></a>';
+
             callback(null, newsHTML, adHTML);
         });
     });

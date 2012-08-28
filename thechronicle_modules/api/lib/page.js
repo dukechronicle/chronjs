@@ -67,11 +67,17 @@ var schemata = [
         id: 'article',
         extends: {type: 'string'},
         description: 'Article Relative URL',
+        transformation: function (url, callback) {
+            api.article.getByUrl(url, callback);
+        }
     },
     {
         id: 'markdown',
         extends: {type: 'string'},
         description: 'Markdown text',
+        transformation: function (markdown, callback) {
+            callback(null, md.parse(markdown));
+        }
     }
 ];
 
@@ -79,15 +85,6 @@ var validator = JSV.createEnvironment();
 _.each(schemata, function (schema) {
     validator.createSchema(schema);
 });
-
-var TRANSFORMATIONS = {
-    'article': function (url, callback) {
-        api.article.getByUrl(url, callback);
-    },
-    'markdown': function (markdown, callback) {
-        callback(null, md.parse(markdown));
-    }
-};
 
 
 exports.getByUrl = function (url, callback) {
@@ -120,11 +117,11 @@ function convertProperties(instance, validated) {
     var operations = [];
     _.each(instance.getProperties(), function (child, key) {
         _.each(validated[child.getURI()], function (schemaUri) {
-            var type = validator.findSchema(schemaUri).getAttribute('id');
-            if (type in TRANSFORMATIONS) {
+            var schema = validator.findSchema(schemaUri);
+            var operation = schema.getAttribute('transformation');
+            if (operation) {
                 operations.push(function (callback) {
                     var value = instance.getValue();
-                    var operation = TRANSFORMATIONS[type];
                     operation(value[key], function (err, result) {
                         value[key] = result;
                         callback(err);

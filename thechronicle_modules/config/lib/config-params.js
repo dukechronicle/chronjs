@@ -212,7 +212,7 @@ var configParams = [
                 { name: 'Baseball', children: [] },
                 { name: 'Basketball',
                   children:
-                  [ { name: 'Men', children: [] },
+                  [ { name: 'Men', pretty: 'Duke Basketball', children: [] },
                     { name: 'Women', children: [] } ] },
                 { name: 'Cross Country',
                   children:
@@ -284,6 +284,10 @@ var configParams = [
                 properties: {
                     name: {
                         required: true,
+                        type: 'string',
+                    },
+                    pretty: {
+                        required: false,
                         type: 'string',
                     },
                     children: {'$ref': 'taxonomyLevel'},

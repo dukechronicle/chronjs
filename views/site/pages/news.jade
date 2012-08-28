@@ -2,8 +2,6 @@ extends layout
 
 block content
     #news
-        !=partial('../layout/subnav', {subsections: subsections})
-
         .clearfix.align-group
             .span-6.align-element(data-aligntarget="#featured .rounded")
                 - if (model.Featured && model.Featured[0])

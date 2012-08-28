@@ -34,13 +34,16 @@
 
 #header-bottom.clearfix
     nav.span-10#nav
-        a(href="/news", class=(section == 'News') ? "active" : ""): h2 News
-        a(href="/sports", class=(section == 'Sports') ? "active" : ""): h2 Sports
-        a(href="/opinion", class=(section == 'Opinion') ? "active" : ""): h2 Opinion
-        a(href="/recess", class=(section == 'Recess') ? "active" : ""): h2 Recess
-        a(href="/towerview", class=(section == 'Towerview') ? "active" : ""): h2 Towerview
+        - if (typeof section != 'undefined')
+            - section = section.toLowerCase()
+        a(href="/news", class=(section == 'news') ? "active" : ""): h2 News
+        a(href="/sports", class=(section == 'sports') ? "active" : ""): h2 Sports
+        a(href="/opinion", class=(section == 'opinion') ? "active" : ""): h2 Opinion
+        a(href="/recess", class=(section == 'recess') ? "active" : ""): h2 Recess
+        a(href="/towerview", class=(section == 'towerview') ? "active" : ""): h2 Towerview
         a(href="http://chronicleblogs.com"): h2 Blogs
         a(href="http://shutter.dukechronicle.com"): h2 Photos
 
     form.span-2.last#search-box(action='/search/', method='GET')
         input(type='search', name='q', placeholder='Search archives', results='5', value=query)
+!=partial('../layout/subnav', {parents: (typeof parents != "undefined") ? parents : [], subsections: (typeof subsections != "undefined") ? subsections : []})

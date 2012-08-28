@@ -44,8 +44,8 @@ site.sports = function (req, res) {
             pageTitle: "Sports",
             locals: {
                 subsections: children,
-                model:model,
-                section: 'Sports'
+                section: 'Sports',
+                model:model
             }
         });
     });
@@ -98,11 +98,11 @@ site.section = function (req, res, next) {
         else {
             res.render('site/pages/section', {
                 locals: {
-                    pageTitle: section.name,
+                    pageTitle: section.pretty || section.name,
                     docs:docs,
                     next:nextDoc,
                     subsections:children,
-                    parentPaths:parents,
+                    parents:parents,
                     section: sectionArray[0],
                     popular: popular,
                     taxonomyPath: sectionArray.join('/')
@@ -166,7 +166,6 @@ site.article = function (req, res, next) {
             res.redirect(doc.url);
         else {
             req.session.polls = req.session.polls || {};
-
             var locals = {
                 doc:doc,
                 pageTitle: doc.title,

@@ -140,8 +140,6 @@ exports.siteInit = function (app) {
         res.redirect(config.get("CLOUDFRONT_DISTRIBUTION") + req.url);
     });
 
-    app.get('/mobile', site.mobile);
-
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);
 

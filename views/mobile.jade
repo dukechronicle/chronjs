@@ -16,21 +16,30 @@ html
   body
     #ArticleListPage(data-role='page', articlelistcontainer='true', url='news', data-add-back-btn='false')
       div(data-role='header', data-position='fixed', data-theme='b')
-        form(id="searchBox")
-            label(for="search-basic")
-            input(id="searchInput", type="search", name="search", value="", placeholder="Search")
         h1#HeaderTitle The Chronicle
-      #ArticleListContent(data-role='content', data-theme='c')
-        ul#ArticleList(data-role='listview')
-      div(data-role='footer', data-position='fixed')
-        div(data-role='navbar')
-          ul
+        a(data-icon="grid", href="/#MenuPage", data-rel="dialog", data-transition="slidedown") Options
+      #SearchContent(data-role='content')
+        form(id="searchBox")
+          label(for="search-basic")
+          input(id="searchInput", type="search", name="search", value="", placeholder="Search")
+      #ArticleListContent(data-role='content')
+        ul#ArticleList(data-role='listview', data-theme='c', data-divider-theme='d')
+    #MenuPage(data-role='page', articlelistcontainer='true', url='news', data-add-back-btn='true')
+      div(data-role='header', data-position='fixed', data-theme='b')
+        h1 Options
+      #MenuContent(data-role='content')
+        ul(data-role='listview', data-theme='c', data-divider-theme='d')
+          li(data-role="list-divider") All
+          li
+            a(href="#ArticleListPage", onclick='javascript:getArticleList(\'All\', \'The Chronicle\', false)') Recent
+          li(data-role="list-divider") Sections
+          - var categories = ["News", "Sports", "Opinion", "Recess", "Towerview"];
+          - for cat in categories
             li
-              a(href='javascript:getArticleList(\'All\', \'The Chronicle\', false)') Recent
-            li
-              a(href='javascript:getSectionList()') By Section
-            li
-              a(href='javascript:showFullSite()') Full Site
+              a(href="#ArticleListPage", onclick='javascript:getArticleList("#{cat}", "#{cat}")') #{cat}
+          li(data-role="list-divider") Settings
+          li
+            a(href='javascript:showFullSite()') Full Site
     #ArticlePage(data-role='page', articlecontainer='true', url='Article', data-add-back-btn='true', data-back-btn-text='Back')
       div(data-role='header', data-theme='b')
         h1 The Chronicle

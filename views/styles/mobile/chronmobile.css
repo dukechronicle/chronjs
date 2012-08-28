@@ -1,43 +1,22 @@
-#HeaderTitle {
-    margin: 0;
-    padding: .6em 0;
-    display: inline-block;
+#SearchContent .ui-input-search{
+    margin: .5em;
 }
 
-#searchBox {
-    padding: 0 10px;
-    height: 0;
-    width: 50%;
-    float:right;
-}
-
-.ui-input-search {
-    margin: 0;
-}
-
-.ui-header .ui-fullsize .ui-btn-inner {
+#SearchContent {
     padding: 0;
 }
 
-.ui-header {
-    padding: 10px;
-    width:auto;
-}
-
-.ui-li-heading  {
+#ArticleList .ui-li-heading  {
     white-space: normal;
     font-weight: 600;
     font-size: 14px;
 }
-.ui-li-desc {
+#ArticleList .ui-li-desc {
     white-space: normal;
     line-height: 1.2em;
 }
 
-.ui-li-divider {
-    font-size: 1.2em;
-}
-.ui-li .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li {
+#ArticleList .ui-li .ui-btn-inner a.ui-link-inherit, .ui-li-static.ui-li {
     padding: .1em 15px .1em 15px;
 }
 
@@ -64,12 +43,12 @@
     color: #777777;
 }
 
-#ARTICLE_CONTENT .author {
+#ArticleContent .author {
     margin-top: 0px;
     font-size: 0.8em;
 }
 
-.article-image {
+#ArticleContent .article-image {
     width: 100%;
     border-radius: 4px;
 }

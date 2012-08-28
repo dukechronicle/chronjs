@@ -41,11 +41,11 @@ function getDateString(time)
 {
     var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-    var date = new Date(time);
+    var date = new Date(time*1000);
     var month = MONTHS[date.getMonth()];
     var day = date.getDate();
     var year= date.getFullYear();
-    var dateString = " - " + month + " "+ day + ", " + year;
+    var dateString = month + " "+ day + ", " + year;
     
     return dateString;
 }
@@ -64,12 +64,11 @@ function generateListItem(articleJSON)
     // Thumbnail
     // hyperlink.append('<img src="' + 'img/test.png"' + ' "class"="ui-li-thumb" />');
 
-    var dateString = getDateString(article.created*1000);
     // Article Title
     hyperlink.append($('<h2 />').html(article.title));
 
     // Article Date
-    hyperlink.append($('<h3 />').html(article.authors + dateString));
+    hyperlink.append($('<h3 />').html(article.authors.join(', ')));
 
     // Article Synopsis
     hyperlink.append($('<p />').html(article.teaser));
@@ -90,8 +89,14 @@ function updateArticleList(responseText, articleListContainer, category)
 
     $(ARTICLE_LIST).empty();
 
+    var lastDate = "";
     for(var i in articleListResponse)
     {
+        curDate = getDateString(articleListResponse[i].created)
+        if (lastDate != curDate) {
+            $(ARTICLE_LIST).append("<li data-role='list-divider'>" + curDate + "</li>");
+            lastDate = curDate;
+        }
         $(ARTICLE_LIST).append(generateListItem(articleListResponse[i]));
         lastDocID[category] = articleListResponse[i]._id;
     }
@@ -101,6 +106,8 @@ function updateArticleList(responseText, articleListContainer, category)
 
 function getArticleList(category, title, forced)
 {
+    // Clear search box.
+    $('#searchInput').val("");
     // Retrieve if cache miss, forced reload, or if cache is too old:
     if(articleListCache[category] == null || forced || new Date().getTime() - articleListCache[category].timestamp > ARTICLE_LIST_CACHE_TIMEOUT)
     {
@@ -133,7 +140,7 @@ function getArticleList(category, title, forced)
         });
     } 
     else {
-        updateArticleList(articleListCache[category].data, $(this), title);
+        updateArticleList(articleListCache[category].data.docs, $(this), title);
     }
 }
 
@@ -150,11 +157,9 @@ function generateArticle(articleJSON)
     var totalString = $('<div />');
     totalString.append($('<h2 />').append(article.title));
 
-    for(author in article.authors)
-    {
-        var authorString = $('<p />', {"class": "author"}).append(article.authors[author]);
-        totalString.append(authorString);
-    }
+    totalString.append($('<p />', {"class": "author"}).append(getDateString(article.created)));
+
+    totalString.append($('<p />', {"class": "author"}).append(article.authors.join(", ")));
 
     if (article.images != null && article.images.LargeRect != null) {
         var imageString = $('<img class="article-image" src='+article.images.LargeRect.url + ' alt="chronicle image"/>');
@@ -214,27 +219,6 @@ function getArticle(articleURL)
             $.mobile.changePage($(ARTICLE_PAGE),{transition:"slide", dataUrl:"/m/article/"+articleURL});
     } 
 }
-     
-
-function getSectionList()
-{
-    $(ARTICLE_LIST).empty();
-    $(HEADER_TITLE).text("The Chronicle");
-
-    // Containers
-    var categories = ["News", "Sports", "Opinion", "Recess", "Towerview"];
-    for(var i in categories)
-    {
-        var listItem = $('<li />');
-        hyperlink = $('<a />',{ "href":"javascript:getArticleList('" + categories[i] + "','" + categories[i] +"')"});
-        hyperlink.append($('<h4 />').text(categories[i]));
-        listItem.append(hyperlink);
-        $(ARTICLE_LIST).append(listItem);
-    }   
-
-    $(ARTICLE_LIST).listview('refresh');
-    $.mobile.silentScroll(0);
-}
 
 function initMobileOptions()
 {
@@ -273,7 +257,7 @@ function search(eventObject)
 
     if(query.length > 0) {
         $.ajax({
-            url: "/api/search?q=" + query,
+            url: CHRONICLE_DOMAIN + "/api/search?q=" + query,
             dataType: "jsonp",
             cache: false,
             success: function(data) {
@@ -281,7 +265,6 @@ function search(eventObject)
                     $.mobile.changePage(ERROR_PAGE, 'slide');
                     return;
                 }
-                
                 updateArticleList(data.docs, $(this), "Search Results");
             },
             error: function (jqXHR, textStatus, errorThrown) {

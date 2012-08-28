@@ -1,8 +1,13 @@
 var CHRONICLE_DOMAIN = 'http://www.dukechronicle.com';
 
-var ARTICLE_LIST = "#ARTICLE_LIST";
-var ARTICLE_CONTENT = "#ARTICLE_CONTENT";
-var HEADER_TITLE = "#HEADER_TITLE";
+var ERROR_PAGE = "#ErrorPage";
+var ARTICLE_LIST_PAGE = "#ArticleListPage";
+var ARTICLE_PAGE = "#ArticlePage";
+
+var ARTICLE_LIST = "#ArticleList";
+var ARTICLE_CONTENT = "#ArticleContent";
+var HEADER_TITLE = "#HeaderTitle";
+var ERROR_MESSAGE = "#ErrorMessage";
 var UNKNOWN_ERROR = "An unknown error has occured, click back to return to the previous page.";
 var ARTICLE_NOT_FOUND = "The article cannot be found. Hit back to return to the previous page.";
 
@@ -79,7 +84,7 @@ function updateArticleList(responseText, articleListContainer, category)
 
     if(articleListResponse == null)
     {
-        $.mobile.changePage('#error', 'slide');
+        $.mobile.changePage(ERROR_PAGE, 'slide');
         return;
     }
 
@@ -114,7 +119,7 @@ function getArticleList(category, title, forced)
             success: function(data){
                 //console.log(category);
                 if(!data) {
-                    $.mobile.changePage('#error', 'none');
+                    $.mobile.changePage(ERROR_PAGE, 'none');
                     return;
                 }
                 // Insert into cache
@@ -138,7 +143,7 @@ function generateArticle(articleJSON)
     
     if(article == null)
     {
-        $.mobile.changePage('#error', 'slide');
+        $.mobile.changePage(ERROR_PAGE, 'slide');
         return;
     }
     
@@ -171,7 +176,7 @@ function handleAJAXError(jqXHR)
     {
         $(ERROR_MESSAGE).text(UNKNOWN_ERROR);
     }
-    $.mobile.changePage('#error', 'slide');
+    $.mobile.changePage(ERROR_PAGE, 'slide');
 }
 
 function getArticle(articleURL)
@@ -187,7 +192,7 @@ function getArticle(articleURL)
             success: function(data){
                 if(!data) {
                     //console.log("get article failed");
-                    $.mobile.changePage('#error', 'slide');
+                    $.mobile.changePage(ERROR_PAGE, 'slide');
                     return;
                 }
 
@@ -195,7 +200,7 @@ function getArticle(articleURL)
                 articleCache[articleURL] = {data: data};
                 $(ARTICLE_CONTENT).empty();
                 $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL].data));
-                 $.mobile.changePage($("#Article"),{transition:"slide", dataUrl:"/article/"+articleURL});
+                 $.mobile.changePage($(ARTICLE_PAGE),{transition:"slide", dataUrl:"/article/"+articleURL});
                 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -206,7 +211,7 @@ function getArticle(articleURL)
     else {
         $(ARTICLE_CONTENT).empty();
         $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL].data));
-            $.mobile.changePage($("#Article"),{transition:"slide", dataUrl:"/m/article/"+articleURL});
+            $.mobile.changePage($(ARTICLE_PAGE),{transition:"slide", dataUrl:"/m/article/"+articleURL});
     } 
 }
      
@@ -273,7 +278,7 @@ function search(eventObject)
             cache: false,
             success: function(data) {
                 if(!data) {
-                    $.mobile.changePage('#error', 'slide');
+                    $.mobile.changePage(ERROR_PAGE, 'slide');
                     return;
                 }
                 

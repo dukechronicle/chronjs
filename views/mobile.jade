@@ -14,34 +14,43 @@ html
     script(type='text/javascript')
       initMobileOptions();
   body
-    #ArticleList(data-role='page', articlelistcontainer='true', url='news', data-add-back-btn='false')
-      div(data-role='header', data-position='fixed')
-        h1#HEADER_TITLE The Chronicle
+    #ArticleListPage(data-role='page', articlelistcontainer='true', url='news', data-add-back-btn='false')
+      div(data-role='header', data-position='fixed', data-theme='b')
+        h1#HeaderTitle The Chronicle
+        a(data-icon="grid", href="/#MenuPage", data-rel="dialog", data-transition="slidedown") Options
+      #SearchContent(data-role='content')
         form(id="searchBox")
-            label(for="search-basic")
-            input(id="searchInput", type="search", name="search", value="", placeholder="Search")
+          label(for="search-basic")
+          input(id="searchInput", type="search", name="search", value="", placeholder="Search")
       #ArticleListContent(data-role='content')
-        ul#ARTICLE_LIST(data-role='listview')
-      div(data-role='footer', data-position='fixed')
-        div(data-role='navbar')
-          ul
+        ul#ArticleList(data-role='listview', data-theme='c', data-divider-theme='d')
+    #MenuPage(data-role='page', articlelistcontainer='true', url='news', data-add-back-btn='true')
+      div(data-role='header', data-position='fixed', data-theme='b')
+        h1 Options
+      #MenuContent(data-role='content')
+        ul(data-role='listview', data-theme='c', data-divider-theme='d')
+          li(data-role="list-divider") All
+          li
+            a(href="#ArticleListPage", onclick='javascript:getArticleList(\'All\', \'The Chronicle\', false)') Recent
+          li(data-role="list-divider") Sections
+          - var categories = ["News", "Sports", "Opinion", "Recess", "Towerview"];
+          - for cat in categories
             li
-              a(href='javascript:getArticleList(\'All\', \'The Chronicle\', false)') All
-            li
-              a(href='javascript:getSectionList()') Sections
-            li
-              a(href='javascript:showFullSite()') Full Site
-    #Article(data-role='page', articlecontainer='true', url='Article', data-add-back-btn='true', data-back-btn-text='Back')
-      div(data-role='header')
+              a(href="#ArticleListPage", onclick='javascript:getArticleList("#{cat}", "#{cat}")') #{cat}
+          li(data-role="list-divider") Settings
+          li
+            a(href='javascript:showFullSite()') Full Site
+    #ArticlePage(data-role='page', articlecontainer='true', url='Article', data-add-back-btn='true', data-back-btn-text='Back')
+      div(data-role='header', data-theme='b')
         h1 The Chronicle
-      #ARTICLE_CONTENT(data-role='content')
+      #ArticleContent(data-role='content', data-theme='c')
       script(src='/js/disqus.js?v=5', type='text/javascript')
-      #disqus_thread
+      #disqus_thread(data-role='content', data-theme='e')
       div(data-role='footer', data-position='fixed')
-    #error(data-role='page', articlecontainer='true', url='Article', data-add-back-btn='true', data-back-btn-text='Back')
+    #ErrorPage(data-role='page', articlecontainer='true', url='Article', data-add-back-btn='true', data-back-btn-text='Back')
       div(data-role='header')
         h1 Error
-      #ERROR_MESSAGE(data-role='content')
+      #ErrorMessage(data-role='content')
         | An error has occured, click back to return to the previous page.
     
     script(type='text/javascript')

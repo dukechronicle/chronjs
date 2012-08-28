@@ -200,10 +200,10 @@ function getArticle(articleURL)
                 }
 
                 // Insert into cache
-                articleCache[articleURL] = {data: data};
+                articleCache[articleURL] = data;
                 $(ARTICLE_CONTENT).empty();
-                $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL].data));
-                 $.mobile.changePage($(ARTICLE_PAGE),{transition:"slide", dataUrl:"/article/"+articleURL});
+                $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL]));
+                $.mobile.changePage($(ARTICLE_PAGE),{transition:"slide", dataUrl:"/article/"+articleURL});
                 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -213,8 +213,8 @@ function getArticle(articleURL)
     }
     else {
         $(ARTICLE_CONTENT).empty();
-        $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL].data));
-            $.mobile.changePage($(ARTICLE_PAGE),{transition:"slide", dataUrl:"/m/article/"+articleURL});
+        $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL]));
+        $.mobile.changePage($(ARTICLE_PAGE),{transition:"slide", dataUrl:"/article/"+articleURL});
     } 
 }
 
@@ -224,6 +224,10 @@ function initMobileOptions()
       $.mobile.page.prototype.options.addBackBtn = true;
       $.mobile.page.prototype.options.backBtnText = "Prev";
       $.mobile.page.prototype.options.backBtnTheme = "a";
+      $.mobile.loader.prototype.options.text = "loading";
+      $.mobile.loader.prototype.options.textVisible = false;
+      $.mobile.loader.prototype.options.theme = "a";
+      $.mobile.loader.prototype.options.html = "";
       $.mobile.pushStateEnabled = false;
       //$.mobile.touchOverflowEnabled = true;
       });

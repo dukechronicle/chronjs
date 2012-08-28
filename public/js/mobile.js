@@ -155,11 +155,9 @@ function generateArticle(articleJSON)
     }
     
     var totalString = $('<div />');
-    totalString.append($('<h2 />').append(article.title));
+    totalString.append($('<h1 />').append(article.title));
 
-    totalString.append($('<p />', {"class": "author"}).append(getDateString(article.created)));
-
-    totalString.append($('<p />', {"class": "author"}).append(article.authors.join(", ")));
+    totalString.append($('<p />', {"class": "author"}).append("By " + article.authors.join(", ") + " | " + getDateString(article.created)));
 
     if (article.images != null && article.images.LargeRect != null) {
         var imageString = $('<img class="article-image" src='+article.images.LargeRect.url + ' alt="chronicle image"/>');

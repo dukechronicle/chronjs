@@ -20,13 +20,13 @@
     padding: .1em 15px .1em 15px;
 }
 
-#ArticleListContent p {
+#ArticleListContent p.ui-li-desc {
     line-height: 1.4em;
     margin-top: 3px;
     margin-bottom: 5px;
 }
 
-#ArticleListContent h2 {
+#ArticleListContent h2.ui-li-heading {
     font-size: 1.0em;
     line-height: 1.3em;
     font-weight: 550;
@@ -34,7 +34,7 @@
     margin-bottom: 0px;
 }
 
-#ArticleListContent h3 {
+#ArticleListContent h3.ui-li-heading {
     font-size: 0.8em;
     line-height: 1.3em;
     font-weight: 100;
@@ -44,6 +44,7 @@
 }
 
 #ArticleContent .author {
+    color: #555;
     margin-top: 0px;
     font-size: 0.8em;
 }

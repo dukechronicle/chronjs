@@ -14,14 +14,14 @@ html
     script(type='text/javascript')
       initMobileOptions();
   body
-    #ArticleList(data-role='page', articlelistcontainer='true', url='news', data-add-back-btn='false')
+    #ArticleListPage(data-role='page', articlelistcontainer='true', url='news', data-add-back-btn='false')
       div(data-role='header', data-position='fixed', data-theme='b')
         form(id="searchBox")
             label(for="search-basic")
             input(id="searchInput", type="search", name="search", value="", placeholder="Search")
-        h1#HEADER_TITLE The Chronicle
+        h1#HeaderTitle The Chronicle
       #ArticleListContent(data-role='content', data-theme='c')
-        ul#ARTICLE_LIST(data-role='listview')
+        ul#ArticleList(data-role='listview')
       div(data-role='footer', data-position='fixed')
         div(data-role='navbar')
           ul
@@ -31,17 +31,17 @@ html
               a(href='javascript:getSectionList()') By Section
             li
               a(href='javascript:showFullSite()') Full Site
-    #Article(data-role='page', articlecontainer='true', url='Article', data-add-back-btn='true', data-back-btn-text='Back')
+    #ArticlePage(data-role='page', articlecontainer='true', url='Article', data-add-back-btn='true', data-back-btn-text='Back')
       div(data-role='header', data-theme='b')
         h1 The Chronicle
-      #ARTICLE_CONTENT(data-role='content', data-theme='c')
+      #ArticleContent(data-role='content', data-theme='c')
       script(src='/js/disqus.js?v=5', type='text/javascript')
       #disqus_thread(data-role='content', data-theme='e')
       div(data-role='footer', data-position='fixed')
-    #error(data-role='page', articlecontainer='true', url='Article', data-add-back-btn='true', data-back-btn-text='Back')
+    #ErrorPage(data-role='page', articlecontainer='true', url='Article', data-add-back-btn='true', data-back-btn-text='Back')
       div(data-role='header')
         h1 Error
-      #ERROR_MESSAGE(data-role='content')
+      #ErrorMessage(data-role='content')
         | An error has occured, click back to return to the previous page.
     
     script(type='text/javascript')

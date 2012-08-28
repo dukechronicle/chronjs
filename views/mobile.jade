@@ -17,7 +17,8 @@ html
     #ArticleListPage(data-role='page', articlelistcontainer='true', url='news', data-add-back-btn='false')
       div(data-role='header', data-position='fixed', data-theme='b')
         h1#HeaderTitle The Chronicle
-        a(data-icon="grid", href="/#MenuPage", data-rel="dialog", data-transition="slidedown") Options
+        a(data-icon='home', href='javascript:getArticleList(\'All\', \'The Chronicle\', false)') Recent
+        a(data-icon="grid", href="#MenuPage", data-rel="dialog", data-transition="slidedown") Options
       #SearchContent(data-role='content')
         form(id="searchBox")
           label(for="search-basic")
@@ -29,9 +30,6 @@ html
         h1 Options
       #MenuContent(data-role='content')
         ul(data-role='listview', data-theme='c', data-divider-theme='d')
-          li(data-role="list-divider") All
-          li
-            a(href="#ArticleListPage", onclick='javascript:getArticleList(\'All\', \'The Chronicle\', false)') Recent
           li(data-role="list-divider") Sections
           - var categories = ["News", "Sports", "Opinion", "Recess", "Towerview"];
           - for cat in categories

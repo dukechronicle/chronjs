@@ -1,0 +1,20 @@
+extends ../layout
+
+block content
+  include ../../mixins/form-helpers
+  .container
+    .row
+      .groups.span8 &nbsp;
+      .sidebar.span4
+        form#settings
+          legend Page Settings
+          label(for='title') Title
+          .input-append
+            input#title(type='text', name='doc[title]')
+            span.add-on | The Chronicle
+          label(for='url') URL
+          .input-prepend
+            span.add-on /page/
+            input#url(type='text', name='doc[url]')
+          .form-actions
+            button.btn.btn-primary(type='submit') Submit

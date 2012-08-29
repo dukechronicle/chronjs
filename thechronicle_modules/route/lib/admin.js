@@ -233,6 +233,14 @@ admin.layout = function (req, res, next) {
     });
 };
 
+admin.addPage = function (req, res, next) {
+    res.render('admin/page/new', {
+        locals: {
+
+        }
+    });
+};
+
 admin.memory = function (req, res, next) {
     var megabyte = 1048576;
     var usage = process.memoryUsage();

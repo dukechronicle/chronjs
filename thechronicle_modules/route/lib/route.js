@@ -37,8 +37,6 @@ exports.siteInit = function (app) {
         app.del('/article/:id', api.site.checkAdmin, siteApi.deleteArticle);
     });
 
-    app.get('/page/:url', site.page);
-
     app.get('/', site.frontpage);
     app.get('/news', site.news);
     app.get('/sports', site.sports);
@@ -54,6 +52,8 @@ exports.siteInit = function (app) {
     app.get('/rss/news', redirect("http://feeds.feedburner.com/thechronicle/news"));
 
     app.namespace('/page', function () {
+        app.get('/:url', site.page);
+
         app.get('/about-us', site.staticPage);
         app.get('/advertising', site.staticPage);
         app.get('/contact', site.staticPage);
@@ -69,8 +69,6 @@ exports.siteInit = function (app) {
 
         app.post('/newsletter', site.newsletterData);
     });
-
-    app.get('/graduation', redirect('/page/graduation'));
 
     // Makes search url more readable
     app.get('/search', site.search);
@@ -131,6 +129,11 @@ exports.siteInit = function (app) {
     	app.get('/:id', api.site.checkAdmin, admin.editPoll);
     	app.post('/', api.site.checkAdmin, admin.addPollData);
     	app.post('/:id', api.site.checkAdmin, admin.editPollData);
+    });
+
+    app.namespace('/admin/page', function () {
+        app.get('/new', api.site.checkAdmin, admin.addPage);
+        app.get('/:url/edit', api.site.checkAdmin, admin.editPage);
     });
 
     app.namespace('/xhrproxy', function() {

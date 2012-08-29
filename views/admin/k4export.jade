@@ -4,11 +4,11 @@ block content
   include ../mixins/form-helpers
   #k4export.container
     h1 K4 Exporter
-    form.well(action='/admin/k4export', method='post', enctype='multipart/form-data')
-      label(for='zip') XML Zip
-      input#zip(type='file', name='zip')
+    form(action='/admin/k4export', method='post', enctype='multipart/form-data')
+      label XML Zip
+      input(type='file', name='zip')
       br
-      input.btn-primary.btn-large(type='submit')
+      button.btn.btn-primary(type='submit') Submit
 
     a(href='/admin/manage') Manage and edit uploaded articles
     - if (failed && failed.length)

@@ -7,14 +7,8 @@ block content
       legend Edit Article: "#{doc.title}"
       input(type='hidden', name='_method', value='put')
       input(type='hidden', name='doc[id]', value=doc._id)
-      .control-group
-        label.control-label(for='title') Title
-        .controls
-          input.input-xlarge#title(type='text', name='doc[title]', value=doc.title)
-      .control-group
-        label.control-label(for='subhead') Subhead
-        .controls
-          input.input-xlarge#subhead(type='text', name='doc[subhead]', value=doc.subhead)
+      mixin text-control-group('title', 'Title', doc)
+      mixin text-control-group('subhead', 'Subhead', doc)
       .control-group
         label.control-label(for='section0') Section
         .controls
@@ -24,18 +18,12 @@ block content
         .controls
           input.input-xlarge#authors(type='text', name='doc[authors]', value=doc.authors.join(', '))
           span.help-block Author names should be comma separated
-      .control-group
-        label.control-label(for='teaser') Teaser
-        .controls
-          textarea.input-xxlarge#teaser(rows=3, name='doc[teaser]')= doc.teaser
-      .control-group
-        label.control-label(for='body') Body
-        .controls
-          textarea.input-xxlarge#body(rows=10, name='doc[body]')= doc.body
+      mixin textarea-control-group('teaser', 'Teaser', doc, 3)
+      mixin textarea-control-group('body', 'Body', doc, 5)
 
       include ../container/images
 
       .form-actions
-        button.btn.btn-primary(type='submit') Submit
+        button.btn-large.btn-primary(type='submit') Submit
         |  
-        button.btn.btn-danger.delete-article(data-docid=doc._id, data-rev=doc._rev, data-title=doc.title, data-dest='/admin') Delete
+        button.btn-large.btn-danger.delete-article(data-docid=doc._id, data-rev=doc._rev, data-title=doc.title, data-dest='/admin') Delete

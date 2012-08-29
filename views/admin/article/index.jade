@@ -1,33 +1,27 @@
 extends ../layout
 
 block header
-    .navbar
-        .navbar-inner
-            .container
-                ul.nav
-                    li: a(href="/admin/manage") All
-                    - each section in sections
-                        li: a(href="/admin/manage/#{section}")= section
+  .navbar
+    .navbar-inner
+      ul.nav
+        li: a(href="/admin/manage") All
+          - each section in sections
+            li: a(href="/admin/manage/#{section}")= section
 
 block content
-    table.table.table-striped.article-index
-        - each doc in docs
-            tr
-                td
-                    a(href='/article/' + doc.urls[doc.urls.length - 1]) #{doc.title}
-                td
-                    a(href='/article/' + doc.urls[doc.urls.length - 1] + '/edit') Edit
-                td
-                    a.delete-article(href='#', data-docid=doc._id, data-title=doc.title, data-rev=doc._rev, data-dest='') Delete
-                td
-                    a(href=db_url + '/' + doc._id)= doc._id
-
+  .container
     - if (docs.length == 0)
-        h1 No Articles Available
+      h1 No Articles Available
+
+    table.table.table-striped.article-index
+      - each doc in docs
+        tr
+          td: a(href='/article/' + doc.urls[doc.urls.length - 1])= doc.title
+          td: a(href='/article/' + doc.urls[doc.urls.length - 1] + '/edit') Edit
+          td: a.delete-article(href='#', data-docid=doc._id, data-title=doc.title, data-rev=doc._rev, data-dest='') Delete
+          td: a(href=db_url + '/' + doc._id)= doc._id
 
     - if (hasPrevious)
-        a(onClick="history.go(-1);") Previous
-        br
-
-    - if (docs.length != 0)
+        a(onClick="history.go(-1);") Previous 
+    - if (next)
         a(href='?start=' + JSON.stringify(next)) Next

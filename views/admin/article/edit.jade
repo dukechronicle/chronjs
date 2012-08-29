@@ -1,27 +1,29 @@
 extends ../layout
 
 block content
-    include ../../mixins/form-helpers
-    .container
-        h1 Editing a Document
-        form.well(action='', method='POST')
-            input(type="hidden", name="_method", value="put")
-            label(for='title') Title
-            input.span4#title(type='text', name='doc[title]', value=doc.title)
-            label(for='subhead') Subhead
-            input.span4#subhead(type='text', name='doc[subhead]', value=doc.subhead)
-            label(for='section0') Section
-            mixin taxonomySelect(taxonomy, doc.taxonomy)
-            label(for='author') Authors
-            input.span4#author(type='text', name='doc[authors]', value=doc.authors.join(', '))
-            label(for='teaser') Teaser
-            textarea.span8#teaser(rows=3, name='doc[teaser]') #{doc.teaser}
-            label(for='body') Article
-            textarea.span8#body(rows=10, name='doc[body]') #{doc.body}
-            input(type="hidden", name='doc[id]', value=doc._id);
+  include ../../mixins/form-helpers
+  .container
+    form.form-horizontal(action='', method='POST')
+      legend Edit Article: "#{doc.title}"
+      input(type='hidden', name='_method', value='put')
+      input(type='hidden', name='doc[id]', value=doc._id)
+      mixin text-control-group('title', 'Title', doc)
+      mixin text-control-group('subhead', 'Subhead', doc)
+      .control-group
+        label.control-label(for='section0') Section
+        .controls
+          mixin taxonomySelect(taxonomy, doc.taxonomy)
+      .control-group
+        label.control-label(for='authors') Authors
+        .controls
+          input.input-xlarge#authors(type='text', name='doc[authors]', value=doc.authors.join(', '))
+          span.help-block Author names should be comma separated
+      mixin textarea-control-group('teaser', 'Teaser', doc, 3)
+      mixin textarea-control-group('body', 'Body', doc, 5)
 
-            !=partial("admin/container/images")
+      include ../container/images
 
-            input.btn-large(type='submit', value='Submit Changes')
-            &nbsp;&nbsp;
-            input.btn-large.delete-article(type='button', value='Delete Article', data-docid=doc._id, data-rev=doc._rev, data-title=doc.title, data-dest='/admin')
+      .form-actions
+        button.btn-large.btn-primary(type='submit') Submit
+        |  
+        button.btn-large.btn-danger.delete-article(data-docid=doc._id, data-rev=doc._rev, data-title=doc.title, data-dest='/admin') Delete

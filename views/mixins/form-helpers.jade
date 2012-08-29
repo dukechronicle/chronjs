@@ -7,3 +7,18 @@ mixin taxonomySelect(levels, taxonomy, prefix)
         - each section in level
           - var selected = (taxonomy && taxonomy[i] == section.name) ? 'selected' : undefined;
             option(value=section.name, class=section.parent, selected=selected)= section.name
+
+mixin text-control-group(field, label, doc)
+  - doc = doc || {}
+  .control-group
+    label.control-label(for=field)= label
+    .controls
+      input.input-xlarge(type='text', name='doc[#{field}]', id=field, value=doc[field])
+
+mixin textarea-control-group(field, label, doc, rows)
+  - doc = doc || {}
+  - rows = rows || 3
+  .control-group
+    label.control-label(for=field)= label
+    .controls
+      textarea.input-xxlarge(rows=rows, name='doc[#{field}]', id=field)= doc[field]

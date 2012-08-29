@@ -6,15 +6,15 @@ block content
 
     #message.alert
 
-    form.form-inline#test
-      label(for='testEmail') Test Email Address:
-      input(type='text', name='testEmail')
+    form#test
       input(type='hidden', name='campaignID', value=campaignID)
-      input.btn(type='submit', value='Send Test Newsletter')
+      .input-append
+        input(type='text', name='testEmail', placeholder='Email Address')
+        button.btn(type='submit') Send Test Newsletter
 
-    form.form-inline#send
+    form#send
       input(type='hidden', name='campaignID', value=campaignID)
-      input.btn(type='submit', value='Send Newsletter')
+      button.btn.btn-primary(type='submit') Send Newsletter
 
     #confirm(title="Send newsletter?")
       p Are you sure you want to send the newsletter to everyone?

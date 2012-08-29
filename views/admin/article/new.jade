@@ -1,22 +1,24 @@
 extends ../layout
 
 block content
-    include ../../mixins/form-helpers
-    .container
-        h1 Add a Document
-        form.well(action='/article', method='POST')
-            input(type='hidden', name='doc[type]', value='article')
-            label(for='title') Title
-            input.span4#title(type='text', name='doc[title]')
-            label(for='subhead') Subhead
-            input.span4#subhead(type='text', name='doc[subhead]')
-            label(for='section0') Section
-            mixin taxonomySelect(taxonomy)
-            label(for='author') Authors
-            input.span4#author(type='text', name='doc[authors]')
-            label(for='teaser') Teaser
-            textarea.span8#teaser(rows=3, name='doc[teaser]')
-            label(for='article-body') Article
-            textarea.span8#article-body(rows=10, name='doc[body]')
-            br
-            input.btn-primary.btn-large(type='submit', value='Add')
+  include ../../mixins/form-helpers
+  .container
+    form.form-horizontal(action='/article', method='POST')
+      legend Add Article
+      input(type='hidden', name='doc[type]', value='article')
+      mixin text-control-group('title', 'Title')
+      mixin text-control-group('subhead', 'Subhead')
+      .control-group
+         label.control-label(for='section0') Section
+         .controls
+           mixin taxonomySelect(taxonomy)
+      .control-group
+        label.control-label(for='authors') Authors
+        .controls
+          input.input-xlarge#authors(type='text', name='doc[authors]')
+          span.help-block Author names should be comma separated
+      mixin textarea-control-group('teaser', 'Teaser', null, 3)
+      mixin textarea-control-group('body', 'Body', null, 5)
+
+      .form-actions
+        button.btn-large.btn-primary(type='submit') Submit

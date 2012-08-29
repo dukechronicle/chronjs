@@ -20,7 +20,7 @@ var NEWSLETTER_FROM_NAME = 'The Chronicle';
 
 
 newsletter.init = function() {
-    var domain = config.get('DOMAIN_NAME');
+    var domain = 'dukechronicle.com'; //config.get('DOMAIN_NAME');
     NEWSLETTER_FROM_EMAIL = 'no-reply@' + domain.replace('www.', '');
 
     var apiKey = config.get("MAILCHIMP_API_KEY");

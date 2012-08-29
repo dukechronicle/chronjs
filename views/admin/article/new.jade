@@ -6,14 +6,8 @@ block content
     form.form-horizontal(action='/article', method='POST')
       legend Add Article
       input(type='hidden', name='doc[type]', value='article')
-      .control-group
-        label.control-label(for='title') Title
-        .controls
-          input.input-xlarge#title(type='text', name='doc[title]')
-      .control-group
-        label.control-label(for='subhead') Subhead
-        .controls
-          input.input-xlarge#subhead(type='text', name='doc[subhead]')
+      mixin text-control-group('title', 'Title')
+      mixin text-control-group('subhead', 'Subhead')
       .control-group
          label.control-label(for='section0') Section
          .controls
@@ -22,13 +16,9 @@ block content
         label.control-label(for='authors') Authors
         .controls
           input.input-xlarge#authors(type='text', name='doc[authors]')
-      .control-group
-        label.control-label(for='teaser') Teaser
-        .controls
-          textarea.input-xxlarge#teaser(rows=3, name='doc[teaser]')
-      .control-group
-        label.control-label(for='body') Article
-        .controls
-          textarea.input-xxlarge#body(rows=10, name='doc[body]')
+          span.help-block Author names should be comma separated
+      mixin textarea-control-group('teaser', 'Teaser', null, 3)
+      mixin textarea-control-group('body', 'Body', null, 5)
+
       .form-actions
         button.btn-large.btn-primary(type='submit') Submit

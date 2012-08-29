@@ -2,9 +2,13 @@ extends ../layout
 
 block content
   include ../../mixins/form-helpers
-  .container
+  .container#page-layout
+    h1 Page Layout
     .row
-      .groups.span8 &nbsp;
+      .groups.span8
+        .row
+          .left-col.span4
+          .right-col.span4
       .sidebar.span4
         form#settings
           legend Page Settings
@@ -16,5 +20,10 @@ block content
           .input-prepend
             span.add-on /page/
             input#url(type='text', name='doc[url]')
+          label(for='template') Template
+          select#template(name='doc[template]')
+            option(value='') --
+            - each template in templates
+              option(value=template)= template
           .form-actions
             button.btn.btn-primary(type='submit') Submit

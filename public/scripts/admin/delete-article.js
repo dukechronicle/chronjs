@@ -1,10 +1,10 @@
-define(['jquery', 'libs/jquery-ui'], function ($) {
+define(['jquery', 'lib/jquery-ui'], function ($) {
 
     return {
 
         ".delete-article": function () {
 
-            $(".delete-article").click(function(event) {
+            $(this).click(function(event) {
                 event.preventDefault();
 
                 var anchor = $(event.target);

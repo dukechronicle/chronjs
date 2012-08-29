@@ -1,4 +1,4 @@
-define(["jquery", "libs/jquery-ui"], function($) {
+define(["jquery", "lib/jquery-ui"], function($) {
 
     var isLoadingPage = false; // stops multiple pages loading at once
     var noPagesLeftToLoad = false; // stops ajax requests from being issued once all articles for this page have been loaded

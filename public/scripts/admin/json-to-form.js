@@ -1,4 +1,4 @@
-define(["jquery", "libs/onde", "libs/jquery.textarea-expander"], function($) {
+define(["jquery", "lib/onde", "lib/jquery.textarea-expander"], function($) {
     var ondeSessions = {};
     var objs = [];
 

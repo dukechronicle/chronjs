@@ -77,7 +77,7 @@ build.pushGeneratedFiles = function (configKey, paths, type, callback) {
     }, function (err) {
         if (err) return callback(err);
         var configPaths = config.get('ASSET_PATHS') || {};
-        configPaths[configKey] = paths;
+        configPaths[configKey] = _.extend(configPaths[configKey] || {}, paths);
         config.setConfigProfile({'ASSET_PATHS': configPaths}, callback);
     });
 };

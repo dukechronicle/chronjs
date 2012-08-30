@@ -1,10 +1,10 @@
-define(['jquery', 'Article', 'libs/jquery.dd'], function ($, Article) {
+define(['jquery', 'common/article', 'lib/jquery.dd'], function ($, Article) {
 
     return {
 
-        "#k4export": function () {
+        "#k4export .article-form": function () {
 
-            $("#k4export .article-form").submit(function (e) {
+            $(this).submit(function (e) {
                 e.preventDefault();
                 $form = $(this);
                 $form.children(".btn").attr('disabled', 'disabled');

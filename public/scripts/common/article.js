@@ -1,5 +1,5 @@
-define(["order!jquery", "order!libs/underscore", "order!libs/backbone"], function ($) {
-    
+define(["order!jquery", "order!lib/underscore", "order!lib/backbone"], function ($) {
+
     return Backbone.Model.extend({
 
         defaults: {
@@ -11,7 +11,7 @@ define(["order!jquery", "order!libs/underscore", "order!libs/backbone"], functio
                 versionIds = [versionIds];
             if (! _.isArray(imageTypes))
                 imageTypes = [imageTypes];
-            
+
             var images = this.get("images") || {};
             for (var i = 0; i < imageTypes.length; i++)
                 images[imageTypes[i]] = versionIds[i];

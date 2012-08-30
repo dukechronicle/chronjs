@@ -1,4 +1,4 @@
-define(['jquery', 'libs/jquery-ui'], function ($) {
+define(['jquery', 'lib/jquery-ui'], function ($) {
 
     var niceDateTextbox;
     var realDateTextbox;

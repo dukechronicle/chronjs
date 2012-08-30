@@ -3,9 +3,9 @@ extends ../layout
 block content
   include ../../mixins/form-helpers
   .container#page-layout
-    h1 Page Layout
     .row
       .groups.span8
+        h1 Page Layout
         .row
           .left-col.span4
           .right-col.span4
@@ -27,3 +27,7 @@ block content
               option(value=template)= template
           .form-actions
             button.btn.btn-primary(type='submit') Submit
+
+  script#group-template(type='text/template')
+    <h3><%= label %></h3>
+    <div class="group"></div>

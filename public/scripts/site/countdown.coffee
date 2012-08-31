@@ -1,4 +1,4 @@
-define ['jquery'], ($) ->
+define ['jquery', 'lib/date.format'], ($) ->
 
   pluralize = (word, quantity) ->
     "#{quantity} #{word}" + (if quantity is 1 then '' else 's')
@@ -19,3 +19,6 @@ define ['jquery'], ($) ->
     endtime = new Date($(this).data('endtime'))
     setInterval(displayRemainingTime($(this), endtime), 1000)
     $(this).parent().show()
+  '.current-time': ->
+    date = new Date($(this.data('date')))
+    $(this).text(dateformat(date, $(this).data('format')))

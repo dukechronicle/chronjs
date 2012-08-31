@@ -21,7 +21,7 @@ mixin vertical-label
         span= info.displayDate
       p
         span.label Time
-        span 7:00PM EDT
+        span.local-time(data-date=info.date, data-format='h:MM Z')= info.displayTime
       p
         span.label TV Channel/Radio
         span= info.channel

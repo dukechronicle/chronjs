@@ -3,6 +3,7 @@ var db = require("../../db-abstract");
 var log = require("../../log");
 
 var async = require('async');
+var dateFormat = require('dateformat');
 var JSV = require('JSV').JSV;
 var md = require('discount');
 var _ = require('underscore');
@@ -116,6 +117,15 @@ exports.templates = {
                         type: 'string',
                         required: true,
                     }
+                },
+                transformation: function (callback) {
+                    date = Date.parse(this.date);
+                    if (isNaN(date)) {
+                        return callback('Invalid date');
+                    }
+                    this.displayDate = dateFormat(date, 'dddd, mmmm d, yyyy');
+                    this.displayTime = dateFormat(date, 'h:MM Z');
+                    callback(null, this);
                 }
             },
             articles: {
@@ -137,16 +147,16 @@ var schemata = [
         id: 'article',
         extends: {type: 'string'},
         description: 'Article Relative URL',
-        transformation: function (url, callback) {
-            api.article.getByUrl(url, callback);
+        transformation: function (callback) {
+            api.article.getByUrl(this, callback);
         }
     },
     {
         id: 'markdown',
         extends: {type: 'string'},
         description: 'Markdown text',
-        transformation: function (markdown, callback) {
-            callback(null, md.parse(markdown));
+        transformation: function (callback) {
+            callback(null, md.parse(this));
         }
     }
 ];
@@ -192,7 +202,7 @@ function convertProperties(instance, validated) {
             if (operation) {
                 operations.push(function (callback) {
                     var value = instance.getValue();
-                    operation(value[key], function (err, result) {
+                    operation.call(value[key], function (err, result) {
                         value[key] = result;
                         callback(err);
                     });

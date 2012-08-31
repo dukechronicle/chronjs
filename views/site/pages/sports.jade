@@ -9,8 +9,7 @@ block content
                 !=partial('../container/slideshow/slideshow-right', {stories: model.Slideshow})
         #bottom.clearfix
             .span-4
-                if (model.adFullRectangle)
-                    .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
+                .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
                 if (model.Blog)
                     #blog.title-medium!=partial('../container/story-list/image', {locals: {title: "The Blue Zone", image: staticCdn + "/img/blogs/sportsblog-banner.jpg", imageHref:'http://sports.chronicleblogs.com', stories:model.Blog}})
 

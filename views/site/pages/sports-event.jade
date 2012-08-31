@@ -4,22 +4,11 @@ block content
   - var symbol = information.homeGame ? 'vs' : '@';
   h2 #{information.mainTeam.name} #{information.mainTeam.mascot} #{information.sport} #{symbol} #{information.opposingTeam.name} #{information.opposingTeam.mascot}
 
-  .span-6#embed
-    .rounded
-      .image-container
-        !=embed
+  #top.clearfix.align-group
+    .span-6.align-element#embed(data-aligntarget='.rounded')
+      .rounded
+        .image-container
+          !=embed
 
-  .span-6.last#information
-    .rounded
-      p
-        span Where 
-        span= information.location
-      p
-        span Date 
-        span= information.displayDate
-      p
-        span Time 
-        span= information.displayTime
-      p
-        span TV Channel/Radio 
-        span= information.channel
+    .span-6.last.align-element(data-aligntarget="#information .rounded")
+      #information!=partial('../container/sport-event-info', {title: 'Game Details', info: information})

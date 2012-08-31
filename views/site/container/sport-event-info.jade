@@ -1,0 +1,27 @@
+include container-helpers
+
+mixin vertical-label
+.rounded
+  .content-container.sport-event-info
+    .teams
+      img.logo(src=info.mainTeam.logo)
+      span.separator= information.homeGame ? 'vs' : '@'
+      img.logo(src=info.opposingTeam.logo)
+
+    .event-info
+      p
+        span.label Where
+        span= info.location
+      p
+        span.label Date
+        span= info.displayDate
+      p
+        span.label Time
+        span= info.displayTime
+      p
+        span.label TV Channel/Radio
+        span= info.channel
+
+    p For live-blog updates of the game, head over to 
+      a(href="http://bluezone.dukechronicle.com") The Blue Zone
+      | .

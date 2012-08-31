@@ -87,6 +87,10 @@ exports.templates = {
                             mascot: {
                                 type: 'string',
                                 required: true,
+                            },
+                            logo: {
+                                type: 'string',
+                                required: true,
                             }
                         }
                     },
@@ -99,6 +103,10 @@ exports.templates = {
                                 required: true,
                             },
                             mascot: {
+                                type: 'string',
+                                required: true,
+                            },
+                            logo: {
                                 type: 'string',
                                 required: true,
                             }

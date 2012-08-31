@@ -26,16 +26,6 @@ site.init = function () {
 
 // Checks if you are an admin with browser check
 site.checkAdmin = function(req, res, next) {
-    site.restrictToAdmin(req, res, function() {
-        if(req.headers['user-agent'].indexOf("Chrome") === -1) {
-            site.askForLogin(res, req.url, '', 'Please use Google Chrome to use the admin interface');
-        } else {
-            next();
-        }
-    });
-};
-// Checks if you are an admin
-site.restrictToAdmin = function(req, res, next) {
     //if not admin, require login
     if(!api.accounts.isAdmin(req)) {
         site.askForLogin(res, req.url);

@@ -17,7 +17,7 @@ define(['jquery'], function ($) {
             if ($("#social-share").length > 0)
                 socialShare();
         
-            if ($("#fb:like").length > 0) {
+            if ($("#fb\\:like").length > 0) {
                 // subscribe to like button
                 FB.Event.subscribe('edge.create', function(url) {
                     _gaq.push(['_trackSocial', 'facebook', 'like', url]);

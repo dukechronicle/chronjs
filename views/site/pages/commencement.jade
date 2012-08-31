@@ -3,7 +3,7 @@ extends layout
 block content
     #commencement-2012
         .lookbacks.clearfix.align-group
-            - each story, year in data.lookbacks
+            - each story, year in lookbacks
                 - if (year == "senior")
                     .span-3.last.align-element(data-aligntarget=".rounded")!=partial('../container/block/teaser', { story: story, title: year })
                 - else
@@ -20,14 +20,14 @@ block content
 
                 .rounded(style="width:542px;height:306px;")
                     .content-container
-                        - each events, day in data.events
+                        - each day in schedule
                             a.hover.highlight-right(href="/article/commencement-2012-event-calendar")
-                                h3.date= day
+                                h3.date= day.date
                                 ul.events
-                                    - each event in events
+                                    - each event in day.events
                                         li: p= event
 
         .bottom.clearfix
-            - each story in data.articles
+            - each story in articles
                 .span-4!=partial('../container/block/wide', { story: story })
             .lighten.span-4.last!=partial('../container/ad/medium-rect', { title: "Advertisement" })

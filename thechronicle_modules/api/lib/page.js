@@ -59,6 +59,76 @@ exports.templates = {
                 required: true,
             }
         }
+    },
+    'Sports Event': {
+        view: 'site/pages/sports-event',
+        model: {
+            information: {
+                type: 'object',
+                required: true,
+                properties: {
+                    sport: {
+                        type: 'string',
+                        required: true,
+                    },
+                    homeGame: {
+                        type: 'boolean',
+                        required: true,
+                    },
+                    mainTeam: {
+                        type: 'object',
+                        required: true,
+                        properties: {
+                            name: {
+                                type: 'string',
+                                required: true,
+                            },
+                            mascot: {
+                                type: 'string',
+                                required: true,
+                            }
+                        }
+                    },
+                    opposingTeam: {
+                        type: 'object',
+                        required: true,
+                        properties: {
+                            name: {
+                                type: 'string',
+                                required: true,
+                            },
+                            mascot: {
+                                type: 'string',
+                                required: true,
+                            }
+                        }
+                    },
+                    date: {
+                        type: 'string',
+                        required: true,
+                        format: 'date',
+                    },
+                    location: {
+                        type: 'string',
+                        required: true,
+                    },
+                    channel: {
+                        type: 'string',
+                        required: true,
+                    }
+                }
+            },
+            articles: {
+                type: 'array',
+                name: 'Event Articles',
+                required: true,
+                items: {'$ref': 'article'},
+            },
+            embed: {
+                type: 'string',
+                required: true,
+            }
+        }
     }
 };
 

@@ -136,6 +136,14 @@ exports.templates = {
                     callback(null, this);
                 }
             },
+            featured: {
+                type: 'array',
+                name: 'Featured Articles',
+                required: true,
+                minItems: 3,
+                maxItems: 3,
+                items: {'$ref': 'article'},
+            },
             articles: {
                 type: 'array',
                 name: 'Event Articles',

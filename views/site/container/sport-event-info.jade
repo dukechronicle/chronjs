@@ -3,6 +3,10 @@ include container-helpers
 mixin vertical-label
 .rounded
   .content-container.sport-event-info
+    .timer
+      p Starts in
+      p.countdown(data-endtime=info.date) 1:00
+
     .teams
       img.logo(src=info.mainTeam.logo)
       span.separator= information.homeGame ? 'vs' : '@'

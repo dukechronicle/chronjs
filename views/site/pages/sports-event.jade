@@ -12,3 +12,24 @@ block content
 
     .span-6.last.align-element(data-aligntarget="#information .rounded")
       #information!=partial('../container/sport-event-info', {title: 'Game Details', info: information})
+
+  .leaderboard-row.clearfix
+    .lighten.filler-block!=partial('../container/image', {url: "http://bluezone.dukechronicle.com", imageUrl: staticCdn + "/img/blogs/sportsblog-banner.jpg"})
+    .lighten.leaderboard-block!=partial('../container/ad/leaderboard', {title: "Ad"})
+
+  #featured
+    .span-4!=partial('../container/block/square', {story: featured[0]})
+    .span-4!=partial('../container/block/square', {story: featured[1]})
+    .span-4.last!=partial('../container/block/square', {story: featured[2]})
+
+  #bottom.clearfix
+    .span-8.clearfix
+      .span-4
+        - each article, index in articles
+          - if (index % 2 == 0)
+            !=partial('../container/block/thumbnail', {story: article})
+      .span-4.last
+        - each article, index in articles
+          - if (index % 2 == 1)
+            !=partial('../container/block/thumbnail', {story: article})
+    .span-4.last.lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})

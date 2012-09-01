@@ -52,16 +52,29 @@
 
     // {{{ function _documentWriteSafeAppend(markup, $this, success) { ... }
     function _documentWriteSafeAppend(markup, $this, success) {
+        var cnt = 0; // prevent infinite loops
         (function (markup) {
             if (markup.match(/document\.write|<script/)) {
+                var oldDocumentWrite = document.write;
+                var buffer = '';
                 document.write = function (markup) {
-                    $this.append(markup);
+                    buffer += markup;
                 };
-            }
+                $this.append(markup);
+                document.write = oldDocumentWrite;
 
-            $this.append(markup);
-            if (typeof success == 'function') {
-                setTimeout(function () { success.call($this); }, 0);
+                cnt++;
+                if (cnt > _loopIterations) {
+                    $.error('openxtag: document.write loop stopped after ' + _loopIterations + ' iterations');
+                }
+
+                arguments.callee(buffer);
+            }
+            else {
+                $this.append(markup);
+                if (typeof success == 'function') {
+                    setTimeout(function () { success.call($this); }, 0);
+                }
             }
         })(markup);
     }
@@ -118,7 +131,7 @@
             'charset': settings['charset'],
             'target': settings['target'],
             'source': settings['source'],
-            'loc': window.location.href.replace(/#.*$/, '')
+            'loc': window.location.href
         };
 
         if (typeof settings['extra'] != 'undefined') {

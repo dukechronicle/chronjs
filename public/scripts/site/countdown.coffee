@@ -19,6 +19,6 @@ define ['jquery', 'lib/date.format'], ($) ->
     endtime = new Date($(this).data('endtime'))
     setInterval(displayRemainingTime($(this), endtime), 1000)
     $(this).parent().show()
-  '.current-time': ->
-    date = new Date($(this.data('date')))
-    $(this).text(dateformat(date, $(this).data('format')))
+  '.local-time': ->
+    date = new Date($(this).data('date'))
+    $(this).text(dateFormat(date, $(this).data('format')))

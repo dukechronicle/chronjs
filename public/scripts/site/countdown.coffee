@@ -13,9 +13,28 @@ define ['jquery', 'lib/date.format'], ($) ->
     minutes = minutes % 60
     "#{pluralize('day', days)}, #{pluralize('hour', hours)}, #{pluralize('minute', minutes)}"
 
+  fetchGameScore = (callback) ->
+    $.ajax('/xhrproxy/espn',
+      cache: false,
+      error: (jqXHR, status) -> callback(status)
+      success: (data) ->
+        selector = '.team-23-2229'
+        cell = $(data).find("#showschedule #{selector} td:eq(2)")
+        if cell.length
+          callback(null, cell.text())
+        else
+          callback("Can't fetch score")
+    )
+
   displayRemainingTime = ($element, milliseconds) ->
-    $element.children('.label').text('Starts in')
+    $element.children('.label').text('Starts In')
     $element.children('.value').text(timeText(milliseconds))
+
+  displayGameScore = ($element) ->
+    $element.children('.label').text('Game Score')
+    fetchGameScore (err, data) ->
+      if not err?
+        $element.children('.value').text(data)
 
   updateGameStats = ($element, startTime) ->
     ->
@@ -27,7 +46,9 @@ define ['jquery', 'lib/date.format'], ($) ->
 
   '.game-stats': ->
     startTime = new Date($(this).data('starttime'))
-    setInterval(updateGameStats($(this), startTime), 5000)
+    update = updateGameStats($(this), startTime)
+    update()
+    setInterval(update, 10000)
     $(this).show()
   '.local-time': ->
     date = new Date($(this).data('date'))

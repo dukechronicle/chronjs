@@ -3,9 +3,9 @@ include container-helpers
 mixin vertical-label
 .rounded
   .content-container.sport-event-info
-    .timer
-      p Starts in
-      p.countdown(data-endtime=info.date)
+    .game-stats.timer(data-starttime=info.date)
+      p.label
+      p.value
 
     .teams
       img.logo(src=info.mainTeam.logo)

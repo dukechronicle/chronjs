@@ -136,6 +136,7 @@ exports.siteInit = function (app) {
 
     app.namespace('/xhrproxy', function() {
         app.get('/delete_activity', xhrproxy.delete_activity);
+        app.get('/espn', xhrproxy.espn);
     })
 
     app.get('/sitemaps/:query', function (req, res, next) {

@@ -61,6 +61,42 @@ exports.templates = {
             }
         }
     },
+    'Commencement': {
+        view: 'site/pages/commencement',
+        model: {
+            lookbacks: {
+                type: 'object',
+                name: 'Lookback Articles',
+                required: true,
+                additionalProperties: {'$ref': 'article'},
+            },
+            schedule: {
+                type: 'array',
+                name: 'Weekend Schedule',
+                required: true,
+                items: {
+                    type: 'object',
+                    properties: {
+                        date: {
+                            type: 'string',
+                            required: true,
+                        },
+                        events: {
+                            type: 'array',
+                            required: true,
+                            items: {type: 'string'},
+                        },
+                    }
+                }
+            },
+            articles: {
+                type: 'array',
+                name: 'Speaker Articles',
+                required: true,
+                items: {'$ref': 'article'},
+            }
+        }
+    },
     'Sports Event': {
         view: 'site/pages/sports-event',
         model: {
@@ -164,7 +200,10 @@ var schemata = [
         extends: {type: 'string'},
         description: 'Article Relative URL',
         transformation: function (callback) {
-            api.article.getByUrl(this, callback);
+            api.article.getByUrl(this, function (err, article) {
+                if (err) callback(err);
+                else callback(null, api.site.modifyArticleForDisplay(article));
+            });
         }
     },
     {

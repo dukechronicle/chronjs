@@ -3,9 +3,9 @@ include container-helpers
 mixin vertical-label
 .rounded
   .content-container.sport-event-info
-    .timer
-      p Starts in
-      p.countdown(data-endtime=info.date)
+    .game-stats.timer(data-starttime=info.date)
+      p.label
+      p.value
 
     .teams
       img.logo(src=info.mainTeam.logo)
@@ -21,7 +21,7 @@ mixin vertical-label
         span= info.displayDate
       p
         span.label Time
-        span= info.displayTime
+        span.local-time(data-date=info.date, data-format='h:MM Z')= info.displayTime
       p
         span.label TV Channel/Radio
         span= info.channel

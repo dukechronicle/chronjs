@@ -64,8 +64,6 @@ exports.siteInit = function (app) {
         app.get('/privacy-policy', site.staticPage);
         app.get('/subscribe', site.staticPage);
         app.get('/user-guidelines', site.staticPage);
-        app.get('/young-trustee-2012', site.staticPage);
-        app.get('/commencement-2012', site.staticPage);
 
         app.post('/newsletter', site.newsletterData);
     });
@@ -138,6 +136,7 @@ exports.siteInit = function (app) {
 
     app.namespace('/xhrproxy', function() {
         app.get('/delete_activity', xhrproxy.delete_activity);
+        app.get('/espn', xhrproxy.espn);
     })
 
     app.get('/sitemaps/:query', function (req, res, next) {

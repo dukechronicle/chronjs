@@ -16,6 +16,8 @@ var LAYOUT_GROUPS;
 var twitterFeeds = [];
 var BENCHMARK = false;
 
+site.modifyArticleForDisplay = modifyArticleForDisplay;
+
 site.init = function () {
     LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
 

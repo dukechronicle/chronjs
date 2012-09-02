@@ -104,3 +104,12 @@ siteApi.votePoll = function (req, res, next) {
             }
         });
 };
+
+siteApi.template = function (req, res, next) {
+    if (req.params.name in api.page.templates) {
+        res.json(api.page.templates[req.params.name].model);
+    }
+    else {
+        next();
+    }
+};

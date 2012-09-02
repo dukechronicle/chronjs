@@ -103,6 +103,7 @@ exports.templates = {
             information: {
                 type: 'object',
                 required: true,
+                name: 'Game Information',
                 properties: {
                     sport: {
                         type: 'string',
@@ -189,6 +190,7 @@ exports.templates = {
             embed: {
                 type: 'string',
                 required: true,
+                name: 'Featured Embed Code',
             }
         }
     }

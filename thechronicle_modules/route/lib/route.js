@@ -35,6 +35,8 @@ exports.siteInit = function (app) {
         app.post('/article', api.site.checkAdmin, siteApi.createArticle);
         app.put('/article/:id', api.site.checkAdmin, siteApi.updateArticle);
         app.del('/article/:id', api.site.checkAdmin, siteApi.deleteArticle);
+
+        app.get('/template/:name', api.site.checkAdmin, siteApi.template);
     });
 
     app.get('/', site.frontpage);

@@ -1,13 +1,14 @@
 define ['jquery', 'cs!common/page', 'cs!common/views/group'], ($, Page, Group) ->
 
   page = undefined
+  views = []
 
 
   loadTemplate = (templateName) ->
-    fetchTemplate(templateName,
-      success: (template) ->
-        views = (new Group(property, schema) for property, schema of template)
-        renderViews(views)
+    fetchTemplate(templateName, (template) ->
+      view.remove() for view in views
+      views = (new Group(property, schema) for property, schema of template)
+      renderViews(views)
     )
 
   renderViews = (views) ->
@@ -19,16 +20,10 @@ define ['jquery', 'cs!common/page', 'cs!common/views/group'], ($, Page, Group) -
         view.render(i)
         $('.groups .right-col').append(view.el);
 
-  fetchTemplate = (template, options) ->
-    options.success(
-      contents:
-        name: 'Body Contents',
-      stuff:
-        name: 'Other Stuff',
-    )
+  fetchTemplate = (template, callback) ->
+    $.get("/api/template/#{template}", callback);
 
   '#page-layout': ->
     page = new Page
     $('#template').change ->
-      console.log 'loading'
       loadTemplate $(this).val()

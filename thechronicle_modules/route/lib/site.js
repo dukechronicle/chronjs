@@ -132,22 +132,21 @@ site.search = function (req, res, next) {
 site.staff = function (req, res, next) {
     var name = util.capitalizeWords(req.params.name.replace(/-/g, ' '));
     api.site.getAuthorContent(name, function (err, docs, info, nextDoc) {
-        if (info && info.name)
-            name = info.name;
-        else if (docs.length <= 0)
-            next();
-        else {
-            res.render('site/pages/people', {
-                locals: {
-                    pageTitle: util.capitalizeWords(name),
-                    docs: docs,
-                    next: nextDoc,
-                    authorInfo: info,
-                    name: name,
-                    isAdmin: api.accounts.isAdmin(req)
-                }
-            });
+        if (docs.length == 0) {
+            return next();
         }
+
+        name =  info && info.name ? info.name : name;
+        res.render('site/pages/people', {
+            locals: {
+                pageTitle: util.capitalizeWords(name),
+                docs: docs,
+                next: nextDoc,
+                authorInfo: info,
+                name: name,
+                isAdmin: api.accounts.isAdmin(req)
+            }
+        });
     });
 };
 

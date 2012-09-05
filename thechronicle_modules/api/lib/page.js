@@ -197,9 +197,19 @@ exports.templates = {
         model: {
             articles: {
                 type: 'array',
-                name: 'Event Articles',
+                name: 'Articles',
                 required: true,
                 items: {'$ref': 'article'},
+            },
+            text: {
+                extends: {'$ref': 'markdown'},
+                required: true,
+                name: 'Featured Text',
+            },
+            image: {
+                type: 'string',
+                name: 'Featured Image URL',
+                required: true,
             }
         }
     }
@@ -222,7 +232,7 @@ var schemata = [
         extends: {type: 'string'},
         description: 'Markdown text',
         transformation: function (callback) {
-            callback(null, md.parse(this));
+            callback(null, md.parse(this.toString()));
         }
     }
 ];

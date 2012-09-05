@@ -191,6 +191,17 @@ exports.templates = {
                 required: true,
             }
         }
+    },
+    'Election': {
+        view: 'site/pages/election',
+        model: {
+            articles: {
+                type: 'array',
+                name: 'Event Articles',
+                required: true,
+                items: {'$ref': 'article'},
+            }
+        }
     }
 };
 

@@ -15,3 +15,8 @@ block content
       !=partial('../container/block/horizontal', {story: articles[0]})
       !=partial('../container/block/horizontal', {story: articles[1]})
       .lighten!=partial('../container/ad/full-banner', {title: "Ad"})
+
+  .clearfix
+    - each article, i in articles
+      - if (i > 1)
+        .span-4(class=(i % 3 == 1 ? "last" : ""))!=partial('../container/block/square', {story: article})

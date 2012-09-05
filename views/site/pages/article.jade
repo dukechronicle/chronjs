@@ -32,7 +32,8 @@ block content
                         - if (doc.images && doc.images.LargeRect && doc.images.Original)
                             .clearfix
                                 p.photo-credit= doc.images.Original.photographer
-                                p.photo-caption= doc.images.Original.caption
+                                - if (doc.images.Original.caption)
+                                  p.photo-caption= doc.images.Original.caption
 
                         p.byline
                             span.author By &nbsp;

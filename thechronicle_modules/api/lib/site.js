@@ -495,7 +495,9 @@ site.getArticleContentUncached = function(doc, callback) {
     });
 };
 
-site.getPageContent = getPageContentUncached;
+site.getPageContent = function (url, callback) {
+    cache(getPageContentUncached, 600, url)(callback);
+};
 
 function getPageContentUncached(url, callback) {
     api.page.getByUrl(url, function (err, page) {

@@ -43,12 +43,12 @@ define ['jquery', 'lib/underscore', 'lib/jquery-ui'], ($) ->
   truncateStoryList = ->
     $('.story-list .rounded').each ->
       # check for overflow, the +1 is a hack for IE. Oh IE...
-      while $(this)[0].scrollHeight > $(this).outerHeight() + 1
+      while $(this)[0].scrollHeight > $(this).outerHeight(false) + 1
         $(this).find('.list-story:last').remove()
 
   truncateTeaser = ->
     $(this).each ->
-      while $(this)[0].scrollHeight > $(this).outerHeight() + 1
+      while $(this)[0].scrollHeight > $(this).outerHeight(false) + 1
         $text = $(this).find('p:last')
         if $text.length > 0
           $text.text((index, text) -> text.replace(/\s+\S*\.*$/, '...'))

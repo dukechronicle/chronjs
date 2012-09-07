@@ -1,8 +1,7 @@
 extends layout
 
 block content
-  - var symbol = information.homeGame ? 'vs' : '@';
-  h2 #{information.mainTeam.name} #{information.mainTeam.mascot} #{information.sport} #{symbol} #{information.opposingTeam.name} #{information.opposingTeam.mascot}
+  h2 #{information.mainTeam.name} #{information.mainTeam.mascot} #{information.sport} vs #{information.opposingTeam.name} #{information.opposingTeam.mascot}
 
   #top.clearfix.align-group
     .span-6.align-element#embed(data-aligntarget='.rounded')

@@ -25,18 +25,20 @@ var articleCache = [];
 
 function showFullSite() {
     _gaq.push(['_trackEvent', 'Mobile', 'OptOut']);
-    setCookie("forceFullSite", "true", 1, '/');
-    window.location = "http://dukechronicle.com";
+    setCookie("forceFullSite", "true", 1, '/', 'dukechronicle.com');
+    window.location = "http://www.dukechronicle.com";
 }
 
-function setCookie(c_name, value, exdays, path)
-{
-    var exdate=new Date();
+function setCookie(c_name, value, exdays, path, domain) {
+    var exdate = new Date();
     exdate.setDate(exdate.getDate() + exdays);
-    var c_value=escape(value) + ((path==null) ? "" : "; path="+path)  +  ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
-    document.cookie=c_name + "=" + c_value;
+    var cookie = c_name + '=' + escape(value);
+    cookie += exdays ? '; expires=' + exdate.toUTCString() : '';
+    cookie += path ? '; path=' + path : '';
+    cookie += domain ? '; domain=' + domain : '';
+    document.cookie = cookie;
 }
-        
+
 function getDateString(time)
 {
     var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

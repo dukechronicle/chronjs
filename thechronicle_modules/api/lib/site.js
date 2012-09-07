@@ -547,13 +547,17 @@ function cache() {
 
         return function (callback) {
             redis.client.get(redisKey, function(err, res) {
-                if (!err && res) callback(null, JSON.parse(res));
+                if (false && !err && res) callback(null, JSON.parse(res));
                 else {
                     args.push(function (err, result) {
                         if (err) callback(err);
                         else {
-                            redis.client.set(redisKey, JSON.stringify(result));
-                            redis.client.expire(redisKey, expireTime);
+                            redis.client.set(redisKey, JSON.stringify(result), function (err) {
+                                if (err) log.error(err);
+                            });
+                            redis.client.expire(redisKey, expireTime, function (err) {
+                                if (err) log.error(err);
+                            });
                             callback(null, result);
                         }
                     })

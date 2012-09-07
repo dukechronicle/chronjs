@@ -19,6 +19,6 @@ block content
                         .lighten.span-4.last.align-element(data-alignTarget=".rounded")!=partial('../container/ad/medium-rect', {title: "Advertisement"})
                 if (model.adFullBanner)
                     .lighten!=partial('../container/ad/full-banner', {title: "Ad"})
-                #cartoon!=partial('../container/image.jade', {title: "Cartoon", url:"http://d2770i1y1fck5h.cloudfront.net/sSAM0S4m-cartoon-large.jpg", imageUrl:"http://d2770i1y1fck5h.cloudfront.net/CrFcgRQM-cartoon.jpg", caption: "Mariah Hukins, Trinity '13"})
+                #cartoon!=partial('../container/image.jade', {title: "Cartoon", url: staticCdn + '/0yRFeDRA-hukins-cartoon1.jpg', imageUrl: staticCdn + '/0yRFeDRA-hukins-cartoon1.jpg', caption: "Mariah Hukins, Trinity '13"})
                 if (model.Columnists)
                     #columnists!=partial('../container/author-box', {title: "Columnists", categories: model.Columnists})

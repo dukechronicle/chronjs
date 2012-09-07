@@ -51,5 +51,6 @@ define ['jquery', 'lib/date.format'], ($) ->
     setInterval(update, 10000)
     $(this).show()
   '.local-time': ->
-    date = new Date($(this).data('date'))
-    $(this).text(dateFormat(date, $(this).data('format')))
+    $(this).each ->
+      date = new Date($(this).data('date'))
+      $(this).text(dateFormat(date, $(this).data('format')))

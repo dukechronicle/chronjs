@@ -18,7 +18,7 @@ mixin vertical-label
         span= info.location
       p
         span.label Date
-        span= info.displayDate
+        span.local-time(data-date=info.date, data-format='dddd, mmmm d, yyyy')= info.displayDate
       p
         span.label Time
         span.local-time(data-date=info.date, data-format='h:MM Z')= info.displayTime

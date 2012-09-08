@@ -161,6 +161,10 @@ exports.templates = {
                     channel: {
                         type: 'string',
                         required: true,
+                    },
+                    scoreSelector: {
+                        type: 'string',
+                        required: true,
                     }
                 },
                 transformation: function (callback) {

@@ -86,10 +86,6 @@ db.init = function(callback) {
     });
 };
 
-function clone(obj) {
-    return JSON.parse(JSON.stringify(obj));
-};
-
 function retry(func) {
     return function () {
         var self = this;
@@ -97,7 +93,7 @@ function retry(func) {
         var callback = args.pop();
 
         var invoke = function (callback) {
-            var clonedArgs = clone(args);
+            var clonedArgs = JSON.parse(JSON.stringify(args));
             clonedArgs.push(callback);
             func.apply(self, clonedArgs);
         };
@@ -105,7 +101,7 @@ function retry(func) {
         invoke(function (err) {
             var caller = arguments.callee;
             if (err && err.error === 'noproc') {
-                log.info('retrying db call');
+                log.warning('Retrying database view');
                 invoke(arguments.callee);
             }
             else {

@@ -223,7 +223,7 @@ var schemata = [
         extends: {type: 'string'},
         description: 'Article Relative URL',
         transformation: function (callback) {
-            api.article.getByUrl(this, function (err, article) {
+            api.article.getByUrl(this.toString(), function (err, article) {
                 if (err) callback(err);
                 else callback(null, api.site.modifyArticleForDisplay(article));
             });

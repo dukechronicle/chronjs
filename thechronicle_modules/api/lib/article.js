@@ -102,7 +102,7 @@ article.getByUrl = function(url, callback) {
         if (err) return callback(err);
 
         if (res.length == 0) {
-            return callback("Article does not exist");
+            return callback("Article '" + url + "' does not exist");
         }
 
         var doc = {};

@@ -3,7 +3,7 @@ include container-helpers
 mixin vertical-label
 .rounded
   .content-container.sport-event-info
-    .game-stats.timer(data-starttime=info.date)
+    .game-stats.timer(data-starttime=info.date, data-selector=info.scoreSelector)
       p.label
       p.value
 

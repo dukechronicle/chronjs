@@ -98,7 +98,7 @@ admin.manage = function (req, res, next) {
             locals:{
                 docs: docs,
                 next: nextKey,
-                hasPrevious: start != null,
+                hasPrevious: start !== null,
                 sections: api.taxonomy.mainSections(),
                 db_url: dbUrl
             }
@@ -133,7 +133,7 @@ admin.addArticle = function (req, res, next) {
     res.render('admin/article/new', {
         locals: {
             groups: [],
-            taxonomy: api.taxonomy.levels(),
+            taxonomy: api.taxonomy.levels()
         }
     });
 };
@@ -153,7 +153,7 @@ admin.editArticle = function (req, res, next) {
             locals:{
                 doc:doc,
                 groups:[],
-                taxonomy:api.taxonomy.levels(),
+                taxonomy:api.taxonomy.levels()
             }
         });
     });
@@ -166,11 +166,30 @@ admin.editArticleData = function (req, res, next) {
     });
 };
 
+admin.addBlogArticle = function (req, res, next) {
+    res.render('admin/blogs/new', {
+        locals: {
+            groups: [],
+            taxonomy: api.taxonomy.levels()
+        }
+    });
+};
+
+admin.addBlogArticleData = function (req, res, next) {
+    adminApi.addBlogArticle(req.body.doc, function (err, url) {
+        if (err) next(err);
+        else {
+            console.log(url);
+            res.send(200);
+        }
+    });
+};
+
 admin.addPoll = function(req, res, next) {
     res.render('admin/poll/new', {
         locals:{
             groups:[],
-            taxonomy:api.taxonomy.levels(),
+            taxonomy:api.taxonomy.levels()
         }
     });
 };
@@ -238,7 +257,7 @@ admin.layout = function (req, res, next) {
 admin.addPage = function (req, res, next) {
     res.render('admin/page/new', {
         locals: {
-            templates: _.keys(api.page.templates),
+            templates: _.keys(api.page.templates)
         }
     });
 };

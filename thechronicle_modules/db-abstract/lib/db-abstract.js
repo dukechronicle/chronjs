@@ -109,7 +109,7 @@ function retry(func) {
             }
         });
     };
-};
+}
 
 function updateViews(callback) {
     async.forEach(_.keys(designDoc), function (name, cb) {
@@ -150,7 +150,7 @@ function viewsAreUpToDate(name, document, callback) {
             // the design doc does not exist, return false check if the design
             // doc file has been modified since the the last time it was updated
             // in the db, and if so, if the hash of each is different
-            var currentHash = res.hash; 
+            var currentHash = res.hash;
             var currentModifiedTime = res.lastModified;
             if (!res.hash || (new Date(res.lastModified) < new Date(localModifiedTime) && res.hash != localHash))
                 return callback(null, false, localModifiedTime, localHash);

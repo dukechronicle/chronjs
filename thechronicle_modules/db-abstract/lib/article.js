@@ -8,7 +8,7 @@ var article = exports;
 
 article.getDuplicates = function (limit, callback) {
     var query = {
-        descending: true    
+        descending: true
     };
 
     if (limit)
@@ -28,7 +28,7 @@ article.getByUrl = function (url, callback) {
 };
 
 article.getByTaxonomy = function (taxonomyTerm, limit, params, callback) {
-    taxonomyTerm = _.map(taxonomyTerm, function (s) { return s.toLowerCase() });
+    taxonomyTerm = _.map(taxonomyTerm, function (s) { return s.toLowerCase(); });
 
     var query = {
         descending: true,
@@ -45,13 +45,13 @@ article.getByTaxonomy = function (taxonomyTerm, limit, params, callback) {
 
     // params.last may be an ending date -- used by news sitemap
     if (params && params.last)
-        query.endkey = [taxonomyTerm, params.last]
+        query.endkey = [taxonomyTerm, params.last];
 
     db.view('articles/taxonomy', query, callback);
 };
 
 article.getByAuthor = function (author, taxonomy, limit, start, callback) {
-    taxonomy = _.map(taxonomy, function (s) { return s.toLowerCase() });
+    taxonomy = _.map(taxonomy, function (s) { return s.toLowerCase(); });
     author = author.toLowerCase().replace(/-/g, ' ');
 
     var query = {

@@ -39,7 +39,7 @@ taxonomy.children = function (tax) {
             fullTaxonomy.push(child.name);
             child = _.extend(child, {
                 taxonomy: fullTaxonomy,
-                path: taxonomy.path(fullTaxonomy),
+                path: taxonomy.path(fullTaxonomy)
             });
             delete child.children;
             return child;

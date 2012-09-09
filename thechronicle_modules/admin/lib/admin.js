@@ -21,7 +21,7 @@ admin.sendNewsletter = function (testEmail, campaignID, callback) {
     else {
         api.newsletter.sendNewsletter(campaignID, callback);
     }
-}
+};
 
 admin.k4export = function (filepath, callback) {
     async.parallel({
@@ -79,7 +79,7 @@ admin.k4export = function (filepath, callback) {
 };
 
 admin.addArticle = function (doc, callback) {
-    if (doc.taxonomy == '') {
+    if (doc.taxonomy === '') {
         callback('No section selected for article');
     }
     else {
@@ -90,7 +90,7 @@ admin.addArticle = function (doc, callback) {
             subhead :doc.subhead,
             teaser  :doc.teaser,
             type    :doc.type,
-            taxonomy:doc.taxonomy,
+            taxonomy:doc.taxonomy
         };
 
         api.article.add(article, callback);
@@ -98,7 +98,7 @@ admin.addArticle = function (doc, callback) {
 };
 
 admin.editArticle = function (doc, callback) {
-    if (doc.taxonomy == '') {
+    if (doc.taxonomy === '') {
         callback('No section selected for article');
     }
     else {
@@ -110,15 +110,32 @@ admin.editArticle = function (doc, callback) {
             subhead :doc.subhead,
             teaser  :doc.teaser,
             authors :doc.authors.split(", "),
-            taxonomy:doc.taxonomy,
+            taxonomy:doc.taxonomy
         };
 
         api.article.edit(id, fields, callback);
     }
 };
 
+admin.addBlogArticle = function (doc, callback) {
+    if (doc.blog === '') {
+        callback('No blog selected for article');
+    } else {
+        var blogArticle = {
+            title   :doc.title,
+            body    :doc.body,
+            subhead :doc.subhead,
+            teaser  :doc.teaser,
+            authors :doc.authors.split(", "),
+            blog    :doc.blog
+        };
+
+        api.blog.add(blogArticle, callback);
+    }
+};
+
 admin.addPoll = function (doc, callback) {
-    if (doc.taxonomy == '') {
+    if (doc.taxonomy === '') {
         callback('No section selected for poll');
     }
     else {
@@ -133,7 +150,7 @@ admin.addPoll = function (doc, callback) {
 };
 
 admin.editPoll = function (id, doc, callback) {
-	if (doc.taxonomy == '') {
+	if (doc.taxonomy === '') {
         callback('No section selected for poll');
     }
     else {
@@ -153,7 +170,7 @@ admin.editPoll = function (id, doc, callback) {
 
         api.poll.edit(id, fields, callback);
     }
-}
+};
 
 admin.layout = function (section, group, layoutConfig, callback) {
     async.parallel({

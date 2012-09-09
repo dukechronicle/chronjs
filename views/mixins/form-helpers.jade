@@ -22,3 +22,10 @@ mixin textarea-control-group(field, label, doc, rows)
     label.control-label(for=field)= label
     .controls
       textarea.input-xxlarge(rows=rows, name='doc[#{field}]', id=field)= doc[field]
+
+mixin blogs()
+  - var blogs = ['Sports Blog', 'Playground', 'Backpages'];
+  select.taxonomy(name='doc[blog]', id='#blogs')
+    option(value='') --
+      - each blog in blogs
+        option(value=blog)= blog

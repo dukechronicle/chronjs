@@ -495,11 +495,7 @@ site.getArticleContentUncached = function(doc, callback) {
             if (err) cb(err);
             else cb(null, modifyArticlesForDisplay(relatedArticles));
         });
-    },
-    function(cb) {
-        api.taxonomy.getParents(doc.taxonomy, cb);
-    }
-    ],
+    }],
     function(err, results) {
         if(err)
             callback(err);

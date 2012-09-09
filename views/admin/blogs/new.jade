@@ -1,0 +1,24 @@
+extends ../layout
+
+block content
+  include ../../mixins/form-helpers
+  .container
+    form.form-horizontal(action='/blogs', method='POST')
+      legend Add Blog Article
+      input(type='hidden', name='doc[type]', value='article')
+      mixin text-control-group('title', 'Title')
+      mixin text-control-group('subhead', 'Subhead')
+      .control-group
+         label.control-label(for='section0') Blog
+         .controls
+           mixin blogs()
+      .control-group
+        label.control-label(for='authors') Authors
+        .controls
+          input.input-xlarge#authors(type='text', name='doc[authors]')
+          span.help-block Author names should be comma separated
+      mixin textarea-control-group('teaser', 'Teaser', null, 3)
+      mixin textarea-control-group('body', 'Body', null, 5)
+
+      .form-actions
+        button.btn-large.btn-primary(type='submit') Submit

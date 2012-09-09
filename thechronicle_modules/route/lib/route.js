@@ -88,6 +88,8 @@ exports.siteInit = function (app) {
     });
 
     app.namespace('/blogs', function () {
+        app.get('/new', api.site.checkAdmin, admin.addBlogArticle);
+        app.post('/', api.site.checkAdmin, admin.addBlogArticleData);
         app.get('/:blog', site.blog);
         app.get('/:blog/:url', site.blogPost);
     });

@@ -40,7 +40,7 @@ block content
 
   .leaderboard-row.clearfix
     .lighten.filler-block!=partial('../container/image', {url: "http://www.qduke.com", imageUrl: "http://d2sug25c5hnh7r.cloudfront.net/img/qduke.png", title: "qDuke"})
-    .lighten.leaderboard-block!=partial('../container/ad/leaderboard', {title: "Ad"})
+    .lighten.leaderboard-block!=partial('../container/ad/leaderboard', {title: "Ad", index: 1})
 
   #bottom.clearfix.align-group
     .span-4.block.align-element(data-alignTarget=".rounded")!=partial('../container/block/teaser', {title: "Recruitment", story: recruitment})
@@ -51,4 +51,4 @@ block content
          .content-container
            h3.title Check out last year's orientation video!
 
-    .span-4.last.lighten.align-element!=partial('../container/ad/medium-rect', {title: "Ad"})
+    .span-4.last.lighten.align-element!=partial('../container/ad/medium-rect', {title: "Ad", index: 1})

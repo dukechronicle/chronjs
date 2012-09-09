@@ -64,7 +64,7 @@ block content
                 - if (model.related && model.related.length > 0)
                     #related.title-small!=partial('../container/story-list/subhead', {title: "Related", stories: model.related})
 
-                .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
+                .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement", index: 1})
 
                 #recommendations!=partial('../container/facebook')
                 - if (model.poll)
@@ -73,8 +73,8 @@ block content
                 - if (model.popular && model.popular.length > 0)
                     #popular.title-small!=partial('../container/story-list/numbered', {title: "Popular", stories: model.popular})
 
-                .lighten!=partial('../container/ad/blog', {title: "Advertisement"})
-                .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
+                .lighten!=partial('../container/ad/blog', {title: "Advertisement", index: 1})
+                .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement", index: 2})
 
     #social-share
         .activities

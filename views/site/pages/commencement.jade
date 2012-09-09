@@ -30,4 +30,4 @@ block content
         .bottom.clearfix
             - each story in articles
                 .span-4!=partial('../container/block/wide', { story: story })
-            .lighten.span-4.last!=partial('../container/ad/medium-rect', { title: "Advertisement" })
+            .lighten.span-4.last!=partial('../container/ad/medium-rect', {title: "Advertisement", index: 1})

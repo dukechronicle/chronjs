@@ -8,7 +8,7 @@ block content
             .span-6.align-element(data-aligntarget="#featured .rounded")
                 if (model.Featured && model.Featured[0])
                     #featured!=partial('../container/block/featured', {story: model.Featured[0]})
-                .lighten!=partial('../container/ad/full-banner', {title: "Ad"})
+                .lighten!=partial('../container/ad/full-banner', {title: "Ad", index: 2})
             .span-3.align-element(data-aligntarget=".feature:last-child .rounded")
                 if (model.Featured[1])
                     .feature!=partial('../container/block', {title: "", story: model.Featured[1]})

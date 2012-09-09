@@ -9,10 +9,10 @@ block content
                 !=partial('../container/slideshow/slideshow-right', {stories: model.Slideshow})
         #bottom.clearfix
             .span-4
-                .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement"})
+                .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement", index: 1})
                 if (model.Blog)
                     #blog.title-medium!=partial('../container/story-list/image', {locals: {title: "The Blue Zone", image: staticCdn + "/img/blogs/sportsblog-banner.jpg", imageHref:'http://sports.chronicleblogs.com', stories:model.Blog}})
-                .lighten!=partial('../container/ad/blog', {title: "Advertisement"})
+                .lighten!=partial('../container/ad/blog', {title: "Advertisement", index: 1})
 
             .span-8.last.clearfix
                 - if (model.Stories)

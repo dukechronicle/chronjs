@@ -83,6 +83,9 @@ admin.addArticle = function (doc, callback) {
         callback('No section selected for article');
     }
     else {
+        if (_.last(doc.taxonomy) === '') {
+            doc.taxonomy.pop();
+        }
         var article = {
             body    :doc.body,
             authors :doc.authors.split(", "),
@@ -104,6 +107,9 @@ admin.editArticle = function (doc, callback) {
     else {
         var id = doc.id;
 
+        if (_.last(doc.taxonomy) === '') {
+            doc.taxonomy.pop();
+        }
         var fields = {
             title   :doc.title,
             body    :doc.body,

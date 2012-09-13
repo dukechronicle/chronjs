@@ -14,7 +14,7 @@ block content
     .span-6.last.align-element(data-aligntarget=":last-child .rounded")
       !=partial('../container/block/horizontal', {story: articles[0]})
       !=partial('../container/block/horizontal', {story: articles[1]})
-      .lighten!=partial('../container/ad/full-banner', {title: "Ad", index: 1})
+      !=partial('../container/ad/full-banner', {title: "Ad", index: 1})
 
   .clearfix
     - each article, i in articles

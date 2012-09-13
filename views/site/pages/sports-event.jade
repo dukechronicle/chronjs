@@ -13,8 +13,8 @@ block content
       #information!=partial('../container/sport-event-info', {title: 'Game Details', info: information})
 
   .leaderboard-row.clearfix
-    .lighten.filler-block!=partial('../container/image', {url: "http://bluezone.dukechronicle.com", imageUrl: staticCdn + "/img/blogs/sportsblog-banner.jpg"})
-    .lighten.leaderboard-block!=partial('../container/ad/leaderboard', {title: "Ad", index: 1})
+    .filler-block!=partial('../container/image', {url: "http://bluezone.dukechronicle.com", imageUrl: staticCdn + "/img/blogs/sportsblog-banner.jpg"})
+    .leaderboard-block!=partial('../container/ad/leaderboard', {title: "Ad", index: 1})
 
   #featured
     .span-4!=partial('../container/block/square', {story: featured[0]})
@@ -31,4 +31,4 @@ block content
         - each article, index in articles
           - if (index % 2 == 1)
             !=partial('../container/block/thumbnail', {story: article})
-    .span-4.last.lighten!=partial('../container/ad/medium-rect', {title: "Advertisement", index: 1})
+    .span-4.last!=partial('../container/ad/medium-rect', {title: "Advertisement", index: 1})

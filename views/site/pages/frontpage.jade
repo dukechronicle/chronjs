@@ -18,11 +18,11 @@ block content
                     #popular.title-small!=partial('../container/story-list/subhead', {title: "What's Hot", stories: model.popular})
                 if (model.Opinion)
                     #opinion.title-small!=partial('../container/story-list/subhead', {title: "Opinion", stories: model.Opinion})
-                .lighten!=partial('../container/ad/medium-rect', {title: "Advertisement", index: 1})
+                !=partial('../container/ad/medium-rect', {title: "Advertisement", index: 1})
 
         .leaderboard-row.clearfix
-            .lighten.filler-block#print-edition!=partial('../container/image', model.printEdition)
-            .lighten.leaderboard-block!=partial('../container/ad/leaderboard', {title: "Ad", index: 1})
+            .filler-block#print-edition!=partial('../container/image', model.printEdition)
+            .leaderboard-block!=partial('../container/ad/leaderboard', {title: "Ad", index: 1})
 
         #middle.clearfix.align-group
             if (model.News)

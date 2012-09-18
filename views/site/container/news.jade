@@ -7,7 +7,7 @@
             a.hover.highlight-left.clearfix(href='#{stories[0].url}')
                 .content-container
                     - if (stories[0].images && stories[0].images.ThumbRect)
-                        img(src=stories[0].images.ThumbRect.url)
+                        img.thumb-rect(src=stories[0].images.ThumbRect.url)
                     h4 #{stories[0].title}
                     p.teaser #{stories[0].teaser}
     

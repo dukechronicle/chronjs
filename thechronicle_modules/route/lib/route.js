@@ -4,6 +4,7 @@ var config = require('../../config');
 var siteApi = require('./api');
 var log = require('../../log');
 var site = require('./site');
+var sitemap = require('./sitemap');
 var xhrproxy = require('./xhrproxy');
 
 var async = require('async');
@@ -141,9 +142,10 @@ exports.siteInit = function (app) {
         app.get('/espn', xhrproxy.espn);
     })
 
-    app.get('/sitemaps/:query', function (req, res, next) {
-        res.redirect(config.get("CLOUDFRONT_DISTRIBUTION") + req.url);
-    });
+    app.get('/sitemaps/full', sitemaps.full);
+    app.get('/sitemaps/full/:id', sitemaps.full);
+    app.get('/sitemaps/news', sitemaps.news);
+    app.get('/sitemaps/news/:id', sitemaps.news);
 
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);

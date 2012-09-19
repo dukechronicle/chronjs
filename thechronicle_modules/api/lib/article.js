@@ -132,7 +132,7 @@ article.getByAuthor = function (author, taxonomy, limit, start, callback) {
 };
 
 article.getByDate = function (limit, start, callback) {
-    article.getByTaxonomy([], limit, start, callback);
+    article.getByTaxonomy([], limit, start, callbackLastKey(limit, callback));
 };
 
 article.getByTaxonomy = function (taxonomyPath, limit, start, callback) {

@@ -61,6 +61,8 @@ function configureApp() {
             next();
         });
 
+        app.use(express.compress());
+
         app.use(stylus.middleware({
             src: 'views',
             dest: 'public',

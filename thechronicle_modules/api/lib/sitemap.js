@@ -18,7 +18,7 @@ var NEWS_URL_LIMIT = 1000;
 
 
 sitemap.generateFullSitemap = function (start, callback) {
-    api.article.getByDate(SITEMAP_URL_LIMIT, start, function (err, results, next) {
+    api.article.getByDate(10, start, function (err, results, next) {
         if (err) return callback(err);
         gzip(generateSitemap(results, false), function (err, buffer) {
             callback(err, buffer, next);
@@ -39,14 +39,21 @@ sitemap.getNewsSitemap = function (callback) {
 };
 
 sitemap.updateFullSitemap = function (callback) {
-    var i = 0;
-    var start = null;
-    async.forEachSeries(docs, function (doc, callback) {
-        sitemap.generateFullSitemap(start, function (err, buffer) {
+    var foo = function (start, index, callback) {
+        sitemap.generateFullSitemap(start, function (err, buffer, next) {
             if (err) callback(err);
-            db.sitemap.saveSitemap('full', i++, buffer, callback);
-        }, callback);
-    });
+            db.sitemap.saveSitemap('full', index, buffer, function (err) {
+                if (err) callback(err);
+                else if (next) {
+                    foo(next, index + 1, callback);
+                }
+                else {
+                    callback();
+                }
+            });
+        });
+    };
+    foo(null, 0, callback);
 };
 
 sitemap.updateNewsSitemap = function (callback) {

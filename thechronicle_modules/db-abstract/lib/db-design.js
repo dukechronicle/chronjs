@@ -310,7 +310,7 @@ exports.doc = {
             byType: {
                 map: function (doc) {
                     if (doc.type === 'sitemap') {
-                        emit([doc.sitemapType, doc.index], doc._id);
+                        emit([doc.sitemapType, doc.index], doc._rev);
                     }
                 }
             }

@@ -24,6 +24,7 @@ db.database = require('./database.js');
 db.poll = require('./poll');
 db.page = require('./page.js');
 db.article = require('./article.js');
+db.sitemap = require('./sitemap.js');
 
 
 db.getDatabaseName = function() {

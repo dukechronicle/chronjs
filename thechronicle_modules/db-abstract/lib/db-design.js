@@ -303,4 +303,18 @@ exports.doc = {
         }
     },
 
+    sitemaps: {
+        language: 'javascript',
+
+        views: {
+            byType: {
+                map: function (doc) {
+                    if (doc.type === 'sitemap') {
+                        emit([doc.sitemapType, doc.index], doc._id);
+                    }
+                }
+            }
+        }
+    }
+
 };

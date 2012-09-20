@@ -1,6 +1,6 @@
 var sitemap = exports;
 
-var db = require('./db');
+var db = require('./db-abstract');
 
 
 sitemap.saveSitemap = function (type, index, attachment, callback) {

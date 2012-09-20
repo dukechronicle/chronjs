@@ -17,19 +17,6 @@ var SITEMAP_URL_LIMIT = 10000;
 var NEWS_URL_LIMIT = 1000;
 
 
-sitemap.generateFullSitemap = function (start, callback) {
-    api.article.getByDate(10, start, function (err, results, next) {
-        if (err) return callback(err);
-        gzip(generateSitemap(results, false), function (err, buffer) {
-            callback(err, buffer, next);
-        });
-    });
-};
-
-sitemap.generateNewsSitemap = function (start, callback) {
-
-};
-
 sitemap.getFullSitemap = function (callback) {
 
 };
@@ -39,25 +26,38 @@ sitemap.getNewsSitemap = function (callback) {
 };
 
 sitemap.updateFullSitemap = function (callback) {
-    var foo = function (start, index, callback) {
-        sitemap.generateFullSitemap(start, function (err, buffer, next) {
-            if (err) callback(err);
-            db.sitemap.saveSitemap('full', index, buffer, function (err) {
+    db.sitemap.remove('full', function (err) {
+        if (err) return callback(err);
+        updateSitemap('full', SITEMAP_URL_LIMIT, null, 0, callback);
+    });
+};
+
+sitemap.updateNewsSitemap = function (callback) {
+    db.sitemap.remove('news', function (err) {
+        if (err) return callback(err);
+        var query = {last: (new Date()).getTime() / 1000 - 2 * 24 * 60 * 60};
+        updateSitemap('news', NEWS_URL_LIMIT, query, 0, callback);
+    });
+};
+
+function updateSitemap(type, limit, start, index, callback) {
+    var news = type === 'news';
+    api.article.getByDate(limit, start, function (err, results, next) {
+        if (err) return callback(err);
+        gzip(generateSitemap(results, false), function (err, buffer) {
+            if (err) return callback(err);
+            db.sitemap.saveSitemap(type, index, buffer, function (err) {
                 if (err) callback(err);
                 else if (next) {
-                    foo(next, index + 1, callback);
+                    next.last = start.last;
+                    updateSitemap(type, limit, next, index + 1, callback);
                 }
                 else {
                     callback();
                 }
             });
         });
-    };
-    foo(null, 0, callback);
-};
-
-sitemap.updateNewsSitemap = function (callback) {
-
+    });
 };
 
 function generateSitemap(docs, news) {

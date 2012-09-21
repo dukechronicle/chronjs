@@ -142,12 +142,10 @@ exports.siteInit = function (app) {
         app.get('/espn', xhrproxy.espn);
     })
 
-    /*
-    app.get('/sitemaps/full', sitemap.full);
-    app.get('/sitemaps/full/:id', sitemap.full);
-    app.get('/sitemaps/news', sitemap.news);
-    app.get('/sitemaps/news/:id', sitemap.news);
-    */
+    app.get('/sitemaps/full', sitemap.fullIndex);
+    app.get('/sitemaps/full/:id', sitemap.show);
+    app.get('/sitemaps/news', sitemap.newsIndex);
+    app.get('/sitemaps/news/:id', sitemap.show);
 
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);

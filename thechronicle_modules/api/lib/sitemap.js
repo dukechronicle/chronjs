@@ -16,13 +16,17 @@ var sitemap = exports;
 var SITEMAP_URL_LIMIT = 10000;
 var NEWS_URL_LIMIT = 1000;
 
+var nock = require('nock');
 
-sitemap.getFullSitemap = function (callback) {
 
-};
-
-sitemap.getNewsSitemap = function (callback) {
-
+sitemap.getSitemap = function (file, callback) {
+    var filePattern = /(.*)\.xml\.gz$/;
+    var id = filePattern.exec(file)[1];
+    nock.recorder.rec();
+    db.getAttachment(id, 'sitemap.xml.gz', function (err, res) {
+        if (err) callback(err);
+        else callback(null, new Buffer(res.body, 'utf8'));
+    });
 };
 
 sitemap.updateFullSitemap = function (callback) {

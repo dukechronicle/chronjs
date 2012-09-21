@@ -1,22 +1,12 @@
 var api = require('../../api');
+var log = require('../../log');
 
 
-exports.full = function (req, res, next) {
-    api.sitemap.getFullSitemap(req.params.id, function (err, xml) {
+exports.show = function (req, res, next) {
+    api.sitemap.getSitemap(req.params.id, function (err, buffer) {
         if (err) res.send(500);
         else {
-            res.header('Content-Encoding', 'gzip');
-            res.send(xml);
-        }
-    });
-};
-
-exports.news = function (req, res, next) {
-    api.sitemap.getNewsSitemap(req.params.id, function (err, xml) {
-        if (err) res.send(500);
-        else {
-            res.header('Content-Encoding', 'gzip');
-            res.send(xml);
+            res.end(buffer.toString('binary'));
         }
     });
 };

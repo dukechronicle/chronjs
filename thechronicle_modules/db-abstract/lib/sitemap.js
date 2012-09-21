@@ -8,11 +8,13 @@ var log = require('../../log');
 
 
 sitemap.saveSitemap = function (type, index, attachment, callback) {
+    log.debug('base64');
+    log.debug(attachment.toString('base64'));
+    log.debug('utf8');
+    log.debug(attachment.toString('utf8'));
     attachment = {
         'sitemap.xml.gz': {
             data: attachment.toString('base64'),
-            'content-type': 'application/xml',
-            'content-encoding': 'gzip',
         }
     };
     db.save({

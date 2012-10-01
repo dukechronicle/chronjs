@@ -109,6 +109,23 @@ exports.doc = {
                 }
             },
 
+            taxonomyWithThumbnail: {
+                map: function (doc) {
+                    if (doc.type == "article" && doc.taxonomy) {
+                        var path = [];
+                        for (var i = 0; i <= doc.taxonomy.length; i++) {
+                            if (i > 0) {
+                                path.push(doc.taxonomy[i - 1].toLowerCase());
+                            }
+                            emit([eval(uneval(path)), parseInt(doc.created), doc._id, 1], doc);
+                            if (doc.images && doc.images.ThumbSquareM) {
+                                emit([eval(uneval(path)), parseInt(doc.created), doc._id, 0], {_id: doc.images.ThumbSquareM});
+                            }
+                        }
+                    }
+                }
+            },
+
             /*
              * Returns all taxonomies of the articles in the database.
              */

@@ -101,9 +101,9 @@ function getNewsletterContent(callback) {
                 model: model
             });
 
-            var adImage = config.get('CLOUDFRONT_STATIC') + '/img/ad/belk_wide_skyscraper.jpg';
-            var adHref = 'http://clk.atdmt.com/COM/go/412687593/direct/01/';
-            var adHTML = '<a href="' + adHref + '"><img src="' + adImage + '"></a>';
+            var adImage = config.get('CLOUDFRONT_STATIC') + '/img/ad/blue_corn_wide_skyscraper.png';
+            var adHref = 'http://www.facebook.com/pages/Blue-Corn-Cafe/165358526808747';
+            var adHTML = '<a href="' + adHref + '" rel="nofollow"><img src="' + adImage + '"></a>';
 
             callback(null, newsHTML, adHTML);
         });

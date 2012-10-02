@@ -12,7 +12,7 @@ block content
                 !=partial('../container/ad/medium-rect', {title: "Advertisement", index: 1})
                 if (model.Blog)
                     #blog.title-medium!=partial('../container/story-list/image', {locals: {title: "The Blue Zone", image: staticCdn + "/img/blogs/sportsblog-banner.jpg", imageHref:'http://sports.chronicleblogs.com', stories:model.Blog}})
-                !=partial('../container/ad/blog', {title: "Advertisement", index: 1})
+                !=partial('../container/ad/medium-rect', {title: "Advertisement", index: 2})
 
             .span-8.last.clearfix
                 - if (model.Stories)

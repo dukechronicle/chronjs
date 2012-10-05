@@ -12,10 +12,6 @@ block content
     .span-6.last.align-element(data-aligntarget="#information .rounded")
       #information!=partial('../container/sport-event-info', {title: 'Game Details', info: information})
 
-  .leaderboard-row.clearfix
-    .filler-block!=partial('../container/image', {url: "http://bluezone.dukechronicle.com", imageUrl: staticCdn + "/img/blogs/sportsblog-banner.jpg"})
-    .leaderboard-block!=partial('../container/ad/leaderboard', {title: "Ad", index: 1})
-
   #featured
     .span-4!=partial('../container/block/square', {story: featured[0]})
     .span-4!=partial('../container/block/square', {story: featured[1]})

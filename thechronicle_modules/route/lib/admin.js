@@ -21,7 +21,7 @@ admin.qdukepush = function (req, res, next) {
 }
 
 admin.qdukepreview = function (req, res) {
-    res.render('qduke', {
+    res.render('qduke/qduke', {
         locals: {
             links: config.get('QDUKE_LINKS'),
             ads: config.get('QDUKE_ADS'),

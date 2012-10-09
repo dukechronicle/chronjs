@@ -4,86 +4,73 @@ include ../mixins/code
 !!! 5
 html
     head
-        link(href='http://fonts.googleapis.com/css?family=Karla', rel='stylesheet', type='text/css')
         script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js', type='text/javascript')
-        script(src='https://raw.github.com/monkeecreate/jquery.simpleWeather/master/jquery.simpleWeather.js', type='text/javascript')
-        script(src='#{assetPath}qduke.js', type='text/javascript')
-        //link(rel='stylesheet', href='qduke/qduke.css')
         mixin stylesheet("qduke")
         title qDuke.com
+        | <script type='text/javascript'>
+        |    <!--// <![CDATA[
+        |      var OA_zones = {
+        |      'zone_946_1' : 946,
+        |      'zone_946_2' : 946,
+        |      'zone_946_3' : 946,
+        |      'zone_946_4' : 946,
+        |      'zone_946_5' : 946,
+        |      'zone_946_6' : 946,
+        |      'zone_946_7' : 946,
+        |      'zone_946_8' : 946,
+        |      'zone_946_9' : 946,
+        |      'zone_946_10' : 946,
+        |      }
+        |    // ]]> -->
+        |</script>
+        |<script type='text/javascript' src='http://www.oncampusweb.com/delivery/spcjs.php?id=73&amp;block=1'></script>
     body
-        div#promobar Welcome to the new qDuke.com! 
-            a(href="https://docs.google.com/spreadsheet/viewform?formkey=dHplTkN2SmdXZEhtZTF1SWRPdFlBM2c6MQ#gid=0") Let us know what you think.
-        div#shell
-            div#header
-                div#logo
-                    p#title
-                        a(href='http://qduke.com') q
-                            span.strong Duke
-                            | .com
-                    p#subtitle presented by 
-                        a#chrontitle(href='http://dukechronicle.com') The Chronicle
-            section#info
-                table.noVSpace
-                    tr.button_bar.default_lightgrey.infobar.clearfix
-                        td
-                            a#time(href='http://google.com/calendar') Calendar
-                        td
-                            a#weather(href='http://www.weather.com/weather/right-now/Durham+NC+27708') Weather
-                        td
-                            a#webmail(href='https://webmail.duke.edu') Webmail
-                        td
-                            a#gmail(href='http://gmail.com') Gmail
-                        td
-                            a#faceboook(href='http://facebook.com') Facebook
-                table
-                    tr.button_bar.clearfix
-                        td.button_blue
-                            a(href='http://www.dukechronicle.com') The Chronicle
-                        td.button_arrownarrow.button_grey
-                            a(href='javascript:prevArticle();') &laquo;
-                        td#newsbox.newsbox.button_grey
-                            a(href="#") Loading...
-                        td.button_arrownarrow.button_grey
-                            a(href='javascript:nextArticle();') &raquo;
-            section#links
-                table.noVSpace
-                    tr.button_bar.clearfix
-                        td.button_doublewide.button_grey.noHover#search
-                            input(name='query', type='text', style='background:transparent', onkeydown='searchOnEnter(event)')
-                        td.button_blue(onclick='search("Google")')
-                            button(type="submit", onclick='search("Google")') Google
-                        td.button_blue(onclick='search("WolframAlpha")')
-                            button(type='submit', onclick='search("WolframAlpha")') WolframAlpha
-                        td.button_blue(onclick='search("Duke")')
-                            button(type='submit', onclick='search("Duke")') Duke
-                table
-                    - var linkRows = Math.ceil(links.length/5)
-                    tr.button_bar.button_bar_tall.default_lightblue.clearfix
-                        -for (var i = 0; i < 5; i++)
-                            td 
-                                a(href=links[i].url) #{links[i].title}
-                    - for (var row = 1; row < linkRows; row++)
-                        tr.button_bar.default_lightblue.clearfix
-                            -for (var i = row*5; i < row*5+5; i++)
-                                td 
-                                    a(href=links[i].url) #{links[i].title}
-            section#ads
-                div.vertical-container.fake-button
-                    a(href="http://dukechronicle.com/page/advertising") Sponsored
-                table
-                    - var adRows = Math.ceil(ads.length/5)
-                    - for (var row = 0; row < adRows; row++)
-                        tr.button_bar.default_lightgrey.clearfix
-                            -for (var i = row*5; i < row*5+5; i++)
-                                td 
-                                    a(href=ads[i].url, rel="nofollow") #{ads[i].title}
-            div#footer
-                p &copy; 2012 
-                    a(href='http://dukechronicle.com') The Chronicle 
-                    |
-                    a(href='http://dukechronicle.com/page/advertising') Advertising 
-                    |
-                    a(href='http://dukechronicle.com/page/contact') Contact 
-                script(type='text/javascript')
-                    doMagic()
+        #wrap
+            .rowHead.clearfix
+                a.box.boxLogo(href="http://qduke.com") 
+                    em q
+                    span Duke
+                a.box(href="http://www.weather.com/weather/right-now/Durham+NC+27708") Weather
+                a.box(href="https://webmail.duke.edu/") Webmail
+                a.box(href="http://gmail.com/") Gmail
+                a.box(href="http://facebook.com/") Facebook
+            .rowNews.clearfix
+                a.box.boxChron(href="http://dukechronicle.com") The Chronicle
+                a.box
+                    .caption
+                        .txt Duke Campus Quad app to help promote events
+                    img(src="http://cdn.dukechronicle.com/186x133-0-0-6aRN11qN-campusquad_ThanhHa.jpg")
+                a.box
+                    .caption
+                        .txt Duke Performances to feature leading figure in Kathak dance
+                    img(src="http://cdn.dukechronicle.com/186x133-114-6-X9VK3T1S-Pandit_Special.jpg")
+                a.box
+                    .caption
+                        .txt Film Review: Looper
+                    img(src="http://cdn.dukechronicle.com/186x133-90-24-0FfgebSM-Looper_Special.jpg")
+                a.box
+                    .caption
+                        .txt Out of the Woods: Homelessness in Durham
+                    img(src="http://cdn.dukechronicle.com/186x133-19-0-TAb55N2e-homeless.jpg")
+            .rowSearch.clearfix
+                .box.boxSearch
+                    input(name="query", type="text", style="background:transparent")
+                a.box.boxButton Google
+                a.box.boxButton WolframAlpha
+                a.box.boxButton Duke
+                - var linkRows = Math.ceil(links.length/5)
+            // LINKS
+            .rowLinks.clearfix
+                -for (var i = 0; i < 5; i++)
+                    a.box.boxLink.boxLinkTall(href=links[i].url) #{links[i].title}
+            - for (var row = 1; row < linkRows; row++)
+                .rowLinks.clearfix
+                    -for (var i = row*5; i < row*5+5; i++)
+                        a.box.boxLink(href=links[i].url) #{links[i].title}
+            // ADS
+            - for (var row = 0; row < 2; row++)
+                .rowAds.clearfix
+                    -for (var i = row*5 + 1; i <= row*5+5; i++)
+                        |<script type='text/javascript'><!--// <![CDATA[
+                        |                     OA_show('zone_946_#{i}');
+                        |                     // ]]> --></script>

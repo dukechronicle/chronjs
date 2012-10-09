@@ -13,7 +13,7 @@ qduke.buildAndPush = function (callback) {
             ads: config.get('QDUKE_ADS'),
             assetPath: "/"
         });
-        api.s3.put("alpha.qduke.com", html, "/index.html", "text/html", null,  function (s3Err, url) {
+        api.s3.put("beta.qduke.com", html, "/index.html", "text/html", null,  function (s3Err, url) {
         	if (s3Err) {
         		callback(s3Err)
         	}
@@ -21,7 +21,7 @@ qduke.buildAndPush = function (callback) {
     });
     // CSS
     fs.readFile('public/qduke/qduke.css', function (err, data) {
-        api.s3.put("alpha.qduke.com", data, "/qduke.css", "text/css", null,  function (s3Err, url) {
+        api.s3.put("beta.qduke.com", data, "/qduke.css", "text/css", null,  function (s3Err, url) {
         	if (s3Err) {
         		callback(s3Err)
         	}
@@ -29,7 +29,7 @@ qduke.buildAndPush = function (callback) {
     });
     // JS
     fs.readFile('public/qduke/qduke.js', function (err, data) {
-        api.s3.put("alpha.qduke.com", data, "/qduke.js", "application/x-javascript", null,  function (s3Err, url) {
+        api.s3.put("beta.qduke.com", data, "/qduke.js", "application/x-javascript", null,  function (s3Err, url) {
         	if (s3Err) {
         		callback(s3Err)
         	}

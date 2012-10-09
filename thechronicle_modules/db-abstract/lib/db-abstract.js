@@ -65,13 +65,14 @@ db.init = function(callback) {
     // assign all methods of the cradle object to db
     var database = db.connect(config.get("COUCHDB_URL"),DATABASE);
     _.extend(db, database);
+    db.view = retry(db.view);
 
-    db.exists(function (error,exists) {    
+    db.exists(function (error,exists) {
         if(error) {
             log.error("ERROR db-abstract" + error);
             return callback(error);
         }
-        
+
         // initialize database if it doesn't already exist
         if(!exists) {
             db.create(function(err, response) {
@@ -83,6 +84,31 @@ db.init = function(callback) {
              updateViews(callback);
         }
     });
+};
+
+function retry(func) {
+    return function () {
+        var self = this;
+        var args = Array.prototype.slice.call(arguments);
+        var callback = args.pop();
+
+        var invoke = function (callback) {
+            var clonedArgs = JSON.parse(JSON.stringify(args));
+            clonedArgs.push(callback);
+            func.apply(self, clonedArgs);
+        };
+
+        invoke(function (err) {
+            var caller = arguments.callee;
+            if (err && err.error === 'noproc') {
+                log.warning('Retrying database view');
+                invoke(arguments.callee);
+            }
+            else {
+                callback.apply(self, arguments);
+            }
+        });
+    };
 };
 
 function updateViews(callback) {

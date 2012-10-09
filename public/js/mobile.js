@@ -1,8 +1,13 @@
 var CHRONICLE_DOMAIN = 'http://www.dukechronicle.com';
 
-var ARTICLE_LIST = "#ARTICLE_LIST";
-var ARTICLE_CONTENT = "#ARTICLE_CONTENT";
-var HEADER_TITLE = "#HEADER_TITLE";
+var ERROR_PAGE = "#ErrorPage";
+var ARTICLE_LIST_PAGE = "#ArticleListPage";
+var ARTICLE_PAGE = "#ArticlePage";
+
+var ARTICLE_LIST = "#ArticleList";
+var ARTICLE_CONTENT = "#ArticleContent";
+var HEADER_TITLE = "#HeaderTitle";
+var ERROR_MESSAGE = "#ErrorMessage";
 var UNKNOWN_ERROR = "An unknown error has occured, click back to return to the previous page.";
 var ARTICLE_NOT_FOUND = "The article cannot be found. Hit back to return to the previous page.";
 
@@ -20,27 +25,29 @@ var articleCache = [];
 
 function showFullSite() {
     _gaq.push(['_trackEvent', 'Mobile', 'OptOut']);
-    setCookie("forceFullSite", "true", 1, '/');
-    window.location = "/";
+    setCookie("forceFullSite", "true", 1, '/', 'dukechronicle.com');
+    window.location = "http://www.dukechronicle.com";
 }
 
-function setCookie(c_name, value, exdays, path)
-{
-    var exdate=new Date();
+function setCookie(c_name, value, exdays, path, domain) {
+    var exdate = new Date();
     exdate.setDate(exdate.getDate() + exdays);
-    var c_value=escape(value) + ((path==null) ? "" : "; path="+path)  +  ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
-    document.cookie=c_name + "=" + c_value;
+    var cookie = c_name + '=' + escape(value);
+    cookie += exdays ? '; expires=' + exdate.toUTCString() : '';
+    cookie += path ? '; path=' + path : '';
+    cookie += domain ? '; domain=' + domain : '';
+    document.cookie = cookie;
 }
-        
+
 function getDateString(time)
 {
     var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-    var date = new Date(time);
+    var date = new Date(time*1000);
     var month = MONTHS[date.getMonth()];
     var day = date.getDate();
     var year= date.getFullYear();
-    var dateString = " - " + month + " "+ day + ", " + year;
+    var dateString = month + " "+ day + ", " + year;
     
     return dateString;
 }
@@ -59,12 +66,11 @@ function generateListItem(articleJSON)
     // Thumbnail
     // hyperlink.append('<img src="' + 'img/test.png"' + ' "class"="ui-li-thumb" />');
 
-    var dateString = getDateString(article.created*1000);
     // Article Title
     hyperlink.append($('<h2 />').html(article.title));
 
     // Article Date
-    hyperlink.append($('<h3 />').html(dateString));
+    hyperlink.append($('<h3 />').html(article.authors.join(', ')));
 
     // Article Synopsis
     hyperlink.append($('<p />').html(article.teaser));
@@ -79,14 +85,20 @@ function updateArticleList(responseText, articleListContainer, category)
 
     if(articleListResponse == null)
     {
-        $.mobile.changePage('#error', 'slide');
+        $.mobile.changePage(ERROR_PAGE, 'slide');
         return;
     }
 
     $(ARTICLE_LIST).empty();
 
+    var lastDate = "";
     for(var i in articleListResponse)
     {
+        curDate = getDateString(articleListResponse[i].created)
+        if (lastDate != curDate) {
+            $(ARTICLE_LIST).append("<li data-role='list-divider'>" + curDate + "</li>");
+            lastDate = curDate;
+        }
         $(ARTICLE_LIST).append(generateListItem(articleListResponse[i]));
         lastDocID[category] = articleListResponse[i]._id;
     }
@@ -96,6 +108,8 @@ function updateArticleList(responseText, articleListContainer, category)
 
 function getArticleList(category, title, forced)
 {
+    // Clear search box.
+    $('#searchInput').val("");
     // Retrieve if cache miss, forced reload, or if cache is too old:
     if(articleListCache[category] == null || forced || new Date().getTime() - articleListCache[category].timestamp > ARTICLE_LIST_CACHE_TIMEOUT)
     {
@@ -114,7 +128,7 @@ function getArticleList(category, title, forced)
             success: function(data){
                 //console.log(category);
                 if(!data) {
-                    $.mobile.changePage('#error', 'none');
+                    $.mobile.changePage(ERROR_PAGE, 'none');
                     return;
                 }
                 // Insert into cache
@@ -128,7 +142,7 @@ function getArticleList(category, title, forced)
         });
     } 
     else {
-        updateArticleList(articleListCache[category].data, $(this), title);
+        updateArticleList(articleListCache[category].data.docs, $(this), title);
     }
 }
 
@@ -138,18 +152,14 @@ function generateArticle(articleJSON)
     
     if(article == null)
     {
-        $.mobile.changePage('#error', 'slide');
+        $.mobile.changePage(ERROR_PAGE, 'slide');
         return;
     }
     
     var totalString = $('<div />');
-    totalString.append($('<h2 />').append(article.title));
+    totalString.append($('<h1 />').append(article.title));
 
-    for(author in article.authors)
-    {
-        var authorString = $('<p />', {"class": "author"}).append(article.authors[author]);
-        totalString.append(authorString);
-    }
+    totalString.append($('<p />', {"class": "author"}).append("By " + article.authors.join(", ") + " | " + getDateString(article.created)));
 
     if (article.images != null && article.images.LargeRect != null) {
         var imageString = $('<img class="article-image" src='+article.images.LargeRect.url + ' alt="chronicle image"/>');
@@ -171,7 +181,7 @@ function handleAJAXError(jqXHR)
     {
         $(ERROR_MESSAGE).text(UNKNOWN_ERROR);
     }
-    $.mobile.changePage('#error', 'slide');
+    $.mobile.changePage(ERROR_PAGE, 'slide');
 }
 
 function getArticle(articleURL)
@@ -187,15 +197,15 @@ function getArticle(articleURL)
             success: function(data){
                 if(!data) {
                     //console.log("get article failed");
-                    $.mobile.changePage('#error', 'slide');
+                    $.mobile.changePage(ERROR_PAGE, 'slide');
                     return;
                 }
 
                 // Insert into cache
-                articleCache[articleURL] = {data: data};
+                articleCache[articleURL] = data;
                 $(ARTICLE_CONTENT).empty();
-                $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL].data));
-                 $.mobile.changePage($("#Article"),{transition:"slide", dataUrl:"/article/"+articleURL});
+                $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL]));
+                $.mobile.changePage($(ARTICLE_PAGE),{transition:"slide", dataUrl:"/article/"+articleURL});
                 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -205,30 +215,9 @@ function getArticle(articleURL)
     }
     else {
         $(ARTICLE_CONTENT).empty();
-        $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL].data));
-            $.mobile.changePage($("#Article"),{transition:"slide", dataUrl:"/m/article/"+articleURL});
+        $(ARTICLE_CONTENT).html(generateArticle(articleCache[articleURL]));
+        $.mobile.changePage($(ARTICLE_PAGE),{transition:"slide", dataUrl:"/article/"+articleURL});
     } 
-}
-     
-
-function getSectionList()
-{
-    $(ARTICLE_LIST).empty();
-    $(HEADER_TITLE).text("The Chronicle");
-
-    // Containers
-    var categories = ["News", "Sports", "Opinion", "Recess", "Towerview"];
-    for(var i in categories)
-    {
-        var listItem = $('<li />');
-        hyperlink = $('<a />',{ "href":"javascript:getArticleList('" + categories[i] + "','" + categories[i] +"')"});
-        hyperlink.append($('<h4 />').text(categories[i]));
-        listItem.append(hyperlink);
-        $(ARTICLE_LIST).append(listItem);
-    }   
-
-    $(ARTICLE_LIST).listview('refresh');
-    $.mobile.silentScroll(0);
 }
 
 function initMobileOptions()
@@ -237,6 +226,10 @@ function initMobileOptions()
       $.mobile.page.prototype.options.addBackBtn = true;
       $.mobile.page.prototype.options.backBtnText = "Prev";
       $.mobile.page.prototype.options.backBtnTheme = "a";
+      $.mobile.loader.prototype.options.text = "loading";
+      $.mobile.loader.prototype.options.textVisible = false;
+      $.mobile.loader.prototype.options.theme = "a";
+      $.mobile.loader.prototype.options.html = "";
       $.mobile.pushStateEnabled = false;
       //$.mobile.touchOverflowEnabled = true;
       });
@@ -250,9 +243,9 @@ function beginMobile()
           var splitString = relativeURL.split("/");
           // TODO: malformed input?
           getArticleList('all', 'The Chronicle', true);
-          if(splitString[2] == "article" && splitString[3] != null && splitString[3] != "")
+          if(splitString[1] == "article" && splitString[2] != null && splitString[2] != "")
           {
-             getArticle(splitString[3]);
+             getArticle(splitString[2]);
           }
 
           $("#searchBox").submit(search);
@@ -268,15 +261,14 @@ function search(eventObject)
 
     if(query.length > 0) {
         $.ajax({
-            url: "/api/search?q=" + query,
+            url: CHRONICLE_DOMAIN + "/api/search?q=" + query,
             dataType: "jsonp",
             cache: false,
             success: function(data) {
                 if(!data) {
-                    $.mobile.changePage('#error', 'slide');
+                    $.mobile.changePage(ERROR_PAGE, 'slide');
                     return;
                 }
-                
                 updateArticleList(data.docs, $(this), "Search Results");
             },
             error: function (jqXHR, textStatus, errorThrown) {

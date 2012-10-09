@@ -1,5 +1,7 @@
 var admin = exports;
 
+var _ = require('underscore');
+
 var adminApi = require('../../admin');
 var api = require('../../api');
 var config = require('../../config');
@@ -249,6 +251,14 @@ admin.layout = function (req, res, next) {
                     nameSpace: layoutConfig[group].namespace
                 }
             });
+        }
+    });
+};
+
+admin.addPage = function (req, res, next) {
+    res.render('admin/page/new', {
+        locals: {
+            templates: _.keys(api.page.templates),
         }
     });
 };

@@ -131,7 +131,7 @@
             'charset': settings['charset'],
             'target': settings['target'],
             'source': settings['source'],
-            'loc': window.location.href.replace(/#.*$/, '')
+            'loc': window.location.href
         };
 
         if (typeof settings['extra'] != 'undefined') {

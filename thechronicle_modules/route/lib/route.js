@@ -35,6 +35,8 @@ exports.siteInit = function (app) {
         app.post('/article', api.site.checkAdmin, siteApi.createArticle);
         app.put('/article/:id', api.site.checkAdmin, siteApi.updateArticle);
         app.del('/article/:id', api.site.checkAdmin, siteApi.deleteArticle);
+
+        app.get('/template/:name', api.site.checkAdmin, siteApi.template);
     });
 
     app.get('/', site.frontpage);
@@ -52,6 +54,8 @@ exports.siteInit = function (app) {
     app.get('/rss/news', redirect("http://feeds.feedburner.com/thechronicle/news"));
 
     app.namespace('/page', function () {
+        app.get('/:url', site.page);
+
         app.get('/about-us', site.staticPage);
         app.get('/advertising', site.staticPage);
         app.get('/contact', site.staticPage);
@@ -62,14 +66,9 @@ exports.siteInit = function (app) {
         app.get('/privacy-policy', site.staticPage);
         app.get('/subscribe', site.staticPage);
         app.get('/user-guidelines', site.staticPage);
-        app.get('/young-trustee-2012', site.staticPage);
-        app.get('/commencement-2012', site.staticPage);
-        app.get('/orientation-2012', site.staticPage);
 
         app.post('/newsletter', site.newsletterData);
     });
-
-    app.get('/graduation', redirect('/page/graduation'));
 
     // Makes search url more readable
     app.get('/search', site.search);
@@ -134,8 +133,14 @@ exports.siteInit = function (app) {
     	app.post('/:id', api.site.checkAdmin, admin.editPollData);
     });
 
+    app.namespace('/admin/page', function () {
+        app.get('/new', api.site.checkAdmin, admin.addPage);
+        app.get('/:url/edit', api.site.checkAdmin, admin.editPage);
+    });
+
     app.namespace('/xhrproxy', function() {
         app.get('/delete_activity', xhrproxy.delete_activity);
+        app.get('/espn', xhrproxy.espn);
     })
 
     app.get('/sitemaps/:query', function (req, res, next) {

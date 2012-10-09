@@ -5,9 +5,9 @@ block append head
 
 block content
   mixin calendarDay(day)
-    - if (day.toString() in data.schedule)
+    - if (day.toString() in schedule)
       ul.events
-        - each event in data.schedule[day.toString()]
+        - each event in schedule[day.toString()]
           li
             span.date= event.time
             |  
@@ -36,14 +36,14 @@ block content
             td: mixin calendarDay(25)
             td: mixin calendarDay(26)
 
-  #articles!=partial('../container/row/feature', {stories: data.articles})
+  #articles!=partial('../container/row/feature', {stories: articles})
 
   .leaderboard-row.clearfix
-    .lighten.filler-block!=partial('../container/image', {url: "http://www.qduke.com", imageUrl: "http://d2sug25c5hnh7r.cloudfront.net/img/qduke.png", title: "qDuke"})
-    .lighten.leaderboard-block!=partial('../container/ad/leaderboard', {title: "Ad"})
+    .filler-block!=partial('../container/image', {url: "http://www.qduke.com", imageUrl: "http://d2sug25c5hnh7r.cloudfront.net/img/qduke.png", title: "qDuke"})
+    .leaderboard-block!=partial('../container/ad/leaderboard', {title: "Ad", index: 1})
 
   #bottom.clearfix.align-group
-    .span-4.block.align-element(data-alignTarget=".rounded")!=partial('../container/block/teaser', {title: "Recruitment", story: data.recruitment})
+    .span-4.block.align-element(data-alignTarget=".rounded")!=partial('../container/block/teaser', {title: "Recruitment", story: recruitment})
     .span-4.block.align-element(data-alignTarget=".rounded")
       .rounded
          .image-container
@@ -51,4 +51,4 @@ block content
          .content-container
            h3.title Check out last year's orientation video!
 
-    .span-4.last.lighten.align-element!=partial('../container/ad/medium-rect', {title: "Ad"})
+    .span-4.last.align-element!=partial('../container/ad/medium-rect', {title: "Ad", index: 1})

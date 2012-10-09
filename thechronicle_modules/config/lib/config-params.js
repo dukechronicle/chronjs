@@ -30,15 +30,6 @@ var configParams = [
         }
     },
     {
-        name: 'MOBILE_DOMAIN_NAME',
-        description: 'Mobile Site Domain Name',
-        defaultValue: 'm.dukechronicle.com',
-        schema: {
-          type: "string",
-          required: true
-        }
-    },
-    {
         name: 'DISQUS_SHORTNAME',
         description: 'Disqus Shortname',
         defaultValue: 'chronicletest',

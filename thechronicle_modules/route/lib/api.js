@@ -5,7 +5,7 @@ var log = require('../../log')
 
 var _ = require('underscore');
 
-var RESULTS_LIMIT = 20;
+var RESULTS_LIMIT = 30;
 
 
 /**
@@ -21,7 +21,7 @@ siteApi.articlesBySection = function (req, res, next) {
         else {
             docs = _.map(docs, function (doc) {
                 return _.pick(doc, 'title', 'teaser', 'urls', '_id', 'created',
-                              'authors');
+                              'authors', 'date');
             });
             res.json({docs: docs, next: JSON.stringify(nextKey)});
         }
@@ -103,4 +103,13 @@ siteApi.votePoll = function (req, res, next) {
                 res.send(_res);
             }
         });
+};
+
+siteApi.template = function (req, res, next) {
+    if (req.params.name in api.page.templates) {
+        res.json(api.page.templates[req.params.name].model);
+    }
+    else {
+        next();
+    }
 };

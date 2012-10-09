@@ -128,12 +128,14 @@ site.search = function (req, res, next) {
     });
 };
 
-site.staff = function (req, res) {
+site.staff = function (req, res, next) {
     var name = util.capitalizeWords(req.params.name.replace(/-/g, ' '));
     api.site.getAuthorContent(name, function (err, docs, info, nextDoc) {
-        if (info && info.name)
-            name = info.name;
+        if (docs.length == 0) {
+            return next();
+        }
 
+        name =  info && info.name ? info.name : name;
         res.render('site/pages/people', {
             locals: {
                 pageTitle: util.capitalizeWords(name),
@@ -310,11 +312,25 @@ site.rss = function (req, res, next) {
     });
 };
 
+site.page = function (req, res, next) {
+    api.site.getPageContent(req.params.url, function (err, page) {
+        if (err) return next(err);
+        else if (!page) next();
+        else {
+            res.render(page.view, {
+                pageTitle: page.title,
+                locals: page.model,
+            });
+        }
+    });
+};
+
 site.staticPage = function (req, res, next) {
     var url = _.last(req.route.path.split('/'));
     var filename = 'site/pages/' + url;
     fs.readFile('views/site/pages/page-data/' + url + '.json', function (err, data) {
         var data = (!err && data) ? JSON.parse(data.toString()) : null;
+        log.debug(data);
         res.render(filename, {
             data: data
         });

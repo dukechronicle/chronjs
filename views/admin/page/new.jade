@@ -1,0 +1,33 @@
+extends ../layout
+
+block content
+  include ../../mixins/form-helpers
+  .container#page-layout
+    .row
+      .groups.span8
+        h1 Page Layout
+        .row
+          .left-col.span4
+          .right-col.span4
+      .sidebar.span4
+        form#settings
+          legend Page Settings
+          label(for='title') Title
+          .input-append
+            input#title(type='text', name='doc[title]')
+            span.add-on | The Chronicle
+          label(for='url') URL
+          .input-prepend
+            span.add-on /page/
+            input#url(type='text', name='doc[url]')
+          label(for='template') Template
+          select#template(name='doc[template]')
+            option(value='') --
+            - each template in templates
+              option(value=template)= template
+          .form-actions
+            button.btn.btn-primary(type='submit') Submit
+
+  script#group-template(type='text/template')
+    <h3><%= label %></h3>
+    <div class="group"></div>

@@ -28,6 +28,6 @@ block content
         .span-4.last
             - if (typeof popular != 'undefined' && popular.length > 0)
                 #popular.title-small!=partial('../container/story-list/numbered', {title: "Popular", stories: popular})
-            .lighten!=partial('../container/ad/medium-rect', { title: "Advertisement" })
+            !=partial('../container/ad/medium-rect', { title: "Advertisement", index: 1})
             !=partial('../container/facebook')
-            .lighten!=partial('../container/ad/blog', { title: "Advertisement" })
+            !=partial('../container/ad/medium-rect', { title: "Advertisement", index: 2})

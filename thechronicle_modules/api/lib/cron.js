@@ -20,6 +20,7 @@ exports.init = function () {
         // Every half hour
         new cron.CronJob('0 0,30 * * * *', loadRSSFeeds).start();
 
+        /*
         // Build full sitemap at 5AM every day
         new cron.CronJob('0 0 5 * * *', function () {
             sitemap.latestFullSitemap('/sitemaps/sitemap', function (err) {
@@ -33,6 +34,7 @@ exports.init = function () {
                 if (err) log.warning("Couldn't build news sitemap: " + err);
             });
         }).start();
+        */
     }
 };
 

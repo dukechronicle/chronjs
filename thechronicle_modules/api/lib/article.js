@@ -102,7 +102,7 @@ article.getByUrl = function(url, callback) {
         if (err) return callback(err);
 
         if (res.length == 0) {
-            return callback("Article does not exist");
+            return callback("Article '" + url + "' does not exist");
         }
 
         var doc = {};
@@ -132,7 +132,7 @@ article.getByAuthor = function (author, taxonomy, limit, start, callback) {
 };
 
 article.getByDate = function (limit, start, callback) {
-    article.getByTaxonomy([], limit, start, callback);
+    article.getByTaxonomy([], limit, start, callbackLastKey(limit, callback));
 };
 
 article.getByTaxonomy = function (taxonomyPath, limit, start, callback) {

@@ -1,5 +1,6 @@
 (function () {
-    var MOBILE_DOMAIN = 'm.dukechronicle.com';
+    var SITE_SUBDOMAIN = 'www';
+    var MOBILE_SUBDOMAIN = 'm';
     var MOBILE_USER_AGENTS = [
         'Android', 'iPhone', 'Windows Phone', 'Blackberry', 'Symbian', 'Palm',
         'webOS',
@@ -8,7 +9,7 @@
 
     if (isMobileUser() && getCookie('forceFullSite') != 'true') {
         var href = window.location.href.replace(
-            window.location.hostname, MOBILE_DOMAIN);
+            SITE_SUBDOMAIN, MOBILE_SUBDOMAIN);
         window.location.replace(href);
     }
 

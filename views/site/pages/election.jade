@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  .clearfix.align-group
+    #featured.span-6.align-element(data-aligntarget=".rounded")
+      .block
+        .rounded
+          .image-container
+            img(src=image)
+          .content-container
+            h3 2012 Election Coverage
+            p!= text
+
+    .span-6.last.align-element(data-aligntarget=":last-child .rounded")
+      !=partial('../container/block/horizontal', {story: articles[0]})
+      !=partial('../container/block/horizontal', {story: articles[1]})
+      !=partial('../container/ad/full-banner', {title: "Ad", index: 1})
+
+  .clearfix
+    - each article, i in articles
+      - if (i > 1)
+        .span-4(class=(i % 3 == 1 ? "last" : ""))!=partial('../container/block/square', {story: article})

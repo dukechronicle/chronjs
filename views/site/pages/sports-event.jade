@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  h2 #{information.mainTeam.name} #{information.mainTeam.mascot} #{information.sport} vs #{information.opposingTeam.name} #{information.opposingTeam.mascot}
+
+  #top.clearfix.align-group
+    .span-6.align-element#embed(data-aligntarget='.rounded')
+      .rounded
+        .image-container
+          !=embed
+
+    .span-6.last.align-element(data-aligntarget="#information .rounded")
+      #information!=partial('../container/sport-event-info', {title: 'Game Details', info: information})
+
+  #featured
+    .span-4!=partial('../container/block/square', {story: featured[0]})
+    .span-4!=partial('../container/block/square', {story: featured[1]})
+    .span-4.last!=partial('../container/block/square', {story: featured[2]})
+
+  #bottom.clearfix
+    .span-8.clearfix
+      .span-4
+        - each article, index in articles
+          - if (index % 2 == 0)
+            !=partial('../container/block/thumbnail', {story: article})
+      .span-4.last
+        - each article, index in articles
+          - if (index % 2 == 1)
+            !=partial('../container/block/thumbnail', {story: article})
+    .span-4.last!=partial('../container/ad/medium-rect', {title: "Advertisement", index: 1})

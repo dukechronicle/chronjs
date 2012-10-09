@@ -16,6 +16,8 @@ var LAYOUT_GROUPS;
 var twitterFeeds = [];
 var BENCHMARK = false;
 
+site.modifyArticleForDisplay = modifyArticleForDisplay;
+
 site.init = function () {
     LAYOUT_GROUPS = config.get("LAYOUT_GROUPS");
 
@@ -26,16 +28,6 @@ site.init = function () {
 
 // Checks if you are an admin with browser check
 site.checkAdmin = function(req, res, next) {
-    site.restrictToAdmin(req, res, function() {
-        if(req.headers['user-agent'].indexOf("Chrome") === -1) {
-            site.askForLogin(res, req.url, '', 'Please use Google Chrome to use the admin interface');
-        } else {
-            next();
-        }
-    });
-};
-// Checks if you are an admin
-site.restrictToAdmin = function(req, res, next) {
     //if not admin, require login
     if(!api.accounts.isAdmin(req)) {
         site.askForLogin(res, req.url);
@@ -503,23 +495,21 @@ site.getArticleContentUncached = function(doc, callback) {
     });
 };
 
-site.getPageContent = function(url, callback) {
-    api.page.getByUrl(url, function(err, doc) {
-        if(err)
-            callback(err);
+site.getPageContent = function (url, callback) {
+    cache(getPageContentUncached, 600, url)(callback);
+};
+
+function getPageContentUncached(url, callback) {
+    api.page.getByUrl(url, function (err, page) {
+        if (err) callback(err);
+        else if (!page) callback();
         else {
-            doc.path = "/page/" + url;
-            doc.fullUrl = "http://" + config.get('DOMAIN_NAME') + "/page/" + url;
-            var model = {
-                adFullRectangle : {
-                    "title" : "Advertisement",
-                    "imageUrl" : "/images/ads/monster.png",
-                    "url" : "http://google.com",
-                    "width" : "300px",
-                    "height" : "250px"
-                }
-            };
-            callback(null, doc, model);
+            api.page.generateModel(page, function (err, model) {
+                if (err) return callback(err);
+                page.view = api.page.view(page);
+                page.model = model;
+                callback(null, page);
+            });
         }
     });
 };
@@ -557,13 +547,17 @@ function cache() {
 
         return function (callback) {
             redis.client.get(redisKey, function(err, res) {
-                if (!err && res) callback(null, JSON.parse(res));
+                if (false && !err && res) callback(null, JSON.parse(res));
                 else {
                     args.push(function (err, result) {
                         if (err) callback(err);
                         else {
-                            redis.client.set(redisKey, JSON.stringify(result));
-                            redis.client.expire(redisKey, expireTime);
+                            redis.client.set(redisKey, JSON.stringify(result), function (err) {
+                                if (err) log.error(err);
+                            });
+                            redis.client.expire(redisKey, expireTime, function (err) {
+                                if (err) log.error(err);
+                            });
                             callback(null, result);
                         }
                     })

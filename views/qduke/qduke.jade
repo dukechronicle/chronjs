@@ -54,10 +54,10 @@ html
             .menu.clearfix
                 a.box.selected(href="#") Quick Links
                 span.spacer.colsmargin
-                a.box Sports
-                span.spacer.colsmargin
-                a.box Events
-                span.spacer.cols2
+                //- a.box(href="#") Sports
+                //- span.spacer.colsmargin
+                //- a.box(href="#") Events
+                span.spacer.cols4
             // LINKS
             #contentLinks.content.contentShown
                 .rowLinks.clearfix
@@ -67,9 +67,9 @@ html
                     .rowLinks.clearfix
                         -for (var i = row*5; i < row*5+5; i++)
                             a.box.boxLink(href=links[i].url) #{links[i].title}
-            #contentSports.content.contentHidden
-                | <object width="300" height="387" type="application/x-shockwave-flash" data="http://a.espncdn.com/community/widgets/swfs/team.swf" ><param name="flashVars" value="teamID=150&amp;pid=espnteamncf_1349831029504162694&amp;share=embed&amp;sport=ncf" ><param name="movie" value="http://a.espncdn.com/community/widgets/swfs/team.swf" ><param name="wmode" value="transparent"><param name="allowScriptAccess" value="always"><param name="allowNetworking" value="all"></object>
-                | <object width="300" height="387" type="application/x-shockwave-flash" data="http://a.espncdn.com/community/widgets/swfs/team.swf" ><param name="flashVars" value="teamID=150&amp;pid=espnteamncb_1349831094140417655&amp;share=embed&amp;sport=ncb" ><param name="movie" value="http://a.espncdn.com/community/widgets/swfs/team.swf" ><param name="wmode" value="transparent"><param name="allowScriptAccess" value="always"><param name="allowNetworking" value="all"></object>
+            //- #contentSports.content.contentHidden
+            //-     | <object width="300" height="387" type="application/x-shockwave-flash" data="http://a.espncdn.com/community/widgets/swfs/team.swf" ><param name="flashVars" value="teamID=150&amp;pid=espnteamncf_1349831029504162694&amp;share=embed&amp;sport=ncf" ><param name="movie" value="http://a.espncdn.com/community/widgets/swfs/team.swf" ><param name="wmode" value="transparent"><param name="allowScriptAccess" value="always"><param name="allowNetworking" value="all"></object>
+            //-     | <object width="300" height="387" type="application/x-shockwave-flash" data="http://a.espncdn.com/community/widgets/swfs/team.swf" ><param name="flashVars" value="teamID=150&amp;pid=espnteamncb_1349831094140417655&amp;share=embed&amp;sport=ncb" ><param name="movie" value="http://a.espncdn.com/community/widgets/swfs/team.swf" ><param name="wmode" value="transparent"><param name="allowScriptAccess" value="always"><param name="allowNetworking" value="all"></object>
             // ADS
             .menu.clearfix
                 .box.selected Sponsored
@@ -91,5 +91,5 @@ html
                     a(href='http://dukechronicle.com/page/contact') Contact 
                     | | 
                     a(href="http://chron.it/SSgkeZ") Feedback
-            p.bugs Known qDuke Alpha Bugs:
-            p.bugs Loading news stories is slow, and may time out, causing an error.
+            //- p.bugs Known qDuke Alpha Bugs:
+            //- p.bugs Loading news stories is slow, and may time out, causing an error.

@@ -25,6 +25,8 @@ exports.siteInit = function (app) {
     app.namespace('/api', function () {
         app.get('/all', siteApi.articlesBySection);
         app.get('/section/*', siteApi.articlesBySection);
+        app.get('/qduke', siteApi.articlesForQduke);
+
         app.get('/article/url/:url', siteApi.articleByUrl);
 
         app.post('/poll/:id/vote', siteApi.votePoll);

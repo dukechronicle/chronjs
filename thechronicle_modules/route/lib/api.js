@@ -7,6 +7,20 @@ var _ = require('underscore');
 
 var RESULTS_LIMIT = 30;
 
+/**
+ * Responds with the articles currently in the front page slider, and the most popular.
+ */
+siteApi.articlesForQduke = function (req, res, next) {
+    api.site.getQdukeContent(function (err, model){
+        if (err) next(err);
+        else {
+            console.log(model);
+            docs = _.pick(model, 'Breaking', 'Slideshow', 'Top Headline', 'Popular');
+            console.log(docs);
+            res.json({docs: docs});
+        }
+    });
+};
 
 /**
  * Responds with most recent articles within a section. If no section is given,

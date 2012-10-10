@@ -14,9 +14,7 @@ siteApi.articlesForQduke = function (req, res, next) {
     api.site.getQdukeContent(function (err, model){
         if (err) next(err);
         else {
-            console.log(model);
             docs = _.pick(model, 'Breaking', 'Slideshow', 'Top Headline', 'Popular');
-            console.log(docs);
             res.json({docs: docs});
         }
     });

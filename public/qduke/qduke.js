@@ -10,16 +10,65 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
 
+// Search Functions
+function search(engine) {
+    var target = engine || "Google";
+
+    var redirect;
+    var query = $('.boxSearch input').val() || "";
+    if (target == "Duke") {
+        redirect = 'http://duke.edu/search/?q=' + query;
+    } else if (target == "WolframAlpha") {
+        redirect = 'http://www.wolframalpha.com/input/?i=' + query;
+    } else {
+        redirect = 'http://google.com/search?q=' + query;
+    }
+    _gaq.push(['_trackEvent', 'Search', target, query, 0]);
+    // TODO(rivkees): allow new window
+    setTimeout('document.location = "' + redirect + '"', 100);
+}
+function searchOnEnter(e) {
+    if (e.keyCode == 13) {
+        search()
+    }
+}
+
+// Article Logic
+function showArticles(docs) {
+    var count = 0;
+    var boxStories = $(".boxStories .boxEmpty");
+    var sections = ['Breaking', 'Slideshow', 'Top Headline', 'Popular'];
+    for (var section in sections) {
+        var articles = docs[sections[section]];
+        for (var i in articles) {
+            var article = articles[i];
+            var img ="";
+            try {
+                img = article.images.ThumbRect.url;
+            }
+            catch(err) {
+                img = "";
+            }
+            $(boxStories[count]).attr("href", "http://dukechronicle.com" + article.url).append(
+                $("<div>").addClass("caption").append($("<div>").addClass("txt").text(article.title))).append(
+                $("<img>").attr("src", img)).removeClass("boxEmpty");
+            count++;
+            if (count >= 4) return;
+            
+        }
+    }
+}
+
+// On Load
 $(function(){
     // Outbound Link Tracking with Google Analytics
     // Requires jQuery 1.7 or higher (use .live if using a lower version)
     // http://wptheming.com/2012/01/tracking-outbound-links-with-google-analytics/
-    $("a").on('click',function(e){
+    $("a:not(.boxButton)").on('click',function(e){
         var url = $(this).attr("href");
         // TODO(rivkees): If using dynamic weather, change this
         var text = $(this).text() || url
         if (e.currentTarget.host != window.location.host) {
-            console.log(text)
             _gaq.push(['_trackEvent', 'Outbound Links', text, url, 0]);
             if (e.metaKey || e.ctrlKey) {
                  var newtab = true;
@@ -53,37 +102,10 @@ $(function(){
                 showArticles(data.docs)
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                console.log("Error loading articles.")
+                // TODO(rivkees): display error
+                $(".boxStories .boxEmpty").text("Error Loading Articles.")
+                console.log("Error loading articles:" + errorThrown)
             }
         });
     });
 });
-
-function showArticles(docs) {
-    var count = 0;
-    var rowNews = $(".rowNews");
-    var sections = ['Breaking', 'Slideshow', 'Top Headline', 'Popular'];
-    for (var section in sections) {
-        var articles = docs[sections[section]];
-        for (var i in articles) {
-            var article = articles[i];
-            var img ="";
-            try {
-                img = article.images.ThumbRect.url;
-            }
-            catch(err) {
-                img = "";
-            }
-            rowNews.append(newArticle(article.title, img, article.url));
-            count++;
-            if (count >= 4) return;
-        }
-    }
-}
-
-function newArticle(title, img, url) {
-    var newbox = $("<a>").addClass("box").attr("href", "http://dukechronicle.com" + url);
-    var cap = $("<div>").addClass("caption").append($("<div>").addClass("txt").text(title));
-    var img = $("<img>").attr("src", img);
-    return newbox.append(cap).append(img);
-}

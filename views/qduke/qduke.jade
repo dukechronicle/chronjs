@@ -40,13 +40,18 @@ html
             // NEWS
             .rowNews.clearfix
                 a.box.boxChron(href="http://dukechronicle.com") The Chronicle
+                .boxStories
+                    a.box.boxEmpty
+                    a.box.boxEmpty
+                    a.box.boxEmpty
+                    a.box.boxEmpty
             // SEARCH
             .rowSearch.clearfix
                 .box.boxSearch
-                    input(name="query", type="text", style="background:transparent")
-                a.box.boxButton Google
-                a.box.boxButton WolframAlpha
-                a.box.boxButton Duke
+                    input(name="query", type="text", style="background:transparent", onkeydown="searchOnEnter(event)")
+                a.box.boxButton(href='javascript:search("Google");') Google
+                a.box.boxButton(href='javascript:search("WolframAlpha");') WolframAlpha
+                a.box.boxButton(href='javascript:search("Duke");') Duke
                 - var linkRows = Math.ceil(links.length/5)
             // MENU
             .menu.clearfix
@@ -88,6 +93,6 @@ html
                     | | 
                     a(href='http://dukechronicle.com/page/contact') Contact 
                     | | 
-                    a(href="") Feedback
-                // script(type='text/javascript')
-                //     doMagic()
+                    a(href="http://chron.it/SSgkeZ") Feedback
+            p.bugs Known qDuke Alpha Bugs:
+            p.bugs Loading news stories is slow, and may time out, causing an error.

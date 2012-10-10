@@ -81,12 +81,12 @@ $(function(){
     });
 
     // Uservoice
-    var uvOptions = {};
-    (function() {
-        var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
-        uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/SMeZbkqkN4ufhQRlnWig.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
-    })();
+    // var uvOptions = {};
+    // (function() {
+    //     var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
+    //     uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/SMeZbkqkN4ufhQRlnWig.js';
+    //     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
+    // })();
 
     // Search Focus
     $('.boxSearch input').focus();
@@ -97,7 +97,7 @@ $(function(){
             url: 'http://www.dukechronicle.com/api/qduke',
             dataType: "jsonp",
             cache: false,
-            timeout: 10000,
+            timeout: 20000,
             success: function(data) {
                 showArticles(data.docs)
             },

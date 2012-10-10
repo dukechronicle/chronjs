@@ -109,7 +109,7 @@ exports.siteInit = function (app) {
         app.get('/author', api.site.checkAdmin, admin.author);
         app.get('/system/memory', api.site.checkAdmin, admin.memory);
         app.get('/qduke/push', api.site.checkAdmin, admin.qdukepush);
-        app.get('/qduke/preview', admin.qdukepreview);
+        app.get('/qduke/preview', api.site.checkAdmin, admin.qdukepreview);
     });
 
     app.namespace('/admin/image', function () {

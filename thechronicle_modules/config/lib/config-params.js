@@ -508,20 +508,6 @@ var configParams = [
        }
     },
     {
-        name: 'QDUKE_ADS',
-        description: 'QDUKE ADLINKS',
-        schema: {
-          type: "array",
-          items: {
-            type: "object",
-            properties: {
-                title: {type: "string", required: true},
-                url: {type: "string", required: true}
-            }
-          }
-       }
-    },
-    {
         name: 'QDUKE_LINKS',
         description: 'QDUKE LINKS',
         schema: {

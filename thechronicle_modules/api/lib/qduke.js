@@ -11,7 +11,7 @@ qduke.buildAndPush = function (callback) {
         var html = jade.compile(data, { filename: 'views/qduke/qduke.jade' })({
             links: config.get('QDUKE_LINKS')
         });
-        api.s3.put("beta.qduke.com", html, "/index.html", "text/html", null,  function (s3Err, url) {
+        api.s3.put("alpha.qduke.com", html, "/index.html", "text/html", null,  function (s3Err, url) {
             if (s3Err) {
                 callback(s3Err)
             }
@@ -19,7 +19,7 @@ qduke.buildAndPush = function (callback) {
     });
     // CSS
     fs.readFile('public/styles/qduke/main.css', function (err, data) {
-        api.s3.put("beta.qduke.com", data, "/styles/qduke/main.css", "text/css", null,  function (s3Err, url) {
+        api.s3.put("alpha.qduke.com", data, "/styles/qduke/main.css", "text/css", null,  function (s3Err, url) {
             if (s3Err) {
                 callback(s3Err)
             }
@@ -27,7 +27,7 @@ qduke.buildAndPush = function (callback) {
     });
     // JS
     fs.readFile('public/scripts/qduke/qduke.js', function (err, data) {
-        api.s3.put("beta.qduke.com", data, "/scripts/qduke/qduke.js", "application/x-javascript", null,  function (s3Err, url) {
+        api.s3.put("alpha.qduke.com", data, "/scripts/qduke/qduke.js", "application/x-javascript", null,  function (s3Err, url) {
             if (s3Err) {
                 callback(s3Err)
             }
@@ -35,7 +35,7 @@ qduke.buildAndPush = function (callback) {
     });
     // Loader
     fs.readFile('public/img/qduke/loading.gif', function (err, data) {
-        api.s3.put("beta.qduke.com", data, "/img/qduke/loading.gif", "image/gif", null,  function (s3Err, url) {
+        api.s3.put("alpha.qduke.com", data, "/img/qduke/loading.gif", "image/gif", null,  function (s3Err, url) {
             if (s3Err) {
                 callback(s3Err)
             }

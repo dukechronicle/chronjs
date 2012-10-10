@@ -67,6 +67,7 @@ site.renderConfigPage = function(req, res, err) {
 };
 
 site.getQdukeContent = function (callback) {
+    var start = Date.now();
     async.parallel([
         function (cb) { //0
             api.group.docs(LAYOUT_GROUPS.Frontpage.namespace, null, function (err, result) {
@@ -94,6 +95,7 @@ site.getQdukeContent = function (callback) {
             callback(err);
         }
         else {
+            if (BENCHMARK) log.info("TOTAL TIME %d", Date.now() - start);
             var model = results[0];
             model.Popular = results[1];
             callback(null, model);

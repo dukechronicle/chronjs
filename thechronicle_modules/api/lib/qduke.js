@@ -15,7 +15,7 @@ qduke.buildAndPush = function (callback) {
             if (s3Err) {
                 callback(s3Err)
             }
-        });
+        }, "no-cache");
     });
     // CSS
     fs.readFile('public/styles/qduke/main.css', function (err, data) {
@@ -23,7 +23,7 @@ qduke.buildAndPush = function (callback) {
             if (s3Err) {
                 callback(s3Err)
             }
-        });
+        }, "no-cache");
     });
     // JS
     fs.readFile('public/scripts/qduke/qduke.js', function (err, data) {
@@ -31,11 +31,18 @@ qduke.buildAndPush = function (callback) {
             if (s3Err) {
                 callback(s3Err)
             }
-        });
+        }, "no-cache");
     });
-    // Loader
+    // Img
     fs.readFile('public/img/qduke/loading.gif', function (err, data) {
         api.s3.put("alpha.qduke.com", data, "/img/qduke/loading.gif", "image/gif", null,  function (s3Err, url) {
+            if (s3Err) {
+                callback(s3Err)
+            }
+        });
+    });
+    fs.readFile('public/img/qduke/search.gif', function (err, data) {
+        api.s3.put("alpha.qduke.com", data, "/img/qduke/search.gif", "image/gif", null,  function (s3Err, url) {
             if (s3Err) {
                 callback(s3Err)
             }

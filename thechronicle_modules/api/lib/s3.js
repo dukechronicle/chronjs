@@ -29,11 +29,11 @@ s3.get = function (bucket, key, callback) {
     }).end();
 };
 
-s3.put = function (bucket, buf, key, type, encoding, callback) {
+s3.put = function (bucket, buf, key, type, encoding, callback, cache) {
     var options = {
         'Content-Length': buf.length,
         'Content-Type': type,
-        'Cache-Control': 'public, max-age=31536000'
+        'Cache-Control': cache || 'public, max-age=31536000'
     };
     if (encoding) {
         options['Content-Encoding'] = encoding;

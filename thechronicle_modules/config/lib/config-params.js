@@ -66,6 +66,15 @@ var configParams = [
         }
     },
     {
+        name: 'MONGODB_URL',
+        description: 'MongoDB Server URL',
+        defaultValue: 'mongo://chrondev:pikachu@alex.mongohq.com:10046/app578498',
+        schema: {
+            type: 'string',
+            required: 'true',
+        }
+    },
+    {
         name: 'S3_BUCKET',
         description: 'Amazon S3 Bucket Name for Site Content',
         defaultValue: 'chron_dev',

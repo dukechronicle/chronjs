@@ -148,8 +148,9 @@ function configureVirtualHosts() {
     };
 
     app.configure(function () {
-        app.use(vhost('www', controllers.site.route.init));
-        //app.use(vhost('m', controllers.mobile.route.init));
+        app.use(vhost('www', route.siteInit));
+        app.use(vhost('m', route.mobileInit));
+        app.use(vhost('admin', controllers.admin.route.init));
     });
 }
 

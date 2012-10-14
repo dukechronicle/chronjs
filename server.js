@@ -17,33 +17,34 @@ var route = require('./thechronicle_modules/route');
 var util = require('./thechronicle_modules/util');
 
 // Heroku requires the use of process.env.PORT to dynamically configure port
-var PORT = process.env.PORT || process.env.CHRONICLE_PORT || 4000;
+var PORT = process.env.PORT || 4000;
 var SECRET = "i'll make you my dirty little secret";
 
 var app, viewOptions, sessionManager;
+var serverCallback;
 
 
-config.init(runSite, function (err) {
-    if (err) return log.error("Configuration failed: " + err);
+exports.run = function (callback) {
+    config.init(runSite(callback), function (err) {
+        if (err) return log.error("Configuration failed: " + err);
 
-    viewOptions = {
-        layout: false,
-        staticCdn: '',
-        useCompiledStaticFiles: false,
-        isProduction: process.env.NODE_ENV === 'production'
-    };
+        viewOptions = {
+            layout: false,
+            staticCdn: '',
+            useCompiledStaticFiles: false,
+            isProduction: process.env.NODE_ENV === 'production'
+        };
 
-    sessionManager = new SessionManager();
+        sessionManager = new SessionManager();
 
-    configureApp();
-    route.preinit(app);
+        configureApp();
+        route.preinit(app);
 
-    if (config.isSetUp()) {
-        runSite(function (err) {
-            if (err) log.error(err);
-        });
-    }
-});
+        if (config.isSetUp()) {
+            runSite(callback)();
+        }
+    });
+};
 
 function configureApp() {
     /* express configuration */
@@ -80,7 +81,7 @@ function configureApp() {
         }));
     });
 
-    app.configure('development', function () {
+    app.configure('development', 'test', function () {
         app.use(express.static(__dirname + '/public'));
     });
 
@@ -93,36 +94,38 @@ function configureApp() {
 }
 
 function runSite(callback) {
-    if (process.env.NODE_ENV === 'production') {
-        log.writeToLoggly();
-    }
-
-    async.waterfall([
-        api.init,
-        redisClient.init
-    ], function (err) {
-        if (err) {
-            log.error(err);
-            app.close();
-            return
-        }
-
+    return function () {
         if (process.env.NODE_ENV === 'production') {
-            viewOptions.paths = config.get('ASSET_PATHS');
-            viewOptions.staticCdn = config.get('CLOUDFRONT_STATIC');
-            viewOptions.useCompiledStaticFiles = true;
+            log.writeToLoggly();
         }
 
-        sessionManager.useRedisStore(redisClient.getHostname(),
-                                     redisClient.getPort(),
-                                     redisClient.getPassword());
+        async.waterfall([
+            api.init,
+            redisClient.init
+        ], function (err) {
+            if (err) {
+                log.error(err);
+                app.close();
+                return
+            }
 
-        configureVirtualHosts();
-        log.notice(util.format("Site configured and listening on port %d in %s mode",
-                               app.address().port, app.settings.env));
+            if (process.env.NODE_ENV === 'production') {
+                viewOptions.paths = config.get('ASSET_PATHS');
+                viewOptions.staticCdn = config.get('CLOUDFRONT_STATIC');
+                viewOptions.useCompiledStaticFiles = true;
+            }
 
-        if (callback) callback();
-    });
+            sessionManager.useRedisStore(redisClient.getHostname(),
+                                         redisClient.getPort(),
+                                         redisClient.getPassword());
+
+            configureVirtualHosts();
+            log.notice(util.format("Site configured and listening on port %d in %s mode",
+                                   app.address().port, app.settings.env));
+
+            if (callback) callback();
+        });
+    };
 }
 
 function newServer() {
@@ -181,4 +184,11 @@ function SessionManager() {
     this.session = function (req, res, next) {
         self.expressSession(req, res, next);
     };
+}
+
+
+if (require.main === module) {
+    exports.run(function (err) {
+        err && log.err(err);
+    });
 }

@@ -43,6 +43,7 @@
         "winston":"0.6.x",
         "winston-loggly":"0.6.x",
         "xmlbuilder":"0.3.x",
-        "zipfile":"0.3.x"
+        "zipfile":"0.3.x",
+        "zombie":"2.0.x"
     }
 }

@@ -10,11 +10,11 @@ install:
 test: test-unit test-acceptance
 
 test-unit:
-	@NODE_ENV=test NODE_PATH=./lib ./node_modules/.bin/mocha \
+	@NODE_ENV=test NODE_PATH=. ./node_modules/.bin/mocha \
 		$(MOCHA_OPTS) --require test/unit/common $(UNIT_TEST_FILES)
 
 test-acceptance:
-	@NODE_ENV=test NODE_PATH=./lib ./node_modules/.bin/mocha \
+	@NODE_ENV=test NODE_PATH=. ./node_modules/.bin/mocha \
 		$(MOCHA_OPTS) --require test/acceptance/common --timeout $(TIMEOUT) \
 		$(ACCEPTANCE_TEST_FILES)
 

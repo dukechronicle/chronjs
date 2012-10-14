@@ -7,7 +7,7 @@ articleSchema = new mongoose.Schema
   created: {type: Date, required: true}
   updated: {type: Date, required: true}
   taxonomy: {type: [String], required: true}
-  subhead: String
+  subtitle: String
   teaser: String
   title: {type: String, required: true}
   urls: {type: [String], required: true}

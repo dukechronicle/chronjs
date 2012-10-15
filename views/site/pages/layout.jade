@@ -25,23 +25,11 @@ html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
             //if lt IE 9
                 script(type="text/javascript", src="//html5shim.googlecode.com/svn/trunk/html5.js")
                 mixin stylesheet("style-ie")
-
-            script(type='text/javascript')
-              var OA_zones = {
-                'zone_914_1' : 914,
-                'zone_651_1' : 651,
-                'zone_651_2' : 651,
-                'zone_316_1' : 316,
-                'zone_316_2' : 316,
-                'zone_308_1' : 308,
-                'zone_308_2' : 308,
-              };
-            script(type='text/javascript', src='http://www.oncampusweb.com/delivery/spcjs.php?id=73&amp;block=1')
     body
         // required for facebook javascript sdk
         #fb-root
+        include ../layout/header
         .container
-            header.clearfix!=partial('../layout/header')
             section.clearfix#content
                 block content
             footer!=partial('../layout/footer')

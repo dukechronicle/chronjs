@@ -1,71 +1,83 @@
 @import '../../mixins'
 @import '../variables'
 
-header
+#super-header
     margin-top 8px
-    background-color #069
+    color #666
+
+    .date
+
+        font-size 1.2em
+        padding-right 10px
+    .advertising-links
+        margin-left 10px
+        a 
+            margin-right 5px
+            color #666
+        a:last-child
+            margin-right 0px
+
+    .icons
+        margin-left 2px
+        a img
+            width 15px
+            height 15px
+            vertical-align bottom
+            transition opacity, .25s linear
+            padding 0px 2px
+
+
+header
+    margin-top 5px
     border-radius corner-radius
+    background-color bar-color
     box-shadow rgba(0,0,0,0.40) 0 1px 3px
     color #EEE
     overflow hidden
+  
 
     #header-top
-        #home-link
-            display inline-block
-            position relative
-            margin 1px 0px 3px 66px
+        margin 5px 5px 5px 20px
 
-            #header-overlay
-                position absolute
-                z-index 1
-                left 50px
-                top -37px
+        border-bottom 1px solid #EEE
 
-            h1, h2, h3
-                text-align right
-                line-height 100%
-                text-shadow 0 1px 3px rgba(0,0,0,.4);
-                margin 0px
-                color #EEE
+    #home-link
+        display inline-block
+        position relative
+        margin-left: -12px;
 
-            .brand
-                font-family ambroise-std
-                font-weight lighter
-                font-size 5.25em
+        
 
-            .tagline
-                font-size 1.7em
-                font-family proxima-nova-sc-osf-ext-cond
-                letter-spacing 2px
+        #header-overlay
+           
+            position absolute
+            z-index 1
+            left 50px
+            top -37px
 
-        #banner
-            .advertising
-                height 65px
-                img
-                    border-bottom-left-radius corner-radius
-                    border-top-right-radius corner-radius
-                    display block
-                    box-shadow 0px 0px 3px #CCC
-                    transition opacity 0.25s linear
-                    margin-bottom 5px
-                    float right
+        h1, h2, h3
+           
+            line-height 100%
+            text-shadow 0 1px 3px rgba(0,0,0,.4);
+            margin 0px
+            color #EEE
 
-            .icons
-                padding-left 3px
-                a img
-                    width 15px
-                    height 15px
-                    transition opacity, .25s linear
-                    padding 0px 2px
+        .brand
+            font-family ambroise-std
+            font-weight lighter
+            font-size 5.25em
+            display inline
+            text-align left
+            margin-left 8px
 
-            .advertising-links
-                a
-                    padding 0px 5px
-                    text-shadow 0 1px 2px rgba(0,0,0,.4);
-                    font-size 1em
-                    color #EEE
-                    line-height 100%
-                    vertical-align top
+        .tagline
+            font-size 1.4 em
+            font-family proxima-nova-sc-osf-ext-cond
+            letter-spacing 1px
+            display inline
+            text-align left
+            margin-left 10px
+
 
     #header-bottom
         nav
@@ -73,6 +85,8 @@ header
             z-index 2
             vertical-align bottom
             padding-top 7px
+            letter-spacing 10px
+
 
             a
                 display inline-block
@@ -80,7 +94,7 @@ header
                     display inline-block
                     margin 0px
                     font-weight bold
-                    font-size 1.2em
+                    font-size 1.3em
                     text-shadow 0 1px 2px rgba(0,0,0,.4);
                     letter-spacing 1px
                     text-transform uppercase
@@ -95,6 +109,7 @@ header
     #search-box
         box-sizing border-box
         padding 2px 4px
+        margin-top 4px 
 
         input
             background #fff url(/img/search-button.png) no-repeat

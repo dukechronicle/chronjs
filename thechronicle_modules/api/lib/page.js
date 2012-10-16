@@ -16,7 +16,7 @@ exports.templates = {
             contents: {
                 extends: {'$ref': 'markdown'},
                 required: true,
-                name: 'Body Contents',
+                label: 'Body Contents',
             }
         }
     },
@@ -25,7 +25,7 @@ exports.templates = {
         model: {
             schedule: {
                 type: 'object',
-                name: 'Week Schedule',
+                label: 'Week Schedule',
                 required: true,
                 additionalProperties: {
                     type: 'array',
@@ -50,13 +50,13 @@ exports.templates = {
             },
             articles: {
                 type: 'array',
-                name: 'Orientation Articles',
+                label: 'Orientation Articles',
                 required: true,
                 items: {'$ref': 'article'},
             },
             recruitment: {
                 extends: {'$ref': 'article'},
-                name: 'Recruitment Article',
+                label: 'Recruitment Article',
                 required: true,
             }
         }
@@ -66,13 +66,13 @@ exports.templates = {
         model: {
             lookbacks: {
                 type: 'object',
-                name: 'Lookback Articles',
+                label: 'Lookback Articles',
                 required: true,
                 additionalProperties: {'$ref': 'article'},
             },
             schedule: {
                 type: 'array',
-                name: 'Weekend Schedule',
+                label: 'Weekend Schedule',
                 required: true,
                 items: {
                     type: 'object',
@@ -91,7 +91,7 @@ exports.templates = {
             },
             articles: {
                 type: 'array',
-                name: 'Speaker Articles',
+                label: 'Speaker Articles',
                 required: true,
                 items: {'$ref': 'article'},
             }
@@ -103,7 +103,7 @@ exports.templates = {
             information: {
                 type: 'object',
                 required: true,
-                name: 'Game Information',
+                label: 'Game Information',
                 properties: {
                     sport: {
                         type: 'string',
@@ -179,7 +179,7 @@ exports.templates = {
             },
             featured: {
                 type: 'array',
-                name: 'Featured Articles',
+                label: 'Featured Articles',
                 required: true,
                 minItems: 3,
                 maxItems: 3,
@@ -187,14 +187,14 @@ exports.templates = {
             },
             articles: {
                 type: 'array',
-                name: 'Event Articles',
+                label: 'Event Articles',
                 required: true,
                 items: {'$ref': 'article'},
             },
             embed: {
                 type: 'string',
                 required: true,
-                name: 'Featured Embed Code',
+                label: 'Featured Embed Code',
             }
         }
     },
@@ -203,18 +203,18 @@ exports.templates = {
         model: {
             articles: {
                 type: 'array',
-                name: 'Articles',
+                label: 'Articles',
                 required: true,
                 items: {'$ref': 'article'},
             },
             text: {
                 extends: {'$ref': 'markdown'},
                 required: true,
-                name: 'Featured Text',
+                label: 'Featured Text',
             },
             image: {
                 type: 'string',
-                name: 'Featured Image URL',
+                label: 'Featured Image URL',
                 required: true,
             }
         }

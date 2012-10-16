@@ -149,7 +149,11 @@ onde.Onde.prototype.render = function (schema, data, opts) {
 
 onde.Onde.prototype.getSchema = function (schemaURL) {
     //TODO: Implement schema management
-    return null;
+    referencedSchemata = {
+        'markdown': {type: 'string'},
+        'article': {type: 'string'},
+    }
+    return referencedSchemata[schemaURL];
 };
 
 onde.Onde.prototype.renderObject = function (schema, parentNode, namespace, data) {
@@ -664,6 +668,12 @@ onde.Onde.prototype.renderObjectPropertyField = function (namespace, baseId, fie
             fieldType = fieldInfo;
             fieldInfo = {};
         } else if (typeof fieldInfo == 'object') {
+            console.log(fieldInfo);
+            if ('extends' in fieldInfo) {
+                this.processSchemaExtends(fieldInfo);
+            }
+            console.log(fieldInfo);
+
             if (fieldInfo instanceof Array) {
                 //TODO: Union
             } else if (typeof fieldInfo.type == 'string') {
@@ -1206,4 +1216,12 @@ onde.Onde.prototype.getData = function (opts) {
 onde.Onde.prototype.tr = function (text) {
     // Translations go here
     return text;
+};
+
+onde.Onde.prototype.processSchemaExtends = function (schema) {
+    // Process schema extends
+    var extSchema = this.getSchema(schema['extends']['$ref']);
+    for (var propName in extSchema) {
+        schema[propName] = extSchema[propName];
+    }
 };

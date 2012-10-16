@@ -150,8 +150,8 @@ onde.Onde.prototype.render = function (schema, data, opts) {
 onde.Onde.prototype.getSchema = function (schemaURL) {
     //TODO: Implement schema management
     referencedSchemata = {
-        'markdown': {type: 'string'},
-        'article': {type: 'string'},
+        'markdown': {type: 'string', format: 'multiline', display: 'markdown', class: 'wysiwyg'},
+        'article': {type: 'string', class: 'article'},
     }
     return referencedSchemata[schemaURL];
 };
@@ -495,6 +495,9 @@ onde.Onde.prototype.renderFieldValue = function (fieldName, fieldInfo, parentNod
                 //TODO: Check the type
                 fieldValueNode.attr('placeholder', fieldInfo['default']);
             }
+            if (fieldInfo.class) {
+                fieldValueNode.addClass(fieldInfo.class);
+            }
             /*if (fieldInfo.format) {
                 fieldValueNode.addClass(fieldInfo.format);
             }*/
@@ -668,11 +671,9 @@ onde.Onde.prototype.renderObjectPropertyField = function (namespace, baseId, fie
             fieldType = fieldInfo;
             fieldInfo = {};
         } else if (typeof fieldInfo == 'object') {
-            console.log(fieldInfo);
             if ('extends' in fieldInfo) {
                 this.processSchemaExtends(fieldInfo);
             }
-            console.log(fieldInfo);
 
             if (fieldInfo instanceof Array) {
                 //TODO: Union

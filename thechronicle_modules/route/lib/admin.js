@@ -236,10 +236,23 @@ admin.layout = function (req, res, next) {
 };
 
 admin.addPage = function (req, res, next) {
-    res.render('admin/page/new', {
+    res.render('admin/page/form', {
         locals: {
             templates: _.keys(api.page.templates),
+            doc: {},
         }
+    });
+};
+
+admin.editPage = function (req, res, next) {
+    api.page.getByUrl(req.params.url, function (err, page) {
+        if (err) return next(err);
+        res.render('admin/page/form', {
+            locals: {
+                templates: _.keys(api.page.templates),
+                doc: page,
+            }
+        });
     });
 };
 

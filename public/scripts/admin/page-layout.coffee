@@ -1,32 +1,33 @@
-define ['jquery', 'cs!common/page', 'cs!common/views/group'], ($, Page, Group) ->
+define ['jquery', 'cs!common/page', 'cs!common/views/page'], ($, Page, PageView) ->
 
   page = undefined
-  views = []
+  view = undefined
 
 
   loadTemplate = (templateName) ->
     fetchTemplate(templateName, (template) ->
-      view.remove() for view in views
-      views = [new Group(template)]
-      renderViews(views)
-    )
-
-  renderViews = (views) ->
-    for view, i in views
-      view.render(i)
+      view.remove() if view?
+      view = new PageView(page, template)
+      view.render()
       $('.groups').append(view.el)
-    # for view, i in views
-    #   if i % 2 == 0
-    #     view.render(i)
-    #     $('.groups .left-col').append(view.el);
-    #   else
-    #     view.render(i)
-    #     $('.groups .right-col').append(view.el);
+    )
 
   fetchTemplate = (template, callback) ->
     $.get("/api/template/#{template}", callback);
 
   '#page-layout': ->
-    page = new Page
+    model = $(this).find('groups').data('model')
+    page = new Page(model: model and JSON.parse(model))
     $('#template').change ->
       loadTemplate $(this).val()
+    $('form#settings').submit (e) ->
+      e.preventDefault()
+      try
+        view.storeData()
+        for input in $(this).serializeArray()
+          page.set(input.name, input.value)
+        console.log page.toJSON()
+      catch err
+        alert('Please fix errors with page model')
+
+

@@ -18,7 +18,7 @@ block content
           label(for='url') URL
           .input-prepend
             span.add-on /page/
-            input#url(type='text', name='url', value=(doc.urls && doc.urls[0]))
+            input#url(type='text', name='url', value=doc.url)
           label(for='template') Template
           select#template(name='template')
             option(value='') --

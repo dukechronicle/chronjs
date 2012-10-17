@@ -23,9 +23,9 @@ block content
           select#template(name='template')
             option(value='') --
             - each template in templates
-              option(value=template)= template
+              option(value=template, selected=(template == doc.template))= template
           .form-actions
-            button.btn.btn-primary(type='submit') Submit
+            button.btn.btn-large.btn-primary(type='submit') Save
 
   script#group-template(type='text/template').
     <form>

@@ -164,7 +164,6 @@ exports.templates = {
                     },
                     scoreSelector: {
                         type: 'string',
-                        required: true,
                     }
                 },
                 transformation: function (callback) {

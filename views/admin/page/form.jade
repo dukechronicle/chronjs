@@ -9,7 +9,8 @@ block content
       .sidebar.span4
         form#settings
           legend Page Settings
-          input(type='hidden', name='_id', value=doc._id)
+          - if (doc._id)
+            input(type='hidden', name='_id', value=doc._id)
           label(for='title') Title
           .input-append
             input#title(type='text', name='title', value=doc.title)

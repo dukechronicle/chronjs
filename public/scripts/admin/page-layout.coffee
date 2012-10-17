@@ -24,10 +24,20 @@ define ['jquery', 'cs!common/page', 'cs!common/views/page'], ($, Page, PageView)
       e.preventDefault()
       try
         view.storeData()
-        for input in $(this).serializeArray()
-          page.set(input.name, input.value)
-        console.log page.toJSON()
       catch err
-        alert('Please fix errors with page model')
+        return alert('Please fix errors with page model')
 
-
+      for input in $(this).serializeArray()
+        page.set(input.name, input.value)
+      $(this).find('button').attr('disabled', true)
+      page.save(
+        complete: (data) ->
+          console.log data
+        success: (data) =>
+          console.log 'success'
+          console.log data
+          $(this).find('button').attr('disabled', undefined)
+        error: (err) =>
+          $(this).find('button').attr('disabled', undefined)
+          alert(err)
+      )

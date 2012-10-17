@@ -1,7 +1,7 @@
 var page = exports;
 
 var db = require('./db-abstract');
-
+var log = require('../../log');
 
 page.getByUrl = function (url, callback) {
     db.view('pages/byUrl', {key: url}, callback);

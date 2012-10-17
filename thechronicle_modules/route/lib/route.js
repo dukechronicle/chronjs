@@ -61,16 +61,8 @@ exports.siteInit = function (app) {
     app.namespace('/page', function () {
         app.get('/:url', site.page);
 
-        app.get('/about-us', site.staticPage);
-        app.get('/advertising', site.staticPage);
-        app.get('/contact', site.staticPage);
-        app.get('/edit-board', site.staticPage);
-        app.get('/graduation', site.staticPage)
-        app.get('/letters', site.staticPage);
         app.get('/newsletter', site.staticPage);
-        app.get('/privacy-policy', site.staticPage);
         app.get('/subscribe', site.staticPage);
-        app.get('/user-guidelines', site.staticPage);
 
         app.post('/newsletter', site.newsletterData);
     });

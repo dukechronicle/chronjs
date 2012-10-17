@@ -257,6 +257,15 @@ exports.getByUrl = function (url, callback) {
     });
 };
 
+exports.listByUrl = function (callback) {
+    db.page.listByUrl(function (err, res) {
+        if (err) return callback(err);
+        callback(null, _.map(res, function (doc) {
+            return doc.value;
+        }));
+    });
+};
+
 exports.generateModel = function (page, callback) {
     var schema = {
         type: 'object',

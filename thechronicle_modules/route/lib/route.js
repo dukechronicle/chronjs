@@ -39,6 +39,7 @@ exports.siteInit = function (app) {
         app.del('/article/:id', api.site.checkAdmin, siteApi.deleteArticle);
 
         app.post('/page', api.site.checkAdmin, siteApi.createPage);
+        app.put('/page/:url', api.site.checkAdmin, siteApi.updatePage);
 
         app.get('/template/:name', api.site.checkAdmin, siteApi.template);
     });

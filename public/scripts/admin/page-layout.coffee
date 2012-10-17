@@ -25,15 +25,11 @@ define ['jquery', 'cs!common/page', 'cs!common/views/page'], ($, Page, PageView)
       page.set(input.name, input.value)
 
     $(this).find('button').attr('disabled', true)
-    page.save(
-      complete: (data) ->
-        console.log data
+    page.save(null,
       success: (data) =>
-        console.log 'success'
-        console.log data
-        $(this).find('button').attr('disabled', undefined)
+        window.location = page.displayUrl()
       error: (err) =>
-        $(this).find('button').attr('disabled', undefined)
+        $(this).find('button').removeAttr('disabled')
         alert(err)
     )
 

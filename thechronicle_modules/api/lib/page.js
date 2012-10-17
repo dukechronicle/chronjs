@@ -303,11 +303,7 @@ exports.view = function (page) {
 
 exports.add = function (data, callback) {
     if (!data.url) callback("URL for page required");
-
     data.type = "page";
-    data.urls = [data.url];
-    delete data.url;
-
     db.page.add(data, callback);
 };
 

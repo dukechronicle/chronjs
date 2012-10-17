@@ -137,6 +137,7 @@ exports.siteInit = function (app) {
     });
 
     app.namespace('/admin/page', function () {
+        app.get('/', api.site.checkAdmin, admin.pageIndex);
         app.get('/new', api.site.checkAdmin, admin.addPage);
         app.get('/:url/edit', api.site.checkAdmin, admin.editPage);
     });

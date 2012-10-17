@@ -235,6 +235,15 @@ admin.layout = function (req, res, next) {
     });
 };
 
+admin.pageIndex = function (req, res, next) {
+    api.page.listByUrl(function (err, pages) {
+        if (err) return callback(err);
+        res.render('admin/page', {
+            docs: pages,
+        });
+    });
+};
+
 admin.addPage = function (req, res, next) {
     res.render('admin/page/form', {
         locals: {

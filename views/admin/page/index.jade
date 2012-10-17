@@ -1,0 +1,9 @@
+extends ../layout
+
+block content
+  .container
+    table.table.table-striped
+      - each page in docs
+        tr
+          td: a(href="/page/#{page.url}")= page.title
+          td: a(href="/admin/page/#{page.url}/edit") Edit

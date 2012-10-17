@@ -7,6 +7,10 @@ page.getByUrl = function (url, callback) {
     db.view('pages/byUrl', {key: url}, callback);
 };
 
+page.listByUrl = function (callback) {
+    db.view('pages/byUrl', {}, callback);
+};
+
 page.add = function (data, callback) {
     db.save(data, callback);
 };

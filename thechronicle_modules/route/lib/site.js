@@ -331,7 +331,6 @@ site.staticPage = function (req, res, next) {
     var filename = 'site/pages/' + url;
     fs.readFile('views/site/pages/page-data/' + url + '.json', function (err, data) {
         var data = (!err && data) ? JSON.parse(data.toString()) : null;
-        log.debug(data);
         res.render(filename, {
             data: data
         });

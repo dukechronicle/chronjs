@@ -119,6 +119,13 @@ siteApi.votePoll = function (req, res, next) {
         });
 };
 
+siteApi.createPage = function (req, res, next) {
+    api.page.add(req.body, function (err, _res) {
+        if (err) res.send(err, 500);
+        else res.json(_res);
+    });
+};
+
 siteApi.template = function (req, res, next) {
     if (req.params.name in api.page.templates) {
         res.json(api.page.templates[req.params.name].model);

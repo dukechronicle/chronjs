@@ -38,6 +38,8 @@ exports.siteInit = function (app) {
         app.put('/article/:id', api.site.checkAdmin, siteApi.updateArticle);
         app.del('/article/:id', api.site.checkAdmin, siteApi.deleteArticle);
 
+        app.post('/page', api.site.checkAdmin, siteApi.createPage);
+
         app.get('/template/:name', api.site.checkAdmin, siteApi.template);
     });
 

@@ -306,16 +306,12 @@ exports.add = function (data, callback) {
     if (!data.url) callback("URL for page required");
 
     data.type = "page";
+    data.urls = [data.url];
+    delete data.url;
 
-    db.page.add(data, function (err, res) {
-        if (err) callback(err);
-        else callback(null, data.node_title);
-    });
+    db.page.add(data, callback);
 };
 
 exports.edit = function (id, data, callback) {
-    db.page.edit(id, data, function (err, res) {
-        if (err) callback(err);
-        else callback(null, data.node_title);
-    });
+    db.page.edit(id, data, callback);
 };

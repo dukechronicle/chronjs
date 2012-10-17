@@ -18,5 +18,5 @@ define ['jquery', 'lib/backbone'], ($, Backbone) ->
     render: () ->
       $(this.el).html(this.template())
       @ondeSession = new onde.Onde $(this.el).find('form')
-      @ondeSession.render(@schema, @model.model, {collapsedCollapsibles: true})
+      @ondeSession.render(@schema, @model.get('model'), {collapsedCollapsibles: true})
       this

@@ -1,4 +1,10 @@
 require.config({
+    shim: {
+        'lib/backbone': {
+            deps: ['jquery', 'lib/underscore'],
+            exports: 'Backbone',
+        }
+    },
     baseUrl: '/scripts',
 });
 

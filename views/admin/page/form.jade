@@ -4,24 +4,22 @@ block content
   include ../../mixins/form-helpers
   .container#page-layout
     .row
-      .groups.span8
+      .groups.span8(data-model=(doc.model && JSON.stringify(doc.model)))
         h1 Page Layout
-        .row
-          .left-col.span4
-          .right-col.span4
       .sidebar.span4
         form#settings
           legend Page Settings
+          input(type='hidden', name='_id', value=doc._id)
           label(for='title') Title
           .input-append
-            input#title(type='text', name='doc[title]')
+            input#title(type='text', name='title', value=doc.title)
             span.add-on | The Chronicle
           label(for='url') URL
           .input-prepend
             span.add-on /page/
-            input#url(type='text', name='doc[url]')
+            input#url(type='text', name='url', value=(doc.urls && doc.urls[0]))
           label(for='template') Template
-          select#template(name='doc[template]')
+          select#template(name='template')
             option(value='') --
             - each template in templates
               option(value=template)= template
@@ -29,6 +27,6 @@ block content
             button.btn.btn-primary(type='submit') Submit
 
   script#group-template(type='text/template').
-    <div class="group">
+    <form>
       <div class="onde-panel"></div>
-    </div>
+    </form>

@@ -498,6 +498,9 @@ onde.Onde.prototype.renderFieldValue = function (fieldName, fieldInfo, parentNod
             if (fieldInfo.class) {
                 fieldValueNode.addClass(fieldInfo.class);
             }
+            if (fieldInfo.format === 'date') {
+                fieldValueNode.datepicker();
+            }
             /*if (fieldInfo.format) {
                 fieldValueNode.addClass(fieldInfo.format);
             }*/

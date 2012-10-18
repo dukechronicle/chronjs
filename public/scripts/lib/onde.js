@@ -499,7 +499,17 @@ onde.Onde.prototype.renderFieldValue = function (fieldName, fieldInfo, parentNod
                 fieldValueNode.addClass(fieldInfo.class);
             }
             if (fieldInfo.format === 'date') {
-                fieldValueNode.datepicker();
+                fieldValueNode.datetimepicker({
+                    timeFormat: 'hh:mm:ssz',
+                    dateFormat: 'yy-mm-dd',
+                    separator: 'T',
+                    useLocalTimeZone: true,
+                    showTimezone: true,
+                    timezoneList: [
+                        { value: '-0400', label: 'EDT'},
+                        { value: '-0500', label: 'EST'},
+                    ]
+                });
             }
             /*if (fieldInfo.format) {
                 fieldValueNode.addClass(fieldInfo.format);

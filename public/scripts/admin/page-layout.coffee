@@ -1,4 +1,4 @@
-define ['jquery', 'cs!common/page', 'cs!common/views/page', 'lib/jquery-ui'],
+define ['jquery', 'cs!common/page', 'cs!common/views/page', 'lib/jquery-ui', 'lib/jquery-ui-timepicker'],
   ($, Page, PageView) ->
 
     page = undefined

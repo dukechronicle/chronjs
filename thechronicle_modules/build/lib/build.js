@@ -131,6 +131,12 @@ build.buildAllJavascript = function (callback) {
 
 build.buildJavascriptFile = function (src, callback) {
     var config = {
+        shim: {
+            'lib/backbone': {
+                deps: ['jquery', 'lib/underscore'],
+                exports: 'Backbone',
+            }
+        },
         baseUrl: 'public/scripts',
         name: src + '/main',
         out: pathutil.join(DIST_DIR, src + '.js'),

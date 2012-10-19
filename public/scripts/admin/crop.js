@@ -5,7 +5,7 @@ define(['jquery', 'lib/jquery.Jcrop'], function ($) {
     var cropOptions = {
         onChange: showCoords,
         onSelect: showCoords,
-        onRelease: clearCoords
+        onRelease: clearCoords,
     };
 
     return { "#crop": cropImage }
@@ -21,6 +21,8 @@ define(['jquery', 'lib/jquery.Jcrop'], function ($) {
         cropOptions.aspectRatio = dim.width / dim.height;
         cropOptions.minSize = [dim.width, dim.height];
         cropOptions.setSelect = [0, 0, dim.width, dim.height];
+        cropOptions.trueSize =
+            [$('#crop')[0].naturalWidth, $('#crop')[0].naturalHeight];
         $("#crop").Jcrop(cropOptions);
     }
 

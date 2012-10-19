@@ -337,6 +337,23 @@ site.staticPage = function (req, res, next) {
     });
 };
 
+site.newsSitemap = function (req, res, next) {
+    var query = {
+        last: (new Date()).getTime() / 1000 - 2 * 24 * 60 * 60
+    };
+    api.article.getByDate(10000, query, function (err, docs) {
+        if (err) return next(err)
+        _.each(docs, function (doc) {
+            doc.fullUrl = "http://www." + config.get('DOMAIN_NAME') + '/article' + _.last(doc.urls);
+            doc.date = util.formatTimestamp(doc.created, "yyyy-mm-dd");
+        });
+        res.render('sitemap', {
+            docs: docs,
+            news: true,
+        });
+    });
+};
+
 site.pageNotFound = function(req, res) {
     res.render('site/pages/404', {
         status: 404,

@@ -139,9 +139,13 @@ exports.siteInit = function (app) {
         app.get('/espn', xhrproxy.espn);
     })
 
+    app.get('/sitemaps/news.xml.gz', site.newsSitemap);
+
+/*
     app.get('/sitemaps/:query', function (req, res, next) {
         res.redirect(config.get("CLOUDFRONT_DISTRIBUTION") + req.url);
     });
+*/
 
     //The 404 Route (ALWAYS Keep this as the last route)
     app.get('*', site.pageNotFound);

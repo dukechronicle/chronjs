@@ -1,0 +1,12 @@
+!!! xml
+urlset(xmlns="http://www.sitemaps.org/schemas/sitemap/0.9", xmlns:news="http://www.google.com/schemas/sitemap-news/0.9")
+  - each doc in docs
+    url
+      loc= doc.fullUrl
+      news:news
+        news:publication
+          news:name The Duke Chronicle
+          news:language en
+        news:genres PressRelease, Blog
+        news:publication_date= doc.date
+        news:title= doc.title

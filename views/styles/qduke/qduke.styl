@@ -58,7 +58,6 @@ body
 			line-height 4.8em
 		.boxEmpty
 			background #b5b5b5 url("/img/qduke/loading.gif") no-repeat center center
-
 	.rowSearch
 		.box
 			height 60px
@@ -92,30 +91,51 @@ body
 			border-bottom 3px solid #b5b5b5
 		.box.selected
 			border-bottom none
-	.rowLinks
-		.box
-			height 40px
-		.boxLink
-			font-size 1.3em
-			line-height 1.8em
-		.boxLinkTall
-			height 60px
-			font-size 1.8em
-			line-height 2em
+	#tabFrame
+		.tabContent
+			overflow hidden
+			transition(height, .25s, linear)
+			height 0
+		.tabShown
+			height auto
+			display block
+		#contentLinks
+			.rowLinks
+				.box
+					height 40px
+				.boxLink
+					font-size 1.3em
+					line-height 1.8em
+				.boxLinkTall
+					height 60px
+					font-size 1.8em
+					line-height 2em
+		#contentFrame.tabShown
+			height 500px
+			border 3px solid #666
+			background #b5b5b5 url("/img/qduke/loading.gif") no-repeat center center
+		#contentFrame
+			width (180*5+3*4)px
+			iframe
+				width 100%
+				height 100%
+				border none
+				background white
+			a.newWindow
+				border 0 solid #666
+				border-width 0 3px 3px 0
+				position absolute
+				display block
+				top 0
+				left 0
+				width 20px
+				height 20px
+				background #eee url("/img/qduke/newwindow.png") no-repeat center center
 	.rowAds
 		a
 			height 30px
 			line-height 1.7em
 			background #b5b5b5
-	.content
-		overflow hidden
-		transition(height, .25s, linear)
-	.contentShown
-		height auto
-		display block
-	.contentHidden
-		height 0
-		display none
 	#footer
 		color #666
 		margin-top 20px

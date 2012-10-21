@@ -59,6 +59,18 @@ function showArticles(docs) {
     }
 }
 
+// Tab Switching
+function changeTab(tab) {
+    $(".menu .box").removeClass("selected");
+    $("#tabFrame .tabContent").removeClass("tabShown");
+
+    setTimeout(function(){
+        $(".menu .box:nth-child("+(tab*2-1)+")").addClass("selected");
+        $("#tabFrame .tabContent:nth-child("+tab+")").addClass("tabShown");
+    }, 500);
+    _gaq.push(['_trackEvent', 'Change Tab', $(".menu .box:nth-child("+(tab*2-1)+")").text(), tab, 0]);
+}
+
 // On Load
 $(function(){
     // Outbound Link Tracking with Google Analytics
@@ -107,5 +119,10 @@ $(function(){
                 console.log("Error loading articles:" + errorThrown)
             }
         });
+    });
+
+    // Load Intense Frames
+    $("#tabFrame .tabContent[data-content]").each(function(index, element){
+        $(element).append($(element).attr("data-content"));
     });
 });

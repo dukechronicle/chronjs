@@ -344,7 +344,7 @@ site.newsSitemap = function (req, res, next) {
     api.article.getByDate(10000, query, function (err, docs) {
         if (err) return next(err)
         _.each(docs, function (doc) {
-            doc.fullUrl = "http://www." + config.get('DOMAIN_NAME') + '/article' + _.last(doc.urls);
+            doc.fullUrl = "http://www." + config.get('DOMAIN_NAME') + '/article/' + _.last(doc.urls);
             doc.date = util.formatTimestamp(doc.created, "yyyy-mm-dd");
         });
         res.render('sitemap', {

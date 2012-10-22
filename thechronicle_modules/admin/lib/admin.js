@@ -10,6 +10,7 @@ var config = require("../../config");
 var db = require('../../db-abstract');
 var k4export = require('./k4export');
 var log = require('../../log');
+var util = require("../../util");
 
 admin.image = require('./image');
 
@@ -121,6 +122,7 @@ admin.editArticle = function (doc, callback) {
 
         api.article.edit(id, fields, callback);
     }
+    util.cache.bust();
 };
 
 admin.addPoll = function (doc, callback) {

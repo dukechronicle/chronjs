@@ -37,3 +37,8 @@ cache.get = function(ttl, callback, func) {
 		callback(null, cacheStorage[hash].result);
 	}
 }
+
+cache.bust = function() {
+	console.log("Bust");
+	cacheStorage = {};
+}

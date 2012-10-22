@@ -66,8 +66,8 @@ site.renderConfigPage = function(req, res, err) {
     });
 };
 
-site.getQdukeContent = function (callback) {
-    util.cache.get(10000, callback, function(cacheCB){
+site.getQdukeContent = function (mainCB) {
+    util.cache.get(300000, mainCB, function(callback){
         async.parallel([
             function (cb) { //0
                 api.group.docs(LAYOUT_GROUPS.Frontpage.namespace, null, function (err, result) {
@@ -91,77 +91,79 @@ site.getQdukeContent = function (callback) {
         ], function (err, results) {
             if (err) {
                 log.warning(err);
-                cacheCB(err);
+                callback(err);
             }
             else {
                 var model = results[0];
                 model.Popular = results[1];
-                cacheCB(null, model);
+                callback(null, model);
             }
         });
     });
 }
 
-site.getFrontPageContent = function (callback) {
-    var start = Date.now();
-    async.parallel([
-        function (cb) { //0
-            api.group.docs(LAYOUT_GROUPS.Frontpage.namespace, null, function (err, result) {
-                if (err) return cb(err);
-                return cb(null, result);
-            });
-        },
-        function (cb) { //1
-            var popularArticles = 7;
-            api.disqus.listHot(popularArticles, function(err, results) {
-                if(err) return cb(err);
-                
-                results.forEach(function(article) {
-                    article.info = article.numComments + " comment";
-                    if(article.numComments != 1) article.info += "s";
+site.getFrontPageContent = function (mainCB) {
+    util.cache.get(300000, mainCB, function(callback){
+        var start = Date.now();
+        async.parallel([
+            function (cb) { //0
+                api.group.docs(LAYOUT_GROUPS.Frontpage.namespace, null, function (err, result) {
+                    if (err) return cb(err);
+                    return cb(null, result);
                 });
+            },
+            function (cb) { //1
+                var popularArticles = 7;
+                api.disqus.listHot(popularArticles, function(err, results) {
+                    if(err) return cb(err);
+                    
+                    results.forEach(function(article) {
+                        article.info = article.numComments + " comment";
+                        if(article.numComments != 1) article.info += "s";
+                    });
 
-                cb(null, modifyArticlesForDisplay(results));
-            });
-        },
-        function (cb) { //2
-            var selectedFeed = twitterFeeds[Math.floor(Math.random() * twitterFeeds.length)];
+                    cb(null, modifyArticlesForDisplay(results));
+                });
+            },
+            function (cb) { //2
+                var selectedFeed = twitterFeeds[Math.floor(Math.random() * twitterFeeds.length)];
 
-            var twitter = {
-                user: selectedFeed.url.split("screen_name=")[1],
-                title: 'Twitter'
-            };
-            twitter.imageUrl = "https://api.twitter.com/1/users/profile_image?screen_name="+twitter.user+"&size=bigger";
+                var twitter = {
+                    user: selectedFeed.url.split("screen_name=")[1],
+                    title: 'Twitter'
+                };
+                twitter.imageUrl = "https://api.twitter.com/1/users/profile_image?screen_name="+twitter.user+"&size=bigger";
 
-            rss.getRSS(selectedFeed.title, function (err, tweets) {
-                if (tweets && tweets.items && tweets.items.length > 0) {
-                    twitter.tweet = tweets.items[0].title;
-                } else {
-                    twitter.tweet = 'No tweets available.';
-                }
-                if (BENCHMARK) log.info("RSS TIME %d", Date.now() - start);
-                return cb(err, twitter);
-            });
-        }
-    ], function (err, results) {
-        if (err) {
-            log.warning(err);
-            callback(err);
-        }
-        else {
-            if (BENCHMARK) log.info("TOTAL TIME %d", Date.now() - start);
-            var model = results[0];
-            model.popular = results[1];
-            model.twitter = results[2];
-            model.printEdition = {
-                title: "Print",
-                imageUrl: "http://d2sug25c5hnh7r.cloudfront.net/images/issuu-thumb.png",
-                url: "http://issuu.com/dukechronicle/docs",
-                width: "134px",
-                height: "60px"
-            };
-            callback(null, model);
-        }
+                rss.getRSS(selectedFeed.title, function (err, tweets) {
+                    if (tweets && tweets.items && tweets.items.length > 0) {
+                        twitter.tweet = tweets.items[0].title;
+                    } else {
+                        twitter.tweet = 'No tweets available.';
+                    }
+                    if (BENCHMARK) log.info("RSS TIME %d", Date.now() - start);
+                    return cb(err, twitter);
+                });
+            }
+        ], function (err, results) {
+            if (err) {
+                log.warning(err);
+                callback(err);
+            }
+            else {
+                if (BENCHMARK) log.info("TOTAL TIME %d", Date.now() - start);
+                var model = results[0];
+                model.popular = results[1];
+                model.twitter = results[2];
+                model.printEdition = {
+                    title: "Print",
+                    imageUrl: "http://d2sug25c5hnh7r.cloudfront.net/images/issuu-thumb.png",
+                    url: "http://issuu.com/dukechronicle/docs",
+                    width: "134px",
+                    height: "60px"
+                };
+                callback(null, model);
+            }
+        });
     });
 };
 

@@ -39,6 +39,5 @@ cache.get = function(ttl, callback, func) {
 }
 
 cache.bust = function() {
-	console.log("Bust");
 	cacheStorage = {};
 }

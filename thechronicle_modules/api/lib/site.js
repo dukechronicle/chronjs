@@ -67,37 +67,38 @@ site.renderConfigPage = function(req, res, err) {
 };
 
 site.getQdukeContent = function (callback) {
-    async.parallel([
-        function (cb) { //0
-            api.group.docs(LAYOUT_GROUPS.Frontpage.namespace, null, function (err, result) {
-                if (err) return cb(err);
-                if (BENCHMARK) log.info("API TIME %d", Date.now() - start);
-                return cb(null, result);
-            });
-        },
-        function (cb) { //1
-            var popularArticles = 7;
-            api.disqus.listHot(popularArticles, function(err, results) {
-                if(err) return cb(err);
-                
-                results.forEach(function(article) {
-                    article.info = article.numComments + " comment";
-                    if(article.numComments != 1) article.info += "s";
+    util.cache.get(10000, callback, function(cacheCB){
+        async.parallel([
+            function (cb) { //0
+                api.group.docs(LAYOUT_GROUPS.Frontpage.namespace, null, function (err, result) {
+                    if (err) return cb(err);
+                    return cb(null, result);
                 });
+            },
+            function (cb) { //1
+                var popularArticles = 7;
+                api.disqus.listHot(popularArticles, function(err, results) {
+                    if(err) return cb(err);
+                    
+                    results.forEach(function(article) {
+                        article.info = article.numComments + " comment";
+                        if(article.numComments != 1) article.info += "s";
+                    });
 
-                cb(null, modifyArticlesForDisplay(results));
-            });
-        }
-    ], function (err, results) {
-        if (err) {
-            log.warning(err);
-            callback(err);
-        }
-        else {
-            var model = results[0];
-            model.Popular = results[1];
-            callback(null, model);
-        }
+                    cb(null, modifyArticlesForDisplay(results));
+                });
+            }
+        ], function (err, results) {
+            if (err) {
+                log.warning(err);
+                cacheCB(err);
+            }
+            else {
+                var model = results[0];
+                model.Popular = results[1];
+                cacheCB(null, model);
+            }
+        });
     });
 }
 
@@ -107,7 +108,6 @@ site.getFrontPageContent = function (callback) {
         function (cb) { //0
             api.group.docs(LAYOUT_GROUPS.Frontpage.namespace, null, function (err, result) {
                 if (err) return cb(err);
-                if (BENCHMARK) log.info("API TIME %d", Date.now() - start);
                 return cb(null, result);
             });
         },

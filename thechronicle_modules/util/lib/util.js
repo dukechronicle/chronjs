@@ -9,16 +9,6 @@ var log = require('../../log/lib/log');
 var util = module.exports = require('util');
 
 
-util.unixTimestamp = function (date) {
-    date = date || new Date();
-    return Math.round(date.getTime() / 1000);
-};
-
-util.formatTimestamp = function (timestamp, format) {
-    var date = new Date(timestamp*1000);
-    return format ? dateFormat(date, format) : date;
-};
-
 util.randomString = function (length) {
     var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
     var randomstring = '';
@@ -27,6 +17,19 @@ util.randomString = function (length) {
         randomstring += chars.substring(rnum,rnum+1);
     }
     return randomstring;
+};
+
+// Has to go under definition of randomString
+util.cache = require("./cache");
+
+util.unixTimestamp = function (date) {
+    date = date || new Date();
+    return Math.round(date.getTime() / 1000);
+};
+
+util.formatTimestamp = function (timestamp, format) {
+    var date = new Date(timestamp*1000);
+    return format ? dateFormat(date, format) : date;
 };
 
 util.trim = function (string) {

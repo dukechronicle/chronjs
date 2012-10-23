@@ -156,14 +156,15 @@ site.article = function (req, res, next) {
     // cache article pages for an hour
     if (!isAdmin) res.header('Cache-Control', 'public, max-age=3600');
 
-    api.site.getArticleContent(url, function (err, doc, model) {
+    api.site.getArticleContent(url, function (err, model) {
         if (err === 'not found')
             next();
         else if (err)
             next(err);
-        else if ('/article/' + url != doc.url)
-            res.redirect(doc.url);
+        else if ('/article/' + url != model.doc.url)
+            res.redirect(model.doc.url);
         else {
+            var doc = model.doc;
             req.session.polls = req.session.polls || {};
 
             var locals = {

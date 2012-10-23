@@ -66,12 +66,11 @@ site.renderConfigPage = function(req, res, err) {
     });
 };
 
-site.getQdukeContent = function (callback) {
+site.getQdukeContent = util.cache(300, function (callback) {
     async.parallel([
         function (cb) { //0
             api.group.docs(LAYOUT_GROUPS.Frontpage.namespace, null, function (err, result) {
                 if (err) return cb(err);
-                if (BENCHMARK) log.info("API TIME %d", Date.now() - start);
                 return cb(null, result);
             });
         },
@@ -99,15 +98,14 @@ site.getQdukeContent = function (callback) {
             callback(null, model);
         }
     });
-}
+});
 
-site.getFrontPageContent = function (callback) {
+site.getFrontPageContent = util.cache(300, function(callback) {
     var start = Date.now();
     async.parallel([
         function (cb) { //0
             api.group.docs(LAYOUT_GROUPS.Frontpage.namespace, null, function (err, result) {
                 if (err) return cb(err);
-                if (BENCHMARK) log.info("API TIME %d", Date.now() - start);
                 return cb(null, result);
             });
         },
@@ -115,7 +113,7 @@ site.getFrontPageContent = function (callback) {
             var popularArticles = 7;
             api.disqus.listHot(popularArticles, function(err, results) {
                 if(err) return cb(err);
-                
+
                 results.forEach(function(article) {
                     article.info = article.numComments + " comment";
                     if(article.numComments != 1) article.info += "s";
@@ -163,7 +161,7 @@ site.getFrontPageContent = function (callback) {
             callback(null, model);
         }
     });
-};
+});
 
 site.getNewsPageContent = function(callback) {
     async.parallel([
@@ -475,63 +473,39 @@ site.getSearchContent = function (wordsQuery, query, callback) {
     });
 };
 
-site.getArticleContent = function(url, callback) {
+site.getArticleContent = util.cache(300, function(url, callback) {
     api.article.getByUrl(url, function(err, doc) {
-        if (err) callback('not found');
-        else {
-            var displayDoc = modifyArticleForDisplay(doc);
-            async.parallel({
-                model: cache(site.getArticleContentUncached, 600, displayDoc),
-                poll: function (cb) {
-                    api.poll.getByTaxonomy(doc.taxonomy, 1, function (err, res) {
-                        if (err) cb(err);
-                        else if (res.length == 0) cb();
-                        else cb(null, res[0]);
-                    });
-                }
-            }, function (err, results) {
-                if (err) return callback(err);
-                results.model.poll = results.poll;
-                popular.registerArticleView(doc, function(err,res){});
-                callback(err, displayDoc, results.model);
-            });
-        }
-    });
-};
-
-site.getArticleContentUncached = function(doc, callback) {
-    async.parallel([
-    function(cb) {
-        popular.getPopularArticles([], 5, cb);
-    },
-    function(cb) {
-        api.search.relatedArticles(doc._id, 5, function(err, relatedArticles) {
-            if (err) {
-                log.error(err);
-                return cb(null, []);
+        if (err) return callback('not found');
+        var displayDoc = modifyArticleForDisplay(doc);
+        async.parallel({
+            popular: function(cb) {
+                popular.getPopularArticles([], 5, cb);
+            },
+            related: function(cb) {
+                api.search.relatedArticles(doc._id, 5, function(err, relatedArticles) {
+                    if (err) {
+                        log.error(err);
+                        return cb(null, []);
+                    }
+                    else cb(null, modifyArticlesForDisplay(relatedArticles));
+                });
+            },
+            poll: function (cb) {
+                api.poll.getByTaxonomy(doc.taxonomy, 1, function (err, res) {
+                    if (err) cb(err);
+                    else if (res.length == 0) cb();
+                    else cb(null, res[0]);
+                });
             }
-            else cb(null, modifyArticlesForDisplay(relatedArticles));
+        }, function (err, model) {
+            if (err) return callback(err);
+            model.doc = displayDoc;
+            model.parents = api.taxonomy.parents(doc.taxonomy);
+            popular.registerArticleView(doc, function(err,res){});
+            callback(err, model);
         });
-    }],
-    function(err, results) {
-        if(err) callback(err);
-        else {
-            var model = {
-            adFullRectangle : {
-                    "title" : "Advertisement",
-                    "imageUrl" : "/images/ads/monster.png",
-                    "url" : "http://google.com",
-                    "width" : "300px",
-                    "height" : "250px"
-                },
-                popular: results[0],
-                related: results[1],
-                parents: api.taxonomy.parents(doc.taxonomy),
-            };
-            callback(null, model);
-        }
     });
-};
+});
 
 site.getPageContent = function (url, callback) {
     cache(getPageContentUncached, 600, url)(callback);
@@ -572,36 +546,4 @@ function modifyArticleForDisplay(doc) {
     doc.body = api.article.renderBody(doc.body);
 
     return doc;
-}
-
-function cache() {
-    if (arguments.length < 2)
-        log.error("cache function called with wrong arguments");
-    else {
-        var args = Array.prototype.slice.call(arguments);
-        var func = args.shift();
-        var expireTime = args.shift();
-        var redisKey = func.toString() + JSON.stringify(args);
-
-        return function (callback) {
-            redis.client.get(redisKey, function(err, res) {
-                if (false && !err && res) callback(null, JSON.parse(res));
-                else {
-                    args.push(function (err, result) {
-                        if (err) callback(err);
-                        else {
-                            redis.client.set(redisKey, JSON.stringify(result), function (err) {
-                                if (err) log.error(err);
-                            });
-                            redis.client.expire(redisKey, expireTime, function (err) {
-                                if (err) log.error(err);
-                            });
-                            callback(null, result);
-                        }
-                    })
-                    func.apply(this, args);
-                }
-            });
-        };
-    }
 }

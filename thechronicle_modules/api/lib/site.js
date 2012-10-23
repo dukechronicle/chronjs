@@ -490,6 +490,7 @@ site.getArticleContent = function(url, callback) {
                     });
                 }
             }, function (err, results) {
+                if (err) return callback(err);
                 results.model.poll = results.poll;
                 popular.registerArticleView(doc, function(err,res){});
                 callback(err, displayDoc, results.model);
@@ -505,13 +506,15 @@ site.getArticleContentUncached = function(doc, callback) {
     },
     function(cb) {
         api.search.relatedArticles(doc._id, 5, function(err, relatedArticles) {
-            if (err) cb(err);
+            if (err) {
+                log.error(err);
+                return cb(null, []);
+            }
             else cb(null, modifyArticlesForDisplay(relatedArticles));
         });
     }],
     function(err, results) {
-        if(err)
-            callback(err);
+        if(err) callback(err);
         else {
             var model = {
             adFullRectangle : {

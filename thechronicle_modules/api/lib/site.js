@@ -163,7 +163,7 @@ site.getFrontPageContent = util.cache(300, function(callback) {
     });
 });
 
-site.getNewsPageContent = function(callback) {
+site.getNewsPageContent = util.cache(300, function(callback) {
     async.parallel([
     function(cb) {
         api.group.docs(LAYOUT_GROUPS.News.namespace, null, cb);
@@ -194,20 +194,13 @@ site.getNewsPageContent = function(callback) {
             model.popular = results[1];
             model.Blog = results[2];
             model.multimedia = config.get('MULTIMEDIA_HTML');
-            model.adFullRectangle = {
-                "title" : "Advertisement",
-                "imageUrl" : "/images/ads/monster.png",
-                "url" : "http://google.com",
-                "width" : "300px",
-                "height" : "250px"
-            };
             var children = api.taxonomy.children(['News']);
             callback(null, model, children);
         }
     });
-};
+});
 
-site.getSportsPageContent = function(callback) {
+site.getSportsPageContent = util.cache(300, function(callback) {
     async.parallel([
         function(cb) {//0
             api.group.docs(LAYOUT_GROUPS.Sports.namespace, null, cb);
@@ -245,9 +238,9 @@ site.getSportsPageContent = function(callback) {
             callback(null, model, children);
         }
     });
-};
+});
 
-site.getOpinionPageContent = function(callback) {
+site.getOpinionPageContent = util.cache(300, function(callback) {
     async.parallel([
     function(cb) {//0
         api.group.docs(LAYOUT_GROUPS.Opinion.namespace, null, cb);
@@ -341,9 +334,9 @@ site.getOpinionPageContent = function(callback) {
                 callback(null, model, children);
             }
         });
-};
+});
 
-site.getRecessPageContent = function(callback) {
+site.getRecessPageContent = util.cache(300, function(callback) {
     async.parallel([
     function(cb) {
         api.group.docs(LAYOUT_GROUPS.Recess.namespace, null, cb);
@@ -383,9 +376,9 @@ site.getRecessPageContent = function(callback) {
             callback(null, model, children);
         }
     });
-};
+});
 
-site.getTowerviewPageContent = function(callback) {
+site.getTowerviewPageContent = util.cache(300, function(callback) {
     async.parallel([
     function(cb) {
         api.group.docs(LAYOUT_GROUPS.Towerview.namespace, null, cb);
@@ -406,7 +399,7 @@ site.getTowerviewPageContent = function(callback) {
             callback(null, model, children);
         }
     });
-};
+});
 
 site.getSectionContent = function (params, callback) {
     async.parallel([
@@ -507,11 +500,7 @@ site.getArticleContent = util.cache(300, function(url, callback) {
     });
 });
 
-site.getPageContent = function (url, callback) {
-    cache(getPageContentUncached, 600, url)(callback);
-};
-
-function getPageContentUncached(url, callback) {
+site.getPageContent = util.cache(300, function (url, callback) {
     api.page.getByUrl(url, function (err, page) {
         if (err) callback(err);
         else if (!page) callback();
@@ -524,7 +513,7 @@ function getPageContentUncached(url, callback) {
             });
         }
     });
-};
+});
 
 function modifyArticlesForDisplay(docs) {
     docs = _.map(docs, function (doc) {

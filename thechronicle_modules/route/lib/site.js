@@ -26,11 +26,11 @@ site.frontpage = function (req, res) {
 };
 
 site.news = function (req, res) {
-    api.site.getNewsPageContent(function (err, model, children) {
+    api.site.getNewsPageContent(function (err, model) {
         res.render('site/pages/news', {
             pageTitle: "News",
             locals: {
-                subsections:children,
+                subsections: model.children,
                 section: 'News',
                 model:model
             }
@@ -39,11 +39,11 @@ site.news = function (req, res) {
 };
 
 site.sports = function (req, res) {
-    api.site.getSportsPageContent(function (err, model, children) {
+    api.site.getSportsPageContent(function (err, model) {
         res.render('site/pages/sports', {
             pageTitle: "Sports",
             locals: {
-                subsections: children,
+                subsections: model.children,
                 model:model,
                 section: 'Sports'
             }
@@ -52,11 +52,11 @@ site.sports = function (req, res) {
 };
 
 site.opinion = function (req, res) {
-    api.site.getOpinionPageContent(function (err, model, children) {
+    api.site.getOpinionPageContent(function (err, model) {
         res.render('site/pages/opinion', {
             pageTitle: "Opinion",
             locals: {
-                subsections:children,
+                subsections: model.children,
                 section: 'Opinion',
                 model:model
             }
@@ -65,11 +65,11 @@ site.opinion = function (req, res) {
 };
 
 site.recess = function (req, res) {
-    api.site.getRecessPageContent(function (err, model, children) {
+    api.site.getRecessPageContent(function (err, model) {
         res.render('site/pages/recess', {
             pageTitle: "Recess",
             locals: {
-                subsections:children,
+                subsections: model.children,
                 section: 'Recess',
                 model:model
             }
@@ -78,11 +78,11 @@ site.recess = function (req, res) {
 };
 
 site.towerview = function (req, res) {
-    api.site.getTowerviewPageContent(function (err, model, children) {
+    api.site.getTowerviewPageContent(function (err, model) {
         res.render('site/pages/towerview', {
             pageTitle: "Towerview",
             locals: {
-                subsections:children,
+                subsections: model.children,
                 section: 'Towerview',
                 model:model
             }

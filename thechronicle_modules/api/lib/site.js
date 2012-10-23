@@ -194,8 +194,8 @@ site.getNewsPageContent = util.cache(300, function(callback) {
             model.popular = results[1];
             model.Blog = results[2];
             model.multimedia = config.get('MULTIMEDIA_HTML');
-            var children = api.taxonomy.children(['News']);
-            callback(null, model, children);
+            model.children = api.taxonomy.children(['News']);
+            callback(null, model);
         }
     });
 });
@@ -227,15 +227,8 @@ site.getSportsPageContent = util.cache(300, function(callback) {
             var model = results[0];
             model.Blog = results[1];
             model.multimedia = config.get('MULTIMEDIA_HTML');
-            model.adFullRectangle = {
-                "title" : "Advertisement",
-                "imageUrl" : "/images/ads/monster.png",
-                "url" : "http://google.com",
-                "width" : "300px",
-                "height" : "250px"
-            };
-            var children = api.taxonomy.children(['Sports']);
-            callback(null, model, children);
+            model.children = api.taxonomy.children(['Sports']);
+            callback(null, model);
         }
     });
 });
@@ -314,24 +307,9 @@ site.getOpinionPageContent = util.cache(300, function(callback) {
                 });
                 // need to call compact to remove undefined entries in array
                 _.compact(model.Columnists);
-                model.adFullRectangle = {
-                    "title" : "Advertisement",
-                    "imageUrl" : "/images/ads/monster.png",
-                    "url" : "http://google.com",
-                    "width" : "300px",
-                    "height" : "250px"
-                };
 
-                model.adFullBanner = {
-                    "title" : "Ad",
-                    "imageUrl" : "/images/ads/full-banner.jpg",
-                    "url" : "http://google.com",
-                    "width" : "468px",
-                    "height" : "60px"
-                };
-
-                var children = api.taxonomy.children(['Opinion']);
-                callback(null, model, children);
+                model.children = api.taxonomy.children(['Opinion']);
+                callback(null, model);
             }
         });
 });
@@ -364,16 +342,9 @@ site.getRecessPageContent = util.cache(300, function(callback) {
             var model = results[0];
             model.Blog = results[1];
             model.multimedia = config.get('MULTIMEDIA_HTML');
-            model.adMedRectangle = {
-                "title" : "Advertisement",
-                "imageUrl" : "https://www.google.com/help/hc/images/adsense_185665_adformat-text_250x250.png",
-                "url" : "http://google.com",
-                "width" : "250px",
-                "height" : "250px"
-            };
-            var children = api.taxonomy.children(['Recess']);
+            model.children = api.taxonomy.children(['Recess']);
 
-            callback(null, model, children);
+            callback(null, model);
         }
     });
 });
@@ -388,15 +359,8 @@ site.getTowerviewPageContent = util.cache(300, function(callback) {
             callback(err);
         else {
             var model = results[0];
-            model.adFullRectangle = {
-                "title" : "Advertisement",
-                "imageUrl" : "/images/ads/monster.png",
-                "url" : "http://google.com",
-                "width" : "300px",
-                "height" : "250px"
-            };
-            var children = api.taxonomy.children(['Towerview']);
-            callback(null, model, children);
+            model.children = api.taxonomy.children(['Towerview']);
+            callback(null, model);
         }
     });
 });

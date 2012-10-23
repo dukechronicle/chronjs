@@ -8,6 +8,7 @@ var log = require('../../log/lib/log');
 
 var util = module.exports = require('util');
 
+util.cache = require("./cache");
 
 util.unixTimestamp = function (date) {
     date = date || new Date();

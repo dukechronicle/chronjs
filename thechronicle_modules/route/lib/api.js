@@ -2,6 +2,7 @@ var siteApi = exports;
 
 var api = require('../../api')
 var log = require('../../log')
+var util = require("../../util");
 
 var _ = require('underscore');
 
@@ -93,6 +94,7 @@ siteApi.updateArticle = function (req, res, next) {
         if (err) res.send(err, 500);
         else res.send({url: _res});
     });
+    util.cache.bust();
 };
 
 siteApi.deleteArticle =  function (req, res, next) {
@@ -100,6 +102,7 @@ siteApi.deleteArticle =  function (req, res, next) {
         if (err) res.send(err, 500);
         else res.send({status: 'success'});
     });
+    util.cache.bust();
 };
 
 siteApi.votePoll = function (req, res, next) {

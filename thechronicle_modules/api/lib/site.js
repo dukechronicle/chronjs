@@ -473,62 +473,36 @@ site.getSearchContent = function (wordsQuery, query, callback) {
     });
 };
 
-site.getArticleContent = function(url, callback) {
+site.getArticleContent = util.cache(300, function(url, callback) {
     api.article.getByUrl(url, function(err, doc) {
-        if (err) callback('not found');
-        else {
-            var displayDoc = modifyArticleForDisplay(doc);
-            async.parallel({
-                model: function (cb) {
-                    site.getArticleContentUncached(displayDoc, cb);
-                },
-                poll: function (cb) {
-                    api.poll.getByTaxonomy(doc.taxonomy, 1, function (err, res) {
-                        if (err) cb(err);
-                        else if (res.length == 0) cb();
-                        else cb(null, res[0]);
-                    });
-                }
-            }, function (err, results) {
-                results.model.poll = results.poll;
-                popular.registerArticleView(doc, function(err,res){});
-                callback(err, displayDoc, results.model);
-            });
-        }
-    });
-};
-
-site.getArticleContentUncached = function(doc, callback) {
-    async.parallel([
-    function(cb) {
-        popular.getPopularArticles([], 5, cb);
-    },
-    function(cb) {
-        api.search.relatedArticles(doc._id, 5, function(err, relatedArticles) {
-            if (err) cb(err);
-            else cb(null, modifyArticlesForDisplay(relatedArticles));
+        if (err) return callback('not found');
+        var displayDoc = modifyArticleForDisplay(doc);
+        async.parallel({
+            popular: function(cb) {
+                popular.getPopularArticles([], 5, cb);
+            },
+            related: function(cb) {
+                api.search.relatedArticles(doc._id, 5, function(err, relatedArticles) {
+                    if (err) cb(err);
+                    else cb(null, modifyArticlesForDisplay(relatedArticles));
+                });
+            },
+            poll: function (cb) {
+                api.poll.getByTaxonomy(doc.taxonomy, 1, function (err, res) {
+                    if (err) cb(err);
+                    else if (res.length == 0) cb();
+                    else cb(null, res[0]);
+                });
+            }
+        }, function (err, model) {
+            if (err) return callback(err);
+            model.doc = displayDoc;
+            model.parents = api.taxonomy.parents(doc.taxonomy);
+            popular.registerArticleView(doc, function(err,res){});
+            callback(err, model);
         });
-    }],
-    function(err, results) {
-        if(err)
-            callback(err);
-        else {
-            var model = {
-            adFullRectangle : {
-                    "title" : "Advertisement",
-                    "imageUrl" : "/images/ads/monster.png",
-                    "url" : "http://google.com",
-                    "width" : "300px",
-                    "height" : "250px"
-                },
-                popular: results[0],
-                related: results[1],
-                parents: api.taxonomy.parents(doc.taxonomy),
-            };
-            callback(null, model);
-        }
     });
-};
+});
 
 site.getPageContent = function (url, callback) {
     cache(getPageContentUncached, 600, url)(callback);

@@ -20,11 +20,16 @@ html
         link(rel="stylesheet", href="/styles/qduke/main.css")
         link(href='http://fonts.googleapis.com/css?family=PT+Sans:400,400italic', rel='stylesheet', type='text/css')
         script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js', type='text/javascript')
+        script(src='https://raw.github.com/monkeecreate/jquery.simpleWeather/master/jquery.simpleWeather.js', type='text/javascript')
         script(src='/scripts/qduke/qduke.js', type='text/javascript')
         script(type='text/javascript', src='http://www.oncampusweb.com/delivery/spcjs.php?id=73&amp;block=1')
         title qDuke.com
     body
         #wrap
+            .promo
+                p Thanks for trying out the new qDuke, 
+                    a(href="http://chron.it/SSgkeZ") let us know what you think.
+            script(src="http://www.duke.edu/alert.html", type="text/javascript")
             .rowHead.clearfix
                 a.box.boxLogo(href="http://qduke.com")
                     h1
@@ -57,10 +62,10 @@ html
                 a.box(href="javascript:changeTab(2)") Bus Tracking
                 span.spacer.colsmargin
                 a.box(href="javascript:changeTab(3)") Campus Map
-                //- span.spacer.colsmargin
-                //- a.box(href="javascript:changeTab(4)") Sports
                 span.spacer.colsmargin
-                span.spacer.cols2
+                a.box(href="javascript:changeTab(4)") Weather
+                span.spacer.colsmargin
+                span.spacer.cols1
             // LINKS
             #tabFrame
                 #contentLinks.tabContent.tabShown
@@ -75,6 +80,17 @@ html
                     a#BusTracking.newWindow(href="http://www.duke.transloc.com/")
                 #contentFrame.box.tabContent(data-content='<iframe src="http://maps.duke.edu/map/index.php?id=21"></iframe>')
                     a#CampusMap.newWindow(href="http://map.duke.edu/")
+                #contentWeather.tabContent
+                    .box
+                        h3 Today
+                    .box
+                        h3 Tomorrow
+                    .box
+                        h3 Friday
+                    .box
+                        h3 Saturday
+                    .box
+                        h3 Sunday
             // ADS
             .menu.clearfix
                 .box.selected Sponsored
@@ -96,5 +112,3 @@ html
                     a(href='http://dukechronicle.com/page/contact') Contact 
                     | | 
                     a(href="http://chron.it/SSgkeZ") Feedback
-            //- p.bugs Known qDuke Alpha Bugs:
-            //- p.bugs Loading news stories is slow, and may time out, causing an error.

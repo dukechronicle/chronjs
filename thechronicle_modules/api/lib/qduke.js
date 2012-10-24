@@ -48,5 +48,19 @@ qduke.buildAndPush = function (callback) {
             }
         });
     });
+    fs.readFile('public/img/qduke/default_image.jpg', function (err, data) {
+        api.s3.put("alpha.qduke.com", data, "/img/qduke/default_image.jpg", "image/gif", null,  function (s3Err, url) {
+            if (s3Err) {
+                callback(s3Err)
+            }
+        });
+    });
+    fs.readFile('public/img/qduke/newwindow.png', function (err, data) {
+        api.s3.put("alpha.qduke.com", data, "/img/qduke/newwindow.png", "image/gif", null,  function (s3Err, url) {
+            if (s3Err) {
+                callback(s3Err)
+            }
+        });
+    });
     callback()
 }

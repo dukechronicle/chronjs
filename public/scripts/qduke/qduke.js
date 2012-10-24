@@ -41,20 +41,29 @@ function showArticles(docs) {
     for (var section in sections) {
         var articles = docs[sections[section]];
         for (var i in articles) {
+            // Special By section
+            if (sections[section] == 'Breaking') {
+                $(boxStories[count]).addClass("breaking").append(
+                $("<div>").addClass("caption captionTop").append($("<div>").addClass("txt").text("Breaking")));
+            }
+            if (sections[section] == 'Popular') {
+                $(boxStories[count]).append(
+                $("<div>").addClass("caption captionTop").append($("<div>").addClass("txt").text("Popular")));
+            }
+            // All
             var article = articles[i];
             var img ="";
             try {
                 img = article.images.ThumbRect.url;
             }
             catch(err) {
-                img = "";
+                img = "/img/qduke/default_image.jpg";
             }
             $(boxStories[count]).attr("href", "http://dukechronicle.com" + article.url).append(
                 $("<div>").addClass("caption").append($("<div>").addClass("txt").text(article.title))).append(
                 $("<img>").attr("src", img)).removeClass("boxEmpty");
             count++;
             if (count >= 4) return;
-            
         }
     }
 }
@@ -119,6 +128,33 @@ $(function(){
                 console.log("Error loading articles:" + errorThrown)
             }
         });
+    });
+
+    // Load Weather
+    $.simpleWeather({
+            zipcode: '27708',
+            unit: 'f',
+            success: function(weather) {
+                    html = "<h4>Currently</h4>";
+                    html +='<p> '+weather.currently+'</p><p>'+weather.temp+'&deg; '+weather.units.temp+' ('+weather.tempAlt+'&deg; C)</p>';
+                    //html += '<h2>'+weather.city+', '+weather.region+' '+weather.country+'</h2>';
+                    html += "<h4>Later</h4>";
+                    html += '<p>'+weather.forecast+'</p><p>High '+weather.high+'&deg; '+weather.units.temp+' - Low '+weather.low+'&deg; '+weather.units.temp+'</p>';
+                    //html += '<p><strong>Wind</strong>: '+weather.wind.direction+' '+weather.wind.speed+' '+weather.units.speed+' <strong>Wind Chill</strong>: '+weather.wind.chill+'</p>';
+                    html += '<p><img src="'+weather.image+'"></p>';
+                    // html += '<p>Humidity'+weather.humidity+' <strong>Pressure</strong>: '+weather.pressure+' <strong>Rising</strong>: '+weather.rising+' <strong>Visibility</strong>: '+weather.visibility+'</p>';
+                    // html += '<p><strong>Heat Index</strong>: '+weather.heatindex+'"></p>';
+                    //html += '<p><strong>Sunrise</strong>: '+weather.sunrise+' - <strong>Sunset</strong>: '+weather.sunset+'</p>';
+                    html += '<p>Last updated '+weather.updated+'</p>';
+                    $("#contentWeather .box:nth-child(1)").append(html);
+                    html = "";
+                    html += '<p>'+weather.tomorrow.forecast+'</p><p>High '+weather.tomorrow.high+' - Low '+weather.tomorrow.low;
+                    html += '<p><img src="'+weather.tomorrow.image+'"></p>';
+                    $("#contentWeather .box:nth-child(2)").append(html);
+            },
+            error: function(error) {
+                    $("#contentWeather .box").html("<p>"+error+"</p>");
+            }
     });
 
     // Load Intense Frames

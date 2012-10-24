@@ -5,11 +5,16 @@ body
 	color white
 	font-family 'PT Sans', sans-serif
 	a:hover
-		color #00B8FF
+		color #09F
+	a.box, .rowAds a, a.dukealert-alertLink
+		cursor pointer
+	a.box:hover, .rowAds a:hover, a.dukealert-alertLink:hover
+		background #09F
+		color white
 	#wrap
 		width 915px
 		margin 20px auto 0 auto
-	.box, .rowAds a
+	.box, .rowAds a, .dukealert-alertLink, .dukealert-description
 		background #666
 		text-align center
 		float left
@@ -18,8 +23,32 @@ body
 		position relative
 		overflow hidden
 		box-shadow 1px 1px 5px #ccc
-	a.box
-		cursor pointer
+	.duke-alert
+		.dukealert-alertLink
+			height 60px
+			font-size 1.3em
+			line-height 2.8em
+			padding 0 25px
+			:before
+				content " DukeALERT "
+		.dukealert-standardHeadline
+			display none
+		.dukealert-description
+			height 60px
+			font-size .9em
+			line-height 1em
+			padding 8px
+			width (180*4+3*3)px
+			a
+				color #09F
+	.duke-alert-lev1
+		.dukealert-alertLink
+			background #AD1E17
+	.duke-alert-lev2
+		.dukealert-alertLink
+			background #F0A21E
+	.duke-alert-0
+		display none
 	.rowHead
 		.box
 			background #069
@@ -52,11 +81,37 @@ body
 					font-size .9em
 					line-height 1em
 					margin 5px
+			.captionTop
+				top 0
+				bottom auto
+				width auto
+				opacity .95
+				background #069
+				border-radius 0 0 4px 0
+		.boxStories
+			a.box:hover:before
+				content ""
+				display block
+				position absolute
+				top 0
+				bottom 0
+				left 0
+				right 0
+				opacity .7
+				background #09F
+			a:hover
+				.caption
+					background #09F
+		.box.breaking
+			//border 3px solid rgba(200, 0, 0, .9);
+			//box-shadow 1px 1px 5px #c80000;
+			.captionTop
+				background #c80000
 		.boxChron
 			background #069
 			font-size 1.5em
 			line-height 4.8em
-		.boxEmpty
+		a.boxEmpty
 			background #b5b5b5 url("/img/qduke/loading.gif") no-repeat center center
 	.rowSearch
 		.box
@@ -91,6 +146,10 @@ body
 			border-bottom 3px solid #b5b5b5
 		.box.selected
 			border-bottom none
+		a.box.selected:hover, .dukealert-alertLink:hover
+			background none
+			color #666
+			cursor default
 	#tabFrame
 		.tabContent
 			overflow hidden
@@ -110,11 +169,23 @@ body
 					height 60px
 					font-size 1.8em
 					line-height 2em
+		#contentWeather
+			float left
+			.box
+				padding 5px
+				height auto
+				h3
+					font-size 1.8em
+					margin-bottom 10px
+				h4
+					font-size 1.4em
+					margin-top 5px
 		#contentFrame.tabShown
 			height 500px
 			border 3px solid #666
 			background #b5b5b5 url("/img/qduke/loading.gif") no-repeat center center
 		#contentFrame
+			floaat left
 			width (180*5+3*4)px
 			iframe
 				width 100%
@@ -134,12 +205,17 @@ body
 	.rowAds
 		a
 			height 30px
-			line-height 1.7em
+			line-height 1.9em
 			background #b5b5b5
-	#footer
+	#footer, .promo
 		color #666
 		margin-top 20px
 		margin-bottom 20px
+	.promo
+		a
+			color #069
+		a:hover
+			color #09F
 	p.bugs
 		color #666
 		font-size .7em

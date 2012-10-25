@@ -20,6 +20,8 @@ function search(engine) {
         redirect = 'http://duke.edu/search/?q=' + query;
     } else if (target == "WolframAlpha") {
         redirect = 'http://www.wolframalpha.com/input/?i=' + query;
+    } else if (target == "Wikipedia") {
+        redirect = 'http://en.wikipedia.org/wiki/Special:Search?search=' + query;
     } else {
         redirect = 'http://google.com/search?q=' + query;
     }

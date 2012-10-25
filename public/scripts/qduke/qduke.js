@@ -53,10 +53,10 @@ function showArticles(docs) {
             // All
             var article = articles[i];
             var img ="";
-            try {
+            if (article.images && article.images.ThumbRect && article.images.ThumbRect.url) {
                 img = article.images.ThumbRect.url;
             }
-            catch(err) {
+            else {
                 img = "/img/qduke/default_image.jpg";
             }
             $(boxStories[count]).attr("href", "http://dukechronicle.com" + article.url).append(

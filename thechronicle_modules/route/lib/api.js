@@ -130,7 +130,10 @@ siteApi.createPage = function (req, res, next) {
 siteApi.updatePage = function (req, res, next) {
     api.page.edit(req.body._id, req.body, function (err, _res) {
         if (err) res.send(err, 500);
-        else res.json(_res);
+        else {
+            util.cache.bust();
+            res.json(_res);
+        }
     });
 };
 

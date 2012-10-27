@@ -75,7 +75,12 @@ function makeDisqusRequest(func, method, params, callback) {
         });
 
         res.on('end', function () {
-            var jsonBody = JSON.parse(body);
+            try {
+                var jsonBody = JSON.parse(body);
+            }
+            catch (err) {
+                return callback(err);
+            }
 
             if(jsonBody.code !== 0) callback(jsonBody.response);
             else callback(null, jsonBody.response);

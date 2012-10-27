@@ -16,6 +16,7 @@ site.mobile = function (req, res, next) {
 
 site.frontpage = function (req, res) {
     api.site.getFrontPageContent(function (err, model) {
+        if (err) return next(err);
         res.render('site/pages/frontpage', {
             locals: {
                 model:model,
@@ -27,6 +28,7 @@ site.frontpage = function (req, res) {
 
 site.news = function (req, res) {
     api.site.getNewsPageContent(function (err, model) {
+        if (err) return next(err);
         res.render('site/pages/news', {
             pageTitle: "News",
             locals: {
@@ -40,6 +42,7 @@ site.news = function (req, res) {
 
 site.sports = function (req, res) {
     api.site.getSportsPageContent(function (err, model) {
+        if (err) return next(err);
         res.render('site/pages/sports', {
             pageTitle: "Sports",
             locals: {
@@ -53,6 +56,7 @@ site.sports = function (req, res) {
 
 site.opinion = function (req, res) {
     api.site.getOpinionPageContent(function (err, model) {
+        if (err) return next(err);
         res.render('site/pages/opinion', {
             pageTitle: "Opinion",
             locals: {
@@ -66,6 +70,7 @@ site.opinion = function (req, res) {
 
 site.recess = function (req, res) {
     api.site.getRecessPageContent(function (err, model) {
+        if (err) return next(err);
         res.render('site/pages/recess', {
             pageTitle: "Recess",
             locals: {
@@ -79,6 +84,7 @@ site.recess = function (req, res) {
 
 site.towerview = function (req, res) {
     api.site.getTowerviewPageContent(function (err, model) {
+        if (err) return next(err);
         res.render('site/pages/towerview', {
             pageTitle: "Towerview",
             locals: {

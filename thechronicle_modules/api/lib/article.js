@@ -201,7 +201,8 @@ function URLify(s, maxChars) {
     s = s.replace(/^\s+|\s+$/g, ""); // trim leading/trailing spaces
     s = s.replace(/[-\s]+/g, "-");   // convert spaces to hyphens
     s = s.toLowerCase();             // convert to lowercase
-    return s.substring(0, maxChars);// trim to first num_chars chars
+    s = s.substring(0, maxChars);    // trim to first num_chars chars
+    return s.replace(/\-$/, "");
 }
 
 function getAvailableUrl(url, n, callback) {

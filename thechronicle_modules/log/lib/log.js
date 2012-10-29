@@ -16,6 +16,7 @@ function createLogger() {
         msgStringify: function (msg) { return util.inspect(msg, false, null); },
         handleExceptions: true,
     });
+    logger.exitOnError = false;
 
     // TODO: Handle logging errors with email alert
     logger.on('error', function(err) {

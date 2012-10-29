@@ -70,13 +70,11 @@ html
             // LINKS
             #tabFrame
                 #contentLinks.tabContent.tabShown
-                    .rowLinks.clearfix
-                        -for (var i = 0; i < 5; i++)
-                            a.box.boxLink.boxLinkTall(href=links[i].url) #{links[i].title}
+                    -for (var i = 0; i < 5; i++)
+                        a.box.boxLink.boxLinkTall(href=links[i].url) #{links[i].title}
                     - for (var row = 1; row < linkRows; row++)
-                        .rowLinks.clearfix
-                            -for (var i = row*5; i < row*5+5; i++)
-                                a.box.boxLink(href=links[i].url) #{links[i].title}
+                        -for (var i = row*5; i < row*5+5; i++)
+                            a.box.boxLink(href=links[i].url) #{links[i].title}
                 #contentSports.contentBoxes.tabContent
                     .box.sportsList
                         h3 Upcoming Events
@@ -104,12 +102,11 @@ html
                 .box.selected Sponsored
                 span.spacer.colsmargin
                 span.spacer.cols4
-            - for (var row = 0; row < 2; row++)
-                .rowAds.clearfix
-                    -for (var i = row*5 + 1; i <= row*5+5; i++)
-                        |<script type='text/javascript'><!--// <![CDATA[
-                        |                     OA_show('zone_946_#{i}');
-                        |                     // ]]> --></script>
+            .rowAds.clearfix
+                -for (var i = 1; i <= 10; i++)
+                    |<script type='text/javascript'><!--// <![CDATA[
+                    |                     OA_show('zone_946_#{i}');
+                    |                     // ]]> --></script>
 
             #footer
                 p &copy; 2012 

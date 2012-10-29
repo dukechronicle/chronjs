@@ -1,5 +1,16 @@
 @import '../mixins'
 
+col-margin = 3px
+col1 = 180px
+col2 = col1*2 + col-margin
+col3 = col1*3 + col-margin*2
+col4 = col1*4 + col-margin*3
+col5 = col1*5 + col-margin*4
+
+qBlue = #069
+qLGray = #b5b5b5
+qDGray = #666
+
 body
 	background-color #eee
 	color white
@@ -15,11 +26,11 @@ body
 		width 915px
 		margin 20px auto 0 auto
 	.box, .rowAds a, .dukealert-alertLink, .dukealert-description
-		background #666
+		background qDGray
 		text-align center
 		float left
-		width 180px
-		margin 0 3px 3px 0
+		width col1
+		margin 0 col-margin col-margin 0
 		position relative
 		overflow hidden
 		box-shadow 1px 1px 5px #ccc
@@ -38,7 +49,7 @@ body
 			font-size .9em
 			line-height 1em
 			padding 8px
-			width (180*4+3*3)px
+			width col4
 			a
 				color #09F
 	.duke-alert-lev1
@@ -51,7 +62,7 @@ body
 		display none
 	.rowHead
 		.box
-			background #069
+			background qBlue
 			height 60px
 			font-size 1.3em
 			line-height 2.8em
@@ -86,7 +97,7 @@ body
 				bottom auto
 				width auto
 				opacity .95
-				background #069
+				background qBlue
 				border-radius 0 0 4px 0
 		.boxStories
 			a.box:hover:before
@@ -108,31 +119,31 @@ body
 			.captionTop
 				background #c80000
 		.boxChron
-			background #069
+			background qBlue
 			font-size 1.5em
 			line-height 4.8em
 		a.boxEmpty
-			background #b5b5b5 url("/img/qduke/loading.gif") no-repeat center center
+			background qLGray url("/img/qduke/loading.gif") no-repeat center center
 	.rowSearch
 		.boxSearch
 			height 59px
 			cursor text
-			width (180*3 + 3*2)px
-			background #b5b5b5 url("/img/qduke/search.gif") no-repeat 10px center
+			width col3
+			background qLGray url("/img/qduke/search.gif") no-repeat 10px center
 			input
 				padding 0 0 0 50px
 				height 100%
 				width 100%
 				border none
 				font-size 25px
-				background #069
+				background qBlue
 		.boxButton
 			font-size 1.1em
 			line-height 1.6em
 			height 28px
-			background #069
+			background qBlue
 	.menu
-		color #666
+		color qDGray
 		.box
 			font-size 1.2em
 			line-height 1.4em
@@ -140,19 +151,19 @@ body
 			box-shadow none
 			margin-right 0
 			height 30px
-			border 3px solid #b5b5b5
+			border col-margin solid qLGray
 		span.spacer
 			height 30px
 			float left
-			border-bottom 3px solid #b5b5b5
+			border-bottom col-margin solid qLGray
 		.box.selectedTab
 			border-bottom none
-			color #666
+			color qDGray
 			background none
 			cursor default
 		a.box.selectedTab:hover//, .dukealert-alertLink:hover
 			background none
-			color #666
+			color qDGray
 			cursor default
 	#tabFrame
 		.tabContent
@@ -190,7 +201,7 @@ body
 		#contentSports
 			.sportsList
 				padding 10px
-				width (180*3+3*2)px
+				width col3
 				height auto
 				text-align left
 				.sportEvent
@@ -216,24 +227,24 @@ body
 						.showing
 							font-variant small-caps
 			.double
-				width (180*2+3)px
+				width col2
 			a.selected
 				cursor default
 		.contentFrame.tabShown
 			height 500px
-			border 3px solid #666
-			background #b5b5b5 url("/img/qduke/loading.gif") no-repeat center center
+			border col-margin solid qDGray
+			background qLGray url("/img/qduke/loading.gif") no-repeat center center
 		.contentFrame
 			floaat left
-			width (180*5+3*4)px
+			width col5
 			iframe
 				width 100%
 				height 100%
 				border none
 				background white
 			a.newWindow
-				border 0 solid #666
-				border-width 0 3px 3px 0
+				border 0 solid qDGray
+				border-width 0 col-margin col-margin 0
 				position absolute
 				display block
 				top 0
@@ -245,28 +256,28 @@ body
 		a
 			height 30px
 			line-height 1.9em
-			background #b5b5b5
+			background qLGray
 	#footer, .promo
-		color #666
+		color qDGray
 		margin-top 20px
 		margin-bottom 20px
 	.promo
 		a
-			color #069
+			color qBlue
 		a:hover
 			color #09F
 	p.bugs
-		color #666
+		color qDGray
 		font-size .7em
 	.cols1
-		width 180px
+		width col1
 	.cols2
-		width (180*2+3)px
+		width col2
 	.cols3
-		width (180*3+3*2)px
+		width col3
 	.cols4
-		width (180*4+3*3)px
+		width col4
 	.cols5
-		width (180*5+3*4)px
+		width col5
 	.colsmargin
-		width 3px
+		width col-margin

@@ -6,6 +6,7 @@ col2 = col1*2 + col-margin
 col3 = col1*3 + col-margin*2
 col4 = col1*4 + col-margin*3
 col5 = col1*5 + col-margin*4
+col3in4 = 134.25px
 
 qBlue = #069
 qLGray = #b5b5b5
@@ -23,7 +24,9 @@ body
 		background #09F
 		color white
 	#wrap
-		width 915px
+		width col5 + col-margin
+		@media all and (max-width: 915px) // if narrow
+			width col3 + col-margin
 		margin 20px auto 0 auto
 	.box, .rowAds a, .dukealert-alertLink, .dukealert-description
 		background qDGray
@@ -50,6 +53,8 @@ body
 			line-height 1em
 			padding 8px
 			width col4
+			@media all and (max-width: 915px) // if narrow
+				width col2
 			a
 				color #09F
 	.duke-alert-lev1
@@ -66,12 +71,16 @@ body
 			height 60px
 			font-size 1.3em
 			line-height 2.8em
+			@media all and (max-width: 915px) // if narrow
+				width col3in4
 		.boxLogo
 			background #555
 			font-size 2em
 			line-height 1.7em
 			em
 				font-style italic
+			@media all and (max-width: 915px) // if narrow
+				width col3
 	.rowNews
 		.box
 			height 120px
@@ -142,6 +151,8 @@ body
 			line-height 1.6em
 			height 28px
 			background qBlue
+			@media all and (max-width: 915px) // if narrow
+				width col3in4
 	.menu
 		color qDGray
 		.box
@@ -180,10 +191,11 @@ body
 			.boxLink
 				font-size 1.3em
 				line-height 1.8em
-			.boxLinkTall
-				height 60px
-				font-size 1.8em
-				line-height 2em
+			@media all and (min-width: 915px) // if wide
+				.boxLinkTall
+					height 60px
+					font-size 1.8em
+					line-height 2em
 		.contentBoxes
 			.box
 				padding 5px

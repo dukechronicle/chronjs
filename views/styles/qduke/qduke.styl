@@ -25,9 +25,9 @@ body
 		color white
 	#wrap
 		width col5 + col-margin
-		@media all and (max-width: 915px) // if narrow
-			width col3 + col-margin
 		margin 20px auto 0 auto
+		@media all and (max-device-width: 915px) // if narrow
+			width col3 + col-margin
 	.box, .rowAds a, .dukealert-alertLink, .dukealert-description
 		background qDGray
 		text-align center
@@ -53,7 +53,7 @@ body
 			line-height 1em
 			padding 8px
 			width col4
-			@media all and (max-width: 915px) // if narrow
+			@media all and (max-device-width: 915px) // if narrow
 				width col2
 			a
 				color #09F
@@ -71,7 +71,7 @@ body
 			height 60px
 			font-size 1.3em
 			line-height 2.8em
-			@media all and (max-width: 915px) // if narrow
+			@media all and (max-device-width: 915px) // if narrow
 				width col3in4
 		.boxLogo
 			background #555
@@ -79,7 +79,7 @@ body
 			line-height 1.7em
 			em
 				font-style italic
-			@media all and (max-width: 915px) // if narrow
+			@media all and (max-device-width: 915px) // if narrow
 				width col3
 	.rowNews
 		.box
@@ -109,7 +109,7 @@ body
 				background qBlue
 				border-radius 0 0 4px 0
 		.boxStories
-			@media all and (max-width: 915px) // if narrow
+			@media all and (max-device-width: 915px) // if narrow
 				:nth-child(4)
 					display none
 			a.box:hover:before
@@ -134,7 +134,7 @@ body
 			background qBlue
 			font-size 1.5em
 			line-height 4.8em
-			@media all and (max-width: 915px) // if narrow
+			@media all and (max-device-width: 915px) // if narrow
 				width col3
 				height 60px
 				font-size 1.3em
@@ -159,7 +159,7 @@ body
 			line-height 1.6em
 			height 28px
 			background qBlue
-			@media all and (max-width: 915px) // if narrow
+			@media all and (max-device-width: 915px) // if narrow
 				width col3in4
 	.menu
 		color qDGray
@@ -177,7 +177,7 @@ body
 			border-bottom col-margin solid qLGray
 		span.adSpacer
 			width col4
-			@media all and (max-width: 915px) // if narrow
+			@media all and (max-device-width: 915px) // if narrow
 				width col2
 		.box.selectedTab
 			border-bottom none
@@ -189,8 +189,13 @@ body
 			color qDGray
 			cursor default
 	.tabMenu
-		@media all and (max-width: 915px) // if narrow
+		@media all and (max-device-width: 915px) // if narrow
 			display none
+			width 0
+			height 0
+			border 0
+			padding 0
+			margin 0
 	#tabFrame
 		.tabContent
 			float left
@@ -206,7 +211,7 @@ body
 			.boxLink
 				font-size 1.3em
 				line-height 1.8em
-			@media all and (min-width: 916px) // if wide
+			@media all and (min-device-width: 916px) // if wide
 				.boxLinkTall
 					height 60px
 					font-size 1.8em

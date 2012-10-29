@@ -26,9 +26,9 @@ html
         title qDuke.com
     body
         #wrap
-            .promo
-                p Thanks for trying out the new qDuke, 
-                    a(href="http://chron.it/SSgkeZ") let us know what you think.
+            //- .promo
+            //-     p Thanks for trying out the new qDuke, 
+            //-         a(href="http://chron.it/SSgkeZ") let us know what you think.
             script(src="http://www.duke.edu/alert.html", type="text/javascript")
             .rowHead.clearfix
                 a.box.boxLogo(href="http://qduke.com")
@@ -57,7 +57,7 @@ html
                 a.box.boxButton(href='javascript:search("Duke");') Duke (Directory)
                 - var linkRows = Math.ceil(links.length/5)
             //- // MENU
-            .menu.clearfix
+            .menu.tabMenu.clearfix
                 a.box.selectedTab(href="javascript:changeTab(1)") Quick Links
                 span.spacer.colsmargin
                 a.box(href="javascript:changeTab(2)") Sports
@@ -101,7 +101,7 @@ html
             .menu.clearfix
                 .box.selected Sponsored
                 span.spacer.colsmargin
-                span.spacer.cols4
+                span.spacer.adSpacer
             .rowAds.clearfix
                 -for (var i = 1; i <= 10; i++)
                     |<script type='text/javascript'><!--// <![CDATA[

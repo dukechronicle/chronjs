@@ -109,6 +109,9 @@ body
 				background qBlue
 				border-radius 0 0 4px 0
 		.boxStories
+			@media all and (max-width: 915px) // if narrow
+				:nth-child(4)
+					display none
 			a.box:hover:before
 				content ""
 				display block
@@ -131,6 +134,11 @@ body
 			background qBlue
 			font-size 1.5em
 			line-height 4.8em
+			@media all and (max-width: 915px) // if narrow
+				width col3
+				height 60px
+				font-size 1.3em
+				line-height 2.8em
 		a.boxEmpty
 			background qLGray url("/img/qduke/loading.gif") no-repeat center center
 	.rowSearch
@@ -167,6 +175,10 @@ body
 			height 30px
 			float left
 			border-bottom col-margin solid qLGray
+		span.adSpacer
+			width col4
+			@media all and (max-width: 915px) // if narrow
+				width col2
 		.box.selectedTab
 			border-bottom none
 			color qDGray
@@ -176,6 +188,9 @@ body
 			background none
 			color qDGray
 			cursor default
+	.tabMenu
+		@media all and (max-width: 915px) // if narrow
+			display none
 	#tabFrame
 		.tabContent
 			float left
@@ -191,7 +206,7 @@ body
 			.boxLink
 				font-size 1.3em
 				line-height 1.8em
-			@media all and (min-width: 915px) // if wide
+			@media all and (min-width: 916px) // if wide
 				.boxLinkTall
 					height 60px
 					font-size 1.8em

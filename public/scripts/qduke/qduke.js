@@ -72,14 +72,71 @@ function showArticles(docs) {
 
 // Tab Switching
 function changeTab(tab) {
-    $(".menu .box").removeClass("selected");
+    $(".menu .box").removeClass("selectedTab");
     $("#tabFrame .tabContent").removeClass("tabShown");
 
     setTimeout(function(){
-        $(".menu .box:nth-child("+(tab*2-1)+")").addClass("selected");
+        $(".menu .box:nth-child("+(tab*2-1)+")").addClass("selectedTab");
         $("#tabFrame .tabContent:nth-child("+tab+")").addClass("tabShown");
     }, 500);
     _gaq.push(['_trackEvent', 'Change Tab', $(".menu .box:nth-child("+(tab*2-1)+")").text(), tab, 0]);
+}
+
+var channels = {
+    'ESPN': '/img/qduke/channels/espn.png',
+    'ESPN2': '/img/qduke/channels/espn2.png',
+    'ESPN3': '/img/qduke/channels/espn3.png',
+    'ESPNU': '/img/qduke/channels/espnu.png',
+}
+
+// Parse RSS to JSON
+function sports(url) {
+    $.ajax({
+        url: document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&output=xml&num=20&callback=?&q=' + encodeURIComponent(url),
+        dataType: 'json',
+        success: function(data) {
+            console.log(data);
+            xml = $.parseXML(data.responseData.xmlString);
+            console.log("parsed");
+            date = "";
+            $(xml).find("item").each(function(){
+                sport = $(this).find("sport").text();
+                opponent = $(this).find("opponent").text();
+                loc = $(this).find("location").text();
+                time = $(this).find("time").text();
+                tv = $(this).find("tv").text();
+                //tournamentname = $(this).find("tournamentname").text();
+                homeaway = $(this).find("homeaway").text();
+                if (homeaway == "H") homeaway = "vs.";
+                else if (homeaway == "A") homeaway = "@";
+                else if (homeaway == "N") homeaway = "-";
+                dc = $(this).find("pubDate").text();
+                //guid = $(this).find("guid").text();
+                console.log($(this))
+                if (date != dc) {
+                    $("#contentSports .sportsList").append("<h4 class='sportDate'>"+dc+"</h4>");
+                    date = dc;
+                }
+                if (tv != "") {
+                    console.log("c"+channels[tv]);
+                    if (channels[tv] != undefined ) {
+                        console.log("tv");
+                        tv = " <span class='sportTv'><img src='"+channels[tv]+"' /></span>";
+                    }
+                    else {
+                        tv = " <span class='sportTv'><span class='showing'>Live on: </span>"+tv+"</span>";
+                    }
+                }
+                $("#contentSports .sportsList").append("<div class='sportEvent'>"
+                        +"<span class='sportTime'>"+time+"</span>"
+                        +" <span class='sportTeam'>"+sport+"</span> "+homeaway+" "+opponent
+                        +" <span class='sportLocation'>"+loc+"</span>"
+                        +tv
+                    +"</div>");
+                //console.log($(this));
+            });
+        }
+    });
 }
 
 // On Load
@@ -163,4 +220,7 @@ $(function(){
     $("#tabFrame .tabContent[data-content]").each(function(index, element){
         $(element).append($(element).attr("data-content"));
     });
+
+    // Load Sports
+    sports("http://www.goduke.com/rss.dbml?db_oem_id=4200&media=schedulesxml");
 });

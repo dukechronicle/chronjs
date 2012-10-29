@@ -4,11 +4,11 @@ body
 	background-color #eee
 	color white
 	font-family 'PT Sans', sans-serif
-	a:hover
+	a:hover, a.selected
 		color #09F
 	a.box, .rowAds a, a.dukealert-alertLink
 		cursor pointer
-	a.box:hover, .rowAds a:hover, a.dukealert-alertLink:hover
+	a.box:hover, .rowAds a:hover, a.dukealert-alertLink:hover, a.selected
 		background #09F
 		color white
 	#wrap
@@ -145,14 +145,18 @@ body
 			height 30px
 			float left
 			border-bottom 3px solid #b5b5b5
-		.box.selected
+		.box.selectedTab
 			border-bottom none
-		a.box.selected:hover, .dukealert-alertLink:hover
+			color #666
+			background none
+			cursor default
+		a.box.selectedTab:hover//, .dukealert-alertLink:hover
 			background none
 			color #666
 			cursor default
 	#tabFrame
 		.tabContent
+			float left
 			overflow hidden
 			transition(height, .25s, linear)
 			height 0
@@ -160,32 +164,66 @@ body
 			height auto
 			display block
 		#contentLinks
-			.rowLinks
-				.box
-					height 40px
-				.boxLink
-					font-size 1.3em
-					line-height 1.8em
-				.boxLinkTall
-					height 60px
-					font-size 1.8em
-					line-height 2em
-		#contentWeather
-			float left
+			.box
+				height 40px
+			.boxLink
+				font-size 1.3em
+				line-height 1.8em
+			.boxLinkTall
+				height 60px
+				font-size 1.8em
+				line-height 2em
+		.contentBoxes
 			.box
 				padding 5px
-				height auto
 				h3
+					text-align center
 					font-size 1.8em
 					margin-bottom 10px
 				h4
+					text-align center
 					font-size 1.4em
-					margin-top 5px
-		#contentFrame.tabShown
+					margin 5px 0
+		#contentWeather
+			.box
+				height auto
+		#contentSports
+			.sportsList
+				padding 10px
+				width (180*3+3*2)px
+				height auto
+				text-align left
+				.sportEvent
+					padding-left 1.5em
+					text-indent -1.5em
+					margin 6px 0
+					line-height .9em
+					.sportTeam
+						font-weight 600
+					.sportLocation
+						font-style italic
+					.sportLocation:before
+						content ("(")
+					.sportLocation:after
+						content (")")
+					.sportTime
+						font-variant small-caps
+						font-size .8em
+					.sportTv
+						font-size .8em
+						img
+							vertical-align middle
+						.showing
+							font-variant small-caps
+			.double
+				width (180*2+3)px
+			a.selected
+				cursor default
+		.contentFrame.tabShown
 			height 500px
 			border 3px solid #666
 			background #b5b5b5 url("/img/qduke/loading.gif") no-repeat center center
-		#contentFrame
+		.contentFrame
 			floaat left
 			width (180*5+3*4)px
 			iframe

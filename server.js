@@ -129,7 +129,7 @@ function newServer() {
     server.enable('jsonp callback');
     server.error(function (err, req, res, next) {
         if (err.name !== 'URIError') {
-            log.error(err.stack || err);
+            log.alert(err.stack || err);
         }
         var errOptions =
             process.env.NODE_ENV !== 'production' || api.accounts.isAdmin(req)

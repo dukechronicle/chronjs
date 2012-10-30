@@ -14,7 +14,7 @@ site.mobile = function (req, res, next) {
     res.render('mobile');
 };
 
-site.frontpage = function (req, res) {
+site.frontpage = function (req, res, next) {
     api.site.getFrontPageContent(function (err, model) {
         if (err) return next(err);
         res.render('site/pages/frontpage', {
@@ -26,7 +26,7 @@ site.frontpage = function (req, res) {
     });
 };
 
-site.news = function (req, res) {
+site.news = function (req, res, next) {
     api.site.getNewsPageContent(function (err, model) {
         if (err) return next(err);
         res.render('site/pages/news', {
@@ -40,7 +40,7 @@ site.news = function (req, res) {
     });
 };
 
-site.sports = function (req, res) {
+site.sports = function (req, res, next) {
     api.site.getSportsPageContent(function (err, model) {
         if (err) return next(err);
         res.render('site/pages/sports', {
@@ -54,7 +54,7 @@ site.sports = function (req, res) {
     });
 };
 
-site.opinion = function (req, res) {
+site.opinion = function (req, res, next) {
     api.site.getOpinionPageContent(function (err, model) {
         if (err) return next(err);
         res.render('site/pages/opinion', {
@@ -68,7 +68,7 @@ site.opinion = function (req, res) {
     });
 };
 
-site.recess = function (req, res) {
+site.recess = function (req, res, next) {
     api.site.getRecessPageContent(function (err, model) {
         if (err) return next(err);
         res.render('site/pages/recess', {
@@ -82,7 +82,7 @@ site.recess = function (req, res) {
     });
 };
 
-site.towerview = function (req, res) {
+site.towerview = function (req, res, next) {
     api.site.getTowerviewPageContent(function (err, model) {
         if (err) return next(err);
         res.render('site/pages/towerview', {

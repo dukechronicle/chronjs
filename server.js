@@ -128,7 +128,9 @@ function newServer() {
     server.set('view engine', 'jade');
     server.enable('jsonp callback');
     server.error(function (err, req, res, next) {
-        log.error(err.stack || err);
+        if (err.name !== 'URIError') {
+            log.error(err.stack || err);
+        }
         var errOptions =
             process.env.NODE_ENV !== 'production' || api.accounts.isAdmin(req)
             ? {showStack: true} : {};

@@ -85,7 +85,7 @@ function groupDocs(namespace, group, callback) {
             var currentArticle;
 
             if (!res.forEach) {
-                log.error(res);
+                log.error("PROBLEM: "+ JSON.stringify(res));
             }
             res.forEach(function (key, doc) {
                 var groupName = key[1];

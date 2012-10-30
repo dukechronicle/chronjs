@@ -33,26 +33,6 @@ group.list = function (namespace, callback) {
     });
 };
 
-group.docs = function (namespace, group, callback) {
-    var redisKey = "group.docs:" + namespace.toString();
-    if (group) redisKey += ":" + group.toString();
-    /*
-     redis.client.get(redisKey, function(err, res) {
-     if (res) callback(null, JSON.parse(res));
-     else {
-     */
-    groupDocs(namespace, group, function (err, results) {
-        if (err) callback(err);
-        else {
-            //               redis.client.set(redisKey, JSON.stringify(results));
-            //               redis.client.expire(redisKey, 2);
-            callback(null, results);
-        }
-    });
-    //   }
-    //});
-};
-
 /**
  * Add a document to a group with the given namespace and group name. The
  * document's weight in the group is specified as a parameter.
@@ -73,7 +53,7 @@ group.getLayoutGroups = function () {
 };
 
 
-function groupDocs(namespace, group, callback) {
+group.docs = function (namespace, group, callback) {
     var start = Date.now();
     db.group.docs(namespace, group, function (err, res) {
         if (BENCHMARK) log.info("RECEIVED %d", Date.now() - start);
@@ -85,7 +65,10 @@ function groupDocs(namespace, group, callback) {
             var currentArticle;
 
             if (!res.forEach) {
-                log.error("PROBLEM: "+ JSON.stringify(res));
+                log.error(res);
+                log.error(err);
+                log.error(namespace);
+                log.error(group);
             }
             res.forEach(function (key, doc) {
                 var groupName = key[1];

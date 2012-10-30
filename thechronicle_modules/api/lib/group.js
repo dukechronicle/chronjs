@@ -84,6 +84,9 @@ function groupDocs(namespace, group, callback) {
             var groupedResults = {};
             var currentArticle;
 
+            if (!res.forEach) {
+                log.error(res);
+            }
             res.forEach(function (key, doc) {
                 var groupName = key[1];
                 var docType = key[3];

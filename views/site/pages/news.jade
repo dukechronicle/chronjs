@@ -23,8 +23,7 @@ block content
                 .middle.clearfix.align-group
                     - if (model.popular)
                         .span-2.title-small.align-element(data-aligntarget=".rounded")!=partial('../container/story-list/numbered', {title: "Popular", stories: model.popular})
-                    - if (model.adFullRectangle)
-                        .span-4.last.align-element(data-alignprimary="true")!=partial('../container/ad/medium-rect', {title: "Advertisement", index: 1})
+                    .span-4.last.align-element(data-alignprimary="true")!=partial('../container/ad/medium-rect', {title: "Advertisement", index: 1})
                 !=partial('../container/ad/full-banner', {title: "Ad", index: 2})
 
         .span-12.last

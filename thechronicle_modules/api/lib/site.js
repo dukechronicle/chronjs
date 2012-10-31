@@ -11,6 +11,7 @@ var util = require('../../util');
 
 var _ = require("underscore");
 var async = require('async');
+var errs = require('errs');
 
 var LAYOUT_GROUPS;
 var twitterFeeds = [];
@@ -441,7 +442,9 @@ site.getArticleContent = util.cache(300, function(url, callback) {
             related: function(cb) {
                 api.search.relatedArticles(doc._id, 5, function(err, relatedArticles) {
                     if (err) {
-                        log.error('Solr error', err);
+                        log.error(errs.merge(err, {
+                            message: 'Solr error'
+                        }));
                         return cb(null, []);
                     }
                     else cb(null, modifyArticlesForDisplay(relatedArticles));

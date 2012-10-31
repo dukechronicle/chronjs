@@ -5,6 +5,7 @@ var async = require('async');
 var fs = require('fs');
 var api = require('../../api');
 var _ = require("underscore");
+var errs = require('errs');
 
 var VALID_EXTENSIONS = {};
 VALID_EXTENSIONS['image/jpeg'] = 'jpg';
@@ -62,7 +63,7 @@ exports.uploadData = function (req, httpRes) {
         }
     ], function (err, result, url) {
         if (err) {
-            log.error(err);
+            log.error(errs.merge(err, {message: 'Image error'}));
 
             if (typeof(err) == "object") {
                 err = "Error";

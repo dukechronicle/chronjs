@@ -1,3 +1,5 @@
+var errs = require('errs');
+
 var redis = require("redis");
 var url = require("url");
 var config = require('../../config');
@@ -23,7 +25,10 @@ exports.init = function (callback) {
     client = redis.createClient(redisUrl.port, redisUrl.hostname);
 
     client.on("error", function (err) {
-        log.error(err);
+        log.error(errs.merge(err, {
+            name: 'RedisError',
+            message: 'Redis error',
+        }));
     });
 
     if (redisUrl.auth) {

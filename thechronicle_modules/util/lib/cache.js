@@ -1,5 +1,6 @@
 var _ = require('underscore');
 var crypto = require('crypto');
+var errs = require('errs');
 
 var log = require('../../log');
 var redis = require('../../redisclient');
@@ -28,9 +29,17 @@ var cache = module.exports = function (expireTime, func) {
             args.push(function (err, result) {
                 if (err) return callback(err);
                 redis.client.set(redisKey, JSON.stringify(result), function (err) {
-                    if (err) return log.error(err);
+                    if (err) return log.error(errs.create({
+                        name: 'RedisError',
+                        message: 'Can\'t store value',
+                        key: redisKey,
+                    }));
                     redis.client.expire(redisKey, expireTime, function (err) {
-                        if (err) log.error(err);
+                        if (err) log.error(errs.create({
+                            name: 'RedisError',
+                            message: 'Can\'t expire key',
+                            key: redisKey,
+                        }));
                     });
                 });
                 callback(null, result);

@@ -1,5 +1,6 @@
 var _ = require('underscore');
 var async = require('async');
+var errs = require('errs');
 
 var db = require('../../db-abstract');
 var log = require('../../log');
@@ -65,10 +66,10 @@ group.docs = function (namespace, group, callback) {
             var currentArticle;
 
             if (!res.forEach) {
-                log.error(res);
-                log.error(err);
-                log.error(namespace);
-                log.error(group);
+                return callback(errs.create('CouchDBError', {
+                    message: 'Empty response',
+                    res: res,
+                }));
             }
             res.forEach(function (key, doc) {
                 var groupName = key[1];

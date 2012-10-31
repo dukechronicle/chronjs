@@ -3,7 +3,7 @@ include container-helpers
 .author-profile
     mixin vertical-label
     .rounded
-        .content-container.content-container
+        .content-container.clearfix
             - if (author.images && author.images.StaffHeadshot)
                 img.headshot(src=author.images.StaffHeadshot.url)
             .author-info

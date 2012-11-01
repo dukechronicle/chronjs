@@ -28,7 +28,7 @@ block content
                 input(type="button", id=param.name+"-rawSwitch", class="rawSwitch", value="Show Raw")
                 br
                 textarea(id=param.name+"-val", name=param.name, schema=JSON.stringify(param.schema), class="expand", style="width:75%")
-                    !{JSON.stringify(param.defaultValue,null,"\t")}
+                    !{JSON.stringify(param.defaultValue,null)}
             - else
                 input(id=param.name+"-val", type='text', name=param.name, schema=JSON.stringify(param.schema), value=param.defaultValue, style="width:75%")
             form(id=param.name, class="fake-form")

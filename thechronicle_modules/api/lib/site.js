@@ -1,6 +1,7 @@
 var site = exports;
 
 var api = require('./api');
+var db = require('../../db-abstract');
 var config = require('../../config');
 var log = require('../../log');
 var redis = require('../../redisclient');
@@ -220,13 +221,24 @@ site.getSportsPageContent = util.cache(300, function(callback) {
                 } else
                     cb(err, []);
             });
-        }], function(err, results) {
+        },
+        function (cb) {
+            db.page.sportsEvents(5, function (err, res) {
+                if (err) cb(err);
+                else cb(null, _.map(res, function (doc) {
+                    return doc.value;
+                }));
+            });
+        }
+    ], function(err, results) {
         if(err) {
             log.warning(err);
             callback(err);
         } else {
             var model = results[0];
             model.Blog = results[1];
+            model.Events = results[2];
+            console.log(model.Events);
             model.multimedia = config.get('MULTIMEDIA_HTML');
             model.children = api.taxonomy.children(['Sports']);
             callback(null, model);

@@ -11,6 +11,10 @@ page.listByUrl = function (callback) {
     db.view('pages/byUrl', {}, callback);
 };
 
+page.sportsEvents = function (limit, callback) {
+    db.view('pages/sportsEvents', {limit: limit}, callback);
+};
+
 page.add = function (data, callback) {
     db.save(data, callback);
 };

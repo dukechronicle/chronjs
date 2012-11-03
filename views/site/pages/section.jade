@@ -28,6 +28,5 @@ block content
         .span-4.last
             - if (typeof popular != 'undefined' && popular.length > 0)
                 #popular.title-small!=partial('../container/story-list/numbered', {title: "Popular", stories: popular})
-            !=partial('../container/ad/medium-rect', { title: "Advertisement", index: 1})
+            !=partial('../container/ad/medium-rect', { title: "Advertisement"})
             !=partial('../container/facebook')
-            !=partial('../container/ad/medium-rect', { title: "Advertisement", index: 2})

@@ -31,7 +31,7 @@ html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
         .container
             header.clearfix!=partial('../layout/header')
             .leaderboard-row.clearfix
-              #print-edition.filler-block!=partial('../container/image', model.printEdition)
+              #print-edition.filler-block!=partial('../container/image', {title: "Print", "imageUrl": staticCdn + "/img/issuu-thumb.png", url: "http://issuu.com/dukechronicle/docs"})
               .leaderboard-block!=partial('../container/ad/leaderboard', {title: "Ad", index: 2})
             section.clearfix#content
                 block content

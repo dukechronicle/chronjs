@@ -314,6 +314,14 @@ exports.doc = {
                         emit(doc.url, doc);
                     }
                 }
+            },
+
+            sportsEvents: {
+                map: function (doc) {
+                    if (doc.type === 'page' && doc.template === 'Sports Event') {
+                        emit(doc.model.information.date, doc);
+                    }
+                }
             }
         }
     },

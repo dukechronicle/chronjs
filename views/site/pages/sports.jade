@@ -10,6 +10,7 @@ block content
                 !=partial('../container/slideshow', {stories: model.Slideshow})
           .span-4.last
             !=partial('../container/ad/medium-rect', {title: "Advertisement"})
+            #events.title-small!=partial('../container/story-list', {title: "Recent Games", stories: model.Events})
 
         #bottom.clearfix
             .span-4

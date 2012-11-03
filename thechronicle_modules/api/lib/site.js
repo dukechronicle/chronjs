@@ -226,7 +226,9 @@ site.getSportsPageContent = util.cache(300, function(callback) {
             db.page.sportsEvents(5, function (err, res) {
                 if (err) cb(err);
                 else cb(null, _.map(res, function (doc) {
-                    return doc.value;
+                    doc = doc.value;
+                    doc.url = '/page/' + doc.url;
+                    return doc;
                 }));
             });
         }
@@ -238,7 +240,6 @@ site.getSportsPageContent = util.cache(300, function(callback) {
             var model = results[0];
             model.Blog = results[1];
             model.Events = results[2];
-            console.log(model.Events);
             model.multimedia = config.get('MULTIMEDIA_HTML');
             model.children = api.taxonomy.children(['Sports']);
             callback(null, model);

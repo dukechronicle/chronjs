@@ -12,7 +12,7 @@ page.listByUrl = function (callback) {
 };
 
 page.sportsEvents = function (limit, callback) {
-    db.view('pages/sportsEvents', {limit: limit}, callback);
+    db.view('pages/sportsEvents', {limit: limit, descending: true}, callback);
 };
 
 page.add = function (data, callback) {

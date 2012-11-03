@@ -5,14 +5,16 @@ block content
         !=partial('../layout/subnav', {subsections: subsections})
 
         #top.clearfix
+          .span-8
             if (model.Slideshow)
-                !=partial('../container/slideshow/slideshow-right', {stories: model.Slideshow})
+                !=partial('../container/slideshow', {stories: model.Slideshow})
+          .span-4.last
+            !=partial('../container/ad/medium-rect', {title: "Advertisement"})
+
         #bottom.clearfix
             .span-4
-                !=partial('../container/ad/medium-rect', {title: "Advertisement", index: 1})
                 if (model.Blog)
                     #blog.title-medium!=partial('../container/story-list/image', {locals: {title: "The Blue Zone", image: staticCdn + "/img/blogs/sportsblog-banner.jpg", imageHref:'http://sports.chronicleblogs.com', stories:model.Blog}})
-                !=partial('../container/ad/medium-rect', {title: "Advertisement", index: 2})
 
             .span-8.last.clearfix
                 - if (model.Stories)

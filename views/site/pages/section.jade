@@ -26,7 +26,7 @@ block content
                 #loadImage(data-key=JSON.stringify(next), data-url="/api/section/#{taxonomyPath}")
 
         .span-4.last
+            !=partial('../container/ad/medium-rect', { title: "Advertisement"})
             - if (typeof popular != 'undefined' && popular.length > 0)
                 #popular.title-small!=partial('../container/story-list/numbered', {title: "Popular", stories: popular})
-            !=partial('../container/ad/medium-rect', { title: "Advertisement"})
             !=partial('../container/facebook')

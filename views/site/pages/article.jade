@@ -61,11 +61,9 @@ block content
                 #disqus_thread.rounded(data-disqus=JSON.stringify(disqusData), data-disqus-identifier=disqusData.id)
 
             .span-4.last
+                !=partial('../container/ad/medium-rect', {title: "Advertisement"})
                 - if (model.related && model.related.length > 0)
                     #related.title-small!=partial('../container/story-list/subhead', {title: "Related", stories: model.related})
-
-                !=partial('../container/ad/medium-rect', {title: "Advertisement"})
-
                 #recommendations!=partial('../container/facebook')
                 - if (model.poll)
                     #poll!=partial('../container/poll', {poll: model.poll})

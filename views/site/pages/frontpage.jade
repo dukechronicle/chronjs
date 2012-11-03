@@ -14,9 +14,9 @@ block content
                     #headlines!=partial('../container/top-news', {title: "Top Stories", left: model["Left Headlines"], right: model["Right Headlines"]})
 
             .sidebar.span-4.last.align-element(data-aligntarget="#popular .rounded")
+                !=partial('../container/ad/medium-rect', {title: "Advertisement"})
                 if (model.popular)
                     #popular.title-small!=partial('../container/story-list/subhead', {title: "What's Hot", stories: model.popular})
-                !=partial('../container/ad/medium-rect', {title: "Advertisement"})
                 if (model.Opinion)
                     #opinion.title-small!=partial('../container/story-list/subhead', {title: "Opinion", stories: model.Opinion})
 

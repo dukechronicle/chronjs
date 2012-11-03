@@ -26,9 +26,9 @@ block content
 
 
         .span-4.last
+            !=partial('../container/ad/medium-rect', {title: "Advertisement"})
             if (model["Editors Note"])
                 #editors-note!=partial('../container/block/teaser', {title: "Letter from the Editor", story: model["Editors Note"][0]})
-            !=partial('../container/ad/medium-rect', {title: "Advertisement", index: 1})
             if (model.Prefix)
                 - each story in model.Prefix
                     .prefix!=partial('../container/block/wide', {story: story})

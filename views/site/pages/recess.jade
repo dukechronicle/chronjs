@@ -5,21 +5,12 @@ block content
         !=partial('../layout/subnav', {subsections: subsections})
 
         #top.clearfix.align-group
-            .span-6.align-element(data-aligntarget="#featured .rounded")
-                if (model.Featured && model.Featured[0])
-                    #featured!=partial('../container/block/featured', {story: model.Featured[0]})
-                !=partial('../container/ad/full-banner', {title: "Ad", index: 2})
-            .span-3.align-element(data-aligntarget=".feature:last-child .rounded")
-                if (model.Featured[1])
-                    .feature!=partial('../container/block', {title: "", story: model.Featured[1]})
-                if (model.Featured[2])
-                    .feature!=partial('../container/block', {title: "", story: model.Featured[2]})
-            .span-3.last.align-element(data-aligntarget="#blog .rounded")
-                if (model.Blog)
-                    #blog.title-small!=partial('../container/story-list', {title: "Recess Blog", stories: model.Blog})
-                if (model.Stories)
-                    - each story in model.Stories
-                        !=partial('../container/block/teaser', {story:story})
+            .span-8.align-element(data-alignprimary="true")
+                #slideshow!=partial('../container/slideshow', {stories: model.Featured})
+
+            .span-4.last.align-element(data-aligntarget="#editors-notes .rounded")
+                !=partial('../container/ad/medium-rect', {title: "Advertisement"})
+                #editors-notes.title-medium!=partial('../container/story-list/featured', {title: "Editor's Notes", stories: model.Stories})
 
         #middle.clearfix
             if (model.Music)

@@ -2,14 +2,14 @@
 @import '../variables'
 
 #super-header
-    margin-top 8px
+    margin-top 3px
     color #666
 
     .date
-
         font-size 1.2em
         padding-right 10px
     .advertising-links
+        font-size 1.1em
         margin-left 10px
         a 
             margin-right 5px
@@ -18,17 +18,34 @@
             margin-right 0px
 
     .icons
-        margin-left 2px
         a img
             width 15px
             height 15px
             vertical-align bottom
-            transition opacity, .25s linear
-            padding 0px 2px
-
+            padding 3px 2px
 
 header
-    margin-top 5px
+    #search-box
+        box-sizing border-box
+        padding 0px 0px
+
+
+        display inline-block
+
+
+        input
+            background #fff url(/img/search-button.png) no-repeat
+            background-position 2px 2px
+            border-radius 10px
+            border 1px inset
+            font-size 12px
+            padding-left 20px
+            box-sizing border-box
+            width 100%
+
+
+header.header-frontpage
+    margin-top 3px
     border-radius corner-radius
     background-color bar-color
     box-shadow rgba(0,0,0,0.40) 0 1px 3px
@@ -37,14 +54,125 @@ header
   
 
     #header-top
-        margin 5px 5px 5px 20px
-
-        border-bottom 1px solid #EEE
+        margin 0px 10px
+        border-bottom 2px solid #EEE
+        border-image -webkit-radial-gradient(center, ellipse, #EEE 70%,#069 100%) 2
 
     #home-link
-        display inline-block
+        display block
+        position relative  
+        margin auto
+        width 600px      
+
+        #header-overlay
+            position absolute
+            z-index 1
+            left 180px
+            top -37px
+
+        h1, h2, h3
+            line-height 100%
+            text-shadow 0 1px 3px rgba(0,0,0,.4);
+            margin 0px
+            color #EEE
+
+        .brand
+            font-family ambroise-std
+            font-weight lighter
+            font-size 5.25em
+            text-align center
+            letter-spacing 1px
+
+
+
+        .tagline
+            position relative 
+            font-size 1.2em
+            font-family proxima-nova-sc-osf-ext-cond
+            letter-spacing 3px
+            text-align center
+            margin-top 10px
+
+
+
+   
+
+
+    #header-bottom
+        margin-bottom 6px
+
+        nav
+            position absolute
+            z-index 2
+            vertical-align bottom
+            padding-top 3px
+            margin-left 8px
+            width 760px
+
+
+            a
+                display inline-block
+                text-align right
+                line-height 1.6
+                h2
+                    display inline-block
+                    margin 0px
+                    font-weight bold
+                    font-size 1.15em
+                    text-shadow 0 1px 2px rgba(0,0,0,.4);
+                    letter-spacing 2.9px
+                    text-transform uppercase
+                    color #EEE
+                    border-bottom 1px solid transparent
+                    transition(border-bottom-color, .25s, linear)
+                    transition(background-color, .25s, linear)
+                    padding 0px 20px
+
+
+            a:hover h2, a.active h2
+                border-bottom-color rgba(255,255,255, .6)
+                background-color rgba(255,255,255, .4)
+                border-radius 4px
+
+        #search-box
+            box-sizing border-box
+            width 170px
+            float right
+            margin 3px 10px 0px 0px
+            
+
+
+            input
+                background #fff url(/img/search-button.png) no-repeat
+                background-position 2px 2px
+                border-radius 10px
+                border 1px inset
+                font-size 12px
+                padding-left 20px
+                box-sizing border-box
+                width 100%
+
+
+header.header
+    margin-top 5px
+
+    border-top-left-radius corner-radius
+    border-top-right-radius corner-radius
+    background-color bar-color
+    box-shadow rgba(0,0,0,0.40) 0 1px 3px
+    color #EEE
+    overflow hidden
+  
+
+    #header-top
+        margin 5px 5px 5px 20px
+        border-image -webkit-linear-gradient(left, #EEE 40%, rgba(255, 255, 255, 0) 100%) 2       
+
+    #home-link
+        float left
         position relative
-        margin-left: -12px;
+        margin-left: 0px;
+        width 160px
 
         
 
@@ -65,51 +193,72 @@ header
         .brand
             font-family ambroise-std
             font-weight lighter
-            font-size 5.25em
-            display inline
+            font-size 2.4em
+            display inline-block
             text-align left
-            margin-left 8px
+            margin-left 20px
+            margin-top 8px
+            margin-bottom 3px
+            width 160px
 
         .tagline
-            font-size 1.4 em
+            font-size 1.48em
             font-family proxima-nova-sc-osf-ext-cond
-            letter-spacing 1px
+            letter-spacing 1.9899px
             display inline
             text-align left
-            margin-left 10px
+            margin-left 18px
 
 
     #header-bottom
+
         nav
             position relative
             z-index 2
             vertical-align bottom
-            padding-top 7px
-            letter-spacing 10px
+            margin-left 35px
+            letter-spacing 1px
+            width 600px
+            padding-top 18px
+            float left
 
 
             a
                 display inline-block
+                margin-right 10px
+
+
                 h2
                     display inline-block
+                
                     margin 0px
                     font-weight bold
-                    font-size 1.3em
+                    font-size 1.2em
                     text-shadow 0 1px 2px rgba(0,0,0,.4);
-                    letter-spacing 1px
+                    letter-spacing 1.2px
                     text-transform uppercase
                     color #EEE
                     border-bottom 1px solid transparent
                     transition(border-bottom-color, .25s, linear)
-                    padding 0px 11px
+                    padding 0px 7px 1.5px 5px
 
             a:hover h2, a.active h2
-                border-bottom-color #DDD
+                background-color white
+                transition background-color .5s linear
+                border-top-left-radius corner-radius
+                border-top-right-radius corner-radius
+                color #069
+                transition color .15s linear
+
+
+
 
     #search-box
         box-sizing border-box
-        padding 2px 4px
-        margin-top 4px 
+        margin 15px 8px 0px 0px 
+        width 150px
+        float right
+
 
         input
             background #fff url(/img/search-button.png) no-repeat
@@ -120,3 +269,44 @@ header
             padding-left 20px
             box-sizing border-box
             width 100%
+
+
+
+.subheader
+    background-color white
+    line-height 20
+    line-height 3
+    border-bottom-left-radius corner-radius
+    border-bottom-right-radius corner-radius
+    box-shadow rgba(0,0,0,0.40) 0 1px 3px
+    background-linear-gradient bottom, whiteSmoke 0%, white 33%
+    .pagetitle
+ 
+        padding-top 10px
+        padding-left 25px
+        font-size 1.7em
+        text-shadow 0 1px 2px rgba(0,0,0,.4);
+        color #444
+        text-align left
+        font-family 
+
+
+    .subnav
+        white-space nowrap
+        overflow hidden
+        a
+            display inline-block
+
+
+            h2
+                display inline-block
+                
+                letter-spacing 1px
+                text-shadow 0px 1px 0px white
+                font-size 0.9em
+                text-transform uppercase
+                color text-color
+                display block
+                padding-left 11px
+                padding-right 11px
+                margin 0px

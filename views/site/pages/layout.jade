@@ -28,8 +28,8 @@ html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
     body
         // required for facebook javascript sdk
         #fb-root
-        include ../layout/header
         .container
+            include ../layout/header
             section.clearfix#content
                 block content
             footer!=partial('../layout/footer')

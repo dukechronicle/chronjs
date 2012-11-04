@@ -1,5 +1,28 @@
 extends layout
 
+block header
+    header.header-frontpage
+        #header-top.clearfix
+            a#home-link(href="/")
+                img#header-overlay(src=staticCdn + "/img/header-overlay.png")
+                h3.tagline The Daily Independent at Duke University
+                h1.brand The Chronicle
+                
+                
+        #header-bottom.clearfix
+            nav#nav
+                a(href="/news", class=(section == 'News') ? "active" : ""): h2 News
+                a(href="/sports", class=(section == 'Sports') ? "active" : ""): h2 Sports
+                a(href="/opinion", class=(section == 'Opinion') ? "active" : ""): h2 Opinion
+                a(href="/recess", class=(section == 'Recess') ? "active" : ""): h2 Recess
+                a(href="/towerview", class=(section == 'Towerview') ? "active" : ""): h2 Towerview
+                a(href="http://chronicleblogs.com"): h2 Blogs
+                a(href="http://shutter.dukechronicle.com"): h2 Photos
+            form#search-box(action='/search/', method='GET')
+                    input(type='search', name='q', placeholder='Search archives', results='5', value=query)
+
+
+
 block content
     #frontpage
         #top.clearfix.align-group

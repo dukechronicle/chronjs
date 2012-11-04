@@ -1,4 +1,4 @@
-define ['jquery', 'lib/date.format'], ($) ->
+define ['jquery'], ($) ->
 
   pluralize = (word, quantity) ->
     "#{quantity} #{word}" + (if quantity is 1 then '' else 's')
@@ -50,7 +50,3 @@ define ['jquery', 'lib/date.format'], ($) ->
     update()
     setInterval(update, 10000)
     $(this).show()
-  '.local-time': ->
-    $(this).each ->
-      date = new Date($(this).data('date'))
-      $(this).text(dateFormat(date, $(this).data('format')))

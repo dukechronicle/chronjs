@@ -2,43 +2,45 @@
 - query = query.replace(/-/g, ' ');
 - if (typeof section == 'undefined') var section = undefined
 
-#header-top.clearfix
-    .span-6 &nbsp
-        a#home-link(href="/")
-            img#header-overlay(src=staticCdn + "/img/header-overlay.png")
-            h1.brand The Chronicle
-            h3.tagline The Independent Daily at Duke University
+#super-header.clearfix
+    span.date.local-time.left(data-format='dddd, mmmm d, yyyy')
+    .icons.left
+        a(href="http://www.facebook.com/dukechronicle")
+            img(src=staticCdn + "/img/icons/facebook.png") 
+        a(href="http://twitter.com/dukechronicle")
+            img(src=staticCdn + "/img/icons/twitter.png") 
+        a(href="http://youtube.com/user/DukeChronicle")
+            img(src=staticCdn + "/img/icons/youtube.png") 
+        a(href="/rss")
+            img(src=staticCdn + "/img/icons/rss.png")
+    .advertising-links.right
+        a(href="/page/subscribe") Print Subscription 
+        a(href="/page/advertising") Advertising 
+        a(href="http://dukechronicle.campusave.com") Classifieds 
+        a(href="http://chroniclehousing.com") Housing
 
-    #banner.span-6.last.clearfix
-        .icons.left
-            a(href="http://www.facebook.com/dukechronicle")
-                img(src=staticCdn + "/img/icons/facebook.png")
-            a(href="http://twitter.com/dukechronicle")
-                img(src=staticCdn + "/img/icons/twitter.png")
-            a(href="http://youtube.com/user/DukeChronicle")
-                img(src=staticCdn + "/img/icons/youtube.png")
-            a(href="http://foursquare.com/dukechronicle")
-                img(src=staticCdn + "/img/icons/foursquare.png")
-            a(href="/rss")
-                img(src=staticCdn + "/img/icons/rss.png")
-            a(href="/page/newsletter")
-                img(src=staticCdn + "/img/icons/email.png")
+block header
+    header.header
+        #header-bottom.clearfix
+            a#home-link(href="/")
+                h1.brand The Chronicle
+            nav#nav
+                a(href="/news", class=(section == 'News') ? "active" : ""): h2 News
+                a(href="/sports", class=(section == 'Sports') ? "active" : ""): h2 Sports
+                a(href="/opinion", class=(section == 'Opinion') ? "active" : ""): h2 Opinion
+                a(href="/recess", class=(section == 'Recess') ? "active" : ""): h2 Recess
+                a(href="/towerview", class=(section == 'Towerview') ? "active" : ""): h2 Towerview
+                a(href="http://chronicleblogs.com"): h2 Blogs
+                a(href="http://shutter.dukechronicle.com"): h2 Photos
+            form#search-box(action='/search/', method='GET')
+                input(type='search', name='q', placeholder='Search archives', results='5', value=query)
 
-        .advertising-links.right
-            a(href="/page/subscribe") Print Subscription
-            a(href="/page/advertising") Advertising
-            a(href="http://dukechronicle.campusave.com") Classifieds
-            a(href="http://chroniclehousing.com") Housing
-
-#header-bottom.clearfix
-    nav.span-10#nav
-        a(href="/news", class=(section == 'News') ? "active" : ""): h2 News
-        a(href="/sports", class=(section == 'Sports') ? "active" : ""): h2 Sports
-        a(href="/opinion", class=(section == 'Opinion') ? "active" : ""): h2 Opinion
-        a(href="/recess", class=(section == 'Recess') ? "active" : ""): h2 Recess
-        a(href="/towerview", class=(section == 'Towerview') ? "active" : ""): h2 Towerview
-        a(href="http://chronicleblogs.com"): h2 Blogs
-        a(href="http://shutter.dukechronicle.com"): h2 Photos
-
-    form.span-2.last#search-box(action='/search/', method='GET')
-        input(type='search', name='q', placeholder='Search archives', results='5', value=query)
+        .subheader.clearfix
+            .span-4
+                block title
+                    h1.pagetitle= pageTitle
+            nav.subnav.span-8.last
+                - if (typeof subsections != 'undefined')
+                    - each subsection in subsections
+                        a.hover(href='/section/' + subsection.path)
+                            h2= subsection.name

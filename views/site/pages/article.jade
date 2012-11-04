@@ -4,14 +4,11 @@ extends layout
 block append variables
   - var prefix = "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#"
 
+block title
+    h1.pagetitle= section
+
 block content
     #article
-        - if (parents)
-            nav.subnav.clearfix
-                - each parent in parents
-                    a.hover(href='/section/'+parent.path)
-                        h2= parent.name
-
         article.clearfix
             .span-8
                 .rounded

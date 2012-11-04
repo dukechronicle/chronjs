@@ -29,10 +29,10 @@ html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
         // required for facebook javascript sdk
         #fb-root
         .container
-            header.clearfix!=partial('../layout/header')
             .leaderboard-row.advertisment.clearfix
-              #print-edition.filler-block!=partial('../container/image', {title: "Print", "imageUrl": staticCdn + "/img/issuu-thumb.png", url: "http://issuu.com/dukechronicle/docs"})
-              .leaderboard-block!=partial('../container/ad/leaderboard', {title: "Ad", index: 2})
+            //#print-edition.filler-block!=partial('../container/image', {title: "Print", "imageUrl": staticCdn + "/img/issuu-thumb.png", url: "http://issuu.com/dukechronicle/docs"})
+            include ../container/ad/leaderboard-row
+            include ../layout/header
             section.clearfix#content
                 block content
             footer!=partial('../layout/footer')

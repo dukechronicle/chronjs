@@ -22,7 +22,7 @@
     .advertising-links
         font-size 1.1em
         margin-left 10px
-        a 
+        a
             margin-right 5px
             color #666
         a:last-child
@@ -48,18 +48,19 @@ header.header-frontpage
     box-shadow rgba(0,0,0,0.40) 0 1px 3px
     color #EEE
     overflow hidden
-  
 
     #header-top
         margin 0px 10px
         border-bottom 2px solid #EEE
         border-image -webkit-radial-gradient(center, ellipse, #EEE 70%,#069 100%) 2
+        border-image -moz-radial-gradient(center, ellipse, #EEE 70%,#069 100%) 2
+        border-image -ms-radial-gradient(center, ellipse, #EEE 70%,#069 100%) 2
 
     #home-link
         display block
-        position relative  
+        position relative
         margin auto
-        width 600px      
+        width 600px
 
         #header-overlay
             position absolute
@@ -90,11 +91,6 @@ header.header-frontpage
             text-align center
             margin-top 10px
 
-
-
-   
-
-
     #header-bottom
         margin-bottom 6px
 
@@ -117,13 +113,13 @@ header.header-frontpage
                     font-weight bold
                     font-size 1.15em
                     text-shadow 0 1px 2px rgba(0,0,0,.4);
-                    letter-spacing 2.9px
+                    letter-spacing 2.5px
                     text-transform uppercase
                     color #EEE
                     border-bottom 1px solid transparent
                     transition(border-bottom-color, .25s, linear)
                     transition(background-color, .25s, linear)
-                    padding 0px 20px
+                    padding 0px 19px
 
 
             a:hover h2, a.active h2
@@ -143,11 +139,10 @@ header.header
     box-shadow rgba(0,0,0,0.40) 0 1px 3px
     color #EEE
     overflow hidden
-  
 
     #header-top
         margin 5px 5px 5px 20px
-        border-image -webkit-linear-gradient(left, #EEE 40%, rgba(255, 255, 255, 0) 100%) 2       
+        border-image -webkit-linear-gradient(left, #EEE 40%, rgba(255, 255, 255, 0) 100%) 2
 
     #home-link
         float left
@@ -155,17 +150,7 @@ header.header
         margin-left: 0px;
         width 160px
 
-        
-
-        #header-overlay
-           
-            position absolute
-            z-index 1
-            left 50px
-            top -37px
-
         h1, h2, h3
-           
             line-height 100%
             text-shadow 0 1px 3px rgba(0,0,0,.4);
             margin 0px
@@ -211,7 +196,6 @@ header.header
 
                 h2
                     display inline-block
-                
                     margin 0px
                     font-weight bold
                     font-size 1.2em
@@ -231,12 +215,9 @@ header.header
                 color #069
                 transition color .15s linear
 
-
-
-
     #search-box
         box-sizing border-box
-        margin 15px 8px 0px 0px 
+        margin 15px 8px 0px 0px
         width 150px
         float right
 
@@ -249,26 +230,24 @@ header.header
     box-shadow rgba(0,0,0,0.40) 0 1px 3px
     background-linear-gradient bottom, whiteSmoke 0%, white 33%
     .pagetitle
- 
-        padding-top 10px
-        padding-left 25px
-        font-size 1.7em
-        text-shadow 0 1px 2px rgba(0,0,0,.4);
-        color #444
-        text-align left
-        font-family 
-
+        padding .8em 0px .8em 25px
+        h1
+            font-size 1.5em
+            margin 0px
+            a
+                display inline
+                color #111
+                transition color .25s linear
+            a:hover
+                color highlight-color
 
     .subnav
+        text-align right
         white-space nowrap
-        overflow hidden
         a
             display inline-block
-
-
             h2
                 display inline-block
-                
                 letter-spacing 1px
                 text-shadow 0px 1px 0px white
                 font-size 0.9em

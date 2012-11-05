@@ -1,13 +1,13 @@
 extends layout
 
+block title
+    h1
+        - each parent, i in parentPaths
+            - if (i > 0)
+                |  &raquo; 
+            a.hover.selected(href='/section/' + parent.path)= parent.name
+
 block content
-    nav.subnav.clearfix
-        - each parent in parentPaths
-            a.hover.selected(href='/section/' + parent.path)
-                h2 #{parent.name} |
-        - each subsection in subsections
-            a.hover(href='/section/' + subsection.path)
-                h2= subsection.name
     #section
         .span-8
             - each doc in docs

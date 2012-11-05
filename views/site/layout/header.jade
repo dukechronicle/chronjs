@@ -36,10 +36,11 @@ block header
                 input(type='search', name='q', placeholder='Search archives', results='5', value=query)
 
         .subheader.clearfix
-            .span-4
-                block title
-                    h1.pagetitle= pageTitle
-            nav.subnav.span-8.last
+            .span-5
+                .pagetitle
+                    block title
+                        h1= pageTitle
+            nav.subnav.span-7.last
                 - if (typeof subsections != 'undefined')
                     - each subsection in subsections
                         a.hover(href='/section/' + subsection.path)

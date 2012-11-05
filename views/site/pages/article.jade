@@ -5,7 +5,11 @@ block append variables
   - var prefix = "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#"
 
 block title
-    h1.pagetitle= section
+    h1
+        - each section, i in sections
+            - if (i > 0)
+                |  &raquo; 
+            a.hover(href='/section/' + section.path)= section.name
 
 block content
     #article

@@ -128,6 +128,7 @@ site.search = function (req, res, next) {
                 currentFacets: req.query.facets || '',
                 facets: facets,
                 query: req.query.q,
+                pageTitle: 'Search ' + req.query.q,
                 sort: req.query.sort,
                 order: req.query.order
             }
@@ -178,7 +179,7 @@ site.article = function (req, res, next) {
                 pageTitle: doc.title,
                 isAdmin:isAdmin,
                 model:model,
-                subsections: model.parents,
+                sections: model.parents,
                 section: doc.taxonomy[0],
                 article: true,
                 disqusData: {

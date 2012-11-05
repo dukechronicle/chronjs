@@ -54,7 +54,6 @@ header.header-frontpage
         border-bottom 2px solid #EEE
         border-image -webkit-radial-gradient(center, ellipse, #EEE 70%,#069 100%) 2
         border-image -moz-radial-gradient(center, ellipse, #EEE 70%,#069 100%) 2
-        border-image -ms-radial-gradient(center, ellipse, #EEE 70%,#069 100%) 2
 
     #home-link
         display block
@@ -230,6 +229,7 @@ header.header
     box-shadow rgba(0,0,0,0.40) 0 1px 3px
     background-linear-gradient bottom, whiteSmoke 0%, white 33%
     .pagetitle
+        white-space nowrap
         padding .8em 0px .8em 25px
         h1
             font-size 1.5em
@@ -246,12 +246,11 @@ header.header
         color #333
 
     .nav-container
-        overflow-x hidden
+        box-sizing border-box
 
     .subnav
         text-align right
         white-space nowrap
-        margin-right 20px
         position relative
         overflow-x hidden
         left 0px

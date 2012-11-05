@@ -41,8 +41,8 @@ block header
                     block title
                         h1= pageTitle
             - if (typeof subsections != 'undefined')
-                .span-7.last
-                    span.caret.right >
+                .nav-container.span-7.last
+                    span.scroll-caret.right >
                     nav.subnav
                         - each subsection in subsections
                             a.hover(href='/section/' + subsection.path)

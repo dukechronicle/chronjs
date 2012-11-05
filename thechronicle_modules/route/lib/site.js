@@ -280,7 +280,8 @@ site.newsletterData = function (req, res) {
         res.render('site/pages/newsletter', {
             locals: {
                 email: email,
-                action: action
+                action: action,
+                pageTitle: 'Newsletter',
             }
         });
     };
@@ -340,7 +341,8 @@ site.staticPage = function (req, res, next) {
     fs.readFile('views/site/pages/page-data/' + url + '.json', function (err, data) {
         var data = (!err && data) ? JSON.parse(data.toString()) : null;
         res.render(filename, {
-            data: data
+            data: data,
+            pageTitle: 'Subscribe',
         });
     });
 };

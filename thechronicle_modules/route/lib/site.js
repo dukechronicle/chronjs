@@ -367,6 +367,7 @@ site.newsSitemap = function (req, res, next) {
 site.pageNotFound = function(req, res) {
     res.render('site/pages/404', {
         status: 404,
-        url: req.url
+        url: req.url,
+        pageTitle: 'Page Not Found',
     });
 };

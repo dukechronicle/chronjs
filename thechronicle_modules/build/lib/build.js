@@ -52,7 +52,7 @@ build.pushSourceFile = function (filepath, callback) {
     var key = '/' + pathutil.relative(PUBLIC_DIR, filepath);
     var type = getMimeType(pathutil.extname(filepath));
     if (!type) {
-        return callback('Cannot determine file type: ' + path);
+        return callback('Cannot determine file type: ' + filepath);
     }
 
     fs.readFile(filepath, function (err, data) {

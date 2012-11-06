@@ -109,7 +109,7 @@ site.section = function (req, res, next) {
                     next:nextDoc,
                     subsections:children,
                     parentPaths:parents,
-                    section: sectionArray[0],
+                    section: section.taxonomy[0],
                     popular: popular,
                     taxonomyPath: sectionArray.join('/')
                 }

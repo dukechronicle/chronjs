@@ -48,7 +48,7 @@ block content
                         .article-body.clearfix
                             .social-media
                                 a#comment-link(href="#disqus_thread") Comments
-                                a#print-link(href="#{doc.url}/print") Print
+                                a#print-link(href=doc.url + "/print") Print
                                 #facebook-like
                                     fb:like(href=doc.fullUrl, send="false", layout="button_count", width="130", show_faces="false", action="recommend", font="lucida grande")
                                 #twitter

@@ -37,10 +37,10 @@ block content
 
             .sidebar.span-4.last.align-element(data-aligntarget="#popular .rounded")
                 !=partial('../container/ad/medium-rect', {title: "Advertisement"})
-                if (model.popular)
-                    #popular.title-small!=partial('../container/story-list/subhead', {title: "What's Hot", stories: model.popular})
-                if (model.Opinion)
-                    #opinion.title-small!=partial('../container/story-list/subhead', {title: "Opinion", stories: model.Opinion})
+                !=partial('../container/twitter', {title: "Twitter"})
+                #popular.title-small!=partial('../container/story-list/subhead', {title: "What's Hot", stories: model.popular})
+                //if (model.Opinion)
+                //#opinion.title-small!=partial('../container/story-list/subhead', {title: "Opinion", stories: model.Opinion})
 
         #middle.clearfix.align-group
             if (model.News)

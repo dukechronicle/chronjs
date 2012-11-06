@@ -1,10 +1,8 @@
-.clearfix
-    .vertical-container
-        h2.vertical #{title}
-    
-    a.rounded-hover.rounded.hover.highlight-right(href='http://twitter.com/#{user}')
-        .content-container.clearfix
-            img(src='#{imageUrl}')
-            .text
-                h3 @#{user}
-                p #{tweet}
+include container-helpers
+
+mixin vertical-label
+.rounded
+  .image-container
+    a.twitter-timeline(href="https://twitter.com/DukeChronicle", data-widget-id="265940333538447360") Tweets by @DukeChronicle
+    script
+      !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");

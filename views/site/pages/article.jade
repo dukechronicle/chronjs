@@ -6,10 +6,11 @@ block append variables
 
 block title
     h1
-        - each section, i in sections
-            - if (i > 0)
-                |  &raquo; 
-            a.hover(href='/section/' + section.path)= section.name
+        - if (sections)
+            - each section, i in sections
+                - if (i > 0)
+                    |  &raquo; 
+                a.hover(href='/section/' + section.path)= section.name
 
 block content
     #article

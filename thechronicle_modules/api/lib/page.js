@@ -20,6 +20,30 @@ exports.templates = {
             }
         }
     },
+    'Simple Slideshow': {
+        view: 'site/pages/simple-slideshow',
+        model: {
+            slideshow: {
+                type: 'array',
+                label: 'Slideshow Articles',
+                required: true,
+                items: {'$ref': 'article'},
+            },
+            list_title: {type: 'string'},
+            list: {
+                type: 'array',
+                label: 'Top List Articles',
+                required: true,
+                items: {'$ref': 'article'},
+            },
+            articles: {
+                type: 'array',
+                label: 'Bottom Block Articles',
+                required: true,
+                items: {'$ref': 'article'},
+            },
+        }
+    },
     'Orientation': {
         view: 'site/pages/orientation',
         model: {

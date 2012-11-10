@@ -35,6 +35,26 @@ function searchOnEnter(e) {
     }
 }
 
+// Tab Switching
+function changeTab(tab) {
+    $(".menu .box").removeClass("selectedTab");
+    $("#tabFrame .tabContent").removeClass("tabShown");
+
+    setTimeout(function(){
+        $(".menu .box:nth-child("+(tab*2-1)+")").addClass("selectedTab");
+        $("#tabFrame .tabContent:nth-child("+tab+")").addClass("tabShown");
+    }, 500);
+    _gaq.push(['_trackEvent', 'Change Tab', $(".menu .box:nth-child("+(tab*2-1)+")").text(), tab, 0]);
+}
+
+function statusbar(docs, weather, sports) {
+
+
+}
+
+/*********************
+* AJAX Loading Stuff *
+**********************/
 // Article Logic
 function showArticles(docs) {
     var count = 0;
@@ -68,18 +88,6 @@ function showArticles(docs) {
             if (count >= 4) return;
         }
     }
-}
-
-// Tab Switching
-function changeTab(tab) {
-    $(".menu .box").removeClass("selectedTab");
-    $("#tabFrame .tabContent").removeClass("tabShown");
-
-    setTimeout(function(){
-        $(".menu .box:nth-child("+(tab*2-1)+")").addClass("selectedTab");
-        $("#tabFrame .tabContent:nth-child("+tab+")").addClass("tabShown");
-    }, 500);
-    _gaq.push(['_trackEvent', 'Change Tab', $(".menu .box:nth-child("+(tab*2-1)+")").text(), tab, 0]);
 }
 
 var channels = {
@@ -171,8 +179,9 @@ $(function(){
     // Search Focus
     $('.boxSearch input').focus();
 
-    // Load Articles
+    // Load Dynamic Content on Load
     $(document).ready(function() {
+        // News
         $.ajax({
             url: 'http://www.dukechronicle.com/api/qduke',
             dataType: "jsonp",
@@ -187,10 +196,8 @@ $(function(){
                 console.log("Error loading articles:" + errorThrown)
             }
         });
-    });
-
-    // Load Weather
-    $.simpleWeather({
+        // Load Weather
+        $.simpleWeather({
             zipcode: '27708',
             unit: 'f',
             success: function(weather) {
@@ -214,6 +221,7 @@ $(function(){
             error: function(error) {
                     $("#contentWeather .box").html("<p>"+error+"</p>");
             }
+        });
     });
 
     // Load Intense Frames

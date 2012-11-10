@@ -76,10 +76,10 @@ html
                 #contentSports.contentBoxes.tabContent
                     .box.sportsList
                         h3 Upcoming Events
-                    a.box.double.selected All Sports
-                    - var sports = ["Basketball (M)", "Basketball (W)", "Baseball", "Cross Country", "Fencing", "Field Hockey", "Football", "Golf (M)", "Golf (W)", "Lacrosse (M)", "Lacrosse (W)", "Rowing", "Soccer (M)", "Soccer (W)", "Swimming & Diving", "Tennis (M)", "Tennis (W)", "Track & Field", "Volleyball", "Wrestling"]
+                    a.box.selected All Sports
+                    - var sports = [{"name":"Baseball"},{name: "Basketball (M)"},{"name":"Basketball (W)"},{"name":"Cross Country"},{"name":"Fencing"},{"name":"Field Hockey"},{"name":"Football"},{"name":"Golf (M)"},{"name":"Golf (W)"},{"name":"Lacrosse (M)"},{"name":"Lacrosse (W)"},{"name":"Rowing"},{"name":"Soccer (M)"},{"name":"Soccer (W)"},{"name":"Swimming & Diving"},{"name":"Tennis (M)"},{"name":"Tennis (W)"},{"name":"Track & Field"},{"name":"Volleyball"},{"name":"Wrestling"}]
                     for sport in sports
-                        a.box=sport
+                        a.box=sport.name
                 .contentFrame.box.tabContent(data-content='<object type="application/x-shockwave-flash" width="100%" height="100%" data="//static.transloc.com/tvspublic/_common/swf/TvsClient-default.swf?v=6619a32d2bacada0b3703d86a4b8efaa"><param name="src" value="//static.transloc.com/tvspublic/_common/swf/TvsClient-default.swf?v=6619a32d2bacada0b3703d86a4b8efaa"><param name="bgColor" value="#ffffff"><param name="wmode" value="transparent"><param name="allowScriptAccess" value="always"><param name="autoplay" value="false"><param name="flashvars" value="box=35.994114%2C-78.955356%2C36.022726%2C-78.914718&amp;feeds_domain=feeds.transloc.com&amp;tile_server_parent=transloc.com&amp;sms=1&amp;predictions=True&amp;agencies=176&amp;static_media_domain=static.transloc.com&amp;announcements=True&amp;sms_keyword=DUKEU&amp;classic=1"><div><p><strong>Flash Required</strong></p><p>Flash is required to view this media. <a href="http://www.adobe.com/go/getflashplayer">Download Here</a>.</p></div></object>')
                     a#BusTracking.newWindow(href="http://www.duke.transloc.com/")
                 .contentFrame.box.tabContent(data-content='<iframe src="http://maps.duke.edu/map/index.php?id=21"></iframe>')

@@ -65,7 +65,7 @@ function showArticles(docs) {
             console.log(i)
             var article = docs["Top Headline"][i];
             $("#boxStatus").append(
-                $("<a class='box' />").attr("href", "http://dukechronicle.com" + article.url).text(article.title)
+                $("<a class='box' />").attr("href", "http://dukechronicle.com" + article.url).html("<p>"+article.title+"</p>")
             );
         }
     }
@@ -104,30 +104,14 @@ function showArticles(docs) {
 }
 // Weather
 function showWeather(weather) {
-    var forcast = '<h3>Now</h3><img src="'+weather.image+'"/><p> '+weather.currently+'</p><p>'+weather.temp+'&deg;'+weather.units.temp+' ('+weather.tempAlt+'&deg;C)</p>'
+    var forcast = '<h3>Now in '+weather.city+'</h3><img src="'+weather.thumbnail+'"/><p> '+weather.currently+'</p><p>'+weather.temp+'&deg;'+weather.units.temp+' ('+weather.tempAlt+'&deg;C)</p>'
     $("#boxStatus").append(
-        $("<a class='box' />").attr("href", "http://weather.com").html(forcast)
+        $("<a class='box' />").attr("href", weather.link).html(forcast)
     );
     var forcast = '<h3>Tomorrow</h3><p>'+weather.tomorrow.forecast+'</p><p>High '+weather.tomorrow.high+'&deg;'+weather.units.temp+' - Low '+weather.tomorrow.low+'&deg;'+weather.units.temp;
     $("#boxStatus").append(
-        $("<a class='box' />").attr("href", "http://weather.com").html(forcast)
+        $("<a class='box' />").attr("href", weather.link).html(forcast)
     );       
-    // html = "<h4>Currently</h4>";
-    // html +='<p> '+weather.currently+'</p><p>'+weather.temp+'&deg; '+weather.units.temp+' ('+weather.tempAlt+'&deg; C)</p>';
-    // //html += '<h2>'+weather.city+', '+weather.region+' '+weather.country+'</h2>';
-    // html += "<h4>Later</h4>";
-    // html += '<p>'+weather.forecast+'</p><p>High '+weather.high+'&deg; '+weather.units.temp+' - Low '+weather.low+'&deg; '+weather.units.temp+'</p>';
-    // //html += '<p><strong>Wind</strong>: '+weather.wind.direction+' '+weather.wind.speed+' '+weather.units.speed+' <strong>Wind Chill</strong>: '+weather.wind.chill+'</p>';
-    // html += '<p><img src="'+weather.image+'"></p>';
-    // // html += '<p>Humidity'+weather.humidity+' <strong>Pressure</strong>: '+weather.pressure+' <strong>Rising</strong>: '+weather.rising+' <strong>Visibility</strong>: '+weather.visibility+'</p>';
-    // // html += '<p><strong>Heat Index</strong>: '+weather.heatindex+'"></p>';
-    // //html += '<p><strong>Sunrise</strong>: '+weather.sunrise+' - <strong>Sunset</strong>: '+weather.sunset+'</p>';
-    // html += '<p>Last updated '+weather.updated+'</p>';
-    // $("#contentWeather .box:nth-child(1)").append(html);
-    // html = "";
-    // html += '<p>'+weather.tomorrow.forecast+'</p><p>High '+weather.tomorrow.high+' - Low '+weather.tomorrow.low;
-    // html += '<p><img src="'+weather.tomorrow.image+'"></p>';
-    //$("#contentWeather .box:nth-child(2)").append(html);
 }
 
 var channels = {
@@ -136,6 +120,29 @@ var channels = {
     'ESPN3': '/img/qduke/channels/espn3.png',
     'ESPNU': '/img/qduke/channels/espnu.png',
 }
+
+// var sportsNames = [
+//     {name:"Baseball"},
+//     {name: "Basketball (M)"},
+//     {name: "Basketball (W)"},
+//     {name:"Cross Country"},
+//     {name:"Fencing"},
+//     {name:"Field Hockey"},
+//     {name:"Football"},
+//     {name:"Golf (M)"},
+//     {name:"Golf (W)"},
+//     {name:"Lacrosse (M)"},
+//     {name:"Lacrosse (W)"},
+//     {name:"Rowing"},
+//     {name:"Soccer (M)"},
+//     {name:"Soccer (W)"},
+//     {name:"Swimming & Diving"},
+//     {name:"Tennis (M)"},
+//     {name:"Tennis (W)"},
+//     {name:"Track & Field"},
+//     {name:"Volleyball"},
+//     {name:"Wrestling"}
+// ]
 
 // Parse RSS to JSON
 function sports(url) {

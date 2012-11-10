@@ -57,9 +57,22 @@ function statusbar(docs, weather, sports) {
 **********************/
 // Article Logic
 function showArticles(docs) {
+    // Always put Top Headline in Status Bar
+    console.log(docs["Top Headline"])
+    if (docs["Top Headline"] != undefined) {
+        console.log("top headline");
+        for (var i in docs["Top Headline"]) {
+            console.log(i)
+            var article = docs["Top Headline"][i];
+            $("#boxStatus").append(
+                $("<a class='box' />").attr("href", "http://dukechronicle.com" + article.url).text(article.title)
+            );
+        }
+    }
     var count = 0;
     var boxStories = $(".boxStories .boxEmpty");
     var sections = ['Breaking', 'Slideshow', 'Top Headline', 'Popular'];
+    // Run through all sections
     for (var section in sections) {
         var articles = docs[sections[section]];
         for (var i in articles) {
@@ -89,6 +102,33 @@ function showArticles(docs) {
         }
     }
 }
+// Weather
+function showWeather(weather) {
+    var forcast = '<h3>Now</h3><img src="'+weather.image+'"/><p> '+weather.currently+'</p><p>'+weather.temp+'&deg;'+weather.units.temp+' ('+weather.tempAlt+'&deg;C)</p>'
+    $("#boxStatus").append(
+        $("<a class='box' />").attr("href", "http://weather.com").html(forcast)
+    );
+    var forcast = '<h3>Tomorrow</h3><p>'+weather.tomorrow.forecast+'</p><p>High '+weather.tomorrow.high+'&deg;'+weather.units.temp+' - Low '+weather.tomorrow.low+'&deg;'+weather.units.temp;
+    $("#boxStatus").append(
+        $("<a class='box' />").attr("href", "http://weather.com").html(forcast)
+    );       
+    // html = "<h4>Currently</h4>";
+    // html +='<p> '+weather.currently+'</p><p>'+weather.temp+'&deg; '+weather.units.temp+' ('+weather.tempAlt+'&deg; C)</p>';
+    // //html += '<h2>'+weather.city+', '+weather.region+' '+weather.country+'</h2>';
+    // html += "<h4>Later</h4>";
+    // html += '<p>'+weather.forecast+'</p><p>High '+weather.high+'&deg; '+weather.units.temp+' - Low '+weather.low+'&deg; '+weather.units.temp+'</p>';
+    // //html += '<p><strong>Wind</strong>: '+weather.wind.direction+' '+weather.wind.speed+' '+weather.units.speed+' <strong>Wind Chill</strong>: '+weather.wind.chill+'</p>';
+    // html += '<p><img src="'+weather.image+'"></p>';
+    // // html += '<p>Humidity'+weather.humidity+' <strong>Pressure</strong>: '+weather.pressure+' <strong>Rising</strong>: '+weather.rising+' <strong>Visibility</strong>: '+weather.visibility+'</p>';
+    // // html += '<p><strong>Heat Index</strong>: '+weather.heatindex+'"></p>';
+    // //html += '<p><strong>Sunrise</strong>: '+weather.sunrise+' - <strong>Sunset</strong>: '+weather.sunset+'</p>';
+    // html += '<p>Last updated '+weather.updated+'</p>';
+    // $("#contentWeather .box:nth-child(1)").append(html);
+    // html = "";
+    // html += '<p>'+weather.tomorrow.forecast+'</p><p>High '+weather.tomorrow.high+' - Low '+weather.tomorrow.low;
+    // html += '<p><img src="'+weather.tomorrow.image+'"></p>';
+    //$("#contentWeather .box:nth-child(2)").append(html);
+}
 
 var channels = {
     'ESPN': '/img/qduke/channels/espn.png',
@@ -103,9 +143,7 @@ function sports(url) {
         url: document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&output=xml&num=20&callback=?&q=' + encodeURIComponent(url),
         dataType: 'json',
         success: function(data) {
-            console.log(data);
             xml = $.parseXML(data.responseData.xmlString);
-            console.log("parsed");
             date = "";
             $(xml).find("item").each(function(){
                 sport = $(this).find("sport").text();
@@ -120,15 +158,12 @@ function sports(url) {
                 else if (homeaway == "N") homeaway = "-";
                 dc = $(this).find("pubDate").text();
                 //guid = $(this).find("guid").text();
-                console.log($(this))
                 if (date != dc) {
                     $("#contentSports .sportsList").append("<h4 class='sportDate'>"+dc+"</h4>");
                     date = dc;
                 }
                 if (tv != "") {
-                    console.log("c"+channels[tv]);
                     if (channels[tv] != undefined ) {
-                        console.log("tv");
                         tv = " <span class='sportTv'><img src='"+channels[tv]+"' /></span>";
                     }
                     else {
@@ -201,22 +236,7 @@ $(function(){
             zipcode: '27708',
             unit: 'f',
             success: function(weather) {
-                    html = "<h4>Currently</h4>";
-                    html +='<p> '+weather.currently+'</p><p>'+weather.temp+'&deg; '+weather.units.temp+' ('+weather.tempAlt+'&deg; C)</p>';
-                    //html += '<h2>'+weather.city+', '+weather.region+' '+weather.country+'</h2>';
-                    html += "<h4>Later</h4>";
-                    html += '<p>'+weather.forecast+'</p><p>High '+weather.high+'&deg; '+weather.units.temp+' - Low '+weather.low+'&deg; '+weather.units.temp+'</p>';
-                    //html += '<p><strong>Wind</strong>: '+weather.wind.direction+' '+weather.wind.speed+' '+weather.units.speed+' <strong>Wind Chill</strong>: '+weather.wind.chill+'</p>';
-                    html += '<p><img src="'+weather.image+'"></p>';
-                    // html += '<p>Humidity'+weather.humidity+' <strong>Pressure</strong>: '+weather.pressure+' <strong>Rising</strong>: '+weather.rising+' <strong>Visibility</strong>: '+weather.visibility+'</p>';
-                    // html += '<p><strong>Heat Index</strong>: '+weather.heatindex+'"></p>';
-                    //html += '<p><strong>Sunrise</strong>: '+weather.sunrise+' - <strong>Sunset</strong>: '+weather.sunset+'</p>';
-                    html += '<p>Last updated '+weather.updated+'</p>';
-                    $("#contentWeather .box:nth-child(1)").append(html);
-                    html = "";
-                    html += '<p>'+weather.tomorrow.forecast+'</p><p>High '+weather.tomorrow.high+' - Low '+weather.tomorrow.low;
-                    html += '<p><img src="'+weather.tomorrow.image+'"></p>';
-                    $("#contentWeather .box:nth-child(2)").append(html);
+                showWeather(weather);
             },
             error: function(error) {
                     $("#contentWeather .box").html("<p>"+error+"</p>");

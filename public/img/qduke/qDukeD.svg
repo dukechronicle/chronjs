@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="128"
+   height="128"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="qDukeD.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4"
+     inkscape:cx="120.68311"
+     inkscape:cy="190.99458"
+     inkscape:document-units="px"
+     inkscape:current-layer="text2985"
+     showgrid="false"
+     inkscape:window-width="1600"
+     inkscape:window-height="876"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-924.36218)">
+    <g
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       id="text2985"
+       transform="translate(-14.285714,62.857143)">
+      <path
+         d="m 45.65532,912.54409 c 0,11.52604 5.277002,22.91323 18.469453,22.91323 8.054346,0 15.414364,-3.05511 21.246821,-12.637 -2.221889,6.80453 -4.721517,14.72003 -5.832465,20.96908 0,0 -3.482871,14.31795 -3.026278,21.56104 0.198022,3.14137 0.101196,6.63414 2.476419,9.11233 2.375231,2.47818 10.642477,4.01837 11.920262,5.26866 1.277793,1.2503 -4.352233,5.77859 -4.352233,5.77859 0,0 4.804299,2.40737 18.059111,-6.21249 -3.70506,-18.13478 -8.658911,-18.3885 -8.658911,-18.3885 0,0 0.463203,6.80443 -0.457842,7.78628 -0.921045,0.98186 -4.384471,-0.70361 -5.419075,-2.38412 -0.749932,-1.21811 0.225782,-4.28543 0.225782,-4.28543 l 18.811666,-89.89228 0.83321,-3.0551 -8.19322,-0.55547 c -4.443774,-1.66642 -10.553977,-3.33284 -17.08077,-3.33284 -24.99623,0 -39.02193,21.10798 -39.02193,47.35402 m 23.607574,11.52604 c -4.721508,0 -7.08227,-2.91623 -7.08227,-10.97057 0,-15.96981 6.110211,-37.21664 22.774365,-37.21664 1.94415,0 4.999248,0.4166 7.637741,1.2498 l -2.083023,11.24832 c -3.471695,18.74717 -13.192475,35.68909 -21.246813,35.68909"
+         style="font-size:800px;font-style:italic;font-variant:normal;font-stretch:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#006699;fill-opacity:1;font-family:Amaranth;-inkscape-font-specification:Amaranth Italic"
+         id="path2990"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="csccszzccczaccccsccsscsc"
+         inkscape:export-xdpi="4.1443138"
+         inkscape:export-ydpi="4.1443138"
+         inkscape:export-filename="/home/ghr4/Chronicle/chronjs/public/img/qduke/qHeaderLogo.png" />
+    </g>
+  </g>
+</svg>

@@ -245,7 +245,7 @@ $(function(){
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 // TODO(rivkees): display error
-                $(".boxStories .boxEmpty").text("Error Loading Articles.")
+                $(".boxStories .boxEmpty").text("Oops, couldn't load the articles. Try refreshing the page.")
                 console.log("Error loading articles:" + errorThrown)
             }
         });
@@ -257,7 +257,7 @@ $(function(){
                 showWeather(weather);
             },
             error: function(error) {
-                    $("#contentWeather .box").html("<p>"+error+"</p>");
+                    //$("#contentWeather .box").html("<p>"+error+"</p>");
             }
         });
     });

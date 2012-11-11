@@ -11,7 +11,7 @@ qduke.buildAndPush = function (callback) {
         var html = jade.compile(data, { filename: 'views/qduke/qduke.jade' })({
             links: config.get('QDUKE_LINKS')
         });
-        api.s3.put("alpha.qduke.com", html, "/coursera.html", "text/html", null,  function (s3Err, url) {
+        api.s3.put("alpha.qduke.com", html, "/index.html", "text/html", null,  function (s3Err, url) {
             if (s3Err) {
                 callback(s3Err)
             }

@@ -144,12 +144,23 @@ var channels = {
 //     {name:"Wrestling"}
 // ]
 
+function changeSport(id) {
+    if (id != "") {
+        sports("http://www.goduke.com/rss.dbml?db_oem_id=4200&media=schedulesxml&RSS_SPORT_ID="+id);
+    } else {
+        sports("http://www.goduke.com/rss.dbml?db_oem_id=4200&media=schedulesxml");
+    }
+    $(".sportsList a").removeClass("selected");
+    $(".sportsList a#sport"+id).addClass("selected");
+}
+
 // Parse RSS to JSON
 function sports(url) {
     $.ajax({
         url: document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&output=xml&num=20&callback=?&q=' + encodeURIComponent(url),
         dataType: 'json',
         success: function(data) {
+            $("#contentSports .scheduleBox #sportSchedule").html("");
             xml = $.parseXML(data.responseData.xmlString);
             date = "";
             $(xml).find("item").each(function(){
@@ -162,27 +173,27 @@ function sports(url) {
                 homeaway = $(this).find("homeaway").text();
                 if (homeaway == "H") homeaway = "vs.";
                 else if (homeaway == "A") homeaway = "@";
-                else if (homeaway == "N") homeaway = "-";
+                else if (homeaway == "N") homeaway = "";
                 dc = $(this).find("pubDate").text();
                 //guid = $(this).find("guid").text();
-                if (date != dc) {
-                    $("#contentSports .sportsList").append("<h4 class='sportDate'>"+dc+"</h4>");
-                    date = dc;
+                // if (date != dc) {
+                //     $("#contentSports .scheduleBox").append("<h4 class='sportDate'>"+dc+"</h4>");
+                //     date = dc;
+                // }
+                if (channels[tv] != undefined ) {
+                    tv = " <td class='sportTv'><img src='"+channels[tv]+"' /></td>";
                 }
-                if (tv != "") {
-                    if (channels[tv] != undefined ) {
-                        tv = " <span class='sportTv'><img src='"+channels[tv]+"' /></span>";
-                    }
-                    else {
-                        tv = " <span class='sportTv'><span class='showing'>Live on: </span>"+tv+"</span>";
-                    }
+                else {
+                    tv = " <td class='sportTv'>"+tv+"</td>";
                 }
-                $("#contentSports .sportsList").append("<div class='sportEvent'>"
-                        +"<span class='sportTime'>"+time+"</span>"
-                        +" <span class='sportTeam'>"+sport+"</span> "+homeaway+" "+opponent
-                        +" <span class='sportLocation'>"+loc+"</span>"
+                $("#contentSports .scheduleBox #sportSchedule").append("<tr class='sportEvent'>"
+                        +"<td class='sportDate'>"+dc+"</td>"
+                        +"<td class='sportTime'>"+time+"</td>"
+                        +"<td class='sportTeam'>"+sport+"</td> "
+                        +"<td class='sportOpponent'>"+homeaway+" "+opponent+"</td>"
+                        //+" <td class='sportLocation'>"+loc+"</td>"
                         +tv
-                    +"</div>");
+                    +"</tr>");
                 //console.log($(this));
             });
         }

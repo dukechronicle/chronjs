@@ -8,6 +8,7 @@ col4 = col1*4 + col-margin*3
 col5 = col1*5 + col-margin*4
 col3in4 = 134.25px
 
+qHover = #09F
 qBlue = #069
 qLGray = #b5b5b5
 qDGray = #666
@@ -17,11 +18,11 @@ body
 	color white
 	font-family 'PT Sans', sans-serif
 	a:hover, a.selected
-		color #09F
+		color qHover
 	a.box, .rowAds a, a.dukealert-alertLink
 		cursor pointer
 	a.box:hover, .rowAds a:hover, a.dukealert-alertLink:hover, a.selected
-		background #09F
+		background qHover
 		color white
 	#wrap
 		width col5 + col-margin
@@ -56,7 +57,7 @@ body
 			@media only screen and (max-device-width: 915px) // if narrow
 				width col2
 			a
-				color #09F
+				color qHover
 	.duke-alert-lev1
 		.dukealert-alertLink
 			background #AD1E17
@@ -136,10 +137,10 @@ body
 				left 0
 				right 0
 				opacity .7
-				background #09F
+				background qHover
 			a:hover
 				.caption
-					background #09F
+					background qHover
 		.box.breaking
 			//border 3px solid rgba(200, 0, 0, .9);
 			//box-shadow 1px 1px 5px #c80000;
@@ -243,33 +244,41 @@ body
 					font-size 1.4em
 					margin 5px 0
 		#contentSports
-			.sportsList
+			.scheduleBox
+				float right
 				padding 10px
 				width col4
-				height auto
+				min-height 711px
 				text-align left
-				.sportEvent
-					padding-left 1.5em
-					text-indent -1.5em
-					margin 6px 0
-					line-height .9em
-					.sportTeam
-						font-weight 600
-					.sportLocation
-						font-style italic
-					.sportLocation:before
-						content ("(")
-					.sportLocation:after
-						content (")")
-					.sportTime
-						font-variant small-caps
-						font-size .8em
-					.sportTv
-						font-size .8em
-						img
-							vertical-align middle
-						.showing
-							font-variant small-caps
+				font-size 1em
+				text-height 1em
+				table
+					border-collapse collapse
+					text-align left
+					width 100%
+					thead
+						th
+							padding 5px 3px 4px 1px
+							font-size 1.1em
+							border-bottom 2px solid qHover
+					tbody
+						td
+							padding 5px 3px 4px 1px
+							border-bottom 1px solid qLGray
+						tr:hover
+							background-color qHover
+						td.sportOpponent
+							max-width 200px
+				// .sportEvent
+				// 	.sportTeam
+				// 		// font-weight 600
+				// 	.sportTime
+				// 		// font-variant small-caps
+				// 		// font-size .8em
+				// 	.sportTv
+				// 		font-size .8em
+				// 		img
+				// 			vertical-align middle
 			.double
 				width col2
 			a.selected
@@ -309,7 +318,7 @@ body
 		a
 			color qBlue
 		a:hover
-			color #09F
+			color qHover
 	p.bugs
 		color qDGray
 		font-size .7em

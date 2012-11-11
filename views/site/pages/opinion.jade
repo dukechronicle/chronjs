@@ -14,6 +14,5 @@ block content
                     if (model.Blog)
                         #blog.title-small.span-2.align-element(data-alignTarget=".rounded")!=partial('../container/story-list', {title: "Backpages", stories: model.Blog})
                     .span-4.last.align-element(data-alignTarget=".rounded")!=partial('../container/ad/medium-rect', {title: "Advertisement", index: 1})
+                #editorial-board.title-medium!=partial('../container/story-list/teaser-date', {title: "Editorial Board", stories: model.EditorialBoard})
                 #cartoon!=partial('../container/image', {title: "Cartoon", imageUrl: "http://cdn.dukechronicle.com/636x393-0-0-lMwbmQ3J-cartoon9hukinsfinal.jpg", url: "http://cdn.dukechronicle.com/lMwbmQ3J-cartoon9hukinsfinal.jpg", caption: "Mariah Hukins, Trinity '13"})
-                if (model.EditorialBoard)
-                    #editorial-board.title-medium!=partial('../container/story-list/teaser-date', {title: "Editorial Board", stories: model.EditorialBoard})

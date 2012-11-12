@@ -8,13 +8,14 @@ col4 = col1*4 + col-margin*3
 col5 = col1*5 + col-margin*4
 col3in4 = 134.25px
 
+qBG = #eee
 qHover = #09F
 qBlue = #069
 qLGray = #b5b5b5
 qDGray = #666
 
 body
-	background-color #eee
+	background-color qBG
 	color white
 	font-family 'PT Sans', sans-serif
 	a:hover, a.selected
@@ -191,6 +192,7 @@ body
 			margin-right 0
 			height 30px
 			border col-margin solid qLGray
+			transition(border-bottom-color, .25s, linear)
 		span.spacer
 			height 30px
 			float left
@@ -200,7 +202,7 @@ body
 			@media only screen and (max-device-width: 915px) // if narrow
 				width col2
 		.box.selectedTab
-			border-bottom none
+			border-bottom qBG
 			color qDGray
 			background none
 			cursor default
@@ -244,7 +246,7 @@ body
 				left 0
 				width 20px
 				height 20px
-				background #eee url("/img/qduke/newwindow.png") no-repeat center center
+				background qBG url("/img/qduke/newwindow.png") no-repeat center center
 		.contentFrame.tabShown
 			height 500px
 			margin-bottom 5px

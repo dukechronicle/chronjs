@@ -10,38 +10,7 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
 
-// Search Functions
-function search(engine) {
-    var redirect;
-    var query = $('.boxSearch input').val() || "";
-    if (query != "") {
-        var target = engine || "Google";
-        
-        if (target == "Duke") {
-            redirect = 'http://duke.edu/search/?q=' + query;
-        } else if (target == "WolframAlpha") {
-            redirect = 'http://www.wolframalpha.com/input/?i=' + query;
-        } else if (target == "Wikipedia") {
-            redirect = 'http://en.wikipedia.org/wiki/Special:Search?search=' + query;
-        } else {
-            redirect = 'http://google.com/search?q=' + query;
-        }
-        _gaq.push(['_trackEvent', 'Search', target, query, 0]);
-    } else {
-        if (engine == "Duke") {
-            redirect = 'http://duke.edu/';
-        } else if (engine == "WolframAlpha") {
-            redirect = 'http://www.wolframalpha.com/';
-        } else if (engine == "Wikipedia") {
-            redirect = 'http://en.wikipedia.org/';
-        } else if (engine == "Google") {
-            redirect = 'http://google.com/';
-        }
-        _gaq.push(['_trackEvent', 'Outbound Links', engine, redirect, 0]);
-    }
-    // TODO(rivkees): allow new window
-    setTimeout('document.location = "' + redirect + '"', 100);
-}
+//TODO(rivkees): fix this now
 function searchOnEnter(e) {
     if (e.keyCode == 13) {
         search()
@@ -58,11 +27,6 @@ function changeTab(tab) {
         $("#tabFrame .tabContent:nth-child("+tab+")").addClass("tabShown");
     }, 500);
     _gaq.push(['_trackEvent', 'Change Tab', $(".menu .box:nth-child("+(tab*2-1)+")").text(), tab, 0]);
-}
-
-function statusbar(docs, weather, sports) {
-
-
 }
 
 /*********************
@@ -230,6 +194,40 @@ $(function(){
             if (!newtab) {
                  e.preventDefault();
                  setTimeout('document.location = "' + url + '"', 100);
+            }
+        }
+    });
+
+    $("a.boxButton").on('click',function(e){
+        if (e.metaKey || e.ctrlKey) {
+             var newtab = true;
+        }
+        var redirect;
+        var query = $('.boxSearch input').val() || "";
+        var target = $(this).text();
+        if (query != "") {
+            if (target == "Duke (Directory)") {
+                redirect = 'http://duke.edu/search/?q=' + query;
+            } else if (target == "WolframAlpha") {
+                redirect = 'http://www.wolframalpha.com/input/?i=' + query;
+            } else if (target == "Wikipedia") {
+                redirect = 'http://en.wikipedia.org/wiki/Special:Search?search=' + query;
+            } else if (target == "Google"){
+                redirect = 'http://google.com/search?q=' + query;
+            }
+            _gaq.push(['_trackEvent', 'Search', target, query, 0]);
+            e.preventDefault();
+            if (!newtab) {
+                setTimeout('document.location = "' + redirect + '"', 100);
+            } else {
+                window.open(redirect, "_blank");
+            }
+        } else {
+            redirect = $(this).attr("href");
+            _gaq.push(['_trackEvent', 'Outbound Links', target, redirect, 0]);
+            if (!newtab) {
+                e.preventDefault();
+                setTimeout('document.location = "' + redirect + '"', 100);
             }
         }
     });

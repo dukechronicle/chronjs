@@ -21,8 +21,6 @@ function checkSearchActive() {
 //TODO(rivkees): fix this now
 function searchOnEnter(e) {
     setTimeout("checkSearchActive()", 5);
-    //console.log($('.boxSearch input').val().length);
-
     if (e.keyCode == 13) {
         $(".rowSearch #GoogleSearchButton").click();
     }
@@ -218,6 +216,7 @@ $(function(){
         var query = $('.boxSearch input').val() || "";
         var target = $(this).text();
         if (query != "") {
+            query = encodeURIComponent(query);
             if (target == "Duke (Directory)") {
                 redirect = 'http://duke.edu/search/?q=' + query;
             } else if (target == "WolframAlpha") {
@@ -283,6 +282,8 @@ $(function(){
                     //$("#contentWeather .box").html("<p>"+error+"</p>");
             }
         });
+        // Search Button colors in case of back button
+        setTimeout("checkSearchActive()", 5);
     });
 
     // Load Intense Frames

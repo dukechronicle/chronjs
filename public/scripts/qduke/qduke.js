@@ -151,7 +151,7 @@ function changeSport(id) {
         sports("http://www.goduke.com/rss.dbml?db_oem_id=4200&media=schedulesxml");
     }
     $(".sportsList a").removeClass("selected");
-    $(".sportsList a#sport"+id).addClass("selected");
+    $(".sportsList a#sportID"+id).addClass("selected");
 }
 
 // Parse RSS to JSON

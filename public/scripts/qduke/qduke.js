@@ -10,12 +10,23 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
 
+function checkSearchActive() {
+    if ($('.boxSearch input').val() && $('.boxSearch input').val().length > 0) {
+        $(".boxButton").addClass("searchActive");
+    } else {
+        $(".boxButton").removeClass("searchActive");
+    }
+}
+
 //TODO(rivkees): fix this now
 function searchOnEnter(e) {
-    console.log(e.keyCode);
+    setTimeout("checkSearchActive()", 5);
+    //console.log($('.boxSearch input').val().length);
+
     if (e.keyCode == 13) {
         $(".rowSearch #GoogleSearchButton").click();
     }
+
 }
 
 // Tab Switching

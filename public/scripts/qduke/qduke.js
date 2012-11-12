@@ -12,20 +12,33 @@
 
 // Search Functions
 function search(engine) {
-    var target = engine || "Google";
-
     var redirect;
     var query = $('.boxSearch input').val() || "";
-    if (target == "Duke") {
-        redirect = 'http://duke.edu/search/?q=' + query;
-    } else if (target == "WolframAlpha") {
-        redirect = 'http://www.wolframalpha.com/input/?i=' + query;
-    } else if (target == "Wikipedia") {
-        redirect = 'http://en.wikipedia.org/wiki/Special:Search?search=' + query;
+    if (query != "") {
+        var target = engine || "Google";
+        
+        if (target == "Duke") {
+            redirect = 'http://duke.edu/search/?q=' + query;
+        } else if (target == "WolframAlpha") {
+            redirect = 'http://www.wolframalpha.com/input/?i=' + query;
+        } else if (target == "Wikipedia") {
+            redirect = 'http://en.wikipedia.org/wiki/Special:Search?search=' + query;
+        } else {
+            redirect = 'http://google.com/search?q=' + query;
+        }
+        _gaq.push(['_trackEvent', 'Search', target, query, 0]);
     } else {
-        redirect = 'http://google.com/search?q=' + query;
+        if (engine == "Duke") {
+            redirect = 'http://duke.edu/';
+        } else if (engine == "WolframAlpha") {
+            redirect = 'http://www.wolframalpha.com/';
+        } else if (engine == "Wikipedia") {
+            redirect = 'http://en.wikipedia.org/';
+        } else if (engine == "Google") {
+            redirect = 'http://google.com/';
+        }
+        _gaq.push(['_trackEvent', 'Outbound Links', engine, redirect, 0]);
     }
-    _gaq.push(['_trackEvent', 'Search', target, query, 0]);
     // TODO(rivkees): allow new window
     setTimeout('document.location = "' + redirect + '"', 100);
 }

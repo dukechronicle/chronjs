@@ -50,11 +50,11 @@ html
             .rowSearch.clearfix
                 .box.boxSearch
                     input(name="query", type="text", style="background:transparent", onkeydown="searchOnEnter(event)")
-                a.box.boxButton#GoogleSearchButton(href='http://google.com/') Google
-                a.box.boxButton(href='http://www.wolframalpha.com') WolframAlpha
-                a.box.boxButton(href='http://en.wikipedia.org') Wikipedia
-                a.box.boxButton(href='http://duke.edu') Duke (Directory)
-                - var linkRows = Math.ceil(links.length/5)
+                .boxButtons.clearfix
+                    a.box.boxButton#GoogleSearchButton(href='http://google.com/') Google
+                    a.box.boxButton(href='http://www.wolframalpha.com') WolframAlpha
+                    a.box.boxButton(href='http://en.wikipedia.org') Wikipedia
+                    a.box.boxButton(href='http://duke.edu') Duke (Directory)
             //- // MENU
             .menu.tabMenu.clearfix
                 a.box.selectedTab(href="javascript:changeTab(1)") Quick Links
@@ -69,6 +69,7 @@ html
             // LINKS
             #tabFrame.clearfix
                 #contentLinks.tabContent.tabShown
+                    - var linkRows = Math.ceil(links.length/5)
                     -for (var i = 0; i < 5; i++)
                         a.box.boxLink.boxLinkTall(href=links[i].url) #{links[i].title}
                     - for (var row = 1; row < linkRows; row++)

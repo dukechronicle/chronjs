@@ -27,7 +27,7 @@ body
 		color white
 	#wrap
 		width col5 + col-margin
-		margin 20px auto 0 auto
+		margin 12px auto 0 auto
 		@media only screen and (max-device-width: 915px) // if narrow
 			width col3 + col-margin
 	.box, .rowAds a, .dukealert-alertLink, .dukealert-description
@@ -184,8 +184,14 @@ body
 				width col3in4
 		.searchActive
 			background qBlue
+		.searchActive#GoogleSearchButton
+			background qHover
+		.boxButtons:hover .searchActive#GoogleSearchButton
+			background qBlue
+		#GoogleSearchButton:hover
+			background qHover !important
 	.menu
-		margin-top 6px
+		margin-top 12px
 		color qDGray
 		.box
 			font-size 1.2em

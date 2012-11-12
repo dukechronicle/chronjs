@@ -12,8 +12,9 @@
 
 //TODO(rivkees): fix this now
 function searchOnEnter(e) {
+    console.log(e.keyCode);
     if (e.keyCode == 13) {
-        search()
+        $(".rowSearch #GoogleSearchButton").click();
     }
 }
 

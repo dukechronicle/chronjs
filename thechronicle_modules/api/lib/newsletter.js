@@ -101,8 +101,8 @@ function getNewsletterContent(callback) {
                 model: model
             });
 
-            var adImage = config.get('CLOUDFRONT_STATIC') + '/img/ad/arts_festival.png';
-            var adHref = 'http://arts.duke.edu/festival';
+            var adImage = config.get('CLOUDFRONT_STATIC') + '/img/ad/16X600-bus-stop.png';
+            var adHref = 'http://chroniclehousing.com';
             var adHTML = '<a href="' + adHref + '" rel="nofollow"><img src="' + adImage + '"></a>';
 
             callback(null, newsHTML, adHTML);

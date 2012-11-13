@@ -10,7 +10,7 @@ var client = null;
 var redisUrl;
 
 exports.init = function (callback) {
-    redis.debug_mode = false;
+    redis.debug_mode = true;
     
     // Grab redis URL from config settings.
     redisUrl = config.get("REDIS_URL");

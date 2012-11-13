@@ -18,18 +18,20 @@ body
 	background-color qBG
 	color white
 	font-family 'PT Sans', sans-serif
-	a:hover, a.selected
+	a:hover, a:focus, a.selected
 		color qHover
 	a.box, .rowAds a, a.dukealert-alertLink
 		cursor pointer
-	a.box:hover, .rowAds a:hover, a.dukealert-alertLink:hover, a.selected
+	a.box:hover, a.box:focus, .rowAds a:hover, .rowAds a:focus, a.dukealert-alertLink:hover, a.dukealert-alertLink:focus, a.selected
 		background qHover
 		color white
 	#wrap
 		width col5 + col-margin
 		margin 12px auto 0 auto
-		@media only screen and (max-device-width: 915px) // if narrow
+		@media only screen and (max-width: 915px) // if narrow
 			width col3 + col-margin
+		@media only screen and (max-width: 549px) // if really narrow
+			width col2 + col-margin
 	.box, .rowAds a, .dukealert-alertLink, .dukealert-description
 		background qDGray
 		text-align center
@@ -55,8 +57,10 @@ body
 			line-height 1em
 			padding 8px
 			width col4
-			@media only screen and (max-device-width: 915px) // if narrow
+			@media only screen and (max-width: 915px) // if narrow
 				width col2
+			@media only screen and (max-width: 549px) // if really narrow
+				width col1
 			a
 				color qHover
 	.duke-alert-lev1
@@ -73,8 +77,10 @@ body
 			height 60px
 			font-size 1.3em
 			line-height 2.8em
-			@media only screen and (max-device-width: 915px) // if narrow
+			@media only screen and (max-width: 915px) // if narrow
 				width col3in4
+			@media only screen and (max-width: 549px) // if really narrow
+				width col1
 		.boxLogo
 			background #555
 			font-size 2em
@@ -86,8 +92,10 @@ body
 				text-indent 100%
 				white-space nowrap
 				overflow hidden
-			@media only screen and (max-device-width: 915px) // if narrow
+			@media only screen and (max-width: 915px) // if narrow
 				width col3
+			@media only screen and (max-width: 549px) // if really narrow
+				width col2
 		#boxStatus
 			.box
 				font-size .9em
@@ -130,10 +138,14 @@ body
 				background qBlue
 				border-radius 0 0 4px 0
 		.boxStories
-			@media only screen and (max-device-width: 915px) // if narrow
+			@media only screen and (max-width: 915px) // if narrow
 				:nth-child(4)
 					display none
-			a.box:hover:before
+			// TODO(rivkees): show more on narrower?
+			@media only screen and (max-width: 549px) // if really narrow
+				:nth-child(4)
+					display inline-block
+			a.box:hover:before, a.box:focus:before
 				content ""
 				display block
 				position absolute
@@ -143,7 +155,7 @@ body
 				right 0
 				opacity .7
 				background qHover
-			a:hover
+			a:hover, a:focus
 				.caption
 					background qHover
 		.box.breaking
@@ -155,11 +167,13 @@ body
 			background qBlue
 			font-size 1.5em
 			line-height 4.8em
-			@media only screen and (max-device-width: 915px) // if narrow
+			@media only screen and (max-width: 915px) // if narrow
 				width col3
 				height 60px
 				font-size 1.3em
 				line-height 2.8em
+			@media only screen and (max-width: 549px) // if really narrow
+				width col2
 		a.boxEmpty
 			background qLGray url("/img/qduke/loading.gif") no-repeat center center
 	.rowSearch
@@ -167,6 +181,8 @@ body
 			height 59px
 			cursor text
 			width col3
+			@media only screen and (max-width: 549px) // if really narrow
+				width col2
 			background qLGray url("/img/qduke/search.gif") no-repeat 10px center
 			input
 				padding 0 0 0 50px
@@ -180,15 +196,17 @@ body
 			line-height 1.6em
 			height 28px
 			background qDGray
-			@media only screen and (max-device-width: 915px) // if narrow
+			@media only screen and (max-width: 915px) // if narrow
 				width col3in4
-		.searchActive
+			@media only screen and (max-width: 549px) // if really narrow
+				width col1
+		.queryActive
 			background qBlue
-		.searchActive#GoogleSearchButton
+		.queryActive#GoogleSearchButton
 			background qHover
-		.boxButtons:hover .searchActive#GoogleSearchButton
+		.boxButtons:hover .queryActive#GoogleSearchButton, .boxButtons .queryActive.searchInactive#GoogleSearchButton
 			background qBlue
-		#GoogleSearchButton:hover
+		#GoogleSearchButton:hover, #GoogleSearchButton:focus
 			background qHover !important
 	.menu
 		margin-top 12px
@@ -208,8 +226,10 @@ body
 			border-bottom col-margin solid qLGray
 		span.adSpacer
 			width col4
-			@media only screen and (max-device-width: 915px) // if narrow
+			@media only screen and (max-width: 915px) // if narrow
 				width col2
+			@media only screen and (max-width: 549px) // if really narrow
+				width col1
 		.box.selectedTab
 			border-bottom qBG
 			color qDGray
@@ -219,8 +239,16 @@ body
 			background none
 			color qDGray
 			cursor default
-	.tabMenu
-		@media only screen and (max-device-width: 915px) // if narrow
+	@media only screen and (max-width: 915px) // if narrow
+		.tabMenu .mobileHideTablet
+			display none
+			width 0
+			height 0
+			border 0
+			padding 0
+			margin 0
+	@media only screen and (max-width: 549px) // if really narrow
+		.tabMenu .mobileHidePhone
 			display none
 			width 0
 			height 0
@@ -267,13 +295,17 @@ body
 			.boxLink
 				font-size 1.3em
 				line-height 1.8em
-			@media only screen and (min-device-width: 916px) // if wide
+			@media only screen and (min-width: 916px) // if wide
 				.boxLinkTall
 					height 60px
 					font-size 1.8em
 					line-height 2em
 		#contentLinks.tabShown
 			height 192px
+			@media only screen and (max-width: 915px) // if narrow
+				height 301px
+			@media only screen and (max-width: 549px) // if really narrow
+				height 430px
 		#contentSports
 			a.box
 				padding 5px
@@ -305,8 +337,6 @@ body
 							background-color qHover
 						td.sportOpponent
 							max-width 200px
-			.double
-				width col2
 			a.selected
 				cursor default
 		#contentSports.tabShown
@@ -323,7 +353,7 @@ body
 	.promo
 		a
 			color qBlue
-		a:hover
+		a:hover a:focus  // TODO(rivkees): add coma
 			color qHover
 	p.bugs
 		color qDGray

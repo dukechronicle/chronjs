@@ -12,9 +12,14 @@
 
 function checkSearchActive() {
     if ($('.boxSearch input').val() && $('.boxSearch input').val().length > 0) {
-        $(".boxButton").addClass("searchActive");
+        $(".boxButton").addClass("queryActive");
+        if (!$('.boxSearch input').is(":focus")){
+            $(".boxButton").addClass("searchInactive");    
+        } else {
+            $(".boxButton").removeClass("searchInactive");   
+        }
     } else {
-        $(".boxButton").removeClass("searchActive");
+        $(".boxButton").removeClass("queryActive");
     }
 }
 

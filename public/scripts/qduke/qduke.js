@@ -113,7 +113,13 @@ function getLiveScores(url) {
         dataType: 'text',
         success: function(data) {
             data = decodeURIComponent(data);
-            data = data.split("&ncb_s_left");
+            if (data.indexOf("&ncb_s_left") != -1) {
+                data = data.split("&ncb_s_left");
+            } else if (data.indexOf("&ncf_s_left") != -1) {
+                data = data.split("&ncf_s_left");
+            } else {
+                return;
+            }
             for (var i = 1; i < data.length; i++) {
                 var line  = data[i];
                 line = line.split("&nc");
@@ -145,7 +151,14 @@ function getLiveScores(url) {
                         teams[1] = teams[1].split("^")[1]
                         teams[3] = 2;
                     }
-                    teams[4] = line[4].split("b_s_url5=")[1];
+                    console.log(line)
+                    if (line[line.length-1].indexOf("b_s_url") != -1) {
+                        teams[4] = line[line.length-1].substring(line[line.length-1].indexOf("=", 1)+1, line[line.length-1].length);
+                        teams[5] = "BasketballScore";
+                    } else if (line[line.length-1].indexOf("f_s_url") != -1) {
+                        teams[4] = line[line.length-1].substring(line[line.length-1].indexOf("=", 1)+1, line[line.length-1].length);
+                        teams[5] = "FootballScore";
+                    }
                     showLiveScores(teams);
                     break;
                 }
@@ -156,11 +169,11 @@ function getLiveScores(url) {
 
 function showLiveScores(data) {
     var score = '<p class="StatusTeam"> '+data[0]+'</p><p class="StatusTeam"> '+data[1]+'</p><p class="bottomRightCaption">'+data[2]+'</p>'
-    $("#boxStatus .StatusSportScore").remove();
+    $("#"+data[5]).remove();
     $("#boxStatus").append(
-        $("<a class='box StatusSportScore' />").attr("href", data[4]).html(score)
+        $("<a class='box StatusSportScore' id="+data[5]+" />").attr("href", data[4]).html(score)
     );
-    $("#boxStatus .StatusSportScore p:nth-child("+data[3]+")").addClass("StatusWon");
+    $("#"+data[5]+" p:nth-child("+data[3]+")").addClass("StatusWon");
 }
 
 var channels = {
@@ -355,6 +368,7 @@ $(function(){
 
     // Load Sports
     getLiveScores("http://sports.espn.go.com/ncb/bottomline/scores");
+    //getLiveScores("http://sports.espn.go.com/ncf/bottomline/scores");
     setInterval(function() {getLiveScores("http://sports.espn.go.com/ncb/bottomline/scores")}, 30000);
     sports("http://www.goduke.com/rss.dbml?db_oem_id=4200&media=schedulesxml");
 });

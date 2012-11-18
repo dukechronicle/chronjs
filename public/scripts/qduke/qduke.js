@@ -156,6 +156,7 @@ function getLiveScores(url) {
 
 function showLiveScores(data) {
     var score = '<p class="StatusTeam"> '+data[0]+'</p><p class="StatusTeam"> '+data[1]+'</p><p class="bottomRightCaption">'+data[2]+'</p>'
+    $("#boxStatus .StatusSportScore").remove();
     $("#boxStatus").append(
         $("<a class='box StatusSportScore' />").attr("href", data[4]).html(score)
     );
@@ -354,5 +355,6 @@ $(function(){
 
     // Load Sports
     getLiveScores("http://sports.espn.go.com/ncb/bottomline/scores");
+    setInterval(function() {getLiveScores("http://sports.espn.go.com/ncb/bottomline/scores")}, 30000);
     sports("http://www.goduke.com/rss.dbml?db_oem_id=4200&media=schedulesxml");
 });

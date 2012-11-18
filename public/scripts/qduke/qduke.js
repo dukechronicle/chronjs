@@ -106,6 +106,62 @@ function showWeather(weather) {
     // );       
 }
 
+// Live Scores
+function getLiveScores(url) {
+    $.ajax({
+        url: document.location.protocol + '//chronproxy.herokuapp.com/' + encodeURIComponent(url),
+        dataType: 'text',
+        success: function(data) {
+            data = decodeURIComponent(data);
+            data = data.split("&ncb_s_left");
+            for (var i = 1; i < data.length; i++) {
+                var line  = data[i];
+                line = line.split("&nc");
+                if (line[0].indexOf("Duke") != -1) {
+                    var teams;
+                    line[0] = line[0].split("=")[1]
+                    // split teams
+                    if (line[0].indexOf(" at ") != -1) {
+                        teams = line[0].split(" at ");
+                    } else {
+                        teams = line[0].split("  ");
+                    }
+                    // get time
+                    var paren = teams[1].indexOf("(");
+                    var secondpareni = teams[1].indexOf("(", paren + 1);
+                    var temp = teams[1];
+                    if (secondpareni != -1) {
+                        console.log("ranked!")
+                        paren = secondpareni;
+                    }
+                    teams[1] = temp.substring(0, paren);
+                    teams[2] = temp.substring(paren, temp.length); 
+                    // winner?
+                    teams[3] = 0;
+                    if (teams[0].indexOf("^") != -1) {
+                        teams[0] = teams[0].split("^")[1]
+                        teams[3] = 1;
+                    } else if (teams[1].indexOf("^") != -1) {
+                        teams[1] = teams[1].split("^")[1]
+                        teams[3] = 2;
+                    }
+                    teams[4] = line[4].split("b_s_url5=")[1];
+                    showLiveScores(teams);
+                    break;
+                }
+            }
+        }
+    });
+}
+
+function showLiveScores(data) {
+    var score = '<p class="StatusTeam"> '+data[0]+'</p><p class="StatusTeam"> '+data[1]+'</p><p class="bottomRightCaption">'+data[2]+'</p>'
+    $("#boxStatus").append(
+        $("<a class='box StatusSportScore' />").attr("href", data[4]).html(score)
+    );
+    $("#boxStatus .StatusSportScore p:nth-child("+data[3]+")").addClass("StatusWon");
+}
+
 var channels = {
     'ESPN': '/img/qduke/channels/espn.png',
     'ESPN2': '/img/qduke/channels/espn2.png',
@@ -297,5 +353,6 @@ $(function(){
     });
 
     // Load Sports
+    getLiveScores("http://sports.espn.go.com/ncb/bottomline/scores");
     sports("http://www.goduke.com/rss.dbml?db_oem_id=4200&media=schedulesxml");
 });

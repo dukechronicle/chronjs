@@ -268,12 +268,27 @@ $(function(){
     // Outbound Link Tracking with Google Analytics
     // Requires jQuery 1.7 or higher (use .live if using a lower version)
     // http://wptheming.com/2012/01/tracking-outbound-links-with-google-analytics/
-    $("a:not(.boxButton, .boxMenu, .boxSport)").on('click',function(e){
+    $("a:not(.boxButton, .boxMenu, .boxSport, .boxNews)").on('click',function(e){
         var url = $(this).attr("href");
         // TODO(rivkees): If using dynamic weather, change this
         var text = $(this).text() || url
         if (e.currentTarget.host != window.location.host) {
             _gaq.push(['_trackEvent', 'Outbound Links', text, url, 0]);
+            if (e.metaKey || e.ctrlKey) {
+                 var newtab = true;
+            }
+            if (!newtab) {
+                 e.preventDefault();
+                 setTimeout('document.location = "' + url + '"', 100);
+            }
+        }
+    });
+    // News Only
+    $("a.boxNews").on('click',function(e){
+        var url = $(this).attr("href");
+        var text = $(this).text() || url
+        if (e.currentTarget.host != window.location.host) {
+            _gaq.push(['_trackEvent', 'Outbound News', text, url, 0]);
             if (e.metaKey || e.ctrlKey) {
                  var newtab = true;
             }

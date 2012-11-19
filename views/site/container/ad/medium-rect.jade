@@ -1,4 +1,11 @@
-extends index
+include ../container-helpers
 
-block advertisement
-  .medium-rectangle.openx-ad(class="{zoneID: 316}")
+.advertisement
+  mixin vertical-label
+  .rounded
+    .image-container
+      block advertisement
+        script(type='text/javascript')
+          <!--// <![CDATA[
+            OA_show('medium_rect');
+          // ]]> -->

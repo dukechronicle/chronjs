@@ -25,12 +25,12 @@ html(lang="en", xmlns:fb="http://ogp.me/ns/fb#")
             //if lt IE 9
                 script(type="text/javascript", src="//html5shim.googlecode.com/svn/trunk/html5.js")
                 mixin stylesheet("style-ie")
+
+            mixin openx
     body
         // required for facebook javascript sdk
         #fb-root
         .container
-            .leaderboard-row.advertisment.clearfix
-            //#print-edition.filler-block!=partial('../container/image', {title: "Print", "imageUrl": staticCdn + "/img/issuu-thumb.png", url: "http://issuu.com/dukechronicle/docs"})
             include ../container/ad/leaderboard-row
             include ../layout/header
             section.clearfix#content

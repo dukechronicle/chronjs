@@ -1,3 +1,5 @@
+// TODO(rivkees): tracking for status bar
+
 // Analytics
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-5900287-15']);
@@ -23,7 +25,6 @@ function checkSearchActive() {
     }
 }
 
-//TODO(rivkees): fix this now
 function searchOnEnter(e) {
     setTimeout("checkSearchActive()", 5);
     if (e.keyCode == 13) {
@@ -270,7 +271,6 @@ $(function(){
     // http://wptheming.com/2012/01/tracking-outbound-links-with-google-analytics/
     $("a:not(.boxButton, .boxMenu, .boxSport, .boxNews)").on('click',function(e){
         var url = $(this).attr("href");
-        // TODO(rivkees): If using dynamic weather, change this
         var text = $(this).text() || url
         if (e.currentTarget.host != window.location.host) {
             _gaq.push(['_trackEvent', 'Outbound Links', text, url, 0]);
@@ -357,7 +357,6 @@ $(function(){
                 showArticles(data.docs)
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                // TODO(rivkees): display error
                 $(".boxStories .boxEmpty").text("Oops, couldn't load the articles. Try refreshing the page.")
                 console.log("Error loading articles:" + errorThrown)
             }

@@ -66,14 +66,12 @@ html
                 a.box.selectedTab#menuQL(href="javascript:changeTab(1)") Quick Links
                 span.spacer.colsmargin
                 a.box#menuSports(href="javascript:changeTab(2)") Sports
-                .mobileHideTablet
-                    span.spacer.colsmargin
-                    a.box#menuBus(href="javascript:changeTab(3)") Bus Tracking
-                    span.spacer.colsmargin
-                    a.box#menuMap(href="javascript:changeTab(4)") Campus Map
-                .mobileHidePhone
-                    span.spacer.colsmargin
-                    span.spacer.cols1
+                span.spacer.colsmargin.mobileHideTablet
+                a.box#menuBus.mobileHideTablet(href="javascript:changeTab(3)") Bus Tracking
+                span.spacer.colsmargin.mobileHideTablet
+                a.box#menuMap.mobileHideTablet(href="javascript:changeTab(4)") Campus Map
+                span.spacer.colsmargin.mobileHidePhone
+                span.spacer.cols1.mobileHidePhone
             // LINKS
             #tabFrame.clearfix
                 #contentLinks.tabContent.tabShown

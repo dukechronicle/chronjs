@@ -34,14 +34,14 @@ function searchOnEnter(e) {
 
 // Tab Switching
 function changeTab(tab) {
-    $(".menu .box").removeClass("selectedTab");
+    $(".tabMenu .boxMenu").removeClass("selectedTab");
     $("#tabFrame .tabContent").removeClass("tabShown");
 
     setTimeout(function(){
-        $(".menu .box:nth-child("+(tab*2-1)+")").addClass("selectedTab");
-        $("#tabFrame .tabContent:nth-child("+tab+")").addClass("tabShown");
+        $(".tabMenu .boxMenu:eq("+(tab-1)+")").addClass("selectedTab");
+        $("#tabFrame .tabContent:eq("+(tab-1)+")").addClass("tabShown");
     }, 500);
-    _gaq.push(['_trackEvent', 'Change Tab', $(".menu .box:nth-child("+(tab*2-1)+")").text(), tab, 0]);
+    _gaq.push(['_trackEvent', 'Change Tab', $(".tabMenu .boxMenu:eq("+(tab-1)+")").text(), 1, 0]);
 }
 
 /*********************
@@ -206,7 +206,7 @@ var channels = {
 //     {name:"Wrestling"}
 // ]
 
-function changeSport(id) {
+function changeSport(id, name) {
     if (id != "") {
         sports("http://www.goduke.com/rss.dbml?db_oem_id=4200&media=schedulesxml&RSS_SPORT_ID="+id);
     } else {
@@ -214,6 +214,7 @@ function changeSport(id) {
     }
     $(".sportsList a").removeClass("selected");
     $(".sportsList a#sportID"+id).addClass("selected");
+    _gaq.push(['_trackEvent', 'Change Sport', name, 1, 0]);
 }
 
 // Parse RSS to JSON
@@ -267,7 +268,7 @@ $(function(){
     // Outbound Link Tracking with Google Analytics
     // Requires jQuery 1.7 or higher (use .live if using a lower version)
     // http://wptheming.com/2012/01/tracking-outbound-links-with-google-analytics/
-    $("a:not(.boxButton)").on('click',function(e){
+    $("a:not(.boxButton, .boxMenu, .boxSport)").on('click',function(e){
         var url = $(this).attr("href");
         // TODO(rivkees): If using dynamic weather, change this
         var text = $(this).text() || url

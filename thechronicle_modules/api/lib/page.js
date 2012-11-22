@@ -39,7 +39,7 @@ exports.templates = {
             articles: {
                 type: 'array',
                 label: 'Bottom Block Articles',
-                required: true,
+                required: false,
                 items: {'$ref': 'article'},
             },
         }

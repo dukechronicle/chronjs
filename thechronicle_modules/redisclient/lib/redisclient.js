@@ -62,7 +62,8 @@ exports.getPassword = function () {
 function spyOnRedis() {
     client.get = (function (get) {
         return function () {
-            log.notice('Redis connections: ' + client.command_queue.length);
+            var level = client.command_queue.length > 20 ? 'warning' : 'notice';
+            log.log(level, 'Redis connections: ' + client.command_queue.length);
             get.apply(this, arguments);
         };
     })(client.get);

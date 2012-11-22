@@ -10,7 +10,7 @@ var client = null;
 var redisUrl;
 
 exports.init = function (callback) {
-    redis.debug_mode = true;
+    redis.debug_mode = false;
     
     // Grab redis URL from config settings.
     redisUrl = config.get("REDIS_URL");
@@ -43,6 +43,7 @@ exports.init = function (callback) {
         });
     }
     exports.client = client;
+    spyOnRedis();
 };
 
 exports.getHostname = function () {
@@ -56,4 +57,13 @@ exports.getPort = function () {
 exports.getPassword = function () {
     if (!redisUrl.auth) return null;
     return redisUrl.auth[1];
+};
+
+function spyOnRedis() {
+    client.get = (function (get) {
+        return function () {
+            log.notice('Redis connections: ' + client.command_queue.length);
+            get.apply(this, arguments);
+        };
+    })(client.get);
 };

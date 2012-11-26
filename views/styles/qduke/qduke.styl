@@ -318,14 +318,19 @@ body
 				float right
 				padding 0 10px
 				width col4
-				min-height 732px
+				@media only screen and (max-width: 915px) // if narrow
+					width col3
+					overflow-x scroll
+				@media only screen and (max-width: 549px) // if really narrow
+					width col2
+				min-height 711px
 				text-align left
 				font-size 1em
 				text-height 1em
 				table
 					border-collapse collapse
 					text-align left
-					width 100%
+					width col4
 					thead
 						th
 							padding 5px 3px 4px 1px

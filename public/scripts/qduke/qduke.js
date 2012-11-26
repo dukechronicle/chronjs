@@ -391,6 +391,6 @@ $(function(){
     // Tour
     $('#joyRideTipContent').joyride({
         'cookieMonster': true,
-        'cookieName': 'qDukeIntro'
+        'cookieName': 'qDukeNov26',
     });
 });

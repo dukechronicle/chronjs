@@ -389,5 +389,8 @@ $(function(){
     sports("http://www.goduke.com/rss.dbml?db_oem_id=4200&media=schedulesxml");
 
     // Tour
-    $('#joyRideTipContent').joyride();
+    $('#joyRideTipContent').joyride({
+        'cookieMonster': true,
+        'cookieName': 'qDukeIntro'
+    });
 });

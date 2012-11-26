@@ -43,11 +43,11 @@ html
             .rowHead.clearfix
                 a.box.boxLogo(href="http://qduke.com")
                     h1 qDuke
-                #boxStatus
+                #boxStatus.clearfix
             // NEWS
             .rowNews.clearfix
                 a.box.boxChron(href="http://dukechronicle.com") The Chronicle
-                .boxStories
+                .boxStories.clearfix
                     a.box.boxNews.boxEmpty
                     a.box.boxNews.boxEmpty
                     a.box.boxNews.boxEmpty
@@ -66,9 +66,9 @@ html
             .menu.tabMenu.clearfix
                 a.box.boxMenu.selectedTab(href="javascript:changeTab(1)") Quick Links
                 span.spacer.colsmargin
-                a.box.boxMenu(href="javascript:changeTab(2)") Sports
+                a.box.boxMenu#sportsTabLink(href="javascript:changeTab(2)") Sports
                 span.spacer.colsmargin.mobileHideTablet
-                a.box.boxMenu.mobileHideTablet(href="javascript:changeTab(3)") Bus Tracking
+                a.box.boxMenu.mobileHideTablet#busTabLink(href="javascript:changeTab(3)") Bus Tracking
                 span.spacer.colsmargin.mobileHideTablet
                 a.box.boxMenu.mobileHideTablet(href="javascript:changeTab(4)") Campus Map
                 span.spacer.colsmargin.mobileHidePhone
@@ -123,18 +123,28 @@ html
                     | | 
                     a(href="http://chron.it/SSgkeZ") Feedback
         ol#joyRideTipContent
-            li.custom(data-text='Take a look around.')
-                h3 Welcome to the new qDuke
-            li(data-class='rowNews', data-button='Next', data-options='tipLocation:top;tipAnimation:fade')
-                h2 News
+            li(data-id='contentLinks', data-button='Next', data-options='tipLocation:top')
+                h2 Get there faster
+                p The quick and easy links you have come to expect from qDuke. Now clearer and better organized.
+            li(data-class='rowNews', data-button='Next', data-options='tipLocation:left')
+                h2 The Chronicle, Now
+                p Keep up to date with the latest news from the Chronicle. 
+                p Today's headlines, popular stories, and breaking news, all at your fingertips.
             li(data-id='boxStatus', data-button='Next', data-options='tipLocation:right')
-                h2 Stop #3
-                p It works right aligned.
-            li(data-button='Next')
-                h2 Stop #4
-                p It works as a modal too!
-            li(data-id='boxStatus', data-button='Close')
-                h2 Stop #5
+                h2 Your World
+                p Everything you need to know. Weather, live basketball scores, DukeAlerts, and more.
+            li(data-class='rowSearch', data-button='Next', data-options='tipLocation:right')
+                h2 Search
+                p Now with extra legroom, and twice the destinations.
+            li(data-id='sportsTabLink', data-button='Next', data-options='tipLocation:top')
+                h2 We Like Sports
+                p Schedules and TV listings for all Duke sports.
+            li(data-id='busTabLink', data-button='Next', data-options='tipLocation:top')
+                h2 Late? Lost?
+                p Keep track of Duke busses, and navigate the campus map, now from inside qDuke.
+            li(data-button='Close')
+                h2 That's it!
+                p Let us know what you think by clicking 'Feedback' below.
         script(type='text/javascript', src='/scripts/qduke/joyride/jquery.cookie.js')
         script(type='text/javascript', src='/scripts/qduke/joyride/modernizr.mq.js')
         

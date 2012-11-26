@@ -377,6 +377,7 @@ $(function(){
     });
 
     // Load Intense Frames
+    // TODO(rivkees): dont actually do this until a user clicks the tab?
     $("#tabFrame .tabContent[data-content]").each(function(index, element){
         $(element).append($(element).attr("data-content"));
     });
@@ -386,4 +387,7 @@ $(function(){
     //getLiveScores("http://sports.espn.go.com/ncf/bottomline/scores");
     setInterval(function() {getLiveScores("http://sports.espn.go.com/ncb/bottomline/scores")}, 30000);
     sports("http://www.goduke.com/rss.dbml?db_oem_id=4200&media=schedulesxml");
+
+    // Tour
+    $('#joyRideTipContent').joyride();
 });

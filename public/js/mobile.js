@@ -242,10 +242,16 @@ function beginMobile()
           var relativeURL = window.location.pathname;
           var splitString = relativeURL.split("/");
           // TODO: malformed input?
-          getArticleList('all', 'The Chronicle', true);
           if(splitString[1] == "article" && splitString[2] != null && splitString[2] != "")
           {
              getArticle(splitString[2]);
+          }
+          var sections = ['news', 'sports', 'opinion', 'recess', 'towerview'];
+          if(sections.indexOf(splitString[1]) !== -1) {
+              getArticleList(splitString[1], 'The Chronicle', true);
+          }
+          else {
+              getArticleList('all', 'The Chronicle', true);
           }
 
           $("#searchBox").submit(search);

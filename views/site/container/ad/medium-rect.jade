@@ -5,7 +5,10 @@ include ../container-helpers
   .rounded
     .image-container
       .medium-rectangle
+        - var zone = 'medium_rect';
+        - if ((typeof index !== 'undefined') && (index > 1))
+          - zone += '_' + index;
         script(type='text/javascript')
           <!--// <![CDATA[
-            OA_show('medium_rect');
+            OA_show('#{zone}');
           // ]]> -->

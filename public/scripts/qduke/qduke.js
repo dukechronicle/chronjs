@@ -85,12 +85,18 @@ function loadChronAPI(data) {
         displaySports(data.liveSports);
         setInterval(updateLiveScores, 30000);
     }
+    // OIT
+    if (data.oit != undefined) {
+        alert = data.oit;
+        $("#boxStatus").append(
+            $("<a class='box StatusOIT' />").attr("href", alert.link).html("<span class='strong'>OIT Alert</span> ("+alert.date+"): " + alert.title)
+        );
+    }
     // Twitter
     for (handle in data.twitter) {
         tweet = data.twitter[handle];
-        console.log(tweet);
         $("#boxStatus").append(
-            $("<a class='box StatusTweet' />").attr("href", tweet.twitterLink).html("<span class='handle'>"+handle+ ":</span> " + tweet.text)
+            $("<a class='box StatusTweet' />").attr("href", tweet.twitterLink).html("<span class='strong'>"+handle+ ":</span> " + tweet.text)
         );
     }
 }

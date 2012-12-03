@@ -120,9 +120,9 @@ function displaySports(game) {
 
 // Weather
 function showWeather(weather) {
-    var forcast = '<p> '+weather.currently+', '+weather.temp+'&deg;'+weather.units.temp+'</p><img src="'+weather.thumbnail+'"/><p class="bottomRightCaption">'+weather.city+'</p>'
+    var forcast = '<img src="'+weather.thumbnail+'"/><p> '+weather.currently+', '+weather.temp+'&deg;'+weather.units.temp+'</p><p>'+weather.city+", "+weather.region+'</p>'
     $("#boxStatus").append(
-        $("<a class='box' />").attr("href", weather.link).html(forcast)
+        $("<a class='box StatusWeather' />").attr("href", weather.link).html(forcast)
     );
     // var forcast = '<h3>Tomorrow</h3><p>'+weather.tomorrow.forecast+'</p><p>High '+weather.tomorrow.high+'&deg;'+weather.units.temp+' - Low '+weather.tomorrow.low+'&deg;'+weather.units.temp;
     // $("#boxStatus").append(

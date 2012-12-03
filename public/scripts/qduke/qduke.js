@@ -48,53 +48,76 @@ function changeTab(tab) {
 /*********************
 * AJAX Loading Stuff *
 **********************/
-// Article Logic
-function showArticles(docs) {
-    // Always put Top Headline in Status Bar
-    console.log(docs["Top Headline"])
-    if (docs["Top Headline"] != undefined) {
-        console.log("top headline");
-        for (var i in docs["Top Headline"]) {
-            console.log(i)
-            var article = docs["Top Headline"][i];
-            $("#boxStatus").append(
-                $("<a class='box' />").attr("href", "http://dukechronicle.com" + article.url).html("<p>"+article.title+"</p>")
-            );
-        }
-    }
-    var count = 0;
+// Load Chron API
+function loadChronAPI(data) {
+    console.log(data);
+    // News
     var boxStories = $(".boxStories .boxEmpty");
-    var sections = ['Breaking', 'Slideshow', 'Top Headline', 'Popular'];
-    // Run through all sections
-    for (var section in sections) {
-        var articles = docs[sections[section]];
-        for (var i in articles) {
-            // Special By section
-            if (sections[section] == 'Breaking') {
-                $(boxStories[count]).addClass("breaking").append(
-                $("<div>").addClass("caption captionTop").append($("<div>").addClass("txt").text("Breaking")));
-            }
-            if (sections[section] == 'Popular') {
-                $(boxStories[count]).append(
-                $("<div>").addClass("caption captionTop").append($("<div>").addClass("txt").text("Popular")));
-            }
-            // All
-            var article = articles[i];
-            var img ="";
-            if (article.images && article.images.ThumbRect && article.images.ThumbRect.url) {
-                img = article.images.ThumbRect.url;
-            }
-            else {
-                img = "/img/qduke/default_image.jpg";
-            }
-            $(boxStories[count]).attr("href", "http://dukechronicle.com" + article.url).append(
-                $("<div>").addClass("caption").append($("<div>").addClass("txt").text(article.title))).append(
-                $("<img>").attr("src", img)).removeClass("boxEmpty");
-            count++;
-            if (count >= 4) return;
+    for (var i = 0; i < data.news.length; i++) {
+        article = data.news[i];
+        // Special By section
+        if (article.type == 'Breaking') {
+            $(boxStories[i]).addClass("breaking").append(
+            $("<div>").addClass("caption captionTop").append($("<div>").addClass("txt").text("Breaking")));
         }
+        if (article.type == 'Sports Blog') {
+            $(boxStories[i]).append(
+            $("<div>").addClass("caption captionTop").append($("<div>").addClass("txt").text("Sports Blog")));
+        }
+        if (article.img == undefined) article.img = "/img/qduke/default_image.jpg";
+        $(boxStories[i]).attr("href", "http://dukechronicle.com" + article.link).append(
+            $("<div>").addClass("caption").append($("<div>").addClass("txt").text(article.title))).append(
+            $("<img>").attr("src", article.img)).removeClass("boxEmpty");
+    }
+    // Headline
+    // if (docs["Top Headline"] != undefined) {
+    //     console.log("top headline");
+    //     for (var i in docs["Top Headline"]) {
+    //         console.log(i)
+    //         var article = docs["Top Headline"][i];
+    //         $("#boxStatus").append(
+    //             $("<a class='box' />").attr("href", "http://dukechronicle.com" + article.url).html("<p>"+article.title+"</p>")
+    //         );
+    //     }
+    // }
+    // Sports
+    if (data.liveSports != undefined) {
+        displaySports(data.liveSports);
+        setInterval(updateLiveScores, 30000);
+    }
+    // Twitter
+    for (handle in data.twitter) {
+        tweet = data.twitter[handle];
+        console.log(tweet);
+        $("#boxStatus").append(
+            $("<a class='box StatusTweet' />").attr("href", tweet.twitterLink).html("<span class='handle'>"+handle+ ":</span> " + tweet.text)
+        );
     }
 }
+
+// Live Scores
+function updateLiveScores() {
+    $.ajax({
+        url: 'http://chronproxy.herokuapp.com/qduke',
+        dataType: "json",
+        cache: false,
+        timeout: 5000,
+        success: function(data) {
+            displaySports(data.liveSports);
+        }
+    });
+}
+
+function displaySports(game) {
+    var score = '<p class="StatusTeam"> '+game.team1+'</p><p class="StatusTeam"> '+game.team2+'</p><p class="bottomRightCaption">'+game.time+'</p>'
+    // TODO(rivkees): check if already there, and if so do in place
+    $("#"+game.sport).remove();
+    $("#boxStatus").append(
+        $("<a class='box StatusSportScore' id="+data[5]+" />").attr("href", game.link).html(score)
+    );
+    $("#"+game.sport+" p:nth-child("+game.winner+")").addClass("StatusWon");
+}
+
 // Weather
 function showWeather(weather) {
     var forcast = '<p> '+weather.currently+', '+weather.temp+'&deg;'+weather.units.temp+'</p><img src="'+weather.thumbnail+'"/><p class="bottomRightCaption">'+weather.city+'</p>'
@@ -107,105 +130,12 @@ function showWeather(weather) {
     // );       
 }
 
-// Live Scores
-function getLiveScores(url) {
-    $.ajax({
-        url: document.location.protocol + '//chronproxy.herokuapp.com/' + encodeURIComponent(url),
-        dataType: 'text',
-        success: function(data) {
-            data = decodeURIComponent(data);
-            if (data.indexOf("&ncb_s_left") != -1) {
-                data = data.split("&ncb_s_left");
-            } else if (data.indexOf("&ncf_s_left") != -1) {
-                data = data.split("&ncf_s_left");
-            } else {
-                return;
-            }
-            for (var i = 1; i < data.length; i++) {
-                var line  = data[i];
-                line = line.split("&nc");
-                if (line[0].indexOf("Duke") != -1) {
-                    var teams;
-                    line[0] = line[0].split("=")[1]
-                    // split teams
-                    if (line[0].indexOf(" at ") != -1) {
-                        teams = line[0].split(" at ");
-                    } else {
-                        teams = line[0].split("  ");
-                    }
-                    // get time
-                    var paren = teams[1].indexOf("(");
-                    var secondpareni = teams[1].indexOf("(", paren + 1);
-                    var temp = teams[1];
-                    if (secondpareni != -1) {
-                        console.log("ranked!")
-                        paren = secondpareni;
-                    }
-                    teams[1] = temp.substring(0, paren);
-                    teams[2] = temp.substring(paren, temp.length); 
-                    // winner?
-                    teams[3] = 0;
-                    if (teams[0].indexOf("^") != -1) {
-                        teams[0] = teams[0].split("^")[1]
-                        teams[3] = 1;
-                    } else if (teams[1].indexOf("^") != -1) {
-                        teams[1] = teams[1].split("^")[1]
-                        teams[3] = 2;
-                    }
-                    console.log(line)
-                    if (line[line.length-1].indexOf("b_s_url") != -1) {
-                        teams[4] = line[line.length-1].substring(line[line.length-1].indexOf("=", 1)+1, line[line.length-1].length);
-                        teams[5] = "BasketballScore";
-                    } else if (line[line.length-1].indexOf("f_s_url") != -1) {
-                        teams[4] = line[line.length-1].substring(line[line.length-1].indexOf("=", 1)+1, line[line.length-1].length);
-                        teams[5] = "FootballScore";
-                    }
-                    showLiveScores(teams);
-                    break;
-                }
-            }
-        }
-    });
-}
-
-function showLiveScores(data) {
-    var score = '<p class="StatusTeam"> '+data[0]+'</p><p class="StatusTeam"> '+data[1]+'</p><p class="bottomRightCaption">'+data[2]+'</p>'
-    $("#"+data[5]).remove();
-    $("#boxStatus").append(
-        $("<a class='box StatusSportScore' id="+data[5]+" />").attr("href", data[4]).html(score)
-    );
-    $("#"+data[5]+" p:nth-child("+data[3]+")").addClass("StatusWon");
-}
-
 var channels = {
     'ESPN': '/img/qduke/channels/espn.png',
     'ESPN2': '/img/qduke/channels/espn2.png',
     'ESPN3': '/img/qduke/channels/espn3.png',
     'ESPNU': '/img/qduke/channels/espnu.png',
 }
-
-// var sportsNames = [
-//     {name:"Baseball"},
-//     {name: "Basketball (M)"},
-//     {name: "Basketball (W)"},
-//     {name:"Cross Country"},
-//     {name:"Fencing"},
-//     {name:"Field Hockey"},
-//     {name:"Football"},
-//     {name:"Golf (M)"},
-//     {name:"Golf (W)"},
-//     {name:"Lacrosse (M)"},
-//     {name:"Lacrosse (W)"},
-//     {name:"Rowing"},
-//     {name:"Soccer (M)"},
-//     {name:"Soccer (W)"},
-//     {name:"Swimming & Diving"},
-//     {name:"Tennis (M)"},
-//     {name:"Tennis (W)"},
-//     {name:"Track & Field"},
-//     {name:"Volleyball"},
-//     {name:"Wrestling"}
-// ]
 
 function changeSport(id, name) {
     if (id != "") {
@@ -298,7 +228,7 @@ $(function(){
             }
         }
     });
-
+    // Search Links and Tracking
     $("a.boxButton").on('click',function(e){
         if (e.metaKey || e.ctrlKey) {
              var newtab = true;
@@ -347,14 +277,14 @@ $(function(){
 
     // Load Dynamic Content on Load
     $(document).ready(function() {
-        // News
+        // ChronAPI
         $.ajax({
-            url: 'http://www.dukechronicle.com/api/qduke',
-            dataType: "jsonp",
+            url: 'http://chronproxy.herokuapp.com/qduke',
+            dataType: "json",
             cache: false,
-            timeout: 20000,
+            timeout: 5000,
             success: function(data) {
-                showArticles(data.docs)
+                loadChronAPI(data)
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 $(".boxStories .boxEmpty").text("Oops, couldn't load the articles. Try refreshing the page.")
@@ -383,9 +313,6 @@ $(function(){
     });
 
     // Load Sports
-    getLiveScores("http://sports.espn.go.com/ncb/bottomline/scores");
-    //getLiveScores("http://sports.espn.go.com/ncf/bottomline/scores");
-    setInterval(function() {getLiveScores("http://sports.espn.go.com/ncb/bottomline/scores")}, 30000);
     sports("http://www.goduke.com/rss.dbml?db_oem_id=4200&media=schedulesxml");
 
     // Tour

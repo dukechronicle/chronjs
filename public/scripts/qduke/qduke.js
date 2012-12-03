@@ -1,6 +1,6 @@
-// TODO(rivkees): tracking for status bar
-
-// Analytics
+/******************
+* Analytics Setup *
+*******************/
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-5900287-15']);
     _gaq.push(['_setDomainName', 'qduke.com']);
@@ -12,6 +12,10 @@
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
     })();
 
+/***********************
+* Search Functionality *
+************************/
+// checkSearchActive handles the color changing behavior of action buttons based on user input.
 function checkSearchActive() {
     if ($('.boxSearch input').val() && $('.boxSearch input').val().length > 0) {
         $(".boxButton").addClass("queryActive");
@@ -25,6 +29,7 @@ function checkSearchActive() {
     }
 }
 
+// searchOnEnter checks if the return key has been pressed, and if so clicks the search button.
 function searchOnEnter(e) {
     setTimeout("checkSearchActive()", 5);
     if (e.keyCode == 13) {
@@ -33,7 +38,7 @@ function searchOnEnter(e) {
 
 }
 
-// Tab Switching
+/* Tab Functionality */
 function changeTab(tab) {
     $(".tabMenu .boxMenu").removeClass("selectedTab");
     $("#tabFrame .tabContent").removeClass("tabShown");
@@ -46,9 +51,9 @@ function changeTab(tab) {
 }
 
 /*********************
-* AJAX Loading Stuff *
+* AJAX Functionality *
 **********************/
-// Load Chron API
+// loadChronAPI loads news, headlines, sports, OIT, and twitter data from the qDuke api.
 function loadChronAPI(data) {
     console.log(data);
     // News
@@ -89,19 +94,20 @@ function loadChronAPI(data) {
     if (data.oit != undefined) {
         alert = data.oit;
         $("#boxStatus").append(
-            $("<a class='box StatusOIT' />").attr("href", alert.link).html("<span class='strong'>OIT Alert</span> ("+alert.date+"): " + alert.title)
+            $("<a data-tracking='OIT' class='box StatusOIT' />").attr("href", alert.link).html("<span class='strong'>OIT Alert</span> ("+alert.date+"): " + alert.title)
         );
     }
     // Twitter
     for (handle in data.twitter) {
         tweet = data.twitter[handle];
         $("#boxStatus").append(
-            $("<a class='box StatusTweet' />").attr("href", tweet.twitterLink).html("<span class='strong'>"+handle+ ":</span> " + tweet.text)
+            $("<a data-tracking='Twitter-"+handle+"' class='box StatusTweet' />").attr("href", tweet.twitterLink).html("<span class='strong'>"+handle+ ":</span> " + tweet.text)
         );
     }
 }
 
-// Live Scores
+/* Live Sports Scores */
+// updateLiveScores makes a call to the qDuke API to update the score.
 function updateLiveScores() {
     $.ajax({
         url: 'http://chronproxy.herokuapp.com/qduke',
@@ -114,6 +120,7 @@ function updateLiveScores() {
     });
 }
 
+// displaySports takes in a game object and adds it to the DOM.
 function displaySports(game) {
     var score = '<p class="StatusTeam"> '+game.team1+'</p><p class="StatusTeam"> '+game.team2+'</p><p class="bottomRightCaption">'+game.time+'</p>'
     // TODO(rivkees): check if already there, and if so do in place
@@ -124,16 +131,13 @@ function displaySports(game) {
     $("#"+game.sport+" p:nth-child("+game.winner+")").addClass("StatusWon");
 }
 
-// Weather
+/* Weather */
+// showWeather adds the weather info to the DOM.
 function showWeather(weather) {
     var forcast = '<img src="'+weather.thumbnail+'"/><p> '+weather.currently+', '+weather.temp+'&deg;'+weather.units.temp+'</p><p>'+weather.city+", "+weather.region+'</p>'
     $("#boxStatus").append(
-        $("<a class='box StatusWeather' />").attr("href", weather.link).html(forcast)
+        $("<a data-tracking='Weather' class='box StatusWeather' />").attr("href", weather.link).html(forcast)
     );
-    // var forcast = '<h3>Tomorrow</h3><p>'+weather.tomorrow.forecast+'</p><p>High '+weather.tomorrow.high+'&deg;'+weather.units.temp+' - Low '+weather.tomorrow.low+'&deg;'+weather.units.temp;
-    // $("#boxStatus").append(
-    //     $("<a class='box' />").attr("href", weather.link).html(forcast)
-    // );       
 }
 
 var channels = {
@@ -143,6 +147,8 @@ var channels = {
     'ESPNU': '/img/qduke/channels/espnu.png',
 }
 
+/* Sport Schedule Functionality */
+// changes the sport schedule shown in the sports tab.
 function changeSport(id, name) {
     if (id != "") {
         sports("http://www.goduke.com/rss.dbml?db_oem_id=4200&media=schedulesxml&RSS_SPORT_ID="+id);
@@ -154,7 +160,7 @@ function changeSport(id, name) {
     _gaq.push(['_trackEvent', 'Change Sport', name, 1, 0]);
 }
 
-// Parse RSS to JSON
+// sports loads the schedule at the given URL into the sports tab.
 function sports(url) {
     $.ajax({
         url: document.location.protocol + '//ajax.googleapis.com/ajax/services/feed/load?v=1.0&output=xml&num=20&callback=?&q=' + encodeURIComponent(url),
@@ -169,17 +175,12 @@ function sports(url) {
                 loc = $(this).find("location").text();
                 time = $(this).find("time").text();
                 tv = $(this).find("tv").text();
+                dc = $(this).find("pubDate").text();
                 //tournamentname = $(this).find("tournamentname").text();
                 homeaway = $(this).find("homeaway").text();
                 if (homeaway == "H") homeaway = "vs.";
                 else if (homeaway == "A") homeaway = "@";
                 else if (homeaway == "N") homeaway = "";
-                dc = $(this).find("pubDate").text();
-                //guid = $(this).find("guid").text();
-                // if (date != dc) {
-                //     $("#contentSports .scheduleBox").append("<h4 class='sportDate'>"+dc+"</h4>");
-                //     date = dc;
-                // }
                 if (channels[tv] != undefined ) {
                     tv = " <td class='sportTv'><img src='"+channels[tv]+"' /></td>";
                 }
@@ -194,32 +195,39 @@ function sports(url) {
                         //+" <td class='sportLocation'>"+loc+"</td>"
                         +tv
                     +"</tr>");
-                //console.log($(this));
             });
         }
     });
 }
 
-// On Load
-$(function(){
-    // Outbound Link Tracking with Google Analytics
-    // Requires jQuery 1.7 or higher (use .live if using a lower version)
-    // http://wptheming.com/2012/01/tracking-outbound-links-with-google-analytics/
-    $("a:not(.boxButton, .boxMenu, .boxSport, .boxNews)").on('click',function(e){
-        var url = $(this).attr("href");
-        var text = $(this).text() || url
-        if (e.currentTarget.host != window.location.host) {
-            _gaq.push(['_trackEvent', 'Outbound Links', text, url, 0]);
-            if (e.metaKey || e.ctrlKey) {
-                 var newtab = true;
-            }
-            if (!newtab) {
-                 e.preventDefault();
-                 setTimeout('document.location = "' + url + '"', 100);
-            }
+// Outbound Link Tracking function
+linkTrack = function(e){
+    console.log("track")
+    var url = $(this).attr("href");
+    var text = $(this).attr("data-tracking") || $(this).text() || url
+    if (e.currentTarget.host != window.location.host) {
+        _gaq.push(['_trackEvent', 'Outbound Links', text, url, 0]);
+        if (e.metaKey || e.ctrlKey) {
+             var newtab = true;
         }
-    });
-    // News Only
+        if (!newtab) {
+             e.preventDefault();
+             setTimeout('document.location = "' + url + '"', 100);
+        }
+    }
+}
+
+/*********************
+*       On Load      *
+**********************/
+$(function(){
+    // Adds onClick behavior to all links.
+    //      Requires jQuery 1.7 or higher (use .live if using a lower version)
+    //      http://wptheming.com/2012/01/tracking-outbound-links-with-google-analytics/
+
+    /* Outbound Link Tracking */
+    $("a:not(.boxButton, .boxMenu, .boxSport, .boxNews)").on('click', linkTrack);
+    /* News Tracking */
     $("a.boxNews").on('click',function(e){
         var url = $(this).attr("href");
         var text = $(this).text() || url
@@ -234,7 +242,7 @@ $(function(){
             }
         }
     });
-    // Search Links and Tracking
+    /* Search Tracking */
     $("a.boxButton").on('click',function(e){
         if (e.metaKey || e.ctrlKey) {
              var newtab = true;
@@ -270,18 +278,10 @@ $(function(){
         }
     });
 
-    // Uservoice
-    // var uvOptions = {};
-    // (function() {
-    //     var uv = document.createElement('script'); uv.type = 'text/javascript'; uv.async = true;
-    //     uv.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'widget.uservoice.com/SMeZbkqkN4ufhQRlnWig.js';
-    //     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(uv, s);
-    // })();
-
-    // Search Focus
+    /* Puts user cursor in the search box */
     $('.boxSearch input').focus();
 
-    // Load Dynamic Content on Load
+    /* Initial AJAX request */
     $(document).ready(function() {
         // ChronAPI
         $.ajax({
@@ -312,16 +312,16 @@ $(function(){
         setTimeout("checkSearchActive()", 5);
     });
 
-    // Load Intense Frames
+    /* Delay loading embedded iframes */
     // TODO(rivkees): dont actually do this until a user clicks the tab?
     $("#tabFrame .tabContent[data-content]").each(function(index, element){
         $(element).append($(element).attr("data-content"));
     });
 
-    // Load Sports
+    /* Load default sports schedule */
     sports("http://www.goduke.com/rss.dbml?db_oem_id=4200&media=schedulesxml");
 
-    // Tour
+    /* Start Tour */
     $('#joyRideTipContent').joyride({
         'cookieMonster': true,
         'cookieName': 'qDukeNov26',

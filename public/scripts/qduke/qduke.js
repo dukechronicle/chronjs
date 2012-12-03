@@ -70,7 +70,7 @@ function loadChronAPI(data) {
             $("<div>").addClass("caption captionTop").append($("<div>").addClass("txt").text("Sports Blog")));
         }
         if (article.img == undefined) article.img = "/img/qduke/default_image.jpg";
-        $(boxStories[i]).attr("href", "http://dukechronicle.com" + article.link).append(
+        $(boxStories[i]).attr("href", article.link).append(
             $("<div>").addClass("caption").append($("<div>").addClass("txt").text(article.title))).append(
             $("<img>").attr("src", article.img)).removeClass("boxEmpty");
     }

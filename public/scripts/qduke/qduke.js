@@ -87,21 +87,21 @@ function loadChronAPI(data) {
     // }
     // Sports
     if (data.liveSports != undefined) {
-        displaySports(data.liveSports);
+        displayLiveSports(data.liveSports);
         setInterval(updateLiveScores, 30000);
     }
     // OIT
     if (data.oit != undefined) {
         alert = data.oit;
         $("#boxStatus").append(
-            $("<a data-tracking='OIT' class='box StatusOIT' />").attr("href", alert.link).html("<span class='strong'>OIT Alert</span> ("+alert.date+"): " + alert.title)
+            $("<a data-tracking='OIT Alert' class='box StatusOIT' />").on('click', linkTrack).attr("href", alert.link).html("<span class='strong'>OIT Alert</span> ("+alert.date+"): " + alert.title)
         );
     }
     // Twitter
     for (handle in data.twitter) {
         tweet = data.twitter[handle];
         $("#boxStatus").append(
-            $("<a data-tracking='Twitter-"+handle+"' class='box StatusTweet' />").attr("href", tweet.twitterLink).html("<span class='strong'>"+handle+ ":</span> " + tweet.text)
+            $("<a data-tracking='Twitter "+handle+"' class='box StatusTweet' />").on('click', linkTrack).attr("href", tweet.twitterLink).html("<span class='strong'>"+handle+ ":</span> " + tweet.text)
         );
     }
 }
@@ -115,18 +115,18 @@ function updateLiveScores() {
         cache: false,
         timeout: 5000,
         success: function(data) {
-            displaySports(data.liveSports);
+            displayLiveSports(data.liveSports);
         }
     });
 }
 
-// displaySports takes in a game object and adds it to the DOM.
-function displaySports(game) {
+// displayLiveSports takes in a game object and adds it to the DOM.
+function displayLiveSports(game) {
     var score = '<p class="StatusTeam"> '+game.team1+'</p><p class="StatusTeam"> '+game.team2+'</p><p class="bottomRightCaption">'+game.time+'</p>'
     // TODO(rivkees): check if already there, and if so do in place
     $("#"+game.sport).remove();
     $("#boxStatus").append(
-        $("<a class='box StatusSportScore' id="+data[5]+" />").attr("href", game.link).html(score)
+        $("<a class='box StatusSportScore' id="+data[5]+" />").on('click', linkTrack).attr("href", game.link).html(score)
     );
     $("#"+game.sport+" p:nth-child("+game.winner+")").addClass("StatusWon");
 }
@@ -136,7 +136,7 @@ function displaySports(game) {
 function showWeather(weather) {
     var forcast = '<img src="'+weather.thumbnail+'"/><p> '+weather.currently+', '+weather.temp+'&deg;'+weather.units.temp+'</p><p>'+weather.city+", "+weather.region+'</p>'
     $("#boxStatus").append(
-        $("<a data-tracking='Weather' class='box StatusWeather' />").attr("href", weather.link).html(forcast)
+        $("<a data-tracking='Weather' class='box StatusWeather' />").on('click', linkTrack).attr("href", weather.link).html(forcast)
     );
 }
 

@@ -72,16 +72,18 @@ body
 	.duke-alert-0
 		display none
 	.rowHead
+		@media only screen and (min-width: 916px) // if wide
+			height 43px // NEW
+			position relative
 		.box
-			background qBlue
 			height 60px
+			background qBlue
 			font-size 1.3em
 			line-height 2.8em
-			// @media only screen and (max-width: 915px) // if narrow
-			// 	width col3in4
-			// @media only screen and (max-width: 549px) // if really narrow
-			// 	width col1
 		.boxLogo
+			@media only screen and (min-width: 916px) // if wide
+				height 80px // NEW
+				position absolute // NEW
 			background #555
 			font-size 2em
 			line-height 1.7em
@@ -99,6 +101,8 @@ body
 				width col2
 		#boxStatus
 			.box
+				@media only screen and (min-width: 916px) // if wide
+					height 40px
 				font-size .9em
 				line-height 1.2em
 				padding 5px
@@ -119,6 +123,14 @@ body
 				text-align left
 				span.handle
 					font-weight bold
+			// NEW
+			@media only screen and (min-width: 916px) // if wide
+				position absolute
+				margin-left 183px
+				z-index 10
+				.box:hover
+					height auto
+					box-shadow 1px 1px 5px #444
 	.rowNews
 		.box
 			height 120px
@@ -145,6 +157,21 @@ body
 				opacity .95
 				background qBlue
 				border-radius 0 0 4px 0
+		.boxChron
+			background qBlue
+			font-size 1.5em
+			line-height 4.8em
+			@media only screen and (max-width: 915px) // if narrow
+				width col3
+				height 60px
+				font-size 1.3em
+				line-height 2.8em
+			@media only screen and (max-width: 549px) // if really narrow
+				width col2
+			@media only screen and (min-width: 916px) // if wide
+				height 80px // NEW
+				margin-top 40px //NEW
+				line-height 3.5 em //NEW
 		.boxStories
 			@media only screen and (max-width: 915px) // if narrow
 				:nth-child(4)
@@ -171,17 +198,6 @@ body
 			//box-shadow 1px 1px 5px #c80000;
 			.captionTop
 				background #c80000
-		.boxChron
-			background qBlue
-			font-size 1.5em
-			line-height 4.8em
-			@media only screen and (max-width: 915px) // if narrow
-				width col3
-				height 60px
-				font-size 1.3em
-				line-height 2.8em
-			@media only screen and (max-width: 549px) // if really narrow
-				width col2
 		a.boxEmpty
 			background qLGray url("/img/qduke/loading.gif") no-repeat center center
 	.rowSearch

@@ -161,9 +161,15 @@ body
 				background rgba(0, 0, 0, .8)
 				.txt
 					font-size .9em
-					line-height 1em
+					line-height 1.1em
 					margin 5px
+			@media only screen and (min-width: 916px) // if wide
+				.caption
+					height 35px
+				&:hover .caption
+					height auto
 			.captionTop
+				height auto
 				top 0
 				bottom auto
 				width auto

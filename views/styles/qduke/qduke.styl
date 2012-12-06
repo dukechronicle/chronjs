@@ -38,13 +38,19 @@ body
 		@media only screen and (max-width: 956px) // if narrow
 			width col3 + col-margin +21*2
 		@media only screen and (max-width: 590px) // if really narrow
-			width col2 + col-margin +21*2
+			//max-width col2 + col-margin +21*2
+			width 100%
+			padding 0 10px
+			margin-top 10px
 	.box, .rowAds a, .dukealert-alertLink, .dukealert-description
 		background qDGray
 		text-align center
 		float left
 		width col1
 		margin 0 col-margin col-margin 0
+		@media only screen and (max-width: 590px) // if really narrow
+			width 49%
+			margin 0 1% 1% 0
 		position relative
 		overflow hidden
 		box-shadow 1px 1px 5px #ddd
@@ -67,7 +73,8 @@ body
 			@media only screen and (max-width: 956px) // if narrow
 				width col2
 			@media only screen and (max-width: 590px) // if really narrow
-				width col1
+				//width col1
+				width 100%
 			a
 				color qHover
 	.duke-alert-lev1
@@ -105,7 +112,8 @@ body
 			@media only screen and (max-width: 956px) // if narrow
 				width col3
 			@media only screen and (max-width: 590px) // if really narrow
-				width col2
+				//max-width col2
+				width 99%
 		#boxStatus
 			.box
 				@media only screen and (min-width: 958px) // if wide
@@ -152,6 +160,11 @@ body
 				.box:hover
 					height auto
 					box-shadow 1px 1px 5px #444
+			@media only screen and (max-width: 590px) // if really narrow
+				:nth-child(3)
+					display none
+				:nth-child(4)
+					display none
 	.rowNews
 		.box
 			height 120px
@@ -195,6 +208,7 @@ body
 				line-height 2.8em
 			@media only screen and (max-width: 590px) // if really narrow
 				width col2
+				width 99%
 			@media only screen and (min-width: 958px) // if wide
 				height 80px // NEW
 				margin-top 40px //NEW
@@ -203,12 +217,18 @@ body
 			// @media only screen and (max-width: 956px) // if narrow
 			// 	:nth-child(4)
 			// 		display none
-			// // TODO(rivkees): show more on narrower?
-			// @media only screen and (max-width: 590px) // if really narrow
-			// 	:nth-child(4)
-			// 		display inline-block
+			// TODO(rivkees): show more on narrower?
+			@media only screen and (max-width: 590px) // if really narrow
+				:nth-child(3)
+					display none
+				:nth-child(4)
+					display none
 			a.boxNews
 				overflow hidden
+				@media only screen and (max-width: 590px) // if really narrow
+					img
+						width 100%
+						height auto
 			a.box:hover:before, a.box:focus:before
 				content ""
 				display block
@@ -236,6 +256,7 @@ body
 			width col3
 			@media only screen and (max-width: 590px) // if really narrow
 				width col2
+				width 99%
 			background qLGray url("/img/qduke/search.gif") no-repeat 10px center
 			input
 				padding 0 0 0 50px
@@ -253,6 +274,7 @@ body
 				width col3in4
 			@media only screen and (max-width: 590px) // if really narrow
 				width col1
+				width 49%
 		.queryActive
 			background qBlue
 		.queryActive#GoogleSearchButton
@@ -283,6 +305,7 @@ body
 				width col2
 			@media only screen and (max-width: 590px) // if really narrow
 				width col1
+				width 49%
 		.box.selectedTab
 			border-bottom qBG
 			color qDGray
@@ -348,6 +371,8 @@ body
 			.boxLink
 				font-size 1.3em
 				line-height 1.8em
+				@media only screen and (max-width: 590px) // if really narrow
+					font-size 1.1em
 			@media only screen and (min-width: 958px) // if wide
 				.boxLinkTall
 					height 60px
@@ -439,7 +464,7 @@ body
 			font-weight bold
 			font-size 28px
 			line-height 1.25
-	@media only screen and (max-width: 956px) // if narrow
+	@media only screen and (max-width: 956px) and (min-width: 591px) // if narrow
 		.rowHead
 			.scrollWrap
 				height 60px
@@ -457,6 +482,11 @@ body
 				float none !important
 				margin 0 21px
 				width col4 +21 !important
-	@media only screen and (max-width: 590px) // if really narrow
-		.scrollWrap
-			width col2 +21*2
+	// @media only screen and (max-width: 590px) // if really narrow
+	// 	.scrollWrap
+	// 		margin 0 -10
+	// 		width 108%
+	// 	.scrollable
+	// 		margin 0 10px
+	// 		.box
+	// 			width 180px

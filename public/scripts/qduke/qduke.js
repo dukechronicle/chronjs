@@ -1,3 +1,5 @@
+var qDuke_api_url = 'http://localhost:8000/qduke';//'http://chronproxy.herokuapp.com/qduke'; //
+
 /******************
 * Analytics Setup *
 *******************/
@@ -74,6 +76,7 @@ function loadChronAPI(data) {
             $("<div>").addClass("caption").append($("<div>").addClass("txt").text(article.title))).append(
             $("<img>").attr("src", article.img)).removeClass("boxEmpty");
     }
+    var count = $("#boxStatus").length; var maxCount = 4;
     // Headline
     // if (docs["Top Headline"] != undefined) {
     //     console.log("top headline");
@@ -87,11 +90,17 @@ function loadChronAPI(data) {
     // }
     // Sports
     if (data.liveSports != undefined) {
+        // Check if status bar is full
+        if (count >= maxCount) return;
+        else count++;
         displayLiveSports(data.liveSports);
         setInterval(updateLiveScores, 30000);
     }
     // OIT
     if (data.oit != undefined) {
+        // Check if status bar is full
+        if (count >= maxCount) return;
+        else count++;
         alert = data.oit;
         $("#boxStatus").append(
             $("<a data-tracking='OIT Alert' class='box StatusOIT' />").on('click', linkTrack).attr("href", alert.link).html("<span class='strong'>OIT Alert</span> ("+alert.date+"): " + alert.title)
@@ -99,6 +108,9 @@ function loadChronAPI(data) {
     }
     // Twitter
     for (handle in data.twitter) {
+        // Check if status bar is full
+        if (count >= maxCount) return;
+        else count++;
         tweet = data.twitter[handle];
         $("#boxStatus").append(
             $("<a data-tracking='Twitter "+handle+"' class='box StatusTweet' />").on('click', linkTrack).attr("href", tweet.twitterLink).html("<span class='strong'>"+handle+ ":</span> " + tweet.text)
@@ -110,7 +122,7 @@ function loadChronAPI(data) {
 // updateLiveScores makes a call to the qDuke API to update the score.
 function updateLiveScores() {
     $.ajax({
-        url: 'http://chronproxy.herokuapp.com/qduke',
+        url: qDuke_api_url,
         dataType: "json",
         cache: false,
         timeout: 5000,
@@ -122,18 +134,26 @@ function updateLiveScores() {
 
 // displayLiveSports takes in a game object and adds it to the DOM.
 function displayLiveSports(game) {
-    var score = '<p class="StatusTeam"> '+game.team1+'</p><p class="StatusTeam"> '+game.team2+'</p><p class="bottomRightCaption">'+game.time+'</p>'
+    console.log(game)
+    game.team1score = game.team1score || "";
+    game.team2score = game.team2score || "";
+    var score = '<p class="StatusTime">'+game.time+'</p><p class="StatusTeam"> '+game.team1+'<span class="StatusScore">'+game.team1score+'</span></p><p class="StatusTeam"> '+game.team2+'<span class="StatusScore">'+game.team2score+'</span></p>'
     // TODO(rivkees): check if already there, and if so do in place
     $("#"+game.sport).remove();
     $("#boxStatus").append(
-        $("<a class='box StatusSportScore' id="+data[5]+" />").on('click', linkTrack).attr("href", game.link).html(score)
+        $("<a data-tracking='Live Sports' class='box StatusSportScore' id="+game.sport+" />").on('click', linkTrack).attr("href", game.link).html(score)
     );
-    $("#"+game.sport+" p:nth-child("+game.winner+")").addClass("StatusWon");
+    $("#"+game.sport+" p:nth-child("+game.winner+")").addClass("strong");
 }
 
 /* Weather */
 // showWeather adds the weather info to the DOM.
 function showWeather(weather) {
+    // Check if status bar is full
+    var count = $("#boxStatus").length; var maxCount = 4;
+    console.log(count);
+    if (count >= maxCount) return;
+
     var forcast = '<img src="'+weather.thumbnail+'"/><p> '+weather.currently+', '+weather.temp+'&deg;'+weather.units.temp+'</p><p>'+weather.city+", "+weather.region+'</p>'
     $("#boxStatus").append(
         $("<a data-tracking='Weather' class='box StatusWeather' />").on('click', linkTrack).attr("href", weather.link).html(forcast)
@@ -285,7 +305,7 @@ $(function(){
     $(document).ready(function() {
         // ChronAPI
         $.ajax({
-            url: 'http://chronproxy.herokuapp.com/qduke',
+            url: qDuke_api_url,
             dataType: "json",
             cache: false,
             timeout: 5000,

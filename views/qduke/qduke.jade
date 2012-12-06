@@ -43,15 +43,17 @@ html
             .rowHead.clearfix
                 a.box.boxLogo(href="http://qduke.com")
                     h1 qDuke
-                #boxStatus.clearfix
+                .scrollWrap
+                    #boxStatus.clearfix.scrollable
             // NEWS
             .rowNews.clearfix
                 a.box.boxChron(href="http://dukechronicle.com") The Chronicle
-                .boxStories.clearfix
-                    a.box.boxNews.boxEmpty
-                    a.box.boxNews.boxEmpty
-                    a.box.boxNews.boxEmpty
-                    a.box.boxNews.boxEmpty
+                .scrollWrap
+                    .boxStories.clearfix.scrollable
+                        a.box.boxNews.boxEmpty
+                        a.box.boxNews.boxEmpty
+                        a.box.boxNews.boxEmpty
+                        a.box.boxNews.boxEmpty
             // SEARCH
             //TODO(rivkees): move buttons above search for mobile?
             .rowSearch.clearfix

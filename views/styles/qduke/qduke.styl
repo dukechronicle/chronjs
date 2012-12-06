@@ -35,9 +35,9 @@ body
 		width col5 + col-margin +21*2
 		margin 21px auto 0 auto
 		padding 0 21px
-		@media only screen and (max-device-width: 956px) // if narrow
+		@media only screen and (max-width: 956px) // if narrow
 			width col3 + col-margin +21*2
-		@media only screen and (max-device-width: 590px) // if really narrow
+		@media only screen and (max-width: 590px) // if really narrow
 			width col2 + col-margin +21*2
 	.box, .rowAds a, .dukealert-alertLink, .dukealert-description
 		background qDGray
@@ -64,9 +64,9 @@ body
 			line-height 1em
 			padding 8px
 			width col4
-			@media only screen and (max-device-width: 956px) // if narrow
+			@media only screen and (max-width: 956px) // if narrow
 				width col2
-			@media only screen and (max-device-width: 590px) // if really narrow
+			@media only screen and (max-width: 590px) // if really narrow
 				width col1
 			a
 				color qHover
@@ -79,7 +79,7 @@ body
 	.duke-alert-0
 		display none
 	.rowHead
-		@media only screen and (min-device-width: 958px) // if wide
+		@media only screen and (min-width: 958px) // if wide
 			height 43px // NEW
 			position relative
 		.box
@@ -88,7 +88,7 @@ body
 			font-size 1.3em
 			line-height 2.8em
 		.boxLogo
-			@media only screen and (min-device-width: 958px) // if wide
+			@media only screen and (min-width: 958px) // if wide
 				height 80px // NEW
 				position absolute // NEW
 			background qLogoGray
@@ -102,16 +102,16 @@ body
 				text-indent 100%
 				white-space nowrap
 				overflow hidden
-			@media only screen and (max-device-width: 956px) // if narrow
+			@media only screen and (max-width: 956px) // if narrow
 				width col3
-			@media only screen and (max-device-width: 590px) // if really narrow
+			@media only screen and (max-width: 590px) // if really narrow
 				width col2
 		#boxStatus
 			.box
-				@media only screen and (min-device-width: 958px) // if wide
+				@media only screen and (min-width: 958px) // if wide
 					height 40px
 					min-height 40px
-				@media only screen and (max-device-width: 956px) // if narrow
+				@media only screen and (max-width: 956px) // if narrow
 					height 57px
 				font-size .9em
 				line-height 1.2em
@@ -145,7 +145,7 @@ body
 				img
 					float left
 			// NEW
-			@media only screen and (min-device-width: 958px) // if wide
+			@media only screen and (min-width: 958px) // if wide
 				position absolute
 				margin-left 183px
 				z-index 10
@@ -171,7 +171,7 @@ body
 					font-size .9em
 					line-height 1.1em
 					margin 5px
-			@media only screen and (min-device-width: 958px) // if wide
+			@media only screen and (min-width: 958px) // if wide
 				.caption
 					height 35px
 				&:hover .caption
@@ -188,23 +188,23 @@ body
 			background qBlue
 			font-size 1.5em
 			line-height 4.8em
-			@media only screen and (max-device-width: 956px) // if narrow
+			@media only screen and (max-width: 956px) // if narrow
 				width col3
 				height 60px
 				font-size 1.3em
 				line-height 2.8em
-			@media only screen and (max-device-width: 590px) // if really narrow
+			@media only screen and (max-width: 590px) // if really narrow
 				width col2
-			@media only screen and (min-device-width: 958px) // if wide
+			@media only screen and (min-width: 958px) // if wide
 				height 80px // NEW
 				margin-top 40px //NEW
 				line-height 3.5 em //NEW
 		.boxStories
-			// @media only screen and (max-device-width: 956px) // if narrow
+			// @media only screen and (max-width: 956px) // if narrow
 			// 	:nth-child(4)
 			// 		display none
 			// // TODO(rivkees): show more on narrower?
-			// @media only screen and (max-device-width: 590px) // if really narrow
+			// @media only screen and (max-width: 590px) // if really narrow
 			// 	:nth-child(4)
 			// 		display inline-block
 			a.boxNews
@@ -234,7 +234,7 @@ body
 			height 59px
 			cursor text
 			width col3
-			@media only screen and (max-device-width: 590px) // if really narrow
+			@media only screen and (max-width: 590px) // if really narrow
 				width col2
 			background qLGray url("/img/qduke/search.gif") no-repeat 10px center
 			input
@@ -249,9 +249,9 @@ body
 			line-height 1.6em
 			height 28px
 			background qDGray
-			@media only screen and (max-device-width: 956px) // if narrow
+			@media only screen and (max-width: 956px) // if narrow
 				width col3in4
-			@media only screen and (max-device-width: 590px) // if really narrow
+			@media only screen and (max-width: 590px) // if really narrow
 				width col1
 		.queryActive
 			background qBlue
@@ -279,9 +279,9 @@ body
 			border-bottom col-margin solid qLGray
 		span.adSpacer
 			width col4
-			@media only screen and (max-device-width: 956px) // if narrow
+			@media only screen and (max-width: 956px) // if narrow
 				width col2
-			@media only screen and (max-device-width: 590px) // if really narrow
+			@media only screen and (max-width: 590px) // if really narrow
 				width col1
 		.box.selectedTab
 			border-bottom qBG
@@ -292,7 +292,7 @@ body
 			background none
 			color qDGray
 			cursor default
-	@media only screen and (max-device-width: 956px) // if narrow
+	@media only screen and (max-width: 956px) // if narrow
 		.tabMenu .mobileHideTablet
 			display none
 			width 0
@@ -300,7 +300,7 @@ body
 			border 0
 			padding 0
 			margin 0
-	@media only screen and (max-device-width: 590px) // if really narrow
+	@media only screen and (max-width: 590px) // if really narrow
 		.tabMenu .mobileHidePhone
 			display none
 			width 0
@@ -348,16 +348,16 @@ body
 			.boxLink
 				font-size 1.3em
 				line-height 1.8em
-			@media only screen and (min-device-width: 958px) // if wide
+			@media only screen and (min-width: 958px) // if wide
 				.boxLinkTall
 					height 60px
 					font-size 1.8em
 					line-height 2em
 		#contentLinks.tabShown
 			height 192px
-			@media only screen and (max-device-width: 956px) // if narrow
+			@media only screen and (max-width: 956px) // if narrow
 				height 301px
-			@media only screen and (max-device-width: 590px) // if really narrow
+			@media only screen and (max-width: 590px) // if really narrow
 				height 430px
 		#contentSports
 			a.box
@@ -367,10 +367,10 @@ body
 				float right
 				padding 0 10px
 				width col4
-				// @media only screen and (max-device-width: 956px) // if narrow
+				// @media only screen and (max-width: 956px) // if narrow
 				// 	width col3
 				// 	overflow-x scroll
-				// @media only screen and (max-device-width: 590px) // if really narrow
+				// @media only screen and (max-width: 590px) // if really narrow
 				// 	width col2
 				min-height 711px
 				text-align left
@@ -395,10 +395,10 @@ body
 						tr:hover
 							background-color qHover
 						td.sportOpponent
-							max-device-width 200px
+							max-width 200px
 			a.selected
 				cursor default
-			@media only screen and (max-device-width: 956px) // if narrow
+			@media only screen and (max-width: 956px) // if narrow
 				.sportsList
 					display none //TODO(rivkees) maybe change
 		#contentSports.tabShown
@@ -439,7 +439,7 @@ body
 			font-weight bold
 			font-size 28px
 			line-height 1.25
-	@media only screen and (max-device-width: 956px) // if narrow
+	@media only screen and (max-width: 956px) // if narrow
 		.rowHead
 			.scrollWrap
 				height 60px
@@ -447,6 +447,7 @@ body
 			.scrollWrap
 				height 123px
 		.scrollWrap
+			clear both
 			margin 0 -21px
 			// -webkit-overflow-scrolling: touch
 			overflow hidden
@@ -456,6 +457,6 @@ body
 				float none !important
 				margin 0 21px
 				width col4 +21 !important
-	@media only screen and (max-device-width: 590px) // if really narrow
+	@media only screen and (max-width: 590px) // if really narrow
 		.scrollWrap
 			width col2 +21*2

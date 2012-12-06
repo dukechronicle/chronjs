@@ -207,6 +207,8 @@ body
 			// @media only screen and (max-width: 591px) // if really narrow
 			// 	:nth-child(4)
 			// 		display inline-block
+			a.boxNews
+				overflow hidden
 			a.box:hover:before, a.box:focus:before
 				content ""
 				display block
@@ -457,3 +459,8 @@ body
 				left 0
 				width col4 + 21*2 + col-margin
 				padding 0 21px
+				.boxNews
+					img
+						// why is this needed?
+						width 180px
+						height 120px

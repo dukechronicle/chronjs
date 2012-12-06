@@ -1,4 +1,4 @@
-var qDuke_api_url = 'http://localhost:8000/qduke';//'http://chronproxy.herokuapp.com/qduke'; //
+var qDuke_api_url = 'http://chronproxy.herokuapp.com/qduke';
 
 /******************
 * Analytics Setup *

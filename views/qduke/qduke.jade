@@ -25,7 +25,7 @@ html
         link(rel="icon", href="/img/qduke/favicon.ico", type="image/x-icon")
         link(rel="shortcut icon", href="/img/qduke/favicon.ico", type="image/x-icon")
         link(rel="icon", type="image/png", href="/img/qduke/qDukeFavicon128.png")
-        link(rel="stylesheet", href="/styles/qduke/main.css?v=9j")
+        link(rel="stylesheet", href="/styles/qduke/main.css?v=9opppipp")
         link(href='http://fonts.googleapis.com/css?family=PT+Sans:400,400italic', rel='stylesheet', type='text/css')
         script(src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js', type='text/javascript')
         script(src='https://raw.github.com/monkeecreate/jquery.simpleWeather/master/jquery.simpleWeather.js', type='text/javascript')
@@ -33,7 +33,26 @@ html
         script(type='text/javascript', src='http://www.oncampusweb.com/delivery/spcjs.php?id=73&amp;block=1')
         script(type='text/javascript', src='/scripts/qduke/joyride/jquery.joyride-2.0.2.js')
         title qDuke.com
-        meta(name="viewport", content="width=device-width, user-scalable=no")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no", id="viewport")
+        // script(type='text/javascript')
+        //     // http://css-tricks.com/resolution-specific-stylesheets/
+        //     function adjustStyle(width) {
+        //         width = parseInt(width);
+        //         var mvp = document.getElementById('viewport');
+        //         if (width < 591) {
+        //             mvp.setAttribute('content','width=408');
+        //         } else if (width < 957) {
+        //             mvp.setAttribute('content','width=591');
+        //         } else {
+        //             mvp.setAttribute('content','width=957');
+        //         }
+        //     }
+        //     $(function() {
+        //         adjustStyle($(this).width());
+        //         $(window).bind('orientationchange resize', function() {
+        //             adjustStyle($(this).width());
+        //         });
+        //     });
     body
         #wrap
             //- .promo
@@ -43,13 +62,13 @@ html
             .rowHead.clearfix
                 a.box.boxLogo(href="http://qduke.com")
                     h1 qDuke
-                .scrollWrap
-                    #boxStatus.clearfix.scrollable
+                .scrollWrap.clearfix
+                    #boxStatus.scrollable.clearfix
             // NEWS
             .rowNews.clearfix
                 a.box.boxChron(href="http://dukechronicle.com") The Chronicle
-                .scrollWrap
-                    .boxStories.clearfix.scrollable
+                .scrollWrap.clearfix
+                    .boxStories.scrollable.clearfix
                         a.box.boxNews.boxEmpty
                         a.box.boxNews.boxEmpty
                         a.box.boxNews.boxEmpty
@@ -85,16 +104,17 @@ html
                         -for (var i = row*5; i < row*5+5; i++)
                             a.box.boxLink(href=links[i].url) #{links[i].title}
                 #contentSports.contentBoxes.tabContent
-                    .box.scheduleBox
-                        table
-                            thead
-                                tr
-                                    th Date
-                                    th Time
-                                    th Sport
-                                    th Opponent
-                                    th TV
-                            tbody#sportSchedule
+                    .scrollWrap
+                        .box.scheduleBox.scrollable.clearfix
+                            table
+                                thead
+                                    tr
+                                        th Date
+                                        th Time
+                                        th Sport
+                                        th Opponent
+                                        th TV
+                                tbody#sportSchedule
                     .sportsList
                         a.box.boxSport.selected(href="javascript:changeSport('', 'All Sports')", id="sportID") All Sports
                         - var sports = [{"name":"Baseball","id":1850},{name: "Basketball (M)","id":1845},{"name":"Basketball (W)","id":1846},{"name":"Cross Country","id":1831},{"name":"Fencing","id":2028},{"name":"Field Hockey","id":2029},{"name":"Football","id":1843},{"name":"Golf (M)","id":1837},{"name":"Golf (W)","id":1838},{"name":"Lacrosse (M)","id":2027},{"name":"Lacrosse (W)","id":1832},{"name":"Rowing","id":2031},{"name":"Soccer (M)","id":1833},{"name":"Soccer (W)","id":1842},{"name":"Swimming & Diving","id":2182},{"name":"Tennis (M)","id":1839},{"name":"Tennis (W)","id":1840},{"name":"Track & Field","id":1835},{"name":"Volleyball","id":1844},{"name":"Wrestling","id":1834}]

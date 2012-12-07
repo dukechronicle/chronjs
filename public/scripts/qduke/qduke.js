@@ -42,6 +42,13 @@ function searchOnEnter(e) {
 
 /* Tab Functionality */
 function changeTab(tab) {
+    /*  Loading embedded iframes */
+    var tabRef = $("#tabFrame .tabContent:nth-child("+tab+")[data-content]")
+    if ($("#tabFrame .tabContent:nth-child("+tab+")[data-content]") != ""){
+        tabRef.append(tabRef.attr("data-content"));
+        tabRef.attr("data-content", "")
+    }
+
     $(".tabMenu .boxMenu").removeClass("selectedTab");
     $("#tabFrame .tabContent").removeClass("tabShown");
 
@@ -330,12 +337,6 @@ $(function(){
         });
         // Search Button colors in case of back button
         setTimeout("checkSearchActive()", 5);
-    });
-
-    /* Delay loading embedded iframes */
-    // TODO(rivkees): dont actually do this until a user clicks the tab?
-    $("#tabFrame .tabContent[data-content]").each(function(index, element){
-        $(element).append($(element).attr("data-content"));
     });
 
     /* Load default sports schedule */

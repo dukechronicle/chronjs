@@ -52,7 +52,7 @@ function changeTab(tab) {
     $(".tabMenu .boxMenu").removeClass("selectedTab");
     $("#tabFrame .tabContent").removeClass("tabShown");
 
-    $("#tabFrame .tabContent:eq("+(tab-1)+")").addClass("tabShown").css({'margin-top': '40px', opacity: 0}).transition({ 'margin-top':0, opacity: 1 }, 300, 'snap');
+    $("#tabFrame .tabContent:eq("+(tab-1)+")").addClass("tabShown").css({'margin-top': '50px', opacity: 0}).transition({ 'margin-top':0, opacity: 1 }, 400, 'snap');
     $(".tabMenu .boxMenu:eq("+(tab-1)+")").addClass("selectedTab");
 
     _gaq.push(['_trackEvent', 'Change Tab', $(".tabMenu .boxMenu:eq("+(tab-1)+")").text(), 1, 0]);
@@ -64,7 +64,7 @@ function changeTab(tab) {
 // loadChronAPI loads news, headlines, sports, OIT, and twitter data from the qDuke api.
 function loadChronAPI(data) {
     console.log(data);
-    // News
+    /* News Bar */
     var boxStories = $(".boxStories .boxEmpty");
     for (var i = 0; i < data.news.length; i++) {
         article = data.news[i];
@@ -80,8 +80,10 @@ function loadChronAPI(data) {
         if (article.img == undefined) article.img = "/img/qduke/default_image.jpg";
         $(boxStories[i]).attr("href", article.link).append(
             $("<div>").addClass("caption").append($("<div>").addClass("txt").text(article.title))).append(
-            $("<img>").attr("src", article.img)).removeClass("boxEmpty");
+            $("<img>").attr("src", article.img)).removeClass("boxEmpty").css(
+            {'x': '50px', opacity: 0}).transition({ 'x':0, opacity: 1 }, 400, 'snap');
     }
+    /* Status Bar */
     var count = $("#boxStatus").length; var maxCount = 4;
     // Headline
     // if (docs["Top Headline"] != undefined) {
@@ -108,7 +110,7 @@ function loadChronAPI(data) {
         if (count >= maxCount) return;
         else count++;
         alert = data.oit;
-        $("#boxStatus").append(
+        appendWithTransition(
             $("<a data-tracking='OIT Alert' class='box StatusOIT' />").on('click', linkTrack).attr("href", alert.link).html("<span class='strong'>OIT Alert</span> ("+alert.date+"): " + alert.title)
         );
     }
@@ -118,7 +120,7 @@ function loadChronAPI(data) {
         if (count >= maxCount) return;
         else count++;
         tweet = data.twitter[handle];
-        $("#boxStatus").append(
+        appendWithTransition(
             $("<a data-tracking='Twitter "+handle+"' class='box StatusTweet' />").on('click', linkTrack).attr("href", tweet.twitterLink).html("<span class='strong'>"+handle+ ":</span> " + tweet.text)
         );
     }
@@ -140,15 +142,19 @@ function updateLiveScores() {
 
 // displayLiveSports takes in a game object and adds it to the DOM.
 function displayLiveSports(game) {
-    console.log(game)
     game.team1score = game.team1score || "";
     game.team2score = game.team2score || "";
     var score = '<p class="StatusTime">'+game.time+'</p><p class="StatusTeam"> '+game.team1+'<span class="StatusScore">'+game.team1score+'</span></p><p class="StatusTeam"> '+game.team2+'<span class="StatusScore">'+game.team2score+'</span></p>'
-    // TODO(rivkees): check if already there, and if so do in place
-    $("#"+game.sport).remove();
-    $("#boxStatus").append(
-        $("<a data-tracking='Live Sports' class='box StatusSportScore' id="+game.sport+" />").on('click', linkTrack).attr("href", game.link).html(score)
-    );
+    
+    if ($("#"+game.sport).length == 0) {
+        appendWithTransition(
+            $("<a data-tracking='Live Sports' class='box StatusSportScore' id="+game.sport+" />").on('click', linkTrack).attr("href", game.link).html(score)
+        ); 
+    } else {
+        $("#"+game.sport).attr("href", game.link).html(score);
+        $("#"+game.sport).transition({ x: '10px' }, 20).transition({ x: '-10px' }, 20).transition({ x: '10px' }, 20).transition({ x: '-10px' }, 20).transition({ x: '10px' }, 20).transition({ x: '0px' }, 20);
+    }
+
     $("#"+game.sport+" p:nth-child("+game.winner+")").addClass("strong");
 }
 
@@ -161,9 +167,15 @@ function showWeather(weather) {
     if (count >= maxCount) return;
 
     var forcast = '<img src="'+weather.thumbnail+'"/><p> '+weather.currently+', '+weather.temp+'&deg;'+weather.units.temp+'</p><p>'+weather.city+", "+weather.region+'</p>'
-    $("#boxStatus").append(
+    
+    appendWithTransition(
         $("<a data-tracking='Weather' class='box StatusWeather' />").on('click', linkTrack).attr("href", weather.link).html(forcast)
     );
+}
+
+function appendWithTransition(element) {
+    $("#boxStatus").append(element);
+    element.css({'x': '50px', opacity: 0}).transition({ 'x':0, opacity: 1 }, 400, 'snap');
 }
 
 var channels = {

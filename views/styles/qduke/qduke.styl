@@ -19,7 +19,6 @@ qLogoGray = #555
 //915 old 915+42 = 957
 // 549 old 549+42=591
 
-
 body
 	background-color qBG
 	color white
@@ -38,7 +37,6 @@ body
 		@media only screen and (max-width: 956px) // if narrow
 			width col3 + col-margin +21*2
 		@media only screen and (max-width: 590px) // if really narrow
-			//max-width col2 + col-margin +21*2
 			width 100%
 			padding 0 10px
 			margin-top 10px
@@ -87,7 +85,7 @@ body
 		display none
 	.rowHead
 		@media only screen and (min-width: 958px) // if wide
-			height 43px // NEW
+			height 43px
 			position relative
 		.box
 			height 60px
@@ -96,8 +94,8 @@ body
 			line-height 2.8em
 		.boxLogo
 			@media only screen and (min-width: 958px) // if wide
-				height 80px // NEW
-				position absolute // NEW
+				height 80px
+				position absolute
 			background qLogoGray
 			font-size 2em
 			line-height 1.7em
@@ -152,7 +150,6 @@ body
 			.StatusWeather
 				img
 					float left
-			// NEW
 			@media only screen and (min-width: 958px) // if wide
 				position absolute
 				margin-left 183px
@@ -210,14 +207,10 @@ body
 				width col2
 				width 99%
 			@media only screen and (min-width: 958px) // if wide
-				height 80px // NEW
-				margin-top 40px //NEW
-				line-height 3.5 em //NEW
+				height 80px
+				margin-top 40px
+				line-height 3.5em
 		.boxStories
-			// @media only screen and (max-width: 956px) // if narrow
-			// 	:nth-child(4)
-			// 		display none
-			// TODO(rivkees): show more on narrower?
 			@media only screen and (max-width: 590px) // if really narrow
 				:nth-child(3)
 					display none
@@ -383,11 +376,6 @@ body
 				float right
 				padding 0 10px
 				width col4
-				// @media only screen and (max-width: 956px) // if narrow
-				// 	width col3
-				// 	overflow-x scroll
-				// @media only screen and (max-width: 590px) // if really narrow
-				// 	width col2
 				min-height 711px
 				text-align left
 				font-size 1em

@@ -52,10 +52,9 @@ function changeTab(tab) {
     $(".tabMenu .boxMenu").removeClass("selectedTab");
     $("#tabFrame .tabContent").removeClass("tabShown");
 
-    setTimeout(function(){
-        $(".tabMenu .boxMenu:eq("+(tab-1)+")").addClass("selectedTab");
-        $("#tabFrame .tabContent:eq("+(tab-1)+")").addClass("tabShown");
-    }, 500);
+    $("#tabFrame .tabContent:eq("+(tab-1)+")").addClass("tabShown").css({'margin-top': '40px', opacity: 0}).transition({ 'margin-top':0, opacity: 1 }, 300, 'snap');
+    $(".tabMenu .boxMenu:eq("+(tab-1)+")").addClass("selectedTab");
+
     _gaq.push(['_trackEvent', 'Change Tab', $(".tabMenu .boxMenu:eq("+(tab-1)+")").text(), 1, 0]);
 }
 

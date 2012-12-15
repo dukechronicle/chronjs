@@ -205,10 +205,10 @@ site.article = function (req, res, next) {
 
 site.articlePrint = function (req, res, next) {
     var url = req.params.url;
-    api.site.getArticleContent(url, function (err, doc, model, parents) {
-        if (err)
-            next();
-        else if ('/article/' + url != doc.url)
+    api.site.getArticleContent(url, function (err, model) {
+        if (err) return next(err);
+        var doc = model.doc;
+        if ('/article/' + url != doc.url)
             res.redirect(doc.url + '/print');
         else {
             doc.url += '/print';

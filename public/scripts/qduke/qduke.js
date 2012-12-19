@@ -218,7 +218,10 @@ function sports(url) {
                 homeaway = $(this).find("homeaway").text();
                 if (homeaway == "H") homeaway = "vs.";
                 else if (homeaway == "A") homeaway = "@";
-                else if (homeaway == "N") homeaway = "";
+                else if (homeaway == "N")  homeaway = "";
+                if (homeaway == "") {
+                    opponent += " (" + loc + ")";
+                }
                 if (channels[tv] != undefined ) {
                     tv = " <td class='sportTv'><img src='"+channels[tv]+"' /></td>";
                 }

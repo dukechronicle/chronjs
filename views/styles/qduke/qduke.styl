@@ -34,7 +34,9 @@ body
 		width col5 + col-margin +21*2
 		margin 21px auto 0 auto
 		padding 0 21px
-		@media only screen and (max-width: 956px) // if narrow
+		@media only screen and (max-width: 956px) // if 4 col (ipad)
+			width col4 + col-margin +21*2
+		@media only screen and (max-width: 773px) // if narrow
 			width col3 + col-margin +21*2
 		@media only screen and (max-width: 590px) // if really narrow
 			width 100%
@@ -68,7 +70,9 @@ body
 			line-height 1em
 			padding 8px
 			width col4
-			@media only screen and (max-width: 956px) // if narrow
+			@media only screen and (max-width: 956px) // if 4 col (ipad)
+				width col3
+			@media only screen and (max-width: 773px) // if narrow
 				width col2
 			@media only screen and (max-width: 590px) // if really narrow
 				//width col1
@@ -107,8 +111,10 @@ body
 				text-indent 100%
 				white-space nowrap
 				overflow hidden
-			@media only screen and (max-width: 956px) // if narrow
-				width col3
+			@media only screen and (max-width: 956px) // if 4 col (ipad)
+				width col4 // 774
+			@media only screen and (max-width: 773px) // if narrow
+				width col3 // 591
 			@media only screen and (max-width: 590px) // if really narrow
 				//max-width col2
 				width 99%
@@ -117,7 +123,7 @@ body
 				@media only screen and (min-width: 958px) // if wide
 					height 40px
 					min-height 40px
-				@media only screen and (max-width: 956px) // if narrow
+				@media only screen and (max-width: 956px) // if 4 col (ipad)
 					height 57px
 				font-size .9em
 				line-height 1.2em
@@ -157,10 +163,11 @@ body
 				.box:hover
 					height auto
 					box-shadow 1px 1px 5px #444
+			@media only screen and (max-width: 773px) // if narrow
+				:nth-child(4)
+					display none
 			@media only screen and (max-width: 590px) // if really narrow
 				:nth-child(3)
-					display none
-				:nth-child(4)
 					display none
 	.rowNews
 		.box
@@ -198,11 +205,13 @@ body
 			background qBlue
 			font-size 1.5em
 			line-height 4.8em
-			@media only screen and (max-width: 956px) // if narrow
-				width col3
+			@media only screen and (max-width: 956px) // if 4 col (ipad)
+				width col4
 				height 60px
 				font-size 1.3em
 				line-height 2.8em
+			@media only screen and (max-width: 773px) // if narrow
+				width col3
 			@media only screen and (max-width: 590px) // if really narrow
 				width col2
 				width 99%
@@ -211,10 +220,11 @@ body
 				margin-top 40px
 				line-height 3.5em
 		.boxStories
+			@media only screen and (max-width: 773px) // if narrow
+				:nth-child(4)
+					display none
 			@media only screen and (max-width: 590px) // if really narrow
 				:nth-child(3)
-					display none
-				:nth-child(4)
 					display none
 			a.boxNews
 				overflow hidden
@@ -247,6 +257,10 @@ body
 			height 59px
 			cursor text
 			width col3
+			@media only screen and (max-width: 956px) // if 4 col (ipad)
+				width col2
+			@media only screen and (max-width: 773px) // if narrow
+				width col3
 			@media only screen and (max-width: 590px) // if really narrow
 				width col2
 				width 99%
@@ -263,7 +277,9 @@ body
 			line-height 1.6em
 			height 28px
 			background qDGray
-			@media only screen and (max-width: 956px) // if narrow
+			@media only screen and (max-width: 956px) // if 4 col (ipad)
+				width col1
+			@media only screen and (max-width: 773px) // if narrow
 				width col3in4
 			@media only screen and (max-width: 590px) // if really narrow
 				width col1
@@ -294,7 +310,9 @@ body
 			border-bottom col-margin solid qLGray
 		span.adSpacer
 			width col4
-			@media only screen and (max-width: 956px) // if narrow
+			@media only screen and (max-width: 956px) // if 4 col (ipad)
+				width col3
+			@media only screen and (max-width: 773px) // if narrow
 				width col2
 			@media only screen and (max-width: 590px) // if really narrow
 				width col1
@@ -308,7 +326,15 @@ body
 			background none
 			color qDGray
 			cursor default
-	@media only screen and (max-width: 956px) // if narrow
+	@media only screen and (max-width: 956px) // if 4 col (ipad)
+		.tabMenu .mobileHideLgTablet
+			display none
+			width 0
+			height 0
+			border 0
+			padding 0
+			margin 0
+	@media only screen and (max-width: 773px) // if narrow
 		.tabMenu .mobileHideTablet
 			display none
 			width 0
@@ -402,9 +428,12 @@ body
 							max-width 200px
 			a.selected
 				cursor default
-			@media only screen and (max-width: 956px) // if narrow
+			@media only screen and (max-width: 773px) // if narrow
 				.sportsList
 					display none //TODO(rivkees) maybe change
+			@media only screen and (max-width: 956px) // if 4 col (ipad)
+				.scheduleBox
+					width col3
 	.rowAds
 		a
 			height 30px
@@ -441,24 +470,24 @@ body
 			font-weight bold
 			font-size 28px
 			line-height 1.25
-	@media only screen and (max-width: 956px) and (min-width: 591px) // if narrow
-		.rowHead
-			.scrollWrap
-				height 60px
-		.rowNews
-			.scrollWrap
-				height 123px
-		.scrollWrap
-			clear both
-			margin 0 -21px
-			// -webkit-overflow-scrolling: touch
-			overflow hidden
-			overflow-x scroll
-			width col3 +21*2
-			.scrollable
-				float none !important
-				margin 0 21px
-				width col4 +21 !important
+	// @media only screen and (max-width: 956px) and (min-width: 591px) // if narrow
+	// 	.rowHead
+	// 		.scrollWrap
+	// 			height 60px
+	// 	.rowNews
+	// 		.scrollWrap
+	// 			height 123px
+	// 	.scrollWrap
+	// 		clear both
+	// 		margin 0 -21px
+	// 		// -webkit-overflow-scrolling: touch
+	// 		overflow hidden
+	// 		overflow-x scroll
+	// 		width col3 +21*2
+	// 		.scrollable
+	// 			float none !important
+	// 			margin 0 21px
+	// 			width col4 +21 !important
 	// @media only screen and (max-width: 590px) // if really narrow
 	// 	.scrollWrap
 	// 		margin 0 -10

@@ -234,6 +234,7 @@ function sports(url) {
                         +tv
                     +"</tr>");
             });
+            $("#contentSports .scheduleBox").css({'margin-top': '50px', opacity: 0}).transition({ 'margin-top':0, opacity: 1 }, 400, 'snap')
         }
     });
 }

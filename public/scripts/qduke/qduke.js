@@ -144,7 +144,7 @@ function updateLiveScores() {
 function displayLiveSports(game) {
     game.team1score = game.team1score || "";
     game.team2score = game.team2score || "";
-    var score = '<p class="StatusTime">'+game.time+'</p><p class="StatusTeam"> '+game.team1+'<span class="StatusScore">'+game.team1score+'</span></p><p class="StatusTeam"> '+game.team2+'<span class="StatusScore">'+game.team2score+'</span></p>'
+    var score = '<p class="StatusTime">'+game.time+'</p><p class="StatusTeam" id="StatusTeam1"> '+game.team1+'<span class="StatusScore">'+game.team1score+'</span></p><p class="StatusTeam" id="StatusTeam2"> '+game.team2+'<span class="StatusScore">'+game.team2score+'</span></p>'
     
     if ($("#"+game.sport).length == 0) {
         appendWithTransition(
@@ -152,10 +152,10 @@ function displayLiveSports(game) {
         ); 
     } else {
         $("#"+game.sport).attr("href", game.link).html(score);
-        $("#"+game.sport).transition({ x: '10px' }, 20).transition({ x: '-10px' }, 20).transition({ x: '10px' }, 20).transition({ x: '-10px' }, 20).transition({ x: '10px' }, 20).transition({ x: '0px' }, 20);
+        $("#"+game.sport).transition({ 'opacity': '0' }, 200).transition({ 'opacity': '1' }, 100);
     }
 
-    $("#"+game.sport+" p:nth-child("+game.winner+")").addClass("strong");
+    $("#"+game.sport+" p#StatusTeam"+game.winner).addClass("strong");
 }
 
 /* Weather */

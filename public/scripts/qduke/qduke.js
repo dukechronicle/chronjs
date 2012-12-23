@@ -361,6 +361,22 @@ $(function(){
     // /* Start Tour */
     // $('#joyRideTipContent').joyride({
     //     'cookieMonster': true,
-    //     'cookieName': 'qDukeNov26',
+    //     'cookieName': 'qDukeNov29',
     // });
+    showPromo();
 });
+
+function showPromo() {
+    if (!$.isFunction($.cookie) || !$.cookie("PromoCookieDec10")) {
+        $("#wrap").prepend("<div class='promo clearfix'><p class='left'>Welcome to the new qDuke.com!</p><p class='right'><a href='http://chron.it/SSgkeZ'>Send feedback</a>&nbsp;|&nbsp;<a href='http://old.qduke.com'>Switch back to old qDuke</a>&nbsp;|&nbsp;<a href='javascript:turnOffPromo();'>Close</a></p></div>");
+        $(".promo").css({'margin-top': '-50px', opacity: 0}).transition({delay: 2000, 'margin-top':0, opacity: 1 }, 400, 'snap');
+    }
+}
+
+function turnOffPromo() {
+    if ($.isFunction($.cookie)) {
+        $.cookie("PromoCookieDec10", 'ridden', { expires: 365, domain: false });
+        $(".promo").transition({'margin-top':'-50px', opacity: 0 }, 400, 'snap');
+        $("promo").remove();
+    }
+}

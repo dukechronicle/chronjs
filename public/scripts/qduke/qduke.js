@@ -1,4 +1,4 @@
-var qDuke_api_url = 'http://chronproxy.herokuapp.com/qduke';
+var qDuke_api_url = 'http://qduke.herokuapp.com/api';
 
 /******************
 * Analytics Setup *
@@ -85,27 +85,28 @@ function loadChronAPI(data) {
     }
     /* Status Bar */
     var count = $("#boxStatus").length; var maxCount = 4;
-    // Headline
-    // if (docs["Top Headline"] != undefined) {
-    //     console.log("top headline");
-    //     for (var i in docs["Top Headline"]) {
-    //         console.log(i)
-    //         var article = docs["Top Headline"][i];
-    //         $("#boxStatus").append(
-    //             $("<a class='box' />").attr("href", "http://dukechronicle.com" + article.url).html("<p>"+article.title+"</p>")
-    //         );
-    //     }
-    // }
     // Sports
-    if (data.liveSports != undefined) {
+    if (data.liveSports != undefined && data.liveSports != null) {
         // Check if status bar is full
         if (count >= maxCount) return;
         else count++;
         displayLiveSports(data.liveSports);
         setInterval(updateLiveScores, 30000);
     }
+    // Headline
+    if (data.headlines != undefined && data.headlines != null) {
+        for (var i in data.headlines) {
+            // Check if status bar is full
+            if (count >= maxCount) return;
+            else count++;
+            var article = data.headlines[i];
+            appendWithTransition(
+                $("<a class='box' />").on('click', linkTrack).attr("href", article.url).html("<p>"+article.title+"</p>")
+            );
+        }
+    }
     // OIT
-    if (data.oit != undefined) {
+    if (data.oit != undefined && data.oit != null) {
         // Check if status bar is full
         if (count >= maxCount) return;
         else count++;

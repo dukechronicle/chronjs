@@ -101,7 +101,7 @@ function loadChronAPI(data) {
             else count++;
             var article = data.headlines[i];
             appendWithTransition(
-                $("<a class='box' />").on('click', linkTrack).attr("href", article.url).html("<p>"+article.title+"</p>")
+                $("<a class='box' />").on('click', linkTrack).attr("href", article.link).html("<p>"+article.title+"</p>")
             );
         }
     }
@@ -378,6 +378,6 @@ function turnOffPromo() {
     if ($.isFunction($.cookie)) {
         $.cookie("PromoCookieDec20", 'ridden', { expires: 365, domain: false });
         $(".promo").transition({'margin-top':'-50px', opacity: 0 }, 400, 'snap');
-        $("promo").remove();
+        $(".promo").remove();
     }
 }

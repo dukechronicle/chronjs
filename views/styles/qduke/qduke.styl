@@ -385,14 +385,15 @@ body
 				height 40px
 			.boxLink
 				font-size 1.3em
-				line-height 1.8em
+				line-height 2em
 				@media only screen and (max-width: 590px) // if really narrow
 					font-size 1.1em
+					height 32px
 			@media only screen and (min-width: 958px) // if wide
 				.boxLinkTall
 					height 60px
 					font-size 1.8em
-					line-height 2em
+					line-height 2.3em
 		#contentSports
 			a.box
 				padding 5px
@@ -433,6 +434,11 @@ body
 			@media only screen and (max-width: 956px) // if 4 col (ipad)
 				.scheduleBox
 					width col3
+			@media only screen and (max-width: 590px) // if really narrow
+				.scheduleBox
+					width 99%
+					font-size .9em
+					line-height 1.3em
 	.rowAds
 		a
 			height 30px
@@ -472,6 +478,8 @@ body
 		width col5
 	.colsmargin
 		width col-margin
+		@media only screen and (max-width: 590px) // if really narrow
+			width 1%
 	.joyride-tip-guide
 		p
 			line-height 1.25

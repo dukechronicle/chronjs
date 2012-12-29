@@ -7,8 +7,8 @@ var qDuke_version = '12/29/2012';
     var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-5900287-15']);
     _gaq.push(['_setDomainName', 'qduke.com']);
-    _gaq.push(['_trackPageview']);
     _gaq.push(['_setCustomVar', 1, 'qDuke Version', qDuke_version, 3]);
+    _gaq.push(['_trackPageview']);
 
     (function() {
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;

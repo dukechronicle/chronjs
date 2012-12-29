@@ -55,7 +55,7 @@ function changeTab(tab) {
     $("#tabFrame .tabContent:eq("+(tab-1)+")").addClass("tabShown").css({'margin-top': '50px', opacity: 0}).transition({ 'margin-top':0, opacity: 1 }, 400, 'snap');
     $(".tabMenu .boxMenu:eq("+(tab-1)+")").addClass("selectedTab");
 
-    _gaq.push(['_trackEvent', 'Change Tab', $(".tabMenu .boxMenu:eq("+(tab-1)+")").text(), 1, 0]);
+    _gaq.push(['_trackEvent', 'Change Tab', $(".tabMenu .boxMenu:eq("+(tab-1)+")").text(), '', 0]);
 }
 
 /*********************
@@ -63,7 +63,6 @@ function changeTab(tab) {
 **********************/
 // loadChronAPI loads news, headlines, sports, OIT, and twitter data from the qDuke api.
 function loadChronAPI(data) {
-    console.log(data);
     /* News Bar */
     var boxStories = $(".boxStories .boxEmpty");
     for (var i = 0; i < data.news.length; i++) {
@@ -164,7 +163,6 @@ function displayLiveSports(game) {
 function showWeather(weather) {
     // Check if status bar is full
     var count = $("#boxStatus").length; var maxCount = 4;
-    console.log(count);
     if (count >= maxCount) return;
 
     var forcast = '<img src="'+weather.thumbnail+'"/><p> '+weather.currently+', '+weather.temp+'&deg;'+weather.units.temp+'</p><p>'+weather.city+", "+weather.region+'</p>'
@@ -196,7 +194,7 @@ function changeSport(id, name) {
     }
     $(".sportsList a").removeClass("selected");
     $(".sportsList a#sportID"+id).addClass("selected");
-    _gaq.push(['_trackEvent', 'Change Sport', name, 1, 0]);
+    _gaq.push(['_trackEvent', 'Change Sport', name, '', 0]);
 }
 
 // sports loads the schedule at the given URL into the sports tab.
@@ -245,7 +243,6 @@ function sports(url) {
 
 // Outbound Link Tracking function
 linkTrack = function(e){
-    console.log("track")
     var url = $(this).attr("href");
     var text = $(this).attr("data-tracking") || $(this).text() || url
     if (e.currentTarget.host != window.location.host) {

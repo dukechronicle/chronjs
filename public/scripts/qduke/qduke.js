@@ -326,7 +326,7 @@ $(function(){
         // ChronAPI
         $.ajax({
             url: qDuke_api_url,
-            dataType: "json",
+            dataType: "jsonp",
             cache: false,
             timeout: 5000,
             success: function(data) {

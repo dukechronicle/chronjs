@@ -144,6 +144,7 @@ function updateLiveScores() {
 function displayLiveSports(game) {
     game.team1score = game.team1score || "";
     game.team2score = game.team2score || "";
+    if (game.time == "HALFTIME") game.time = "HALF TIME";
     var score = '<p class="StatusTime">'+game.time+'</p><p class="StatusTeam" id="StatusTeam1"> '+game.team1+'<span class="StatusScore">'+game.team1score+'</span></p><p class="StatusTeam" id="StatusTeam2"> '+game.team2+'<span class="StatusScore">'+game.team2score+'</span></p>'
     
     if ($("#"+game.sport).length == 0) {

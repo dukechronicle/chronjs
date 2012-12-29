@@ -189,6 +189,7 @@ body
 		.box
 			height 120px
 			background black
+			line-height 1.1em
 			img
 				float left
 				display inline
@@ -200,16 +201,9 @@ body
 				left 0
 				width 100%
 				background rgba(0, 0, 0, .8)
-				.txt
-					font-size .9em
-					line-height 1.1em
-					margin 5px
-			@media only screen and (min-width: 957px) // if wide
-				.caption
-					height 35px
-				&:hover .caption
-					height auto
+				border-top col-margin solid qBlue
 			.captionTop
+				position absolute
 				height auto
 				top 0
 				bottom auto
@@ -217,24 +211,20 @@ body
 				opacity .95
 				background qBlue
 				border-radius 0 0 4px 0
-		// .boxChron
-		// 	background qBlue
-		// 	font-size 1.5em
-		// 	line-height 4.8em
-		// 	@media only screen and (max-width: 956px) // if 4 col (ipad)
-		// 		width col4
-		// 		height 60px
-		// 		font-size 1.3em
-		// 		line-height 2.8em
-		// 	@media only screen and (max-width: 773px) // if narrow
-		// 		width col3
-		// 	@media only screen and (max-width: 590px) // if really narrow
-		// 		width col2
-		// 		width 99%
-		// 	@media only screen and (min-width: 957px) // if wide
-		// 		height 80px
-		// 		margin-top 40px
-		// 		line-height 3.5em
+			.txt
+				font-size .9em
+				margin 5px
+			@media only screen and (min-width: 957px) // if wide
+				.caption
+					height 48px
+					line-height 1.2em
+				&:hover .caption
+					height auto
+			&.breaking
+				.captionTop
+					background #c80000
+				.caption
+					border-top-color #c80000
 		.boxStories
 			@media only screen and (max-width: 773px) // if narrow
 				:nth-child(4)
@@ -261,11 +251,6 @@ body
 			a:hover, a:focus
 				.caption
 					background rgba(0, 153, 255, .8)
-		.box.breaking
-			//border 3px solid rgba(200, 0, 0, .9);
-			//box-shadow 1px 1px 5px #c80000;
-			.captionTop
-				background #c80000
 		a.boxEmpty
 			background qLGray url("/img/qduke/loading.gif") no-repeat center center
 	.rowSearch

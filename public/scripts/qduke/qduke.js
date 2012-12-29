@@ -70,11 +70,11 @@ function loadChronAPI(data) {
         // Special By section
         if (article.type == 'Breaking') {
             $(boxStories[i]).addClass("breaking").append(
-            $("<div>").addClass("caption captionTop").append($("<div>").addClass("txt").text("Breaking")));
+            $("<div>").addClass("captionTop").append($("<div>").addClass("txt").text("Breaking")));
         }
         if (article.type == 'Sports Blog') {
             $(boxStories[i]).append(
-            $("<div>").addClass("caption captionTop").append($("<div>").addClass("txt").text("Sports Blog")));
+            $("<div>").addClass("captionTop").append($("<div>").addClass("txt").text("Sports Blog")));
         }
         if (article.img == undefined) article.img = "/img/qduke/default_image.jpg";
         $(boxStories[i]).attr("href", article.link).append(

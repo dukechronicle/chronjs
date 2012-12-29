@@ -39,13 +39,14 @@ html
         #wrap
             script(src="http://www.duke.edu/alert.html", type="text/javascript")
             .rowHead.clearfix
-                a.box.boxLogo(href="http://qduke.com")
-                    h1 qDuke
+                .boxLogos
+                    a.box.boxLogo(href="http://qduke.com")
+                        h1 qDuke
+                    a.box.boxChron(href="http://dukechronicle.com") The Chronicle  
                 .scrollWrap.clearfix
                     #boxStatus.scrollable.clearfix
             // NEWS
             .rowNews.clearfix
-                a.box.boxChron(href="http://dukechronicle.com") The Chronicle
                 .scrollWrap.clearfix
                     .boxStories.scrollable.clearfix
                         a.box.boxNews.boxEmpty

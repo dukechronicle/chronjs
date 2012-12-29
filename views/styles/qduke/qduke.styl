@@ -97,10 +97,29 @@ body
 			background qBlue
 			font-size 1.3em
 			line-height 2.8em
+		.boxLogos
+			float left
+			width col1 + col-margin
+			.box
+				float left
+				@media only screen and (min-width: 957px) // if wide
+					height 80px
+			@media only screen and (max-width: 956px) // if 4 col (ipad)
+				width 100%
+				.boxLogo
+					width col2
+				.boxChron
+					line-height 2.8em
+					width col2 // 774
+			@media only screen and (max-width: 773px) // if narrow
+				.boxLogo
+					width col2 // 591
+				.boxChron
+					width col1
+			@media only screen and (max-width: 590px) // if really narrow
+				.box
+					width 49%
 		.boxLogo
-			@media only screen and (min-width: 957px) // if wide
-				height 80px
-				position absolute
 			background qLogoGray
 			font-size 2em
 			line-height 1.7em
@@ -112,13 +131,10 @@ body
 				text-indent 100%
 				white-space nowrap
 				overflow hidden
-			@media only screen and (max-width: 956px) // if 4 col (ipad)
-				width col4 // 774
-			@media only screen and (max-width: 773px) // if narrow
-				width col3 // 591
-			@media only screen and (max-width: 590px) // if really narrow
-				//max-width col2
-				width 99%
+		.boxChron
+			background qBlue
+			font-size 1.5em
+			line-height 3.5em
 		#boxStatus
 			.box
 				@media only screen and (min-width: 957px) // if wide
@@ -201,24 +217,24 @@ body
 				opacity .95
 				background qBlue
 				border-radius 0 0 4px 0
-		.boxChron
-			background qBlue
-			font-size 1.5em
-			line-height 4.8em
-			@media only screen and (max-width: 956px) // if 4 col (ipad)
-				width col4
-				height 60px
-				font-size 1.3em
-				line-height 2.8em
-			@media only screen and (max-width: 773px) // if narrow
-				width col3
-			@media only screen and (max-width: 590px) // if really narrow
-				width col2
-				width 99%
-			@media only screen and (min-width: 957px) // if wide
-				height 80px
-				margin-top 40px
-				line-height 3.5em
+		// .boxChron
+		// 	background qBlue
+		// 	font-size 1.5em
+		// 	line-height 4.8em
+		// 	@media only screen and (max-width: 956px) // if 4 col (ipad)
+		// 		width col4
+		// 		height 60px
+		// 		font-size 1.3em
+		// 		line-height 2.8em
+		// 	@media only screen and (max-width: 773px) // if narrow
+		// 		width col3
+		// 	@media only screen and (max-width: 590px) // if really narrow
+		// 		width col2
+		// 		width 99%
+		// 	@media only screen and (min-width: 957px) // if wide
+		// 		height 80px
+		// 		margin-top 40px
+		// 		line-height 3.5em
 		.boxStories
 			@media only screen and (max-width: 773px) // if narrow
 				:nth-child(4)

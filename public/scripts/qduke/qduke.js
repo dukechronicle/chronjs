@@ -1,4 +1,5 @@
 var qDuke_api_url = 'http://qduke.herokuapp.com/api';
+var qDuke_version = '12/29/2012';
 
 /******************
 * Analytics Setup *
@@ -7,6 +8,7 @@ var qDuke_api_url = 'http://qduke.herokuapp.com/api';
     _gaq.push(['_setAccount', 'UA-5900287-15']);
     _gaq.push(['_setDomainName', 'qduke.com']);
     _gaq.push(['_trackPageview']);
+    _gaq.push(['_setCustomVar', 1, 'qDuke Version', qDuke_version, 3]);
 
     (function() {
         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;

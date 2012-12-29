@@ -90,9 +90,9 @@ body
 		display none
 	.rowHead
 		clear both
-		@media only screen and (min-width: 957px) // if wide
-			height 43px
-			position relative
+		height 43px
+		@media only screen and (max-width: 956px) // if 4 col (ipad)
+			height auto
 		.box
 			height 60px
 			background qBlue
@@ -103,10 +103,11 @@ body
 			width col1 + col-margin
 			.box
 				float left
-				@media only screen and (min-width: 957px) // if wide
-					height 80px
+				height 80px
 			@media only screen and (max-width: 956px) // if 4 col (ipad)
 				width 100%
+				.box
+					height 60px
 				.boxLogo
 					width col2
 				.boxChron
@@ -138,8 +139,7 @@ body
 			line-height 3.5em
 		#boxStatus
 			.box
-				@media only screen and (min-width: 957px) // if wide
-					height 40px
+				height 40px
 				@media only screen and (max-width: 956px) // if 4 col (ipad)
 					height 57px
 				font-size .9em
@@ -174,6 +174,7 @@ body
 				img
 					float left
 			@media only screen and (min-width: 957px) // if wide
+				// TODO(rivkees): IE will not expand properly
 				position absolute
 				margin-left 183px
 				z-index 10
@@ -216,6 +217,7 @@ body
 				font-size .9em
 				margin 5px
 			@media only screen and (min-width: 957px) // if wide
+				// TODO(rivkees): IE will not have caption same height
 				.caption
 					height 48px
 					line-height 1.2em
@@ -393,6 +395,7 @@ body
 					font-size 1.1em
 					height 32px
 			@media only screen and (min-width: 957px) // if wide
+				// TODO(rivkees): IE will not have first row taller
 				.boxLinkTall
 					height 60px
 					font-size 1.8em

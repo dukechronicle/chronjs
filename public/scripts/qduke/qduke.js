@@ -334,7 +334,6 @@ $(function(){
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 $(".boxStories .boxEmpty").text("Oops, couldn't load the articles. Try refreshing the page.")
-                console.log("Error loading articles:" + errorThrown)
             }
         });
         // Load Weather

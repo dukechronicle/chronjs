@@ -37,84 +37,89 @@ html
         meta(name="viewport", content="width=device-width; minimum-scale=1.0, maximum-scale=1.0; user-scalable=no", id="viewport")
     body
         #wrap
-            script(src="http://www.duke.edu/alert.html", type="text/javascript")
-            .rowHead.clearfix
-                .boxLogos
-                    a.box.boxLogo(href="http://qduke.com")
-                        h1 qDuke
-                    a.box.boxChron(href="http://dukechronicle.com") The Chronicle  
-                .scrollWrap.clearfix
-                    #boxStatus.scrollable.clearfix
-            // NEWS
-            .rowNews.clearfix
-                .scrollWrap.clearfix
-                    .boxStories.scrollable.clearfix
-                        a.box.boxNews.boxEmpty
-                        a.box.boxNews.boxEmpty
-                        a.box.boxNews.boxEmpty
-                        a.box.boxNews.boxEmpty
-            // SEARCH
-            .rowSearch.clearfix
-                .box.boxSearch
-                    input(name="query", type="text", style="background:transparent", onkeydown="searchOnEnter(event)")
-                .boxButtons.clearfix
-                    a.box.boxButton#GoogleSearchButton(href='http://google.com/') Google
-                    a.box.boxButton(href='http://www.wolframalpha.com') WolframAlpha
-                    a.box.boxButton(href='http://en.wikipedia.org') Wikipedia
-                    a.box.boxButton(href='http://duke.edu') Duke (Directory)
-            //- // MENU
-            .menu.tabMenu.clearfix
-                a.box.boxMenu.selectedTab(href="javascript:changeTab(1)") Quick Links
-                span.spacer.colsmargin
-                a.box.boxMenu#sportsTabLink(href="javascript:changeTab(2)") Sports
-                span.spacer.colsmargin.mobileHideLgTablet
-                a.box.boxMenu.mobileHideLgTablet#busTabLink(href="javascript:changeTab(3)") Bus Tracking
-                span.spacer.colsmargin.mobileHideTablet
-                a.box.boxMenu.mobileHideTablet(href="javascript:changeTab(4)") Campus Map
-                span.spacer.colsmargin.mobileHidePhone
-                span.spacer.cols1.mobileHidePhone
-            // LINKS
-            #tabFrame.clearfix
-                #contentLinks.tabContent.tabShown
-                    - var linkRows = Math.ceil(links.length/5)
-                    -for (var i = 0; i < 5; i++)
-                        a.box.boxLink.boxLinkTall(href=links[i].url) #{links[i].title}
-                    - for (var row = 1; row < linkRows; row++)
-                        -for (var i = row*5; i < row*5+5; i++)
-                            a.box.boxLink(href=links[i].url) #{links[i].title}
-                #contentSports.contentBoxes.tabContent
-                    .scrollWrap
-                        .box.scheduleBox.scrollable.clearfix
-                            table
-                                thead
-                                    tr
-                                        th Date
-                                        th Time
-                                        th Sport
-                                        th Opponent
-                                        th TV
-                                tbody#sportSchedule
-                    .sportsList
-                        a.box.boxSport.selected(href="javascript:changeSport('', 'All Sports')", id="sportID") All Sports
-                        - var sports = [{"name":"Baseball","id":1850},{name: "Basketball (M)","id":1845},{"name":"Basketball (W)","id":1846},{"name":"Cross Country","id":1831},{"name":"Fencing","id":2028},{"name":"Field Hockey","id":2029},{"name":"Football","id":1843},{"name":"Golf (M)","id":1837},{"name":"Golf (W)","id":1838},{"name":"Lacrosse (M)","id":2027},{"name":"Lacrosse (W)","id":1832},{"name":"Rowing","id":2031},{"name":"Soccer (M)","id":1833},{"name":"Soccer (W)","id":1842},{"name":"Swimming & Diving","id":2182},{"name":"Tennis (M)","id":1839},{"name":"Tennis (W)","id":1840},{"name":"Track & Field","id":1835},{"name":"Volleyball","id":1844},{"name":"Wrestling","id":1834}]
-                        for sport in sports
-                            a.box.boxSport(href="javascript:changeSport("+sport.id+", '"+sport.name+"')", id="sportID"+sport.id)=sport.name
-                .contentFrame.box.tabContent(data-content='<object type="application/x-shockwave-flash" width="100%" height="100%" data="//static.transloc.com/tvspublic/_common/swf/TvsClient-default.swf?v=6619a32d2bacada0b3703d86a4b8efaa"><param name="src" value="//static.transloc.com/tvspublic/_common/swf/TvsClient-default.swf?v=6619a32d2bacada0b3703d86a4b8efaa"><param name="bgColor" value="#ffffff"><param name="wmode" value="transparent"><param name="allowScriptAccess" value="always"><param name="autoplay" value="false"><param name="flashvars" value="box=35.994114%2C-78.955356%2C36.022726%2C-78.914718&amp;feeds_domain=feeds.transloc.com&amp;tile_server_parent=transloc.com&amp;sms=1&amp;predictions=True&amp;agencies=176&amp;static_media_domain=static.transloc.com&amp;announcements=True&amp;sms_keyword=DUKEU&amp;classic=1"><div><p><strong>Flash Required</strong></p><p>Flash is required to view this media. <a href="http://www.adobe.com/go/getflashplayer">Download Here</a>.</p></div></object>')
-                    a#BusTracking.newWindow(href="http://www.duke.transloc.com/")
-                .contentFrame.box.tabContent(data-content='<iframe src="http://maps.duke.edu/map/index.php?id=21"></iframe>')
-                    a#CampusMap.newWindow(href="http://map.duke.edu/")
+            // HEAD CONTENT
+            .section.head
+                script(src="http://www.duke.edu/alert.html", type="text/javascript")
+                .rowHead.clearfix
+                    .boxLogos
+                        a.box.boxLogo(href="http://qduke.com")
+                            h1 qDuke
+                        a.box.boxChron(href="http://dukechronicle.com") The Chronicle  
+                    .scrollWrap.clearfix
+                        #boxStatus.scrollable.clearfix
+                // NEWS
+                .rowNews.clearfix
+                    .scrollWrap.clearfix
+                        .boxStories.scrollable.clearfix
+                            a.box.boxNews.boxEmpty
+                            a.box.boxNews.boxEmpty
+                            a.box.boxNews.boxEmpty
+                            a.box.boxNews.boxEmpty
+                // SEARCH
+                .rowSearch.clearfix
+                    .box.boxSearch
+                        input(name="query", type="text", style="background:transparent", onkeydown="searchOnEnter(event)")
+                    .boxButtons.clearfix
+                        a.box.boxButton#GoogleSearchButton(href='http://google.com/') Google
+                        a.box.boxButton(href='http://www.wolframalpha.com') WolframAlpha
+                        a.box.boxButton(href='http://en.wikipedia.org') Wikipedia
+                        a.box.boxButton(href='http://duke.edu') Duke (Directory)
+            // MAIN CONTENT
+            .section.main
+                // MENU
+                .menu.tabMenu.clearfix
+                    a.box.boxMenu.selectedTab(href="javascript:changeTab(1)") Quick Links
+                    span.spacer.colsmargin
+                    a.box.boxMenu#sportsTabLink(href="javascript:changeTab(2)") Sports
+                    span.spacer.colsmargin.mobileHideLgTablet
+                    a.box.boxMenu.mobileHideLgTablet#busTabLink(href="javascript:changeTab(3)") Bus Tracking
+                    span.spacer.colsmargin.mobileHideTablet
+                    a.box.boxMenu.mobileHideTablet(href="javascript:changeTab(4)") Campus Map
+                    span.spacer.colsmargin.mobileHidePhone
+                    span.spacer.cols1.mobileHidePhone
+                // LINKS
+                #tabFrame.clearfix
+                    #contentLinks.tabContent.tabShown
+                        - var linkRows = Math.ceil(links.length/5)
+                        -for (var i = 0; i < 5; i++)
+                            a.box.boxLink.boxLinkTall(href=links[i].url) #{links[i].title}
+                        - for (var row = 1; row < linkRows; row++)
+                            -for (var i = row*5; i < row*5+5; i++)
+                                a.box.boxLink(href=links[i].url) #{links[i].title}
+                    #contentSports.contentBoxes.tabContent
+                        .scrollWrap
+                            .box.scheduleBox.scrollable.clearfix
+                                table
+                                    thead
+                                        tr
+                                            th Date
+                                            th Time
+                                            th Sport
+                                            th Opponent
+                                            th TV
+                                    tbody#sportSchedule
+                        .sportsList
+                            a.box.boxSport.selected(href="javascript:changeSport('', 'All Sports')", id="sportID") All Sports
+                            - var sports = [{"name":"Baseball","id":1850},{name: "Basketball (M)","id":1845},{"name":"Basketball (W)","id":1846},{"name":"Cross Country","id":1831},{"name":"Fencing","id":2028},{"name":"Field Hockey","id":2029},{"name":"Football","id":1843},{"name":"Golf (M)","id":1837},{"name":"Golf (W)","id":1838},{"name":"Lacrosse (M)","id":2027},{"name":"Lacrosse (W)","id":1832},{"name":"Rowing","id":2031},{"name":"Soccer (M)","id":1833},{"name":"Soccer (W)","id":1842},{"name":"Swimming & Diving","id":2182},{"name":"Tennis (M)","id":1839},{"name":"Tennis (W)","id":1840},{"name":"Track & Field","id":1835},{"name":"Volleyball","id":1844},{"name":"Wrestling","id":1834}]
+                            for sport in sports
+                                a.box.boxSport(href="javascript:changeSport("+sport.id+", '"+sport.name+"')", id="sportID"+sport.id)=sport.name
+                    .contentFrame.box.tabContent(data-content='<object type="application/x-shockwave-flash" width="100%" height="100%" data="//static.transloc.com/tvspublic/_common/swf/TvsClient-default.swf?v=6619a32d2bacada0b3703d86a4b8efaa"><param name="src" value="//static.transloc.com/tvspublic/_common/swf/TvsClient-default.swf?v=6619a32d2bacada0b3703d86a4b8efaa"><param name="bgColor" value="#ffffff"><param name="wmode" value="transparent"><param name="allowScriptAccess" value="always"><param name="autoplay" value="false"><param name="flashvars" value="box=35.994114%2C-78.955356%2C36.022726%2C-78.914718&amp;feeds_domain=feeds.transloc.com&amp;tile_server_parent=transloc.com&amp;sms=1&amp;predictions=True&amp;agencies=176&amp;static_media_domain=static.transloc.com&amp;announcements=True&amp;sms_keyword=DUKEU&amp;classic=1"><div><p><strong>Flash Required</strong></p><p>Flash is required to view this media. <a href="http://www.adobe.com/go/getflashplayer">Download Here</a>.</p></div></object>')
+                        a#BusTracking.newWindow(href="http://www.duke.transloc.com/")
+                    .contentFrame.box.tabContent(data-content='<iframe src="http://maps.duke.edu/map/index.php?id=21"></iframe>')
+                        a#CampusMap.newWindow(href="http://map.duke.edu/")
             // ADS
-            .menu.clearfix
-                .box.selected Sponsored
-                span.spacer.colsmargin
-                span.spacer.adSpacer
-            .rowAds.clearfix
-                -for (var i = 1; i <= 15; i++)
-                    |<script type='text/javascript'><!--// <![CDATA[
-                    |                     OA_show('zone_946_#{i}');
-                    |                     // ]]> --></script>
-
-            #footer
+            .section.advertising
+                .menu.clearfix
+                    .box.selected Sponsored
+                    span.spacer.colsmargin
+                    span.spacer.adSpacer
+                .rowAds.clearfix
+                    -for (var i = 1; i <= 15; i++)
+                        |<script type='text/javascript'><!--// <![CDATA[
+                        |                     OA_show('zone_946_#{i}');
+                        |                     // ]]> --></script>
+            // FOOTER
+            .section#footer
                 p &copy; 2012 
                     a(href='http://dukechronicle.com') The Chronicle 
                     | | 

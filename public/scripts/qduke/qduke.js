@@ -68,7 +68,7 @@ function loadChronAPI(data) {
     for (var i = 0; i < data.news.length; i++) {
         article = data.news[i];
         // Special By section
-        if (article.type == 'Breaking') {
+        if (article.type == 'Slideshow') {
             $(boxStories[i]).addClass("breaking").append(
             $("<div>").addClass("captionTop").append($("<div>").addClass("txt").text("Breaking")));
         }
@@ -364,7 +364,7 @@ $(function(){
 
 function showPromo() {
     if (!$.isFunction($.cookie) || !$.cookie("PromoCookieDec21")) {
-        $("#wrap").prepend("<div class='promo clearfix'><p class='left'>Welcome to the new qDuke.com!</p><p class='right'><a href='http://chron.it/SSgkeZ'>Send feedback</a>&nbsp;|&nbsp;<a href='http://old.qduke.com'>Switch back to old qDuke</a>&nbsp;|&nbsp;<a href='javascript:turnOffPromo();'>Close</a></p></div>");
+        $("#wrap").prepend("<div class='section promo clearfix'><p class='left'>Welcome to the new qDuke.com!</p><p class='right'><a href='http://chron.it/SSgkeZ'>Send feedback</a>&nbsp;|&nbsp;<a href='http://old.qduke.com'>Switch back to old qDuke</a>&nbsp;|&nbsp;<a href='javascript:turnOffPromo();'>Close</a></p></div>");
         $(".promo").css({'margin-top': '-50px', opacity: 0}).transition({delay: 2000, 'margin-top':0, opacity: 1 }, 400, 'snap');
         $(".promo a").on('click', linkTrack);
     }

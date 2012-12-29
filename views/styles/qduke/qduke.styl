@@ -14,6 +14,7 @@ qBlue = #069
 qLGray = #888
 qDGray = #444
 qLogoGray = #555
+qRed = #AD1E17 // #C80000
 
 //916 old 916+42 = 958
 //915 old 915+42 = 957
@@ -43,6 +44,9 @@ body
 			width 100%
 			padding 0 10px
 			margin-top 10px
+	.section
+		margin-top 21px
+		clear both
 	.box, .rowAds a, .dukealert-alertLink, .dukealert-description
 		background qDGray
 		text-align center
@@ -82,7 +86,7 @@ body
 				color qHover
 	.duke-alert-lev1
 		.dukealert-alertLink
-			background #AD1E17
+			background qRed
 	.duke-alert-lev2
 		.dukealert-alertLink
 			background #F0A21E
@@ -226,9 +230,9 @@ body
 					height auto
 			&.breaking
 				.captionTop
-					background #c80000
+					background qRed
 				.caption
-					border-top-color #c80000
+					border-top-color qRed
 		.boxStories
 			@media only screen and (max-width: 773px) // if narrow
 				:nth-child(4)
@@ -298,7 +302,6 @@ body
 		#GoogleSearchButton:hover, #GoogleSearchButton:focus
 			background qHover !important
 	.menu
-		margin-top 21px
 		color qDGray
 		.box
 			font-size 1.2em
@@ -456,7 +459,6 @@ body
 			background qLGray
 	#footer
 		color qDGray
-		margin-top 20px
 		margin-bottom 20px
 	.promo
 		.left
@@ -465,7 +467,8 @@ body
 		.right
 			float right
 			font-size .9em
-		margin 20px -1000px
+		margin-left -1000px
+		margin-right -1000px
 		padding 10px 1010px
 		background qBlue
 		a

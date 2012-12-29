@@ -68,7 +68,7 @@ function loadChronAPI(data) {
     for (var i = 0; i < data.news.length; i++) {
         article = data.news[i];
         // Special By section
-        if (article.type == 'Slideshow') {
+        if (article.type == 'Breaking') {
             $(boxStories[i]).addClass("breaking").append(
             $("<div>").addClass("captionTop").append($("<div>").addClass("txt").text("Breaking")));
         }

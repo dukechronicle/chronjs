@@ -181,7 +181,7 @@ var channels = {
     'ESPN': '/img/qduke/channels/espn.png',
     'ESPN2': '/img/qduke/channels/espn2.png',
     'ESPN3': '/img/qduke/channels/espn3.png',
-    'ESPNU': '/img/qduke/channels/espnu.png',
+    'ESPNU': '/img/qduke/channels/espnu.png'
 }
 
 /* Sport Schedule Functionality */

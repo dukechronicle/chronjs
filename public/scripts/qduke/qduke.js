@@ -109,7 +109,7 @@ function loadChronAPI(data) {
         // Check if status bar is full
         if (count >= maxCount) return;
         else count++;
-        alert = data.oit;
+        var alert = data.oit;
         appendWithTransition(
             $("<a data-tracking='OIT Alert' class='box StatusOIT' />").on('click', linkTrack).attr("href", alert.link).html("<span class='strong'>OIT Alert</span> ("+alert.date+"): " + alert.title)
         );
@@ -119,7 +119,7 @@ function loadChronAPI(data) {
         // Check if status bar is full
         if (count >= maxCount) return;
         else count++;
-        tweet = data.twitter[handle];
+        var tweet = data.twitter[handle];
         appendWithTransition(
             $("<a data-tracking='Twitter "+handle+"' class='box StatusTweet' />").on('click', linkTrack).attr("href", tweet.twitterLink).html("<span class='strong'>"+handle+ ":</span> " + tweet.text)
         );

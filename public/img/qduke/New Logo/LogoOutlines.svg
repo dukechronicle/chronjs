@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="64px"
+   height="64px"
+   id="svg3035"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="LogoOutlines.svg">
+  <defs
+     id="defs3037" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.75"
+     inkscape:cx="58.968752"
+     inkscape:cy="2.8864346"
+     inkscape:current-layer="text3043"
+     showgrid="true"
+     inkscape:document-units="px"
+     inkscape:grid-bbox="true"
+     inkscape:window-width="1535"
+     inkscape:window-height="876"
+     inkscape:window-x="65"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata3040">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer">
+    <g
+       style="font-size:64px;font-style:normal;font-variant:normal;font-weight:600;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#006699;fill-opacity:1;stroke:none;font-family:Exo;-inkscape-font-specification:Exo Semi-Bold"
+       id="text3043">
+      <path
+         d="m 9.1636362,18.356364 c 0.576,-3.967996 2.1760058,-11.0719996 7.6159998,-11.0719996 l 8.832,0 -3.328,21.3119996 c -3.903996,1.215999 -5.568003,1.472 -9.088,1.472 -5.6959938,0 -5.0559988,-4.544007 -4.0319998,-11.712 m -7.4239998,-0.512 c -1.72799832,10.815989 -0.06399,18.432 9.7279996,18.432 2.879997,0 6.528004,-0.768002 9.984,-2.496 l -3.008,19.136 c -0.404266,2.862786 0.976162,4.964513 3.634089,5.838207 3.476177,1.142663 11.969216,-1.629805 15.831365,-2.292752 0.366117,1.61378 -0.813224,4.409379 -1.44711,6.295886 6.918106,-2.208544 11.290757,-5.962542 13.117954,-9.89836 -2.200729,-4.152875 -5.219639,-7.851205 -9.420369,-9.276807 -0.04343,2.022568 -0.268686,4.863317 -0.948483,6.340431 -5.720542,1.997799 -8.259267,2.450142 -13.343446,2.993395 l 7.872,-49.9839996 c -3.071997,-0.6399994 -10.304007,-1.728 -17.088,-1.728 -8.1279918,0 -13.1200014,5.1200115 -14.9119996,16.6399996"
+         style="font-style:italic;-inkscape-font-specification:Exo Semi-Bold Italic"
+         id="path3987"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="csccsccsccscccccccsc" />
+      <text
+         xml:space="preserve"
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:PT Sans;-inkscape-font-specification:PT Sans"
+         x="56"
+         y="56.363636"
+         id="text4094"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           id="tspan4096"
+           x="56"
+           y="56.363636"
+           style="font-size:18px">by <tspan
+   style="font-size:18px;font-weight:bold;-inkscape-font-specification:PT Sans Bold"
+   id="tspan4098">The Chronicle</tspan></tspan></text>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:68px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:PT Sans;-inkscape-font-specification:PT Sans"
+       x="39.164768"
+       y="37.122105"
+       id="text3815"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3817"
+         x="39.164768"
+         y="37.122105"
+         style="font-size:68px;fill:#000000;fill-opacity:1">Duke</tspan></text>
+  </g>
+</svg>

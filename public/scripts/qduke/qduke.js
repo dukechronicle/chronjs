@@ -1,5 +1,5 @@
 var qDuke_api_url = 'http://qduke.herokuapp.com/api';
-var qDuke_version = '12/29/2012';
+var qDuke_version = '12/30/2012';
 
 /******************
 * Analytics Setup *

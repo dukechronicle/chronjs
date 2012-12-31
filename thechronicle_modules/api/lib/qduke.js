@@ -5,7 +5,7 @@ var api = require('../../api');
 var jade = require('jade');
 var fs = require('fs');
 
-var s3_bucket = "dev.qduke.com";
+var s3_bucket = "www.qduke.com";
 
 qduke.buildAndPush = function (callback) {
     // HTML

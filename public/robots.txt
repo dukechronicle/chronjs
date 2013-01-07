@@ -1,7 +1,6 @@
 User-agent: *
 Disallow: /admin
 Disallow: /api
+Disallow: /article/student-reports-indecent-exposure-4th-floor-perkins-library
+Disallow: /article/breaking-silence-eating-disorders
 Sitemap: http://www.dukechronicle.com/sitemaps/news_sitemap.xml
-
-Disallow: http://www.dukechronicle.com/article/student-reports-indecent-exposure-4th-floor-perkins-library
-Disallow: http://www.dukechronicle.com/article/breaking-silence-eating-disorders
